@@ -1,0 +1,45 @@
+// Line comment. C style comment (/* ~ */) is not supported.
+// In this example, the overall syntax of eudasm is explained.
+//
+//
+
+// eudasm line consists of 3 part
+// [line type] [something] @[labelname]+[offset]
+//
+// 5 line types have been used in this example.
+//
+// Address of each line is where the element according to the line appears in the compiled trigger.
+// Experiment yourself, maybe.
+
+
+Trigger: @trigA // Start the trigger. Lable this offset 0 as trigA. code:trigA = base+0
+	next trigB  // Set next pointer of the current trigger to where label code:trigB points to.
+
+	Actions:
+		SetDeaths(&0x0058D740, SetTo, 0x00000000, 0) @trig1_act1 // code:trig1_act = base+328
+		    // &(expression) returns eup player of address (expression).
+		SetDeaths(&(trig1_act1 + 16), Add, 1, 0)
+		SetDeaths(&(trig1_act1 + 20), Add, 1, 0)
+		SetDeaths("Player 1", Add, 1, "Terran Vulture")
+		PreserveTrigger()
+
+
+
+Trigger: @trigB //code:trigB = 2408
+	next trigA
+
+	Conditions:
+		Deaths("Player 1", Exactly, 320, "Terran Vulture")
+
+	Actions:
+		SetDeaths(&(trigB + 4), SetTo, 0xFFAE5D73, 0)
+		SetDeaths(&(0x51A28C + 4), SetTo, 0x51A28C, 0)
+		SetDeaths(&(0x51A28C + 8), SetTo, 0xFFAE5D73, 0)
+
+
+
+// There are 3 labels in this script.
+//  in code.eud
+//   - code:trigA        : base+0
+//   - code:trig1_act1   : base+328
+//   - code:trigB        : base+2408
