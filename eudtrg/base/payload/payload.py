@@ -18,13 +18,13 @@ class Payload:
 
 def CreatePayload(root):
 	needed_objects = depgraph.GetAllDependencies(root)
+	objn = len(needed_objects)
+	print('Collected %d eud objects.' % objn)
 
 	objsizetable = []
 	current_cursor = 0
-	
 
-	# Since writing binary data requires that all of the objects have predetermined addresses,
-	# we first calculate addresses of all objects
+	# calculate addresses of all objects
 	for obj in needed_objects:
 		obj.SetAddress(current_cursor)
 		
@@ -37,10 +37,15 @@ def CreatePayload(root):
 	buf = _PayloadBuffer()
 	for i, obj in enumerate(needed_objects):
 		buf.StartEmit()
-		obj.WritePayloadChunk(buf)
+		obj.WritePayload(buf)
 		emitted_size = buf.EndEmit()
 		assert emitted_size == objsizetable[i], \
 			"Expected %d bytes, got %d bytes, Object type %s" % (objsizetable[i], emitted_size, str(type(obj)))
+	# Reset addresses & expire expr caches
+	for obj in needed_objects:
+		obj.ResetAddress();
+
+	expr.ExpireCacheToken()
 
 	# done.
 	return buf.CreatePayload()
@@ -57,6 +62,10 @@ class _PayloadBuffer:
 		self._datalen = 0
 		self._prttable = []
 		self._orttable = []
+		self._tablebr = {
+			1: self._prttable,
+			4: self._orttable
+		}
 		
 	def StartEmit(self):
 		self._datastart = self._datalen
@@ -87,19 +96,12 @@ class _PayloadBuffer:
 		number = expr.Evaluate(number)
 		number.number &= 0xFFFFFFFF
 
-		if number.offset_applied != 0:
-			assert self._datalen % 4 == 0
-			if number.offset_applied == 1:
-				self._prttable.append(self._datalen)
-
-			elif number.offset_applied == 4:
-				self._orttable.append(self._datalen)
-
-			else:
-				raise RuntimeError('DWORD is not either PRT nor ORT!')
+		if number.offset_applied:
+			self._tablebr[number.offset_applied].append(self._datalen)
 
 		self._datas.append( binio.i2b4(number.number) )
 		self._datalen += 4
+		
 
 	def EmitBytes(self, b):
 		b = bytes(b)

@@ -4,121 +4,115 @@ triggers with next pointer. Each class is addressable. This file also defines
 PushTriggerScope and PopTriggerScope function for trigger scoping.
 """
 
-from . import addressable
-from ..payload import depgraph
-from .expr import IsValidExpr
-from ..utils.utils import FlattenList
+from .eudobj import EUDObject
+from .expr import Expr, IsValidExpr, Evaluate
+from ..payload.rlocint import RelocatableInt
 
-_last_trigger_stack = [None]
-_token_stack = []
+# Utility for Trigger
+def _FlattenList(l):
+	ret = []
+	for item in l:
+		try:
+			ret.extend(_FlattenList(item))
+		except: # item cannot be flattened. Maybe already flattened?
+			ret.append(item)
+			
+	return ret
+
+# Trigger scoping thing
+_last_trigger = None
+
+# Used while evaluating Trigger
+_next_triggers = []
+class NextTrigger(Expr):
+	def __init__(self):
+		_next_triggers.append(self)
+		
+	def SetTrigger(self, trg):
+		self._trg = trg
+		
+	def GetDependencyList(self):
+		return [self._trg]
+	
+	def Evaluate(self):
+		return Evaluate(self._trg)
 
 
-"""
-Creates trigger scope. Scope semantically links related triggers.
-ex)
-  PushTriggerScope()
-  # Triggers consisting function f_add
-  PopTriggerScope()
-
-Triggers in the same scope are eligible for auto link.
-"""
-def PushTriggerScope():
-	_last_trigger_stack.append(None)
-	class Token:
-		pass
-	_token_stack.append(Token)
-	return Token
-
-
-def PopTriggerScope(token = None):
-	if token:
-		assert _token_stack[-1] == token, "Trigger scoping error"
-	_token_stack.pop()
-	_last_trigger_stack.pop()
-
-"""
-Trigger class. This class is immutable.
-"""
-class Trigger(addressable.Addressable):
-	"""
-	Constructor for trigger
-	 - nextptr : Addr to trigger to be executed after this trigger.
-	 - conditions : Condition consisting this trigger. Must be less than 16
-	 - actions : Action consisting this trigger. Must be less than 64
-	ref) GetNextPtrAddr, GetConditionAddr, GetActionAddr
-	"""
+class Trigger(EUDObject):
 	def __init__(self, nextptr = None, conditions = [], actions = []):
-		super(Trigger, self).__init__()
+		global _last_trigger
+		global _next_triggers
 		
-		conditions = FlattenList(conditions)
-		actions = FlattenList(actions)
+		super().__init__()
+
+		conditions = _FlattenList(conditions)
+		actions = _FlattenList(actions)
 		
-		
-		# basic assert
+		# basic assertion
 		assert len(conditions) <= 16
 		assert len(actions) <= 64
-		
-		
 		
 		for cond in conditions:
 			assert type(cond) is Condition
 			
 		for act in actions:
 			assert type(act) is Action
-			
-		# set
+
+
+		# Set fields
 		if nextptr:
 			assert IsValidExpr(nextptr), "nextptr is not an addressable object or expression."
-		
 		self._nextptr = nextptr
 		self._conditions = conditions
 		self._actions = actions
-		self._nexttrgaddr = addressable.Addr()
+		self._nexttrg = 0xFFFFFFFF
+
+
+		# Set parents of conditions and actions.
+		for i, cond in enumerate(conditions):
+			cond.SetParentTrigger(self, i)
+
+		for i, act in enumerate(actions):
+			act.SetParentTrigger(self, i)
+
+
 		
-		# set last trigger
-		lasttrig = _last_trigger_stack.pop()
-		if lasttrig:
-			if lasttrig._nextptr is None:
-				lasttrig._nextptr = addressable.Addr(self)
-				lasttrig._nexttrgaddr << self
-		_last_trigger_stack.append(self)
-	
-	
-	
-	# override
-	"""
-	Override of Addressable::SetAddress
-	"""
-	def SetAddress(self, address):
-		super(Trigger, self).SetAddress(address)
-		for i, cond in enumerate(self._conditions):
-			cond.SetAddress(address + 8 + 20 * i)
+		# link previous trigger with this, if previous trigger had not specified nextptr.
+		if _last_trigger:
+			if _last_trigger._nextptr is None:
+				_last_trigger._nextptr = self
+			_last_trigger._nexttrg = self
+		_last_trigger = self
+		
+		# link NextTriggers
+		for nt in _next_triggers:
+			nt.SetTrigger(self)
 			
-		for i, act in enumerate(self._actions):
-			act.SetAddress(address + 8 + 320 + 32 * i)
-	
+		_next_triggers = []
+		
+		
+	def MUTATE_SetNextPtr(self, nexttrg):
+		assert nexttrg
+		self._nextptr = nexttrg
+		
 	# some helper func
-	def GetNextPtrAddr(self):
-		return addressable.Addr(self) + 4
+	def NextPtr(self):
+		return self + 4
 	
-	def GetConditionAddr(self, index):
-		assert 0 <= index < 16
-		return addressable.Addr(self) + 8 + 20 * index
+	def Condition(self, index):
+		return self._conditions[index]
 	
-	def GetActionAddr(self, index):
-		assert 0 <= index < 64
-		return addressable.Addr(self) + 8 + 320 + 32 * index
+	def Action(self, index):
+		return self._actions[index]
 	
 	
 	# function needed for payloadmanager
 	def GetDataSize(self):
 		return 2408
-	
-	def IsIndependent(self):
-		return True
 
 	def GetDependencyList(self):
-		deplist = depgraph.GetDependencyList(self._nextptr)
+		deplist = [self._nextptr]
+
 		for cond in self._conditions:
 			deplist.extend(cond.GetDependencyList())
 
@@ -128,20 +122,22 @@ class Trigger(addressable.Addressable):
 		return deplist
 
 	
-	def WritePayloadChunk(self, buf):
+	def WritePayload(self, buf):
+		_next_trigger = self._nexttrg
+		
 		buf.EmitDword(0)
 		if self._nextptr is None:
-			buf.EmitDword(0xFFFFFFFF) # by default behavior. This will lead to crash
+			buf.EmitDword(0xFFFFFFFF) # by default behavior.
 		else:
 			buf.EmitDword(self._nextptr)
 
 		for cond in self._conditions:
-			cond.WritePayloadChunk(buf)
+			cond.WritePayload(buf)
 
 		buf.EmitBytes(bytes(20 * (16 - len(self._conditions))))
 
 		for act in self._actions:
-			act.WritePayloadChunk(buf)
+			act.WritePayload(buf)
 
 		buf.EmitBytes(bytes(32 * (64 - len(self._actions))))
 		
@@ -155,7 +151,7 @@ class Trigger(addressable.Addressable):
 """
 Condition class. Immutable. Stock conditions are defined at stocktrg.
 """
-class Condition(addressable.Addressable):
+class Condition(Expr):
 	def __init__(self, locid, player, amount, unitid, comparison, condtype, restype, flags):
 		assert IsValidExpr(locid)
 		assert IsValidExpr(player)
@@ -176,16 +172,27 @@ class Condition(addressable.Addressable):
 		self._restype = restype
 		self._flags = flags
 		
+		self._parenttrg = None
+		self._condindex = None
+
+	def SetParentTrigger(self, trg, index):
+		assert self._parenttrg is None, 'Condition cannot be shared by two triggers. Deep copy each conditions'
+		assert trg is not None, 'Trigger should not be null.'
+		assert 0 <= index < 16, 'WTF'
+
+		self._parenttrg = trg
+		self._condindex = index
+
 	def Disable(self):
 		self._flags |= 2
 
-	# function needed for payloadmanager
-	def GetDataSize(self):
-		return 20
-	
-	def IsIndependent(self):
-		return False
-	
+
+
+	# Expr
+	def Evaluate(self):
+		return Evaluate(self._parenttrg) + RelocatableInt(8 + 20 * self._condindex, 0)
+
+	# Used by Trigger::GetDependencyList
 	def GetDependencyList(self):
 		return [
 			self._locid,
@@ -198,7 +205,8 @@ class Condition(addressable.Addressable):
 			self._flags,
 		]
 
-	def WritePayloadChunk(self, buf):
+	# Used by Trigger::WritePayload
+	def WritePayload(self, buf):
 		buf.EmitDword (self._locid)
 		buf.EmitDword (self._player)
 		buf.EmitDword (self._amount)
@@ -213,7 +221,7 @@ class Condition(addressable.Addressable):
 """
 Action class. Immutable. Stock actions are defined at stocktrg.
 """
-class Action(addressable.Addressable):
+class Action(Expr):
 	def __init__(self, locid1, strid, wavid, time, player1, player2, unitid, acttype, amount, flags):
 		super(Action, self).__init__()
 		
@@ -238,17 +246,28 @@ class Action(addressable.Addressable):
 		self._acttype = acttype
 		self._amount = amount
 		self._flags = flags
-		
+	
+		self._parenttrg = None
+		self._actindex = None
+
+	def SetParentTrigger(self, trg, index):
+		assert self._parenttrg is None, 'Condition cannot be shared by two triggers. Deep copy each conditions'
+		assert trg is not None, 'Trigger should not be null.'
+		assert 0 <= index < 64, 'WTF'
+
+		self._parenttrg = trg
+		self._actindex = index
+
 	def Disable(self):
 		self._flags |= 2
+
+
+
+	# Expr
+	def Evaluate(self):
+		return Evaluate(self._parenttrg) + RelocatableInt(8 + 320 + 32 * self._actindex, 0)
 		
-	# function needed for payloadmanager
-	def GetDataSize(self):
-		return 32
-	
-	def IsIndependent(self):
-		return False
-	
+	# Used in Trigger::GetDependencyList
 	def GetDependencyList(self):
 		return [
 			self._locid1,
@@ -264,7 +283,8 @@ class Action(addressable.Addressable):
 		]
 
 
-	def WritePayloadChunk(self, buf):
+	# Used in Trigger::WritePayload
+	def WritePayload(self, buf):
 		buf.EmitDword (self._locid1)
 		buf.EmitDword (self._strid)
 		buf.EmitDword (self._wavid)

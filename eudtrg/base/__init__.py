@@ -1,10 +1,22 @@
-from .dataspec.trigger import PushTriggerScope, PopTriggerScope, Trigger, Condition, Action, Disabled
-from .dataspec.addressable import Addr, Addressable
+from .dataspec.eudobj import EUDObject
+from .dataspec.forward import Forward
+
+from .dataspec.trigger import (
+	Trigger,
+	Condition,
+	Action,
+	NextTrigger,
+	Disabled
+)
+
 from .dataspec.bytedump import Db
-from .payload.payload import CreatePayload
+
 from .inject.injgen import Inject
 
 from .stocktrg import *
 from .utils.utils import *
 from .enum import *
+
+
+from .payload.payload import CreatePayload
 

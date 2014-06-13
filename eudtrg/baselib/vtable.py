@@ -1,22 +1,19 @@
-from eudtrg.base import * #@UnusedWildImport
+from ..base import *
 
 class EUDVTable(Trigger):
 	def __init__(self, varn):
-		variables = [Addr() for _ in range(varn)]
+		variables = [Forward() for _ in range(varn)]
 		
-		PushTriggerScope()
-		super(EUDVTable, self).__init__(
+		super().__init__(
 			actions = 
 				[variables[i] << Disabled(SetDeaths(0, SetTo, 0, 0)) for i in range(varn)] + 
 				[SetDeaths(EPD(variables[i] + 28), SetTo, 2, 0) for i in range(varn)]
 		)
 		
 		self._var = [EUDVariable(var, self) for var in variables]
-		PopTriggerScope()
 		
 	def GetVariables(self):
 		return self._var
-	
 	
 	
 class EUDVariable:
@@ -83,3 +80,10 @@ class EUDVariable:
 			SetDeaths(EPD(self._varact + 24), SetTo, 0x092D0000, 0),
 			SetDeaths(EPD(self._varact + 28), SetTo, 0, 0)
 		]
+
+
+def VTProc(vt, actions):
+	Trigger(
+		nextptr = vt,
+		actions = actions + [SetNextPtr(vt, NextTrigger)]
+	)

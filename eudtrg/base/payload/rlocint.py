@@ -4,6 +4,7 @@ Relocatable int. Used internally in eudtrg.
 
 class RelocatableInt:
 	def __init__(self, number, offset_applied):
+		# assert type(number) is int and type(offset_applied) is int, 'Invalid parameters for RelocatableInt consturctor'
 		self.number = number
 		self.offset_applied = offset_applied
 

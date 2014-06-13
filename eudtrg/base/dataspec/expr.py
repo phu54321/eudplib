@@ -1,15 +1,25 @@
 """
 Expression wrapper library. Expr class represents expression containing Addr.
 Value of Expr class can be calculated only if all Addresses it's refering to
-have been calculated. Expr class is used in eudtrg internally. You shouldn't
-use this class on normal situation.
+have been calculated. Used internally in eudtrg.
 """
 
 from ..payload.rlocint import RelocatableInt
 
+# Binary expression cache expire mechanism
+_cachetoken = type('_ct', (), {})
+
+def ExpireCacheToken():
+	global _cachetoken
+	_cachetoken = type('_ct', (), {})
+
+def GetCacheToken():
+	return _cachetoken
+
+
 class Expr:
 	def __init__(self):
-		pass
+		self._cachetoken = None
 
 	# operations with default actions
 	def __add__       (self, other): return _AddExpr(self, other)
@@ -28,96 +38,103 @@ class Expr:
 	def __ifloordiv__ (self, other): self = self // other; return self
 
 	
-	# user have to define below
 	def GetDependencyList(self):
-		raise NotImplementedError("Subclass should implement this")
+		raise NotImplementedError("Subclass %s should implement this" % str(type(self)))
 
 	def Evaluate(self):
-		raise NotImplementedError("Subclass should implement this")
+		if self._cachetoken != _cachetoken:
+			self._cache = self.EvalImpl()
+			self._cachetoken = _cachetoken
+		return self._cache
+		
+	def EvalImpl(self):
+		raise NotImplementedError("Subclass %s should implement this" % str(type(self)))
 
 
+# Expression class for binary operators
 class BinopExpr(Expr):
 	def __init__(self, exprA, exprB):
 		super(BinopExpr, self).__init__()
+		assert IsValidExpr(exprA), 'Lhs is not valid expression'
+		assert IsValidExpr(exprB), 'Rhs is not Valid expression'
+		
 		self.exprA = exprA
 		self.exprB = exprB
+
+	def GetDependencyList(self):
+		return GetDependencyList(self.exprA) + GetDependencyList(self.exprB)
 
 
 class _AddExpr(BinopExpr):
 	def __init__(self, exprA, exprB):
 		super(_AddExpr, self).__init__(exprA, exprB)
 		self._cache = None
+		self._cachetoken = None
 		
-	def Evaluate(self):
-		if self._cache is None:
-			self._cache = Evaluate(self.exprA) + Evaluate(self.exprB);
-		return self._cache
+	def EvalImpl(self):
+		return Evaluate(self.exprA) + Evaluate(self.exprB)
 
 
 class _SubExpr(BinopExpr):
 	def __init__(self, exprA, exprB):
 		super(_SubExpr, self).__init__(exprA, exprB)
 		self._cache = None
+		self._cachetoken = None
 		
-	def Evaluate(self):
-		if self._cache is None:
-			self._cache = Evaluate(self.exprA) - Evaluate(self.exprB);
-		return self._cache
+	def EvalImpl(self):
+		return Evaluate(self.exprA) - Evaluate(self.exprB)
 	
 	
 class _MulExpr(BinopExpr):
 	def __init__(self, exprA, exprB):
 		super(_MulExpr, self).__init__(exprA, exprB)
 		self._cache = None
+		self._cachetoken = None
 		
-	def Evaluate(self):
-		if self._cache is None:
-			self._cache = Evaluate(self.exprA) * Evaluate(self.exprB);
-		return self._cache
+	def EvalImpl(self):
+		return Evaluate(self.exprA) * Evaluate(self.exprB)
 	
 
 class _DivExpr(BinopExpr):
 	def __init__(self, exprA, exprB):
 		super(_DivExpr, self).__init__(exprA, exprB)
-		self._cache = None
 		
-	def Evaluate(self):
-		if self._cache is None:
-			self._cache = Evaluate(self.exprA) // Evaluate(self.exprB);
-		return self._cache
+	def EvalImpl(self):
+		return Evaluate(self.exprA) // Evaluate(self.exprB)
 	
 
+
+# Checks if expression is valid
 def IsValidExpr(x):
 	if type(x) is int or isinstance(x, RelocatableInt):
 		return True
 	else:
-		if hasattr(x, 'Evaluate'):
-			return True
-		else:
-			return False
-	
+		return isinstance(x, Expr)
+
+
+
+
+
+
+# Dependency walker
+def GetDependencyList(item):
+	try:
+		return item.GetDependencyList()
+	except AttributeError:
+		return []
+
+
+
+# Expression evaluator
 def Evaluate(x):
-	if type(x) is int:
-		return RelocatableInt(x, 0)
+	try:
+		return x.Evaluate()
+	except AttributeError:
+		if type(x) is int:
+			return RelocatableInt(x, 0)
+	
+		elif isinstance(x, RelocatableInt):
+			return x
 
-	elif isinstance(x, RelocatableInt):
-		return x
-
-	else:
-		try:
-			return x.Evaluate()
-		except:
+		else:
 			raise RuntimeError('Function Evaluate called on unknown type')
-
-if __name__ == '__main__':
-	a = _MulExpr(RelocatableInt(1, 3), 2)
-	b = Evaluate(a)
-	print(a, b)
-
-	c = RelocatableInt(4, 6)
-	d = RelocatableInt(2, 0)
-	e = c // d
-	print(e)
-
-	assert b == RelocatableInt(2, 6)
-	assert e == RelocatableInt(2, 3)

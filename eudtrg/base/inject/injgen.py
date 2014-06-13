@@ -9,10 +9,10 @@ import struct
 from ..maprw import mpqapi
 from ..maprw import chktok
 
-from ..dataspec.trigger import Trigger
-from ..dataspec.addressable import Addr
-from ..stocktrg import SetDeaths
 from .trigtrg import * #@UnusedWildImport
+from ..dataspec.trigger import Trigger
+from ..dataspec.forward import Forward
+from ..stocktrg import SetDeaths
 from ..payload.payload import CreatePayload
 
 from ..utils.utils import EPD
@@ -140,8 +140,8 @@ def Inject(input_map_path, output_map_path, root):
 	
 	# Add crash killer in front of the trigger
 	triggerend = ~(0x51A284 + injector * 12)
-	entry = Addr()
-	entry2 = Addr()
+	entry = Forward()
+	entry2 = Forward()
 	
 	entry << Trigger(
 		nextptr = triggerend,
@@ -627,7 +627,8 @@ def Inject(input_map_path, output_map_path, root):
 
 	# Set mrgn to blank one.
 	chkt.setsection('MRGN', b'\x00' * 5100)
-
+	chkt.optimize()
+	
 	chk = chkt.savechk()
 
 	# Write to file

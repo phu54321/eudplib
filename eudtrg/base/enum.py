@@ -2,7 +2,7 @@
 Useful enumeration.
 """
 
-Units = {
+DefUnitID = {
 	"Terran Marine" : 0,
 	"Terran Ghost" : 1,
 	"Terran Vulture" : 2,

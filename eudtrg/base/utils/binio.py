@@ -3,18 +3,18 @@ Simple integer <-> bytes conversion. Used internally in eudtrg.
 """
 
 def i2b4(i):
-	return bytes([
+	return bytes((
 		0xFF & i,
 		0xFF & (i >> 8),
 		0xFF & (i >> 16),
 		0xFF & (i >> 24)
-	])
+	))
 
 def i2b2(i):
-	return bytes([
+	return bytes((
 		0xFF & i,
 		0xFF & (i >> 8)
-	])
+	))
 
 def i2b1(i):
 	return bytes([
