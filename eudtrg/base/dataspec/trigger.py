@@ -20,7 +20,14 @@ def _FlattenList(l):
 	return ret
 
 # Trigger scoping thing
-_last_trigger = None
+_last_trigger = [None]
+def PushTriggerScope():
+	_last_trigger.append(None)
+
+def PopTriggerScope():
+	_last_trigger.pop()
+
+
 
 # Used while evaluating Trigger
 _next_triggers = []
@@ -78,11 +85,13 @@ class Trigger(EUDObject):
 
 		
 		# link previous trigger with this, if previous trigger had not specified nextptr.
-		if _last_trigger:
-			if _last_trigger._nextptr is None:
-				_last_trigger._nextptr = self
-			_last_trigger._nexttrg = self
-		_last_trigger = self
+		last_trigger = _last_trigger.pop()
+		if last_trigger:
+			if last_trigger._nextptr is None:
+				last_trigger._nextptr = self
+			last_trigger._nexttrg = self
+		last_trigger = self
+		_last_trigger.append(last_trigger)
 		
 		# link NextTriggers
 		for nt in _next_triggers:

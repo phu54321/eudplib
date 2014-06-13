@@ -2,10 +2,10 @@ from ..base import *
 from .vtable import EUDVTable
 from .eudfunc import EUDFunc
 
-f_read = None
+f_dwread = None
 
 def _ReadDwordInit():
-	global f_read
+	global f_dwread
 	
 	vt = EUDVTable(2)
 	targetplayer, ret = vt.GetVariables()
@@ -13,7 +13,7 @@ def _ReadDwordInit():
 	readstart = Forward()
 	readend = Forward()
 	
-	f_read = EUDFunc(readstart, readend, vt, 1, 1)	
+	f_dwread = EUDFunc(readstart, readend, vt, 1, 1)	
 	
 	
 	"""

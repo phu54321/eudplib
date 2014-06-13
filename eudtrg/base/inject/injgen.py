@@ -140,6 +140,10 @@ def Inject(input_map_path, output_map_path, root):
 	
 	# Add crash killer in front of the trigger
 	triggerend = ~(0x51A284 + injector * 12)
+
+	# For programs who missed putting triggerend to their last trigger.
+	Trigger( nextptr = triggerend )
+	
 	entry = Forward()
 	entry2 = Forward()
 	

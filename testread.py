@@ -2,7 +2,7 @@ from eudtrg import *
 
 main = NextTrigger()
 
-retval = readdword.call(EPD(0x5993D4)) # Get address of STR section
+retval = f_dwread.call(EPD(0x5993D4)) # Get address of STR section
 retvt = retval.GetVTable()
 
 main2 = Trigger(

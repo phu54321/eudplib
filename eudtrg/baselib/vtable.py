@@ -2,6 +2,7 @@ from ..base import *
 
 class EUDVTable(Trigger):
 	def __init__(self, varn):
+		PushTriggerScope()
 		variables = [Forward() for _ in range(varn)]
 		
 		super().__init__(
@@ -11,6 +12,7 @@ class EUDVTable(Trigger):
 		)
 		
 		self._var = [EUDVariable(var, self) for var in variables]
+		PopTriggerScope()
 		
 	def GetVariables(self):
 		return self._var
@@ -83,7 +85,11 @@ class EUDVariable:
 
 
 def VTProc(vt, actions):
+	next = Forward()
+
 	Trigger(
 		nextptr = vt,
-		actions = actions + [SetNextPtr(vt, NextTrigger)]
+		actions = actions + [SetNextPtr(vt, next)]
 	)
+	
+	next << NextTrigger()

@@ -39,7 +39,7 @@ def EUDJumpIf(conditions, ontrue):
 		]
 	)
 	
-	onfalse = NextTrigger()
+	onfalse << NextTrigger()
 	
 	
 def EUDJumpIfNot(conditions, onfalse):
@@ -66,8 +66,8 @@ def EUDWhile(conditions, block_start, block_end):
 	out = Forward()
 	
 	forstart = NextTrigger()
+	EUDJumpIf(conditions, block_start, out)
 	block_end.MUTATE_SetNextPtr(forstart)
-	EUDJumpIfNot(conditions, out)
-	
+		
 	out << NextTrigger()
 	

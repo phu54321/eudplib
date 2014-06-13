@@ -2,6 +2,8 @@ from .dataspec.eudobj import EUDObject
 from .dataspec.forward import Forward
 
 from .dataspec.trigger import (
+	PushTriggerScope,
+	PopTriggerScope,
 	Trigger,
 	Condition,
 	Action,

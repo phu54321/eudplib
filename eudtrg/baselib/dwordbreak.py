@@ -1,13 +1,13 @@
 from ..base import *
 from .vtable import EUDVTable
 from .eudfunc import EUDFunc
-from .ctrlstru import EUDJumpIf
+from .ctrlstru import EUDJumpIfNot
 
 f_dwbreak = None
 def _dwordbreak_init():
 	global f_dwbreak
 
-	vt = VTable(7)
+	vt = EUDVTable(7)
 	
 	word = [None] * 2
 	byte = [None] * 4
@@ -20,7 +20,7 @@ def _dwordbreak_init():
 
 
 	# Clear byte[], word[]
-	dwordbreak_begin = Trigger(
+	dwordbreak_begin << Trigger(
 		actions = [
 			[ byte[i].SetNumber(0) for i in range(4) ],
 			[ word[i].SetNumber(0) for i in range(2) ]
@@ -32,8 +32,8 @@ def _dwordbreak_init():
 	chain = [Forward() for _ in range(32)]
 
 	for i in range(31, -1, -1):
-		byteidx = i / 8
-		wordidx = i / 16
+		byteidx = i // 8
+		wordidx = i // 16
 		byteexp = i % 8
 		wordexp = i % 16
 
@@ -47,7 +47,7 @@ def _dwordbreak_init():
 		chain[i] << NextTrigger()
 		nextchain = chain[i - 1] if i > 0 else dwordbreak_end
 
-		EUDJumpIf( [number.AtLeast(2**i)], nextchain )
+		EUDJumpIfNot( [number.AtLeast(2**i)], nextchain )
 
 		Trigger(
 			nextptr = nextchain,
@@ -59,4 +59,6 @@ def _dwordbreak_init():
 		)
 
 
-	dwordbreak_end = Trigger()
+	dwordbreak_end << Trigger()
+
+_dwordbreak_init()
