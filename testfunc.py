@@ -27,7 +27,7 @@ main2 = Trigger(
 	nextptr = retval.GetVTable(),
 	actions = [
 		SetDeaths(0, SetTo, 1234, 0),
-		retval.QueueAssignTo(EPD(0x51A364)),
+		retval.QueueAssignTo(EPD(0x58A364)),
 		SetNextPtr(retval.GetVTable(), triggerend)
 	]
 )

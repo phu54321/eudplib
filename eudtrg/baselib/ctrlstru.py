@@ -1,5 +1,11 @@
 from ..base import *
 
+def DoActions(actions):
+	Trigger( actions = FlattenList(actions) )
+
+def EUDJump(nexttrg):
+	Trigger( nextptr = nexttrg )
+
 def EUDIf(conditions, ontrue, onfalse):
 	brtrg = Forward()
 	ontruetrg = Forward()

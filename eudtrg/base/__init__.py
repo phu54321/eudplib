@@ -8,7 +8,7 @@ from .dataspec.trigger import (
 	Condition,
 	Action,
 	NextTrigger,
-	Disabled
+	Disabled,
 )
 
 from .dataspec.bytedump import Db

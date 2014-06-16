@@ -1,5 +1,5 @@
 from ..base import *
-from .muldiv import f_div
+from .arithmetic import f_div
 from .vtable import EUDVTable, VTProc
 from .eudfunc import EUDFunc
 

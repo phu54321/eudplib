@@ -7,26 +7,7 @@ PushTriggerScope and PopTriggerScope function for trigger scoping.
 from .eudobj import EUDObject
 from .expr import Expr, IsValidExpr, Evaluate
 from ..payload.rlocint import RelocatableInt
-
-# Utility for Trigger
-def _FlattenList(l):
-	ret = []
-	for item in l:
-		try:
-			ret.extend(_FlattenList(item))
-		except: # item cannot be flattened. Maybe already flattened?
-			ret.append(item)
-			
-	return ret
-
-# Trigger scoping thing
-_last_trigger = [None]
-def PushTriggerScope():
-	_last_trigger.append(None)
-
-def PopTriggerScope():
-	_last_trigger.pop()
-
+from ..utils.utils import FlattenList
 
 
 # Used while evaluating Trigger
@@ -45,6 +26,17 @@ class NextTrigger(Expr):
 		return Evaluate(self._trg)
 
 
+# Trigger scoping thing
+_last_trigger = [None]
+def PushTriggerScope():
+	_last_trigger.append(None)
+
+def PopTriggerScope():
+	assert not _next_triggers, 'Inplicit trigger linking cannot happen when closing scope'
+	_last_trigger.pop()
+
+
+
 class Trigger(EUDObject):
 	def __init__(self, nextptr = None, conditions = [], actions = []):
 		global _last_trigger
@@ -52,8 +44,8 @@ class Trigger(EUDObject):
 		
 		super().__init__()
 
-		conditions = _FlattenList(conditions)
-		actions = _FlattenList(actions)
+		conditions = FlattenList(conditions)
+		actions = FlattenList(actions)
 		
 		# basic assertion
 		assert len(conditions) <= 16
@@ -120,15 +112,7 @@ class Trigger(EUDObject):
 		return 2408
 
 	def GetDependencyList(self):
-		deplist = [self._nextptr]
-
-		for cond in self._conditions:
-			deplist.extend(cond.GetDependencyList())
-
-		for act in self._actions:
-			deplist.extend(act.GetDependencyList())
-
-		return deplist
+		return [self._nextptr] + self._conditions + self._actions
 
 	
 	def WritePayload(self, buf):
@@ -311,3 +295,6 @@ class Action(Expr):
 def Disabled(item):
 	item.Disable()
 	return item
+
+
+	

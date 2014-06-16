@@ -62,7 +62,7 @@ class BinopExpr(Expr):
 		self.exprB = exprB
 
 	def GetDependencyList(self):
-		return GetDependencyList(self.exprA) + GetDependencyList(self.exprB)
+		return [self.exprA, self.exprB]
 
 
 class _AddExpr(BinopExpr):
