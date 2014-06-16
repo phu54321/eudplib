@@ -91,11 +91,6 @@ class Trigger(EUDObject):
 			
 		_next_triggers = []
 		
-		
-	def MUTATE_SetNextPtr(self, nexttrg):
-		assert nexttrg
-		self._nextptr = nexttrg
-		
 	# some helper func
 	def NextPtr(self):
 		return self + 4
@@ -188,6 +183,7 @@ class Condition(Expr):
 	# Used by Trigger::GetDependencyList
 	def GetDependencyList(self):
 		return [
+			self._parenttrg,
 			self._locid,
 			self._player,
 			self._amount,
@@ -263,6 +259,7 @@ class Action(Expr):
 	# Used in Trigger::GetDependencyList
 	def GetDependencyList(self):
 		return [
+			self._parenttrg,
 			self._locid1,
 			self._strid,
 			self._wavid,

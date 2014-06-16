@@ -10,10 +10,9 @@ def _initepdcalc():
 
 	epdcalc_begin = Forward()
 	epdcalc_end = Forward()
-	vt = EUDVTable(2)
-	addr, epd = vt.GetVariables()
+	addr, epd = CreateVariables(2)
 
-	f_epd = EUDFunc(epdcalc_begin, epdcalc_end, vt, 1, 1)
+	f_epd = EUDFunc(epdcalc_begin, epdcalc_end, addr, epd)
 
 	epdcalc_begin << Trigger(
 		actions = [

@@ -6,7 +6,6 @@ from .ctrlstru import (
 	EUDIf,
 	EUDJumpIf,
 	EUDJumpIfNot,
-	EUDWhile
 )
 
 from .varassign import SetVariables, SeqCompute

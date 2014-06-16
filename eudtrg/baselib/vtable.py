@@ -1,6 +1,6 @@
 from ..base import *
 
-class EUDVTable(Trigger):
+class _EUDVTable(Trigger):
 	def __init__(self, varn):
 		PushTriggerScope()
 		variables = [Forward() for _ in range(varn)]
@@ -14,7 +14,7 @@ class EUDVTable(Trigger):
 		self._var = [EUDVariable(var, self) for var in variables]
 		PopTriggerScope()
 		
-	def GetVariables(self):
+	def GetVariableList(self):
 		return self._var
 	
 	
@@ -84,12 +84,19 @@ class EUDVariable:
 		]
 
 
-def VTProc(vt, actions):
-	next = Forward()
 
-	Trigger(
-		nextptr = vt,
-		actions = actions + [SetNextPtr(vt, next)]
-	)
-	
-	next << NextTrigger()
+def CreateVariable(varn):
+	vts = []
+	variables = []
+
+	while varn > 0:
+		varn_for_vt = min(varn, 32)
+		varn -= varn_for_vt
+		vt = _EUDVTable(varn_for_vt)
+		vtn.append(vt)
+		variables.extend(list(_EUDVTable.GetVariableList()))
+
+	if varn == 1:
+		return variables[0]
+	else:
+		return variables

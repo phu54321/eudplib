@@ -1,27 +1,25 @@
 from ..base import *
-from .vtable import EUDVTable, EUDVariable
+from .vtable import EUDVariable
 from .varassign import SetVariables
 
 class EUDFunc:
-	def __init__(self, starttrig, endtrig, vt, argn, retn):
-		assert 0 <= retn < 16 and 0 <= argn < 16
-		assert isinstance(vt, EUDVTable)
+	def __init__(self, starttrig, endtrig, argv, retv):
+		argv = FlattenList(argv)
+		retv = FlattenList(retv)
+		assert 0 <= len(argv) < 16 and 0 <= len(retv) < 16
 
 		self._fstarttrig = starttrig
 		self._fendtrig = endtrig
 		self._vt = vt
-		self._retn = retn
-		self._argn = argn
+		self._argv = argv
+		self._retv = retv
 		
-	def GetVTable(self):
-		return self._vt
 
-	def call(self, *args):
-		assert len(args) == self._argn
+	def call(self, args):
+		args = FlattenList(args)
+		assert len(args) == len(self._argv)
 
-		vtvars = self._vt.GetVariables()
-
-		SetVariables(vtvars[0:self._argn], args)
+		SetVariables(self._argv, args)
 
 		callend = Forward()
 		Trigger(
@@ -30,9 +28,6 @@ class EUDFunc:
 		)
 		callend << NextTrigger()
 
-		ret = tuple(vtvars[self._argn : self._argn + self._retn])
-		if len(ret) == 1:
-			ret = ret[0]
-		return ret
+		return self._retv
 
 	

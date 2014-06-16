@@ -19,6 +19,7 @@ def SetVariables(dstlist, srclist, mdtlist = None):
 	
 	SeqCompute(list(zip(dstlist, mdtlist, srclist)))
 
+
 def SeqCompute(assignpairs):
 	# Dictionary needed.
 	queueactiondict = {

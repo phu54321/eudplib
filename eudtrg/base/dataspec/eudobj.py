@@ -21,7 +21,7 @@ class EUDObject(Expr):
 		self._address = None
 		
 	def EvalImpl(self):
-		assert self._address is not None
+		assert self._address is not None, 'Object of type %s not initalized' % type(self)
 		return RelocatableInt(self._address, 4)
 		
 	def GetDependencyList(self):
