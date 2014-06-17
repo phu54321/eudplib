@@ -1,7 +1,7 @@
 from eudtrg import *
 
 main = NextTrigger()
-retval = f_exp.call(1233, 567)
+retval = f_mul.call(1233, 567)
 retvt = retval.GetVTable()
 
 main2 = Trigger(

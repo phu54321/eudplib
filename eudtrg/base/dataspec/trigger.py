@@ -9,6 +9,9 @@ from .expr import Expr, IsValidExpr, Evaluate
 from ..payload.rlocint import RelocatableInt
 from ..utils.utils import FlattenList
 
+_trgcount = 0
+def GetTriggerCount():
+	return _trgcount
 
 # Used while evaluating Trigger
 _next_triggers = []
@@ -26,6 +29,12 @@ class NextTrigger(Expr):
 		return Evaluate(self._trg)
 
 
+def LastTrigger(Expr):
+	last_trigger = _last_trigger.pop()
+	_last_trigger.append(last_trigger)
+	return last_trigger
+
+
 # Trigger scoping thing
 _last_trigger = [None]
 def PushTriggerScope():
@@ -41,6 +50,7 @@ class Trigger(EUDObject):
 	def __init__(self, nextptr = None, conditions = [], actions = []):
 		global _last_trigger
 		global _next_triggers
+		global _trgcount
 		
 		super().__init__()
 
@@ -90,6 +100,8 @@ class Trigger(EUDObject):
 			nt.SetTrigger(self)
 			
 		_next_triggers = []
+
+		_trgcount += 1
 		
 	# some helper func
 	def NextPtr(self):
@@ -182,6 +194,7 @@ class Condition(Expr):
 
 	# Used by Trigger::GetDependencyList
 	def GetDependencyList(self):
+		assert self._parenttrg, 'Condition must be inside an action'
 		return [
 			self._parenttrg,
 			self._locid,
@@ -240,7 +253,7 @@ class Action(Expr):
 		self._actindex = None
 
 	def SetParentTrigger(self, trg, index):
-		assert self._parenttrg is None, 'Condition cannot be shared by two triggers. Deep copy each conditions'
+		assert self._parenttrg is None, 'Action cannot be shared by two triggers. Deep copy each conditions'
 		assert trg is not None, 'Trigger should not be null.'
 		assert 0 <= index < 64, 'WTF'
 
@@ -258,6 +271,7 @@ class Action(Expr):
 		
 	# Used in Trigger::GetDependencyList
 	def GetDependencyList(self):
+		assert self._parenttrg, 'Action must be inside an action'
 		return [
 			self._parenttrg,
 			self._locid1,

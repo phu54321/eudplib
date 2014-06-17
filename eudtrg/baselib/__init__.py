@@ -3,7 +3,7 @@ from .vtable import EUDVTable, EUDVariable, VTProc
 from .ctrlstru import (
 	DoActions,
 	EUDJump,
-	EUDIf,
+	EUDBranch,
 	EUDJumpIf,
 	EUDJumpIfNot,
 )
@@ -11,6 +11,6 @@ from .ctrlstru import (
 from .varassign import SetVariables, SeqCompute
 
 from .readdword import f_dwread
-from .arithmetic import f_mul, f_div, f_exp
+from .arithmetic import f_add, f_sub, f_mul, f_div
 from .dwordbreak import f_dwbreak
 from .epdcalc import f_epd

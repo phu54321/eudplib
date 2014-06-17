@@ -6,7 +6,7 @@ def DoActions(actions):
 def EUDJump(nexttrg):
 	Trigger( nextptr = nexttrg )
 
-def EUDIf(conditions, ontrue, onfalse):
+def EUDBranch(conditions, ontrue, onfalse):
 	brtrg = Forward()
 	ontruetrg = Forward()
 	
