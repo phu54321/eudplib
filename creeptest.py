@@ -45,7 +45,7 @@ def CreateCreepReadFunc():
 
 	# select word0/word1 by evenodd
 	creepbr0, creepbr1, creepbrend = Forward(), Forward(), Forward()
-	EUDIf( [creepevenodd.Exactly(0)], creepbr0, creepbr1 )
+	EUDBranch( [creepevenodd.Exactly(0)], creepbr0, creepbr1 )
 
 	# on even
 	creepbr0 << NextTrigger()

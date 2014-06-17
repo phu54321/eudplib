@@ -6,7 +6,7 @@ have been calculated. Used internally in eudtrg.
 
 from ..payload.rlocint import RelocatableInt
 
-# Binary expression cache expire mechanism
+# Expression caching
 _cachetoken = type('_ct', (), {})
 
 def ExpireCacheToken():
