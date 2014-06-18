@@ -3,7 +3,7 @@ import sys
 
 setup(
     name = "eudtrg",
-    version = "0.1-r1",
+    version = "0.1-r2",
     packages = find_packages(),
     package_data = {
         '': ['*.dll', '*.lst'],
@@ -13,7 +13,7 @@ setup(
     author = "Trgk",
     author_email = "whyask37@naver.com",
     description = "EUD Trigger generator",
-    license = "Public License",
+    license = "New BSD License",
     keywords = "starcraft trigger eud",
     url = "http://blog.naver.com/whyask37/",   # project home page, if any
 

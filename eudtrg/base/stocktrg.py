@@ -1,3 +1,5 @@
+import ..LICENSE
+
 """
 Useful stock triggers.
 """
@@ -307,6 +309,8 @@ def SetAllianceStatus(Player, Status):
 	return Action(0, 0, 0, 0, Player, 0, Status, 57, 0, 4)
 
 
+
+# Initalization triggers
 
 # compound triggers
 def Memory(dest, cmptype, value):

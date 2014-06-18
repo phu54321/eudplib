@@ -1,11 +1,15 @@
-from .eudobj import EUDObject
+import ...LICENSE
 
+__doc__ = \
 """
 eudtrg equivilant to 'db' command in eudasm. You can load any sequence of bytes
 into Starcraft memory using Db class. Db class is one of the most basic class 
 implementing Addressable class, so this may be your starting point for creating
 your own Addressable class.
 """
+
+from .eudobj import EUDObject
+
 class Db(EUDObject):
 	"""
 	Initalize db class with binary contents. Constructor accepts anything
