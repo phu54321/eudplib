@@ -4,8 +4,15 @@ from ..utils import binio, ubconv
 
 class TBL:
     def __init__(self, content = None):
-        self._stringarr = []
+        #
+        # datatb : table of strings                         : string data table
+        # dataindextb : string id -> data id                : string offset table
+        # stringmap : string -> representative string id
+        #
+        
+        self._datatb = []
         self._stringmap = {}
+        self._dataindextb = [] # String starts from #1
         self._capacity = 2 # Size of STR section
 
         if content is not None:
@@ -13,7 +20,7 @@ class TBL:
         
             
     def LoadTBL(self, content):
-        self._stringarr.clear()
+        self._datatb.clear()
         self._stringmap.clear()
         self._capacity = 2
         
@@ -28,58 +35,76 @@ class TBL:
             string = content[stringoffset:send]
             self.AddString(string)
 
+
     def AddString(self, string):
         if type(string) is str:
             string = ubconv.u2b(string) # Starcraft uses multibyte encoding.
-
-        # Update properties
-        self._capacity += len(string) + 1 + 2 # string + b'\0' + string offset
-        self._stringarr.append(string)
-        stringindex = len(self._stringarr)
-        self._stringmap[string] = stringindex
+        
+        stringindex = len(self._dataindextb)
+        
+        # If duplicate text exist -> just proxy it    
+        try:
+            repr_stringid = self._stringmap[string]
+            dataindex = self._dataindextb[repr_stringid]
+            self._dataindextb.append(dataindex)
+            self._capacity += 2 # just string offset
+            
+        # Else -> Create new entry
+        except KeyError:
+            dataindex = len(self._datatb)
+            self._stringmap[string] = stringindex
+            self._datatb.append(string)
+            self._dataindextb.append(dataindex)
+            self._capacity += len(string) + 1 + 2 # string + b'\0' + string offset
 
         assert self._capacity < 65536, 'String table overflow'
-
-        # Beware : self._stringarr[stringindex - 1] == string.
+        
         return stringindex
+
 
     def GetString(self, index):
         if index == 0: return None
         else:
             try:
-                return self._stringarr[index]
+                return self._datatb[index - 1]
             except IndexError:
                 return None
 
 
     def GetStringIndex(self, string):
         try:
-            return self._stringmap[string]
+            return self._stringmap[string] + 1
+        
         except KeyError:
-            return self.AddString(string)
+            return self.AddString(string) + 1
+        
 
     def SaveTBL(self):
-        datatb = []
+        #
+        # datatb : table of strings                         : string data table
+        # dataindextb : string id -> data id                : string offset table
+        # stringmap : string -> representative string id
+        #
+        
+        outbytes = []
 
         # calculate offset of each string
         stroffset = []
-        outindex = 2 * len(self._stringarr) + 2
-        for s in self._stringarr:
+        outindex = 2 * len(self._dataindextb) + 2
+        for s in self._datatb:
             stroffset.append(outindex)
             outindex += len(s) + 1
 
-        # Collect data
-
         # String count
-        datatb.append(binio.b2i2(len(self._stringarr)))
+        outbytes.append(binio.i2b2(len(self._dataindextb)))
 
         # String offsets
-        for off in stroffset:
-            datatb.append(binio.b2i2(off))
+        for dataidx in self._dataindextb:
+            outbytes.append(binio.i2b2(stroffset[dataidx]))
 
-        # String datas
-        for s in self._stringarr:
-            datatb.append(s)
-            datatb.append(b'\0')
+        # String data
+        for s in self._datatb:
+            outbytes.append(s)
+            outbytes.append(b'\0')
 
-        return b''.join(datatb)
+        return b''.join(outbytes)

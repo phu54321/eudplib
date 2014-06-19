@@ -11,6 +11,7 @@ from .expr import Expr, IsValidExpr, Evaluate
 from ..payload.rlocint import RelocatableInt
 from ..utils.utils import FlattenList
 
+# Just for debugging usage
 _trgcount = 0
 def GetTriggerCount():
     return _trgcount
@@ -54,7 +55,7 @@ def PopTriggerScope():
 
 
 class Trigger(EUDObject):
-    def __init__(self, nextptr = None, conditions = [], actions = []):
+    def __init__(self, nextptr = None, conditions = [], actions = [], preserved = True):
         global _last_trigger
         global _next_triggers
         global _trgcount
@@ -84,7 +85,7 @@ class Trigger(EUDObject):
         self._conditions = conditions
         self._actions = actions
         self._nexttrg = 0xFFFFFFFF
-
+        self._preserved = preserved
 
         # Set parents of conditions and actions.
         for i, cond in enumerate(conditions):
@@ -158,7 +159,10 @@ class Trigger(EUDObject):
         buf.EmitBytes(bytes(32 * (64 - len(self._actions))))
 
         # 04 00 00 00 means 'preserve trigger'.
-        buf.EmitBytes(b'\x04\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0')
+        if self._preserved:
+            buf.EmitBytes(b'\x04\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0')
+        else:
+            buf.EmitBytes(b'\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0')
 
 
 

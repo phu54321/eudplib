@@ -21,7 +21,7 @@ from .stocktrg import *
 from .trgconst import *
 
 from .utils.utils import *
-from .utils.ubconv import ubconv_UseCharset
+from .utils.ubconv import UbconvUseCharset
 
 
 from .payload.payload import CreatePayload

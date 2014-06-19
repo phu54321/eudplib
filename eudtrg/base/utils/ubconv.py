@@ -9,7 +9,7 @@ import sys
 
 charset = sys.stdin.encoding
 
-def ubconv_UseCharset(newencoding):
+def UbconvUseCharset(newencoding):
     global charset
     charset = newencoding
 

@@ -87,12 +87,17 @@ def LoadMap(fname):
     
 def SaveMap(fname, root):
     print('Saving map %s' % fname)
-    # Generate injector
-    injgen.GenerateInjector(_chk, root)
-    
+   
     # write new uprp
     uprpcontent = b''.join( uprptable + [bytes(20 * (64 - len(uprptable)))] )
     _chk.setsection('UPRP', uprpcontent)
+    
+    # write new str
+    strcontent = strtable.SaveTBL()
+    _chk.setsection('STR', strcontent)
+    
+    # Generate injector
+    injgen.GenerateInjector(_chk, root)
     
     # optimize & dump
     _chk.optimize()

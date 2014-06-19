@@ -55,7 +55,8 @@ def ParseUnit(unitstring):
 
 def ParseString(string):
     try:
-        return strtable.GetString(string)
+        return strtable.GetStringIndex(string)
+    
     except TypeError:
         return string
 
