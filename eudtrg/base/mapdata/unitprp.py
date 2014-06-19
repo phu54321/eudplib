@@ -1,3 +1,5 @@
+from eudtrg import LICENSE #@UnusedImport
+
 from ctypes import * #@UnusedWildImport
 
 class UnitProperty(LittleEndianStructure):

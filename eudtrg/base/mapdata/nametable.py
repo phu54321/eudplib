@@ -1,3 +1,5 @@
+from eudtrg import LICENSE #@UnusedImport
+
 from ..trgstrconst import UnitNameDict
 from ..utils import ubconv
 from .mapdata import strtable, unitnametable, locnametable
@@ -26,10 +28,9 @@ def ParseLocation(locstring):
 
 def ParseUnit(unitstring):
     try:
-        string = ubconv.u2b(unitstring)
-
         # try map-defined location name
         try:
+            string = ubconv.u2b(unitstring)
             unitidx = unitnametable[string]
             if not unitidx:
                 raise RuntimeError('Duplicated unit name %s used in template map' % unitstring)
@@ -40,6 +41,7 @@ def ParseUnit(unitstring):
 
         # try default unit name
         try:
+            string = unitstring
             unitidx = UnitNameDict[string]
             return unitidx
 
@@ -55,7 +57,8 @@ def ParseUnit(unitstring):
 
 def ParseString(string):
     try:
-        return strtable.GetStringIndex(string)
+        bstring = ubconv.u2b(string)
+        return strtable.GetStringIndex(bstring)
     
     except TypeError:
         return string

@@ -63,7 +63,7 @@ def LoadMap(fname):
             if locstr in locnametable: # Location name duplicated
                 locnametable[locstr] = None
             else:
-                locnametable[locstr] = i
+                locnametable[locstr] = i + 1 # SC counts location from 1. Weird
 
     # Get unit names
     unix = _chk.getsection('UNIx')
