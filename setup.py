@@ -3,7 +3,7 @@ import sys
 
 setup(
     name = "eudtrg",
-    version = "0.1-r2",
+    version = "0.2-r1",
     packages = find_packages(),
     package_data = {
         '': ['*.dll', '*.lst'],
