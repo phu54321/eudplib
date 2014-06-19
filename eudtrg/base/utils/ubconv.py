@@ -1,23 +1,45 @@
+
 """
 Unicode(python) <-> Binary(starcraft) conversion. Used internally in eudtrg.
 """
 
+from eudtrg import LICENSE #@UnusedImport
+
 import sys
 
-# This works for me. If anything goes wrong, change below.
 charset = sys.stdin.encoding
 
+def ubconv_UseCharset(newencoding):
+    global charset
+    charset = newencoding
+
 def Unicode2Bytes(string):
-	return string.encode(charset)
+    if isinstance(string, bytes):
+        return string
+
+    elif isinstance(string, str):
+        return string.encode(charset)
+
+    else:
+        raise TypeError('Unknown type %s given to Unicode2Bytes' % type(string))
+
+
 
 def Bytes2Unicode(b):
-	return b.decode(charset)
-	
+    if isinstance(b, str):
+        return b
+
+    elif isinstance(b, bytes):
+        return b.decode(charset)
+
+    else:
+        raise TypeError('Unknown type %s given to Bytes2Unicode' % type(b))
+
 def main():
-	print("Performing unicode - multibyte conversion library")
+    print("Performing unicode - multibyte conversion library")
 
 if __name__ == "__main__":
-	main()
+    main()
 
 # shorter names
 u2b = Unicode2Bytes
