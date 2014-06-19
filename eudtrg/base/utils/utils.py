@@ -1,21 +1,24 @@
+
 """
 Useful utilities. You may freely use these functions.
 """
 
-"""
-offset -> EPD player number according to offset
-"""
+from eudtrg import LICENSE #@UnusedImport
+
 def EPD(offset):
-	return (offset - 0x0058A364) // 4
+    """
+    Converts normal address to EPD player.
+    """
+    return (offset - 0x0058A364) // 4
 
 
 def FlattenList(l):
-	ret = []
-	try:
-		for item in l:
-			ret.extend(FlattenList(item))
+    ret = []
+    try:
+        for item in l:
+            ret.extend(FlattenList(item))
 
-	except TypeError: # l is not iterable
-		ret.append(l)
-			
-	return ret
+    except TypeError: # l is not iterable
+        ret.append(l)
+
+    return ret
