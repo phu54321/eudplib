@@ -19,7 +19,7 @@ from .trgconst import (
 	ParseSwitchState,
     ParseCount,
     ParseAIScript,
-    
+
     SetTo, # Needed for SetNextPtr
 )
 
@@ -375,13 +375,13 @@ def SetDeaths(Player, Modifier, Number, Unit):
     Unit = ParseUnit(Unit)
     return Action(0, 0, 0, 0, Player, Number, Unit, 45, Modifier, 20)
 
-def Order(Unit, Owner, StartLocation, Order, DestLocation):
+def Order(Unit, Owner, StartLocation, OrderType, DestLocation):
     Unit = ParseUnit(Unit)
     Owner = ParsePlayer(Owner)
     StartLocation = ParseLocation(StartLocation)
-    Order = ParseOrder(Order)
+    OrderType = ParseOrder(OrderType)
     DestLocation = ParseLocation(DestLocation)
-    return Action(StartLocation, 0, 0, 0, Owner, DestLocation, Unit, 46, Order, 20)
+    return Action(StartLocation, 0, 0, 0, Owner, DestLocation, Unit, 46, OrderType, 20)
 
 def Comment(Text):
     Text = ParseString(Text)

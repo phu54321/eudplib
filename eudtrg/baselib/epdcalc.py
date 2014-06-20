@@ -15,13 +15,6 @@ def _initepdcalc():
     vt = EUDVTable(2)
     addr, epd = vt.GetVariables()
 
-<<<<<<< HEAD
-	epdcalc_begin = Forward()
-	epdcalc_end = Forward()
-	addr, epd = CreateVariables(2)
-
-	f_epd = EUDFunc(epdcalc_begin, epdcalc_end, addr, epd)
-=======
     f_epd = EUDFunc(epdcalc_begin, epdcalc_end, vt, 1, 1)
 
     epdcalc_begin << Trigger(
@@ -29,7 +22,6 @@ def _initepdcalc():
             addr.AddNumber(0x100000000 - 0x58A364) # SubtractNumber don't underflow. So we use AddNumber to cause overflow.
         ]
     )
->>>>>>> development
 
     ret_epd = f_div.call(addr, 4)[0]
 

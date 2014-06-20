@@ -1,9 +1,10 @@
 from eudtrg import *
 
+
 LoadMap('outputmap/basemap.scx')
 
 main = NextTrigger()
-retval = f_mul.call(1233, 567)
+retval = f_div.call(12345678, 567)[0]
 retvt = retval.GetVTable()
 
 main2 = Trigger(

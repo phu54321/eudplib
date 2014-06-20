@@ -2,37 +2,17 @@ from eudtrg import LICENSE #@UnusedImport
 
 from eudtrg.base import * #@UnusedWildImport
 
-<<<<<<< HEAD
-class _EUDVTable(Trigger):
-	def __init__(self, varn):
-		PushTriggerScope()
-		variables = [Forward() for _ in range(varn)]
-		
-		super().__init__(
-			actions = 
-				[variables[i] << Disabled(SetDeaths(0, SetTo, 0, 0)) for i in range(varn)] + 
-				[SetDeaths(EPD(variables[i] + 28), SetTo, 2, 0) for i in range(varn)]
-		)
-		
-		self._var = [EUDVariable(var, self) for var in variables]
-		PopTriggerScope()
-		
-	def GetVariableList(self):
-		return self._var
-	
-	
-=======
 class EUDVTable(Trigger):
     def __init__(self, varn):
         PushTriggerScope()
         variables = [Forward() for _ in range(varn)]
-        
+
         super().__init__(
             actions =
                 [variables[i] << Disabled(SetDeaths(0, SetTo, 0, 0)) for i in range(varn)] +
                 [SetDeaths(EPD(variables[i] + 28), SetTo, 2, 0) for i in range(varn)]
         )
-        
+
         self._var = [EUDVariable(var, self) for var in variables]
         PopTriggerScope()
 
@@ -40,7 +20,6 @@ class EUDVTable(Trigger):
         return self._var
 
 
->>>>>>> development
 class EUDVariable:
     def __init__(self, vartrigger, originvt):
         self._varact = vartrigger
@@ -107,24 +86,6 @@ class EUDVariable:
         ]
 
 
-<<<<<<< HEAD
-
-def CreateVariable(varn):
-	vts = []
-	variables = []
-
-	while varn > 0:
-		varn_for_vt = min(varn, 32)
-		varn -= varn_for_vt
-		vt = _EUDVTable(varn_for_vt)
-		vtn.append(vt)
-		variables.extend(list(_EUDVTable.GetVariableList()))
-
-	if varn == 1:
-		return variables[0]
-	else:
-		return variables
-=======
 def VTProc(vt, actions):
     nexttrg = Forward()
 
@@ -134,4 +95,3 @@ def VTProc(vt, actions):
     )
 
     nexttrg << NextTrigger()
->>>>>>> development

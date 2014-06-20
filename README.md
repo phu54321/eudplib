@@ -26,27 +26,27 @@ How to use eudtrg in 5 minute.
    3. Copy collowing code to ``test.py`` and place it at the same directory with ``basemap.scx``
 
    ```
-       from eudtrg import *
+   from eudtrg import *
 
-       LoadMap('basemap.scx')
+   LoadMap('basemap.scx')
 
-       b = Forward()
+   b = Forward()
 
-       a = Trigger(
-           nextptr = b, # Trigger executed after a is b
-           actions = [
-               SetDeaths(Player1, Add, 1, 'Terran Marine')
-           ]
-       )
+   a = Trigger(
+       nextptr = b, # Trigger executed after a is b
+       actions = [
+           SetDeaths(Player1, Add, 1, 'Terran Marine')
+       ]
+   )
 
-       b << Trigger(
-           nextptr = a, # Trigger executed after b is a
-           actions = [
-               SetDeaths(Player2, Add, 1, 'Terran Marine')
-           ]
-       )
+   b << Trigger(
+       nextptr = a, # Trigger executed after b is a
+       actions = [
+           SetDeaths(Player2, Add, 1, 'Terran Marine')
+       ]
+   )
 
-       SaveMap('output.scx', a) # save map with a as starting trigger.
+   SaveMap('output.scx', a) # save map with a as starting trigger.
    ```
 
    4. Run test.py. You will get output.scx

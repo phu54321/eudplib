@@ -72,8 +72,8 @@ _f_mul_init()
 def _f_div_init():
     global f_div
 
-    vt = EUDVTable(7)
-    a, b, ret, remainder, x0, x1, y0 = vt.GetVariables()
+    vt = EUDVTable(5)
+    a, b, ret, remainder, x = vt.GetVariables()
     f_div_begin, f_div_end = Forward(), Forward()
     f_div = EUDFunc(f_div_begin, f_div_end, vt, 2, 2)
 
@@ -82,11 +82,10 @@ def _f_div_init():
 
     # init
     f_div_begin << NextTrigger()
-    SeqCompute((
+    SeqCompute([
         (ret, SetTo, 0),
-        (x0, SetTo, b),
-        (x1, SetTo, b)
-    ))
+        (x, SetTo, b),
+    ])
 
     # chain.
     chain_x0 = [Forward() for _ in range(32)]
@@ -94,13 +93,16 @@ def _f_div_init():
     chain = [Forward() for _ in range(32)]
 
     for i in range(32):
-        EUDJumpIf(x0.AtLeast(0x8000000), chain[i])
-        SeqCompute((
-            (EPD(chain_x0[0]), SetTo, x0),
-            (EPD(chain_x1[0]), SetTo, x1),
-            (x0, Add, x0),
-            (x1, Add, x1)
-        ))
+        SeqCompute([
+            (EPD(chain_x0[i]), SetTo, x),
+            (EPD(chain_x1[i]), SetTo, x),
+        ])
+
+        EUDJumpIf(x.AtLeast(0x8000000), chain[i])
+
+        SeqCompute([
+            (x, Add, x),
+        ])
 
     # Run division chain
     for i in range(31, -1, -1):
@@ -121,6 +123,7 @@ def _f_div_init():
     SetVariables(remainder, a)
 
     f_div_end << Trigger()
+
     PopTriggerScope()
 
 _f_div_init()

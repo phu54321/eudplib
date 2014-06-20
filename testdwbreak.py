@@ -1,5 +1,7 @@
 from eudtrg import *
 
+LoadMap('outputmap/basemap.scx')
+
 main = NextTrigger()
 
 word0, word1, byte0, byte1, byte2, byte3 = f_dwbreak.call(0x12345678)
@@ -18,4 +20,4 @@ main2 = Trigger(
 	]
 )
 
-Inject('outputmap/basemap.scx', 'outputmap/dwbreak.scx', main)
+SaveMap('outputmap/dwbreak.scx', main)

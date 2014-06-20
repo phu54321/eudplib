@@ -7,6 +7,8 @@ from .varassign import SeqCompute, SetVariables
 from .ctrlstru import EUDJumpIfNot, EUDJump
 
 def InitPlayerSwitch(playerroots):
+    playerroots = [p if p else Trigger(nextptr = triggerend) for p in playerroots]
+
     vt = EUDVTable(8)
     ptsfirst = vt.GetVariables()
 
@@ -40,7 +42,7 @@ def InitPlayerSwitch(playerroots):
 
     PopTriggerScope()
 
-    
+
     SeqCompute(
         [(EPD(playerentry[i] + 0), SetTo, 0x51A280 + 12*i + 4) for i in range(8)] +         # modify playerentry[i].prev
         [(EPD(playerentry[i] + 4), SetTo, ptsfirst[i]) for i in range(8)] +         # modify playerentry[i].next

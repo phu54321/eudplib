@@ -6,29 +6,6 @@ def DoActions(actions):
     Trigger( actions = FlattenList(actions) )
 
 def EUDJump(nexttrg):
-<<<<<<< HEAD
-	Trigger( nextptr = nexttrg )
-
-def EUDBranch(conditions, ontrue, onfalse):
-	brtrg = Forward()
-	ontruetrg = Forward()
-	
-	brtrg << Trigger(
-		nextptr = onfalse,
-		conditions = conditions,
-		actions = [
-			SetNextPtr(brtrg, ontruetrg)
-		]
-	)
-	
-	ontruetrg << Trigger(
-		nextptr = ontrue,
-		actions = [
-			SetNextPtr(brtrg, onfalse)
-		]
-	)
-	
-=======
     Trigger( nextptr = nexttrg )
 
 def EUDBranch(conditions, ontrue, onfalse):
@@ -50,7 +27,6 @@ def EUDBranch(conditions, ontrue, onfalse):
         ]
     )
 
->>>>>>> development
 def EUDJumpIf(conditions, ontrue):
     brtrg = Forward()
     ontruetrg = Forward()
@@ -75,25 +51,6 @@ def EUDJumpIf(conditions, ontrue):
 
 
 def EUDJumpIfNot(conditions, onfalse):
-<<<<<<< HEAD
-	brtrg = Forward()
-	ontrue = Forward()
-	
-	brtrg << Trigger(
-		nextptr = onfalse,
-		conditions = conditions,
-		actions = [
-			SetNextPtr(brtrg, ontrue)
-		]
-	)
-	
-	ontrue << Trigger(
-		actions = [
-			SetNextPtr(brtrg, onfalse)
-		]
-	)
-	
-=======
     brtrg = Forward()
     ontrue = Forward()
 
@@ -122,4 +79,3 @@ def EUDWhile(conditions, block_start, block_end):
 
     out << NextTrigger()
 
->>>>>>> development

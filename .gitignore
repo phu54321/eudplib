@@ -213,3 +213,10 @@ pip-log.txt
 
 #Mr Developer
 .mr.developer.cfg
+
+#Starcraft
+.tar.gz
+.egg
+dist/
+build/
+eudtrg.egg-info/

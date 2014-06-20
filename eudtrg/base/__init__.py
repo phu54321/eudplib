@@ -3,16 +3,6 @@ from eudtrg import LICENSE #@UnusedImport
 from .dataspec.eudobj import EUDObject
 from .dataspec.forward import Forward
 from .dataspec.trigger import (
-<<<<<<< HEAD
-	GetTriggerCount,
-	PushTriggerScope,
-	PopTriggerScope,
-	Trigger,
-	Condition,
-	Action,
-	NextTrigger,
-	Disabled,
-=======
     GetTriggerCount,
     PushTriggerScope,
     PopTriggerScope,
@@ -21,7 +11,6 @@ from .dataspec.trigger import (
     Action,
     NextTrigger,
     Disabled,
->>>>>>> development
 )
 from .dataspec.bytedump import Db
 
