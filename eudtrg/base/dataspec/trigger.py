@@ -1,10 +1,13 @@
-from eudtrg import LICENSE #@UnusedImport
+'''
+Defines
+ - Trigger scoping function
+ - Trigger, Condition, Action class
+ - Trigger linker (NextTrigger, LastTrigger)
+ - Debug utility ( GetTriggerCount )
+'''
 
-"""
-This file defines class Trigger, Condition, Actions. Trigger class represents
-triggers with next pointer. Each class is addressable. This file also defines
-PushTriggerScope and PopTriggerScope function for trigger scoping.
-"""
+
+from eudtrg import LICENSE #@UnusedImport
 
 from .eudobj import EUDObject
 from .expr import Expr, IsValidExpr, Evaluate
@@ -15,12 +18,23 @@ from ..utils.utils import FlattenList
 # Just for debugging usage
 _trgcount = 0
 def GetTriggerCount():
+    '''
+    Counts how many trigger objects have been constructed since eudtrg have been
+    initalized. Useful for debugging simple errors.
+    ex) I made a function with about 1000 triggers expected.
+     GetTriggerCount has changed only by 3 -> Bug.
+    '''
     return _trgcount
+
 
 # Used while evaluating Trigger
 _next_triggers_stack = []
 _next_triggers = []
 class NextTrigger(Expr):
+    '''
+    Create reference to next declared trigger. Makes your code cleaner.
+    '''
+
     def __init__(self):
         _next_triggers.append(self)
 
@@ -35,12 +49,6 @@ class NextTrigger(Expr):
 
 
 
-def LastTrigger(Expr):
-	last_trigger = _last_trigger.pop()
-	_last_trigger.append(last_trigger)
-	return last_trigger
-
-
 # Trigger scoping thing
 _last_trigger = [None]
 
@@ -48,12 +56,32 @@ def LastTrigger(Expr):
     return _last_trigger[-1]
 
 def PushTriggerScope():
+    '''
+    Creates trigger scope. Triggers inside the scope is isolated from outside.
+    Used in conjunction with PopTriggerScope().
+
+    ex)
+    a = Trigger()
+    PushTriggerScope()
+    b = Trigger()
+    c = Trigger()
+    PopTriggerScope()
+    d = Trigger()
+
+    Result : a->d, b->c. Inside and outside of scope is isolated.
+    '''
+
     global _next_triggers
     _next_triggers_stack.append(_next_triggers)
     _last_trigger.append(None)
     _next_triggers = []
 
+
 def PopTriggerScope():
+    '''
+    Exits trigger scope. Used in conjunction with PushTriggerScope().
+    '''
+
     global _next_triggers
     assert not _next_triggers, 'Implicit trigger linking cannot happen when closing scope'
     _last_trigger.pop()
@@ -62,7 +90,22 @@ def PopTriggerScope():
 
 
 class Trigger(EUDObject):
+    '''
+    Trigger object.
+    '''
+
     def __init__(self, nextptr = None, conditions = [], actions = [], preserved = True):
+        '''
+        nextptr : Trigger to be executed after this trigger. Modifiable via SetNextPtr
+         action.
+        conditions : List of conditions. Single condition (not a list) / nested list
+         allowed. If omitted, trigger won't have any conditions. (Always execute)
+        actions : List of conditions. Single condition (not a list) / nested list
+         allowed. If omitted, trigger won't have any actions. (Do nothing)
+        preserved : Preserve Trigger() flag. Default : True.
+
+        See eudtrg.base.stocktrg for stock conditions/actions.
+        '''
         global _last_trigger
         global _next_triggers
         global _trgcount
@@ -123,21 +166,6 @@ class Trigger(EUDObject):
         _trgcount += 1
 
 
-    def MUTATE_SetNextPtr(self, nexttrg):
-        assert nexttrg
-        self._nextptr = nexttrg
-
-    # some helper func
-    def NextPtr(self):
-        return self + 4
-
-    def Condition(self, index):
-        return self._conditions[index]
-
-    def Action(self, index):
-        return self._actions[index]
-
-
     # function needed for payloadmanager
     def GetDataSize(self):
         return 2408
@@ -175,10 +203,13 @@ class Trigger(EUDObject):
 
 
 
-"""
-Condition class. Immutable. Stock conditions are defined at stocktrg.
-"""
+
 class Condition(Expr):
+    '''
+    Condition class. Immutable in python. See eudtrg.base.stocktrg for stock conditions.
+    You won't be manipulating this class directly if you're only using stock triggers.
+    '''
+
     def __init__(self, locid, player, amount, unitid, comparison, condtype, restype, flags):
         assert IsValidExpr(locid)
         assert IsValidExpr(player)
@@ -248,10 +279,13 @@ class Condition(Expr):
 
 
 
-"""
-Action class. Immutable. Stock actions are defined at stocktrg.
-"""
+
 class Action(Expr):
+    '''
+    Action class. Immutable in python. See eudtrg.base.stocktrg for stock actions.
+    You won't be manipulating this class directly if you're only using stock triggers.
+    '''
+
     def __init__(self, locid1, strid, wavid, time, player1, player2, unitid, acttype, amount, flags):
         super(Action, self).__init__()
 
@@ -332,6 +366,11 @@ class Action(Expr):
 
 
 def Disabled(item):
+    '''
+    Make condition/action disabled.
+    ex)
+     Disabled(SetDeaths(Player1, SetTo, 1234, 'Terran Marine'))
+    '''
     item.Disable()
     return item
 

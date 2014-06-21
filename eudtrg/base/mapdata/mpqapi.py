@@ -1,11 +1,10 @@
+'''
+SFmpq.dll wrapper. Used internally inside eudtrg.
+'''
+
 from eudtrg import LICENSE #@UnusedImport
 
-"""
-Simple SFmpq.dll wrapper. Used internally for editing MPQ.
-"""
-
 from ctypes import * #@UnusedWildImport
-
 from ..utils.ubconv import u2b
 
 

@@ -174,7 +174,7 @@ def PauseGame():
 def UnpauseGame():
     return Action(0, 0, 0, 0, 0, 0, 0, 6, 0, 4)
 
-def Transmission(Unit, Where, WAVName, TimeModifier, Time, Text, AlwaysDisplay):
+def Transmission(Unit, Where, WAVName, TimeModifier, Time, Text, AlwaysDisplay = 4):
     Unit = ParseUnit(Unit)
     Where = ParseLocation(Where)
     WAVName = ParseString(WAVName)
@@ -186,7 +186,7 @@ def PlayWAV(WAVName):
     WAVName = ParseString(WAVName)
     return Action(0, 0, WAVName, 0, 0, 0, 0, 8, 0, 4)
 
-def DisplayText(Text, AlwaysDisplay):
+def DisplayText(Text, AlwaysDisplay = 4):
     Text = ParseString(Text)
     return Action(0, Text, 0, 0, 0, 0, 0, 9, 0, AlwaysDisplay)
 

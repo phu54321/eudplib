@@ -1,8 +1,8 @@
-from eudtrg import LICENSE #@UnusedImport
+'''
+Templates for TRIG section triggers. Uesd internally in eudtrg.
+'''
 
-"""
-Templates for TRIG section triggers. Internally used in eudtrg.
-"""
+from eudtrg import LICENSE #@UnusedImport
 
 from ctypes import * #@UnusedWildImport
 

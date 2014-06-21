@@ -1,8 +1,7 @@
-"""
-Expression wrapper library. Expr class represents expression containing Addr.
-Value of Expr class can be calculated only if all Addresses it's refering to
-have been calculated. Used internally in eudtrg.
-"""
+'''
+Expression library wrapper. Used for calculating expression with addreses.
+Internally used in eudtrg.
+'''
 
 from eudtrg import LICENSE #@UnusedImport
 from ..payload.rlocint import RelocatableInt
@@ -19,6 +18,12 @@ def GetCacheToken():
 
 
 class Expr:
+    '''
+    Base class for expression containing address of objects.
+    Any object derived from this class should implement these virtual methods:
+     - GetDependencyList : Get list of expressions this expression depents on.
+     - EvalImpl : Evaluate value of expressions.
+    '''
     def __init__(self):
         self._cachetoken = None
 
@@ -117,7 +122,6 @@ def IsValidExpr(x):
 
 
 
-# Dependency walker
 def GetDependencyList(item):
     try:
         return item.GetDependencyList()

@@ -1,8 +1,26 @@
+'''
+Forward declaration class Forward
+'''
+
 from eudtrg import LICENSE #@UnusedImport
 
 from .expr import Expr, Evaluate, GetCacheToken
 
 class Forward(Expr):
+    '''
+    ex)
+
+    a = Trigger( nextptr = b ) # Error : b is not defined
+    b = Trigger( nextptr = a ) 
+
+    ->
+
+    b = Forward() # Forward declaration
+    a = Trigger( nextptr = b )
+    b << Trigger( nextptr = a ) # put in value later.
+
+    '''
+
     def __init__(self):
         super().__init__()
         self.target = None

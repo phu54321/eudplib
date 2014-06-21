@@ -1,3 +1,7 @@
+'''
+String table manager. Internally used in eudtrg.
+'''
+
 from eudtrg import LICENSE #@UnusedImport
 
 from ..utils import binio, ubconv

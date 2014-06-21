@@ -1,9 +1,8 @@
-from eudtrg import LICENSE #@UnusedImport
+'''
+Injector generator. Used internally inside eudtrg.
+'''
 
-"""
-Injector generator. This function injects payload into your map and some
-initalization triggers into your map.
-"""
+from eudtrg import LICENSE #@UnusedImport
 
 import struct
 

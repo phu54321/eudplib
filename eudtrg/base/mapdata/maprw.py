@@ -1,3 +1,7 @@
+'''
+Implements LoadMap, SaveMap function
+'''
+
 from eudtrg import LICENSE #@UnusedImport
 
 from .mapdata import (
@@ -18,6 +22,10 @@ _mpqcontent = None
 
     
 def LoadMap(fname):
+    '''
+    Load template map and read various data from it.
+    '''
+
     print('Loading map %s' % fname)
     
     global _chk, _mpqcontent
@@ -86,6 +94,11 @@ def LoadMap(fname):
     
     
 def SaveMap(fname, root):
+    '''
+    Inject EUDObjects needed for roots into template map and save it to fname.
+    Original map file is not altered.
+    '''
+
     print('Saving map %s' % fname)
    
     # write new uprp

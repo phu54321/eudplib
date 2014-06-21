@@ -7,11 +7,13 @@ from eudtrg import LICENSE #@UnusedImport
 
 import sys
 
-charset = sys.stdin.encoding
+charset = sys.getdefaultencoding()
+
 
 def UbconvUseCharset(newencoding):
     global charset
     charset = newencoding
+    
 
 def Unicode2Bytes(string):
     if isinstance(string, bytes):

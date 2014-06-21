@@ -1,8 +1,10 @@
+'''
+scenario.chk section tokenizer. Internally used in eudtrg.
+'''
+
+
 from eudtrg import LICENSE #@UnusedImport
 
-"""
-scenario.chk parser. Internally used in eudtrg.
-"""
 
 import struct
 from ..utils import ubconv
