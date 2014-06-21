@@ -18,9 +18,9 @@ EUDJump(loopstart)
 loopend << Trigger()
 
 DoActions([
-	SetMemory(0x58A364, SetTo, 5678),
-	SetDeaths(203151, SetTo, 0, 0)
-	#SetNextPtr(main, triggerend)
+    SetMemory(0x58A364, SetTo, 5678),
+    SetDeaths(203151, SetTo, 0, 0)
+    #SetNextPtr(main, triggerend)
 ])
 
 
