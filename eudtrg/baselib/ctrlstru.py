@@ -3,10 +3,10 @@ from eudtrg import LICENSE #@UnusedImport
 from eudtrg.base import * #@UnusedWildImport
 
 def DoActions(actions):
-    Trigger( actions = FlattenList(actions) )
+    return Trigger( actions = FlattenList(actions) )
 
 def EUDJump(nexttrg):
-    Trigger( nextptr = nexttrg )
+    return Trigger( nextptr = nexttrg )
 
 def EUDBranch(conditions, ontrue, onfalse):
     brtrg = Forward()

@@ -16,6 +16,18 @@ class Subtract: pass
 class Move: pass
 class Patrol: pass
 class Attack: pass
+class P1: pass
+class P2: pass
+class P3: pass
+class P4: pass
+class P5: pass
+class P6: pass
+class P7: pass
+class P8: pass
+class P9: pass
+class P10: pass
+class P11: pass
+class P12: pass
 class Player1: pass
 class Player2: pass
 class Player3: pass
@@ -83,6 +95,18 @@ OrderDict = {
 }
 
 PlayerDict = {
+    P1:0,
+    P2:1,
+    P3:2,
+    P4:3,
+    P5:4,
+    P6:5,
+    P7:6,
+    P8:7,
+    P9:8,
+    P10:9,
+    P11:10,
+    P12:11,
     Player1:0,
     Player2:1,
     Player3:2,
@@ -156,7 +180,7 @@ def ParseScore(s): return ParseConst(ScoreDict, s)
 def ParseSwitchAction(s): return ParseConst(SwitchActionDict, s)
 def ParseSwitchState(s): return ParseConst(SwitchStateDict, s)
 def ParseAIScript(s):
-    return binio.b2i4(ParseConst(AIScriptDict, s))
+    return binio.b2i4(ParseConst(AIScriptDict, s), 0)
 
 def ParseCount(s):
     if s is All: return 0

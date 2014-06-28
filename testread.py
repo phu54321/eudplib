@@ -1,5 +1,7 @@
 from eudtrg import *
 
+LoadMap('outputmap/basemap.scx')
+
 main = NextTrigger()
 
 retval = f_dwread.call(EPD(0x5993D4)) # Get address of STR section
@@ -13,4 +15,4 @@ main2 = Trigger(
 	]
 )
 
-Inject('outputmap/basemap.scx', 'outputmap/readdword.scx', main)
+SaveMap('outputmap/readdword.scx', main)

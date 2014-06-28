@@ -1,7 +1,6 @@
-
-"""
-Payload packager. Used internally in eudtrg
-"""
+'''
+Declares payload class & various helper functions. Used internally in eudtrg.
+'''
 
 from eudtrg import LICENSE #@UnusedImport
 
@@ -21,7 +20,6 @@ class Payload:
 def CreatePayload(root):
     needed_objects = depgraph.GetAllDependencies(root)
     objn = len(needed_objects)
-    print('Collected %d eud objects.' % objn)
 
     objsizetable = []
     current_cursor = 0

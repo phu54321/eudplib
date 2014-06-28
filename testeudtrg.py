@@ -1,6 +1,6 @@
 from eudtrg import *
 
-LoadMap('basemap.scx')
+LoadMap('outputmap/basemap.scx')
 
 b = Forward()
 
@@ -18,4 +18,4 @@ b << Trigger(
     ]
 )
 
-SaveMap('output.scx', a)
+SaveMap('outputmap/eudtrgout.scx', a)

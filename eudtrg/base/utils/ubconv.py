@@ -1,13 +1,12 @@
-
-"""
+'''
 Unicode(python) <-> Binary(starcraft) conversion. Used internally in eudtrg.
-"""
+'''
 
 from eudtrg import LICENSE #@UnusedImport
 
 import sys
 
-charset = sys.getdefaultencoding()
+charset = 'cp949' # default : korean
 
 
 def UbconvUseCharset(newencoding):

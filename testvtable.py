@@ -1,5 +1,6 @@
 from eudtrg import *
 
+LoadMap('outputmap/basemap.scx');
 addvt = vtable.EUDVTable(3)
 a, b, ret = addvt.GetVariables()
 
@@ -37,5 +38,4 @@ main2 << Trigger(
 	]
 )
 
-
-Inject('outputmap/basemap.scx', 'outputmap/vtable.scx', main)
+SaveMap('outputmap/vtable.scx', main)

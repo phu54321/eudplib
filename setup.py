@@ -1,11 +1,9 @@
 from setuptools import setup, find_packages
 import sys
 
-sys.argv.append('install')
-
 setup(
     name = "eudtrg",
-    version = "0.2-r3",
+    version = "0.21-r10",
     packages = find_packages(),
     package_data = {
         '': ['*.dll', '*.lst'],
@@ -21,4 +19,3 @@ setup(
 
     # could also include long_description, download_url, classifiers, etc.
 )
-

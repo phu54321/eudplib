@@ -1,7 +1,7 @@
-"""
+'''
 Dependency graph library. Traverses through objects by dependencies, collecting
-needed objects. Used internally in eudtrg.
-"""
+required objects. Used internally in eudtrg.
+'''
 
 from eudtrg import LICENSE #@UnusedImport
 

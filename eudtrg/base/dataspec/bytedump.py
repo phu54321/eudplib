@@ -27,7 +27,7 @@ class Db(EUDObject):
     def GetDependencyList(self):
         return []
 
-    def WritePayloadChunk(self, buf):
+    def WritePayload(self, buf):
         buf.EmitBytes(self._content)
 
 

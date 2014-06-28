@@ -23,7 +23,7 @@ class EUDObject(Expr):
 
     def SetAddress(self, address):
         '''
-        Returns address of object. Set address of object.
+        Set address of object. Don't override.
         '''
         assert self._address is None
         self._address = address
@@ -39,7 +39,8 @@ class EUDObject(Expr):
 
     def EvalImpl(self):
         '''
-        Used internally in eudtrg. Returns address of object.
+        Returns address of object. You can override this function for some effects. See
+        auxlib/EUDGrp for override example.
         '''
         assert self._address is not None
         return RelocatableInt(self._address, 4)
@@ -52,14 +53,14 @@ class EUDObject(Expr):
         traverse through other objects. Instead, GetDependencyList should give a
         complete list of objects which derived object directly depends on.
         '''
-        raise NotImplementedError("Subclass %s should implement this" % str(type(self)))
+        raise NotImplementedError("Subclass %s should implement GetDependencyList" % str(type(self)))
 
 
     def GetDataSize(self):
         '''
         Get size of object when it is uploaded. e.g. Trigger object's size is 2408.
         '''
-        raise NotImplementedError("Subclass %s should implement this" % str(type(self)))
+        raise NotImplementedError("Subclass %s should implement GetDataSize" % str(type(self)))
 
 
     def WritePayload(self, emitbuffer):
@@ -73,5 +74,5 @@ class EUDObject(Expr):
         eudtrg will raise RuntimeError if object have written payload of size different
         from GetDatasize.
         '''
-        raise NotImplementedError("Subclass %s should implement this" % str(type(self)))
+        raise NotImplementedError("Subclass %s should implement WritePayload" % str(type(self)))
 

@@ -20,13 +20,35 @@ from ..inject import injgen
 _chk = None
 _mpqcontent = None
 
+
+
+def PutDict_NoDup(d, key, value):
+    if key in d: # Duplication
+        d[key] = None # Mark as duplicate
+    else:
+        d[key] = value
+
     
+
+
 def LoadMap(fname):
     '''
     Load template map and read various data from it.
     '''
 
-    print('Loading map %s' % fname)
+    # Function for ignoring colorful unit names - They are useless.
+    def IgnoreColor(s):
+        stb = []
+        for ch in s:
+            if 0x01 <= ch <= 0x1F or ch == 0x7F:
+                continue
+            else:
+                stb.append(bytes([ch]))
+
+        return b''.join(stb)
+
+
+    # Main logic start
     
     global _chk, _mpqcontent
     
@@ -68,12 +90,10 @@ def LoadMap(fname):
             locstr = strtable.GetString(locstrid)
             if not locstr: continue
 
-            if locstr in locnametable: # Location name duplicated
-                locnametable[locstr] = None
-            else:
-                locnametable[locstr] = i + 1 # SC counts location from 1. Weird
+            PutDict_NoDup(locnametable, locstr, i+1) # SC counts location from 1. Weird
 
     # Get unit names
+
     unix = _chk.getsection('UNIx')
     if unix:
         for i in range(228):
@@ -81,10 +101,11 @@ def LoadMap(fname):
             unitstr = strtable.GetString(unitstrid)
             if not unitstr: continue
 
-            if unitstr in unitnametable:
-                unitnametable[unitstr] = None # Unit name duplicated
-            else:
-                unitnametable[unitstr] = i
+
+            PutDict_NoDup(unitnametable, unitstr, i)
+            cignored = IgnoreColor(unitstr)
+            if cignored != unitstr:
+                PutDict_NoDup(unitnametable, cignored, i)
                 
     
     uprptable.clear()
@@ -93,13 +114,13 @@ def LoadMap(fname):
     
     
     
-def SaveMap(fname, root):
+
+
+def SaveMap(fname, root, additionalfiles = {}):
     '''
     Inject EUDObjects needed for roots into template map and save it to fname.
     Original map file is not altered.
     '''
-
-    print('Saving map %s' % fname)
    
     # write new uprp
     uprpcontent = b''.join( uprptable + [bytes(20 * (64 - len(uprptable)))] )
@@ -124,5 +145,12 @@ def SaveMap(fname, root):
 
 
     mw.PutFile('staredit\\scenario.chk', rawchk)
+
+
+    # Put in additional files
+    for fname, data in additionalfiles.items():
+        mw.PutFile(fname, data)
+
+    # Compact & close
     mw.Compact()
     mw.Close()

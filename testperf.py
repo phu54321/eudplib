@@ -1,5 +1,7 @@
 from eudtrg import *
 
+LoadMap('outputmap/basemap.scx')
+
 vt = EUDVTable(1)
 a = vt.GetVariables()[0]
 
@@ -24,4 +26,4 @@ DoActions([
 ])
 
 
-Inject('outputmap/basemap.scx', 'outputmap/perfest.scx', main)
+SaveMap('outputmap/perfest.scx', main)

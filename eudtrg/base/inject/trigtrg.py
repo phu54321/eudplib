@@ -4,45 +4,8 @@ Templates for TRIG section triggers. Uesd internally in eudtrg.
 
 from eudtrg import LICENSE #@UnusedImport
 
-from ctypes import * #@UnusedWildImport
-
-class TrigCond(LittleEndianStructure):
-    _fields_ = [
-        ('locid', c_uint),
-        ('player', c_uint),
-        ('amount', c_uint),
-        ('unitid', c_ushort),
-        ('comparison', c_ubyte),
-        ('condtype', c_ubyte),
-        ('restype', c_ubyte),
-        ('flag', c_ubyte),
-        ('internal', c_ubyte * 2)
-    ]
-
-
-class TrigAct(LittleEndianStructure):
-    _fields_ = [
-        ('locid1', c_uint),
-        ('strid', c_uint),
-        ('wavid', c_uint),
-        ('time', c_uint),
-        ('player1', c_uint),
-        ('player2', c_uint),
-        ('unitid', c_ushort),
-        ('acttype', c_ubyte),
-        ('amount', c_ubyte),
-        ('flags', c_ubyte),
-        ('internal', c_ubyte * 3)
-    ]
-
-
-class TrigBox(LittleEndianStructure):
-    _fields_ = [
-        ('conditions', TrigCond * 16),
-        ('actions', TrigAct * 64),
-        ('internal', c_uint),
-        ('effplayer', c_ubyte * 28)
-    ]
+from struct import pack
+from ..utils import binio
 
 
 # for Deaths
@@ -94,63 +57,48 @@ SwitchToogle   = 6
 SwitchRandom   = 11
 
 # constructor
+_bc_dict = {
+    1:binio.i2b1,
+    2:binio.i2b2,
+    4:binio.i2b4,
+    None: (lambda x: x)
+}
+
+def _bconstruct(vspair):
+    btb = []
+    for value, size in vspair:
+        btb.append(_bc_dict[size](value))
+    return b''.join(btb)
+
 def CreateTRIGCondition(locid, player, amount, unitid, comparison, condtype, restype, flag):
-    cond = TrigCond()
-    cond.locid = locid
-    cond.player = player
-    cond.amount = amount
-    cond.unitid = unitid
-    cond.comparison = comparison
-    cond.condtype = condtype
-    cond.restype = restype
-    cond.flag = flag
-    return cond
+    if player<0: player += 0x100000000 #EPD
+    return pack('<IIIHBBBBBB', locid, player, amount, unitid, comparison, condtype, restype, flag, 0, 0)
 
 def CreateTRIGAction(locid1, strid, wavid, time, player1, player2, unitid, acttype, amount, flags):
-    act = TrigAct()
-    act.locid1 = locid1
-    act.strid = strid
-    act.wavid = wavid
-    act.time = time
-    act.player1 = player1
-    act.player2 = player2
-    act.unitid = unitid
-    act.acttype = acttype
-    act.amount = amount
-    act.flags = flags
-    return act
-
+    if player1<0: player1 += 0x100000000 #EPD
+    if player2<0: player2 += 0x100000000 #EPD
+    return pack('<IIIIIIHBBBBBB', locid1, strid, wavid, time, player1, player2, unitid, acttype, amount, flags, 0, 0, 0)
+    
+    
 def CreateTRIGTrigger(players, conditions, actions, preservetrigger = False):
     assert type(players) is list and type(conditions) is list and type(actions) is list
     assert len(conditions) <= 16
     assert len(actions) <= 64
 
-    trg = TrigBox()
-    for i in range(16):
-        memset(addressof(trg.conditions[i]), 0x00, sizeof(TrigCond))
-
-    for i in range(64):
-        memset(addressof(trg.actions[i]), 0x00, sizeof(TrigAct))
-
+    peff = bytearray(28)
     for p in players:
-        trg.effplayer[p] = 1
+        peff[p] = 1
 
-    for i in range(len(conditions)):
-        trg.conditions[i] = conditions[i]
-    if len(conditions) != 16:
-        trg.conditions[len(conditions)].condtype = 0
-
-    for i in range(len(actions)):
-        trg.actions[i] = actions[i]
-    if len(actions) != 64:
-        trg.actions[len(actions)].acttype = 0
-
-
-
-    if preservetrigger:
-        trg.internal = 4
-
-    return trg
+    b = _bconstruct(
+        [(cond, None) for cond in conditions] +
+        [(bytes(20*(16-len(conditions))), None)] +
+        [(act, None) for act in actions] +
+        [(bytes(32*(64-len(actions))), None)] +
+        [(b'\x04\0\0\0' if preservetrigger else b'\0\0\0\0', None)] +
+        [(bytes(peff), None)]
+    )
+    assert len(b) == 2400
+    return b
 
 
 # file writer

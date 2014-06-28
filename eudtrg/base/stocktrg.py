@@ -1,8 +1,18 @@
-from eudtrg import LICENSE #@UnusedImport
+'''
+Defines stock conditions & actions. You are most likely to use only conditions
+declared in this file. This file also serves as a basic reference for trigger
+condition / actions.
 
-"""
-Useful stock triggers.
-"""
+ ex) You want to create 'Create Unit' action:
+   1. Remove spaces. 'CreateUnit'
+   2. Find 'CreateUnit' in this file. You'll see the following function def.
+     def CreateUnit(Number, Unit, Where, ForPlayer):
+   3. Make your action as mentioned here.
+     ex) CreateUnit(30, 'Terran Marine', 'Anywhere', Player1)
+
+'''
+
+from eudtrg import LICENSE #@UnusedImport
 
 from .dataspec.trigger import Condition, Action
 from .utils.utils import EPD

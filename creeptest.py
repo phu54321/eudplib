@@ -68,6 +68,7 @@ CreateCreepReadFunc()
 Main logic
 '''
 
+LoadMap('basemap.scx')
 
 start = Trigger()
 f_creepread_init.call()
@@ -149,7 +150,7 @@ if 1:
 		], [ unitx, unity ]
 	)
 
-	DoActions(CreateUnit(1, DefUnitID['Kakaru (Twilight Critter)'], 1, Player1))
+	DoActions(CreateUnit(1, 'Kakaru (Twilight Critter)', 1, Player1))
 
 	# Loop done. Get next unit pointer
 	loopcontinue << NextTrigger()
@@ -171,10 +172,10 @@ loopout << NextTrigger()
 Trigger(
 	nextptr = triggerend,
 	actions = [
-		RemoveUnit( DefUnitID['Kakaru (Twilight Critter)'], Player1 ),
+		RemoveUnit('Kakaru (Twilight Critter)', Player1 ),
 	]
 )
 
 
 
-Inject('outputmap/creeptest_basemap.scx', 'outputmap/creeptest.scx', start)
+SaveMap('outputmap/creeptest.scx', start)

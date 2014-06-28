@@ -7,6 +7,10 @@ from eudtrg import LICENSE #@UnusedImport
 from ctypes import * #@UnusedWildImport
 
 class UnitProperty(LittleEndianStructure):
+    '''
+    UnitProperty class. Uses UPRP entry in the map.
+    '''
+
     _fields_ = [
         ('sprpvalid', c_ushort),
         ('prpvalid', c_ushort),
@@ -21,11 +25,26 @@ class UnitProperty(LittleEndianStructure):
     ]
         
     def __init__(self,
-        # Properties. True/False/None(Don't care)
         hitpoint = None, shield = None, energy = None, resource = None, hanger = None,
-        # Special properties. True/False/None(Don't care)
         clocked = None, burrowed = None, intransit = None, hallucinated = None, invincible = None
     ):
+        '''
+        Properties : Value/None (Don't care)
+         hitpoint : 0~100(%)  cf) When unit's hitpoint is greater than 167772,
+         shield   : 0~100(%)      you should give hitpoint None to make 100%% HP.
+         energy   : 0~100(%)
+         resource : 0~4294967295
+         hanger   : 0~65536 (Count)
+
+        Special properties : True(Enabled)/False(Disabled)/None(Don't care)
+         clocked      : Unit is clocked.
+         burrowed     : Unit is burrowed.
+         intransit    : Unit is lifted. (In transit)
+         hallucinated : Unit is hallucination.
+         invincible   : Unit is invincible.
+
+         ex) UnitProperty(hitpoint = 50, burrowed = True) # unit with HP 50%, burrowed
+        '''
         assert hitpoint is None or 0 <= hitpoint <= 100
         assert shield is None or 0 <= shield <= 100
         assert energy is None or 0 <= energy <= 100

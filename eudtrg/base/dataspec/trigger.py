@@ -83,7 +83,7 @@ def PopTriggerScope():
     '''
 
     global _next_triggers
-    assert not _next_triggers, 'Implicit trigger linking cannot happen when closing scope'
+    assert not _next_triggers, 'NextTrigger() has no meanings at the end of the scope'
     _last_trigger.pop()
     _next_triggers = _next_triggers_stack.pop()
 
@@ -105,6 +105,27 @@ class Trigger(EUDObject):
         preserved : Preserve Trigger() flag. Default : True.
 
         See eudtrg.base.stocktrg for stock conditions/actions.
+
+        ex)
+            Trigger()
+            Trigger(nextptr = triggerend)
+            Trigger(actions = [
+                SetMemory(0x12345678, SetTo, 1234)
+            ])
+            Trigger(actions = SetMemory(0x12345678, SetTo, 1234))
+            Trigger(
+                conditions = [
+                    Bring(Player1, AtLeast, 1, 'Terran Marine', 'Loc0')
+                ],
+                actions = [
+                    [ SetMemory(0x12345678, SetTo, 1234) ],
+                    [
+                        SetDeaths(Player1, SetTo, 30, 'Terran Marine'),
+                        PreserveTrigger()
+                    ],
+                    PlayWav('tata.wav')
+                ]
+            )
         '''
         global _last_trigger
         global _next_triggers
@@ -203,11 +224,23 @@ class Trigger(EUDObject):
 
 
 
-
 class Condition(Expr):
     '''
-    Condition class. Immutable in python. See eudtrg.base.stocktrg for stock conditions.
-    You won't be manipulating this class directly if you're only using stock triggers.
+    Condition class. Immutable in python. See eudtrg.base.stocktrg for stock
+    conditions. You won't be manipulating this class directly if you're only using
+    stock triggers, but you'll need to know in which offset each field will be
+    stored.
+
+     +00 locid         | dword0  | EPD(cond)+0
+     +04 player        | dword1  | EPD(cond)+1
+     +08 amount        | dword2  | EPD(cond)+2
+     +0C unitid        | dword3  | EPD(cond)+3
+     +0E comparison    |         |
+     +0F condtype      |         |
+     +10 restype       | dword4  | EPD(cond)+4
+     +11 flags         |         |
+     +12 internal[2]   |         |
+
     '''
 
     def __init__(self, locid, player, amount, unitid, comparison, condtype, restype, flags):
@@ -283,7 +316,21 @@ class Condition(Expr):
 class Action(Expr):
     '''
     Action class. Immutable in python. See eudtrg.base.stocktrg for stock actions.
-    You won't be manipulating this class directly if you're only using stock triggers.
+    You won't be manipulating this class directly if you're only using stock
+    triggers, but you'll need to know in which offset each field will be stored.
+
+     +00 locid1        | dword0  | EPD(act)+0
+     +04 strid         | dword1  | EPD(act)+1
+     +08 wavid         | dword2  | EPD(act)+2
+     +0C time          | dword3  | EPD(act)+3
+     +10 player1       | dword4  | EPD(act)+4
+     +14 player2       | dword5  | EPD(act)+5
+     +18 unitid        | dword6  | EPD(act)+6
+     +1A acttype       |         |
+     +1B amount        |         |
+     +1C flags         | dword7  | EPD(act)+7
+     +1D internal[3]   |         |
+
     '''
 
     def __init__(self, locid1, strid, wavid, time, player1, player2, unitid, acttype, amount, flags):

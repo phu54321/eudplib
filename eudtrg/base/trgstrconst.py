@@ -233,6 +233,10 @@ UnitNameDict = {
     "Zerg Vespene Gas Sac Type 2" : 225,
     "Terran Vespene Gas Tank Type 1" : 226,
     "Terran Vespene Gas Tank Type 2" : 227,
+    "(any unit)" : 229,
+    "(men)" : 230,
+    "(buildings)" : 231,
+    "(factories)" : 232
 }
 
 
