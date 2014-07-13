@@ -49,3 +49,17 @@ def SeqCompute(assignpairs):
 
             else:
                 DoActions( SetDeaths(dst, mdt, src, 0) )
+
+def DerefWrite(varname, value):
+    if type(value) is int:
+        act = Forward()
+        SeqCompute([(EPD(act + 16), SetTo, varname)])
+        DoActions(act << SetMemory(0, SetTo, value))
+
+    else:
+        act = Forward()
+        SeqCompute([
+            (EPD(act + 16), SetTo, varname),
+            (EPD(act + 20), SetTo, value)
+        ])
+        DoActions(act << SetMemory(0, SetTo, 0))

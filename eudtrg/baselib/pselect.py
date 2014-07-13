@@ -6,6 +6,7 @@ from .vtable import EUDVTable
 from .varassign import SeqCompute, SetVariables
 from .ctrlstru import EUDJumpIfNot, EUDJump
 
+
 def InitPlayerSwitch(playerroots):
     PushTriggerScope()
     playerroots = [p if p else Trigger(nextptr = triggerend) for p in playerroots]
@@ -58,6 +59,11 @@ def InitPlayerSwitch(playerroots):
         SeqCompute([(EPD(0x51A280 + 12*i + 4), SetTo, playerentry[i])])
         t << NextTrigger()
 
-    EUDJump(triggerend)
+    Trigger(
+        nextptr = triggerend,
+        actions = [
+            SetDeaths(203151, SetTo, 0, 0) # SetDeaths thing
+        ]
+    )
 
     return psbegin

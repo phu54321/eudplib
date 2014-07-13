@@ -11,6 +11,7 @@ def EPD(offset):
     return (offset - 0x0058A364) // 4
 
 
+
 '''
 Nested list / Single item -> Flat list
  ex) FlattenList([a, [b, c], d]) -> [a, b, c, d]
@@ -27,6 +28,11 @@ def FlattenList(l):
     except TypeError: # l is not iterable
         return [l]
 
+
+
+'''
+Parses SCMDraft2 style text message
+'''
 def SCM2Text(s):
     #
     # normal -> xdigitinput1 -> xdigitinput2 -> xdigitinput3 -> normal
@@ -54,7 +60,6 @@ def SCM2Text(s):
 
     # simple fsm
     for i in s:
-        print(i, state)
         if state == 0:
             if i == '<':
                 state = 1
@@ -97,3 +102,27 @@ def SCM2Text(s):
                 state = 0
 
     return ''.join(out)
+
+
+
+'''
+To support syntax like this:
+ a = f(1)     # f(1) returns 1 (not [1])
+ a,b = f(2)   # f(2) returns [1,2]
+ a,b,c = f(3) # f(3) returns [1,2,3]
+'''
+
+def List2Assignable(l):
+    if len(l) == 1:
+        return l[0]
+
+    else:
+        return l
+
+
+def Assignable2List(a):
+    if hasattr(a, '__iter__'):
+        return list(a)
+
+    else:
+        return [a]

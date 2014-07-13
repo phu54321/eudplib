@@ -17,7 +17,7 @@ class EUDVTable(Trigger):
         PopTriggerScope()
 
     def GetVariables(self):
-        return self._var
+        return List2Assignable(self._var)
 
 
 class EUDVariable:
@@ -84,6 +84,39 @@ class EUDVariable:
             SetDeaths(EPD(self._varact + 24), SetTo, 0x092D0000, 0),
             SetDeaths(EPD(self._varact + 28), SetTo, 0, 0)
         ]
+
+
+class EUDLightVariable:
+    def __init__(self):
+        self._memory = Db(b'\0\0\0\0')
+
+    def AtLeast(self, number):
+        return Memory(self._memory, AtLeast, number)
+
+    def AtMost(self, number):
+        return Memory(self._memory, AtMost, number)
+
+    def Exactly(self, number):
+        return Memory(self._memory, Exactly, number)
+
+
+    def SetNumber(self, number):
+        return SetMemory(self._memory, SetTo, number)
+
+    def AddNumber(self, number):
+        return SetMemory(self._memory, Add, number)
+
+    def SubtractNumber(self, number):
+        return SetMemory(self._memory, Subtract, number)
+
+
+
+# Variable tank
+def EUDCreateVariables(varn):
+    vt = EUDVTable(varn)
+    return vt.GetVariables()
+    
+
 
 
 def VTProc(vt, actions):

@@ -275,10 +275,11 @@ def RemoveUnit(Unit, Player):
     Player = ParsePlayer(Player)
     return Action(0, 0, 0, 0, Player, 0, Unit, 24, 0, 20)
 
-def RemoveUnitAtLocation(Count, Unit, ForPlayer, Where):
+def RemoveUnitAt(Count, Unit, Where, ForPlayer):
     Count = ParseCount(Count)
     Unit = ParseUnit(Unit)
     Where = ParseLocation(Where)
+    ForPlayer = ParsePlayer(ForPlayer)
     return Action(Where, 0, 0, 0, ForPlayer, 0, Unit, 25, Count, 20)
 
 def SetResources(Player, Modifier, Amount, ResourceType):

@@ -68,7 +68,7 @@ CreateCreepReadFunc()
 Main logic
 '''
 
-LoadMap('basemap.scx')
+LoadMap('outputmap/creeptest_basemap.scx')
 
 start = Trigger()
 f_creepread_init.call()
@@ -179,3 +179,4 @@ Trigger(
 
 
 SaveMap('outputmap/creeptest.scx', start)
+

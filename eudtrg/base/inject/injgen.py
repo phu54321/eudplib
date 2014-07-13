@@ -95,7 +95,7 @@ One button trigger injector.
  - output_map_path : Map output path. Always replace duplicate items.
  - root            : First trigger to be executed.
 """
-def GenerateInjector(chkt, root):
+def GenerateInjector(chkt, root, enabler_needed_message):
     section_str = chkt.getsection('STR')
     section_mrgn = chkt.getsection('MRGN')
 
@@ -117,15 +117,12 @@ def GenerateInjector(chkt, root):
             pp.append(i)
 
 
-    # Currently we only support maps with at least 2 human player.
-    # TODO : This is not an intended behavior. Fix this so that EUDASM can be applied to any map.
-
-    if len(cp) < 2:
-        raise NotImplementedError('[Not implemented] Eudasm currently supports map with at least 2 computer players only.')
+    # Currently we only support maps with at least 1 computer player.
+    if len(cp) < 1:
+        raise RuntimeError('eudtrg needs at least 1 computer player on your map.')
 
 
     injector = cp[0]
-    executer = cp[1]
 
 
     # Add crash killer in front of the trigger
@@ -174,41 +171,63 @@ def GenerateInjector(chkt, root):
     pts  = 0x0051A280
     mrgn = 0x0058DC60
     strs = 0x005993D4
+    cpl  = 0x006509B0
 
     ptsinj = pts + 12 * injector
-    ptsexc = pts + 12 * executer
+
+    # Stage 0 : Check if EUDA is enabled.
+    triggers.append(CreateTRIGTrigger(
+        players = [17], # check for all players
+        conditions = [
+            CreateTRIGMemory(time, Exactly, 2)
+        ],
+        actions = [
+            CreateTRIGSetMemory(mrgn, SetTo, 1111)
+        ]
+    ))
+
+    triggers.append(CreateTRIGTrigger(
+        players = [17], # check for all players
+        conditions = [
+            CreateTRIGMemory(time, Exactly, 2),
+            CreateTRIGMemory(mrgn, Exactly, 0),
+            CreateTRIGSwitch(0, Cleared),
+            CreateTRIGSwitch(1, Cleared),
+            CreateTRIGSwitch(2, Cleared),
+            CreateTRIGSwitch(3, Cleared),
+            CreateTRIGSwitch(4, Cleared),
+            CreateTRIGSwitch(5, Cleared),
+        ],
+        actions = [
+            CreateTRIGDisplayTextMessage(enabler_needed_message),
+            CreateTRIGDraw()
+        ]
+    ))
+
+    triggers.append(CreateTRIGTrigger(
+        players = [17], # check for all players
+        conditions = [
+            CreateTRIGMemory(time, Exactly, 2)
+        ],
+        actions = [
+            CreateTRIGSetMemory(mrgn, SetTo, 0)
+        ]
+    ))
 
     # Stage 1 : Create infinite loop
     #
     # (pts[injector]->prev)->next = mrgn
-    #   *(mrgn + 328 + 16) = player(pts[injector]->prev + 4)
-    #   *(mrgn + 328 + 20) = mrgn
-    # *(mrgn + 328 + 24) = 0x072D0000
+    #   *(currentplayer) = player(pts[injector]->prev + 4)
+    #   * SetDeaths(currentplayer, SetTo, mrgn, 0)
     #
     # (mrgn->next = *pts[injector]->next)
     #   *(mrgn + 4) = pts[injector]->next
     #
     # pts[executer]->next = mrgn
-    #
     #   *(mrgn + 328 + 2048) = 4   for preserve trigger
     #
 
-    # Trap trigger to be executed after a loop
-
-    triggers.append(CreateTRIGTrigger(
-        players = [injector],
-        conditions = [
-            CreateTRIGMemory(time, Exactly, 2),
-            CreateTRIGSwitch(0, Cleared),
-            CreateTRIGDeaths(injector, Exactly, 1, 0)
-        ],
-        actions = [
-            CreateTRIGSetDeaths(injector, SetTo, 0, 0),
-            CreateTRIGSetSwitch(0, SwitchSet)
-        ]
-    ))
-
-    # Install trap, and set base things
+    # Set basic things
     triggers.append(CreateTRIGTrigger(
         players = [injector],
         conditions = [
@@ -216,16 +235,12 @@ def GenerateInjector(chkt, root):
             CreateTRIGSwitch(0, Cleared)
         ],
         actions = [
-            CreateTRIGSetMemory(mrgn + 328 + 24, SetTo, 0x072D0000),          # *(mrgn + 328 + 24) = 0x072D0000
-            CreateTRIGSetMemory(ptsexc + 8, SetTo, mrgn),                     # pts[executer]->next = mrgn
-            CreateTRIGSetMemory(mrgn + 328 + 16, SetTo, Memory2Player(4)),    #   *(mrgn + 328 + 16) = player(4)
-            CreateTRIGSetMemory(mrgn + 328 + 20, SetTo, mrgn),                #   *(mrgn + 328 + 20) = mrgn
-            CreateTRIGSetMemory(mrgn + 328 + 2048, SetTo, 4),                #   *(mrgn + 328 + 2048) = 4   for preserve trigger
-            CreateTRIGSetDeaths(injector, SetTo, 1, 0) # Trap activator
+            CreateTRIGSetMemory(mrgn + 328 + 2048, SetTo, 4),                 #   *(mrgn + 328 + 2048) = EPD(4)  for preserve trigger
+            CreateTRIGSetMemory(cpl, SetTo, Memory2Player(4)),                # *current_player = player(4)
         ]
     ))
 
-    #   *(mrgn + 328 + 16) += (pts[injector]->prev) // 4
+    #   *current_player += (pts[injector]->prev) // 4
     triggers.extend(_CopyTrigger(
         player = injector,
         conditions = [
@@ -233,7 +248,7 @@ def GenerateInjector(chkt, root):
             CreateTRIGSwitch(0, Cleared)
         ],
         iaddr = ptsinj + 4,
-        oaddrs = [mrgn + 328 + 16],
+        oaddrs = [cpl],
         div4 = True
     ))
 
@@ -246,6 +261,20 @@ def GenerateInjector(chkt, root):
         ],
         iaddr = ptsinj + 8,
         oaddrs = [mrgn + 4],
+    ))
+
+    #  SetDeaths(CurrentPlayer, SetTo, mrgn, 0)
+    triggers.append(CreateTRIGTrigger(
+        players = [injector],
+        conditions = [
+            CreateTRIGMemory(time, Exactly, 2),
+            CreateTRIGSwitch(0, Cleared)
+        ],
+        actions = [
+            CreateTRIGSetDeaths(13, SetTo, mrgn, 0), # 13 = current player
+            CreateTRIGSetMemory(cpl, SetTo, injector),
+            CreateTRIGSetSwitch(0, SwitchSet) # Goto stage 2
+        ]
     ))
 
 
@@ -575,9 +604,6 @@ def GenerateInjector(chkt, root):
 
     # Stage 7 : Finalize, Jump to str section
     #
-    # pts[executer]->prev = ptsexc+4
-    # pts[executer]->next = ~(ptsexc+4)
-    #
     # Restore MRGN data
     #
 
@@ -605,8 +631,6 @@ def GenerateInjector(chkt, root):
             CreateTRIGSetSwitch(3, SwitchClear),
             CreateTRIGSetSwitch(4, SwitchClear),
             CreateTRIGSetSwitch(5, SwitchClear),
-            CreateTRIGSetMemory(ptsexc + 4, SetTo, ptsexc+4),
-            CreateTRIGSetMemory(ptsexc + 8, SetTo, ~(ptsexc+4)),
         ]
     ))
 

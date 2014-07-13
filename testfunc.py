@@ -5,6 +5,8 @@ from eudtrg import *
 
 LoadMap('outputmap/basemap.scx')
 
+# type 1
+'''
 addvt = vtable.EUDVTable(3)
 a, b, ret = addvt.GetVariables()
 
@@ -22,10 +24,26 @@ add0 = Trigger(
 add1 << Trigger()
 
 f_add = eudfunc.EUDFunc(add0, add1, addvt, 2, 1)
+'''
+
+
+
+# type 2
+@EUDFunc
+def f_add(a, b):
+	ret = EUDCreateVariables(1)
+	SeqCompute([
+		(ret, SetTo, 0),
+		(ret, Add, a),
+		(ret, Add, b)
+	])
+
+	return ret
+
 
 
 main = NextTrigger()
-retval = f_add.call(123, 456)
+[retval] = f_add(123, 456)
 main2 = Trigger(
 	nextptr = retval.GetVTable(),
 	actions = [

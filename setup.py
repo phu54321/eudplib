@@ -1,9 +1,9 @@
 from setuptools import setup, find_packages
-import sys
+from eudtrg import __version__
 
 setup(
     name = "eudtrg",
-    version = "0.21-r10",
+    version = __version__,
     packages = find_packages(),
     package_data = {
         '': ['*.dll', '*.lst'],

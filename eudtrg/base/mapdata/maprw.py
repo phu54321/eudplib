@@ -15,6 +15,7 @@ from .mapdata import (
 from ..utils import binio
 from . import chktok, mpqapi
 from ..inject import injgen
+from .nametable import ParseString
 
 # private variables
 _chk = None
@@ -121,7 +122,10 @@ def SaveMap(fname, root, additionalfiles = {}):
     Inject EUDObjects needed for roots into template map and save it to fname.
     Original map file is not altered.
     '''
-   
+
+    eudenabler_needed = ParseString('This map requires EUD Enabler to run. (wLauncher, AquaLauncher, EUD Action Enabler stuff)')
+    
+
     # write new uprp
     uprpcontent = b''.join( uprptable + [bytes(20 * (64 - len(uprptable)))] )
     _chk.setsection('UPRP', uprpcontent)
@@ -131,7 +135,7 @@ def SaveMap(fname, root, additionalfiles = {}):
     _chk.setsection('STR', strcontent)
     
     # Generate injector
-    injgen.GenerateInjector(_chk, root)
+    injgen.GenerateInjector(_chk, root, eudenabler_needed)
     
     # optimize & dump
     _chk.optimize()

@@ -2,20 +2,38 @@ from eudtrg import *
 
 LoadMap('outputmap/basemap.scx')
 
-b = Forward()
+ep = Trigger()
+DoActions(SetNextPtr(ep, triggerend))
 
-a = Trigger(
-    nextptr = b,
+
+# Test #1 : Display Text (tests InitPlayerSwitch)
+# Display text action
+DoActions(DisplayText('Test #1 success')) # If this message appears, then test was successful.
+
+
+# Test #2 : basic loop
+loop0_start = Trigger(
     actions = [
-        SetDeaths(Player1, Add, 1, 'Terran Marine')
+        CreateUnit(1, 'Terran Marine', 'Anywhere', Player1),
+        SetDeaths(Player1, Add, 1, 'Terran Marine') 
     ]
 )
 
-b << Trigger(
-    nextptr = b,
+EUDJumpIf( Deaths(Player1, AtMost, 319, 'Terran Marine') , loop0_start )
+
+DoActions( LeaderBoardControl( 'Terran Marine', 'Should be 320' ) )
+
+Trigger(
+    conditions = [
+        Command(Player1, Exactly, 320, 'Terran Marine')
+    ],
     actions = [
-        SetDeaths(Player2, Add, 1, 'Terran Marine')
+        DisplayText('Test #2 success')
     ]
 )
 
-SaveMap('outputmap/eudtrgout.scx', a)
+
+
+
+psw = InitPlayerSwitch([ep, None, None, None, None, None, None, None])
+SaveMap('outputmap/eudtrgout.scx', psw)

@@ -285,7 +285,7 @@ class Condition(Expr):
 
     # Used by Trigger::GetDependencyList
     def GetDependencyList(self):
-        assert self._parenttrg, 'Condition must be inside an action'
+        assert self._parenttrg, 'Condition must be inside a trigger'
         return [
             self._parenttrg,
             self._locid,
@@ -300,6 +300,7 @@ class Condition(Expr):
 
     # Used by Trigger::WritePayload
     def WritePayload(self, buf):
+        '''
         buf.EmitDword (self._locid)
         buf.EmitDword (self._player)
         buf.EmitDword (self._amount)
@@ -309,6 +310,10 @@ class Condition(Expr):
         buf.EmitByte  (self._restype)
         buf.EmitByte  (self._flags)
         buf.EmitBytes (b'\0\0')
+        '''
+
+        buf.EmitPack('IIIHBBBBH', self._locid, self._player, self._amount,
+            self._unitid, self._comparison, self._condtype, self._restype, self._flags, 0)
 
 
 
@@ -380,7 +385,7 @@ class Action(Expr):
 
     # Used in Trigger::GetDependencyList
     def GetDependencyList(self):
-        assert self._parenttrg, 'Action must be inside an action'
+        assert self._parenttrg, 'Action must be inside a trigger'
         return [
             self._parenttrg,
             self._locid1,
@@ -398,6 +403,7 @@ class Action(Expr):
 
     # Used in Trigger::WritePayload
     def WritePayload(self, buf):
+        '''
         buf.EmitDword (self._locid1)
         buf.EmitDword (self._strid)
         buf.EmitDword (self._wavid)
@@ -409,6 +415,10 @@ class Action(Expr):
         buf.EmitByte  (self._amount)
         buf.EmitByte  (self._flags)
         buf.EmitBytes (b'\0\0\0')
+        '''
+
+        buf.EmitPack('IIIIIIHBBBBH', self._locid1, self._strid, self._wavid, self._time, self._player1,
+            self._player2, self._unitid, self._acttype, self._amount, self._flags, 0, 0)
 
 
 

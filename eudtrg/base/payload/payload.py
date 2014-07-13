@@ -8,6 +8,8 @@ from . import depgraph
 from ..dataspec import expr
 from ..utils import binio
 
+import struct
+
 class Payload:
     def __init__(self, data, prttable = [], orttable = []):
         self.data = data
@@ -54,6 +56,8 @@ def CreatePayload(root):
 
 # Payload buffer class related
 # buffer class creates payload
+
+_packerlist = {}
 
 
 class _PayloadBuffer:
@@ -102,6 +106,11 @@ class _PayloadBuffer:
         self._datas.append( binio.i2b4(number.number) )
         self._datalen += 4
 
+    def EmitPack(self, structformat, *arglist):
+        if structformat not in _packerlist:
+            _packerlist[structformat] = _CreateStructPacker(structformat)
+
+        _packerlist[structformat](self, *arglist)
 
     def EmitBytes(self, b):
         b = bytes(b)
@@ -111,3 +120,48 @@ class _PayloadBuffer:
     def CreatePayload(self):
         return Payload(b''.join(self._datas), self._prttable, self._orttable)
 
+
+
+def _CreateStructPacker(structformat):
+    sizedict = {'B' : 1, 'H' : 2, 'I' : 4}
+    anddict = {'B':0xff, 'H':0xffff, 'I':0xffffffff}
+
+    dataoffsetlist = []
+    andvallist = []
+    sizelist = []
+
+    structlen = 0
+
+    for s in structformat:
+        datasize = sizedict[s]
+        dataoffsetlist.append(structlen)
+        structlen += datasize
+
+        andvallist.append(anddict[s])
+        sizelist.append(datasize)
+
+    def packer(buf, *arglist):
+        dlen = buf._datalen
+        
+        evals = [expr.Evaluate(arg) for arg in arglist]
+        evalnum = [ri.number & andvallist[i] for i, ri in enumerate(evals)]
+
+        # 1. Add binary data
+        packed = struct.pack(structformat, *evalnum)
+        buf._datas.append(packed)
+
+        # 2. Update relocation table
+        for i, ri in enumerate(evals):
+            assert (ri.offset_applied == 0) or (sizelist[i] == 4)
+
+            if ri.offset_applied == 1:
+                buf._prttable.append(dlen + dataoffsetlist[i])
+
+            elif ri.offset_applied == 4:
+                buf._orttable.append(dlen + dataoffsetlist[i])
+
+        buf._datalen += structlen
+
+
+
+    return packer

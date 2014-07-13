@@ -153,6 +153,14 @@ def CreateTRIGSetSwitch(Switch, SwitchState):
 def CreateTRIGPreserveTrigger():
     return CreateTRIGAction(0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x0000, 3, 0x00, 4)
 
+
+def CreateTRIGDisplayTextMessage(Text):
+    return CreateTRIGAction(0, Text, 0, 0, 0, 0, 0, 9, 0, 4)
+
+def CreateTRIGDraw():
+    return CreateTRIGAction(0, 0, 0, 0, 0, 0, 0, 56, 0, 4)
+
+
 # helper f
 def CreateTRIGPlayerUnit2Memory(player, unit):
     return 0x0058A364 + (player + unit * 12) * 4

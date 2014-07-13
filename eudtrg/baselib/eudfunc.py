@@ -1,40 +1,50 @@
 from .. import LICENSE
 
 from eudtrg.base import * #@UnusedWildImport
-from .vtable import EUDVTable, EUDVariable
-from .varassign import SetVariables
+from .vtable import EUDVTable, EUDVariable, EUDCreateVariables
+from .varassign import SetVariables, SeqCompute
 
-class EUDFunc:
-    def __init__(self, starttrig, endtrig, vt, argn, retn):
-        assert 0 <= retn < 16 and 0 <= argn < 16
-        assert isinstance(vt, EUDVTable)
+import inspect
 
-        self._fstarttrig = starttrig
-        self._fendtrig = endtrig
-        self._vt = vt
-        self._retn = retn
-        self._argn = argn
 
-    def GetVTable(self):
-        return self._vt
 
-    def call(self, *args):
-        assert len(args) == self._argn
+def EUDFunc(fdecl_func):
+    # Get argument number of fdecl_func
+    argspec = inspect.getargspec(fdecl_func)
+    assert argspec[1] is None, 'No variadic arguments (*args) allowed'
+    assert argspec[2] is None, 'No variadic keyword arguments (*kwargs) allowd'
+    argn = len(argspec[0])
 
-        vtvars = self._vt.GetVariables()
 
-        SetVariables(vtvars[0:self._argn], args)
+    # Create function body
 
-        callend = Forward()
+    PushTriggerScope()
+    
+    f_args = Assignable2List(EUDCreateVariables(argn))
+    fstart = NextTrigger()
+    f_rets = Assignable2List(fdecl_func(*f_args))
+    fend = Trigger()
+
+    PopTriggerScope()
+
+
+    # Function to return
+    def retfunc(*args):
+        # Assign arguments into argument space
+        computeset = [(farg, SetTo, arg) for farg, arg in zip(f_args, args)]
+        SeqCompute(computeset)
+
+        # Call body
+        fcallend = Forward()
+
         Trigger(
-            nextptr = self._fstarttrig,
-            actions = [SetNextPtr(self._fendtrig, callend)]
+            nextptr = fstart,
+            actions = [ SetNextPtr(fend, fcallend) ]
         )
-        callend << NextTrigger()
 
-        ret = tuple(vtvars[self._argn : self._argn + self._retn])
-        if len(ret) == 1:
-            ret = ret[0]
-        return ret
+        fcallend << NextTrigger()
 
+        return List2Assignable(f_rets)
 
+    # return
+    return retfunc

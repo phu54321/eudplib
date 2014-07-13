@@ -6,33 +6,12 @@ from .eudfunc import EUDFunc
 
 f_dwread = None
 
-def _ReadDwordInit():
-    global f_dwread
-
-    vt = EUDVTable(2)
-    targetplayer, ret = vt.GetVariables()
-
-    readstart = Forward()
-    readend = Forward()
-
-    f_dwread = EUDFunc(readstart, readend, vt, 1, 1)
-
-
-    """
-    Pseudocode
-        ret = 0xFFFFFFFF
-
-        static_for(i = 31, 30, ... , 0) {
-            ret -= 2**i
-            ifnot ret(cmptrigger_number) >= target(cmptrigger_player): // chain[i]
-                continue
-
-            ret += 2**i
-        }
-    """
-
+@EUDFunc
+def f_dwread(targetplayer):
+    ret = EUDCreateVariables(1)
 
     # Common comparison trigger
+    PushTriggerScope()
     cmp = Forward()
     cmp_player = cmp + 4
     cmp_number = cmp + 8
@@ -48,6 +27,8 @@ def _ReadDwordInit():
         ]
     )
     cmpact_ontrueaddr = cmpact + 20
+    PopTriggerScope()
+
 
     # static_for
     chain1 = [Forward() for _ in range(32)]
@@ -67,6 +48,7 @@ def _ReadDwordInit():
             SetNextPtr(vt, chain1[31])
         ]
     )
+
 
     for i in range(31, -1, -1):
         nextchain = chain1[i-1] if i > 0 else readend
@@ -88,6 +70,3 @@ def _ReadDwordInit():
             ]
         )
 
-    readend << Trigger()
-
-_ReadDwordInit()
