@@ -3,7 +3,6 @@ Defines class EUDGrp.
 '''
 
 from eudtrg.base import *
-from eudtrg.baselib import *
 
 import struct
 

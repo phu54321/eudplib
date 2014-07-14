@@ -1,11 +1,9 @@
 from eudtrg import LICENSE #@UnusedImport
 
 from eudtrg.base import * #@UnusedWildImport
-from .readdword import f_dwread
-from .vtable import EUDVTable
-from .varassign import SeqCompute, SetVariables
-from .ctrlstru import EUDJumpIfNot, EUDJump
+from eudtrg.lib.baselib import * #@UnusedWildImport
 
+from .readdword import f_dwread
 
 def InitPlayerSwitch(playerroots):
     PushTriggerScope()

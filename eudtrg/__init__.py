@@ -9,9 +9,9 @@ eudtrg consists of 3 subpackages.
 from eudtrg import LICENSE #@UnusedImport
 
 from .base import *
-from .baselib import *
+from .lib import *
 
-__version__ = "0.22-r2"
+__version__ = "0.23-r1"
 
 def eudtrgVersion():
     return __version__
@@ -19,11 +19,11 @@ def eudtrgVersion():
 '''
 Changelog
 
-0.22-r2
+0.23-r1
  - Added some intro messages for non-euda-enabled players.
  - New easier eudfunc syntax
 
- 
+
 
 0.22-r1
  - eudtrg now requires only 1 computer player to work properly.

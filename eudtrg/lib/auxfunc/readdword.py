@@ -1,10 +1,7 @@
 from eudtrg import LICENSE #@UnusedImport
 
 from eudtrg.base import * #@UnusedWildImport
-from .vtable import EUDVTable
-from .eudfunc import EUDFunc
-
-f_dwread = None
+from eudtrg.lib.baselib import * #@UnusedWildImport
 
 @EUDFunc
 def f_dwread(targetplayer):
@@ -36,19 +33,13 @@ def f_dwread(targetplayer):
 
 
     # Main logic start
-    readstart << Trigger(
-        nextptr = vt,
-        actions = [
-            targetplayer.QueueAssignTo(EPD(cmp_player)),
+    SeqCompute([
+        (cmp_player, SetTo, targetplayer),
+        (cmp_number, SetTo, 0xFFFFFFFF),
+        (ret,        SetTo, 0xFFFFFFFF)
+    ])
 
-            # num = 0xFFFFFFFF
-            SetMemory(cmp_number, SetTo, 0xFFFFFFFF),
-            ret.SetNumber(0xFFFFFFFF),
-
-            SetNextPtr(vt, chain1[31])
-        ]
-    )
-
+    readend = Forward()
 
     for i in range(31, -1, -1):
         nextchain = chain1[i-1] if i > 0 else readend
@@ -69,4 +60,8 @@ def f_dwread(targetplayer):
                 ret.AddNumber(2**i)
             ]
         )
+
+    readend = NextTrigger()
+
+    return ret
 

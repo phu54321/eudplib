@@ -4,11 +4,7 @@ from eudtrg.base import * #@UnusedWildImport
 from .vtable import EUDVariable, VTProc
 from .ctrlstru import DoActions
 
-"""
-This function is rather complex one.
 
-
-"""
 def SetVariables(dstlist, srclist, mdtlist = None):
     dstlist = FlattenList(dstlist)
     srclist = FlattenList(srclist)
@@ -49,6 +45,7 @@ def SeqCompute(assignpairs):
 
             else:
                 DoActions( SetDeaths(dst, mdt, src, 0) )
+
 
 def DerefWrite(varname, value):
     if type(value) is int:

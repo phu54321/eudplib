@@ -1,28 +1,17 @@
 from eudtrg import LICENSE #@UnusedImport
 
 from eudtrg.base import * #@UnusedWildImport
-from .vtable import EUDVTable
-from .eudfunc import EUDFunc
-from .ctrlstru import EUDJumpIfNot
+from eudtrg.lib.baselib import * #@UnusedWildImport
 
-f_dwbreak = None
-def _dwordbreak_init():
-    global f_dwbreak
-
-    vt = EUDVTable(7)
-
+@EUDFunc
+def f_dwbreak(number):
     word = [None] * 2
     byte = [None] * 4
-    number, word[0], word[1], byte[0], byte[1], byte[2], byte[3] = vt.GetVariables()
-
-    dwordbreak_begin = Forward()
-    dwordbreak_end = Forward()
-
-    f_dwbreak = EUDFunc(dwordbreak_begin, dwordbreak_end, vt, 1, 6)
+    word[0], word[1], byte[0], byte[1], byte[2], byte[3] = EUDCreateVariables(6)
 
 
     # Clear byte[], word[]
-    dwordbreak_begin << Trigger(
+    Trigger(
         actions = [
             [ byte[i].SetNumber(0) for i in range(4) ],
             [ word[i].SetNumber(0) for i in range(2) ]
@@ -32,6 +21,8 @@ def _dwordbreak_init():
 
     # Chaining
     chain = [Forward() for _ in range(32)]
+
+    dwordbreak_end = Forward()
 
     for i in range(31, -1, -1):
         byteidx = i // 8
@@ -61,6 +52,4 @@ def _dwordbreak_init():
         )
 
 
-    dwordbreak_end << Trigger()
-
-_dwordbreak_init()
+    dwordbreak_end << NextTrigger()

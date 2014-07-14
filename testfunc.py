@@ -11,16 +11,9 @@ addvt = vtable.EUDVTable(3)
 a, b, ret = addvt.GetVariables()
 
 add1 = Forward()
-add0 = Trigger(
-	nextptr = addvt,
-	actions = [
-		ret.SetNumber(0),
-		a.QueueAddTo(ret),
-		b.QueueAddTo(ret),
-		SetNextPtr(addvt, add1)
-	]
-)
 
+SeqCompute([
+	(ret, S
 add1 << Trigger()
 
 f_add = eudfunc.EUDFunc(add0, add1, addvt, 2, 1)
@@ -43,7 +36,7 @@ def f_add(a, b):
 
 
 main = NextTrigger()
-[retval] = f_add(123, 456)
+retval = f_add(123, 456)
 main2 = Trigger(
 	nextptr = retval.GetVTable(),
 	actions = [
