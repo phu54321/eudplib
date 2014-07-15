@@ -21,6 +21,7 @@ from .dataspec.trigger import (
     Action,
     NextTrigger,
     Disabled,
+    triggerend
 )
 
 from .dataspec.bytedump import Db

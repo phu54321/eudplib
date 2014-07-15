@@ -1,9 +1,8 @@
 from eudtrg import *
-from eudtrg.auxlib import EUDGrp
 
-LoadMap('outputmap/grpbasemap.scx')
+LoadMap('outputmap/basemap/grpbasemap.scx')
 
-a = EUDGrp(open('outputmap/inputgrp.grp', 'rb').read())
+a = EUDGrp(open('outputmap/basemap/inputgrp.grp', 'rb').read())
 
 # change zergling grp to inputgrp.grp
 k = Trigger(

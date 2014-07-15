@@ -1,9 +1,9 @@
 from eudtrg import *
 
-LoadMap('outputmap/basemap.scx')
+LoadMap('outputmap/basemap/basemap.scx')
 
 vt = EUDVTable(1)
-a = vt.GetVariables()[0]
+a = vt.GetVariables()
 
 main = Trigger()
 

@@ -1,6 +1,6 @@
 from eudtrg import *
 
-LoadMap('outputmap/basemap.scx')
+LoadMap('outputmap/basemap/basemap.scx')
 
 a = Trigger(
     nextptr = triggerend,

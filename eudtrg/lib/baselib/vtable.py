@@ -1,9 +1,10 @@
 from eudtrg import LICENSE #@UnusedImport
-
 from eudtrg.base import * #@UnusedWildImport
 
 class EUDVTable(Trigger):
     def __init__(self, varn):
+        assert varn <= 32, 'VTable with more than 32 variables are not supported'
+        
         PushTriggerScope()
         variables = [Forward() for _ in range(varn)]
 
@@ -111,14 +112,6 @@ class EUDLightVariable:
 
 
 
-# Variable tank
-def EUDCreateVariables(varn):
-    vt = EUDVTable(varn)
-    return vt.GetVariables()
-    
-
-
-
 def VTProc(vt, actions):
     nexttrg = Forward()
 
@@ -128,3 +121,8 @@ def VTProc(vt, actions):
     )
 
     nexttrg << NextTrigger()
+
+
+
+
+

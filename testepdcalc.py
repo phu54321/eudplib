@@ -1,9 +1,9 @@
 from eudtrg import *
 
-LoadMap('outputmap/basemap.scx')
+LoadMap('outputmap/basemap/basemap.scx')
 
 main = NextTrigger()
-ret_epd = f_epd.call(0x5993D4)
+ret_epd = f_epd(0x5993D4)
 VTProc(ret_epd.GetVTable(), [
 	ret_epd.QueueAssignTo(EPD(0x58A364))
 ])

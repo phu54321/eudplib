@@ -17,7 +17,7 @@ def InitPlayerSwitch(playerroots):
     psbegin = NextTrigger()
 
     for i in range(8):
-        SetVariables(ptsfirst[i], f_dwread.call(EPD(0x51A280 + 8 + 12 * i)))
+        SetVariables(ptsfirst[i], f_dwread(EPD(0x51A280 + 8 + 12 * i)))
 
     # Create trigger skipper to prevent memory leak
 

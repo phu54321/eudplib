@@ -53,3 +53,4 @@ def f_dwbreak(number):
 
 
     dwordbreak_end << NextTrigger()
+    return word[0], word[1], byte[0], byte[1], byte[2], byte[3]

@@ -4,44 +4,30 @@ from eudtrg import *
 Creep reading
 '''
 
-def CreateCreepReadFunc():
-	global f_creepread_init, f_creepread
+mapwidth, mapheight, creepaddr = EUDCreateVariables(3)
 
-	creepvt = EUDVTable(9)
-	x, y, ret, creepaddr, mapwidth, mapheight, creepindex, creeptileaddr, creepevenodd = creepvt.GetVariables()
+@EUDFunc
+def f_creepread_init():
+	SetVariables(creepaddr, f_epd(f_dwread(EPD(0x6D0E84)))) # Get creepmap address
+	SetVariables( [mapwidth, mapheight], f_dwbreak(f_dwread(EPD(0x57F1D4)))[0:2] ) # Get map width & height
 
+@EUDFunc
+def f_creepread(x, y):
+	ret, creepindex, creeptileaddr, creepevenodd = EUDCreateVariables(4)
 
-	# f_creepread_init
-	creepread_init_begin = Forward()
-	creepread_init_end = Forward()
-	f_creepread_init = EUDFunc(creepread_init_begin, creepread_init_end, creepvt, 0, 0)
-
-	creepread_init_begin << NextTrigger()
-	SetVariables(creepaddr, f_epd.call(f_dwread.call(EPD(0x6D0E84)))) # Get creepmap address
-	SetVariables( [mapwidth, mapheight], f_dwbreak.call(f_dwread.call(EPD(0x57F1D4)))[0:2] ) # Get map width & height
-	creepread_init_end << Trigger()
-
-
-	# f_creepread
-	creepread_begin = Forward()
-	creepread_end = Forward()
-	f_creepread = EUDFunc(creepread_begin, creepread_end, creepvt, 2, 1)
-
-	creepread_begin << NextTrigger()
-
-	
 	# calculate creepindex = y * mapwidth + x
-	SetVariables(creepindex, f_mul.call(y, mapwidth))
+	SetVariables(creepindex, f_mul(y, mapwidth))
 	SetVariables(creepindex, x, Add)
+	
 	# creeptileaddr = creepindex // 2, creepevenodd = creepindex % 2
-	SetVariables( [creeptileaddr, creepevenodd], f_div.call(creepindex, 2) )
+	SetVariables( [creeptileaddr, creepevenodd], f_div(creepindex, 2) )
+	
 	# creeptileaddr += creepaddr
 	SetVariables(creeptileaddr, creepaddr, Add)
 
 	# read tile data
-	ret_creeptiledata = f_dwread.call(creeptileaddr)
-	ret_creeptiledata_word0, ret_creeptiledata_word1 = f_dwbreak.call(ret_creeptiledata)[0:2]
-	
+	ret_creeptiledata = f_dwread(creeptileaddr)
+	ret_creeptiledata_word0, ret_creeptiledata_word1 = f_dwbreak(ret_creeptiledata)[0:2]
 
 	# select word0/word1 by evenodd
 	creepbr0, creepbr1, creepbrend = Forward(), Forward(), Forward()
@@ -58,9 +44,8 @@ def CreateCreepReadFunc():
 
 	# end
 	creepbrend << NextTrigger()
-	creepread_end << Trigger()
 
-CreateCreepReadFunc()
+	return ret
 
 
 
@@ -68,10 +53,10 @@ CreateCreepReadFunc()
 Main logic
 '''
 
-LoadMap('outputmap/creeptest_basemap.scx')
+LoadMap('outputmap/basemap/creeptest_basemap.scx')
 
 start = Trigger()
-f_creepread_init.call()
+f_creepread_init()
 start1 = Forward()
 start1 << Trigger(
 	actions = [
@@ -87,7 +72,7 @@ DoActions(SetDeaths(203151, SetTo, 1, 0))
 vt = EUDVTable(7)
 unitptr, unitepd, tmpepd, unitx, unity, tileunitx, tileunity = vt.GetVariables()
 
-SetVariables(unitptr, f_dwread.call(EPD(0x628430)))
+SetVariables(unitptr, f_dwread(EPD(0x628430)))
 
 # loop start
 loopout = Forward()
@@ -99,7 +84,7 @@ if 1:
 	EUDJumpIf( [unitptr.Exactly(0)], loopout ) # traversed all units -> break
 
 	# Convert addr -> epd
-	SetVariables(unitepd, f_epd.call(unitptr))
+	SetVariables(unitepd, f_epd(unitptr))
 
 	# Get unit type
 	# +0x0064   uint16 unittype
@@ -109,7 +94,7 @@ if 1:
 	])
 
 	# Continue if the unit is not zergling
-	ret_ut = f_dwbreak.call(f_dwread.call(tmpepd))[0]
+	ret_ut = f_dwbreak(f_dwread(tmpepd))[0]
 	EUDJumpIfNot( [ret_ut.Exactly(37)], loopcontinue ) # not zergling -> continue
 
 	
@@ -119,15 +104,15 @@ if 1:
 		unitepd.QueueAddTo(tmpepd)
 	])
 
-	SetVariables([unitx, unity], f_dwbreak.call(f_dwread.call(tmpepd))[0:2])
+	SetVariables([unitx, unity], f_dwbreak(f_dwread(tmpepd))[0:2])
 
 	
 	# Convert coordinates to tile coord
-	SetVariables(tileunitx, f_div.call(unitx, 32)[0])
-	SetVariables(tileunity, f_div.call(unity, 32)[0])
+	SetVariables(tileunitx, f_div(unitx, 32)[0])
+	SetVariables(tileunity, f_div(unity, 32)[0])
 
 	# If there is no creep, then continue
-	ret_creepval = f_creepread.call(tileunitx, tileunity) # read creep value
+	ret_creepval = f_creepread(tileunitx, tileunity) # read creep value
 	EUDJumpIf( [
 		ret_creepval.AtLeast(16),
 		ret_creepval.AtMost(31)
@@ -160,7 +145,7 @@ if 1:
 		unitepd.QueueAddTo(tmpepd)
 	])
 
-	SetVariables(unitptr, f_dwread.call(tmpepd))
+	SetVariables(unitptr, f_dwread(tmpepd))
 
 	Trigger( nextptr = loopstart )
 

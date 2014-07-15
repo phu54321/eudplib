@@ -1,6 +1,6 @@
 from eudtrg import *
 
-LoadMap('outputmap/basemap.scx');
+LoadMap('outputmap/basemap/basemap.scx');
 addvt = vtable.EUDVTable(3)
 a, b, ret = addvt.GetVariables()
 

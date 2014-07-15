@@ -34,9 +34,9 @@ def f_dwread(targetplayer):
 
     # Main logic start
     SeqCompute([
-        (cmp_player, SetTo, targetplayer),
-        (cmp_number, SetTo, 0xFFFFFFFF),
-        (ret,        SetTo, 0xFFFFFFFF)
+        (EPD(cmp_player), SetTo, targetplayer),
+        (EPD(cmp_number), SetTo, 0xFFFFFFFF),
+        (ret,             SetTo, 0xFFFFFFFF)
     ])
 
     readend = Forward()
@@ -61,7 +61,7 @@ def f_dwread(targetplayer):
             ]
         )
 
-    readend = NextTrigger()
+    readend << NextTrigger()
 
     return ret
 

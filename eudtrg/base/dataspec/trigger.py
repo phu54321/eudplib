@@ -15,7 +15,7 @@ from ..payload.rlocint import RelocatableInt
 from ..utils.utils import FlattenList
 
 
-# Just for debugging usage
+# debugging usage
 _trgcount = 0
 def GetTriggerCount():
     '''
@@ -36,6 +36,7 @@ class NextTrigger(Expr):
     '''
 
     def __init__(self):
+        self._trg = triggerend
         _next_triggers.append(self)
 
     def SetTrigger(self, trg):
@@ -86,6 +87,7 @@ def PopTriggerScope():
     assert not _next_triggers, 'NextTrigger() has no meanings at the end of the scope'
     _last_trigger.pop()
     _next_triggers = _next_triggers_stack.pop()
+
 
 
 
@@ -200,7 +202,7 @@ class Trigger(EUDObject):
 
         buf.EmitDword(0)
         if self._nextptr is None:
-            buf.EmitDword(0xFFFFFFFF) # by default behavior.
+            buf.EmitDword(triggerend) # default behavior.
         else:
             buf.EmitDword(self._nextptr)
 
@@ -432,4 +434,5 @@ def Disabled(item):
     return item
 
 
-
+# predefined constants
+triggerend = 0xFFFFFFFF # bigger than 0x80000000

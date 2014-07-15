@@ -1,10 +1,10 @@
 from eudtrg import *
 
-LoadMap('outputmap/basemap.scx')
+LoadMap('outputmap/basemap/basemap.scx')
 
 main = NextTrigger()
 
-word0, word1, byte0, byte1, byte2, byte3 = f_dwbreak.call(0x12345678)
+word0, word1, byte0, byte1, byte2, byte3 = f_dwbreak(0x12345678)
 retvt = word0.GetVTable()
 
 main2 = Trigger(

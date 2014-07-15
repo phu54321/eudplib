@@ -105,6 +105,7 @@ def SCM2Text(s):
 
 
 
+
 '''
 To support syntax like this:
  a = f(1)     # f(1) returns 1 (not [1])
@@ -121,7 +122,10 @@ def List2Assignable(l):
 
 
 def Assignable2List(a):
-    if hasattr(a, '__iter__'):
+    if a is None:
+        return []
+        
+    elif hasattr(a, '__iter__'):
         return list(a)
 
     else:

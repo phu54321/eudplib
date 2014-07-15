@@ -42,9 +42,6 @@ from .mapdata.nametable import (
 from .mapdata.prptable import ParseProperty
 
 
-# predefined constants
-triggerend = 0xFFFFFFFF # bigger than 0x80000000
-
 # predefined conditions
 def NoCondition():
     return Condition(0, 0, 0, 0, 0, 0, 0, 0)

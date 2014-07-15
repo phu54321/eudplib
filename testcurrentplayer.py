@@ -2,7 +2,7 @@ from eudtrg import *
 
 UbconvUseCharset('cp949')
 
-LoadMap('outputmap/basemap.scx')
+LoadMap('outputmap/basemap/basemap.scx')
 
 sd1 = Trigger(
     nextptr = triggerend,
@@ -16,5 +16,3 @@ sd1 = Trigger(
 psw = InitPlayerSwitch([sd1 for _ in range(8)])
 
 SaveMap('outputmap/currentplayertest.scx', psw)
-
-print('Done')

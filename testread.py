@@ -1,10 +1,10 @@
 from eudtrg import *
 
-LoadMap('outputmap/basemap.scx')
+LoadMap('outputmap/basemap/basemap.scx')
 
 main = NextTrigger()
 
-retval = f_dwread.call(EPD(0x5993D4)) # Get address of STR section
+retval = f_dwread(EPD(0x5993D4)) # Get address of STR section
 retvt = retval.GetVTable()
 
 main2 = Trigger(

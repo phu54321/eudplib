@@ -21,7 +21,23 @@ Changelog
 
 0.23-r1
  - Added some intro messages for non-euda-enabled players.
- - New easier eudfunc syntax
+ - New easier EUDFunc syntax. Now you can just convert normal python function
+  to EUD function by only decorating it with EUDFunc
+
+
+    @EUDFunc
+    def f_add(a, b):
+        ret = EUDCreateVariables(1)
+        SeqCompute([
+            (ret, SetTo, 0),
+            (ret, Add, a),
+            (ret, Add, b)
+        ])
+
+        return ret
+
+
+ - Added EUDLightVariable.
 
 
 

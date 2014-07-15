@@ -1,7 +1,7 @@
 from .. import LICENSE
 
 from eudtrg.base import * #@UnusedWildImport
-from .vtable import EUDVTable, EUDVariable, EUDCreateVariables
+from .vtable import EUDVTable, EUDVariable
 from .varassign import SetVariables, SeqCompute
 
 import inspect
@@ -11,8 +11,8 @@ import inspect
 def EUDFunc(fdecl_func):
     # Get argument number of fdecl_func
     argspec = inspect.getargspec(fdecl_func)
-    assert argspec[1] is None, 'No variadic arguments (*args) allowed'
-    assert argspec[2] is None, 'No variadic keyword arguments (*kwargs) allowd'
+    assert argspec[1] is None, 'No variadic arguments (*args) allowed for eud function'
+    assert argspec[2] is None, 'No variadic keyword arguments (*kwargs) allowed for eud function'
     argn = len(argspec[0])
 
 
@@ -20,12 +20,15 @@ def EUDFunc(fdecl_func):
 
     PushTriggerScope()
     
-    f_args = Assignable2List(EUDCreateVariables(argn))
+    f_args = Assignable2List(EUDVTable(argn).GetVariables())
     fstart = NextTrigger()
     f_rets = Assignable2List(fdecl_func(*f_args))
     fend = Trigger()
 
     PopTriggerScope()
+
+
+    print('Created function %-16s : argn %2d, retn %2d' % (fdecl_func.__name__, argn, len(f_rets)))
 
 
     # Function to return
