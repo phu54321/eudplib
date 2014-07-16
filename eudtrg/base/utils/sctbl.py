@@ -4,7 +4,7 @@ String table manager. Internally used in eudtrg.
 
 from eudtrg import LICENSE #@UnusedImport
 
-from ..utils import binio, ubconv
+from . import binio, ubconv
 
 class TBL:
     def __init__(self, content = None):

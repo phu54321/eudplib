@@ -9,10 +9,9 @@ from .expr import Expr
 
 class EUDObject(Expr):
     '''
-    EUDObject is a base class for uploadable objects. Uploadable objects means that
-    object can be uploaded into Starcraft memory. Every resource data and triggers
-    should be uploaded to SC memory to have effects. Derived class should implement
-    three virtual methods:
+    EUDObject is a base class for uploadable objects, which can be placed in
+    starcraft memory after map loads. Derived class should implement three
+    virtual methods:
      - GetDependencyList : Get list of objects/expressions object depends on.
      - GetDataSize : Get size of object. e.g. Trigger object's size is 2408.
      - WritePayload : Write payload data into given buffer.
@@ -21,9 +20,11 @@ class EUDObject(Expr):
         super().__init__()
         self._address = None
 
+
     def SetAddress(self, address):
         '''
-        Set address of object. Don't override.
+        Set address of object. After this function is called, you can cache
+        values of EvalImpl, GetDependencyList, GetDataSize, WritePayload.
         '''
         assert self._address is None
         self._address = address
@@ -31,7 +32,9 @@ class EUDObject(Expr):
 
     def ResetAddress(self):
         '''
-        Returns address of object. Reset address for future usage.
+        Returns address of object. Reset address for future usage. You should
+        invalidate caches regarding EvalImpl, GetDependencyList, GetDataSize,
+        WritePayload after this function is called.
         '''
         assert self._address is not None
         self._address = None
@@ -39,8 +42,8 @@ class EUDObject(Expr):
 
     def EvalImpl(self):
         '''
-        Returns address of object. You can override this function for some effects. See
-        auxlib/EUDGrp for override example.
+        Returns nummerical value of this object. This function returns address
+        of the object by default, but you may override this behavior.
         '''
         assert self._address is not None
         return RelocatableInt(self._address, 4)
@@ -49,16 +52,16 @@ class EUDObject(Expr):
     def GetDependencyList(self):
         '''
         Get list of objects/expressions object depends on.
-        eudtrg automatically traverses through objects, so derived object don't have to
-        traverse through other objects. Instead, GetDependencyList should give a
-        complete list of objects which derived object directly depends on.
+        eudtrg automatically traverses through objects, so object do not have
+        to, and should not traverse through other objects. GetDependencyList
+        should give complete list of objects which object directly depends on.
         '''
         raise NotImplementedError("Subclass %s should implement GetDependencyList" % str(type(self)))
 
 
     def GetDataSize(self):
         '''
-        Get size of object when it is uploaded. e.g. Trigger object's size is 2408.
+        Get size of object when it is uploaded into Starcraft memory.
         '''
         raise NotImplementedError("Subclass %s should implement GetDataSize" % str(type(self)))
 
@@ -69,10 +72,10 @@ class EUDObject(Expr):
         WritePayload can write data into emitbuffer using following functions
          - EmitByte  : Emit byte. Byte should be constant
          - EmitWord  : Emit words. Word should be constant
-         - EmitDword : Emit dword. Dword can be either constant or object address/epdp.
+         - EmitDword : Emit dword. Dword can be either constant or expression.
          - EmitBytes : Emit bytes object.
-        eudtrg will raise RuntimeError if object have written payload of size different
-        from GetDatasize.
+        eudtrg will raise RuntimeError if object writes more or less bytes than
+        specified by GetDataSize.
         '''
         raise NotImplementedError("Subclass %s should implement WritePayload" % str(type(self)))
 

@@ -246,14 +246,14 @@ class Condition(Expr):
     '''
 
     def __init__(self, locid, player, amount, unitid, comparison, condtype, restype, flags):
-        assert IsValidExpr(locid)
-        assert IsValidExpr(player)
-        assert IsValidExpr(amount)
-        assert IsValidExpr(unitid)
-        assert IsValidExpr(comparison)
-        assert IsValidExpr(condtype)
-        assert IsValidExpr(restype)
-        assert IsValidExpr(flags)
+        assert IsValidExpr(locid)      , 'locid = %s is not a valid expression!' % str(locid)
+        assert IsValidExpr(player)     , 'player = %s is not a valid expression!' % str(player)
+        assert IsValidExpr(amount)     , 'amount = %s is not a valid expression!' % str(amount)
+        assert IsValidExpr(unitid)     , 'unitid = %s is not a valid expression!' % str(unitid)
+        assert IsValidExpr(comparison) , 'comparison = %s is not a valid expression!' % str(comparison)
+        assert IsValidExpr(condtype)   , 'condtype = %s is not a valid expression!' % str(condtype)
+        assert IsValidExpr(restype)    , 'restype = %s is not a valid expression!' % str(restype)
+        assert IsValidExpr(flags)      , 'flags = %s is not a valid expression!' % str(flags)
 
         super(Condition, self).__init__()
         self._locid = locid
@@ -302,18 +302,6 @@ class Condition(Expr):
 
     # Used by Trigger::WritePayload
     def WritePayload(self, buf):
-        '''
-        buf.EmitDword (self._locid)
-        buf.EmitDword (self._player)
-        buf.EmitDword (self._amount)
-        buf.EmitWord  (self._unitid)
-        buf.EmitByte  (self._comparison)
-        buf.EmitByte  (self._condtype)
-        buf.EmitByte  (self._restype)
-        buf.EmitByte  (self._flags)
-        buf.EmitBytes (b'\0\0')
-        '''
-
         buf.EmitPack('IIIHBBBBH', self._locid, self._player, self._amount,
             self._unitid, self._comparison, self._condtype, self._restype, self._flags, 0)
 
@@ -343,16 +331,16 @@ class Action(Expr):
     def __init__(self, locid1, strid, wavid, time, player1, player2, unitid, acttype, amount, flags):
         super(Action, self).__init__()
 
-        assert IsValidExpr(locid1)
-        assert IsValidExpr(strid)
-        assert IsValidExpr(wavid)
-        assert IsValidExpr(time)
-        assert IsValidExpr(player1)
-        assert IsValidExpr(player2)
-        assert IsValidExpr(unitid)
-        assert IsValidExpr(acttype)
-        assert IsValidExpr(amount)
-        assert IsValidExpr(flags)
+        assert IsValidExpr(locid1)  , 'locid1 = %s is not a valid expression!' % str(locid1)
+        assert IsValidExpr(strid)   , 'strid = %s is not a valid expression!' % str(strid)
+        assert IsValidExpr(wavid)   , 'wavid = %s is not a valid expression!' % str(wavid)
+        assert IsValidExpr(time)    , 'time = %s is not a valid expression!' % str(time)
+        assert IsValidExpr(player1) , 'player1 = %s is not a valid expression!' % str(player1)
+        assert IsValidExpr(player2) , 'player2 = %s is not a valid expression!' % str(player2)
+        assert IsValidExpr(unitid)  , 'unitid = %s is not a valid expression!' % str(unitid)
+        assert IsValidExpr(acttype) , 'acttype = %s is not a valid expression!' % str(acttype)
+        assert IsValidExpr(amount)  , 'amount = %s is not a valid expression!' % str(amount)
+        assert IsValidExpr(flags)   , 'flags = %s is not a valid expression!' % str(flags)
 
         self._locid1 = locid1
         self._strid = strid
@@ -405,20 +393,6 @@ class Action(Expr):
 
     # Used in Trigger::WritePayload
     def WritePayload(self, buf):
-        '''
-        buf.EmitDword (self._locid1)
-        buf.EmitDword (self._strid)
-        buf.EmitDword (self._wavid)
-        buf.EmitDword (self._time)
-        buf.EmitDword (self._player1)
-        buf.EmitDword (self._player2)
-        buf.EmitWord  (self._unitid)
-        buf.EmitByte  (self._acttype)
-        buf.EmitByte  (self._amount)
-        buf.EmitByte  (self._flags)
-        buf.EmitBytes (b'\0\0\0')
-        '''
-
         buf.EmitPack('IIIIIIHBBBBH', self._locid1, self._strid, self._wavid, self._time, self._player1,
             self._player2, self._unitid, self._acttype, self._amount, self._flags, 0, 0)
 

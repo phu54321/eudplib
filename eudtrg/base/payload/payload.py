@@ -22,6 +22,7 @@ class Payload:
 def CreatePayload(root):
     needed_objects = depgraph.GetAllDependencies(root)
     objn = len(needed_objects)
+    print('Collected %d objects' % objn)
 
     objsizetable = []
     current_cursor = 0
@@ -34,6 +35,9 @@ def CreatePayload(root):
         objsizetable.append(size)
         size = size + (-size & 0x3) # align by 4 byte
         current_cursor += size
+
+    payloadsize = current_cursor
+
 
     # Write data
     buf = _PayloadBuffer()
@@ -50,6 +54,7 @@ def CreatePayload(root):
     expr.ExpireCacheToken()
 
     # done.
+    print('Payload size = %.3fMiB' % (payloadsize / 1024 / 1024))
     return buf.CreatePayload()
 
 

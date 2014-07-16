@@ -27,8 +27,9 @@ def EUDFunc(fdecl_func):
 
     PopTriggerScope()
 
-
-    print('Created function %-16s : argn %2d, retn %2d' % (fdecl_func.__name__, argn, len(f_rets)))
+    # Assert that all return values are EUDVariable.
+    for i, ret in enumerate(f_rets):
+        assert isinstance(ret, EUDVariable), 'Return value #%d is not EUDVariable' % i
 
 
     # Function to return

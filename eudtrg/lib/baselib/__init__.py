@@ -15,5 +15,11 @@ from .ctrlstru import (
 )
 
 from .varassign import SeqCompute, SetVariables
-from .vtable import EUDVTable, EUDVariable, VTProc
+from .vtable import (
+    EUDVTable, 
+    EUDVariable, 
+    EUDLightVariable, 
+    VTProc
+)
+
 from .vbuffer import EUDCreateVariables

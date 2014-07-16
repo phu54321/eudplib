@@ -4,16 +4,16 @@ from eudtrg.base import * #@UnusedWildImport
 from eudtrg.lib.baselib import * #@UnusedWildImport
 
 
-def f_dwwrite(targetplayer):
-    if isinstance(targetplayer, EUDVariable):
+def f_dwwrite(targetplayer, value):
+    if isinstance(value, EUDVariable):
         act = Forward()
         SeqCompute([
-            (EPD(act + 16), SetTo, varname),
-            (EPD(act + 20), SetTo, targetplayer)
+            (EPD(act + 16), SetTo, targetplayer),
+            (EPD(act + 20), SetTo, value)
         ])
         DoActions(act << SetMemory(0, SetTo, 0))
 
     else:
         act = Forward()
-        SeqCompute([(EPD(act + 16), SetTo, varname)])
-        DoActions(act << SetMemory(0, SetTo, targetplayer))
+        SeqCompute([(EPD(act + 16), SetTo, targetplayer)])
+        DoActions(act << SetMemory(0, SetTo, value))
