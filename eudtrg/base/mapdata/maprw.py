@@ -37,20 +37,9 @@ def LoadMap(fname):
     Load template map and read various data from it.
     '''
 
-    # Function for ignoring colorful unit names - They are useless.
-    def IgnoreColor(s):
-        stb = []
-        for ch in s:
-            if 0x01 <= ch <= 0x1F or ch == 0x7F:
-                continue
-            else:
-                stb.append(bytes([ch]))
-
-        return b''.join(stb)
+    print('Loading map %s' % fname)
 
 
-    # Main logic start
-    
     global _chk, _mpqcontent
     
     # read mpq content. The file will be copied to output file.
@@ -82,6 +71,19 @@ def LoadMap(fname):
     locnametable.clear()
     unitnametable.clear()
 
+    # Function for ignoring unit name color.
+    def IgnoreColor(s):
+        stb = []
+        for ch in s:
+            if 0x01 <= ch <= 0x1F or ch == 0x7F: # Special characters.
+                continue
+            else:
+                stb.append(bytes([ch]))
+
+        return b''.join(stb)
+
+
+
     # Get location names
     mrgn = _chk.getsection('MRGN')
     if mrgn:
@@ -93,8 +95,8 @@ def LoadMap(fname):
 
             PutDict_NoDup(locnametable, locstr, i+1) # SC counts location from 1. Weird
 
-    # Get unit names
 
+    # Get unit names
     unix = _chk.getsection('UNIx')
     if unix:
         for i in range(228):
@@ -111,7 +113,6 @@ def LoadMap(fname):
     
     uprptable.clear()
     uprpdict.clear()
-    # No entry is needed now.
     
     
     
@@ -123,7 +124,13 @@ def SaveMap(fname, root, additionalfiles = {}):
     Original map file is not altered.
     '''
 
-    eudenabler_needed = ParseString('This map requires EUD Enabler to run. (wLauncher, AquaLauncher, EUD Action Enabler stuff)')
+    print('Saving map %s' % fname)
+
+    # Message to display for non EUDA-Enabled players
+    # Since we pass in strtable.SaveTBL() into injgen.GenerateInjector, injgen
+    # cannot insert new string into string table. So we first make one and pass
+    # it to injgen
+    eudenabler_needed = ParseString('This map requires EUD Action Enabler to run.')
     
 
     # write new uprp

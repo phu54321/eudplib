@@ -1,9 +1,8 @@
 '''
 eudtrg library. This library follows zlib license.
-eudtrg consists of 3 subpackages.
- base : Core of eudtrg. baselib and auxlib is implemented with base subpackage.
- baselib : Basic library. Memory rw, Multiply/Division, etc
- auxlib : Some more high-level libraries such as GRP.
+eudtrg consists of 2 subpackages.
+ base : Core of eudtrg. lib is implemented using base subpackage.
+ lib  : Libraries made using 'base'.
 '''
 
 from eudtrg import LICENSE #@UnusedImport
@@ -11,13 +10,16 @@ from eudtrg import LICENSE #@UnusedImport
 from .base import *
 from .lib import *
 
-__version__ = "0.23-r1"
+__version__ = "0.23-r2"
 
 def eudtrgVersion():
     return __version__
 
 '''
 Changelog
+
+0.23-r2
+ - eudtrg now alerts about payload size.
 
 0.23-r1
  - Added some intro messages for non-euda-enabled players.
@@ -38,7 +40,6 @@ Changelog
 
 
  - Added EUDLightVariable.
-
 
 
 0.22-r1

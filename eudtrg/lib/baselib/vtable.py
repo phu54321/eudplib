@@ -27,8 +27,8 @@ class EUDVariable:
         self._originvt = originvt
 
 
-    def GetActionAddr(self):
-        return self._varact
+    def GetMemoryAddr(self):
+        return self._varact + 20
 
     def GetVTable(self):
         return self._originvt
@@ -56,8 +56,8 @@ class EUDVariable:
 
 
     def QueueAssignTo(self, dest):
-        if isinstance(dest, EUDVariable):
-            dest = EPD(dest.GetActionAddr() + 20)
+        if isinstance(dest, EUDVariable) or isinstance(dest, EUDLightVariable):
+            dest = EPD(dest.GetMemoryAddr())
 
         return [
             SetDeaths(EPD(self._varact + 16), SetTo, dest, 0),
@@ -67,8 +67,8 @@ class EUDVariable:
 
 
     def QueueAddTo(self, dest):
-        if isinstance(dest, EUDVariable):
-            dest = EPD(dest.GetActionAddr() + 20)
+        if isinstance(dest, EUDVariable) or isinstance(dest, EUDLightVariable):
+            dest = EPD(dest.GetMemoryAddr())
 
         return [
             SetDeaths(EPD(self._varact + 16), SetTo, dest, 0),
@@ -77,8 +77,8 @@ class EUDVariable:
         ]
 
     def QueueSubtractTo(self, dest):
-        if isinstance(dest, EUDVariable):
-            dest = EPD(dest.GetActionAddr() + 20)
+        if isinstance(dest, EUDVariable) or isinstance(dest, EUDLightVariable):
+            dest = EPD(dest.GetMemoryAddr())
 
         return [
             SetDeaths(EPD(self._varact + 16), SetTo, dest, 0),
@@ -90,6 +90,9 @@ class EUDVariable:
 class EUDLightVariable:
     def __init__(self):
         self._memory = Db(b'\0\0\0\0')
+
+    def GetMemoryAddr(self):
+        return self._memory
 
     def AtLeast(self, number):
         return Memory(self._memory, AtLeast, number)

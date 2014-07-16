@@ -1,7 +1,7 @@
 from eudtrg import LICENSE #@UnusedImport
 
 from eudtrg.base import * #@UnusedWildImport
-from .vtable import EUDVariable, VTProc
+from .vtable import EUDVariable, EUDLightVariable, VTProc
 from .ctrlstru import DoActions
 
 
@@ -26,37 +26,47 @@ def SeqCompute(assignpairs):
         Subtract : EUDVariable.QueueSubtractTo
     }
 
-    directactiondict = {
+    directactiondict_fv = {
         SetTo    : EUDVariable.SetNumber,
         Add      : EUDVariable.AddNumber,
         Subtract : EUDVariable.SubtractNumber
     }
 
+    directactiondict_lv = {
+        SetTo    : EUDLightVariable.SetNumber,
+        Add      : EUDLightVariable.AddNumber,
+        Subtract : EUDLightVariable.SubtractNumber
+    }
+
+    # action buffer
+    actionbuffer = []
+
+    def FlushActionBuffer():
+        nonlocal actionbuffer
+
+        if actionbuffer:
+            DoActions(actionbuffer)
+        actionbuffer = []
+
+
     for dst, mdt, src in assignpairs:
-        assert mdt != Set, "Change 'Set' to 'SetTo'."
+        assert mdt != Set, "Change 'Set' in arguments for SeqCompute to 'SetTo'."
+        assert not isinstance(src, EUDLightVariable), 'Light variable cannot be assigned to other variables directly'
         if isinstance(src, EUDVariable):
+            FlushActionBuffer()
             VTProc(src.GetVTable(), [
                 queueactiondict[mdt].__get__(src, type(src))(dst)
             ])
 
         else:
-            if isinstance(dst, EUDVariable):
-                DoActions(directactiondict[mdt].__get__(dst, type(dst))(src))
+            if isinstance(dst, EUDVariable) or isinstance(dst, EUDLightVariable):
+                dstaddr = EPD(dst.GetMemoryAddr())
 
             else:
-                DoActions( SetDeaths(dst, mdt, src, 0) )
+                dstaddr = dst
+            
+            actionbuffer.append(SetDeaths(dstaddr, mdt, src, 0))
+            if len(actionbuffer) == 64:
+                FlushActionBuffer()
 
-
-def DerefWrite(varname, value):
-    if type(value) is int:
-        act = Forward()
-        SeqCompute([(EPD(act + 16), SetTo, varname)])
-        DoActions(act << SetMemory(0, SetTo, value))
-
-    else:
-        act = Forward()
-        SeqCompute([
-            (EPD(act + 16), SetTo, varname),
-            (EPD(act + 20), SetTo, value)
-        ])
-        DoActions(act << SetMemory(0, SetTo, 0))
+    FlushActionBuffer()

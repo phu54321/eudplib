@@ -1,4 +1,4 @@
-rom eudtrg import LICENSE #@UnusedImport
+from eudtrg import LICENSE #@UnusedImport
 
 from eudtrg.base import * #@UnusedWildImport
 

@@ -3,6 +3,7 @@ from eudtrg import LICENSE #@UnusedImport
 from eudtrg.base import * #@UnusedWildImport
 from eudtrg.lib.baselib import * #@UnusedWildImport
 
+
 @EUDFunc
 def f_dwread(targetplayer):
     ret = EUDCreateVariables(1)
