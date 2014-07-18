@@ -1,23 +1,21 @@
-'''
-Forward declaration class Forward
-'''
-
 from eudtrg import LICENSE #@UnusedImport
 
 from .expr import Expr, Evaluate, GetCacheToken
 
 class Forward(Expr):
     '''
-    ex)
+    Forward declaration for expressions.
 
-    a = Trigger( nextptr = b ) # Error : b is not defined
-    b = Trigger( nextptr = a ) 
+    Example)
+
+        a = Trigger( nextptr = b ) # Error : b is not defined
+        b = Trigger( nextptr = a ) 
 
     ->
 
-    b = Forward() # Forward declaration
-    a = Trigger( nextptr = b )
-    b << Trigger( nextptr = a ) # put in value later.
+        b = Forward() # Forward declaration
+        a = Trigger( nextptr = b )
+        b << Trigger( nextptr = a ) # put in value later.
 
     '''
 
@@ -27,6 +25,14 @@ class Forward(Expr):
         self._ct = None
 
     def __lshift__(self, item):
+        '''
+        Assign expression to self. The object will evaluate to assigned
+        expressions afterwards.
+
+        :raises AssertionError:
+             - Forward has already been assigned.
+             - Non-expression types are being assigned into.
+        '''
         assert isinstance(item, Expr), 'Non-expr types cannot be assigned to Forward object.'
         assert self.target == None, 'Duplicate assignment'
         self.target = item
@@ -35,12 +41,11 @@ class Forward(Expr):
     def GetDependencyList(self):
         return [self.target]
 
-    def Evaluate(self): # Internally used.
-        assert self.target is not None, 'Forward() not initalized'
-        ct = GetCacheToken()
-        if ct is not self._ct:
-            self._ct = ct
-            self._cache = Evaluate(self.target)
-
-        return self._cache
+    def EvalImpl(self):
+        '''
+        :raises AssertionError: Forward hasn't been assigned to any values by
+            :meth:`__lshift__`.
+        '''
+        assert self.target is not None, 'Forward has not been properly initalized'
+        return Evaluate(self.target)
 

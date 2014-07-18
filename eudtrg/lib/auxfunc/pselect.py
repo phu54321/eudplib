@@ -6,6 +6,17 @@ from eudtrg.lib.baselib import * #@UnusedWildImport
 from .readdword import f_dwread
 
 def InitPlayerSwitch(playerroots):
+    '''
+    Override default behavior of :func:`SaveMap` and set starting trigger for
+    all players.
+
+    :param playerroots: Starting trigger for each players. (List of 8 elements)
+        Starting trigger may be None if the player won't execute any trigger.
+    :returns: Starting trigger for InitPlayerSwitch to work.
+
+    .. warning::
+        You should call InitPlayerSwitch at most once.
+    '''
     PushTriggerScope()
     playerroots = [p if p else Trigger(nextptr = triggerend) for p in playerroots]
     PopTriggerScope()

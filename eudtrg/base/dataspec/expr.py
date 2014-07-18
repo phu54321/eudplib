@@ -7,22 +7,23 @@ from eudtrg import LICENSE #@UnusedImport
 from ..payload.rlocint import RelocatableInt
 
 # Expression caching
-_cachetoken = type('_ct', (), {})
+_cachetoken = 0
 
 def ExpireCacheToken():
     global _cachetoken
-    _cachetoken = type('_ct', (), {})
+    _cachetoken += 1
 
 def GetCacheToken():
     return _cachetoken
 
 
+
 class Expr:
     '''
-    Base class for expression containing address of objects.
-    Any object derived from this class should implement these virtual methods:
-     - GetDependencyList : Get list of expressions this expression depents on.
-     - EvalImpl : Evaluate value of expressions.
+    Expression class. Object of this type can be evaluated into
+    :class:`RelocatableInt`. Derived classes should override:
+     - :meth:`GetDependencyList`
+     - :meth:`EvalImpl`
     '''
     
     def __init__(self):
@@ -46,15 +47,31 @@ class Expr:
 
 
     def GetDependencyList(self):
+        '''
+        :returns: Expressions this expression depends on
+        :raises NotImplementedError: Derived class didn't override this method.
+        '''
         raise NotImplementedError("Subclass %s should implement this" % str(type(self)))
 
     def Evaluate(self):
-        if self._cachetoken != _cachetoken:
+        '''
+        This function caches :meth:`EvalImpl` and returns its value. Cache
+        expires as :func:`SaveMap` ends, so cached values shouldn't affect
+        each others.
+        :returns: Cached value of :meth:`EvalImpl`.
+        '''
+        if self._cachetoken != _cachetoken: # Cache has expired, or no cache has been stored yet
+            # Cache EvalImpl.
             self._cache = self.EvalImpl()
             self._cachetoken = _cachetoken
+
         return self._cache
 
+
     def EvalImpl(self):
+        '''
+        :returns: What the expression should be evaluated to.
+        '''
         raise NotImplementedError("Subclass %s should implement this" % str(type(self)))
 
 
@@ -111,16 +128,15 @@ class _DivExpr(BinopExpr):
 
 
 
-# Checks if expression is valid
+
+
+
+# Helper functions
 def IsValidExpr(x):
     if type(x) is int or isinstance(x, RelocatableInt):
         return True
     else:
         return isinstance(x, Expr)
-
-
-
-
 
 
 def GetDependencyList(item):
@@ -130,8 +146,6 @@ def GetDependencyList(item):
         return []
 
 
-
-# Expression evaluator
 def Evaluate(x):
     try:
         return x.Evaluate()

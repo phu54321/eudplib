@@ -9,7 +9,12 @@ from .mapdata import uprptable, uprpdict
 
 def ParseProperty(prop):
     '''
-    UnitProperty -> property id.
+    :param prop: Unit property
+    :type prop: :class:`UnitProperty`
+    :returns: Corresponding property ID. Identical Properties will have same
+        property ID.
+        
+    :raises AssertionError: More than 64 different properties have been used.
     '''
     assert isinstance(prop, UnitProperty), 'UnitProperty type needed, but %s given.' % type(prop)
     

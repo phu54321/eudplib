@@ -8,7 +8,7 @@ from ctypes import * #@UnusedWildImport
 
 class UnitProperty(LittleEndianStructure):
     '''
-    UnitProperty class. Uses UPRP entry in the map.
+    UnitProperty class. Used in 'Create Unit with Properties' action.
     '''
 
     _fields_ = [
@@ -30,8 +30,8 @@ class UnitProperty(LittleEndianStructure):
     ):
         '''
         Properties : Value/None (Don't care)
-         hitpoint : 0~100(%)  cf) When unit's hitpoint is greater than 167772,
-         shield   : 0~100(%)      you should give hitpoint None to make 100%% HP.
+         hitpoint : 0~100(%)  if) When unit's hitpoint is greater than 167772,
+         shield   : 0~100(%)    you should give hitpoint None to make 100%% HP.
          energy   : 0~100(%)
          resource : 0~4294967295
          hanger   : 0~65536 (Count)
@@ -43,7 +43,7 @@ class UnitProperty(LittleEndianStructure):
          hallucinated : Unit is hallucination.
          invincible   : Unit is invincible.
 
-         ex) UnitProperty(hitpoint = 50, burrowed = True) # unit with HP 50%, burrowed
+        >>> UnitProperty(hitpoint = 50, burrowed = True) # HP 50%, burrowed
         '''
         assert hitpoint is None or 0 <= hitpoint <= 100
         assert shield is None or 0 <= shield <= 100

@@ -66,6 +66,9 @@ _packerlist = {}
 
 
 class _PayloadBuffer:
+    '''
+    Buffer where EUDObject should write to.
+    '''
     def __init__(self):
         self._datas = []
         self._datalen = 0
@@ -85,23 +88,45 @@ class _PayloadBuffer:
         self.EmitBytes(bytes(padding_byten))
         return emitted_size
 
+
     def EmitByte(self, number):
+        '''
+        Write single byte to the buffer. Byte to be written must be constant.
+
+        :param number: Byte to put in. Automatically truncated to 0~255.
+        :type number: int/:class:`Expr`
+        :raises AssertionError: number is not constant.
+        '''
         number = expr.Evaluate(number)
-        assert number.offset_applied == 0
+        assert number.offset_applied == 0, 'Non constant given.'
         number.number &= 0xFF
 
         self._datas.append( binio.i2b1(number.number) )
         self._datalen += 1
 
     def EmitWord(self, number):
+        '''
+        Write single word to the buffer. Word to be written must be constant.
+
+        :param number: Word to put in. Automatically truncated to 0~65536.
+        :type number: int/:class:`Expr`
+        :raises AssertionError: number is not constant.
+        '''
         number = expr.Evaluate(number)
-        assert number.offset_applied == 0
+        assert number.offset_applied == 0, 'Non constant given.'
         number.number &= 0xFFFF
 
         self._datas.append( binio.i2b2(number.number) )
         self._datalen += 2
 
     def EmitDword(self, number):
+        '''
+        Write single dword to the buffer. number may or may not be constant
+
+        :param number: Double word to put in. Automatically truncated to
+            0~4294967295.
+        :type number: int/:class:`Expr`
+        '''
         number = expr.Evaluate(number)
         number.number &= 0xFFFFFFFF
 
@@ -111,17 +136,48 @@ class _PayloadBuffer:
         self._datas.append( binio.i2b4(number.number) )
         self._datalen += 4
 
+
     def EmitPack(self, structformat, *arglist):
+        '''
+        Write several numbers at once.
+
+        :param structformat: Defines how to write each numbers into buffer.
+
+            ======= =======
+              Char   Type  
+            ======= =======
+               B     Byte
+               H     Word
+               I     Dword
+            ======= =======
+
+            ex) 'BHI' : Byte, Word, Dword
+
+        :param arglist: Numbers to write.
+
+
+        >>> buf.EmitPack('IIBH', 0x123456, 0x7890, 0x56, 0x7891')
+
+          -> [56 34 12 00] [90 78 00 00] [56] [91 78] is written
+
+        '''
         if structformat not in _packerlist:
             _packerlist[structformat] = _CreateStructPacker(structformat)
 
         _packerlist[structformat](self, *arglist)
 
     def EmitBytes(self, b):
+        '''
+        Write bytes object to buffer.
+
+        :param b: bytes object to write.
+        '''
         b = bytes(b)
         self._datas.append( b )
         self._datalen += len(b)
 
+
+    # Internally used
     def CreatePayload(self):
         return Payload(b''.join(self._datas), self._prttable, self._orttable)
 

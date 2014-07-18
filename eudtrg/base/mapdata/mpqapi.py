@@ -89,7 +89,8 @@ def InitMpqLibrary():
         SFmpq.MpqCompactArchive.argtypes       = [c_int]
         return True
 
-    except:
+    except OSError:
+        print('Loading SFmpq failed. If you are using 64bit python, change to 32bit one.')
         SFmpq = None
         return False
 

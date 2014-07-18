@@ -1,11 +1,6 @@
 '''
-Defines
- - Trigger scoping function
- - Trigger, Condition, Action class
- - Trigger linker (NextTrigger, LastTrigger)
- - Debug utility ( GetTriggerCount )
+Defines trigger-related items.
 '''
-
 
 from eudtrg import LICENSE #@UnusedImport
 
@@ -15,16 +10,6 @@ from ..payload.rlocint import RelocatableInt
 from ..utils.utils import FlattenList
 
 
-# debugging usage
-_trgcount = 0
-def GetTriggerCount():
-    '''
-    Counts how many trigger objects have been constructed since eudtrg have been
-    initalized. Useful for debugging simple errors.
-    ex) I made a function with about 1000 triggers expected.
-     GetTriggerCount has changed only by 3 -> Bug.
-    '''
-    return _trgcount
 
 
 # Used while evaluating Trigger
@@ -32,7 +17,7 @@ _next_triggers_stack = []
 _next_triggers = []
 class NextTrigger(Expr):
     '''
-    Create reference to next declared trigger. Makes your code cleaner.
+    Create reference to next declared trigger.
     '''
 
     def __init__(self):
@@ -45,31 +30,27 @@ class NextTrigger(Expr):
     def GetDependencyList(self):
         return [self._trg]
 
-    def Evaluate(self):
+    def EvalImpl(self):
         return Evaluate(self._trg)
 
 
 
-# Trigger scoping thing
-_last_trigger = [None]
 
-def LastTrigger(Expr):
-    return _last_trigger[-1]
 
 def PushTriggerScope():
     '''
-    Creates trigger scope. Triggers inside the scope is isolated from outside.
-    Used in conjunction with PopTriggerScope().
+    Creates trigger scope. Triggers inside a scope is isolated from outside.
+    Triggers from different scope won't have their nextptr linked implicitly.
+    You can still link triggers in other scopes by setting nextptr explicitly.
+    This function is used in conjunction with :func:`PopTriggerScope()`.
 
     ex)
     a = Trigger()
-    PushTriggerScope()
-    b = Trigger()
-    c = Trigger()
-    PopTriggerScope()
+    PushTriggerScope() ################
+    b = Trigger()          isolated
+    c = Trigger()          isolated
+    PopTriggerScope()  ################
     d = Trigger()
-
-    Result : a->d, b->c. Inside and outside of scope is isolated.
     '''
 
     global _next_triggers
@@ -80,7 +61,7 @@ def PushTriggerScope():
 
 def PopTriggerScope():
     '''
-    Exits trigger scope. Used in conjunction with PushTriggerScope().
+    Exits trigger scope. Used in conjunction with :func:`PushTriggerScope()`.
     '''
 
     global _next_triggers
@@ -93,45 +74,26 @@ def PopTriggerScope():
 
 class Trigger(EUDObject):
     '''
-    Trigger object.
+    Object representing trigger. Trigger has following fields
+     - nextptr : Pointer to next executed trigger.
+     - conditions : Conditions. Trigger executes if every conditions are met.
+     - actions : Actions. Actions are executed in sequential order.
     '''
 
     def __init__(self, nextptr = None, conditions = [], actions = [], preserved = True):
         '''
-        nextptr : Trigger to be executed after this trigger. Modifiable via SetNextPtr
-         action.
-        conditions : List of conditions. Single condition (not a list) / nested list
-         allowed. If omitted, trigger won't have any conditions. (Always execute)
-        actions : List of conditions. Single condition (not a list) / nested list
-         allowed. If omitted, trigger won't have any actions. (Do nothing)
-        preserved : Preserve Trigger() flag. Default : True.
+        Constructor of Trigger class.
 
-        See eudtrg.base.stocktrg for stock conditions/actions.
-
-        ex)
-            Trigger()
-            Trigger(nextptr = triggerend)
-            Trigger(actions = [
-                SetMemory(0x12345678, SetTo, 1234)
-            ])
-            Trigger(actions = SetMemory(0x12345678, SetTo, 1234))
-            Trigger(
-                conditions = [
-                    Bring(Player1, AtLeast, 1, 'Terran Marine', 'Loc0')
-                ],
-                actions = [
-                    [ SetMemory(0x12345678, SetTo, 1234) ],
-                    [
-                        SetDeaths(Player1, SetTo, 30, 'Terran Marine'),
-                        PreserveTrigger()
-                    ],
-                    PlayWav('tata.wav')
-                ]
-            )
+        :param nextptr: Trigger to be executed after this trigger. If not
+            specified, nextptr of the trigger is automatically set to the next
+            created triggers in the same scope. Default: None(Unspecified).
+        :param conditions: Nested List of :class:`Condition`.
+        :param actions: Nested List of :class:`Action`.
+        :param preserved: Trigger is preserved. Default: True
+        :type preserved: bool
         '''
         global _last_trigger
         global _next_triggers
-        global _trgcount
 
 
         super().__init__()
@@ -186,8 +148,6 @@ class Trigger(EUDObject):
 
         _next_triggers = []
 
-        _trgcount += 1
-
 
     # function needed for payloadmanager
     def GetDataSize(self):
@@ -228,24 +188,29 @@ class Trigger(EUDObject):
 
 class Condition(Expr):
     '''
-    Condition class. Immutable in python. See eudtrg.base.stocktrg for stock
-    conditions. You won't be manipulating this class directly if you're only using
-    stock triggers, but you'll need to know in which offset each field will be
-    stored.
+    Condition class.
 
-     +00 locid         | dword0  | EPD(cond)+0
-     +04 player        | dword1  | EPD(cond)+1
-     +08 amount        | dword2  | EPD(cond)+2
-     +0C unitid        | dword3  | EPD(cond)+3
-     +0E comparison    |         |
-     +0F condtype      |         |
-     +10 restype       | dword4  | EPD(cond)+4
-     +11 flags         |         |
-     +12 internal[2]   |         |
+    Memory layout:
 
+     ======  =============  ========  ===========
+     Offset  Field name     Position  EPD Player   
+     ======  =============  ========  ===========
+       +00   locid           dword0   EPD(cond)+0  
+       +04   player          dword1   EPD(cond)+1  
+       +08   amount          dword2   EPD(cond)+2  
+       +0C   unitid          dword3   EPD(cond)+3  
+       +0E   comparison                            
+       +0F   condtype                              
+       +10   restype         dword4   EPD(cond)+4  
+       +11   flags                                 
+       +12   internal[2]                           
+     ======  =============  ========  ===========
     '''
 
     def __init__(self, locid, player, amount, unitid, comparison, condtype, restype, flags):
+        '''
+        See :mod:`eudtrg.base.stocktrg` for stock conditions list.
+        '''
         assert IsValidExpr(locid)      , 'locid = %s is not a valid expression!' % str(locid)
         assert IsValidExpr(player)     , 'player = %s is not a valid expression!' % str(player)
         assert IsValidExpr(amount)     , 'amount = %s is not a valid expression!' % str(amount)
@@ -308,27 +273,34 @@ class Condition(Expr):
 
 
 
+
 class Action(Expr):
     '''
-    Action class. Immutable in python. See eudtrg.base.stocktrg for stock actions.
-    You won't be manipulating this class directly if you're only using stock
-    triggers, but you'll need to know in which offset each field will be stored.
+    Action class.
 
-     +00 locid1        | dword0  | EPD(act)+0
-     +04 strid         | dword1  | EPD(act)+1
-     +08 wavid         | dword2  | EPD(act)+2
-     +0C time          | dword3  | EPD(act)+3
-     +10 player1       | dword4  | EPD(act)+4
-     +14 player2       | dword5  | EPD(act)+5
-     +18 unitid        | dword6  | EPD(act)+6
-     +1A acttype       |         |
-     +1B amount        |         |
-     +1C flags         | dword7  | EPD(act)+7
-     +1D internal[3]   |         |
+    Memory layout.
 
+     ======  ============= ========  ==========
+     Offset  Field Name    Position  EPD Player  
+     ======  ============= ========  ==========
+       +00   locid1         dword0   EPD(act)+0  
+       +04   strid          dword1   EPD(act)+1  
+       +08   wavid          dword2   EPD(act)+2  
+       +0C   time           dword3   EPD(act)+3  
+       +10   player1        dword4   EPD(act)+4  
+       +14   player2        dword5   EPD(act)+5  
+       +18   unitid         dword6   EPD(act)+6  
+       +1A   acttype                             
+       +1B   amount                              
+       +1C   flags          dword7   EPD(act)+7  
+       +1D   internal[3]                         
+     ======  ============= ========  ==========
     '''
 
     def __init__(self, locid1, strid, wavid, time, player1, player2, unitid, acttype, amount, flags):
+        '''
+        See :mod:`eudtrg.base.stocktrg` for stock actions list.
+        '''
         super(Action, self).__init__()
 
         assert IsValidExpr(locid1)  , 'locid1 = %s is not a valid expression!' % str(locid1)
@@ -401,12 +373,18 @@ class Action(Expr):
 def Disabled(item):
     '''
     Make condition/action disabled.
-    ex)
-     Disabled(SetDeaths(Player1, SetTo, 1234, 'Terran Marine'))
+    >>> Disabled(SetDeaths(Player1, SetTo, 1234, 'Terran Marine'))
+
+    :param item: Condition/Action to disable
+    :returns: Disabled condition/action.
     '''
     item.Disable()
     return item
 
 
 # predefined constants
+'''
+Indicates 'End of trigger execution'. Set nextptr of trigger to triggerend if
+you want to end trigger execution with the trigger.
+'''
 triggerend = 0xFFFFFFFF # bigger than 0x80000000

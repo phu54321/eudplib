@@ -5,6 +5,9 @@ from eudtrg.lib.baselib import * #@UnusedWildImport
 
 @EUDFunc
 def f_mul(a, b):
+    '''
+    :returns: a * b
+    '''
     ret, y0 = EUDCreateVariables(2)
 
     # Init
@@ -46,6 +49,9 @@ def f_mul(a, b):
 
 @EUDFunc
 def f_div(a, b):
+    '''
+    :returns: a//b, a % b
+    '''
     ret, x = EUDCreateVariables(2)
     
     # Init

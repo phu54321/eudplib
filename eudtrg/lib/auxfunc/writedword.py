@@ -5,6 +5,12 @@ from eudtrg.lib.baselib import * #@UnusedWildImport
 
 
 def f_dwwrite(targetplayer, value):
+    '''
+    Writes value to specified address.
+
+    :param targetplayer: EPD Player of address to write value.
+    :param value: Value to write.
+    '''
     if isinstance(value, EUDVariable):
         act = Forward()
         SeqCompute([

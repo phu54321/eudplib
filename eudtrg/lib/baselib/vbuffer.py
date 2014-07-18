@@ -6,14 +6,19 @@ from eudtrg import LICENSE #@UnusedImport
 from eudtrg.base import * #@UnusedWildImport
 from .vtable import *
 
-'''
-# Variable recycling thing. Not yet tested
+
 
 _lastvtvars = EUDVTable(32).GetVariables()
 _lastvt_filled = 32
 
-# Variable tank
 def EUDCreateVariables(varn):
+    '''
+    Create (varn) :class:`EUDVariables`. Returned variables are not guarranted 
+    to be in the same variable table.
+
+    :param varn: Number of EUDVariables to create.
+    :returns: List of variables. If varn is 1, then a variable is returned.
+    '''
     
     global _lastvt_filled
     global _lastvtvars
@@ -32,7 +37,3 @@ def EUDCreateVariables(varn):
             _lastvt_filled = 0
 
     return List2Assignable(variables)
-'''
-
-def EUDCreateVariables(varn):
-    return EUDVTable(varn).GetVariables()

@@ -10,51 +10,46 @@ from .mapdata import strtable, unitnametable, locnametable
 
 
 # Data getter
-def ParseLocation(locstring):
+def ParseLocation(locname):
     '''
-    Location name -> Location id.
-     - type(locstring) is int : return as-is
-     - type(locstring) in [str, bytes]: find it in template map.
-       If matching location name -> return its location id
-       If location name is ambigious -> raise RuntimeError
-       If location name not found -> raise Runtimeerror
+    :param locname: Location name
+    :returns: Corresponding location name.
+    :raises RuntimeError: Location name is ambigious or not defined.
     '''
     try:
-        string = ubconv.u2b(locstring)
+        string = ubconv.u2b(locname)
 
         # try map-defined location name
         try:
             locidx = locnametable[string]
             if not locidx:
-                raise RuntimeError('Ambigious location name %s used in template map' % locstring)
+                raise RuntimeError('Ambigious location name %s used in template map' % locname)
             return locidx
 
         except KeyError:
             pass
 
-        raise RuntimeError('Unknown location name %s' % locstring)
+        raise RuntimeError('Unknown location name %s' % locname)
 
     except TypeError:
-        return locstring
+        return locname
 
 
-def ParseUnit(unitstring):
+def ParseUnit(unitname):
     '''
-    Unit name -> Unit ID.
-     - type(unitstring) is int : return as-is
-     - type(unitstring) in [str, bytes]: find it in template map / default names.
-       If matching unit name in template map -> return is unit id
-       If matching unit name in stock unit name -> return its unit id
-       If unit name is ambigious -> raise RuntimeError
-       If unit name not found -> raise RuntimeError.
+    :param unitname: Unit name, with or without color characters.
+    :returns: Corresponding Unit ID.
+    :raises RuntimeError:
+        1. Unit name may match multiple units.
+        2. There is no corresponding unit to given unit name.
     '''
     try:
-        # try map-defined location name
+        # try map-defined unit name
         try:
-            string = ubconv.u2b(unitstring)
+            string = ubconv.u2b(unitname)
             unitidx = unitnametable[string]
             if not unitidx:
-                raise RuntimeError('Ambigious unit name %s used in template map' % unitstring)
+                raise RuntimeError('Ambigious unit name %s used in template map' % unitname)
             return unitidx
 
         except KeyError:
@@ -62,28 +57,28 @@ def ParseUnit(unitstring):
 
         # try default unit name
         try:
-            string = unitstring
+            string = unitname
             unitidx = UnitNameDict[string]
             return unitidx
 
         except KeyError:
             pass
 
-        raise RuntimeError('Unknown unit name %s' % unitstring)
+        raise RuntimeError('Unknown unit name %s' % unitname)
 
     except TypeError:
-        return unitstring # maybe int
+        return unitname # maybe int
 
 
 
 def ParseString(string):
     '''
-    String -> string id.
-     - type(string) is int : return as-is.
-     - type(string) in [str, bytes]:
-       If matching string -> returns its string id.
-       If no match -> Creates new string & returns its id.
-        (May cause string overflow error.)
+    :param string: String
+    :returns: Corresponding string number. This function creates new string
+        if there isn't existing one. String with same contents will have same
+        string ID.
+
+    :raises AssertionError: String table exceeded 65536 bytes.
     '''
     try:
         bstring = ubconv.u2b(string)

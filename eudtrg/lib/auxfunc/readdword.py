@@ -6,6 +6,11 @@ from eudtrg.lib.baselib import * #@UnusedWildImport
 
 @EUDFunc
 def f_dwread(targetplayer):
+    '''
+    Read dword from memory. This function can read any memory with read access.
+    :param targetplayer: EPD Player for address to read.
+    :returns: Memory content.
+    '''
     ret = EUDCreateVariables(1)
 
     # Common comparison trigger

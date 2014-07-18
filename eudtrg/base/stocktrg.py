@@ -76,7 +76,7 @@ def Kills(Player, Comparison, Number, Unit):
     return Condition(0, Player, Number, Unit, Comparison, 5, 0, 0)
 
 def CommandMost(Unit):
-    Unit = ParseUnit(Unit)
+    nit = ParseUnit(Unit)
     return Condition(0, 0, 0, Unit, 0, 6, 0, 0)
 
 def CommandMostAt(Unit, Location):

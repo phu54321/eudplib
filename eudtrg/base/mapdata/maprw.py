@@ -4,6 +4,8 @@ Implements LoadMap, SaveMap function
 
 from eudtrg import LICENSE #@UnusedImport
 
+from ..dataspec.trigger import Trigger
+
 from .mapdata import (
     locnametable,
     unitnametable,
@@ -35,6 +37,8 @@ def PutDict_NoDup(d, key, value):
 def LoadMap(fname):
     '''
     Load template map and read various data from it.
+
+    :param fname: Path to input map.
     '''
 
     print('Loading map %s' % fname)
@@ -120,10 +124,19 @@ def LoadMap(fname):
 
 def SaveMap(fname, root, additionalfiles = {}):
     '''
-    Inject EUDObjects needed for roots into template map and save it to fname.
-    Original map file is not altered.
+    Save template map with EUDObjects & various files.
+
+    :param root: Starting trigger. At every trigger loop, a computer player
+        executes triggers starting from root.
+    :type root: Trigger
+
+    :param additionalfiles: List of (MPQ Filename, bytes) to be inserted into
+        map MPQ. If different contents share the same MPQ filename, function
+        will raise RuntimeError.
     '''
 
+    assert isinstance(root, Trigger), 'root is not an instance of Trigger'
+    
     print('Saving map %s' % fname)
 
     # Message to display for non EUDA-Enabled players

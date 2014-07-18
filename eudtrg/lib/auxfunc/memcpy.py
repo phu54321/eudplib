@@ -12,6 +12,13 @@ from .muldiv import f_div
 # Faster function
 @EUDFunc
 def f_repmovsd(dstepdp, srcepdp, copydwn):
+    '''
+    rep movsd equivilant in eudtrg. Copy dwords. Faster than f_memcpy.
+
+    :param dstepdp: EPD Player for destination.
+    :param srcepdp: EPD Player for source.
+    :param copydwn: Count of dwords to copy.
+    '''
     repmovsd_end = Forward()
 
     loopstart = NextTrigger()
@@ -27,6 +34,8 @@ def f_repmovsd(dstepdp, srcepdp, copydwn):
     EUDJump(loopstart)
 
     repmovsd_end << NextTrigger()
+
+
 
 
 
@@ -250,8 +259,18 @@ _br = EUDByteReader()
 _bw = EUDByteWriter()
 
 
+
+
+
 @EUDFunc
 def f_memcpy(dst, src, copylen):
+    '''
+    memcpy equivilant in eudtrg. Copy bytes.
+
+    :param dst: Destination address. (Not EPD Player)
+    :param src: Source address. (Not EPD Player)
+    :param copylen: Count of bytes to copy.
+    '''
     b = EUDCreateVariables(1)
 
     _br.seekoffset(src)
@@ -273,6 +292,12 @@ def f_memcpy(dst, src, copylen):
 
 @EUDFunc
 def f_strcpy(dst, src):
+    '''
+    strcpy equivilant in eudtrg. Copy C-style string.
+
+    :param dst: Destination address. (Not EPD Player)
+    :param src: Source address. (Not EPD Player)
+    '''
     b = EUDCreateVariables(1)
 
     _br.seekoffset(src)

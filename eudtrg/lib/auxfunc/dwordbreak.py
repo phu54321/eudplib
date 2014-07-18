@@ -5,6 +5,17 @@ from eudtrg.lib.baselib import * #@UnusedWildImport
 
 @EUDFunc
 def f_dwbreak(number):
+    '''
+    Break dword into words & dwords.
+
+    :param number: Number to break.
+    :returns: w[0], w[1], b[0], b[1], b[2], b[3]
+        union {
+            DWORD number;
+            WORD w[2];
+            BYTE b[4];
+        }
+    '''
     word = [None] * 2
     byte = [None] * 4
     word[0], word[1], byte[0], byte[1], byte[2], byte[3] = EUDCreateVariables(6)

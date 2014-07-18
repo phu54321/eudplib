@@ -9,12 +9,7 @@ from .expr import Expr
 
 class EUDObject(Expr):
     '''
-    EUDObject is a base class for uploadable objects, which can be placed in
-    starcraft memory after map loads. Derived class should implement three
-    virtual methods:
-     - GetDependencyList : Get list of objects/expressions object depends on.
-     - GetDataSize : Get size of object. e.g. Trigger object's size is 2408.
-     - WritePayload : Write payload data into given buffer.
+    Base class for objects to be inserted into map.
     '''
     def __init__(self):
         super().__init__()
@@ -22,60 +17,73 @@ class EUDObject(Expr):
 
 
     def SetAddress(self, address):
+        '''Set address of object ingame. This function is called by eudtrg.
+        After this function is called, object shouldn't be modified until
+        :meth:'`ResetAddress` is called.
+
+        :param address: Address where the object will be located at ingame.
         '''
-        Set address of object. After this function is called, you can cache
-        values of EvalImpl, GetDependencyList, GetDataSize, WritePayload.
-        '''
-        assert self._address is None
+        assert self._address is None, 'Might be eudtrg bug. Report this.'
         self._address = address
 
 
     def ResetAddress(self):
+        '''This function is called by eudtrg. After this function is called, 
+        objects can be modified again.
         '''
-        Returns address of object. Reset address for future usage. You should
-        invalidate caches regarding EvalImpl, GetDependencyList, GetDataSize,
-        WritePayload after this function is called.
-        '''
-        assert self._address is not None
+        assert self._address is not None, 'Might be eudtrg bug. Report this.'
         self._address = None
 
 
     def EvalImpl(self):
         '''
-        Returns nummerical value of this object. This function returns address
-        of the object by default, but you may override this behavior.
+        Evaluate object's value. This function returns the object's address by
+        default, but you may override the behavior. Return values are cached,
+        so EvalImpl will be called at most once for a SaveMap call.
+
+        :returns: Value of object as expression. Default: Address of object.
         '''
-        assert self._address is not None
+        assert self._address is not None, 'GetDependencyList of some classes are incomplete.'
         return RelocatableInt(self._address, 4)
 
 
+    def GetMPQDependencyList(self):
+        '''
+        Get list of files this object needs to be inside MPQ.
+
+        :returns: List of (MPQ file path, bytes). Default: [] If different
+        contents share the same MPQ filename, :func:`SaveMap` will raise
+        RuntimeError.
+        '''
+        return []
+
     def GetDependencyList(self):
         '''
-        Get list of objects/expressions object depends on.
-        eudtrg automatically traverses through objects, so object do not have
-        to, and should not traverse through other objects. GetDependencyList
-        should give complete list of objects which object directly depends on.
+        Get list of objects or expressions the object needs. Objects in this
+        list are also inserted to the map when the object is being inserted.
+
+        :returns: Objects the object depends on. Default: []
         '''
-        raise NotImplementedError("Subclass %s should implement GetDependencyList" % str(type(self)))
+        return []
 
 
     def GetDataSize(self):
         '''
-        Get size of object when it is uploaded into Starcraft memory.
+        :returns: Size of object in SC memory. Default: 0
         '''
-        raise NotImplementedError("Subclass %s should implement GetDataSize" % str(type(self)))
+        return 0
 
 
     def WritePayload(self, emitbuffer):
         '''
-        Write payload data into given buffer.
-        WritePayload can write data into emitbuffer using following functions
-         - EmitByte  : Emit byte. Byte should be constant
-         - EmitWord  : Emit words. Word should be constant
-         - EmitDword : Emit dword. Dword can be either constant or expression.
-         - EmitBytes : Emit bytes object.
-        eudtrg will raise RuntimeError if object writes more or less bytes than
-        specified by GetDataSize.
+        This function should write data into buffer. Size of written data
+        should match :meth:`GetDataSize.
+
+        :param emitbuffer: Buffer to write data to.
+        :type emitbuffer: :class:`PayloadBuffer`
+
+        :raises RuntimeError: Size of written data is different from what
+            :meth:`GetDataSize tells.
         '''
-        raise NotImplementedError("Subclass %s should implement WritePayload" % str(type(self)))
+        pass
 

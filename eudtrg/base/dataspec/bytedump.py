@@ -7,19 +7,20 @@ from .eudobj import EUDObject
 
 class Db(EUDObject):
     '''
-    Object for uploading arbitary bytestream into starcraft memory. You can store
-    bytes objects and reference to this object when you need its content. Useful
-    for uploading custom resources into SC memory. One of the simplest EUDObjects.
+    Db object inserts binary data into starcraft memory. Db object evaluates to
+    address where bytes are stored.
     '''
     def __init__(self, content):
         '''
-        content : Bytes/Bytes-convertible object which Db class should contain.
+        :param content: Content to put in.
+        :type content: bytes
         '''
         super(Db, self).__init__()
 
         # convert & store
         content = bytes(content)
         self._content = content
+
 
     def GetDataSize(self):
         return len(self._content)

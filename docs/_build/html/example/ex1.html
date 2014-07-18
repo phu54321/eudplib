@@ -1,0 +1,138 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Example 1 : Hello World! &mdash; eudtrg 0.3-r1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.3-r1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="eudtrg 0.3-r1 documentation" href="../index.html" />
+    <link rel="up" title="Tutorial" href="../tutorial.html" />
+    <link rel="next" title="Example 2 : Trigger execution order" href="ex2.html" />
+    <link rel="prev" title="Tutorial" href="../tutorial.html" /> 
+  </head>
+  <body>
+      <div class="header"><h1 class="heading"><a href="../index.html">
+          <span>eudtrg 0.3-r1 documentation</span></a></h1>
+        <h2 class="heading"><span>Example 1 : Hello World!</span></h2>
+      </div>
+      <div class="topnav">
+      
+        <p>
+        «&#160;&#160;<a href="../tutorial.html">Tutorial</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="../index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="ex2.html">Example 2 : Trigger execution order</a>&#160;&#160;»
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <div class="section" id="example-1-hello-world">
+<span id="example1"></span><h1>Example 1 : Hello World!<a class="headerlink" href="#example-1-hello-world" title="Permalink to this headline">¶</a></h1>
+<p>Simple eudtrg example.</p>
+<div class="section" id="code">
+<h2>Code<a class="headerlink" href="#code" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">eudtrg</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="n">LoadMap</span><span class="p">(</span><span class="s">&quot;basemap.scx&quot;</span><span class="p">)</span> <span class="c"># Collect various map-related informations from basemap.scx</span>
+
+<span class="n">ptrg</span> <span class="o">=</span> <span class="n">Trigger</span><span class="p">(</span>
+    <span class="n">nextptr</span> <span class="o">=</span> <span class="n">triggerend</span><span class="p">,</span> <span class="c"># End trigger execution after ptrg</span>
+    <span class="n">actions</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">DisplayText</span><span class="p">(</span><span class="s">&quot;Hello World!&quot;</span><span class="p">)</span> <span class="c"># Hello World!</span>
+    <span class="p">]</span>
+<span class="p">)</span>
+<span class="c"># Every triggers are automatically preserved. You need to explicitly</span>
+<span class="c"># unpreserve them if you want to.</span>
+<span class="c">#  ex) Trigger( preserved = False )</span>
+
+
+<span class="n">psw</span> <span class="o">=</span> <span class="n">InitPlayerSwitch</span><span class="p">([</span><span class="n">ptrg</span><span class="p">,</span> <span class="n">ptrg</span><span class="p">,</span> <span class="n">ptrg</span><span class="p">,</span> <span class="n">ptrg</span><span class="p">,</span> <span class="n">ptrg</span><span class="p">,</span> <span class="n">ptrg</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">])</span>
+<span class="c"># InitPlayerSwitch will be explained at example 8</span>
+
+
+<span class="n">SaveMap</span><span class="p">(</span><span class="s">&quot;ex1.scx&quot;</span><span class="p">,</span> <span class="n">psw</span><span class="p">)</span> <span class="c"># Set psw as starting trigger.</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="output">
+<h2>Output<a class="headerlink" href="#output" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre>Hello World!
+Hello World!
+Hello World!
+Hello World!
+(continues)
+</pre></div>
+</div>
+</div>
+<div class="section" id="description">
+<h2>Description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>
+<p>This example covers how eudtrg code is structured.</p>
+<p><tt class="code docutils literal"><span class="pre">from</span> <span class="pre">eudtrg</span> <span class="pre">import</span> <span class="pre">*</span></tt> imports all functions from eudtrg. eudtrg is
+designed to be used with asterisk import.</p>
+<p><tt class="code docutils literal"><span class="pre">LoadMap(&quot;basemap.scx&quot;)</span></tt> loads template map basemap.scx. Template map
+stores everything except trigger, such as unit preplacement, location, terrain,
+map name/description, mission briefing.:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">ptrg</span> <span class="o">=</span> <span class="n">Trigger</span><span class="p">(</span>
+    <span class="n">nextptr</span> <span class="o">=</span> <span class="n">triggerend</span><span class="p">,</span> <span class="c"># End trigger execution after ptrg</span>
+    <span class="n">actions</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">DisplayText</span><span class="p">(</span><span class="s">&quot;Hello World!&quot;</span><span class="p">)</span>
+    <span class="p">]</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>We create <tt class="xref py py-class docutils literal"><span class="pre">Trigger</span></tt> object and assign it to ptrg. Trigger object created
+has following properties:
+- nextptr is set to triggerend, which means end of trigger execution. When SC
+encounters triggerend, SC exits trigger execution.
+- No conditions are specified. Since there won&#8217;t be any false condition,
+trigger will be always executed if SC encounters it.
+- There is one DisplayText action, which displays text &#8216;Hello World!&#8217; for
+current player. When P1 executes this action, P1 get the text printed.
+- Even if there are no Preserve Trigger actions, trigger is preserved by
+default. You can explicitly unpreserve them by constructing them with preserved
+set to false. <tt class="code docutils literal"><span class="pre">Trigger(</span> <span class="pre">preserved</span> <span class="pre">=</span> <span class="pre">False</span> <span class="pre">)</span></tt></p>
+<p>InitPlayerSwitch will be explained at <em class="xref std std-ref">example8</em></p>
+</div>
+</div>
+
+
+      </div>
+      <div class="bottomnav">
+      
+        <p>
+        «&#160;&#160;<a href="../tutorial.html">Tutorial</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="../index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="ex2.html">Example 2 : Trigger execution order</a>&#160;&#160;»
+        </p>
+
+      </div>
+
+    <div class="footer">
+        &copy; Copyright 2014, whyask37.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

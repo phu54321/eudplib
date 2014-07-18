@@ -1,0 +1,139 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Example 3 : Forward declaration with Forward() &mdash; eudtrg 0.3-r1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.3-r1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="eudtrg 0.3-r1 documentation" href="../index.html" />
+    <link rel="up" title="Tutorial" href="../tutorial.html" />
+    <link rel="prev" title="Example 2 : Trigger execution order" href="ex2.html" /> 
+  </head>
+  <body>
+      <div class="header"><h1 class="heading"><a href="../index.html">
+          <span>eudtrg 0.3-r1 documentation</span></a></h1>
+        <h2 class="heading"><span>Example 3 : Forward declaration with Forward()</span></h2>
+      </div>
+      <div class="topnav">
+      
+        <p>
+        «&#160;&#160;<a href="ex2.html">Example 2 : Trigger execution order</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <div class="section" id="example-3-forward-declaration-with-forward">
+<span id="example3"></span><h1>Example 3 : Forward declaration with Forward()<a class="headerlink" href="#example-3-forward-declaration-with-forward" title="Permalink to this headline">¶</a></h1>
+<p>This example explains <tt class="xref py py-class docutils literal"><span class="pre">Forward()</span></tt> class.</p>
+<p><strong>Code</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">eudtrg</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="n">LoadMap</span><span class="p">(</span><span class="s">&quot;basemap.scx&quot;</span><span class="p">)</span>
+
+<span class="n">a</span> <span class="o">=</span> <span class="n">Forward</span><span class="p">()</span> <span class="c"># Forward will be described at :ref:`example3`</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">Forward</span><span class="p">()</span>
+<span class="n">c</span> <span class="o">=</span> <span class="n">Forward</span><span class="p">()</span>
+<span class="n">d</span> <span class="o">=</span> <span class="n">Forward</span><span class="p">()</span>
+<span class="n">e</span> <span class="o">=</span> <span class="n">Forward</span><span class="p">()</span>
+<span class="n">f</span> <span class="o">=</span> <span class="n">Forward</span><span class="p">()</span>
+
+
+<span class="n">a</span> <span class="o">&lt;&lt;</span> <span class="n">Trigger</span><span class="p">(</span><span class="n">nextptr</span> <span class="o">=</span> <span class="n">b</span><span class="p">,</span>          <span class="n">actions</span> <span class="o">=</span> <span class="p">[</span><span class="n">DisplayText</span><span class="p">(</span><span class="s">&quot;Trigger A&quot;</span><span class="p">)])</span> <span class="c"># b is executed after a</span>
+<span class="n">b</span> <span class="o">&lt;&lt;</span> <span class="n">Trigger</span><span class="p">(</span><span class="n">nextptr</span> <span class="o">=</span> <span class="n">d</span><span class="p">,</span>          <span class="n">actions</span> <span class="o">=</span> <span class="p">[</span><span class="n">DisplayText</span><span class="p">(</span><span class="s">&quot;Trigger B&quot;</span><span class="p">)])</span> <span class="c"># d is executed after b</span>
+<span class="n">c</span> <span class="o">&lt;&lt;</span> <span class="n">Trigger</span><span class="p">(</span><span class="n">nextptr</span> <span class="o">=</span> <span class="n">e</span><span class="p">,</span>          <span class="n">actions</span> <span class="o">=</span> <span class="p">[</span><span class="n">DisplayText</span><span class="p">(</span><span class="s">&quot;Trigger C&quot;</span><span class="p">)])</span> <span class="c"># e is executed after c</span>
+<span class="n">d</span> <span class="o">&lt;&lt;</span> <span class="n">Trigger</span><span class="p">(</span><span class="n">nextptr</span> <span class="o">=</span> <span class="n">c</span><span class="p">,</span>          <span class="n">actions</span> <span class="o">=</span> <span class="p">[</span><span class="n">DisplayText</span><span class="p">(</span><span class="s">&quot;Trigger D&quot;</span><span class="p">)])</span> <span class="c"># c is executed after d</span>
+<span class="n">e</span> <span class="o">&lt;&lt;</span> <span class="n">Trigger</span><span class="p">(</span><span class="n">nextptr</span> <span class="o">=</span> <span class="n">f</span><span class="p">,</span>          <span class="n">actions</span> <span class="o">=</span> <span class="p">[</span><span class="n">DisplayText</span><span class="p">(</span><span class="s">&quot;Trigger E&quot;</span><span class="p">)])</span> <span class="c"># f is executed after e</span>
+<span class="n">f</span> <span class="o">&lt;&lt;</span> <span class="n">Trigger</span><span class="p">(</span><span class="n">nextptr</span> <span class="o">=</span> <span class="n">triggerend</span><span class="p">,</span> <span class="n">actions</span> <span class="o">=</span> <span class="p">[</span><span class="n">DisplayText</span><span class="p">(</span><span class="s">&quot;Trigger F&quot;</span><span class="p">)])</span> <span class="c"># No trigger is executed after f.</span>
+
+
+
+<span class="n">psw</span> <span class="o">=</span> <span class="n">InitPlayerSwitch</span><span class="p">([</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">])</span>
+<span class="c"># P1, P2, P3, P4, P5, P6 each starts trigger execution with a, b, c, d, e, f.</span>
+
+
+<span class="n">SaveMap</span><span class="p">(</span><span class="s">&quot;ex2.scx&quot;</span><span class="p">,</span> <span class="n">psw</span><span class="p">)</span> <span class="c"># ex2.scx에 트리거를 넣는다.</span>
+</pre></div>
+</div>
+<p><strong>Output</strong></p>
+<div class="highlight-python"><div class="highlight"><pre>P1
+Trigger A
+Trigger B
+Trigger D
+Trigger C
+Trigger E
+Trigger F
+
+P2
+Trigger B
+Trigger D
+Trigger C
+Trigger E
+Trigger F
+
+P3
+Trigger C
+Trigger E
+Trigger F
+
+P4
+Trigger D
+Trigger C
+Trigger E
+Trigger F
+
+P5
+Trigger E
+Trigger F
+
+P6
+Trigger F
+
+(Text are repeated for all players)
+</pre></div>
+</div>
+<p><strong>Description</strong></p>
+<p>Execution order of triggers are controlled by nextptr. Each trigger has nextptr
+which points to trigger to be executed next. We set different starting trigger
+for P1~P6, so trigger executed by different players differ.</p>
+</div>
+
+
+      </div>
+      <div class="bottomnav">
+      
+        <p>
+        «&#160;&#160;<a href="ex2.html">Example 2 : Trigger execution order</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer">
+        &copy; Copyright 2014, whyask37.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

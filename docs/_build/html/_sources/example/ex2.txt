@@ -1,0 +1,89 @@
+.. _example2:
+
+Example 2 : Trigger execution order
+===================================
+
+This example explains trigger execution order.
+
+Code
+----
+
+::
+
+    from eudtrg import *
+
+    LoadMap("basemap.scx")
+
+    a, b, c, d, e, f = [Forward() for _ in range(6)]
+
+    a << Trigger(nextptr = b,          actions = [DisplayText("Trigger A")]) # b is executed after a
+    b << Trigger(nextptr = d,          actions = [DisplayText("Trigger B")]) # d is executed after b
+    c << Trigger(nextptr = e,          actions = [DisplayText("Trigger C")]) # e is executed after c
+    d << Trigger(nextptr = c,          actions = [DisplayText("Trigger D")]) # c is executed after d
+    e << Trigger(nextptr = f,          actions = [DisplayText("Trigger E")]) # f is executed after e
+    f << Trigger(nextptr = triggerend, actions = [DisplayText("Trigger F")]) # No trigger is executed after f.
+
+
+
+    psw = InitPlayerSwitch([a, b, c, d, e, f, None, None])
+    # P1, P2, P3, P4, P5, P6 each starts trigger execution with a, b, c, d, e, f.
+
+
+    SaveMap("ex2.scx", psw)
+
+
+Output
+------
+
+::
+
+    P1
+    Trigger A
+    Trigger B
+    Trigger D
+    Trigger C
+    Trigger E
+    Trigger F
+
+    P2
+    Trigger B
+    Trigger D
+    Trigger C
+    Trigger E
+    Trigger F
+
+    P3
+    Trigger C
+    Trigger E
+    Trigger F
+
+    P4
+    Trigger D
+    Trigger C
+    Trigger E
+    Trigger F
+
+    P5
+    Trigger E
+    Trigger F
+
+    P6
+    Trigger F
+    
+    (Text are repeated for all players)
+
+
+Description
+-----------
+
+:class:`Forward` is a forward declaration class. You can use it before you
+actually initalize it. :class:`Forward` syntax is quite similar to that of
+pyparsing.
+
+Execution order of triggers are controlled by nextptr. Each trigger has nextptr
+which points to trigger to be executed next. We set different starting trigger
+for P1~P6, so trigger executed by different players differ.
+
+For example, Player 4 starts trigger execution with trigger d. Since d.nextptr
+= c, c is executed after d. c.nextptr = e, e.nextptr = f, f.nextptr = 
+triggerend. So Trigger execute in dcef order.
