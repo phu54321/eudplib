@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Example 3 : Forward declaration with Forward() &mdash; eudtrg 0.3-r1 documentation</title>
+    <title>Example 3 : nextptr 자동 연결, Trigger Scope &mdash; eudtrg 0.3-r1 documentation</title>
     
     <link rel="stylesheet" href="../_static/haiku.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -24,99 +24,184 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="top" title="eudtrg 0.3-r1 documentation" href="../index.html" />
-    <link rel="up" title="Tutorial" href="../tutorial.html" />
-    <link rel="prev" title="Example 2 : Trigger execution order" href="ex2.html" /> 
+    <link rel="up" title="튜토리얼" href="../tutorial.html" />
+    <link rel="next" title="튜토리얼 4 : 특정 플레이어에게서만 실행되는 트리거" href="ex4.html" />
+    <link rel="prev" title="튜토리얼 2 : nextptr를 이용해서 트리거 실행 순서 지정하기" href="ex2.html" /> 
   </head>
   <body>
       <div class="header"><h1 class="heading"><a href="../index.html">
           <span>eudtrg 0.3-r1 documentation</span></a></h1>
-        <h2 class="heading"><span>Example 3 : Forward declaration with Forward()</span></h2>
+        <h2 class="heading"><span>Example 3 : nextptr 자동 연결, Trigger Scope</span></h2>
       </div>
       <div class="topnav">
       
         <p>
-        «&#160;&#160;<a href="ex2.html">Example 2 : Trigger execution order</a>
+        «&#160;&#160;<a href="ex2.html">튜토리얼 2 : nextptr를 이용해서 트리거 실행 순서 지정하기</a>
         &#160;&#160;::&#160;&#160;
         <a class="uplink" href="../index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="ex4.html">튜토리얼 4 : 특정 플레이어에게서만 실행되는 트리거</a>&#160;&#160;»
         </p>
 
       </div>
       <div class="content">
         
         
-  <div class="section" id="example-3-forward-declaration-with-forward">
-<span id="example3"></span><h1>Example 3 : Forward declaration with Forward()<a class="headerlink" href="#example-3-forward-declaration-with-forward" title="Permalink to this headline">¶</a></h1>
-<p>This example explains <tt class="xref py py-class docutils literal"><span class="pre">Forward()</span></tt> class.</p>
-<p><strong>Code</strong></p>
+  <div class="section" id="example-3-nextptr-trigger-scope">
+<span id="example3"></span><h1>Example 3 : nextptr 자동 연결, Trigger Scope<a class="headerlink" href="#example-3-nextptr-trigger-scope" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="id1">
+<h2>소스<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">eudtrg</span> <span class="kn">import</span> <span class="o">*</span>
 
 <span class="n">LoadMap</span><span class="p">(</span><span class="s">&quot;basemap.scx&quot;</span><span class="p">)</span>
 
-<span class="n">a</span> <span class="o">=</span> <span class="n">Forward</span><span class="p">()</span> <span class="c"># Forward will be described at :ref:`example3`</span>
-<span class="n">b</span> <span class="o">=</span> <span class="n">Forward</span><span class="p">()</span>
-<span class="n">c</span> <span class="o">=</span> <span class="n">Forward</span><span class="p">()</span>
-<span class="n">d</span> <span class="o">=</span> <span class="n">Forward</span><span class="p">()</span>
-<span class="n">e</span> <span class="o">=</span> <span class="n">Forward</span><span class="p">()</span>
-<span class="n">f</span> <span class="o">=</span> <span class="n">Forward</span><span class="p">()</span>
+<span class="n">pstart</span> <span class="o">=</span> <span class="n">NextTrigger</span><span class="p">()</span> <span class="c"># NextTrigger는 &#39;바로 다음 트리거&#39;를 나타냅니다. 여기서는 1번 트리거.</span>
+
+<span class="n">Trigger</span><span class="p">(</span> <span class="n">actions</span> <span class="o">=</span> <span class="p">[</span><span class="n">DisplayText</span><span class="p">(</span><span class="s">&quot;1&quot;</span><span class="p">)]</span> <span class="p">)</span> <span class="c"># 1번 트리거</span>
+<span class="n">Trigger</span><span class="p">(</span> <span class="n">actions</span> <span class="o">=</span> <span class="p">[</span><span class="n">DisplayText</span><span class="p">(</span><span class="s">&quot;2&quot;</span><span class="p">)]</span> <span class="p">)</span> <span class="c"># 2번 트리거</span>
+
+<span class="k">if</span> <span class="mi">1</span><span class="p">:</span>
+    <span class="n">PushTriggerScope</span><span class="p">()</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">Trigger</span><span class="p">(</span> <span class="n">actions</span> <span class="o">=</span> <span class="p">[</span><span class="n">DisplayText</span><span class="p">(</span><span class="s">&quot;3&quot;</span><span class="p">)]</span> <span class="p">)</span> <span class="c"># 3번 트리거</span>
+    <span class="n">Trigger</span><span class="p">(</span> <span class="n">actions</span> <span class="o">=</span> <span class="p">[</span><span class="n">DisplayText</span><span class="p">(</span><span class="s">&quot;4&quot;</span><span class="p">)]</span> <span class="p">)</span> <span class="c"># 4번 트리거</span>
+    <span class="n">Trigger</span><span class="p">(</span> <span class="n">actions</span> <span class="o">=</span> <span class="p">[</span><span class="n">DisplayText</span><span class="p">(</span><span class="s">&quot;5&quot;</span><span class="p">)]</span> <span class="p">)</span> <span class="c"># 5번 트리거</span>
+    <span class="n">Trigger</span><span class="p">(</span> <span class="n">actions</span> <span class="o">=</span> <span class="p">[</span><span class="n">DisplayText</span><span class="p">(</span><span class="s">&quot;6&quot;</span><span class="p">)]</span> <span class="p">)</span> <span class="c"># 6번 트리거</span>
+    <span class="n">Trigger</span><span class="p">(</span><span class="n">nextptr</span> <span class="o">=</span> <span class="n">triggerend</span><span class="p">)</span> <span class="c"># 7번 트리거</span>
+    <span class="n">PopTriggerScope</span><span class="p">()</span>
 
 
-<span class="n">a</span> <span class="o">&lt;&lt;</span> <span class="n">Trigger</span><span class="p">(</span><span class="n">nextptr</span> <span class="o">=</span> <span class="n">b</span><span class="p">,</span>          <span class="n">actions</span> <span class="o">=</span> <span class="p">[</span><span class="n">DisplayText</span><span class="p">(</span><span class="s">&quot;Trigger A&quot;</span><span class="p">)])</span> <span class="c"># b is executed after a</span>
-<span class="n">b</span> <span class="o">&lt;&lt;</span> <span class="n">Trigger</span><span class="p">(</span><span class="n">nextptr</span> <span class="o">=</span> <span class="n">d</span><span class="p">,</span>          <span class="n">actions</span> <span class="o">=</span> <span class="p">[</span><span class="n">DisplayText</span><span class="p">(</span><span class="s">&quot;Trigger B&quot;</span><span class="p">)])</span> <span class="c"># d is executed after b</span>
-<span class="n">c</span> <span class="o">&lt;&lt;</span> <span class="n">Trigger</span><span class="p">(</span><span class="n">nextptr</span> <span class="o">=</span> <span class="n">e</span><span class="p">,</span>          <span class="n">actions</span> <span class="o">=</span> <span class="p">[</span><span class="n">DisplayText</span><span class="p">(</span><span class="s">&quot;Trigger C&quot;</span><span class="p">)])</span> <span class="c"># e is executed after c</span>
-<span class="n">d</span> <span class="o">&lt;&lt;</span> <span class="n">Trigger</span><span class="p">(</span><span class="n">nextptr</span> <span class="o">=</span> <span class="n">c</span><span class="p">,</span>          <span class="n">actions</span> <span class="o">=</span> <span class="p">[</span><span class="n">DisplayText</span><span class="p">(</span><span class="s">&quot;Trigger D&quot;</span><span class="p">)])</span> <span class="c"># c is executed after d</span>
-<span class="n">e</span> <span class="o">&lt;&lt;</span> <span class="n">Trigger</span><span class="p">(</span><span class="n">nextptr</span> <span class="o">=</span> <span class="n">f</span><span class="p">,</span>          <span class="n">actions</span> <span class="o">=</span> <span class="p">[</span><span class="n">DisplayText</span><span class="p">(</span><span class="s">&quot;Trigger E&quot;</span><span class="p">)])</span> <span class="c"># f is executed after e</span>
-<span class="n">f</span> <span class="o">&lt;&lt;</span> <span class="n">Trigger</span><span class="p">(</span><span class="n">nextptr</span> <span class="o">=</span> <span class="n">triggerend</span><span class="p">,</span> <span class="n">actions</span> <span class="o">=</span> <span class="p">[</span><span class="n">DisplayText</span><span class="p">(</span><span class="s">&quot;Trigger F&quot;</span><span class="p">)])</span> <span class="c"># No trigger is executed after f.</span>
+<span class="n">Trigger</span><span class="p">(</span> <span class="n">actions</span> <span class="o">=</span> <span class="p">[</span><span class="n">DisplayText</span><span class="p">(</span><span class="s">&quot;8&quot;</span><span class="p">)]</span> <span class="p">)</span> <span class="c"># 8번 트리거</span>
+<span class="n">Trigger</span><span class="p">(</span> <span class="n">nextptr</span> <span class="o">=</span> <span class="n">c</span><span class="p">,</span> <span class="n">actions</span> <span class="o">=</span> <span class="p">[</span><span class="n">DisplayText</span><span class="p">(</span><span class="s">&quot;9&quot;</span><span class="p">)]</span> <span class="p">)</span> <span class="c"># 9번 트리거</span>
+<span class="n">Trigger</span><span class="p">(</span> <span class="n">actions</span> <span class="o">=</span> <span class="p">[</span><span class="n">DisplayText</span><span class="p">(</span><span class="s">&quot;10&quot;</span><span class="p">)]</span> <span class="p">)</span> <span class="c"># 10번 트리거</span>
 
 
-
-<span class="n">psw</span> <span class="o">=</span> <span class="n">InitPlayerSwitch</span><span class="p">([</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">])</span>
-<span class="c"># P1, P2, P3, P4, P5, P6 each starts trigger execution with a, b, c, d, e, f.</span>
+<span class="n">psw</span> <span class="o">=</span> <span class="n">InitPlayerSwitch</span><span class="p">([</span><span class="n">pstart</span><span class="p">,</span> <span class="n">pstart</span><span class="p">,</span> <span class="n">pstart</span><span class="p">,</span> <span class="n">pstart</span><span class="p">,</span> <span class="n">pstart</span><span class="p">,</span> <span class="n">pstart</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">])</span>
 
 
-<span class="n">SaveMap</span><span class="p">(</span><span class="s">&quot;ex2.scx&quot;</span><span class="p">,</span> <span class="n">psw</span><span class="p">)</span> <span class="c"># ex2.scx에 트리거를 넣는다.</span>
+<span class="n">SaveMap</span><span class="p">(</span><span class="s">&quot;ex3.scx&quot;</span><span class="p">,</span> <span class="n">psw</span><span class="p">)</span>
 </pre></div>
 </div>
-<p><strong>Output</strong></p>
-<div class="highlight-python"><div class="highlight"><pre>P1
-Trigger A
-Trigger B
-Trigger D
-Trigger C
-Trigger E
-Trigger F
-
-P2
-Trigger B
-Trigger D
-Trigger C
-Trigger E
-Trigger F
-
-P3
-Trigger C
-Trigger E
-Trigger F
-
-P4
-Trigger D
-Trigger C
-Trigger E
-Trigger F
-
-P5
-Trigger E
-Trigger F
-
-P6
-Trigger F
-
-(Text are repeated for all players)
+</div>
+<div class="section" id="id2">
+<h2>결과<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>::</dt>
+<dd>1
+2
+8
+9
+3
+4
+5
+6</dd>
+</dl>
+</div>
+<div class="section" id="id3">
+<h2>코드 설명<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="nexptr">
+<h3>1. nexptr 자동 연결<a class="headerlink" href="#nexptr" title="Permalink to this headline">¶</a></h3>
+<p>nextptr를 지정하지 않은 트리거의 nextptr는 다음에 만들어진 트리거로 자동으로
+지정됩니다. 예를 들어</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">Trigger</span><span class="p">(</span> <span class="n">actions</span> <span class="o">=</span> <span class="p">[</span><span class="n">DisplayText</span><span class="p">(</span><span class="s">&quot;1&quot;</span><span class="p">)]</span> <span class="p">)</span> <span class="c"># 1번 트리거</span>
+<span class="n">Trigger</span><span class="p">(</span> <span class="n">actions</span> <span class="o">=</span> <span class="p">[</span><span class="n">DisplayText</span><span class="p">(</span><span class="s">&quot;2&quot;</span><span class="p">)]</span> <span class="p">)</span> <span class="c"># 2번 트리거</span>
 </pre></div>
 </div>
-<p><strong>Description</strong></p>
-<p>Execution order of triggers are controlled by nextptr. Each trigger has nextptr
-which points to trigger to be executed next. We set different starting trigger
-for P1~P6, so trigger executed by different players differ.</p>
+<p>는 다음과 같습니다. ##</p>
+<blockquote>
+<div>t = Forward()
+Trigger( nextptr = t, actions = [DisplayText(&#8220;1&#8221;)] ) # 1번 트리거
+t &lt;&lt; Trigger( actions = [DisplayText(&#8220;2&#8221;)] ) # 2번 트리거</div></blockquote>
+</div>
+<div class="section" id="nexttrigger">
+<h3>2. <tt class="xref py py-class docutils literal"><span class="pre">NextTrigger</span></tt><a class="headerlink" href="#nexttrigger" title="Permalink to this headline">¶</a></h3>
+<p>NextTrigger는 &#8216;다음에 만들어진 Trigger&#8217;를 말합니다. 예를 들어</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">t</span> <span class="o">=</span> <span class="n">Forward</span><span class="p">()</span>
+<span class="n">Trigger</span><span class="p">(</span> <span class="n">nextptr</span> <span class="o">=</span> <span class="n">t</span><span class="p">,</span> <span class="n">actions</span> <span class="o">=</span> <span class="p">[</span><span class="n">DisplayText</span><span class="p">(</span><span class="s">&quot;1&quot;</span><span class="p">)]</span> <span class="p">)</span> <span class="c"># 1번 트리거</span>
+<span class="n">t</span> <span class="o">&lt;&lt;</span> <span class="n">NextTrigger</span><span class="p">()</span>
+<span class="n">Trigger</span><span class="p">(</span> <span class="n">actions</span> <span class="o">=</span> <span class="p">[</span><span class="n">DisplayText</span><span class="p">(</span><span class="s">&quot;2&quot;</span><span class="p">)]</span> <span class="p">)</span> <span class="c"># 2번 트리거</span>
+</pre></div>
+</div>
+<p>에서 t는 NextTrigger()가 불린 후 처음으로 불린 Trigger(), 즉 2번 트리거를
+가르킵니다.</p>
+<p>..note:</p>
+<div class="highlight-python"><div class="highlight"><pre>NextTrigger()를 Trigger()의 인자로 넣으면 안됩니다. 예를 들어서 ::
+
+    t = Trigger( nextptr = NextTrigger() )
+
+에서 NextTrigger()가 불린 뒤에 Trigger( nextptr = ... ) 가 불리므로
+NextTrigger는 t를 가르키게 됩니다. 즉, t.nextptr = t가 됩니다.
+NextTrigger()는 Trigger() 밖에서 사용하세요.
+</pre></div>
+</div>
+</div>
+<div class="section" id="trigger-scope">
+<h3>3. Trigger Scope<a class="headerlink" href="#trigger-scope" title="Permalink to this headline">¶</a></h3>
+<p>nextptr 자동 연결을 설명하는 김에 Trigger Scope도 설명하겠습니다. Scope는
+파이썬의 함수나 클래스 등으로 트리거를 생성할 때 자주 씁니다. 트리거를 짜다보면
+nextptr 자동 연결이 안됬으면 하는 경우가 있는데, Trigger Scope를 이용해서
+트리거간에 nextptr 자동 연결을 조절할 수 있습니다.</p>
+<ul class="simple">
+<li><tt class="xref py py-func docutils literal"><span class="pre">PushTriggerScope()</span></tt> : Trigger Scope를 하나 만든다.</li>
+<li><tt class="xref py py-func docutils literal"><span class="pre">PopTriggerScope()</span></tt> : Trigger Scope 하나를 해제한다.
+<tt class="xref py py-func docutils literal"><span class="pre">PushTriggerScope()</span></tt> 랑 쌍으로 사용된다.</li>
+</ul>
+<p>예를 들어서</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">if</span> <span class="mi">1</span><span class="p">:</span>
+    <span class="n">PushTriggerScope</span><span class="p">()</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">Trigger</span><span class="p">(</span> <span class="n">actions</span> <span class="o">=</span> <span class="p">[</span><span class="n">DisplayText</span><span class="p">(</span><span class="s">&quot;3&quot;</span><span class="p">)]</span> <span class="p">)</span> <span class="c"># 3번 트리거</span>
+    <span class="n">Trigger</span><span class="p">(</span> <span class="n">actions</span> <span class="o">=</span> <span class="p">[</span><span class="n">DisplayText</span><span class="p">(</span><span class="s">&quot;4&quot;</span><span class="p">)]</span> <span class="p">)</span> <span class="c"># 4번 트리거</span>
+    <span class="n">Trigger</span><span class="p">(</span> <span class="n">actions</span> <span class="o">=</span> <span class="p">[</span><span class="n">DisplayText</span><span class="p">(</span><span class="s">&quot;5&quot;</span><span class="p">)]</span> <span class="p">)</span> <span class="c"># 5번 트리거</span>
+    <span class="n">Trigger</span><span class="p">(</span> <span class="n">actions</span> <span class="o">=</span> <span class="p">[</span><span class="n">DisplayText</span><span class="p">(</span><span class="s">&quot;6&quot;</span><span class="p">)]</span> <span class="p">)</span> <span class="c"># 6번 트리거</span>
+    <span class="n">Trigger</span><span class="p">(</span><span class="n">nextptr</span> <span class="o">=</span> <span class="n">triggerend</span><span class="p">)</span> <span class="c"># 7번 트리거</span>
+    <span class="n">PopTriggerScope</span><span class="p">()</span>
+
+<span class="n">Trigger</span><span class="p">(</span> <span class="n">actions</span> <span class="o">=</span> <span class="p">[</span><span class="n">DisplayText</span><span class="p">(</span><span class="s">&quot;8&quot;</span><span class="p">)]</span> <span class="p">)</span> <span class="c"># 8번 트리거</span>
+</pre></div>
+</div>
+<p>에서 3, 4, 5, 6, 7번 트리거는 <tt class="xref py py-func docutils literal"><span class="pre">PushTriggerScope`와</span>
+<span class="pre">:func:`PopTriggerScope()</span></tt> 사이에 있습니다. 이 때</p>
+<ol class="arabic simple">
+<li>PushTriggerScope를 이용해서 Scope를 하나 만듭니다.</li>
+<li>3, 4, 5, 6, 7번 트리거를 Scope 안에서 만듭니다.</li>
+<li>PopTriggerScope로 Scope를 해제합니다.</li>
+<li>Scope가 해제된 후 만들어진 8번 트리거는 Scope 밖에 있습니다.</li>
+</ol>
+<p>따라서 3, 4, 5, 6, 7번 트리거는 Scope 안에 있고, 1, 2, 8, 9, 10번 트리거는
+Scope 밖에 있습니다.</p>
+<p>nextptr 자동 연결은 같은 Scope 안에 있는 트리거들끼리만 적용됩니다. 즉,
+3, 4, 5, 6, 7번 트리거끼리 nextptr가 자동으로 설정되고, 1, 2, 8, 9, 10번
+트리거끼리 nextptr가 자동으로 설정됩니다. 따라서 트리거 실행이 1-&gt;2-&gt;8-&gt;9
+순서로 진행됩니다. 9번 트리거의 nextptr는 3번 트리거로 설정되어있으므로
+9번 트리거 이후로는 9-&gt;3-&gt;4-&gt;5-&gt;6-&gt;7-&gt;끝 순서로 트리거가 실행되는거고요.</p>
+<p>Scope는 중첩될 수 있습니다. 예를 들어서</p>
+<div class="highlight-python"><div class="highlight"><pre>Trigger() -  트리거 A
+
+PushTriggerScope()-----------+
+Trigger() -  트리거 B        |
+                             |
+PushTriggerScope()--------+  |
+Trigger() -  트리거 C     |  |
+PopTriggerScope()---------+  |
+                             |
+Trigger() -  트리거 D        |
+PopTriggerScope()------------+
+
+Trigger() -  트리거 E
+
+PushTriggerScope()-----------+
+Trigger() -  트리거 F        |
+PopTriggerScope()------------+
+</pre></div>
+</div>
+<p>일 때, (A, E), (B, D), (C), (F) 가 각각 같은 Scope에 있게 됩니다.</p>
+<p>Scope는 보통 외부 트리거랑 별로 연관이 없는 트리거를 트리거 중간에 선언할 때
+많이 씁니다. <em class="xref std std-ref">example5</em> 에서 변수에 대해서 배우는데, 이 때
+<tt class="xref py py-class docutils literal"><span class="pre">EUDVTable</span></tt> 를 쓰게 됩니다. 이 클래스는 생성자에서 트리거를 하나
+만드는데, EUDVTable이 만드는 트리거랑 다른 트리거랑 엮이면 안되기 때문에
+EUDVTable에서는 트리거를 Scope에 넣어둡니다. Scope는 생각보다 의외로 유용한
+기능이라서 알아두면 좋습니다.</p>
+</div>
+</div>
 </div>
 
 
@@ -124,9 +209,11 @@ for P1~P6, so trigger executed by different players differ.</p>
       <div class="bottomnav">
       
         <p>
-        «&#160;&#160;<a href="ex2.html">Example 2 : Trigger execution order</a>
+        «&#160;&#160;<a href="ex2.html">튜토리얼 2 : nextptr를 이용해서 트리거 실행 순서 지정하기</a>
         &#160;&#160;::&#160;&#160;
         <a class="uplink" href="../index.html">Contents</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="ex4.html">튜토리얼 4 : 특정 플레이어에게서만 실행되는 트리거</a>&#160;&#160;»
         </p>
 
       </div>

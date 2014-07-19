@@ -1,0 +1,201 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>eudtrg.base.utils package &mdash; eudtrg 0.3-r1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.3-r1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="eudtrg 0.3-r1 documentation" href="../index.html" /> 
+  </head>
+  <body>
+      <div class="header"><h1 class="heading"><a href="../index.html">
+          <span>eudtrg 0.3-r1 documentation</span></a></h1>
+        <h2 class="heading"><span>eudtrg.base.utils package</span></h2>
+      </div>
+      <div class="topnav">
+      
+        <p>
+        <a class="uplink" href="../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <div class="section" id="eudtrg-base-utils-package">
+<h1>eudtrg.base.utils package<a class="headerlink" href="#eudtrg-base-utils-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-eudtrg.base.utils.binio">
+<span id="eudtrg-base-utils-binio-module"></span><h2>eudtrg.base.utils.binio module<a class="headerlink" href="#module-eudtrg.base.utils.binio" title="Permalink to this headline">¶</a></h2>
+<p>Simple integer &lt;-&gt; bytes conversion. Used internally in eudtrg.</p>
+<dl class="function">
+<dt id="eudtrg.base.utils.binio.b2i1">
+<tt class="descclassname">eudtrg.base.utils.binio.</tt><tt class="descname">b2i1</tt><big>(</big><em>b</em>, <em>index</em><big>)</big><a class="headerlink" href="#eudtrg.base.utils.binio.b2i1" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="eudtrg.base.utils.binio.b2i2">
+<tt class="descclassname">eudtrg.base.utils.binio.</tt><tt class="descname">b2i2</tt><big>(</big><em>b</em>, <em>index</em><big>)</big><a class="headerlink" href="#eudtrg.base.utils.binio.b2i2" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="eudtrg.base.utils.binio.b2i4">
+<tt class="descclassname">eudtrg.base.utils.binio.</tt><tt class="descname">b2i4</tt><big>(</big><em>b</em>, <em>index</em><big>)</big><a class="headerlink" href="#eudtrg.base.utils.binio.b2i4" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="eudtrg.base.utils.binio.i2b1">
+<tt class="descclassname">eudtrg.base.utils.binio.</tt><tt class="descname">i2b1</tt><big>(</big><em>i</em><big>)</big><a class="headerlink" href="#eudtrg.base.utils.binio.i2b1" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="eudtrg.base.utils.binio.i2b2">
+<tt class="descclassname">eudtrg.base.utils.binio.</tt><tt class="descname">i2b2</tt><big>(</big><em>i</em><big>)</big><a class="headerlink" href="#eudtrg.base.utils.binio.i2b2" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="eudtrg.base.utils.binio.i2b4">
+<tt class="descclassname">eudtrg.base.utils.binio.</tt><tt class="descname">i2b4</tt><big>(</big><em>i</em><big>)</big><a class="headerlink" href="#eudtrg.base.utils.binio.i2b4" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-eudtrg.base.utils.sctbl">
+<span id="eudtrg-base-utils-sctbl-module"></span><h2>eudtrg.base.utils.sctbl module<a class="headerlink" href="#module-eudtrg.base.utils.sctbl" title="Permalink to this headline">¶</a></h2>
+<p>String table manager. Internally used in eudtrg.</p>
+<dl class="class">
+<dt id="eudtrg.base.utils.sctbl.TBL">
+<em class="property">class </em><tt class="descclassname">eudtrg.base.utils.sctbl.</tt><tt class="descname">TBL</tt><big>(</big><em>content=None</em><big>)</big><a class="headerlink" href="#eudtrg.base.utils.sctbl.TBL" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">builtins.object</span></tt></p>
+<dl class="method">
+<dt id="eudtrg.base.utils.sctbl.TBL.AddString">
+<tt class="descname">AddString</tt><big>(</big><em>string</em><big>)</big><a class="headerlink" href="#eudtrg.base.utils.sctbl.TBL.AddString" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="eudtrg.base.utils.sctbl.TBL.GetString">
+<tt class="descname">GetString</tt><big>(</big><em>index</em><big>)</big><a class="headerlink" href="#eudtrg.base.utils.sctbl.TBL.GetString" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="eudtrg.base.utils.sctbl.TBL.GetStringIndex">
+<tt class="descname">GetStringIndex</tt><big>(</big><em>string</em><big>)</big><a class="headerlink" href="#eudtrg.base.utils.sctbl.TBL.GetStringIndex" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="eudtrg.base.utils.sctbl.TBL.LoadTBL">
+<tt class="descname">LoadTBL</tt><big>(</big><em>content</em><big>)</big><a class="headerlink" href="#eudtrg.base.utils.sctbl.TBL.LoadTBL" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="eudtrg.base.utils.sctbl.TBL.SaveTBL">
+<tt class="descname">SaveTBL</tt><big>(</big><big>)</big><a class="headerlink" href="#eudtrg.base.utils.sctbl.TBL.SaveTBL" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-eudtrg.base.utils.ubconv">
+<span id="eudtrg-base-utils-ubconv-module"></span><h2>eudtrg.base.utils.ubconv module<a class="headerlink" href="#module-eudtrg.base.utils.ubconv" title="Permalink to this headline">¶</a></h2>
+<p>Unicode(python) &lt;-&gt; Binary(starcraft) conversion. Used internally in eudtrg.</p>
+<dl class="function">
+<dt id="eudtrg.base.utils.ubconv.Bytes2Unicode">
+<tt class="descclassname">eudtrg.base.utils.ubconv.</tt><tt class="descname">Bytes2Unicode</tt><big>(</big><em>b</em><big>)</big><a class="headerlink" href="#eudtrg.base.utils.ubconv.Bytes2Unicode" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="eudtrg.base.utils.ubconv.UbconvUseCharset">
+<tt class="descclassname">eudtrg.base.utils.ubconv.</tt><tt class="descname">UbconvUseCharset</tt><big>(</big><em>newencoding</em><big>)</big><a class="headerlink" href="#eudtrg.base.utils.ubconv.UbconvUseCharset" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="eudtrg.base.utils.ubconv.Unicode2Bytes">
+<tt class="descclassname">eudtrg.base.utils.ubconv.</tt><tt class="descname">Unicode2Bytes</tt><big>(</big><em>string</em><big>)</big><a class="headerlink" href="#eudtrg.base.utils.ubconv.Unicode2Bytes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="eudtrg.base.utils.ubconv.b2u">
+<tt class="descclassname">eudtrg.base.utils.ubconv.</tt><tt class="descname">b2u</tt><big>(</big><em>b</em><big>)</big><a class="headerlink" href="#eudtrg.base.utils.ubconv.b2u" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="eudtrg.base.utils.ubconv.main">
+<tt class="descclassname">eudtrg.base.utils.ubconv.</tt><tt class="descname">main</tt><big>(</big><big>)</big><a class="headerlink" href="#eudtrg.base.utils.ubconv.main" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="eudtrg.base.utils.ubconv.u2b">
+<tt class="descclassname">eudtrg.base.utils.ubconv.</tt><tt class="descname">u2b</tt><big>(</big><em>string</em><big>)</big><a class="headerlink" href="#eudtrg.base.utils.ubconv.u2b" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-eudtrg.base.utils.utils">
+<span id="eudtrg-base-utils-utils-module"></span><h2>eudtrg.base.utils.utils module<a class="headerlink" href="#module-eudtrg.base.utils.utils" title="Permalink to this headline">¶</a></h2>
+<p>Useful utilities. You may freely use these functions.</p>
+<dl class="function">
+<dt id="eudtrg.base.utils.utils.Assignable2List">
+<tt class="descclassname">eudtrg.base.utils.utils.</tt><tt class="descname">Assignable2List</tt><big>(</big><em>a</em><big>)</big><a class="headerlink" href="#eudtrg.base.utils.utils.Assignable2List" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="eudtrg.base.utils.utils.EPD">
+<tt class="descclassname">eudtrg.base.utils.utils.</tt><tt class="descname">EPD</tt><big>(</big><em>offset</em><big>)</big><a class="headerlink" href="#eudtrg.base.utils.utils.EPD" title="Permalink to this definition">¶</a></dt>
+<dd><p>Offset to EPD player.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="eudtrg.base.utils.utils.FlattenList">
+<tt class="descclassname">eudtrg.base.utils.utils.</tt><tt class="descname">FlattenList</tt><big>(</big><em>l</em><big>)</big><a class="headerlink" href="#eudtrg.base.utils.utils.FlattenList" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="eudtrg.base.utils.utils.List2Assignable">
+<tt class="descclassname">eudtrg.base.utils.utils.</tt><tt class="descname">List2Assignable</tt><big>(</big><em>l</em><big>)</big><a class="headerlink" href="#eudtrg.base.utils.utils.List2Assignable" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="eudtrg.base.utils.utils.SCM2Text">
+<tt class="descclassname">eudtrg.base.utils.utils.</tt><tt class="descname">SCM2Text</tt><big>(</big><em>s</em><big>)</big><a class="headerlink" href="#eudtrg.base.utils.utils.SCM2Text" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-eudtrg.base.utils">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-eudtrg.base.utils" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+      </div>
+      <div class="bottomnav">
+      
+        <p>
+        <a class="uplink" href="../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer">
+        &copy; Copyright 2014, whyask37.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

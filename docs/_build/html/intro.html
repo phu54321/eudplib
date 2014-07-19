@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Introduction &mdash; eudtrg 0.3-r1 documentation</title>
+    <title>eudtrg 소개 &mdash; eudtrg 0.3-r1 documentation</title>
     
     <link rel="stylesheet" href="_static/haiku.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -25,17 +25,17 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="top" title="eudtrg 0.3-r1 documentation" href="index.html" />
     <link rel="next" title="Getting started" href="getting_started.html" />
-    <link rel="prev" title="Welcome to eudtrg documentation!" href="index.html" /> 
+    <link rel="prev" title="eudtrg 사용설명서" href="index.html" /> 
   </head>
   <body>
       <div class="header"><h1 class="heading"><a href="index.html">
           <span>eudtrg 0.3-r1 documentation</span></a></h1>
-        <h2 class="heading"><span>Introduction</span></h2>
+        <h2 class="heading"><span>eudtrg 소개</span></h2>
       </div>
       <div class="topnav">
       
         <p>
-        «&#160;&#160;<a href="index.html">Welcome to eudtrg documentation!</a>
+        «&#160;&#160;<a href="index.html">eudtrg 사용설명서</a>
         &#160;&#160;::&#160;&#160;
         <a class="uplink" href="index.html">Contents</a>
         &#160;&#160;::&#160;&#160;
@@ -46,31 +46,27 @@
       <div class="content">
         
         
-  <div class="section" id="introduction">
-<span id="id1"></span><h1>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h1>
-<p>eudtrg is a tool for systematically generating Self-modifying trigger, trigger
-that can be modified by EUD actions. With eudtrg, you can easily create
-triggers that modify triggers. We call this technique &#8216;Trigger programming&#8217;.
-With trigger programming, you can</p>
+  <div class="section" id="eudtrg">
+<span id="introduction"></span><h1>eudtrg 소개<a class="headerlink" href="#eudtrg" title="Permalink to this headline">¶</a></h1>
+<p>eudtrg는 트리거를 수정하는 트리거를 쉽게 만들 수 있도록 해주는 일종의 트리거
+에디터입니다. 트리거를 EUD를 이용해서 실시간으로 변형하는 기법을 트리거
+프로그래밍이라고 부릅니다. 트리거 프로그래밍을 사용하면 다양한 계산들을 쉽게 할
+수 있습니다.</p>
 <ul class="simple">
-<li>Create control flow such as conditional branch and loop.</li>
-<li>Customize conditions and actions ingame.</li>
-<li>Use variables that supports fast assignment and calculation.</li>
-<li>Make functions out of triggers.</li>
+<li>트리거의 조건과 액션을 게임 중에 변경할 수 있습니다.</li>
+<li>반복문, 분기문 등을 만들 수 있습니다.</li>
+<li>대입/덧셈/뺄셈 등을 매우 빠르게 할 수 있습니다.</li>
+<li>함수를 구현할 수 있습니다.</li>
 </ul>
-<p>As a result, programming is possible. Any C code without APIs can be converted
-to equivilant eudtrg trigger. eudtrg is harder than assembly, but it can do
-anything.</p>
-<dl class="docutils">
-<dt>Example map:</dt>
-<dd><ul class="first last simple">
+<p>트리거 프로그래밍을 이용하면 프로그래밍을 할 수 있습니다. 순수 C언어로 만들 수
+있는 모든 프로그램은 eudtrg로도 만들 수 있습니다.</p>
+<p>예시 맵:</p>
+<ul class="simple">
 <li><a class="reference download internal" href="_downloads/CreepDependentZergling.scx"><tt class="xref download docutils literal"><span class="pre">CreepDependentZergling</span></tt></a> :
-Zergling gets slower as they move out of the creep. This map checks position
-and creep for every zergling and controls their speed respectively.</li>
+저글링이 크립 밖으로 벗어나면 느려집니다. 매 프레임마다 저글링들의 위치를
+인식해서 해당 좌표에 크립이 있는지를 인식, 결과에 따라서 저글링의 속도를
+조절합니다.</li>
 </ul>
-</dd>
-</dl>
-<p>SEN article for trigger programming : <a class="reference external" href="http://www.staredit.net/topic/16214/">http://www.staredit.net/topic/16214/</a></p>
 </div>
 
 
@@ -78,7 +74,7 @@ and creep for every zergling and controls their speed respectively.</li>
       <div class="bottomnav">
       
         <p>
-        «&#160;&#160;<a href="index.html">Welcome to eudtrg documentation!</a>
+        «&#160;&#160;<a href="index.html">eudtrg 사용설명서</a>
         &#160;&#160;::&#160;&#160;
         <a class="uplink" href="index.html">Contents</a>
         &#160;&#160;::&#160;&#160;

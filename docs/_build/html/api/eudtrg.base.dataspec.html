@@ -1,0 +1,460 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>eudtrg.base.dataspec package &mdash; eudtrg 0.3-r1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.3-r1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="eudtrg 0.3-r1 documentation" href="../index.html" /> 
+  </head>
+  <body>
+      <div class="header"><h1 class="heading"><a href="../index.html">
+          <span>eudtrg 0.3-r1 documentation</span></a></h1>
+        <h2 class="heading"><span>eudtrg.base.dataspec package</span></h2>
+      </div>
+      <div class="topnav">
+      
+        <p>
+        <a class="uplink" href="../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <div class="section" id="eudtrg-base-dataspec-package">
+<h1>eudtrg.base.dataspec package<a class="headerlink" href="#eudtrg-base-dataspec-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-eudtrg.base.dataspec.bytedump">
+<span id="eudtrg-base-dataspec-bytedump-module"></span><h2>eudtrg.base.dataspec.bytedump module<a class="headerlink" href="#module-eudtrg.base.dataspec.bytedump" title="Permalink to this headline">¶</a></h2>
+<p>Defines Db class for uploading arbitary bytes data on SC memory.</p>
+<dl class="class">
+<dt id="eudtrg.base.dataspec.bytedump.Db">
+<em class="property">class </em><tt class="descclassname">eudtrg.base.dataspec.bytedump.</tt><tt class="descname">Db</tt><big>(</big><em>content</em><big>)</big><a class="headerlink" href="#eudtrg.base.dataspec.bytedump.Db" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#eudtrg.base.dataspec.eudobj.EUDObject" title="eudtrg.base.dataspec.eudobj.EUDObject"><tt class="xref py py-class docutils literal"><span class="pre">eudtrg.base.dataspec.eudobj.EUDObject</span></tt></a></p>
+<p>Object for uploading arbitary bytestream into starcraft memory. You can store
+bytes objects and reference to this object when you need its content. Useful
+for uploading custom resources into SC memory. One of the simplest EUDObjects.</p>
+<dl class="method">
+<dt id="eudtrg.base.dataspec.bytedump.Db.GetDataSize">
+<tt class="descname">GetDataSize</tt><big>(</big><big>)</big><a class="headerlink" href="#eudtrg.base.dataspec.bytedump.Db.GetDataSize" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="eudtrg.base.dataspec.bytedump.Db.GetDependencyList">
+<tt class="descname">GetDependencyList</tt><big>(</big><big>)</big><a class="headerlink" href="#eudtrg.base.dataspec.bytedump.Db.GetDependencyList" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="eudtrg.base.dataspec.bytedump.Db.WritePayload">
+<tt class="descname">WritePayload</tt><big>(</big><em>buf</em><big>)</big><a class="headerlink" href="#eudtrg.base.dataspec.bytedump.Db.WritePayload" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-eudtrg.base.dataspec.eudobj">
+<span id="eudtrg-base-dataspec-eudobj-module"></span><h2>eudtrg.base.dataspec.eudobj module<a class="headerlink" href="#module-eudtrg.base.dataspec.eudobj" title="Permalink to this headline">¶</a></h2>
+<p>Defines EUDObject, which means everything uploadable into SC memory.</p>
+<dl class="class">
+<dt id="eudtrg.base.dataspec.eudobj.EUDObject">
+<em class="property">class </em><tt class="descclassname">eudtrg.base.dataspec.eudobj.</tt><tt class="descname">EUDObject</tt><a class="headerlink" href="#eudtrg.base.dataspec.eudobj.EUDObject" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#eudtrg.base.dataspec.expr.Expr" title="eudtrg.base.dataspec.expr.Expr"><tt class="xref py py-class docutils literal"><span class="pre">eudtrg.base.dataspec.expr.Expr</span></tt></a></p>
+<p>EUDObject is a base class for uploadable objects, which can be placed in
+starcraft memory after map loads. Derived class should implement three
+virtual methods:</p>
+<blockquote>
+<div><ul class="simple">
+<li>GetDependencyList : Get list of objects/expressions object depends on.</li>
+<li>GetDataSize : Get size of object. e.g. Trigger object&#8217;s size is 2408.</li>
+<li>WritePayload : Write payload data into given buffer.</li>
+</ul>
+</div></blockquote>
+<dl class="method">
+<dt id="eudtrg.base.dataspec.eudobj.EUDObject.EvalImpl">
+<tt class="descname">EvalImpl</tt><big>(</big><big>)</big><a class="headerlink" href="#eudtrg.base.dataspec.eudobj.EUDObject.EvalImpl" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns nummerical value of this object. This function returns address
+of the object by default, but you may override this behavior.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="eudtrg.base.dataspec.eudobj.EUDObject.GetDataSize">
+<tt class="descname">GetDataSize</tt><big>(</big><big>)</big><a class="headerlink" href="#eudtrg.base.dataspec.eudobj.EUDObject.GetDataSize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get size of object when it is uploaded into Starcraft memory.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="eudtrg.base.dataspec.eudobj.EUDObject.GetDependencyList">
+<tt class="descname">GetDependencyList</tt><big>(</big><big>)</big><a class="headerlink" href="#eudtrg.base.dataspec.eudobj.EUDObject.GetDependencyList" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get list of objects/expressions object depends on.
+eudtrg automatically traverses through objects, so object do not have
+to, and should not traverse through other objects. GetDependencyList
+should give complete list of objects which object directly depends on.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="eudtrg.base.dataspec.eudobj.EUDObject.ResetAddress">
+<tt class="descname">ResetAddress</tt><big>(</big><big>)</big><a class="headerlink" href="#eudtrg.base.dataspec.eudobj.EUDObject.ResetAddress" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns address of object. Reset address for future usage. You should
+invalidate caches regarding EvalImpl, GetDependencyList, GetDataSize,
+WritePayload after this function is called.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="eudtrg.base.dataspec.eudobj.EUDObject.SetAddress">
+<tt class="descname">SetAddress</tt><big>(</big><em>address</em><big>)</big><a class="headerlink" href="#eudtrg.base.dataspec.eudobj.EUDObject.SetAddress" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set address of object. After this function is called, you can cache
+values of EvalImpl, GetDependencyList, GetDataSize, WritePayload.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="eudtrg.base.dataspec.eudobj.EUDObject.WritePayload">
+<tt class="descname">WritePayload</tt><big>(</big><em>emitbuffer</em><big>)</big><a class="headerlink" href="#eudtrg.base.dataspec.eudobj.EUDObject.WritePayload" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write payload data into given buffer.
+WritePayload can write data into emitbuffer using following functions</p>
+<blockquote>
+<div><ul class="simple">
+<li>EmitByte  : Emit byte. Byte should be constant</li>
+<li>EmitWord  : Emit words. Word should be constant</li>
+<li>EmitDword : Emit dword. Dword can be either constant or expression.</li>
+<li>EmitBytes : Emit bytes object.</li>
+</ul>
+</div></blockquote>
+<p>eudtrg will raise RuntimeError if object writes more or less bytes than
+specified by GetDataSize.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-eudtrg.base.dataspec.expr">
+<span id="eudtrg-base-dataspec-expr-module"></span><h2>eudtrg.base.dataspec.expr module<a class="headerlink" href="#module-eudtrg.base.dataspec.expr" title="Permalink to this headline">¶</a></h2>
+<p>Expression library wrapper. Used for calculating expression with addreses.
+Internally used in eudtrg.</p>
+<dl class="class">
+<dt id="eudtrg.base.dataspec.expr.BinopExpr">
+<em class="property">class </em><tt class="descclassname">eudtrg.base.dataspec.expr.</tt><tt class="descname">BinopExpr</tt><big>(</big><em>exprA</em>, <em>exprB</em><big>)</big><a class="headerlink" href="#eudtrg.base.dataspec.expr.BinopExpr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#eudtrg.base.dataspec.expr.Expr" title="eudtrg.base.dataspec.expr.Expr"><tt class="xref py py-class docutils literal"><span class="pre">eudtrg.base.dataspec.expr.Expr</span></tt></a></p>
+<dl class="method">
+<dt id="eudtrg.base.dataspec.expr.BinopExpr.GetDependencyList">
+<tt class="descname">GetDependencyList</tt><big>(</big><big>)</big><a class="headerlink" href="#eudtrg.base.dataspec.expr.BinopExpr.GetDependencyList" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="eudtrg.base.dataspec.expr.Evaluate">
+<tt class="descclassname">eudtrg.base.dataspec.expr.</tt><tt class="descname">Evaluate</tt><big>(</big><em>x</em><big>)</big><a class="headerlink" href="#eudtrg.base.dataspec.expr.Evaluate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="eudtrg.base.dataspec.expr.ExpireCacheToken">
+<tt class="descclassname">eudtrg.base.dataspec.expr.</tt><tt class="descname">ExpireCacheToken</tt><big>(</big><big>)</big><a class="headerlink" href="#eudtrg.base.dataspec.expr.ExpireCacheToken" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="eudtrg.base.dataspec.expr.Expr">
+<em class="property">class </em><tt class="descclassname">eudtrg.base.dataspec.expr.</tt><tt class="descname">Expr</tt><a class="headerlink" href="#eudtrg.base.dataspec.expr.Expr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">builtins.object</span></tt></p>
+<p>Base class for expression containing address of objects.
+Any object derived from this class should implement these virtual methods:</p>
+<blockquote>
+<div><ul class="simple">
+<li>GetDependencyList : Get list of expressions this expression depents on.</li>
+<li>EvalImpl : Evaluate value of expressions.</li>
+</ul>
+</div></blockquote>
+<dl class="method">
+<dt id="eudtrg.base.dataspec.expr.Expr.EvalImpl">
+<tt class="descname">EvalImpl</tt><big>(</big><big>)</big><a class="headerlink" href="#eudtrg.base.dataspec.expr.Expr.EvalImpl" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="eudtrg.base.dataspec.expr.Expr.Evaluate">
+<tt class="descname">Evaluate</tt><big>(</big><big>)</big><a class="headerlink" href="#eudtrg.base.dataspec.expr.Expr.Evaluate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="eudtrg.base.dataspec.expr.Expr.GetDependencyList">
+<tt class="descname">GetDependencyList</tt><big>(</big><big>)</big><a class="headerlink" href="#eudtrg.base.dataspec.expr.Expr.GetDependencyList" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="eudtrg.base.dataspec.expr.GetCacheToken">
+<tt class="descclassname">eudtrg.base.dataspec.expr.</tt><tt class="descname">GetCacheToken</tt><big>(</big><big>)</big><a class="headerlink" href="#eudtrg.base.dataspec.expr.GetCacheToken" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="eudtrg.base.dataspec.expr.GetDependencyList">
+<tt class="descclassname">eudtrg.base.dataspec.expr.</tt><tt class="descname">GetDependencyList</tt><big>(</big><em>item</em><big>)</big><a class="headerlink" href="#eudtrg.base.dataspec.expr.GetDependencyList" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="eudtrg.base.dataspec.expr.IsValidExpr">
+<tt class="descclassname">eudtrg.base.dataspec.expr.</tt><tt class="descname">IsValidExpr</tt><big>(</big><em>x</em><big>)</big><a class="headerlink" href="#eudtrg.base.dataspec.expr.IsValidExpr" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-eudtrg.base.dataspec.forward">
+<span id="eudtrg-base-dataspec-forward-module"></span><h2>eudtrg.base.dataspec.forward module<a class="headerlink" href="#module-eudtrg.base.dataspec.forward" title="Permalink to this headline">¶</a></h2>
+<p>Forward declaration class Forward</p>
+<dl class="class">
+<dt id="eudtrg.base.dataspec.forward.Forward">
+<em class="property">class </em><tt class="descclassname">eudtrg.base.dataspec.forward.</tt><tt class="descname">Forward</tt><a class="headerlink" href="#eudtrg.base.dataspec.forward.Forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#eudtrg.base.dataspec.expr.Expr" title="eudtrg.base.dataspec.expr.Expr"><tt class="xref py py-class docutils literal"><span class="pre">eudtrg.base.dataspec.expr.Expr</span></tt></a></p>
+<p>ex)</p>
+<p>a = Trigger( nextptr = b ) # Error : b is not defined
+b = Trigger( nextptr = a )</p>
+<p>-&gt;</p>
+<p>b = Forward() # Forward declaration
+a = Trigger( nextptr = b )
+b &lt;&lt; Trigger( nextptr = a ) # put in value later.</p>
+<dl class="method">
+<dt id="eudtrg.base.dataspec.forward.Forward.Evaluate">
+<tt class="descname">Evaluate</tt><big>(</big><big>)</big><a class="headerlink" href="#eudtrg.base.dataspec.forward.Forward.Evaluate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="eudtrg.base.dataspec.forward.Forward.GetDependencyList">
+<tt class="descname">GetDependencyList</tt><big>(</big><big>)</big><a class="headerlink" href="#eudtrg.base.dataspec.forward.Forward.GetDependencyList" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-eudtrg.base.dataspec.trigger">
+<span id="eudtrg-base-dataspec-trigger-module"></span><h2>eudtrg.base.dataspec.trigger module<a class="headerlink" href="#module-eudtrg.base.dataspec.trigger" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>Defines</dt>
+<dd><ul class="first last simple">
+<li>Trigger scoping function</li>
+<li>Trigger, Condition, Action class</li>
+<li>Trigger linker (NextTrigger, LastTrigger)</li>
+<li>Debug utility ( GetTriggerCount )</li>
+</ul>
+</dd>
+</dl>
+<dl class="class">
+<dt id="eudtrg.base.dataspec.trigger.Action">
+<em class="property">class </em><tt class="descclassname">eudtrg.base.dataspec.trigger.</tt><tt class="descname">Action</tt><big>(</big><em>locid1</em>, <em>strid</em>, <em>wavid</em>, <em>time</em>, <em>player1</em>, <em>player2</em>, <em>unitid</em>, <em>acttype</em>, <em>amount</em>, <em>flags</em><big>)</big><a class="headerlink" href="#eudtrg.base.dataspec.trigger.Action" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#eudtrg.base.dataspec.expr.Expr" title="eudtrg.base.dataspec.expr.Expr"><tt class="xref py py-class docutils literal"><span class="pre">eudtrg.base.dataspec.expr.Expr</span></tt></a></p>
+<p>Action class. Immutable in python. See eudtrg.base.stocktrg for stock actions.
+You won&#8217;t be manipulating this class directly if you&#8217;re only using stock
+triggers, but you&#8217;ll need to know in which offset each field will be stored.</p>
+<blockquote>
+<div>+00 locid1        | dword0  | EPD(act)+0
++04 strid         | dword1  | EPD(act)+1
++08 wavid         | dword2  | EPD(act)+2
++0C time          | dword3  | EPD(act)+3
++10 player1       | dword4  | EPD(act)+4
++14 player2       | dword5  | EPD(act)+5
++18 unitid        | dword6  | EPD(act)+6
++1A acttype       |         |
++1B amount        |         |
++1C flags         | dword7  | EPD(act)+7
++1D internal[3]   |         |</div></blockquote>
+<dl class="method">
+<dt id="eudtrg.base.dataspec.trigger.Action.Disable">
+<tt class="descname">Disable</tt><big>(</big><big>)</big><a class="headerlink" href="#eudtrg.base.dataspec.trigger.Action.Disable" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="eudtrg.base.dataspec.trigger.Action.Evaluate">
+<tt class="descname">Evaluate</tt><big>(</big><big>)</big><a class="headerlink" href="#eudtrg.base.dataspec.trigger.Action.Evaluate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="eudtrg.base.dataspec.trigger.Action.GetDependencyList">
+<tt class="descname">GetDependencyList</tt><big>(</big><big>)</big><a class="headerlink" href="#eudtrg.base.dataspec.trigger.Action.GetDependencyList" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="eudtrg.base.dataspec.trigger.Action.SetParentTrigger">
+<tt class="descname">SetParentTrigger</tt><big>(</big><em>trg</em>, <em>index</em><big>)</big><a class="headerlink" href="#eudtrg.base.dataspec.trigger.Action.SetParentTrigger" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="eudtrg.base.dataspec.trigger.Action.WritePayload">
+<tt class="descname">WritePayload</tt><big>(</big><em>buf</em><big>)</big><a class="headerlink" href="#eudtrg.base.dataspec.trigger.Action.WritePayload" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="eudtrg.base.dataspec.trigger.Condition">
+<em class="property">class </em><tt class="descclassname">eudtrg.base.dataspec.trigger.</tt><tt class="descname">Condition</tt><big>(</big><em>locid</em>, <em>player</em>, <em>amount</em>, <em>unitid</em>, <em>comparison</em>, <em>condtype</em>, <em>restype</em>, <em>flags</em><big>)</big><a class="headerlink" href="#eudtrg.base.dataspec.trigger.Condition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#eudtrg.base.dataspec.expr.Expr" title="eudtrg.base.dataspec.expr.Expr"><tt class="xref py py-class docutils literal"><span class="pre">eudtrg.base.dataspec.expr.Expr</span></tt></a></p>
+<p>Condition class. Immutable in python. See eudtrg.base.stocktrg for stock
+conditions. You won&#8217;t be manipulating this class directly if you&#8217;re only using
+stock triggers, but you&#8217;ll need to know in which offset each field will be
+stored.</p>
+<blockquote>
+<div>+00 locid         | dword0  | EPD(cond)+0
++04 player        | dword1  | EPD(cond)+1
++08 amount        | dword2  | EPD(cond)+2
++0C unitid        | dword3  | EPD(cond)+3
++0E comparison    |         |
++0F condtype      |         |
++10 restype       | dword4  | EPD(cond)+4
++11 flags         |         |
++12 internal[2]   |         |</div></blockquote>
+<dl class="method">
+<dt id="eudtrg.base.dataspec.trigger.Condition.Disable">
+<tt class="descname">Disable</tt><big>(</big><big>)</big><a class="headerlink" href="#eudtrg.base.dataspec.trigger.Condition.Disable" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="eudtrg.base.dataspec.trigger.Condition.Evaluate">
+<tt class="descname">Evaluate</tt><big>(</big><big>)</big><a class="headerlink" href="#eudtrg.base.dataspec.trigger.Condition.Evaluate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="eudtrg.base.dataspec.trigger.Condition.GetDependencyList">
+<tt class="descname">GetDependencyList</tt><big>(</big><big>)</big><a class="headerlink" href="#eudtrg.base.dataspec.trigger.Condition.GetDependencyList" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="eudtrg.base.dataspec.trigger.Condition.SetParentTrigger">
+<tt class="descname">SetParentTrigger</tt><big>(</big><em>trg</em>, <em>index</em><big>)</big><a class="headerlink" href="#eudtrg.base.dataspec.trigger.Condition.SetParentTrigger" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="eudtrg.base.dataspec.trigger.Condition.WritePayload">
+<tt class="descname">WritePayload</tt><big>(</big><em>buf</em><big>)</big><a class="headerlink" href="#eudtrg.base.dataspec.trigger.Condition.WritePayload" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="eudtrg.base.dataspec.trigger.Disabled">
+<tt class="descclassname">eudtrg.base.dataspec.trigger.</tt><tt class="descname">Disabled</tt><big>(</big><em>item</em><big>)</big><a class="headerlink" href="#eudtrg.base.dataspec.trigger.Disabled" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make condition/action disabled.
+ex)</p>
+<blockquote>
+<div>Disabled(SetDeaths(Player1, SetTo, 1234, &#8216;Terran Marine&#8217;))</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="eudtrg.base.dataspec.trigger.GetTriggerCount">
+<tt class="descclassname">eudtrg.base.dataspec.trigger.</tt><tt class="descname">GetTriggerCount</tt><big>(</big><big>)</big><a class="headerlink" href="#eudtrg.base.dataspec.trigger.GetTriggerCount" title="Permalink to this definition">¶</a></dt>
+<dd><p>Counts how many trigger objects have been constructed since eudtrg have been
+initalized. Useful for debugging simple errors.
+ex) I made a function with about 1000 triggers expected.</p>
+<blockquote>
+<div>GetTriggerCount has changed only by 3 -&gt; Bug.</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="eudtrg.base.dataspec.trigger.LastTrigger">
+<tt class="descclassname">eudtrg.base.dataspec.trigger.</tt><tt class="descname">LastTrigger</tt><big>(</big><em>Expr</em><big>)</big><a class="headerlink" href="#eudtrg.base.dataspec.trigger.LastTrigger" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="eudtrg.base.dataspec.trigger.NextTrigger">
+<em class="property">class </em><tt class="descclassname">eudtrg.base.dataspec.trigger.</tt><tt class="descname">NextTrigger</tt><a class="headerlink" href="#eudtrg.base.dataspec.trigger.NextTrigger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#eudtrg.base.dataspec.expr.Expr" title="eudtrg.base.dataspec.expr.Expr"><tt class="xref py py-class docutils literal"><span class="pre">eudtrg.base.dataspec.expr.Expr</span></tt></a></p>
+<p>Create reference to next declared trigger. Makes your code cleaner.</p>
+<dl class="method">
+<dt id="eudtrg.base.dataspec.trigger.NextTrigger.Evaluate">
+<tt class="descname">Evaluate</tt><big>(</big><big>)</big><a class="headerlink" href="#eudtrg.base.dataspec.trigger.NextTrigger.Evaluate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="eudtrg.base.dataspec.trigger.NextTrigger.GetDependencyList">
+<tt class="descname">GetDependencyList</tt><big>(</big><big>)</big><a class="headerlink" href="#eudtrg.base.dataspec.trigger.NextTrigger.GetDependencyList" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="eudtrg.base.dataspec.trigger.NextTrigger.SetTrigger">
+<tt class="descname">SetTrigger</tt><big>(</big><em>trg</em><big>)</big><a class="headerlink" href="#eudtrg.base.dataspec.trigger.NextTrigger.SetTrigger" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="eudtrg.base.dataspec.trigger.PopTriggerScope">
+<tt class="descclassname">eudtrg.base.dataspec.trigger.</tt><tt class="descname">PopTriggerScope</tt><big>(</big><big>)</big><a class="headerlink" href="#eudtrg.base.dataspec.trigger.PopTriggerScope" title="Permalink to this definition">¶</a></dt>
+<dd><p>Exits trigger scope. Used in conjunction with PushTriggerScope().</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="eudtrg.base.dataspec.trigger.PushTriggerScope">
+<tt class="descclassname">eudtrg.base.dataspec.trigger.</tt><tt class="descname">PushTriggerScope</tt><big>(</big><big>)</big><a class="headerlink" href="#eudtrg.base.dataspec.trigger.PushTriggerScope" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates trigger scope. Triggers inside the scope is isolated from outside.
+Used in conjunction with PopTriggerScope().</p>
+<p>ex)
+a = Trigger()
+PushTriggerScope()
+b = Trigger()
+c = Trigger()
+PopTriggerScope()
+d = Trigger()</p>
+<p>Result : a-&gt;d, b-&gt;c. Inside and outside of scope is isolated.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="eudtrg.base.dataspec.trigger.Trigger">
+<em class="property">class </em><tt class="descclassname">eudtrg.base.dataspec.trigger.</tt><tt class="descname">Trigger</tt><big>(</big><em>nextptr=None</em>, <em>conditions=</em>, <span class="optional">[</span><span class="optional">]</span><em>actions=</em>, <span class="optional">[</span><span class="optional">]</span><em>preserved=True</em><big>)</big><a class="headerlink" href="#eudtrg.base.dataspec.trigger.Trigger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#eudtrg.base.dataspec.eudobj.EUDObject" title="eudtrg.base.dataspec.eudobj.EUDObject"><tt class="xref py py-class docutils literal"><span class="pre">eudtrg.base.dataspec.eudobj.EUDObject</span></tt></a></p>
+<p>Trigger object.</p>
+<dl class="method">
+<dt id="eudtrg.base.dataspec.trigger.Trigger.GetDataSize">
+<tt class="descname">GetDataSize</tt><big>(</big><big>)</big><a class="headerlink" href="#eudtrg.base.dataspec.trigger.Trigger.GetDataSize" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="eudtrg.base.dataspec.trigger.Trigger.GetDependencyList">
+<tt class="descname">GetDependencyList</tt><big>(</big><big>)</big><a class="headerlink" href="#eudtrg.base.dataspec.trigger.Trigger.GetDependencyList" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="eudtrg.base.dataspec.trigger.Trigger.WritePayload">
+<tt class="descname">WritePayload</tt><big>(</big><em>buf</em><big>)</big><a class="headerlink" href="#eudtrg.base.dataspec.trigger.Trigger.WritePayload" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-eudtrg.base.dataspec">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-eudtrg.base.dataspec" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+      </div>
+      <div class="bottomnav">
+      
+        <p>
+        <a class="uplink" href="../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer">
+        &copy; Copyright 2014, whyask37.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

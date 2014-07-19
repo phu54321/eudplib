@@ -1,0 +1,106 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>eudtrg.base.payload package &mdash; eudtrg 0.3-r1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.3-r1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="eudtrg 0.3-r1 documentation" href="../index.html" /> 
+  </head>
+  <body>
+      <div class="header"><h1 class="heading"><a href="../index.html">
+          <span>eudtrg 0.3-r1 documentation</span></a></h1>
+        <h2 class="heading"><span>eudtrg.base.payload package</span></h2>
+      </div>
+      <div class="topnav">
+      
+        <p>
+        <a class="uplink" href="../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <div class="section" id="eudtrg-base-payload-package">
+<h1>eudtrg.base.payload package<a class="headerlink" href="#eudtrg-base-payload-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-eudtrg.base.payload.depgraph">
+<span id="eudtrg-base-payload-depgraph-module"></span><h2>eudtrg.base.payload.depgraph module<a class="headerlink" href="#module-eudtrg.base.payload.depgraph" title="Permalink to this headline">¶</a></h2>
+<p>Dependency graph library. Traverses through objects by dependencies, collecting
+required objects. Used internally in eudtrg.</p>
+<dl class="function">
+<dt id="eudtrg.base.payload.depgraph.GetAllDependencies">
+<tt class="descclassname">eudtrg.base.payload.depgraph.</tt><tt class="descname">GetAllDependencies</tt><big>(</big><em>root</em><big>)</big><a class="headerlink" href="#eudtrg.base.payload.depgraph.GetAllDependencies" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-eudtrg.base.payload.payload">
+<span id="eudtrg-base-payload-payload-module"></span><h2>eudtrg.base.payload.payload module<a class="headerlink" href="#module-eudtrg.base.payload.payload" title="Permalink to this headline">¶</a></h2>
+<p>Declares payload class &amp; various helper functions. Used internally in eudtrg.</p>
+<dl class="function">
+<dt id="eudtrg.base.payload.payload.CreatePayload">
+<tt class="descclassname">eudtrg.base.payload.payload.</tt><tt class="descname">CreatePayload</tt><big>(</big><em>root</em><big>)</big><a class="headerlink" href="#eudtrg.base.payload.payload.CreatePayload" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="eudtrg.base.payload.payload.Payload">
+<em class="property">class </em><tt class="descclassname">eudtrg.base.payload.payload.</tt><tt class="descname">Payload</tt><big>(</big><em>data</em>, <em>prttable=</em>, <span class="optional">[</span><span class="optional">]</span><em>orttable=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#eudtrg.base.payload.payload.Payload" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">builtins.object</span></tt></p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-eudtrg.base.payload.rlocint">
+<span id="eudtrg-base-payload-rlocint-module"></span><h2>eudtrg.base.payload.rlocint module<a class="headerlink" href="#module-eudtrg.base.payload.rlocint" title="Permalink to this headline">¶</a></h2>
+<p>Class for representing relocatable int. Used internally in eudtrg.</p>
+<p>Basically, EUDObject don&#8217;t have fixed address: they are relocated by address of
+STR section. (dword_5993D4) RelocatableInt class merges relocate information and
+number.</p>
+<dl class="class">
+<dt id="eudtrg.base.payload.rlocint.RelocatableInt">
+<em class="property">class </em><tt class="descclassname">eudtrg.base.payload.rlocint.</tt><tt class="descname">RelocatableInt</tt><big>(</big><em>number</em>, <em>offset_applied</em><big>)</big><a class="headerlink" href="#eudtrg.base.payload.rlocint.RelocatableInt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">builtins.object</span></tt></p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-eudtrg.base.payload">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-eudtrg.base.payload" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+      </div>
+      <div class="bottomnav">
+      
+        <p>
+        <a class="uplink" href="../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer">
+        &copy; Copyright 2014, whyask37.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

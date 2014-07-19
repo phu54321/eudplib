@@ -1,8 +1,13 @@
-Tutorial
+.. _tutorial:
+
+튜토리얼
 ========
 
-All example needs :download:`basemap.scx <basemap.scx>` in the same
-directory with source code to run properly.
+튜토리얼 예제들을 실행하기 위해서는 튜토리얼 .py 파일과 같은 폴더에 
+:download:`basemap.scx <basemap.scx>` 를 같이 넣어두어야 합니다.
+
+
+**목록**
 
 .. toctree::
     example/ex1
