@@ -6,12 +6,12 @@ class Forward(Expr):
     '''
     Forward declaration for expressions.
 
-    Example)
+    Example) ::
 
         a = Trigger( nextptr = b ) # Error : b is not defined
         b = Trigger( nextptr = a ) 
 
-    ->
+    -> ::
 
         b = Forward() # Forward declaration
         a = Trigger( nextptr = b )
@@ -30,8 +30,8 @@ class Forward(Expr):
         expressions afterwards.
 
         :raises AssertionError:
-             - Forward has already been assigned.
-             - Non-expression types are being assigned into.
+            - Forward has already been assigned.
+            - Non-expression types are being assigned into.
         '''
         assert isinstance(item, Expr), 'Non-expr types cannot be assigned to Forward object.'
         assert self.target == None, 'Duplicate assignment'

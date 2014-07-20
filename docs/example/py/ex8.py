@@ -1,21 +1,13 @@
-'''
-간단한 트리거 프로그래밍 예제입니다.
-nextptr를 실시간으로 변경하는 예제입니다.
-
-맵에 존재하는 모든 저글링을 스카웃으로 바꿉니다.
-'''
-
 from eudtrg import *
 
 LoadMap('basemap.scx')
 
-# 0058D740 ~ 0058DC40 을 0 ~ 319 로 채워봅시다.
-
+a = Forward()
+b = Forward()
 c = Forward()
 
 
 # 저글링이 없으면 a의 nextptr를 c로 설정합니다.
-a = Forward()
 a << Trigger(
     nextptr = b,
     conditions = [
@@ -32,11 +24,12 @@ a << Trigger(
 
 # 저글링이 있으면 (a트리거의 Command 조건으로 체크했습니다) 저글링을 죽이고 그 위치에 스카웃 생성
 # b의 nextptr는 a니까 b 다음에는 a가 실행되겠죠.
-b = Trigger(
+b << Trigger(
     nextptr = a,
     actions = [
         MoveLocation('ztrace', 'Zerg Zergling', Player1, 'Anywhere'),
-        KillUnitAt(1, 'Zerg Zergling', 'ztrace', Player1),
+        GiveUnits(1, 'Zerg Zergling', Player1, 'ztrace', Player7),
+        RemoveUnitAt(1, 'Zerg Zergling', 'ztrace', Player7),
         CreateUnit(1, 'Protoss Scout', 'ztrace', Player1)
     ]
 )
@@ -52,7 +45,7 @@ c << Trigger(
 
 
 
-SaveMap('a.scx', loopstart)
+SaveMap('ex8.scx', a)
 
 # InitPlayerSwitch가 이번 맵에서는 쓰이지 않았습니다.
 

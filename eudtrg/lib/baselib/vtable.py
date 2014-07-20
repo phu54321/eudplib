@@ -121,6 +121,7 @@ class EUDVariable:
     def QueueAssignTo(self, dest):
         '''
         :param dest: Where to assign variable value to.
+
             - EUDVariable : Value of variable is assigned to dest variable.
             - :class:`EUDLightVariable` : Value of variable is assigned to dest
                 variable.
@@ -142,11 +143,12 @@ class EUDVariable:
     def QueueAddTo(self, dest):
         '''
         :param dest: Where to add variable value to.
+
             - EUDVariable : Value of variable is added to dest variable.
             - :class:`EUDLightVariable` : Value of variable is added to dest
-                variable.
+              variable.
             - :class:`Expr` : Value of variable is added to memory. dest is
-                interpreted as EPD Player.
+              interpreted as EPD Player.
 
         :returns: List of :class:`Action` needed for queueing addition.
         '''
@@ -162,11 +164,12 @@ class EUDVariable:
     def QueueSubtractTo(self, dest):
         '''
         :param dest: Where to subtract variable value to.
+        
             - EUDVariable : Value of variable is subtracted to dest variable.
             - :class:`EUDLightVariable` : Value of variable is subtracted to
-                dest variable.
+              dest variable.
             - :class:`Expr` : Value of variable is subtracted to memory. dest
-                is interpreted as EPD Player.
+              is interpreted as EPD Player.
 
         :returns: List of :class:`Action` needed for queueing addition.
 
@@ -235,6 +238,18 @@ class EUDLightVariable:
         :returns: :class:`Action` for adding given number to variable.
         '''
         return SetMemory(self.GetMemoryAddr(), Add, number)
+
+    def SubtractNumber(self, number):
+        '''
+        :param number: Number to subtract.
+        :returns: :class:`Action` for subtracting given number to variable.
+        
+        .. warning::
+            Subtraction won't underflow. Subtracting values with bigger one
+            will yield 0.
+        '''
+        return SetMemory(self.GetMemoryAddr(), Subtract, number)
+
 
 
 

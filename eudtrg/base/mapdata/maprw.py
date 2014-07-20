@@ -128,15 +128,12 @@ def SaveMap(fname, root, additionalfiles = {}):
 
     :param root: Starting trigger. At every trigger loop, a computer player
         executes triggers starting from root.
-    :type root: Trigger
-
+    
     :param additionalfiles: List of (MPQ Filename, bytes) to be inserted into
         map MPQ. If different contents share the same MPQ filename, function
         will raise RuntimeError.
     '''
 
-    assert isinstance(root, Trigger), 'root is not an instance of Trigger'
-    
     print('Saving map %s' % fname)
 
     # Message to display for non EUDA-Enabled players

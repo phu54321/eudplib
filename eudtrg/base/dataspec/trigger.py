@@ -15,6 +15,7 @@ from ..utils.utils import FlattenList
 # Used while evaluating Trigger
 _next_triggers_stack = []
 _next_triggers = []
+_last_trigger = [None]
 class NextTrigger(Expr):
     '''
     Create reference to next declared trigger.
@@ -44,13 +45,13 @@ def PushTriggerScope():
     You can still link triggers in other scopes by setting nextptr explicitly.
     This function is used in conjunction with :func:`PopTriggerScope()`.
 
-    ex)
-    a = Trigger()
-    PushTriggerScope() ################
-    b = Trigger()          isolated
-    c = Trigger()          isolated
-    PopTriggerScope()  ################
-    d = Trigger()
+    example ::
+        a = Trigger()
+        PushTriggerScope() ################
+        b = Trigger()          isolated
+        c = Trigger()          isolated
+        PopTriggerScope()  ################
+        d = Trigger()
     '''
 
     global _next_triggers

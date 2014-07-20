@@ -12,8 +12,7 @@ class Db(EUDObject):
     '''
     def __init__(self, content):
         '''
-        :param content: Content to put in.
-        :type content: bytes
+        :param bytes content: Content to put in.
         '''
         super(Db, self).__init__()
 

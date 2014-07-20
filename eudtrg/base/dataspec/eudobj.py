@@ -21,7 +21,7 @@ class EUDObject(Expr):
         After this function is called, object shouldn't be modified until
         :meth:'`ResetAddress` is called.
 
-        :param address: Address where the object will be located at ingame.
+        :param :class:`Expr` address: Address where the object will be located at ingame.
         '''
         assert self._address is None, 'Might be eudtrg bug. Report this.'
         self._address = address
@@ -52,8 +52,9 @@ class EUDObject(Expr):
         Get list of files this object needs to be inside MPQ.
 
         :returns: List of (MPQ file path, bytes). Default: [] If different
-        contents share the same MPQ filename, :func:`SaveMap` will raise
-        RuntimeError.
+            contents share the same MPQ filename, :func:`SaveMap` will raise
+            RuntimeError.
+
         '''
         return []
 
@@ -77,13 +78,11 @@ class EUDObject(Expr):
     def WritePayload(self, emitbuffer):
         '''
         This function should write data into buffer. Size of written data
-        should match :meth:`GetDataSize.
+        should match :meth:`GetDataSize`.
 
-        :param emitbuffer: Buffer to write data to.
-        :type emitbuffer: :class:`PayloadBuffer`
+        :param \:class\:`PayloadBuffer` emitbuffer: Buffer to write data to.
+        :type emitbuffer: 
 
-        :raises RuntimeError: Size of written data is different from what
-            :meth:`GetDataSize tells.
         '''
         pass
 

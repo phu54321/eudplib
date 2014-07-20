@@ -11,7 +11,6 @@ from .ctrlstru import (
     EUDBranch,
     EUDJumpIf,
     EUDJumpIfNot,
-    EUDWhile
 )
 
 from .varassign import SeqCompute, SetVariables

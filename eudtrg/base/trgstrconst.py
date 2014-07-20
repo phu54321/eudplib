@@ -1,9 +1,5 @@
 from eudtrg import LICENSE #@UnusedImport
 
-"""
-Useful enumeration.
-"""
-
 UnitNameDict = {
     "Terran Marine" : 0,
     "Terran Ghost" : 1,

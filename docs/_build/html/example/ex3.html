@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Example 3 : nextptr 자동 연결, Trigger Scope &mdash; eudtrg 0.3-r1 documentation</title>
+    <title>튜토리얼 3 : nextptr 자동 연결, Trigger Scope &mdash; eudtrg 0.3-r1 documentation</title>
     
     <link rel="stylesheet" href="../_static/haiku.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -31,7 +31,7 @@
   <body>
       <div class="header"><h1 class="heading"><a href="../index.html">
           <span>eudtrg 0.3-r1 documentation</span></a></h1>
-        <h2 class="heading"><span>Example 3 : nextptr 자동 연결, Trigger Scope</span></h2>
+        <h2 class="heading"><span>튜토리얼 3 : nextptr 자동 연결, Trigger Scope</span></h2>
       </div>
       <div class="topnav">
       
@@ -47,8 +47,8 @@
       <div class="content">
         
         
-  <div class="section" id="example-3-nextptr-trigger-scope">
-<span id="example3"></span><h1>Example 3 : nextptr 자동 연결, Trigger Scope<a class="headerlink" href="#example-3-nextptr-trigger-scope" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="nextptr-trigger-scope">
+<span id="example3"></span><h1>튜토리얼 3 : nextptr 자동 연결, Trigger Scope<a class="headerlink" href="#nextptr-trigger-scope" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="id1">
 <h2>소스<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">eudtrg</span> <span class="kn">import</span> <span class="o">*</span>
@@ -195,7 +195,7 @@ PopTriggerScope()------------+
 </div>
 <p>일 때, (A, E), (B, D), (C), (F) 가 각각 같은 Scope에 있게 됩니다.</p>
 <p>Scope는 보통 외부 트리거랑 별로 연관이 없는 트리거를 트리거 중간에 선언할 때
-많이 씁니다. <em class="xref std std-ref">example5</em> 에서 변수에 대해서 배우는데, 이 때
+많이 씁니다. <em class="xref std std-ref">example6</em> 에서 변수에 대해서 배우는데, 이 때
 <tt class="xref py py-class docutils literal"><span class="pre">EUDVTable</span></tt> 를 쓰게 됩니다. 이 클래스는 생성자에서 트리거를 하나
 만드는데, EUDVTable이 만드는 트리거랑 다른 트리거랑 엮이면 안되기 때문에
 EUDVTable에서는 트리거를 Scope에 넣어둡니다. Scope는 생각보다 의외로 유용한

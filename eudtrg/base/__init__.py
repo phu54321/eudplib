@@ -1,11 +1,13 @@
 '''
 Core of eudtrg. Everything in eudtrg are implemented using eudtrg.base
 Core defines
- - EUD Object (EUDObject class)
- - Trigger (Trigger, Condition, Action class)
- - Raw bytes object (Db)
- - Calculation of expression containing addresses. (Expr class)
- - Map reading/writing (LoadMap, SaveMap)
+
+- EUD Object (EUDObject class)
+- Trigger (Trigger, Condition, Action class)
+- Raw bytes object (Db)
+- Calculation of expression containing addresses. (Expr class)
+- Map reading/writing (LoadMap, SaveMap)
+
 '''
 
 from eudtrg import LICENSE #@UnusedImport
@@ -13,7 +15,6 @@ from eudtrg import LICENSE #@UnusedImport
 from .dataspec.eudobj import EUDObject
 from .dataspec.forward import Forward
 from .dataspec.trigger import (
-    GetTriggerCount,
     PushTriggerScope,
     PopTriggerScope,
     Trigger,

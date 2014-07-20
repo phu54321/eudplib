@@ -11,7 +11,7 @@ import inspect
 def EUDFunc(fdecl_func):
     '''
     Generates EUD Function. Usually used as decorators. EUD Function cannot
-    be recursive.
+    be recursive. ::
 
         @EUDFunc
         def f_add(a, b):
@@ -25,7 +25,7 @@ def EUDFunc(fdecl_func):
             return ret
 
     EUD function gets several EUDVariables as arguments, but user can use both
-    :class:`EUDVariable` and :class:`Expr` for calling function.
+    :class:`EUDVariable` and :class:`Expr` for calling function. ::
 
         a,b = EUDCreateVariable(2)
         c = Trigger()
@@ -40,14 +40,14 @@ def EUDFunc(fdecl_func):
 
     EUD Function may return several return values. Return values are 
     overwritten after every function call, so users should store it with
-    :func:`SetVariables` or :func:`SeqCompute` if they need it.
+    :func:`SetVariables` or :func:`SeqCompute` if they need it. ::
 
         SeqCompute(local_variable, f_function()) # store return value
 
         f_function() # local_variable still presists its value.
 
     If returned values won't be used after another function call, users don't 
-    have to store it.
+    have to store it. ::
 
         var = f_function()
 

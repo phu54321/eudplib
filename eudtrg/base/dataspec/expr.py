@@ -22,8 +22,9 @@ class Expr:
     '''
     Expression class. Object of this type can be evaluated into
     :class:`RelocatableInt`. Derived classes should override:
-     - :meth:`GetDependencyList`
-     - :meth:`EvalImpl`
+    
+    - :meth:`GetDependencyList`
+    - :meth:`EvalImpl`
     '''
     
     def __init__(self):

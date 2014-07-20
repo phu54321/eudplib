@@ -1,0 +1,136 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>튜토리얼 5 : 기초적인 트리거 프로그래밍 &mdash; eudtrg 0.3-r1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.3-r1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="eudtrg 0.3-r1 documentation" href="../index.html" />
+    <link rel="up" title="튜토리얼" href="../tutorial.html" />
+    <link rel="prev" title="튜토리얼 4 : 특정 플레이어에게서만 실행되는 트리거" href="ex4.html" /> 
+  </head>
+  <body>
+      <div class="header"><h1 class="heading"><a href="../index.html">
+          <span>eudtrg 0.3-r1 documentation</span></a></h1>
+        <h2 class="heading"><span>튜토리얼 5 : 기초적인 트리거 프로그래밍</span></h2>
+      </div>
+      <div class="topnav">
+      
+        <p>
+        «&#160;&#160;<a href="ex4.html">튜토리얼 4 : 특정 플레이어에게서만 실행되는 트리거</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <div class="section" id="example5">
+<span id="id1"></span><h1>튜토리얼 5 : 기초적인 트리거 프로그래밍<a class="headerlink" href="#example5" title="Permalink to this headline">¶</a></h1>
+<p>이번 강좌에서는 eudtrg를 이용해서 트리거를 변형하는 트리거를 짜보겠습니다.
+트리거를 변형하는 트리거를 이용한 방법을 트리거 프로그래밍이라고 하는데,
+트리거 프로그래밍의 난이도는 꽤 높은 편입니다. 이번 강좌에서는 nextptr를
+트리거로 변형하는, 상대적으로 간단한 트리거 프로그래밍을 해보겠습니다.</p>
+<div class="section" id="id2">
+<h2>소스<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">eudtrg</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="n">LoadMap</span><span class="p">(</span><span class="s">&#39;basemap.scx&#39;</span><span class="p">)</span>
+
+<span class="n">a</span> <span class="o">=</span> <span class="n">Forward</span><span class="p">()</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">Forward</span><span class="p">()</span>
+<span class="n">c</span> <span class="o">=</span> <span class="n">Forward</span><span class="p">()</span>
+
+
+<span class="c"># 저글링이 없으면 a의 nextptr를 c로 설정합니다.</span>
+<span class="n">a</span> <span class="o">&lt;&lt;</span> <span class="n">Trigger</span><span class="p">(</span>
+    <span class="n">nextptr</span> <span class="o">=</span> <span class="n">b</span><span class="p">,</span>
+    <span class="n">conditions</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">Command</span><span class="p">(</span><span class="n">Player1</span><span class="p">,</span> <span class="n">Exactly</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s">&#39;Zerg Zergling&#39;</span><span class="p">)</span>
+    <span class="p">],</span>
+    <span class="n">actions</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">SetNextPtr</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span>
+    <span class="p">]</span>
+<span class="p">)</span>
+<span class="c"># 저글링이 없으면 a의 nextptr가 c가 될것이므로 c 트리거가 실행될거고</span>
+<span class="c"># 아니면 a의 nextptr가 b가 될것이므로 b 트리거가 실행될겁니다.</span>
+
+
+
+<span class="c"># 저글링이 있으면 (a트리거의 Command 조건으로 체크했습니다) 저글링을 죽이고 그 위치에 스카웃 생성</span>
+<span class="c"># b의 nextptr는 a니까 b 다음에는 a가 실행되겠죠.</span>
+<span class="n">b</span> <span class="o">&lt;&lt;</span> <span class="n">Trigger</span><span class="p">(</span>
+    <span class="n">nextptr</span> <span class="o">=</span> <span class="n">a</span><span class="p">,</span>
+    <span class="n">actions</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">MoveLocation</span><span class="p">(</span><span class="s">&#39;ztrace&#39;</span><span class="p">,</span> <span class="s">&#39;Zerg Zergling&#39;</span><span class="p">,</span> <span class="n">Player1</span><span class="p">,</span> <span class="s">&#39;Anywhere&#39;</span><span class="p">),</span>
+        <span class="n">GiveUnits</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s">&#39;Zerg Zergling&#39;</span><span class="p">,</span> <span class="n">Player1</span><span class="p">,</span> <span class="s">&#39;ztrace&#39;</span><span class="p">,</span> <span class="n">Player7</span><span class="p">),</span>
+        <span class="n">RemoveUnitAt</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s">&#39;Zerg Zergling&#39;</span><span class="p">,</span> <span class="s">&#39;ztrace&#39;</span><span class="p">,</span> <span class="n">Player7</span><span class="p">),</span>
+        <span class="n">CreateUnit</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s">&#39;Protoss Scout&#39;</span><span class="p">,</span> <span class="s">&#39;ztrace&#39;</span><span class="p">,</span> <span class="n">Player1</span><span class="p">)</span>
+    <span class="p">]</span>
+<span class="p">)</span>
+
+
+<span class="c"># 저글링이 없으면 a에서 c로 점프합니다.</span>
+<span class="n">c</span> <span class="o">&lt;&lt;</span> <span class="n">Trigger</span><span class="p">(</span>
+    <span class="n">nextptr</span> <span class="o">=</span> <span class="n">triggerend</span><span class="p">,</span>
+    <span class="n">actions</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">SetNextPtr</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span> <span class="c"># 다시 a의 nextptr를 b로 설정해둡니다.</span>
+    <span class="p">]</span>
+<span class="p">)</span>
+
+
+<span class="n">psw</span> <span class="o">=</span> <span class="n">InitPlayerSwitch</span><span class="p">([</span><span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="bp">None</span><span class="p">])</span>
+<span class="n">SaveMap</span><span class="p">(</span><span class="s">&#39;ex5.scx&#39;</span><span class="p">,</span> <span class="n">psw</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id3">
+<h2>결과<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre>저글링이 있던 자리에 스카웃이 생성된다.
+</pre></div>
+</div>
+</div>
+<div class="section" id="id4">
+<h2>코드 설명<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h2>
+<p>코드 주석에 대부분의 설명이 되어있습니다. <tt class="xref py py-func docutils literal"><span class="pre">SetNextPtr()</span></tt> 액션이 새로
+등장했는데요, 함수의 레퍼런스를 통해서 함수를 익히시기 바랍니다.</p>
+</div>
+</div>
+
+
+      </div>
+      <div class="bottomnav">
+      
+        <p>
+        «&#160;&#160;<a href="ex4.html">튜토리얼 4 : 특정 플레이어에게서만 실행되는 트리거</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer">
+        &copy; Copyright 2014, whyask37.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

@@ -1,8 +1,9 @@
 '''
 eudtrg library. This library follows zlib license.
 eudtrg consists of 2 subpackages.
- base : Core of eudtrg. lib is implemented using base subpackage.
- lib  : Libraries made using 'base'.
+
+- base : Core of eudtrg. lib is implemented using base subpackage.
+- lib  : Libraries made using 'base'.
 '''
 
 from eudtrg import LICENSE #@UnusedImport

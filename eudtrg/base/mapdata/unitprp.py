@@ -30,18 +30,20 @@ class UnitProperty(LittleEndianStructure):
     ):
         '''
         Properties : Value/None (Don't care)
-         hitpoint : 0~100(%)  if) When unit's hitpoint is greater than 167772,
-         shield   : 0~100(%)    you should give hitpoint None to make 100%% HP.
-         energy   : 0~100(%)
-         resource : 0~4294967295
-         hanger   : 0~65536 (Count)
+
+        - hitpoint : 0~100(%)  if) When unit's hitpoint is greater than 167772,
+        - shield   : 0~100(%)    you should give hitpoint None to make 100%% HP.
+        - energy   : 0~100(%)
+        - resource : 0~4294967295
+        - hanger   : 0~65536 (Count)
 
         Special properties : True(Enabled)/False(Disabled)/None(Don't care)
-         clocked      : Unit is clocked.
-         burrowed     : Unit is burrowed.
-         intransit    : Unit is lifted. (In transit)
-         hallucinated : Unit is hallucination.
-         invincible   : Unit is invincible.
+        
+        - clocked      : Unit is clocked.
+        - burrowed     : Unit is burrowed.
+        - intransit    : Unit is lifted. (In transit)
+        - hallucinated : Unit is hallucination.
+        - invincible   : Unit is invincible.
 
         >>> UnitProperty(hitpoint = 50, burrowed = True) # HP 50%, burrowed
         '''
