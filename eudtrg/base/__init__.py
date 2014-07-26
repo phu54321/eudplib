@@ -25,6 +25,7 @@ from .dataspec.trigger import (
     triggerend
 )
 
+from .dataspec.expr import Expr
 from .dataspec.bytedump import Db
 
 from .mapdata.maprw import LoadMap, SaveMap
@@ -32,7 +33,5 @@ from .mapdata.unitprp import UnitProperty
 
 from .stocktrg import *
 from .trgconst import *
-
 from .utils.utils import *
 from .utils.ubconv import UbconvUseCharset
-

@@ -1,15 +1,12 @@
-'''
-Expression library wrapper. Used for calculating expression with addreses.
-Internally used in eudtrg.
-'''
-
 from eudtrg import LICENSE #@UnusedImport
-from ..payload.rlocint import RelocatableInt
+
+from .rlocint import RelocatableInt
 
 # Expression caching
 _cachetoken = 0
 
 def ExpireCacheToken():
+    ''' Internal function. Don't use '''
     global _cachetoken
     _cachetoken += 1
 
@@ -20,11 +17,28 @@ def GetCacheToken():
 
 class Expr:
     '''
-    Expression class. Object of this type can be evaluated into
-    :class:`RelocatableInt`. Derived classes should override:
+    Expression class. Handle expressions with unknown variables. Example::
+
+        a = Forward() # some unknown variable
+        b = Trigger() # some unknown variable
+            # b's value is determined with a call of SaveMap()
+
+        c = a + 5 - b # a + 5 - b is an expression with unknown variable.
+
+        # since a, b is undetermined yet, c needs to store expression tree of
+        # 'a + 5 - b', such as in form of (- (+ a 5) b). Expr class can be used
+        # to store such expressions.
+
+    Expr class supports basic arithmetic operators: addition, subtraction,
+    muliplication, and division. Derived class should implement following two
+    methods.
+
+    - GetDependencyList : List of other expression required for evaluation of
+      the expression. Circular dependency are supported.
+
+    - EvalImpl : Calculate value of the expression. Evaluate() caches result of
+      EvalImpl, so you should override EvalImpl method instead of Evaluate.
     
-    - :meth:`GetDependencyList`
-    - :meth:`EvalImpl`
     '''
     
     def __init__(self):
@@ -49,18 +63,25 @@ class Expr:
 
     def GetDependencyList(self):
         '''
-        :returns: Expressions this expression depends on
-        :raises NotImplementedError: Derived class didn't override this method.
+        :returns: List of Expr instances self depends on.
+        :raises NotImplementedError: Derived class have not overridden this
+            method.
+        
         '''
         raise NotImplementedError("Subclass %s should implement this" % str(type(self)))
 
     def Evaluate(self):
         '''
-        This function caches :meth:`EvalImpl` and returns its value. Cache
-        expires as :func:`SaveMap` ends, so cached values shouldn't affect
-        each others.
-        :returns: Cached value of :meth:`EvalImpl`.
+        :returns: Cached value of EvalImpl.
+
+        Remarks
+        -------
+        Evaluate function caches and returns the value of EvalImpl. cache token
+        expires or no values were cached before, Evaluate recaches its value by
+        calling EvalImpl. Cache expires with a call of SaveMap.
+
         '''
+
         if self._cachetoken != _cachetoken: # Cache has expired, or no cache has been stored yet
             # Cache EvalImpl.
             self._cache = self.EvalImpl()
@@ -71,7 +92,11 @@ class Expr:
 
     def EvalImpl(self):
         '''
-        :returns: What the expression should be evaluated to.
+        :returns: What the object should be evaluated to. For example,
+        EUDObject returns the data's address in Starcraft Memory by default.
+        Type of returned object should be one of int,
+        :class:`eudtrg.RelocatableInt`, or one having `Evaluate` method.
+
         '''
         raise NotImplementedError("Subclass %s should implement this" % str(type(self)))
 
@@ -149,7 +174,11 @@ def GetDependencyList(item):
 
 def Evaluate(x):
     try:
-        return x.Evaluate()
+        for i in range(10000): # 10000 is some very large number.
+            return x.Evaluate() # Exits when evaluate fails
+
+        raise RuntimeError('Infinite evaluation loop detected with object %s' % str(x))
+
     except AttributeError:
         if type(x) is int:
             return RelocatableInt(x, 0)

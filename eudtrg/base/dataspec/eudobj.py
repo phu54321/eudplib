@@ -1,15 +1,17 @@
-'''
-Defines EUDObject, which means everything uploadable into SC memory.
-'''
-
 from eudtrg import LICENSE #@UnusedImport
 
-from ..payload.rlocint import RelocatableInt
+from .rlocint import RelocatableInt
 from .expr import Expr
 
 class EUDObject(Expr):
     '''
-    Base class for objects to be inserted into map.
+    Base class for uploadable objects. Uploadable objects objects having data
+    to be inserted into SC Memory. Every EUDObject corresponds to one memory
+    chunk inside SC Memory. EUDObject creates data to put inside memory chunk.
+
+    For example, every trigger in Starcraft is just a 2408byte memory chunk.
+    :class:`eudtrg.Trigger` refers to that memory chunk, and can create 2408
+    byte data to put inside it.
     '''
     def __init__(self):
         super().__init__()
@@ -17,19 +19,17 @@ class EUDObject(Expr):
 
 
     def SetAddress(self, address):
-        '''Set address of object ingame. This function is called by eudtrg.
-        After this function is called, object shouldn't be modified until
-        :meth:'`ResetAddress` is called.
-
-        :param :class:`Expr` address: Address where the object will be located at ingame.
+        '''
+        Called by eudtrg when address of object is fixed. You won't need to
+        override this function.
         '''
         assert self._address is None, 'Might be eudtrg bug. Report this.'
         self._address = address
 
 
     def ResetAddress(self):
-        '''This function is called by eudtrg. After this function is called, 
-        objects can be modified again.
+        '''
+        Reset object address. Called after payload is successfully injected.
         '''
         assert self._address is not None, 'Might be eudtrg bug. Report this.'
         self._address = None
@@ -37,51 +37,43 @@ class EUDObject(Expr):
 
     def EvalImpl(self):
         '''
-        Evaluate object's value. This function returns the object's address by
-        default, but you may override the behavior. Return values are cached,
-        so EvalImpl will be called at most once for a SaveMap call.
+        Overrides :meth:`eudtrg.Expr.EvalImpl` .
 
-        :returns: Value of object as expression. Default: Address of object.
+        :returns: What this object should evaluate to. Default: Address of object.
         '''
         assert self._address is not None, 'GetDependencyList of some classes are incomplete.'
         return RelocatableInt(self._address, 4)
 
-
-    def GetMPQDependencyList(self):
-        '''
-        Get list of files this object needs to be inside MPQ.
-
-        :returns: List of (MPQ file path, bytes). Default: [] If different
-            contents share the same MPQ filename, :func:`SaveMap` will raise
-            RuntimeError.
-
-        '''
-        return []
-
     def GetDependencyList(self):
         '''
-        Get list of objects or expressions the object needs. Objects in this
-        list are also inserted to the map when the object is being inserted.
+        Overrides :meth:`eudtrg.Expr.GetDependencyList` .
 
-        :returns: Objects the object depends on. Default: []
+        :returns: List of Expr instances this object depends on. Default: Empty list.
         '''
         return []
 
 
     def GetDataSize(self):
         '''
-        :returns: Size of object in SC memory. Default: 0
+        :returns: Size of data inside SC Memory. Default: 0
         '''
         return 0
 
 
     def WritePayload(self, emitbuffer):
         '''
-        This function should write data into buffer. Size of written data
-        should match :meth:`GetDataSize`.
+        Writes payload(data) to buffer. Users may use:
 
-        :param \:class\:`PayloadBuffer` emitbuffer: Buffer to write data to.
-        :type emitbuffer: 
+        - emitbuffer.EmitByte(b) : Emit 1 byte(b) to buffer. b should be const.
+        - emitbuffer.EmitWord(w) : Emit 1 word(w) to buffer. w should be const.
+        - emitbuffer.EmitDword(dw) : Emit 1 dword(dw) to buffer. Dword should
+          be constant or should be placed in 4byte boundary : bytes multiple of
+          4 were emitted before EmitDword() call.
+
+        emitbuffer is always aligned to 4byte boundary when WritePayload is
+        called.
+
+       :param emitbuffer: Output buffer. Write payload here.
 
         '''
         pass

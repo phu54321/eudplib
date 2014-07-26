@@ -6,7 +6,7 @@ from eudtrg import LICENSE #@UnusedImport
 
 from .eudobj import EUDObject
 from .expr import Expr, IsValidExpr, Evaluate
-from ..payload.rlocint import RelocatableInt
+from .rlocint import RelocatableInt
 from ..utils.utils import FlattenList
 
 
@@ -46,12 +46,14 @@ def PushTriggerScope():
     This function is used in conjunction with :func:`PopTriggerScope()`.
 
     example ::
+
         a = Trigger()
         PushTriggerScope() ################
         b = Trigger()          isolated
         c = Trigger()          isolated
         PopTriggerScope()  ################
         d = Trigger()
+    
     '''
 
     global _next_triggers

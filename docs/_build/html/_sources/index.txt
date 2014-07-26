@@ -18,6 +18,7 @@ eudtrg 튜토리얼 및 문서입니다. eudtrg는 EUD 액션부를 사용하므
    intro
    getting_started
    tutorial
+   api
    
 기타
 ====

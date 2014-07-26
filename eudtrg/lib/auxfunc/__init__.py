@@ -8,4 +8,4 @@ from .writedword import f_dwwrite
 from .dwordbreak import f_dwbreak
 
 from .muldiv import f_mul, f_div
-from .memcpy import f_repmovsd, f_strcpy
+from .memcpy import f_repmovsd, f_strcpy, f_memcpy

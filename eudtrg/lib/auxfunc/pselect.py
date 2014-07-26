@@ -30,8 +30,8 @@ def InitPlayerSwitch(playerroots):
     for i in range(8):
         SetVariables(ptsfirst[i], f_dwread(EPD(0x51A280 + 8 + 12 * i)))
 
-    # Create trigger skipper to prevent memory leak
 
+    # Create trigger skipper to prevent memory leak
     playerentry  = [Forward() for _ in range(8)]
     playerentry2 = [Forward() for _ in range(8)]
     entry2_act1  = [Forward() for _ in range(8)]
@@ -61,6 +61,8 @@ def InitPlayerSwitch(playerroots):
         [(EPD(entry2_act1[i] + 20), SetTo, ptsfirst[i]) for i in range(8)] +        # modify entry2_act1.number
         [(EPD(0x51A280 + 12*i + 8), SetTo, playerentry[i]) for i in range(8)]       # Modify pts
     )
+
+    
 
     for i in range(8):
         t = Forward()

@@ -8,7 +8,7 @@
     
     <title>튜토리얼 2 : nextptr를 이용해서 트리거 실행 순서 지정하기 &mdash; eudtrg 0.3-r1 documentation</title>
     
-    <link rel="stylesheet" href="../_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
@@ -29,24 +29,28 @@
     <link rel="prev" title="튜토리얼 1 : Hello World!" href="ex1.html" /> 
   </head>
   <body>
-      <div class="header"><h1 class="heading"><a href="../index.html">
-          <span>eudtrg 0.3-r1 documentation</span></a></h1>
-        <h2 class="heading"><span>튜토리얼 2 : nextptr를 이용해서 트리거 실행 순서 지정하기</span></h2>
-      </div>
-      <div class="topnav">
-      
-        <p>
-        «&#160;&#160;<a href="ex1.html">튜토리얼 1 : Hello World!</a>
-        &#160;&#160;::&#160;&#160;
-        <a class="uplink" href="../index.html">Contents</a>
-        &#160;&#160;::&#160;&#160;
-        <a href="ex3.html">튜토리얼 3 : nextptr 자동 연결, Trigger Scope</a>&#160;&#160;»
-        </p>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="ex3.html" title="튜토리얼 3 : nextptr 자동 연결, Trigger Scope"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="ex1.html" title="튜토리얼 1 : Hello World!"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">eudtrg 0.3-r1 documentation</a> &raquo;</li>
+          <li><a href="../tutorial.html" accesskey="U">튜토리얼</a> &raquo;</li> 
+      </ul>
+    </div>  
 
-      </div>
-      <div class="content">
-        
-        
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
   <div class="section" id="nextptr">
 <span id="example2"></span><h1>튜토리얼 2 : nextptr를 이용해서 트리거 실행 순서 지정하기<a class="headerlink" href="#nextptr" title="Permalink to this headline">¶</a></h1>
 <p>이 튜토리얼에서는 nextptr를 이용해서 트리거 실행 순서를 지정하는 방법을
@@ -236,19 +240,70 @@ nextptr는 &#8216;이 트리거 다음에 실행되는 트리거&#8217;를 나�
 </div>
 
 
+          </div>
+        </div>
       </div>
-      <div class="bottomnav">
-      
-        <p>
-        «&#160;&#160;<a href="ex1.html">튜토리얼 1 : Hello World!</a>
-        &#160;&#160;::&#160;&#160;
-        <a class="uplink" href="../index.html">Contents</a>
-        &#160;&#160;::&#160;&#160;
-        <a href="ex3.html">튜토리얼 3 : nextptr 자동 연결, Trigger Scope</a>&#160;&#160;»
-        </p>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">튜토리얼 2 : nextptr를 이용해서 트리거 실행 순서 지정하기</a><ul>
+<li><a class="reference internal" href="#id1">소스</a></li>
+<li><a class="reference internal" href="#id2">결과</a></li>
+<li><a class="reference internal" href="#id3">코드 설명</a><ul>
+<li><a class="reference internal" href="#forward">1. <tt class="docutils literal"><span class="pre">Forward</span></tt> 클래스</a></li>
+<li><a class="reference internal" href="#id4">2. 스타크래프트 트리거 엔진의 원리</a></li>
+<li><a class="reference internal" href="#id5">3. nextptr</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
 
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="ex1.html"
+                        title="previous chapter">튜토리얼 1 : Hello World!</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="ex3.html"
+                        title="next chapter">튜토리얼 3 : nextptr 자동 연결, Trigger Scope</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/example/ex2.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
       </div>
-
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="ex3.html" title="튜토리얼 3 : nextptr 자동 연결, Trigger Scope"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="ex1.html" title="튜토리얼 1 : Hello World!"
+             >previous</a> |</li>
+        <li><a href="../index.html">eudtrg 0.3-r1 documentation</a> &raquo;</li>
+          <li><a href="../tutorial.html" >튜토리얼</a> &raquo;</li> 
+      </ul>
+    </div>
     <div class="footer">
         &copy; Copyright 2014, whyask37.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.

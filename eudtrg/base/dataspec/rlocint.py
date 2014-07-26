@@ -15,7 +15,7 @@ def _i2ri(i):
         return RelocatableInt(i, 0)
     
 class RelocatableInt:
-    def __init__(self, number, offset_applied):
+    def __init__(self, number, offset_applied = 0):
         # assert type(number) is int and type(offset_applied) is int, 'Invalid parameters for RelocatableInt consturctor'
         self.number = number
         self.offset_applied = offset_applied

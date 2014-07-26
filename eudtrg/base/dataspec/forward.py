@@ -4,19 +4,13 @@ from .expr import Expr, Evaluate, GetCacheToken
 
 class Forward(Expr):
     '''
-    Forward declaration for expressions.
-
-    Example) ::
-
-        a = Trigger( nextptr = b ) # Error : b is not defined
-        b = Trigger( nextptr = a ) 
-
-    -> ::
+    Forward declaration for expressions. Example::
 
         b = Forward() # Forward declaration
-        a = Trigger( nextptr = b )
+        a = Trigger( nextptr = b ) # b is defined here, so no error occurs.
         b << Trigger( nextptr = a ) # put in value later.
 
+    Forward() class can be assigned a value only once.
     '''
 
     def __init__(self):
@@ -25,6 +19,9 @@ class Forward(Expr):
         self._ct = None
 
     def __lshift__(self, item):
+        return self.Assign(item)
+
+    def Assign(self, item):
         '''
         Assign expression to self. The object will evaluate to assigned
         expressions afterwards.
@@ -38,13 +35,15 @@ class Forward(Expr):
         self.target = item
         return item
 
+
     def GetDependencyList(self):
         return [self.target]
+
 
     def EvalImpl(self):
         '''
         :raises AssertionError: Forward hasn't been assigned to any values by
-            :meth:`__lshift__`.
+            :meth:`Assign`.
         '''
         assert self.target is not None, 'Forward has not been properly initalized'
         return Evaluate(self.target)

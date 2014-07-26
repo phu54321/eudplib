@@ -19,6 +19,9 @@ def eudtrgVersion():
 '''
 Changelog
 
+0.30-r1
+ - SaveMap syntax changed.
+
 0.23-r2
  - eudtrg now alerts about payload size.
 

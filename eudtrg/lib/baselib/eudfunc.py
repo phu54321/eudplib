@@ -4,6 +4,7 @@ from eudtrg.base import * #@UnusedWildImport
 from .vtable import EUDVTable, EUDVariable
 from .varassign import SetVariables, SeqCompute
 
+from functools import wraps
 import inspect
 
 
@@ -82,6 +83,7 @@ def EUDFunc(fdecl_func):
 
 
     # Function to return
+    @wraps(fdecl_func)
     def retfunc(*args):
         # Assign arguments into argument space
         computeset = [(farg, SetTo, arg) for farg, arg in zip(f_args, args)]

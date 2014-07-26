@@ -122,12 +122,11 @@ def LoadMap(fname):
     
 
 
-def SaveMap(fname, root, additionalfiles = {}):
+def SaveMap(fname, roots):
     '''
     Save template map with EUDObjects & various files.
 
-    :param root: Starting trigger. At every trigger loop, a computer player
-        executes triggers starting from root.
+    :param root: Starting trigger for each player. List of length 8.
     
     :param additionalfiles: List of (MPQ Filename, bytes) to be inserted into
         map MPQ. If different contents share the same MPQ filename, function
@@ -136,13 +135,7 @@ def SaveMap(fname, root, additionalfiles = {}):
 
     print('Saving map %s' % fname)
 
-    # Message to display for non EUDA-Enabled players
-    # Since we pass in strtable.SaveTBL() into injgen.GenerateInjector, injgen
-    # cannot insert new string into string table. So we first make one and pass
-    # it to injgen
-    eudenabler_needed = ParseString('This map requires EUD Action Enabler to run.')
     
-
     # write new uprp
     uprpcontent = b''.join( uprptable + [bytes(20 * (64 - len(uprptable)))] )
     _chk.setsection('UPRP', uprpcontent)
@@ -150,6 +143,9 @@ def SaveMap(fname, root, additionalfiles = {}):
     # write new str
     strcontent = strtable.SaveTBL()
     _chk.setsection('STR', strcontent)
+
+    # Now generate injection trigger
+    injgen.GenerateInjector(_chk, roots, eudenabler_needed)
     
     # Generate injector
     injgen.GenerateInjector(_chk, root, eudenabler_needed)
