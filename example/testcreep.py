@@ -1,4 +1,4 @@
-from eudtrg import *
+from eudtrglib import *
 
 '''
 Creep reading

@@ -17,7 +17,7 @@ eudtrg에서는 '트리거가 실행되는 플레이어'의 개념이 없습니�
 
 ::
 
-    from eudtrg import *
+    from eudtrglib import *
 
     LoadMap("basemap.scx")
 
@@ -102,7 +102,7 @@ eudtrg에서는 '트리거가 실행되는 플레이어'의 개념이 없습니�
 
 ::
 
-    from eudtrg import *
+    from eudtrglib import *
 
     LoadMap("basemap.scx")
 
@@ -165,7 +165,7 @@ P1~P6이 공통으로 실행하는 트리거를 실행하도록 하면 트리거
 
 ::
 
-    from eudtrg import *
+    from eudtrglib import *
 
     currentplayer = 0x006509B0 # Current Player의 값을 저장하는 오프셋
 

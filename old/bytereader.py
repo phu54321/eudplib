@@ -1,6 +1,6 @@
-from eudtrg import LICENSE #@UnusedImport
+from eudtrglib import LICENSE #@UnusedImport
 
-from eudtrg.base import * #@UnusedWildImport
+from eudtrglib.base import * #@UnusedWildImport
 
 from .readdword import f_dwread
 from .dwordbreak import f_dwbreak

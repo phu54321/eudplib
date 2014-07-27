@@ -4,7 +4,7 @@ SetMemory 액션을 실시간으로 변형합니다.
 약간 난이도가 있습니다.
 '''
 
-from eudtrg import *
+from eudtrglib import *
 
 LoadMap('basemap.scx')
 
@@ -93,8 +93,8 @@ SaveMap('ex9.scx', loopstart)
       cond0 +  8| [2E     16     00     00] | -> 0x0000162E = 5678
 
     이와 같이 트리거 조건문을 바꿀 수 있습니다. Bring 조건문이 위와 같은 구조로 되어있다는건
-    eudtrg.base.stocktrg를 통해서 알 수 있습니다. stocktrg.py를 열면
-     ( C:\\Python[파이썬버젼명]\\Lib\\site-packages\\eudtrg\\base 등을 열면 됩니다. )
+    eudtrglib.base.stocktrg를 통해서 알 수 있습니다. stocktrg.py를 열면
+     ( C:\\Python[파이썬버젼명]\\Lib\\site-packages\\eudtrglib\\base 등을 열면 됩니다. )
 
         def Bring(Player, Comparison, Number, Unit, Location):
             Player = ParsePlayer(Player)

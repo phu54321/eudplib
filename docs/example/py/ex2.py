@@ -2,7 +2,7 @@
 example 2에서는 트리거의 실행 순서를 다룹니다.
 '''
 
-from eudtrg import *
+from eudtrglib import *
 
 LoadMap("basemap.scx") # basemap.scx 에서 잡다한 정보들을 모음.
 

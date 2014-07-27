@@ -3,8 +3,8 @@
 튜토리얼 1 : Hello World!
 =========================
 
-간단한 eudtrg 예제입니다. 아마 :ref:`getting_Started` 다음으로 본 첫번째 코드
-이실텐데요, eudtrg 코드가 어떻게 생겼는지를 대략적으로 알아보시면 됩니다.
+간단한 eudtrglib 예제입니다. 아마 :ref:`getting_Started` 다음으로 본 첫번째 코드
+이실텐데요, eudtrglib 코드가 어떻게 생겼는지를 대략적으로 알아보시면 됩니다.
 
 
 소스
@@ -12,7 +12,7 @@
 
 ::
 
-    from eudtrg import *
+    from eudtrglib import *
 
     LoadMap("basemap.scx") # basemap.scx를 불러옵니다.
 
@@ -52,9 +52,9 @@
 코드 설명
 ---------
 
-이 예제에서는 eudtrg 코드가 보통 어떻게 생겼는지를 다룹니다.
+이 예제에서는 eudtrglib 코드가 보통 어떻게 생겼는지를 다룹니다.
 
-:code:`from eudtrg import *` 는 eudtrg의 모든 함수들을 불러온다는 뜻입니다.
+:code:`from eudtrglib import *` 는 eudtrg의 모든 함수들을 불러온다는 뜻입니다.
 eudtrg는 \'import *\' 로 불러올 수 있도록 만들었으며, 앞으로의 예제에서도
 \'import *\' 를 이용해서 eudtrg를 사용할겁니다.
 

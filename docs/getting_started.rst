@@ -1,13 +1,13 @@
-eudtrg 시작하기
+eudtrglib 시작하기
 ===============
 
-eudtrg 설치하기
+eudtrglib 설치하기
 ---------------
 
 eudtrg는 파이썬 3용 라이브러리입니다. eudtrg는 pip를 이용해서 설치할 수 
 있습니다. ::
 
-    pip install eudtrg
+    pip install eudtrglib
 
 .. note::
     eudtrg는 32비트 SFmpq.dll을 이용해서 맵을 읽습니다. 따라서
@@ -21,7 +21,7 @@ eudtrg는 파이썬 3용 라이브러리입니다. eudtrg는 pip를 이용해서
 
 #. test.py에 아래 코드를 붙여놓고 적당한 곳에 저장합니다. ::
 
-    from eudtrg import *
+    from eudtrglib import *
 
     LoadMap('basemap.scx')
     

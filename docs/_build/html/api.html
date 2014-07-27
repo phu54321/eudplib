@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>eudtrg API Reference &mdash; eudtrg 0.3-r1 documentation</title>
+    <title>eudtrglib API Reference &mdash; eudtrglib 0.3-r1 documentation</title>
     
     <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="eudtrg 0.3-r1 documentation" href="index.html" />
+    <link rel="top" title="eudtrglib 0.3-r1 documentation" href="index.html" />
     <link rel="prev" title="튜토리얼 5 : 기초적인 트리거 프로그래밍" href="example/ex5.html" /> 
   </head>
   <body>
@@ -36,7 +36,7 @@
         <li class="right" >
           <a href="example/ex5.html" title="튜토리얼 5 : 기초적인 트리거 프로그래밍"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">eudtrg 0.3-r1 documentation</a> &raquo;</li> 
+        <li><a href="index.html">eudtrglib 0.3-r1 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -45,21 +45,21 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="eudtrg-api-reference">
-<h1>eudtrg API Reference<a class="headerlink" href="#eudtrg-api-reference" title="Permalink to this headline">¶</a></h1>
-<p>This is eudtrg API Reference. API Reference aims to hold any information needed
-to use eudtrg properly. If you think that this reference lacks essential
+  <div class="section" id="eudtrglib-api-reference">
+<h1>eudtrglib API Reference<a class="headerlink" href="#eudtrglib-api-reference" title="Permalink to this headline">¶</a></h1>
+<p>This is eudtrglib API Reference. API Reference aims to hold any information needed
+to use eudtrglib properly. If you think that this reference lacks essential
 information, is too vague, is written in bad grammar, or lacks anything, feel
 free to contact the author using <a class="reference external" href="mailto:whyask37&#37;&#52;&#48;gmail&#46;com">whyask37<span>&#64;</span>gmail<span>&#46;</span>com</a>.</p>
 <div class="section" id="expressions">
 <h2>Expressions<a class="headerlink" href="#expressions" title="Permalink to this headline">¶</a></h2>
-<p>Expression is a basic calculation unit of eudtrg. Expression mean &#8216;Object that
+<p>Expression is a basic calculation unit of eudtrglib. Expression mean &#8216;Object that
 can be evaluated to some number&#8217;.</p>
 <div class="section" id="base-classes">
 <h3>Base classes<a class="headerlink" href="#base-classes" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
-<dt id="eudtrg.Expr">
-<em class="property">class </em><tt class="descclassname">eudtrg.</tt><tt class="descname">Expr</tt><a class="headerlink" href="#eudtrg.Expr" title="Permalink to this definition">¶</a></dt>
+<dt id="eudtrglib.Expr">
+<em class="property">class </em><tt class="descclassname">eudtrglib.</tt><tt class="descname">Expr</tt><a class="headerlink" href="#eudtrglib.Expr" title="Permalink to this definition">¶</a></dt>
 <dd><p>Expression class. Handle expressions with unknown variables. Example:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">a</span> <span class="o">=</span> <span class="n">Forward</span><span class="p">()</span> <span class="c"># some unknown variable</span>
 <span class="n">b</span> <span class="o">=</span> <span class="n">Trigger</span><span class="p">()</span> <span class="c"># some unknown variable</span>
@@ -82,8 +82,8 @@ the expression. Circular dependency are supported.</li>
 EvalImpl, so you should override EvalImpl method instead of Evaluate.</li>
 </ul>
 <dl class="method">
-<dt id="eudtrg.Expr.EvalImpl">
-<tt class="descname">EvalImpl</tt><big>(</big><big>)</big><a class="headerlink" href="#eudtrg.Expr.EvalImpl" title="Permalink to this definition">¶</a></dt>
+<dt id="eudtrglib.Expr.EvalImpl">
+<tt class="descname">EvalImpl</tt><big>(</big><big>)</big><a class="headerlink" href="#eudtrglib.Expr.EvalImpl" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -94,12 +94,12 @@ EvalImpl, so you should override EvalImpl method instead of Evaluate.</li>
 </table>
 <p>EUDObject returns the data&#8217;s address in Starcraft Memory by default.
 Type of returned object should be one of int,
-<tt class="xref py py-class docutils literal"><span class="pre">eudtrg.RelocatableInt</span></tt>, or one having <cite>Evaluate</cite> method.</p>
+<tt class="xref py py-class docutils literal"><span class="pre">eudtrglib.RelocatableInt</span></tt>, or one having <cite>Evaluate</cite> method.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="eudtrg.Expr.Evaluate">
-<tt class="descname">Evaluate</tt><big>(</big><big>)</big><a class="headerlink" href="#eudtrg.Expr.Evaluate" title="Permalink to this definition">¶</a></dt>
+<dt id="eudtrglib.Expr.Evaluate">
+<tt class="descname">Evaluate</tt><big>(</big><big>)</big><a class="headerlink" href="#eudtrglib.Expr.Evaluate" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -114,8 +114,8 @@ calling EvalImpl. Cache expires with a call of SaveMap.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="eudtrg.Expr.GetDependencyList">
-<tt class="descname">GetDependencyList</tt><big>(</big><big>)</big><a class="headerlink" href="#eudtrg.Expr.GetDependencyList" title="Permalink to this definition">¶</a></dt>
+<dt id="eudtrglib.Expr.GetDependencyList">
+<tt class="descname">GetDependencyList</tt><big>(</big><big>)</big><a class="headerlink" href="#eudtrglib.Expr.GetDependencyList" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -133,18 +133,18 @@ method.</td>
 </dd></dl>
 
 <dl class="class">
-<dt id="eudtrg.EUDObject">
-<em class="property">class </em><tt class="descclassname">eudtrg.</tt><tt class="descname">EUDObject</tt><a class="headerlink" href="#eudtrg.EUDObject" title="Permalink to this definition">¶</a></dt>
+<dt id="eudtrglib.EUDObject">
+<em class="property">class </em><tt class="descclassname">eudtrglib.</tt><tt class="descname">EUDObject</tt><a class="headerlink" href="#eudtrglib.EUDObject" title="Permalink to this definition">¶</a></dt>
 <dd><p>Base class for uploadable objects. Uploadable objects objects having data
 to be inserted into SC Memory. Every EUDObject corresponds to one memory
 chunk inside SC Memory. EUDObject creates data to put inside memory chunk.</p>
 <p>For example, every trigger in Starcraft is just a 2408byte memory chunk.
-<a class="reference internal" href="#eudtrg.Trigger" title="eudtrg.Trigger"><tt class="xref py py-class docutils literal"><span class="pre">eudtrg.Trigger</span></tt></a> refers to that memory chunk, and can create 2408
+<a class="reference internal" href="#eudtrglib.Trigger" title="eudtrglib.Trigger"><tt class="xref py py-class docutils literal"><span class="pre">eudtrglib.Trigger</span></tt></a> refers to that memory chunk, and can create 2408
 byte data to put inside it.</p>
 <dl class="method">
-<dt id="eudtrg.EUDObject.EvalImpl">
-<tt class="descname">EvalImpl</tt><big>(</big><big>)</big><a class="headerlink" href="#eudtrg.EUDObject.EvalImpl" title="Permalink to this definition">¶</a></dt>
-<dd><p>Overrides <a class="reference internal" href="#eudtrg.Expr.EvalImpl" title="eudtrg.Expr.EvalImpl"><tt class="xref py py-meth docutils literal"><span class="pre">eudtrg.Expr.EvalImpl()</span></tt></a> .</p>
+<dt id="eudtrglib.EUDObject.EvalImpl">
+<tt class="descname">EvalImpl</tt><big>(</big><big>)</big><a class="headerlink" href="#eudtrglib.EUDObject.EvalImpl" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overrides <a class="reference internal" href="#eudtrglib.Expr.EvalImpl" title="eudtrglib.Expr.EvalImpl"><tt class="xref py py-meth docutils literal"><span class="pre">eudtrglib.Expr.EvalImpl()</span></tt></a> .</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -156,8 +156,8 @@ byte data to put inside it.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="eudtrg.EUDObject.GetDataSize">
-<tt class="descname">GetDataSize</tt><big>(</big><big>)</big><a class="headerlink" href="#eudtrg.EUDObject.GetDataSize" title="Permalink to this definition">¶</a></dt>
+<dt id="eudtrglib.EUDObject.GetDataSize">
+<tt class="descname">GetDataSize</tt><big>(</big><big>)</big><a class="headerlink" href="#eudtrglib.EUDObject.GetDataSize" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -169,9 +169,9 @@ byte data to put inside it.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="eudtrg.EUDObject.GetDependencyList">
-<tt class="descname">GetDependencyList</tt><big>(</big><big>)</big><a class="headerlink" href="#eudtrg.EUDObject.GetDependencyList" title="Permalink to this definition">¶</a></dt>
-<dd><p>Overrides <a class="reference internal" href="#eudtrg.Expr.GetDependencyList" title="eudtrg.Expr.GetDependencyList"><tt class="xref py py-meth docutils literal"><span class="pre">eudtrg.Expr.GetDependencyList()</span></tt></a> .</p>
+<dt id="eudtrglib.EUDObject.GetDependencyList">
+<tt class="descname">GetDependencyList</tt><big>(</big><big>)</big><a class="headerlink" href="#eudtrglib.EUDObject.GetDependencyList" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overrides <a class="reference internal" href="#eudtrglib.Expr.GetDependencyList" title="eudtrglib.Expr.GetDependencyList"><tt class="xref py py-meth docutils literal"><span class="pre">eudtrglib.Expr.GetDependencyList()</span></tt></a> .</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -183,21 +183,21 @@ byte data to put inside it.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="eudtrg.EUDObject.ResetAddress">
-<tt class="descname">ResetAddress</tt><big>(</big><big>)</big><a class="headerlink" href="#eudtrg.EUDObject.ResetAddress" title="Permalink to this definition">¶</a></dt>
+<dt id="eudtrglib.EUDObject.ResetAddress">
+<tt class="descname">ResetAddress</tt><big>(</big><big>)</big><a class="headerlink" href="#eudtrglib.EUDObject.ResetAddress" title="Permalink to this definition">¶</a></dt>
 <dd><p>Reset object address. Called after payload is successfully injected.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="eudtrg.EUDObject.SetAddress">
-<tt class="descname">SetAddress</tt><big>(</big><em>address</em><big>)</big><a class="headerlink" href="#eudtrg.EUDObject.SetAddress" title="Permalink to this definition">¶</a></dt>
-<dd><p>Called by eudtrg when address of object is fixed. You won&#8217;t need to
+<dt id="eudtrglib.EUDObject.SetAddress">
+<tt class="descname">SetAddress</tt><big>(</big><em>address</em><big>)</big><a class="headerlink" href="#eudtrglib.EUDObject.SetAddress" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called by eudtrglib when address of object is fixed. You won&#8217;t need to
 override this function.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="eudtrg.EUDObject.WritePayload">
-<tt class="descname">WritePayload</tt><big>(</big><em>emitbuffer</em><big>)</big><a class="headerlink" href="#eudtrg.EUDObject.WritePayload" title="Permalink to this definition">¶</a></dt>
+<dt id="eudtrglib.EUDObject.WritePayload">
+<tt class="descname">WritePayload</tt><big>(</big><em>emitbuffer</em><big>)</big><a class="headerlink" href="#eudtrglib.EUDObject.WritePayload" title="Permalink to this definition">¶</a></dt>
 <dd><blockquote>
 <div><p>Writes payload(data) to buffer. Users may use:</p>
 <ul class="simple">
@@ -226,8 +226,8 @@ called.</p>
 <div class="section" id="basic-objects">
 <h3>Basic objects<a class="headerlink" href="#basic-objects" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
-<dt id="eudtrg.Forward">
-<em class="property">class </em><tt class="descclassname">eudtrg.</tt><tt class="descname">Forward</tt><a class="headerlink" href="#eudtrg.Forward" title="Permalink to this definition">¶</a></dt>
+<dt id="eudtrglib.Forward">
+<em class="property">class </em><tt class="descclassname">eudtrglib.</tt><tt class="descname">Forward</tt><a class="headerlink" href="#eudtrglib.Forward" title="Permalink to this definition">¶</a></dt>
 <dd><p>Forward declaration for expressions. Example:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">b</span> <span class="o">=</span> <span class="n">Forward</span><span class="p">()</span> <span class="c"># Forward declaration</span>
 <span class="n">a</span> <span class="o">=</span> <span class="n">Trigger</span><span class="p">(</span> <span class="n">nextptr</span> <span class="o">=</span> <span class="n">b</span> <span class="p">)</span> <span class="c"># b is defined here, so no error occurs.</span>
@@ -236,8 +236,8 @@ called.</p>
 </div>
 <p>Forward() class can be assigned a value only once.</p>
 <dl class="method">
-<dt id="eudtrg.Forward.Assign">
-<tt class="descname">Assign</tt><big>(</big><em>item</em><big>)</big><a class="headerlink" href="#eudtrg.Forward.Assign" title="Permalink to this definition">¶</a></dt>
+<dt id="eudtrglib.Forward.Assign">
+<tt class="descname">Assign</tt><big>(</big><em>item</em><big>)</big><a class="headerlink" href="#eudtrglib.Forward.Assign" title="Permalink to this definition">¶</a></dt>
 <dd><p>Assign expression to self. The object will evaluate to assigned
 expressions afterwards.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -256,8 +256,8 @@ expressions afterwards.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="eudtrg.Forward.EvalImpl">
-<tt class="descname">EvalImpl</tt><big>(</big><big>)</big><a class="headerlink" href="#eudtrg.Forward.EvalImpl" title="Permalink to this definition">¶</a></dt>
+<dt id="eudtrglib.Forward.EvalImpl">
+<tt class="descname">EvalImpl</tt><big>(</big><big>)</big><a class="headerlink" href="#eudtrglib.Forward.EvalImpl" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -273,8 +273,8 @@ expressions afterwards.</p>
 </dd></dl>
 
 <dl class="class">
-<dt id="eudtrg.Db">
-<em class="property">class </em><tt class="descclassname">eudtrg.</tt><tt class="descname">Db</tt><big>(</big><em>content</em><big>)</big><a class="headerlink" href="#eudtrg.Db" title="Permalink to this definition">¶</a></dt>
+<dt id="eudtrglib.Db">
+<em class="property">class </em><tt class="descclassname">eudtrglib.</tt><tt class="descname">Db</tt><big>(</big><em>content</em><big>)</big><a class="headerlink" href="#eudtrglib.Db" title="Permalink to this definition">¶</a></dt>
 <dd><p>Db object inserts binary data into starcraft memory. Db object evaluates to
 address where bytes are stored.</p>
 </dd></dl>
@@ -287,8 +287,8 @@ address where bytes are stored.</p>
 <div class="section" id="functions-classes-on-trigger">
 <h3>Functions/Classes on trigger<a class="headerlink" href="#functions-classes-on-trigger" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
-<dt id="eudtrg.Trigger">
-<em class="property">class </em><tt class="descclassname">eudtrg.</tt><tt class="descname">Trigger</tt><big>(</big><em>nextptr=None</em>, <em>conditions=</em>, <span class="optional">[</span><span class="optional">]</span><em>actions=</em>, <span class="optional">[</span><span class="optional">]</span><em>preserved=True</em><big>)</big><a class="headerlink" href="#eudtrg.Trigger" title="Permalink to this definition">¶</a></dt>
+<dt id="eudtrglib.Trigger">
+<em class="property">class </em><tt class="descclassname">eudtrglib.</tt><tt class="descname">Trigger</tt><big>(</big><em>nextptr=None</em>, <em>conditions=</em>, <span class="optional">[</span><span class="optional">]</span><em>actions=</em>, <span class="optional">[</span><span class="optional">]</span><em>preserved=True</em><big>)</big><a class="headerlink" href="#eudtrglib.Trigger" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="docutils">
 <dt>Object representing trigger. Trigger has following fields</dt>
 <dd><ul class="first last simple">
@@ -301,8 +301,8 @@ address where bytes are stored.</p>
 </dd></dl>
 
 <dl class="class">
-<dt id="eudtrg.Condition">
-<em class="property">class </em><tt class="descclassname">eudtrg.</tt><tt class="descname">Condition</tt><big>(</big><em>locid</em>, <em>player</em>, <em>amount</em>, <em>unitid</em>, <em>comparison</em>, <em>condtype</em>, <em>restype</em>, <em>flags</em><big>)</big><a class="headerlink" href="#eudtrg.Condition" title="Permalink to this definition">¶</a></dt>
+<dt id="eudtrglib.Condition">
+<em class="property">class </em><tt class="descclassname">eudtrglib.</tt><tt class="descname">Condition</tt><big>(</big><em>locid</em>, <em>player</em>, <em>amount</em>, <em>unitid</em>, <em>comparison</em>, <em>condtype</em>, <em>restype</em>, <em>flags</em><big>)</big><a class="headerlink" href="#eudtrglib.Condition" title="Permalink to this definition">¶</a></dt>
 <dd><p>Condition class.</p>
 <p>Memory layout:</p>
 <blockquote>
@@ -372,8 +372,8 @@ address where bytes are stored.</p>
 </dd></dl>
 
 <dl class="class">
-<dt id="eudtrg.Action">
-<em class="property">class </em><tt class="descclassname">eudtrg.</tt><tt class="descname">Action</tt><big>(</big><em>locid1</em>, <em>strid</em>, <em>wavid</em>, <em>time</em>, <em>player1</em>, <em>player2</em>, <em>unitid</em>, <em>acttype</em>, <em>amount</em>, <em>flags</em><big>)</big><a class="headerlink" href="#eudtrg.Action" title="Permalink to this definition">¶</a></dt>
+<dt id="eudtrglib.Action">
+<em class="property">class </em><tt class="descclassname">eudtrglib.</tt><tt class="descname">Action</tt><big>(</big><em>locid1</em>, <em>strid</em>, <em>wavid</em>, <em>time</em>, <em>player1</em>, <em>player2</em>, <em>unitid</em>, <em>acttype</em>, <em>amount</em>, <em>flags</em><big>)</big><a class="headerlink" href="#eudtrglib.Action" title="Permalink to this definition">¶</a></dt>
 <dd><p>Action class.</p>
 <p>Memory layout.</p>
 <blockquote>
@@ -453,8 +453,8 @@ address where bytes are stored.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="eudtrg.Disabled">
-<tt class="descclassname">eudtrg.</tt><tt class="descname">Disabled</tt><big>(</big><em>item</em><big>)</big><a class="headerlink" href="#eudtrg.Disabled" title="Permalink to this definition">¶</a></dt>
+<dt id="eudtrglib.Disabled">
+<tt class="descclassname">eudtrglib.</tt><tt class="descname">Disabled</tt><big>(</big><em>item</em><big>)</big><a class="headerlink" href="#eudtrglib.Disabled" title="Permalink to this definition">¶</a></dt>
 <dd><p>Make condition/action disabled.
 &gt;&gt;&gt; Disabled(SetDeaths(Player1, SetTo, 1234, &#8216;Terran Marine&#8217;))</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -470,8 +470,8 @@ address where bytes are stored.</p>
 </dd></dl>
 
 <dl class="class">
-<dt id="eudtrg.NextTrigger">
-<em class="property">class </em><tt class="descclassname">eudtrg.</tt><tt class="descname">NextTrigger</tt><a class="headerlink" href="#eudtrg.NextTrigger" title="Permalink to this definition">¶</a></dt>
+<dt id="eudtrglib.NextTrigger">
+<em class="property">class </em><tt class="descclassname">eudtrglib.</tt><tt class="descname">NextTrigger</tt><a class="headerlink" href="#eudtrglib.NextTrigger" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create reference to next declared trigger.</p>
 </dd></dl>
 
@@ -482,8 +482,8 @@ address where bytes are stored.</p>
 triggers together. Triggers in the same scope are eligable for
 <a href="#id1"><span class="problematic" id="id2">`nextptr auto linking`_</span></a>.</p>
 <dl class="function">
-<dt id="eudtrg.PushTriggerScope">
-<tt class="descclassname">eudtrg.</tt><tt class="descname">PushTriggerScope</tt><big>(</big><big>)</big><a class="headerlink" href="#eudtrg.PushTriggerScope" title="Permalink to this definition">¶</a></dt>
+<dt id="eudtrglib.PushTriggerScope">
+<tt class="descclassname">eudtrglib.</tt><tt class="descname">PushTriggerScope</tt><big>(</big><big>)</big><a class="headerlink" href="#eudtrglib.PushTriggerScope" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates trigger scope. Triggers inside a scope is isolated from outside.
 Triggers from different scope won&#8217;t have their nextptr linked implicitly.
 You can still link triggers in other scopes by setting nextptr explicitly.
@@ -500,8 +500,8 @@ d = Trigger()
 </dd></dl>
 
 <dl class="function">
-<dt id="eudtrg.PopTriggerScope">
-<tt class="descclassname">eudtrg.</tt><tt class="descname">PopTriggerScope</tt><big>(</big><big>)</big><a class="headerlink" href="#eudtrg.PopTriggerScope" title="Permalink to this definition">¶</a></dt>
+<dt id="eudtrglib.PopTriggerScope">
+<tt class="descclassname">eudtrglib.</tt><tt class="descname">PopTriggerScope</tt><big>(</big><big>)</big><a class="headerlink" href="#eudtrglib.PopTriggerScope" title="Permalink to this definition">¶</a></dt>
 <dd><p>Exits trigger scope. Used in conjunction with <tt class="xref py py-func docutils literal"><span class="pre">PushTriggerScope()</span></tt>.</p>
 </dd></dl>
 
@@ -514,8 +514,8 @@ intergal values. Consider following condition:</p>
 </pre></div>
 </div>
 <p>Each field is parsed by enumeration parser : player field is parsed by
-<a class="reference internal" href="#eudtrg.ParsePlayer" title="eudtrg.ParsePlayer"><tt class="xref py py-func docutils literal"><span class="pre">eudtrg.ParsePlayer()</span></tt></a> function, unit field is parsed by
-<a class="reference internal" href="#eudtrg.ParseUnit" title="eudtrg.ParseUnit"><tt class="xref py py-func docutils literal"><span class="pre">eudtrg.ParseUnit()</span></tt></a> function.</p>
+<a class="reference internal" href="#eudtrglib.ParsePlayer" title="eudtrglib.ParsePlayer"><tt class="xref py py-func docutils literal"><span class="pre">eudtrglib.ParsePlayer()</span></tt></a> function, unit field is parsed by
+<a class="reference internal" href="#eudtrglib.ParseUnit" title="eudtrglib.ParseUnit"><tt class="xref py py-func docutils literal"><span class="pre">eudtrglib.ParseUnit()</span></tt></a> function.</p>
 <div class="highlight-python"><div class="highlight"><pre>Player1 -&gt; ParsePlayer(Player1) = 0
 AtLeast -&gt; ParseComparison(AtLeast) = 0
 1
@@ -540,14 +540,14 @@ following function changing unit&#8217;s graphic to other sprite:</p>
 </div>
 <p>Or even better, ChangeUnitGraphics function can use ParseUnit internally.</p>
 <dl class="function">
-<dt id="eudtrg.ParseSwitchState">
-<tt class="descclassname">eudtrg.</tt><tt class="descname">ParseSwitchState</tt><big>(</big><em>s</em><big>)</big><a class="headerlink" href="#eudtrg.ParseSwitchState" title="Permalink to this definition">¶</a></dt>
+<dt id="eudtrglib.ParseSwitchState">
+<tt class="descclassname">eudtrglib.</tt><tt class="descname">ParseSwitchState</tt><big>(</big><em>s</em><big>)</big><a class="headerlink" href="#eudtrglib.ParseSwitchState" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert [Set, Cleared] to [2, 3].</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="eudtrg.ParseScore">
-<tt class="descclassname">eudtrg.</tt><tt class="descname">ParseScore</tt><big>(</big><em>s</em><big>)</big><a class="headerlink" href="#eudtrg.ParseScore" title="Permalink to this definition">¶</a></dt>
+<dt id="eudtrglib.ParseScore">
+<tt class="descclassname">eudtrglib.</tt><tt class="descname">ParseScore</tt><big>(</big><em>s</em><big>)</big><a class="headerlink" href="#eudtrglib.ParseScore" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert score type identifier to number.</p>
 <table border="1" class="docutils">
 <colgroup>
@@ -589,50 +589,50 @@ following function changing unit&#8217;s graphic to other sprite:</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="eudtrg.ParseComparison">
-<tt class="descclassname">eudtrg.</tt><tt class="descname">ParseComparison</tt><big>(</big><em>s</em><big>)</big><a class="headerlink" href="#eudtrg.ParseComparison" title="Permalink to this definition">¶</a></dt>
+<dt id="eudtrglib.ParseComparison">
+<tt class="descclassname">eudtrglib.</tt><tt class="descname">ParseComparison</tt><big>(</big><em>s</em><big>)</big><a class="headerlink" href="#eudtrglib.ParseComparison" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert [AtLeast, AtMost, Exactly] to number [0, 1, 10].</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="eudtrg.ParsePropState">
-<tt class="descclassname">eudtrg.</tt><tt class="descname">ParsePropState</tt><big>(</big><em>s</em><big>)</big><a class="headerlink" href="#eudtrg.ParsePropState" title="Permalink to this definition">¶</a></dt>
+<dt id="eudtrglib.ParsePropState">
+<tt class="descclassname">eudtrglib.</tt><tt class="descname">ParsePropState</tt><big>(</big><em>s</em><big>)</big><a class="headerlink" href="#eudtrglib.ParsePropState" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert [Enable, Disable, Toogle] to number [4, 5, 6]</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="eudtrg.ParseModifier">
-<tt class="descclassname">eudtrg.</tt><tt class="descname">ParseModifier</tt><big>(</big><em>s</em><big>)</big><a class="headerlink" href="#eudtrg.ParseModifier" title="Permalink to this definition">¶</a></dt>
+<dt id="eudtrglib.ParseModifier">
+<tt class="descclassname">eudtrglib.</tt><tt class="descname">ParseModifier</tt><big>(</big><em>s</em><big>)</big><a class="headerlink" href="#eudtrglib.ParseModifier" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert [SetTo, Add, Subtract] to number [7, 8, 9].</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="eudtrg.ParseOrder">
-<tt class="descclassname">eudtrg.</tt><tt class="descname">ParseOrder</tt><big>(</big><em>s</em><big>)</big><a class="headerlink" href="#eudtrg.ParseOrder" title="Permalink to this definition">¶</a></dt>
+<dt id="eudtrglib.ParseOrder">
+<tt class="descclassname">eudtrglib.</tt><tt class="descname">ParseOrder</tt><big>(</big><em>s</em><big>)</big><a class="headerlink" href="#eudtrglib.ParseOrder" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert [Move, Patrol, Attack] to number [0, 1, 2].</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="eudtrg.ParseResource">
-<tt class="descclassname">eudtrg.</tt><tt class="descname">ParseResource</tt><big>(</big><em>s</em><big>)</big><a class="headerlink" href="#eudtrg.ParseResource" title="Permalink to this definition">¶</a></dt>
+<dt id="eudtrglib.ParseResource">
+<tt class="descclassname">eudtrglib.</tt><tt class="descname">ParseResource</tt><big>(</big><em>s</em><big>)</big><a class="headerlink" href="#eudtrglib.ParseResource" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert [Ore, Gas, OreAndGas] to [0, 1, 2]</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="eudtrg.ParseCount">
-<tt class="descclassname">eudtrg.</tt><tt class="descname">ParseCount</tt><big>(</big><em>s</em><big>)</big><a class="headerlink" href="#eudtrg.ParseCount" title="Permalink to this definition">¶</a></dt>
+<dt id="eudtrglib.ParseCount">
+<tt class="descclassname">eudtrglib.</tt><tt class="descname">ParseCount</tt><big>(</big><em>s</em><big>)</big><a class="headerlink" href="#eudtrglib.ParseCount" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert [All, (other numbers)] to number [0, (as-is)].</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="eudtrg.ParseAllyStatus">
-<tt class="descclassname">eudtrg.</tt><tt class="descname">ParseAllyStatus</tt><big>(</big><em>s</em><big>)</big><a class="headerlink" href="#eudtrg.ParseAllyStatus" title="Permalink to this definition">¶</a></dt>
+<dt id="eudtrglib.ParseAllyStatus">
+<tt class="descclassname">eudtrglib.</tt><tt class="descname">ParseAllyStatus</tt><big>(</big><em>s</em><big>)</big><a class="headerlink" href="#eudtrglib.ParseAllyStatus" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert [Enemy, Ally, AlliedVictory] to number [0, 1, 2].</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="eudtrg.ParsePlayer">
-<tt class="descclassname">eudtrg.</tt><tt class="descname">ParsePlayer</tt><big>(</big><em>s</em><big>)</big><a class="headerlink" href="#eudtrg.ParsePlayer" title="Permalink to this definition">¶</a></dt>
+<dt id="eudtrglib.ParsePlayer">
+<tt class="descclassname">eudtrglib.</tt><tt class="descname">ParsePlayer</tt><big>(</big><em>s</em><big>)</big><a class="headerlink" href="#eudtrglib.ParsePlayer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert player identifier to corresponding number.</p>
 <table border="1" class="docutils">
 <colgroup>
@@ -752,21 +752,21 @@ following function changing unit&#8217;s graphic to other sprite:</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="eudtrg.ParseAIScript">
-<tt class="descclassname">eudtrg.</tt><tt class="descname">ParseAIScript</tt><big>(</big><em>s</em><big>)</big><a class="headerlink" href="#eudtrg.ParseAIScript" title="Permalink to this definition">¶</a></dt>
-<dd><p>Convert known AI Script to script ID. See <tt class="xref py py-func docutils literal"><span class="pre">eudtrg.RunAIScript()</span></tt> and
-<tt class="xref py py-func docutils literal"><span class="pre">eudtrg.RunAIScriptAt()</span></tt> for list of AI scripts.</p>
+<dt id="eudtrglib.ParseAIScript">
+<tt class="descclassname">eudtrglib.</tt><tt class="descname">ParseAIScript</tt><big>(</big><em>s</em><big>)</big><a class="headerlink" href="#eudtrglib.ParseAIScript" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert known AI Script to script ID. See <tt class="xref py py-func docutils literal"><span class="pre">eudtrglib.RunAIScript()</span></tt> and
+<tt class="xref py py-func docutils literal"><span class="pre">eudtrglib.RunAIScriptAt()</span></tt> for list of AI scripts.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="eudtrg.ParseSwitchAction">
-<tt class="descclassname">eudtrg.</tt><tt class="descname">ParseSwitchAction</tt><big>(</big><em>s</em><big>)</big><a class="headerlink" href="#eudtrg.ParseSwitchAction" title="Permalink to this definition">¶</a></dt>
+<dt id="eudtrglib.ParseSwitchAction">
+<tt class="descclassname">eudtrglib.</tt><tt class="descname">ParseSwitchAction</tt><big>(</big><em>s</em><big>)</big><a class="headerlink" href="#eudtrglib.ParseSwitchAction" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert [Set, Clear, Toogle, Random] to [4, 5, 6, 11].</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="eudtrg.ParseUnit">
-<tt class="descclassname">eudtrg.</tt><tt class="descname">ParseUnit</tt><big>(</big><em>unitname</em><big>)</big><a class="headerlink" href="#eudtrg.ParseUnit" title="Permalink to this definition">¶</a></dt>
+<dt id="eudtrglib.ParseUnit">
+<tt class="descclassname">eudtrglib.</tt><tt class="descname">ParseUnit</tt><big>(</big><em>unitname</em><big>)</big><a class="headerlink" href="#eudtrglib.ParseUnit" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -787,8 +787,8 @@ following function changing unit&#8217;s graphic to other sprite:</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="eudtrg.ParseLocation">
-<tt class="descclassname">eudtrg.</tt><tt class="descname">ParseLocation</tt><big>(</big><em>locname</em><big>)</big><a class="headerlink" href="#eudtrg.ParseLocation" title="Permalink to this definition">¶</a></dt>
+<dt id="eudtrglib.ParseLocation">
+<tt class="descclassname">eudtrglib.</tt><tt class="descname">ParseLocation</tt><big>(</big><em>locname</em><big>)</big><a class="headerlink" href="#eudtrglib.ParseLocation" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -805,8 +805,8 @@ following function changing unit&#8217;s graphic to other sprite:</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="eudtrg.ParseString">
-<tt class="descclassname">eudtrg.</tt><tt class="descname">ParseString</tt><big>(</big><em>string</em><big>)</big><a class="headerlink" href="#eudtrg.ParseString" title="Permalink to this definition">¶</a></dt>
+<dt id="eudtrglib.ParseString">
+<tt class="descclassname">eudtrglib.</tt><tt class="descname">ParseString</tt><big>(</big><em>string</em><big>)</big><a class="headerlink" href="#eudtrglib.ParseString" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -825,8 +825,8 @@ string ID.</td>
 </dd></dl>
 
 <dl class="function">
-<dt id="eudtrg.ParseProperty">
-<tt class="descclassname">eudtrg.</tt><tt class="descname">ParseProperty</tt><big>(</big><em>prop</em><big>)</big><a class="headerlink" href="#eudtrg.ParseProperty" title="Permalink to this definition">¶</a></dt>
+<dt id="eudtrglib.ParseProperty">
+<tt class="descclassname">eudtrglib.</tt><tt class="descname">ParseProperty</tt><big>(</big><em>prop</em><big>)</big><a class="headerlink" href="#eudtrglib.ParseProperty" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -850,8 +850,8 @@ property ID.</td>
 <div class="section" id="variable-table">
 <h3>Variable Table<a class="headerlink" href="#variable-table" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
-<dt id="eudtrg.EUDVTable">
-<em class="property">class </em><tt class="descclassname">eudtrg.</tt><tt class="descname">EUDVTable</tt><big>(</big><em>varn</em><big>)</big><a class="headerlink" href="#eudtrg.EUDVTable" title="Permalink to this definition">¶</a></dt>
+<dt id="eudtrglib.EUDVTable">
+<em class="property">class </em><tt class="descclassname">eudtrglib.</tt><tt class="descname">EUDVTable</tt><big>(</big><em>varn</em><big>)</big><a class="headerlink" href="#eudtrglib.EUDVTable" title="Permalink to this definition">¶</a></dt>
 <dd><p>Full Variable table. EUDVTable stores <tt class="xref py py-class docutils literal"><span class="pre">EUDVariable</span></tt> objects.
 EUDVTable serves as a key component of trigger programming.</p>
 <blockquote>
@@ -862,8 +862,8 @@ a, b, c = vt.GetVariables()
 EUDVTable is executed, queued calculations are processed. You can queue
 calculations with <tt class="xref py py-meth docutils literal"><span class="pre">EUDVariable.QueueAssignTo()</span></tt> and its family.</p>
 <dl class="method">
-<dt id="eudtrg.EUDVTable.GetVariables">
-<tt class="descname">GetVariables</tt><big>(</big><big>)</big><a class="headerlink" href="#eudtrg.EUDVTable.GetVariables" title="Permalink to this definition">¶</a></dt>
+<dt id="eudtrglib.EUDVTable.GetVariables">
+<tt class="descname">GetVariables</tt><big>(</big><big>)</big><a class="headerlink" href="#eudtrglib.EUDVTable.GetVariables" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -878,12 +878,12 @@ variable, return it.</td>
 </dd></dl>
 
 <dl class="class">
-<dt id="eudtrg.EUDVariable">
-<em class="property">class </em><tt class="descclassname">eudtrg.</tt><tt class="descname">EUDVariable</tt><big>(</big><em>vartrigger</em>, <em>originvt</em><big>)</big><a class="headerlink" href="#eudtrg.EUDVariable" title="Permalink to this definition">¶</a></dt>
+<dt id="eudtrglib.EUDVariable">
+<em class="property">class </em><tt class="descclassname">eudtrglib.</tt><tt class="descname">EUDVariable</tt><big>(</big><em>vartrigger</em>, <em>originvt</em><big>)</big><a class="headerlink" href="#eudtrglib.EUDVariable" title="Permalink to this definition">¶</a></dt>
 <dd><p>Full variable.</p>
 <dl class="method">
-<dt id="eudtrg.EUDVariable.AddNumber">
-<tt class="descname">AddNumber</tt><big>(</big><em>number</em><big>)</big><a class="headerlink" href="#eudtrg.EUDVariable.AddNumber" title="Permalink to this definition">¶</a></dt>
+<dt id="eudtrglib.EUDVariable.AddNumber">
+<tt class="descname">AddNumber</tt><big>(</big><em>number</em><big>)</big><a class="headerlink" href="#eudtrglib.EUDVariable.AddNumber" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -897,8 +897,8 @@ variable, return it.</td>
 </dd></dl>
 
 <dl class="method">
-<dt id="eudtrg.EUDVariable.AtLeast">
-<tt class="descname">AtLeast</tt><big>(</big><em>number</em><big>)</big><a class="headerlink" href="#eudtrg.EUDVariable.AtLeast" title="Permalink to this definition">¶</a></dt>
+<dt id="eudtrglib.EUDVariable.AtLeast">
+<tt class="descname">AtLeast</tt><big>(</big><em>number</em><big>)</big><a class="headerlink" href="#eudtrglib.EUDVariable.AtLeast" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -913,8 +913,8 @@ given number.</td>
 </dd></dl>
 
 <dl class="method">
-<dt id="eudtrg.EUDVariable.AtMost">
-<tt class="descname">AtMost</tt><big>(</big><em>number</em><big>)</big><a class="headerlink" href="#eudtrg.EUDVariable.AtMost" title="Permalink to this definition">¶</a></dt>
+<dt id="eudtrglib.EUDVariable.AtMost">
+<tt class="descname">AtMost</tt><big>(</big><em>number</em><big>)</big><a class="headerlink" href="#eudtrglib.EUDVariable.AtMost" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -929,8 +929,8 @@ given number.</td>
 </dd></dl>
 
 <dl class="method">
-<dt id="eudtrg.EUDVariable.Exactly">
-<tt class="descname">Exactly</tt><big>(</big><em>number</em><big>)</big><a class="headerlink" href="#eudtrg.EUDVariable.Exactly" title="Permalink to this definition">¶</a></dt>
+<dt id="eudtrglib.EUDVariable.Exactly">
+<tt class="descname">Exactly</tt><big>(</big><em>number</em><big>)</big><a class="headerlink" href="#eudtrglib.EUDVariable.Exactly" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -945,8 +945,8 @@ given number.</td>
 </dd></dl>
 
 <dl class="method">
-<dt id="eudtrg.EUDVariable.GetMemoryAddr">
-<tt class="descname">GetMemoryAddr</tt><big>(</big><big>)</big><a class="headerlink" href="#eudtrg.EUDVariable.GetMemoryAddr" title="Permalink to this definition">¶</a></dt>
+<dt id="eudtrglib.EUDVariable.GetMemoryAddr">
+<tt class="descname">GetMemoryAddr</tt><big>(</big><big>)</big><a class="headerlink" href="#eudtrglib.EUDVariable.GetMemoryAddr" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -958,8 +958,8 @@ given number.</td>
 </dd></dl>
 
 <dl class="method">
-<dt id="eudtrg.EUDVariable.GetVTable">
-<tt class="descname">GetVTable</tt><big>(</big><big>)</big><a class="headerlink" href="#eudtrg.EUDVariable.GetVTable" title="Permalink to this definition">¶</a></dt>
+<dt id="eudtrglib.EUDVariable.GetVTable">
+<tt class="descname">GetVTable</tt><big>(</big><big>)</big><a class="headerlink" href="#eudtrglib.EUDVariable.GetVTable" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -971,8 +971,8 @@ given number.</td>
 </dd></dl>
 
 <dl class="method">
-<dt id="eudtrg.EUDVariable.QueueAddTo">
-<tt class="descname">QueueAddTo</tt><big>(</big><em>dest</em><big>)</big><a class="headerlink" href="#eudtrg.EUDVariable.QueueAddTo" title="Permalink to this definition">¶</a></dt>
+<dt id="eudtrglib.EUDVariable.QueueAddTo">
+<tt class="descname">QueueAddTo</tt><big>(</big><em>dest</em><big>)</big><a class="headerlink" href="#eudtrglib.EUDVariable.QueueAddTo" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -994,8 +994,8 @@ interpreted as EPD Player.</li>
 </dd></dl>
 
 <dl class="method">
-<dt id="eudtrg.EUDVariable.QueueAssignTo">
-<tt class="descname">QueueAssignTo</tt><big>(</big><em>dest</em><big>)</big><a class="headerlink" href="#eudtrg.EUDVariable.QueueAssignTo" title="Permalink to this definition">¶</a></dt>
+<dt id="eudtrglib.EUDVariable.QueueAssignTo">
+<tt class="descname">QueueAssignTo</tt><big>(</big><em>dest</em><big>)</big><a class="headerlink" href="#eudtrglib.EUDVariable.QueueAssignTo" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1023,8 +1023,8 @@ interpreted as EPD Player.</li>
 </dd></dl>
 
 <dl class="method">
-<dt id="eudtrg.EUDVariable.QueueSubtractTo">
-<tt class="descname">QueueSubtractTo</tt><big>(</big><em>dest</em><big>)</big><a class="headerlink" href="#eudtrg.EUDVariable.QueueSubtractTo" title="Permalink to this definition">¶</a></dt>
+<dt id="eudtrglib.EUDVariable.QueueSubtractTo">
+<tt class="descname">QueueSubtractTo</tt><big>(</big><em>dest</em><big>)</big><a class="headerlink" href="#eudtrglib.EUDVariable.QueueSubtractTo" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1051,8 +1051,8 @@ will yield 0.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="eudtrg.EUDVariable.SetNumber">
-<tt class="descname">SetNumber</tt><big>(</big><em>number</em><big>)</big><a class="headerlink" href="#eudtrg.EUDVariable.SetNumber" title="Permalink to this definition">¶</a></dt>
+<dt id="eudtrglib.EUDVariable.SetNumber">
+<tt class="descname">SetNumber</tt><big>(</big><em>number</em><big>)</big><a class="headerlink" href="#eudtrglib.EUDVariable.SetNumber" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1066,8 +1066,8 @@ will yield 0.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="eudtrg.EUDVariable.SubtractNumber">
-<tt class="descname">SubtractNumber</tt><big>(</big><em>number</em><big>)</big><a class="headerlink" href="#eudtrg.EUDVariable.SubtractNumber" title="Permalink to this definition">¶</a></dt>
+<dt id="eudtrglib.EUDVariable.SubtractNumber">
+<tt class="descname">SubtractNumber</tt><big>(</big><em>number</em><big>)</big><a class="headerlink" href="#eudtrglib.EUDVariable.SubtractNumber" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1088,8 +1088,8 @@ will yield 0.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="eudtrg.EUDCreateVariables">
-<tt class="descclassname">eudtrg.</tt><tt class="descname">EUDCreateVariables</tt><big>(</big><em>varn</em><big>)</big><a class="headerlink" href="#eudtrg.EUDCreateVariables" title="Permalink to this definition">¶</a></dt>
+<dt id="eudtrglib.EUDCreateVariables">
+<tt class="descclassname">eudtrglib.</tt><tt class="descname">EUDCreateVariables</tt><big>(</big><em>varn</em><big>)</big><a class="headerlink" href="#eudtrglib.EUDCreateVariables" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create (varn) <tt class="xref py py-class docutils literal"><span class="pre">EUDVariables</span></tt>. Returned variables are not guarranted 
 to be in the same variable table.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -1105,8 +1105,8 @@ to be in the same variable table.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="eudtrg.SeqCompute">
-<tt class="descclassname">eudtrg.</tt><tt class="descname">SeqCompute</tt><big>(</big><em>assignpairs</em><big>)</big><a class="headerlink" href="#eudtrg.SeqCompute" title="Permalink to this definition">¶</a></dt>
+<dt id="eudtrglib.SeqCompute">
+<tt class="descclassname">eudtrglib.</tt><tt class="descname">SeqCompute</tt><big>(</big><em>assignpairs</em><big>)</big><a class="headerlink" href="#eudtrglib.SeqCompute" title="Permalink to this definition">¶</a></dt>
 <dd><p>Do multiple assignment/addition/subtraction sequentially.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1161,8 +1161,8 @@ yield 0.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="eudtrg.SetVariables">
-<tt class="descclassname">eudtrg.</tt><tt class="descname">SetVariables</tt><big>(</big><em>dstlist</em>, <em>srclist</em>, <em>mdtlist=None</em><big>)</big><a class="headerlink" href="#eudtrg.SetVariables" title="Permalink to this definition">¶</a></dt>
+<dt id="eudtrglib.SetVariables">
+<tt class="descclassname">eudtrglib.</tt><tt class="descname">SetVariables</tt><big>(</big><em>dstlist</em>, <em>srclist</em>, <em>mdtlist=None</em><big>)</big><a class="headerlink" href="#eudtrglib.SetVariables" title="Permalink to this definition">¶</a></dt>
 <dd><p>Assigns values to variables/memory. This is just a syntax sugar for
 <tt class="xref py py-func docutils literal"><span class="pre">SeqCompute()</span></tt>. Useful for retrieving function return values after
 EUD Function call.</p>
@@ -1215,20 +1215,20 @@ yield 0.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="eudtrg.VTProc">
-<tt class="descclassname">eudtrg.</tt><tt class="descname">VTProc</tt><big>(</big><em>vt</em>, <em>actions</em><big>)</big><a class="headerlink" href="#eudtrg.VTProc" title="Permalink to this definition">¶</a></dt>
+<dt id="eudtrglib.VTProc">
+<tt class="descclassname">eudtrglib.</tt><tt class="descname">VTProc</tt><big>(</big><em>vt</em>, <em>actions</em><big>)</big><a class="headerlink" href="#eudtrglib.VTProc" title="Permalink to this definition">¶</a></dt>
 <dd><p>Shortcut for <tt class="xref py py-class docutils literal"><span class="pre">EUDVTable</span></tt> calculation. VTProc automatically inserts
 nextptr manipulation triggers, so you wouldn&#8217;t have to 
 :param actions: Actions to execute</p>
 </dd></dl>
 
 <dl class="class">
-<dt id="eudtrg.EUDLightVariable">
-<em class="property">class </em><tt class="descclassname">eudtrg.</tt><tt class="descname">EUDLightVariable</tt><a class="headerlink" href="#eudtrg.EUDLightVariable" title="Permalink to this definition">¶</a></dt>
+<dt id="eudtrglib.EUDLightVariable">
+<em class="property">class </em><tt class="descclassname">eudtrglib.</tt><tt class="descname">EUDLightVariable</tt><a class="headerlink" href="#eudtrglib.EUDLightVariable" title="Permalink to this definition">¶</a></dt>
 <dd><p>Light variable. EUDLightVariable occupies only 4 bytes.</p>
 <dl class="method">
-<dt id="eudtrg.EUDLightVariable.AddNumber">
-<tt class="descname">AddNumber</tt><big>(</big><em>number</em><big>)</big><a class="headerlink" href="#eudtrg.EUDLightVariable.AddNumber" title="Permalink to this definition">¶</a></dt>
+<dt id="eudtrglib.EUDLightVariable.AddNumber">
+<tt class="descname">AddNumber</tt><big>(</big><em>number</em><big>)</big><a class="headerlink" href="#eudtrglib.EUDLightVariable.AddNumber" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1242,8 +1242,8 @@ nextptr manipulation triggers, so you wouldn&#8217;t have to
 </dd></dl>
 
 <dl class="method">
-<dt id="eudtrg.EUDLightVariable.AtLeast">
-<tt class="descname">AtLeast</tt><big>(</big><em>number</em><big>)</big><a class="headerlink" href="#eudtrg.EUDLightVariable.AtLeast" title="Permalink to this definition">¶</a></dt>
+<dt id="eudtrglib.EUDLightVariable.AtLeast">
+<tt class="descname">AtLeast</tt><big>(</big><em>number</em><big>)</big><a class="headerlink" href="#eudtrglib.EUDLightVariable.AtLeast" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1258,8 +1258,8 @@ given number.</td>
 </dd></dl>
 
 <dl class="method">
-<dt id="eudtrg.EUDLightVariable.AtMost">
-<tt class="descname">AtMost</tt><big>(</big><em>number</em><big>)</big><a class="headerlink" href="#eudtrg.EUDLightVariable.AtMost" title="Permalink to this definition">¶</a></dt>
+<dt id="eudtrglib.EUDLightVariable.AtMost">
+<tt class="descname">AtMost</tt><big>(</big><em>number</em><big>)</big><a class="headerlink" href="#eudtrglib.EUDLightVariable.AtMost" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1274,8 +1274,8 @@ given number.</td>
 </dd></dl>
 
 <dl class="method">
-<dt id="eudtrg.EUDLightVariable.Exactly">
-<tt class="descname">Exactly</tt><big>(</big><em>number</em><big>)</big><a class="headerlink" href="#eudtrg.EUDLightVariable.Exactly" title="Permalink to this definition">¶</a></dt>
+<dt id="eudtrglib.EUDLightVariable.Exactly">
+<tt class="descname">Exactly</tt><big>(</big><em>number</em><big>)</big><a class="headerlink" href="#eudtrglib.EUDLightVariable.Exactly" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1290,8 +1290,8 @@ given number.</td>
 </dd></dl>
 
 <dl class="method">
-<dt id="eudtrg.EUDLightVariable.GetMemoryAddr">
-<tt class="descname">GetMemoryAddr</tt><big>(</big><big>)</big><a class="headerlink" href="#eudtrg.EUDLightVariable.GetMemoryAddr" title="Permalink to this definition">¶</a></dt>
+<dt id="eudtrglib.EUDLightVariable.GetMemoryAddr">
+<tt class="descname">GetMemoryAddr</tt><big>(</big><big>)</big><a class="headerlink" href="#eudtrglib.EUDLightVariable.GetMemoryAddr" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1303,8 +1303,8 @@ given number.</td>
 </dd></dl>
 
 <dl class="method">
-<dt id="eudtrg.EUDLightVariable.SetNumber">
-<tt class="descname">SetNumber</tt><big>(</big><em>number</em><big>)</big><a class="headerlink" href="#eudtrg.EUDLightVariable.SetNumber" title="Permalink to this definition">¶</a></dt>
+<dt id="eudtrglib.EUDLightVariable.SetNumber">
+<tt class="descname">SetNumber</tt><big>(</big><em>number</em><big>)</big><a class="headerlink" href="#eudtrglib.EUDLightVariable.SetNumber" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1318,8 +1318,8 @@ given number.</td>
 </dd></dl>
 
 <dl class="method">
-<dt id="eudtrg.EUDLightVariable.SubtractNumber">
-<tt class="descname">SubtractNumber</tt><big>(</big><em>number</em><big>)</big><a class="headerlink" href="#eudtrg.EUDLightVariable.SubtractNumber" title="Permalink to this definition">¶</a></dt>
+<dt id="eudtrglib.EUDLightVariable.SubtractNumber">
+<tt class="descname">SubtractNumber</tt><big>(</big><em>number</em><big>)</big><a class="headerlink" href="#eudtrglib.EUDLightVariable.SubtractNumber" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1343,8 +1343,8 @@ will yield 0.</p>
 <div class="section" id="common-control-structures">
 <h3>Common control structures<a class="headerlink" href="#common-control-structures" title="Permalink to this headline">¶</a></h3>
 <dl class="function">
-<dt id="eudtrg.DoActions">
-<tt class="descclassname">eudtrg.</tt><tt class="descname">DoActions</tt><big>(</big><em>actions</em><big>)</big><a class="headerlink" href="#eudtrg.DoActions" title="Permalink to this definition">¶</a></dt>
+<dt id="eudtrglib.DoActions">
+<tt class="descclassname">eudtrglib.</tt><tt class="descname">DoActions</tt><big>(</big><em>actions</em><big>)</big><a class="headerlink" href="#eudtrglib.DoActions" title="Permalink to this definition">¶</a></dt>
 <dd><p>Shortcut for creating trigger with only action fields specified.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1357,8 +1357,8 @@ will yield 0.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="eudtrg.EUDJump">
-<tt class="descclassname">eudtrg.</tt><tt class="descname">EUDJump</tt><big>(</big><em>nextptr</em><big>)</big><a class="headerlink" href="#eudtrg.EUDJump" title="Permalink to this definition">¶</a></dt>
+<dt id="eudtrglib.EUDJump">
+<tt class="descclassname">eudtrglib.</tt><tt class="descname">EUDJump</tt><big>(</big><em>nextptr</em><big>)</big><a class="headerlink" href="#eudtrglib.EUDJump" title="Permalink to this definition">¶</a></dt>
 <dd><p>Trigger with only nextptr specified. Useful for controlling trigger
 execution order. Acts as jmp instruction of x86 assembly.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -1372,8 +1372,8 @@ execution order. Acts as jmp instruction of x86 assembly.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="eudtrg.EUDJumpIf">
-<tt class="descclassname">eudtrg.</tt><tt class="descname">EUDJumpIf</tt><big>(</big><em>conditions</em>, <em>ontrue</em><big>)</big><a class="headerlink" href="#eudtrg.EUDJumpIf" title="Permalink to this definition">¶</a></dt>
+<dt id="eudtrglib.EUDJumpIf">
+<tt class="descclassname">eudtrglib.</tt><tt class="descname">EUDJumpIf</tt><big>(</big><em>conditions</em>, <em>ontrue</em><big>)</big><a class="headerlink" href="#eudtrglib.EUDJumpIf" title="Permalink to this definition">¶</a></dt>
 <dd><p>Jump if conditions are met. Two triggers are executed when jumping. If jump
 conditions are not met, then the following triggers are executed.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -1391,8 +1391,8 @@ conditions are not met, then the following triggers are executed.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="eudtrg.EUDJumpIfNot">
-<tt class="descclassname">eudtrg.</tt><tt class="descname">EUDJumpIfNot</tt><big>(</big><em>conditions</em>, <em>onfalse</em><big>)</big><a class="headerlink" href="#eudtrg.EUDJumpIfNot" title="Permalink to this definition">¶</a></dt>
+<dt id="eudtrglib.EUDJumpIfNot">
+<tt class="descclassname">eudtrglib.</tt><tt class="descname">EUDJumpIfNot</tt><big>(</big><em>conditions</em>, <em>onfalse</em><big>)</big><a class="headerlink" href="#eudtrglib.EUDJumpIfNot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Jump if conditions are not met. Two triggers are executed when jumping. If
 jump conditions are met, then the following triggers are executed.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -1410,8 +1410,8 @@ jump conditions are met, then the following triggers are executed.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="eudtrg.EUDBranch">
-<tt class="descclassname">eudtrg.</tt><tt class="descname">EUDBranch</tt><big>(</big><em>conditions</em>, <em>ontrue</em>, <em>onfalse</em><big>)</big><a class="headerlink" href="#eudtrg.EUDBranch" title="Permalink to this definition">¶</a></dt>
+<dt id="eudtrglib.EUDBranch">
+<tt class="descclassname">eudtrglib.</tt><tt class="descname">EUDBranch</tt><big>(</big><em>conditions</em>, <em>ontrue</em>, <em>onfalse</em><big>)</big><a class="headerlink" href="#eudtrglib.EUDBranch" title="Permalink to this definition">¶</a></dt>
 <dd><p>Branch based on conditions.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1429,8 +1429,8 @@ jump conditions are met, then the following triggers are executed.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="eudtrg.EUDFunc">
-<tt class="descclassname">eudtrg.</tt><tt class="descname">EUDFunc</tt><big>(</big><em>fdecl_func</em><big>)</big><a class="headerlink" href="#eudtrg.EUDFunc" title="Permalink to this definition">¶</a></dt>
+<dt id="eudtrglib.EUDFunc">
+<tt class="descclassname">eudtrglib.</tt><tt class="descname">EUDFunc</tt><big>(</big><em>fdecl_func</em><big>)</big><a class="headerlink" href="#eudtrglib.EUDFunc" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generates EUD Function. Usually used as decorators. EUD Function cannot
 be recursive.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="nd">@EUDFunc</span>
@@ -1487,8 +1487,8 @@ of EUDVariable.</td>
 </dd></dl>
 
 <dl class="function">
-<dt id="eudtrg.InitPlayerSwitch">
-<tt class="descclassname">eudtrg.</tt><tt class="descname">InitPlayerSwitch</tt><big>(</big><em>playerroots</em><big>)</big><a class="headerlink" href="#eudtrg.InitPlayerSwitch" title="Permalink to this definition">¶</a></dt>
+<dt id="eudtrglib.InitPlayerSwitch">
+<tt class="descclassname">eudtrglib.</tt><tt class="descname">InitPlayerSwitch</tt><big>(</big><em>playerroots</em><big>)</big><a class="headerlink" href="#eudtrglib.InitPlayerSwitch" title="Permalink to this definition">¶</a></dt>
 <dd><p>Override default behavior of <tt class="xref py py-func docutils literal"><span class="pre">SaveMap()</span></tt> and set starting trigger for
 all players.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -1514,12 +1514,12 @@ Starting trigger may be None if the player won&#8217;t execute any trigger.</td>
 <div class="section" id="string-table">
 <h4>String table<a class="headerlink" href="#string-table" title="Permalink to this headline">¶</a></h4>
 <dl class="class">
-<dt id="eudtrg.EUDTbl">
-<em class="property">class </em><tt class="descclassname">eudtrg.</tt><tt class="descname">EUDTbl</tt><a class="headerlink" href="#eudtrg.EUDTbl" title="Permalink to this definition">¶</a></dt>
+<dt id="eudtrglib.EUDTbl">
+<em class="property">class </em><tt class="descclassname">eudtrglib.</tt><tt class="descname">EUDTbl</tt><a class="headerlink" href="#eudtrglib.EUDTbl" title="Permalink to this definition">¶</a></dt>
 <dd><p>Custom string table.</p>
 <dl class="method">
-<dt id="eudtrg.EUDTbl.SetAsDefault">
-<tt class="descname">SetAsDefault</tt><big>(</big><big>)</big><a class="headerlink" href="#eudtrg.EUDTbl.SetAsDefault" title="Permalink to this definition">¶</a></dt>
+<dt id="eudtrglib.EUDTbl.SetAsDefault">
+<tt class="descname">SetAsDefault</tt><big>(</big><big>)</big><a class="headerlink" href="#eudtrglib.EUDTbl.SetAsDefault" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set default string table to self. All strings used by DisplayText will
 be forwarded to current string table</p>
 <div class="admonition warning">
@@ -1530,8 +1530,8 @@ Always call <tt class="xref py py-func docutils literal"><span class="pre">f_res
 </dd></dl>
 
 <dl class="method">
-<dt id="eudtrg.EUDTbl.StringIndex">
-<tt class="descname">StringIndex</tt><big>(</big><em>string</em><big>)</big><a class="headerlink" href="#eudtrg.EUDTbl.StringIndex" title="Permalink to this definition">¶</a></dt>
+<dt id="eudtrglib.EUDTbl.StringIndex">
+<tt class="descname">StringIndex</tt><big>(</big><em>string</em><big>)</big><a class="headerlink" href="#eudtrglib.EUDTbl.StringIndex" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get string index of certain string inside string table.
 :param string: String to get index.
 :returns: String index.
@@ -1541,15 +1541,15 @@ Always call <tt class="xref py py-func docutils literal"><span class="pre">f_res
 </dd></dl>
 
 <dl class="function">
-<dt id="eudtrg.f_reseteudtbl">
-<tt class="descclassname">eudtrg.</tt><tt class="descname">f_reseteudtbl</tt><big>(</big><big>)</big><a class="headerlink" href="#eudtrg.f_reseteudtbl" title="Permalink to this definition">¶</a></dt>
+<dt id="eudtrglib.f_reseteudtbl">
+<tt class="descclassname">eudtrglib.</tt><tt class="descname">f_reseteudtbl</tt><big>(</big><big>)</big><a class="headerlink" href="#eudtrglib.f_reseteudtbl" title="Permalink to this definition">¶</a></dt>
 <dd><p>Restore string table address. If you used custom string table, then you
 should call this function before trigger loop ends.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="eudtrg.f_initeudtbl">
-<tt class="descclassname">eudtrg.</tt><tt class="descname">f_initeudtbl</tt><big>(</big><big>)</big><a class="headerlink" href="#eudtrg.f_initeudtbl" title="Permalink to this definition">¶</a></dt>
+<dt id="eudtrglib.f_initeudtbl">
+<tt class="descclassname">eudtrglib.</tt><tt class="descname">f_initeudtbl</tt><big>(</big><big>)</big><a class="headerlink" href="#eudtrglib.f_initeudtbl" title="Permalink to this definition">¶</a></dt>
 <dd><p>Backup original string table address.</p>
 </dd></dl>
 
@@ -1557,8 +1557,8 @@ should call this function before trigger loop ends.</p>
 <div class="section" id="custom-graphic-grp">
 <h4>Custom graphic (.GRP)<a class="headerlink" href="#custom-graphic-grp" title="Permalink to this headline">¶</a></h4>
 <dl class="class">
-<dt id="eudtrg.EUDGrp">
-<em class="property">class </em><tt class="descclassname">eudtrg.</tt><tt class="descname">EUDGrp</tt><big>(</big><em>content</em><big>)</big><a class="headerlink" href="#eudtrg.EUDGrp" title="Permalink to this definition">¶</a></dt>
+<dt id="eudtrglib.EUDGrp">
+<em class="property">class </em><tt class="descclassname">eudtrglib.</tt><tt class="descname">EUDGrp</tt><big>(</big><em>content</em><big>)</big><a class="headerlink" href="#eudtrglib.EUDGrp" title="Permalink to this definition">¶</a></dt>
 <dd><p>Object wrapper for GRP</p>
 </dd></dl>
 
@@ -1567,8 +1567,8 @@ should call this function before trigger loop ends.</p>
 <div class="section" id="utility-functions">
 <h3>Utility functions<a class="headerlink" href="#utility-functions" title="Permalink to this headline">¶</a></h3>
 <dl class="function">
-<dt id="eudtrg.EPD">
-<tt class="descclassname">eudtrg.</tt><tt class="descname">EPD</tt><big>(</big><em>offset</em><big>)</big><a class="headerlink" href="#eudtrg.EPD" title="Permalink to this definition">¶</a></dt>
+<dt id="eudtrglib.EPD">
+<tt class="descclassname">eudtrglib.</tt><tt class="descname">EPD</tt><big>(</big><em>offset</em><big>)</big><a class="headerlink" href="#eudtrglib.EPD" title="Permalink to this definition">¶</a></dt>
 <dd><p>Offset to EPD player.</p>
 </dd></dl>
 
@@ -1579,8 +1579,8 @@ should call this function before trigger loop ends.</p>
 <div class="section" id="arithmetics">
 <h3>Arithmetics<a class="headerlink" href="#arithmetics" title="Permalink to this headline">¶</a></h3>
 <dl class="function">
-<dt id="eudtrg.f_mul">
-<tt class="descclassname">eudtrg.</tt><tt class="descname">f_mul</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="headerlink" href="#eudtrg.f_mul" title="Permalink to this definition">¶</a></dt>
+<dt id="eudtrglib.f_mul">
+<tt class="descclassname">eudtrglib.</tt><tt class="descname">f_mul</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="headerlink" href="#eudtrglib.f_mul" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1592,8 +1592,8 @@ should call this function before trigger loop ends.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="eudtrg.f_div">
-<tt class="descclassname">eudtrg.</tt><tt class="descname">f_div</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="headerlink" href="#eudtrg.f_div" title="Permalink to this definition">¶</a></dt>
+<dt id="eudtrglib.f_div">
+<tt class="descclassname">eudtrglib.</tt><tt class="descname">f_div</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="headerlink" href="#eudtrglib.f_div" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1608,8 +1608,8 @@ should call this function before trigger loop ends.</p>
 <div class="section" id="memory-i-o">
 <h3>Memory I/O<a class="headerlink" href="#memory-i-o" title="Permalink to this headline">¶</a></h3>
 <dl class="function">
-<dt id="eudtrg.f_epd">
-<tt class="descclassname">eudtrg.</tt><tt class="descname">f_epd</tt><big>(</big><em>addr</em><big>)</big><a class="headerlink" href="#eudtrg.f_epd" title="Permalink to this definition">¶</a></dt>
+<dt id="eudtrglib.f_epd">
+<tt class="descclassname">eudtrglib.</tt><tt class="descname">f_epd</tt><big>(</big><em>addr</em><big>)</big><a class="headerlink" href="#eudtrglib.f_epd" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert address to EPD Player value. Use <tt class="xref py py-func docutils literal"><span class="pre">EPD()</span></tt> instead to convert
 Expr to EPD player value.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -1625,16 +1625,16 @@ Expr to EPD player value.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="eudtrg.f_dwread">
-<tt class="descclassname">eudtrg.</tt><tt class="descname">f_dwread</tt><big>(</big><em>targetplayer</em><big>)</big><a class="headerlink" href="#eudtrg.f_dwread" title="Permalink to this definition">¶</a></dt>
+<dt id="eudtrglib.f_dwread">
+<tt class="descclassname">eudtrglib.</tt><tt class="descname">f_dwread</tt><big>(</big><em>targetplayer</em><big>)</big><a class="headerlink" href="#eudtrglib.f_dwread" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read dword from memory. This function can read any memory with read access.
 :param targetplayer: EPD Player for address to read.
 :returns: Memory content.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="eudtrg.f_dwwrite">
-<tt class="descclassname">eudtrg.</tt><tt class="descname">f_dwwrite</tt><big>(</big><em>targetplayer</em>, <em>value</em><big>)</big><a class="headerlink" href="#eudtrg.f_dwwrite" title="Permalink to this definition">¶</a></dt>
+<dt id="eudtrglib.f_dwwrite">
+<tt class="descclassname">eudtrglib.</tt><tt class="descname">f_dwwrite</tt><big>(</big><em>targetplayer</em>, <em>value</em><big>)</big><a class="headerlink" href="#eudtrglib.f_dwwrite" title="Permalink to this definition">¶</a></dt>
 <dd><p>Writes value to specified address.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1651,8 +1651,8 @@ Expr to EPD player value.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="eudtrg.f_dwbreak">
-<tt class="descclassname">eudtrg.</tt><tt class="descname">f_dwbreak</tt><big>(</big><em>number</em><big>)</big><a class="headerlink" href="#eudtrg.f_dwbreak" title="Permalink to this definition">¶</a></dt>
+<dt id="eudtrglib.f_dwbreak">
+<tt class="descclassname">eudtrglib.</tt><tt class="descname">f_dwbreak</tt><big>(</big><em>number</em><big>)</big><a class="headerlink" href="#eudtrglib.f_dwbreak" title="Permalink to this definition">¶</a></dt>
 <dd><p>Break dword into words &amp; dwords.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1674,9 +1674,9 @@ BYTE b[4];</dd>
 </dd></dl>
 
 <dl class="function">
-<dt id="eudtrg.f_repmovsd">
-<tt class="descclassname">eudtrg.</tt><tt class="descname">f_repmovsd</tt><big>(</big><em>dstepdp</em>, <em>srcepdp</em>, <em>copydwn</em><big>)</big><a class="headerlink" href="#eudtrg.f_repmovsd" title="Permalink to this definition">¶</a></dt>
-<dd><p>rep movsd equivilant in eudtrg. Copy dwords. Faster than f_memcpy.</p>
+<dt id="eudtrglib.f_repmovsd">
+<tt class="descclassname">eudtrglib.</tt><tt class="descname">f_repmovsd</tt><big>(</big><em>dstepdp</em>, <em>srcepdp</em>, <em>copydwn</em><big>)</big><a class="headerlink" href="#eudtrglib.f_repmovsd" title="Permalink to this definition">¶</a></dt>
+<dd><p>rep movsd equivilant in eudtrglib. Copy dwords. Faster than f_memcpy.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1693,9 +1693,9 @@ BYTE b[4];</dd>
 </dd></dl>
 
 <dl class="function">
-<dt id="eudtrg.f_memcpy">
-<tt class="descclassname">eudtrg.</tt><tt class="descname">f_memcpy</tt><big>(</big><em>dst</em>, <em>src</em>, <em>copylen</em><big>)</big><a class="headerlink" href="#eudtrg.f_memcpy" title="Permalink to this definition">¶</a></dt>
-<dd><p>memcpy equivilant in eudtrg. Copy bytes.</p>
+<dt id="eudtrglib.f_memcpy">
+<tt class="descclassname">eudtrglib.</tt><tt class="descname">f_memcpy</tt><big>(</big><em>dst</em>, <em>src</em>, <em>copylen</em><big>)</big><a class="headerlink" href="#eudtrglib.f_memcpy" title="Permalink to this definition">¶</a></dt>
+<dd><p>memcpy equivilant in eudtrglib. Copy bytes.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1712,9 +1712,9 @@ BYTE b[4];</dd>
 </dd></dl>
 
 <dl class="function">
-<dt id="eudtrg.f_strcpy">
-<tt class="descclassname">eudtrg.</tt><tt class="descname">f_strcpy</tt><big>(</big><em>dst</em>, <em>src</em><big>)</big><a class="headerlink" href="#eudtrg.f_strcpy" title="Permalink to this definition">¶</a></dt>
-<dd><p>strcpy equivilant in eudtrg. Copy C-style string.</p>
+<dt id="eudtrglib.f_strcpy">
+<tt class="descclassname">eudtrglib.</tt><tt class="descname">f_strcpy</tt><big>(</big><em>dst</em>, <em>src</em><big>)</big><a class="headerlink" href="#eudtrglib.f_strcpy" title="Permalink to this definition">¶</a></dt>
+<dd><p>strcpy equivilant in eudtrglib. Copy C-style string.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1734,8 +1734,8 @@ BYTE b[4];</dd>
 <div class="section" id="map-i-o-functions">
 <h2>Map I/O Functions<a class="headerlink" href="#map-i-o-functions" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
-<dt id="eudtrg.SaveMap">
-<tt class="descclassname">eudtrg.</tt><tt class="descname">SaveMap</tt><big>(</big><em>fname</em>, <em>roots</em><big>)</big><a class="headerlink" href="#eudtrg.SaveMap" title="Permalink to this definition">¶</a></dt>
+<dt id="eudtrglib.SaveMap">
+<tt class="descclassname">eudtrglib.</tt><tt class="descname">SaveMap</tt><big>(</big><em>fname</em>, <em>roots</em><big>)</big><a class="headerlink" href="#eudtrglib.SaveMap" title="Permalink to this definition">¶</a></dt>
 <dd><p>Save template map with EUDObjects &amp; various files.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1754,8 +1754,8 @@ will raise RuntimeError.</li>
 </dd></dl>
 
 <dl class="function">
-<dt id="eudtrg.LoadMap">
-<tt class="descclassname">eudtrg.</tt><tt class="descname">LoadMap</tt><big>(</big><em>fname</em><big>)</big><a class="headerlink" href="#eudtrg.LoadMap" title="Permalink to this definition">¶</a></dt>
+<dt id="eudtrglib.LoadMap">
+<tt class="descclassname">eudtrglib.</tt><tt class="descname">LoadMap</tt><big>(</big><em>fname</em><big>)</big><a class="headerlink" href="#eudtrglib.LoadMap" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load template map and read various data from it.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1778,7 +1778,7 @@ will raise RuntimeError.</li>
         <div class="sphinxsidebarwrapper">
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">eudtrg API Reference</a><ul>
+<li><a class="reference internal" href="#">eudtrglib API Reference</a><ul>
 <li><a class="reference internal" href="#expressions">Expressions</a><ul>
 <li><a class="reference internal" href="#base-classes">Base classes</a></li>
 <li><a class="reference internal" href="#basic-objects">Basic objects</a></li>
@@ -1845,7 +1845,7 @@ will raise RuntimeError.</li>
         <li class="right" >
           <a href="example/ex5.html" title="튜토리얼 5 : 기초적인 트리거 프로그래밍"
              >previous</a> |</li>
-        <li><a href="index.html">eudtrg 0.3-r1 documentation</a> &raquo;</li> 
+        <li><a href="index.html">eudtrglib 0.3-r1 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

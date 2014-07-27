@@ -1,11 +1,11 @@
 :Author: whyask37
 
 ====================
-eudtrg API Reference
+eudtrglib API Reference
 ====================
 
-This is eudtrg API Reference. API Reference aims to hold any information needed
-to use eudtrg properly. If you think that this reference lacks essential
+This is eudtrglib API Reference. API Reference aims to hold any information needed
+to use eudtrglib properly. If you think that this reference lacks essential
 information, is too vague, is written in bad grammar, or lacks anything, feel
 free to contact the author using whyask37@gmail.com.
 
@@ -13,24 +13,24 @@ free to contact the author using whyask37@gmail.com.
 Expressions
 ===========
 
-Expression is a basic calculation unit of eudtrg. Expression mean 'Object that
+Expression is a basic calculation unit of eudtrglib. Expression mean 'Object that
 can be evaluated to some number'.
 
 Base classes
 ------------
 
-.. autoclass:: eudtrg.Expr
+.. autoclass:: eudtrglib.Expr
     :members:
 
-.. autoclass:: eudtrg.EUDObject
+.. autoclass:: eudtrglib.EUDObject
     :members:
 
 Basic objects
 -------------
-.. autoclass:: eudtrg.Forward
+.. autoclass:: eudtrglib.Forward
     :members:
 
-.. autoclass:: eudtrg.Db
+.. autoclass:: eudtrglib.Db
     :members:
 
 
@@ -44,14 +44,14 @@ Trigger defines map logic.
 Functions/Classes on trigger
 ----------------------------
 
-.. autoclass:: eudtrg.Trigger
+.. autoclass:: eudtrglib.Trigger
     :members:
-.. autoclass:: eudtrg.Condition
+.. autoclass:: eudtrglib.Condition
     :members:
-.. autoclass:: eudtrg.Action
+.. autoclass:: eudtrglib.Action
     :members:
-.. autofunction:: eudtrg.Disabled
-.. autoclass:: eudtrg.NextTrigger
+.. autofunction:: eudtrglib.Disabled
+.. autoclass:: eudtrglib.NextTrigger
     :members:
 
 
@@ -62,8 +62,8 @@ Trigger scopes are used to specify scoping into triggers. Scopes groups
 triggers together. Triggers in the same scope are eligable for
 `nextptr auto linking`_.
 
-.. autofunction:: eudtrg.PushTriggerScope
-.. autofunction:: eudtrg.PopTriggerScope
+.. autofunction:: eudtrglib.PushTriggerScope
+.. autofunction:: eudtrglib.PopTriggerScope
 
 
 
@@ -76,8 +76,8 @@ intergal values. Consider following condition::
     Bring(Player1, AtLeast, 1, "Terran Marine", "Anywhere")
 
 Each field is parsed by enumeration parser : player field is parsed by
-:func:`eudtrg.ParsePlayer` function, unit field is parsed by
-:func:`eudtrg.ParseUnit` function. ::
+:func:`eudtrglib.ParsePlayer` function, unit field is parsed by
+:func:`eudtrglib.ParseUnit` function. ::
 
     Player1 -> ParsePlayer(Player1) = 0
     AtLeast -> ParseComparison(AtLeast) = 0
@@ -102,23 +102,23 @@ This code can be rewritten to::
 
 Or even better, ChangeUnitGraphics function can use ParseUnit internally.
 
-.. autofunction:: eudtrg.ParseSwitchState
-.. autofunction:: eudtrg.ParseScore
-.. autofunction:: eudtrg.ParseComparison
-.. autofunction:: eudtrg.ParsePropState
-.. autofunction:: eudtrg.ParseModifier
-.. autofunction:: eudtrg.ParseOrder
-.. autofunction:: eudtrg.ParseResource
-.. autofunction:: eudtrg.ParseCount
-.. autofunction:: eudtrg.ParseAllyStatus
-.. autofunction:: eudtrg.ParsePlayer
-.. autofunction:: eudtrg.ParseAIScript
-.. autofunction:: eudtrg.ParseSwitchAction
+.. autofunction:: eudtrglib.ParseSwitchState
+.. autofunction:: eudtrglib.ParseScore
+.. autofunction:: eudtrglib.ParseComparison
+.. autofunction:: eudtrglib.ParsePropState
+.. autofunction:: eudtrglib.ParseModifier
+.. autofunction:: eudtrglib.ParseOrder
+.. autofunction:: eudtrglib.ParseResource
+.. autofunction:: eudtrglib.ParseCount
+.. autofunction:: eudtrglib.ParseAllyStatus
+.. autofunction:: eudtrglib.ParsePlayer
+.. autofunction:: eudtrglib.ParseAIScript
+.. autofunction:: eudtrglib.ParseSwitchAction
 
-.. autofunction:: eudtrg.ParseUnit
-.. autofunction:: eudtrg.ParseLocation
-.. autofunction:: eudtrg.ParseString
-.. autofunction:: eudtrg.ParseProperty
+.. autofunction:: eudtrglib.ParseUnit
+.. autofunction:: eudtrglib.ParseLocation
+.. autofunction:: eudtrglib.ParseString
+.. autofunction:: eudtrglib.ParseProperty
 
 
 
@@ -128,30 +128,30 @@ Auxilary library
 Variable Table
 --------------
 
-.. autoclass:: eudtrg.EUDVTable
+.. autoclass:: eudtrglib.EUDVTable
     :members:
-.. autoclass:: eudtrg.EUDVariable
+.. autoclass:: eudtrglib.EUDVariable
     :members:
-.. autofunction:: eudtrg.EUDCreateVariables
-.. autofunction:: eudtrg.SeqCompute
-.. autofunction:: eudtrg.SetVariables
-.. autofunction:: eudtrg.VTProc
+.. autofunction:: eudtrglib.EUDCreateVariables
+.. autofunction:: eudtrglib.SeqCompute
+.. autofunction:: eudtrglib.SetVariables
+.. autofunction:: eudtrglib.VTProc
 
-.. autoclass:: eudtrg.EUDLightVariable
+.. autoclass:: eudtrglib.EUDLightVariable
     :members:
 
 
 Common control structures
 -------------------------
 
-.. autofunction:: eudtrg.DoActions
-.. autofunction:: eudtrg.EUDJump
-.. autofunction:: eudtrg.EUDJumpIf
-.. autofunction:: eudtrg.EUDJumpIfNot
-.. autofunction:: eudtrg.EUDBranch
+.. autofunction:: eudtrglib.DoActions
+.. autofunction:: eudtrglib.EUDJump
+.. autofunction:: eudtrglib.EUDJumpIf
+.. autofunction:: eudtrglib.EUDJumpIfNot
+.. autofunction:: eudtrglib.EUDBranch
 
-.. autofunction:: eudtrg.EUDFunc
-.. autofunction:: eudtrg.InitPlayerSwitch
+.. autofunction:: eudtrglib.EUDFunc
+.. autofunction:: eudtrglib.InitPlayerSwitch
 
 
 
@@ -161,23 +161,23 @@ Common objects
 String table
 ^^^^^^^^^^^^
 
-.. autoclass:: eudtrg.EUDTbl
+.. autoclass:: eudtrglib.EUDTbl
     :members:
-.. autofunction:: eudtrg.f_reseteudtbl
-.. autofunction:: eudtrg.f_initeudtbl
+.. autofunction:: eudtrglib.f_reseteudtbl
+.. autofunction:: eudtrglib.f_initeudtbl
 
 
 Custom graphic (.GRP)
 ^^^^^^^^^^^^^^^^^^^^^
 
-.. autoclass:: eudtrg.EUDGrp
+.. autoclass:: eudtrglib.EUDGrp
     :members:
 
 
 Utility functions
 -----------------
 
-.. autofunction:: eudtrg.EPD
+.. autofunction:: eudtrglib.EPD
 
 
 
@@ -187,26 +187,26 @@ Basic EUD Functions
 
 Arithmetics
 -----------
-.. autofunction:: eudtrg.f_mul
-.. autofunction:: eudtrg.f_div
+.. autofunction:: eudtrglib.f_mul
+.. autofunction:: eudtrglib.f_div
 
 Memory I/O
 ----------
-.. autofunction:: eudtrg.f_epd
-.. autofunction:: eudtrg.f_dwread
-.. autofunction:: eudtrg.f_dwwrite
-.. autofunction:: eudtrg.f_dwbreak
+.. autofunction:: eudtrglib.f_epd
+.. autofunction:: eudtrglib.f_dwread
+.. autofunction:: eudtrglib.f_dwwrite
+.. autofunction:: eudtrglib.f_dwbreak
 
-.. autofunction:: eudtrg.f_repmovsd
-.. autofunction:: eudtrg.f_memcpy
-.. autofunction:: eudtrg.f_strcpy
+.. autofunction:: eudtrglib.f_repmovsd
+.. autofunction:: eudtrglib.f_memcpy
+.. autofunction:: eudtrglib.f_strcpy
 
 
 Map I/O Functions
 =================
 
-.. autofunction:: eudtrg.SaveMap
-.. autofunction:: eudtrg.LoadMap
+.. autofunction:: eudtrglib.SaveMap
+.. autofunction:: eudtrglib.LoadMap
 
 
 

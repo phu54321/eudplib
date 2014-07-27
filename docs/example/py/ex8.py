@@ -1,4 +1,4 @@
-from eudtrg import *
+from eudtrglib import *
 
 LoadMap('basemap.scx')
 
@@ -86,7 +86,7 @@ c에서 a의 nextptr를 b로 설정해서 다음 트리거루프때 저글링이
     # c의 nextptr는 c 다음에 만들어진 Trigger()로 자동설정됨
 
 
-이와 같이 EUDJumpIf, EUDJumpIfNot, 나중에 다룰 EUDVTable, f_mul, f_div 등등 eudtrg 안에 있는 것들은
+이와 같이 EUDJumpIf, EUDJumpIfNot, 나중에 다룰 EUDVTable, f_mul, f_div 등등 eudtrglib 안에 있는 것들은
 모두 Trigger같이 기초적인 것들을 조합해서 만들어진 파이썬 함수/클래스 입니다.
 
 

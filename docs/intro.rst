@@ -1,6 +1,6 @@
 .. _introduction:
 
-eudtrg 소개
+eudtrglib 소개
 ===========
 
 eudtrg는 트리거를 수정하는 트리거를 쉽게 만들 수 있도록 해주는 일종의 트리거

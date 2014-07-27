@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #
-# eudtrg documentation build configuration file, created by
+# eudtrglib documentation build configuration file, created by
 # sphinx-quickstart on Thu Jul 17 12:05:12 2014.
 #
 # This file is execfile()d with the current directory set to its
@@ -49,7 +49,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = 'eudtrg'
+project = 'eudtrglib'
 copyright = '2014, whyask37'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -202,7 +202,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-  ('index', 'eudtrg.tex', 'eudtrg Documentation',
+  ('index', 'eudtrglib.tex', 'eudtrglib Documentation',
    'whyask37', 'manual'),
 ]
 
@@ -232,7 +232,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index', 'eudtrg', 'eudtrg Documentation',
+    ('index', 'eudtrglib', 'eudtrglib Documentation',
      ['whyask37'], 1)
 ]
 
@@ -246,8 +246,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-  ('index', 'eudtrg', 'eudtrg Documentation',
-   'whyask37', 'eudtrg', 'One line description of project.',
+  ('index', 'eudtrglib', 'eudtrglib Documentation',
+   'whyask37', 'eudtrglib', 'One line description of project.',
    'Miscellaneous'),
 ]
 
