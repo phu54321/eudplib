@@ -7,7 +7,7 @@
 먼저 스타가 트리거를 다루는 방식대로 eudtrg에서 트리거를 만들면 다음과 같습니다.
 '''
 
-from eudtrglib import *
+from eudtrg import *
 
 LoadMap("basemap.scx")
 

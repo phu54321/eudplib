@@ -1,4 +1,4 @@
-from eudtrglib import *
+from eudtrg import *
 
 UbconvUseCharset('cp949')
 

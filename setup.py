@@ -1,9 +1,9 @@
 from setuptools import setup, find_packages
-from eudtrglib import __version__
+from eudtrg import __version__
 
 
 setup(
-    name = "eudtrglib",
+    name = "eudtrg",
     version = __version__,
     packages = find_packages(),
     package_data = {

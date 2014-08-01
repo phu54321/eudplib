@@ -2,7 +2,7 @@
 EUDFunc 간단한 맛보기.
 '''
 
-from eudtrglib import *
+from eudtrg import *
 
 LoadMap('basemap.scx')
 

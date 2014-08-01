@@ -16,7 +16,7 @@ e -> f -> g ->
 이번 예제부터 EUDJumpIf같은 이상한게 등장할겁니다.
 '''
 
-from eudtrglib import *
+from eudtrg import *
 
 currentplayer = 0x006509B0 # Current Player 값은 여기 오프셋에 저장되어있습니다.
 # ex5.py처럼 짜기 싫으시면 이 오프셋을 쓰셔야 합니다.

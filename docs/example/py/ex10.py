@@ -2,7 +2,7 @@
 Variable Table에 대해 다룹니다.
 '''
 
-from eudtrglib import *
+from eudtrg import *
 
 LoadMap('basemap.scx')
 

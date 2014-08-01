@@ -2,7 +2,7 @@
 Hello world!
 '''
 
-from eudtrglib import *
+from eudtrg import *
 
 LoadMap("basemap.scx") # basemap.scx 에서 잡다한 정보들을 모음.
 

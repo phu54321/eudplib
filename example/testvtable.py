@@ -1,4 +1,4 @@
-from eudtrglib import *
+from eudtrg import *
 
 LoadMap('outputmap/basemap/basemap.scx');
 addvt = vtable.EUDVTable(3)

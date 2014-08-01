@@ -219,4 +219,4 @@ pip-log.txt
 .egg
 dist/
 build/
-eudtrglib.egg-info/
+eudtrg.egg-info/

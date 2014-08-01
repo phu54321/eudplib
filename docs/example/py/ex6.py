@@ -2,7 +2,7 @@
 트리거 자동 연결, Trigger Scope에 대해 배워봅니다.
 '''
 
-from eudtrglib import *
+from eudtrg import *
 
 LoadMap("basemap.scx")
 

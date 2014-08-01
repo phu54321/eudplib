@@ -1,9 +1,9 @@
-import eudtrglib
+import eudtrg
 import types
 import textwrap
 import re
 
-module_to_doc = eudtrglib
+module_to_doc = eudtrg
 
 exclude_types = [dict, str, types.ModuleType]
 exclude_names = ['__loader__', '__path__', '__spec__']
@@ -16,8 +16,8 @@ rstinputs = open('docs/api.rst', 'r', encoding = 'utf-8').read().split('\n')
 documented_functions = set()
 documented_classes = set()
 
-func_regex  = re.compile(r'\.\. autofunction:: +eudtrglib\.(.+)')
-class_regex = re.compile(r'\.\. autoclass:: +eudtrglib\.(.+)')
+func_regex  = re.compile(r'\.\. autofunction:: +eudtrg\.(.+)')
+class_regex = re.compile(r'\.\. autoclass:: +eudtrg\.(.+)')
 
 for line in rstinputs:
     func_match_result = func_regex.match(line)

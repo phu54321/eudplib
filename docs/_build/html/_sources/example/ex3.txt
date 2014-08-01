@@ -9,7 +9,7 @@
 
 ::
 
-    from eudtrglib import *
+    from eudtrg import *
 
     LoadMap("basemap.scx")
 

@@ -4,7 +4,7 @@ Collect all assertion statements & raises. Refer when creating documentation.
 
 import os
 
-root = 'eudtrglib/'
+root = 'eudtrg/'
 
 for dirname, _, filelist in os.walk(root):
     for fname in filelist:
