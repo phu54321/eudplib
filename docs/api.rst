@@ -1,5 +1,3 @@
-:Author: whyask37
-
 ====================
 eudtrg API Reference
 ====================
@@ -21,17 +19,21 @@ Base classes
 
 .. autoclass:: eudtrg.Expr
     :members:
+    :show-inheritance:
 
 .. autoclass:: eudtrg.EUDObject
     :members:
+    :show-inheritance:
 
 Basic objects
 -------------
 .. autoclass:: eudtrg.Forward
     :members:
+    :show-inheritance:
 
 .. autoclass:: eudtrg.Db
     :members:
+    :show-inheritance:
 
 
 
@@ -46,13 +48,17 @@ Functions/Classes on trigger
 
 .. autoclass:: eudtrg.Trigger
     :members:
+    :show-inheritance:
 .. autoclass:: eudtrg.Condition
     :members:
+    :show-inheritance:
 .. autoclass:: eudtrg.Action
     :members:
+    :show-inheritance:
 .. autofunction:: eudtrg.Disabled
 .. autoclass:: eudtrg.NextTrigger
     :members:
+    :show-inheritance:
 
 
 Trigger scope
@@ -130,8 +136,10 @@ Variable Table
 
 .. autoclass:: eudtrg.EUDVTable
     :members:
+    :show-inheritance:
 .. autoclass:: eudtrg.EUDVariable
     :members:
+    :show-inheritance:
 .. autofunction:: eudtrg.EUDCreateVariables
 .. autofunction:: eudtrg.SeqCompute
 .. autofunction:: eudtrg.SetVariables
@@ -139,6 +147,7 @@ Variable Table
 
 .. autoclass:: eudtrg.EUDLightVariable
     :members:
+    :show-inheritance:
 
 
 Common control structures
@@ -163,6 +172,7 @@ String table
 
 .. autoclass:: eudtrg.EUDTbl
     :members:
+    :show-inheritance:
 .. autofunction:: eudtrg.f_reseteudtbl
 .. autofunction:: eudtrg.f_initeudtbl
 
@@ -172,13 +182,14 @@ Custom graphic (.GRP)
 
 .. autoclass:: eudtrg.EUDGrp
     :members:
+    :show-inheritance:
 
 
 Utility functions
 -----------------
 
 .. autofunction:: eudtrg.EPD
-
+.. autofunction:: eudtrg.CreateOffsetMapping
 
 
 

@@ -27,6 +27,7 @@ from .dataspec.trigger import (
 
 from .dataspec.expr import Expr
 from .dataspec.bytedump import Db
+from .dataspec.struoffset import CreateOffsetMapping
 
 from .mapdata.maprw import LoadMap, SaveMap
 from .mapdata.unitprp import UnitProperty

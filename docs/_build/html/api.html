@@ -60,7 +60,8 @@ can be evaluated to some number&#8217;.</p>
 <dl class="class">
 <dt id="eudtrg.Expr">
 <em class="property">class </em><tt class="descclassname">eudtrg.</tt><tt class="descname">Expr</tt><a class="headerlink" href="#eudtrg.Expr" title="Permalink to this definition">¶</a></dt>
-<dd><p>Expression class. Handle expressions with unknown variables. Example:</p>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">builtins.object</span></tt></p>
+<p>Expression class. Handle expressions with unknown variables. Example:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">a</span> <span class="o">=</span> <span class="n">Forward</span><span class="p">()</span> <span class="c"># some unknown variable</span>
 <span class="n">b</span> <span class="o">=</span> <span class="n">Trigger</span><span class="p">()</span> <span class="c"># some unknown variable</span>
     <span class="c"># b&#39;s value is determined with a call of SaveMap()</span>
@@ -135,7 +136,8 @@ method.</td>
 <dl class="class">
 <dt id="eudtrg.EUDObject">
 <em class="property">class </em><tt class="descclassname">eudtrg.</tt><tt class="descname">EUDObject</tt><a class="headerlink" href="#eudtrg.EUDObject" title="Permalink to this definition">¶</a></dt>
-<dd><p>Base class for uploadable objects. Uploadable objects objects having data
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">eudtrg.base.dataspec.expr.Expr</span></tt></p>
+<p>Base class for uploadable objects. Uploadable objects objects having data
 to be inserted into SC Memory. Every EUDObject corresponds to one memory
 chunk inside SC Memory. EUDObject creates data to put inside memory chunk.</p>
 <p>For example, every trigger in Starcraft is just a 2408byte memory chunk.
@@ -149,7 +151,8 @@ byte data to put inside it.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">What this object should evaluate to. Default: Address of object.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">What this object should evaluate to. Default: Address of
+object.</td>
 </tr>
 </tbody>
 </table>
@@ -176,7 +179,8 @@ byte data to put inside it.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">List of Expr instances this object depends on. Default: Empty list.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">List of Expr instances this object depends on. Default:
+Empty list.</td>
 </tr>
 </tbody>
 </table>
@@ -228,7 +232,8 @@ called.</p>
 <dl class="class">
 <dt id="eudtrg.Forward">
 <em class="property">class </em><tt class="descclassname">eudtrg.</tt><tt class="descname">Forward</tt><a class="headerlink" href="#eudtrg.Forward" title="Permalink to this definition">¶</a></dt>
-<dd><p>Forward declaration for expressions. Example:</p>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">eudtrg.base.dataspec.expr.Expr</span></tt></p>
+<p>Forward declaration for expressions. Example:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">b</span> <span class="o">=</span> <span class="n">Forward</span><span class="p">()</span> <span class="c"># Forward declaration</span>
 <span class="n">a</span> <span class="o">=</span> <span class="n">Trigger</span><span class="p">(</span> <span class="n">nextptr</span> <span class="o">=</span> <span class="n">b</span> <span class="p">)</span> <span class="c"># b is defined here, so no error occurs.</span>
 <span class="n">b</span> <span class="o">&lt;&lt;</span> <span class="n">Trigger</span><span class="p">(</span> <span class="n">nextptr</span> <span class="o">=</span> <span class="n">a</span> <span class="p">)</span> <span class="c"># put in value later.</span>
@@ -275,7 +280,8 @@ expressions afterwards.</p>
 <dl class="class">
 <dt id="eudtrg.Db">
 <em class="property">class </em><tt class="descclassname">eudtrg.</tt><tt class="descname">Db</tt><big>(</big><em>content</em><big>)</big><a class="headerlink" href="#eudtrg.Db" title="Permalink to this definition">¶</a></dt>
-<dd><p>Db object inserts binary data into starcraft memory. Db object evaluates to
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">eudtrg.base.dataspec.eudobj.EUDObject</span></tt></p>
+<p>Db object inserts binary data into starcraft memory. Db object evaluates to
 address where bytes are stored.</p>
 </dd></dl>
 
@@ -289,7 +295,8 @@ address where bytes are stored.</p>
 <dl class="class">
 <dt id="eudtrg.Trigger">
 <em class="property">class </em><tt class="descclassname">eudtrg.</tt><tt class="descname">Trigger</tt><big>(</big><em>nextptr=None</em>, <em>conditions=</em>, <span class="optional">[</span><span class="optional">]</span><em>actions=</em>, <span class="optional">[</span><span class="optional">]</span><em>preserved=True</em><big>)</big><a class="headerlink" href="#eudtrg.Trigger" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="docutils">
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">eudtrg.base.dataspec.eudobj.EUDObject</span></tt></p>
+<dl class="docutils">
 <dt>Object representing trigger. Trigger has following fields</dt>
 <dd><ul class="first last simple">
 <li>nextptr : Pointer to next executed trigger.</li>
@@ -303,7 +310,8 @@ address where bytes are stored.</p>
 <dl class="class">
 <dt id="eudtrg.Condition">
 <em class="property">class </em><tt class="descclassname">eudtrg.</tt><tt class="descname">Condition</tt><big>(</big><em>locid</em>, <em>player</em>, <em>amount</em>, <em>unitid</em>, <em>comparison</em>, <em>condtype</em>, <em>restype</em>, <em>flags</em><big>)</big><a class="headerlink" href="#eudtrg.Condition" title="Permalink to this definition">¶</a></dt>
-<dd><p>Condition class.</p>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">eudtrg.base.dataspec.expr.Expr</span></tt></p>
+<p>Condition class.</p>
 <p>Memory layout:</p>
 <blockquote>
 <div><table border="1" class="docutils">
@@ -374,7 +382,8 @@ address where bytes are stored.</p>
 <dl class="class">
 <dt id="eudtrg.Action">
 <em class="property">class </em><tt class="descclassname">eudtrg.</tt><tt class="descname">Action</tt><big>(</big><em>locid1</em>, <em>strid</em>, <em>wavid</em>, <em>time</em>, <em>player1</em>, <em>player2</em>, <em>unitid</em>, <em>acttype</em>, <em>amount</em>, <em>flags</em><big>)</big><a class="headerlink" href="#eudtrg.Action" title="Permalink to this definition">¶</a></dt>
-<dd><p>Action class.</p>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">eudtrg.base.dataspec.expr.Expr</span></tt></p>
+<p>Action class.</p>
 <p>Memory layout.</p>
 <blockquote>
 <div><table border="1" class="docutils">
@@ -443,7 +452,7 @@ address where bytes are stored.</p>
 <td>EPD(act)+7</td>
 </tr>
 <tr class="row-even"><td>+1D</td>
-<td>internal[3]</td>
+<td>internal[3</td>
 <td>&nbsp;</td>
 <td>&nbsp;</td>
 </tr>
@@ -472,7 +481,8 @@ address where bytes are stored.</p>
 <dl class="class">
 <dt id="eudtrg.NextTrigger">
 <em class="property">class </em><tt class="descclassname">eudtrg.</tt><tt class="descname">NextTrigger</tt><a class="headerlink" href="#eudtrg.NextTrigger" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create reference to next declared trigger.</p>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">eudtrg.base.dataspec.expr.Expr</span></tt></p>
+<p>Create reference to next declared trigger.</p>
 </dd></dl>
 
 </div>
@@ -852,7 +862,8 @@ property ID.</td>
 <dl class="class">
 <dt id="eudtrg.EUDVTable">
 <em class="property">class </em><tt class="descclassname">eudtrg.</tt><tt class="descname">EUDVTable</tt><big>(</big><em>varn</em><big>)</big><a class="headerlink" href="#eudtrg.EUDVTable" title="Permalink to this definition">¶</a></dt>
-<dd><p>Full Variable table. EUDVTable stores <tt class="xref py py-class docutils literal"><span class="pre">EUDVariable</span></tt> objects.
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">eudtrg.base.dataspec.trigger.Trigger</span></tt></p>
+<p>Full Variable table. EUDVTable stores <tt class="xref py py-class docutils literal"><span class="pre">EUDVariable</span></tt> objects.
 EUDVTable serves as a key component of trigger programming.</p>
 <blockquote>
 <div>vt = EUDVTable(3)
@@ -880,7 +891,8 @@ variable, return it.</td>
 <dl class="class">
 <dt id="eudtrg.EUDVariable">
 <em class="property">class </em><tt class="descclassname">eudtrg.</tt><tt class="descname">EUDVariable</tt><big>(</big><em>vartrigger</em>, <em>originvt</em><big>)</big><a class="headerlink" href="#eudtrg.EUDVariable" title="Permalink to this definition">¶</a></dt>
-<dd><p>Full variable.</p>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">builtins.object</span></tt></p>
+<p>Full variable.</p>
 <dl class="method">
 <dt id="eudtrg.EUDVariable.AddNumber">
 <tt class="descname">AddNumber</tt><big>(</big><em>number</em><big>)</big><a class="headerlink" href="#eudtrg.EUDVariable.AddNumber" title="Permalink to this definition">¶</a></dt>
@@ -1090,7 +1102,7 @@ will yield 0.</p>
 <dl class="function">
 <dt id="eudtrg.EUDCreateVariables">
 <tt class="descclassname">eudtrg.</tt><tt class="descname">EUDCreateVariables</tt><big>(</big><em>varn</em><big>)</big><a class="headerlink" href="#eudtrg.EUDCreateVariables" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create (varn) <tt class="xref py py-class docutils literal"><span class="pre">EUDVariables</span></tt>. Returned variables are not guarranted 
+<dd><p>Create (varn) <tt class="xref py py-class docutils literal"><span class="pre">EUDVariables</span></tt>. Returned variables are not guarranted
 to be in the same variable table.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1218,14 +1230,42 @@ yield 0.</p>
 <dt id="eudtrg.VTProc">
 <tt class="descclassname">eudtrg.</tt><tt class="descname">VTProc</tt><big>(</big><em>vt</em>, <em>actions</em><big>)</big><a class="headerlink" href="#eudtrg.VTProc" title="Permalink to this definition">¶</a></dt>
 <dd><p>Shortcut for <tt class="xref py py-class docutils literal"><span class="pre">EUDVTable</span></tt> calculation. VTProc automatically inserts
-nextptr manipulation triggers, so you wouldn&#8217;t have to 
-:param actions: Actions to execute</p>
+nextptr manipulation triggers, so you wouldn&#8217;t have to write them every
+time.</p>
+<p>Before:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">t</span> <span class="o">=</span> <span class="n">Forward</span><span class="p">()</span>
+<span class="n">Trigger</span><span class="p">(</span>
+    <span class="n">nextptr</span> <span class="o">=</span> <span class="n">vt</span><span class="p">,</span>
+    <span class="n">actions</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">a</span><span class="o">.</span><span class="n">QueueSetTo</span><span class="p">(</span><span class="n">EPD</span><span class="p">(</span><span class="mh">0x58A364</span><span class="p">)),</span>
+        <span class="n">SetNextPtr</span><span class="p">(</span><span class="n">vt</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span>
+    <span class="p">]</span>
+<span class="p">)</span>
+
+<span class="n">t</span> <span class="o">=</span> <span class="n">NextTrigger</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>After:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">VTProc</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="p">[</span>
+    <span class="n">a</span><span class="o">.</span><span class="n">QueueSetTo</span><span class="p">(</span><span class="n">EPD</span><span class="p">(</span><span class="mh">0x58A364</span><span class="p">))</span>
+<span class="p">])</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>actions</strong> &#8211; Actions to execute</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="class">
 <dt id="eudtrg.EUDLightVariable">
 <em class="property">class </em><tt class="descclassname">eudtrg.</tt><tt class="descname">EUDLightVariable</tt><a class="headerlink" href="#eudtrg.EUDLightVariable" title="Permalink to this definition">¶</a></dt>
-<dd><p>Light variable. EUDLightVariable occupies only 4 bytes.</p>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">builtins.object</span></tt></p>
+<p>Light variable. EUDLightVariable occupies only 4 bytes.</p>
 <dl class="method">
 <dt id="eudtrg.EUDLightVariable.AddNumber">
 <tt class="descname">AddNumber</tt><big>(</big><em>number</em><big>)</big><a class="headerlink" href="#eudtrg.EUDLightVariable.AddNumber" title="Permalink to this definition">¶</a></dt>
@@ -1459,7 +1499,7 @@ be recursive.</p>
 <span class="n">f_mul</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span> <span class="c"># Error. c_int is neither EUDVariable nor Expr.</span>
 </pre></div>
 </div>
-<p>EUD Function may return several return values. Return values are 
+<p>EUD Function may return several return values. Return values are
 overwritten after every function call, so users should store it with
 <tt class="xref py py-func docutils literal"><span class="pre">SetVariables()</span></tt> or <tt class="xref py py-func docutils literal"><span class="pre">SeqCompute()</span></tt> if they need it.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">SeqCompute</span><span class="p">(</span><span class="n">local_variable</span><span class="p">,</span> <span class="n">f_function</span><span class="p">())</span> <span class="c"># store return value</span>
@@ -1467,7 +1507,7 @@ overwritten after every function call, so users should store it with
 <span class="n">f_function</span><span class="p">()</span> <span class="c"># local_variable still presists its value.</span>
 </pre></div>
 </div>
-<p>If returned values won&#8217;t be used after another function call, users don&#8217;t 
+<p>If returned values won&#8217;t be used after another function call, users don&#8217;t
 have to store it.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">var</span> <span class="o">=</span> <span class="n">f_function</span><span class="p">()</span>
 
@@ -1516,7 +1556,8 @@ Starting trigger may be None if the player won&#8217;t execute any trigger.</td>
 <dl class="class">
 <dt id="eudtrg.EUDTbl">
 <em class="property">class </em><tt class="descclassname">eudtrg.</tt><tt class="descname">EUDTbl</tt><a class="headerlink" href="#eudtrg.EUDTbl" title="Permalink to this definition">¶</a></dt>
-<dd><p>Custom string table.</p>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">eudtrg.base.dataspec.eudobj.EUDObject</span></tt></p>
+<p>Custom string table.</p>
 <dl class="method">
 <dt id="eudtrg.EUDTbl.SetAsDefault">
 <tt class="descname">SetAsDefault</tt><big>(</big><big>)</big><a class="headerlink" href="#eudtrg.EUDTbl.SetAsDefault" title="Permalink to this definition">¶</a></dt>
@@ -1559,7 +1600,8 @@ should call this function before trigger loop ends.</p>
 <dl class="class">
 <dt id="eudtrg.EUDGrp">
 <em class="property">class </em><tt class="descclassname">eudtrg.</tt><tt class="descname">EUDGrp</tt><big>(</big><em>content</em><big>)</big><a class="headerlink" href="#eudtrg.EUDGrp" title="Permalink to this definition">¶</a></dt>
-<dd><p>Object wrapper for GRP</p>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">eudtrg.base.dataspec.eudobj.EUDObject</span></tt></p>
+<p>Object wrapper for GRP</p>
 </dd></dl>
 
 </div>
@@ -1570,6 +1612,46 @@ should call this function before trigger loop ends.</p>
 <dt id="eudtrg.EPD">
 <tt class="descclassname">eudtrg.</tt><tt class="descname">EPD</tt><big>(</big><em>offset</em><big>)</big><a class="headerlink" href="#eudtrg.EPD" title="Permalink to this definition">¶</a></dt>
 <dd><p>Offset to EPD player.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="eudtrg.CreateOffsetMapping">
+<tt class="descclassname">eudtrg.</tt><tt class="descname">CreateOffsetMapping</tt><big>(</big><em>ctypes_class</em>, <em>offset</em><big>)</big><a class="headerlink" href="#eudtrg.CreateOffsetMapping" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create offset calculator based on ctypes class.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">A</span><span class="p">(</span><span class="n">Structure</span><span class="p">):</span>
+    <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="s">&#39;x&#39;</span><span class="p">,</span> <span class="n">c_int</span><span class="p">),</span>
+        <span class="p">(</span><span class="s">&#39;y&#39;</span><span class="p">,</span> <span class="n">c_int</span><span class="p">)</span>
+    <span class="p">]</span>
+
+<span class="k">class</span> <span class="nc">B</span><span class="p">(</span><span class="n">Structure</span><span class="p">):</span>
+    <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="s">&#39;p&#39;</span><span class="p">,</span> <span class="n">A</span> <span class="o">*</span> <span class="mi">10</span> <span class="o">*</span> <span class="mi">10</span><span class="p">),</span>
+        <span class="p">(</span><span class="s">&#39;q&#39;</span><span class="p">,</span> <span class="n">c_int</span> <span class="o">*</span> <span class="mi">10</span> <span class="o">*</span> <span class="mi">10</span><span class="p">),</span>
+        <span class="p">(</span><span class="s">&#39;r&#39;</span><span class="p">,</span> <span class="n">c_int</span><span class="p">)</span>
+    <span class="p">]</span>
+
+<span class="c"># B = template ctypes class, 0 = Offset of B instance</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">CreateOffsetMapping</span><span class="p">(</span><span class="n">B</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">p</span><span class="p">[</span><span class="mi">3</span><span class="p">][</span><span class="mi">5</span><span class="p">]</span><span class="o">.</span><span class="n">y</span><span class="p">)</span> <span class="c"># prints (284, 0)</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>ctypes_class</strong> &#8211; Template ctypes Structure class to be used for offset
+calculation.</li>
+<li><strong>offset</strong> &#8211; Offset of where your structure will reside in.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Offset mapper for your structure.</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>

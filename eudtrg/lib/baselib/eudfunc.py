@@ -10,8 +10,8 @@ import inspect
 
 def EUDFunc(fdecl_func):
     '''
-    Generates EUD Function. Usually used as decorators. EUD Function cannot
-    be recursive. ::
+    Generates EUD Function. Usually used as decorators. EUD Function shouldn't
+    be applied to recursive functions. ::
 
         @EUDFunc
         def f_add(a, b):

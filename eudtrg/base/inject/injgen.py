@@ -1,4 +1,5 @@
 from eudtrg import LICENSE
+from ctypes import *
 
 from ..utils.binio import *
 from ..utils.sctbl import TBL
@@ -9,18 +10,22 @@ One button trigger injector.
  - root            : First trigger to be executed.
 """
 
-def GenerateInjector(chkt, roots):
+def GenerateInjector(chkt, payload):
     # Get needed sections
     section_str = chkt.getsection('STR')
     section_mrgn = chkt.getsection('MRGN')
 
     # Insert notification string
-    # This is kinda weird, since we're unpacking STR table that were just been packed at SaveMap
-    # I couldn't find a better way to get string number of 'This map requires EUD Action Enabler to run.'
-    # while not creating the same string inside SaveMap. This works, so it's done.
+    # This is kinda weird. We've just unpacking STR table at SaveMap. I
+    # couldn't find a better way to get string number of 'This map requires EUD
+    # Action Enabler to run.' while not creating the same string inside
+    # SaveMap. This works, so it's ok.
+
     stb = TBL(section_str)
     noneuda_notify = stb.GetStringIndex('This map requires EUD Action Enabler to run.')
     section_str = stb.SaveTBL()
+
+    
 
     '''
     What we'll do:
@@ -52,7 +57,6 @@ def GenerateInjector(chkt, roots):
     }
     *(DWORD*)(mrgn + 8 + 320 + 2048) = 4; // Preserve Trigger
 
-    
     // 3. Init PRT Applier
     for(int i = 0 ; i < 32 ; i++) {
         *(DWORD*)(mrgn + 8 + 320 + 32*i + 16) = EPD(str + payload_offset);
@@ -69,3 +73,16 @@ def GenerateInjector(chkt, roots):
     if(player == i) *(DWORD*)(
 
     '''
+
+    pts = 0x51A280
+    mrgn = 0x58DC60
+
+    # Backup pts to known places.
+    BackupPTS(stage = 0)
+    CreateMRGNBase(stage = 1)
+    LinkMRGNTRIG(stage = 2)
+    InitPrtApplier(stage = 3)
+    RunPrtApplier(payload.prttable, stage = 4)
+    InitOrtApplier(stage = 5)
+    RunPRTApplier(payload.orttable, stage = 6)
+    InitTriggerEnabler(stage = 7)
