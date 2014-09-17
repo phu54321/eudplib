@@ -24,7 +24,7 @@ class TBL:
         if content is not None:
             self.LoadData(content)
 
-    def LoadTBL(self, content):
+    def LoadData(self, content):
         self._datatb.clear()
         self._stringmap.clear()
         self._capacity = 2

@@ -23,6 +23,8 @@ class NextTrigger(Expr):
     '''
 
     def __init__(self):
+        super().__init__()
+
         self._trg = triggerend
         _next_triggers.append(self)
 
@@ -414,13 +416,13 @@ class triggerend_class(Expr):
     '''
 
     def __init__(self):
-        pass
+        super().__init__()
 
-    def GetDependencyList():
+    def GetDependencyList(self):
         return []
 
-    def EvalImpl():
-        return 0xFFFFFFFF
+    def EvalImpl(self):
+        return RelocatableInt(0xFFFFFFFF, 0)
 
 triggerend = triggerend_class()
 

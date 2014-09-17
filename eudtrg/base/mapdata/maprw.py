@@ -61,7 +61,7 @@ def LoadMap(fname):
     chk.delsection('UPUS')  # related to uprp
 
     # Load STR section
-    strtable.LoadTBL(_chk.getsection('STR'))
+    strtable.LoadData(_chk.getsection('STR'))
 
     # Init nametables
     locnametable.clear()
@@ -109,7 +109,7 @@ def LoadMap(fname):
     uprpdict.clear()
 
 
-def SaveMap(fname, roots):
+def SaveMap(fname, root):
     '''
     Save template map with EUDObjects & various files.
 
@@ -131,7 +131,7 @@ def SaveMap(fname, roots):
     _chk.setsection('STR', strcontent)
 
     # Generate injector
-    injgen.GenerateInjector(_chk, root, eudenabler_needed)
+    injgen.GenerateInjector(_chk, root)
 
     # optimize & dump
     _chk.optimize()
@@ -144,10 +144,6 @@ def SaveMap(fname, roots):
         raise RuntimeError('Cannot open output file \'%s\'.' % _mpqcontent)
 
     mw.PutFile('staredit\\scenario.chk', rawchk)
-
-    # Put in additional files
-    for fname, data in additionalfiles.items():
-        mw.PutFile(fname, data)
 
     # Compact & close
     mw.Compact()

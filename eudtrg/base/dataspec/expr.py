@@ -203,11 +203,7 @@ def GetDependencyList(item):
 
 def Evaluate(x):
     try:
-        for i in range(10000):  # 10000 is some very large number.
-            return x.Evaluate()  # Exits when evaluate fails
-
-        raise RuntimeError(
-            'Infinite evaluation loop detected with object %s' % str(x))
+        return x.Evaluate()
 
     except AttributeError:
         if type(x) is int:

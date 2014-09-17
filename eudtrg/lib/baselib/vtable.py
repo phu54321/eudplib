@@ -24,18 +24,23 @@ class EUDVTable(Trigger):
         :param varn: Number of arguments EUDVTable should have. 0 < varn <= 32
         :raises AssertionError: varn <= 0 or varn > 32.
         '''
-        assert varn > 0, 'EUDVTable should have at least 1 variables.'
+        assert varn >= 0, "argn can't be less than 0."
         assert varn <= 32, (
             'EUDVTable with more than 32 variables are not supported')
+
+        if varn == 0:
+            self._var = []
+            return
 
         PushTriggerScope()
         variables = [Forward() for _ in range(varn)]
 
         super().__init__(
             actions=
-                [variables[i] << Disabled(SetDeaths(0, SetTo, 0, 0)) for i in range(varn)] +
-                [SetDeaths(EPD(variables[i] + 28), SetTo, 2, 0)
-                 for i in range(varn)]
+            [variables[i] << Disabled(SetDeaths(0, SetTo, 0, 0))
+                for i in range(varn)] +
+            [SetDeaths(EPD(variables[i] + 28), SetTo, 2, 0)
+                for i in range(varn)]
         )
 
         self._var = [EUDVariable(var, self) for var in variables]
