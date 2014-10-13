@@ -19,34 +19,14 @@ freely, subject to the following restrictions:
    distribution.
 '''
 
-from eudtrg.base import (
-    Trigger,
-    PushTriggerScope,
-    PopTriggerScope,
-    Forward,
-    Disabled,
-    SetDeaths,
-    SetTo,
-    EPD,
-    List2Assignable,
-    SetMemory,
-    Memory,
-    Db,
-    AtLeast,
-    AtMost,
-    Exactly,
-    Add,
-    Subtract,
-    SetNextPtr,
-    NextTrigger
-)
+from eudtrg import base as b
 
 from ..auxfunc import muldiv
 from . import varassign as va
 from . import vbuffer as vb
 
 
-class EUDVTable(Trigger):
+class EUDVTable(b.Trigger):
 
     '''
     Full Variable table. EUDVTable stores :class:`EUDVariable` objects.
@@ -76,26 +56,26 @@ class EUDVTable(Trigger):
             self._var = []
             return
 
-        PushTriggerScope()
-        variables = [Forward() for _ in range(varn)]
+        b.PushTriggerScope()
+        variables = [b.Forward() for _ in range(varn)]
 
         super().__init__(
             actions=
-            [variables[i] << Disabled(SetDeaths(0, SetTo, 0, 0))
+            [variables[i] << b.Disabled(b.SetDeaths(0, b.SetTo, 0, 0))
                 for i in range(varn)] +
-            [SetDeaths(EPD(variables[i] + 28), SetTo, 2, 0)
+            [b.SetDeaths(b.EPD(variables[i] + 28), b.SetTo, 2, 0)
                 for i in range(varn)]
         )
 
         self._var = [EUDVariable(var, self) for var in variables]
-        PopTriggerScope()
+        b.PopTriggerScope()
 
     def GetVariables(self):
         '''
         :returns: List of variables inside EUDVTable. If there is only one
             variable, return it.
         '''
-        return List2Assignable(self._var)
+        return b.List2Assignable(self._var)
 
 
 class EUDLightVariable:
@@ -105,7 +85,7 @@ class EUDLightVariable:
     '''
 
     def __init__(self):
-        self._memory = Db(b'\0\0\0\0')
+        self._memory = b.Db(b'\0\0\0\0')
 
     def GetMemoryAddr(self):
         '''
@@ -119,7 +99,7 @@ class EUDLightVariable:
         :returns: :class:`Condition` for checking if the variable is at least
             given number.
         '''
-        return Memory(self.GetMemoryAddr(), AtLeast, number)
+        return b.Memory(self.GetMemoryAddr(), b.AtLeast, number)
 
     def AtMost(self, number):
         '''
@@ -127,7 +107,7 @@ class EUDLightVariable:
         :returns: :class:`Condition` for checking if the variable is at most
             given number.
         '''
-        return Memory(self.GetMemoryAddr(), AtMost, number)
+        return b.Memory(self.GetMemoryAddr(), b.AtMost, number)
 
     def Exactly(self, number):
         '''
@@ -135,21 +115,21 @@ class EUDLightVariable:
         :returns: :class:`Condition` for checking if the variable is at exactly
             given number.
         '''
-        return Memory(self.GetMemoryAddr(), Exactly, number)
+        return b.Memory(self.GetMemoryAddr(), b.Exactly, number)
 
     def SetNumber(self, number):
         '''
         :param number: Number to assign.
         :returns: :class:`Action` for assigning given number to variable.
         '''
-        return SetMemory(self.GetMemoryAddr(), SetTo, number)
+        return b.SetMemory(self.GetMemoryAddr(), b.SetTo, number)
 
     def AddNumber(self, number):
         '''
         :param number: Number to add.
         :returns: :class:`Action` for adding given number to variable.
         '''
-        return SetMemory(self.GetMemoryAddr(), Add, number)
+        return b.SetMemory(self.GetMemoryAddr(), b.Add, number)
 
     def SubtractNumber(self, number):
         '''
@@ -160,7 +140,7 @@ class EUDLightVariable:
             Subtraction won't underflow. Subtracting values with bigger one
             will yield 0.
         '''
-        return SetMemory(self.GetMemoryAddr(), Subtract, number)
+        return b.SetMemory(self.GetMemoryAddr(), b.Subtract, number)
 
 
 class EUDVariable:
@@ -191,7 +171,7 @@ class EUDVariable:
         :returns: :class:`Condition` for checking if the variable is at least
             given number.
         '''
-        return Memory(self.GetMemoryAddr(), AtLeast, number)
+        return b.Memory(self.GetMemoryAddr(), b.AtLeast, number)
 
     def AtMost(self, number):
         '''
@@ -199,7 +179,7 @@ class EUDVariable:
         :returns: :class:`Condition` for checking if the variable is at most
             given number.
         '''
-        return Memory(self.GetMemoryAddr(), AtMost, number)
+        return b.Memory(self.GetMemoryAddr(), b.AtMost, number)
 
     def Exactly(self, number):
         '''
@@ -207,21 +187,21 @@ class EUDVariable:
         :returns: :class:`Condition` for checking if the variable is at exactly
             given number.
         '''
-        return Memory(self.GetMemoryAddr(), Exactly, number)
+        return b.Memory(self.GetMemoryAddr(), b.Exactly, number)
 
     def SetNumber(self, number):
         '''
         :param number: Number to assign.
         :returns: :class:`Action` for assigning given number to variable.
         '''
-        return SetMemory(self.GetMemoryAddr(), SetTo, number)
+        return b.SetMemory(self.GetMemoryAddr(), b.SetTo, number)
 
     def AddNumber(self, number):
         '''
         :param number: Number to add.
         :returns: :class:`Action` for adding given number to variable.
         '''
-        return SetMemory(self.GetMemoryAddr(), Add, number)
+        return b.SetMemory(self.GetMemoryAddr(), b.Add, number)
 
     def SubtractNumber(self, number):
         '''
@@ -232,7 +212,7 @@ class EUDVariable:
             Subtraction won't underflow. Subtracting values with bigger one
             will yield 0.
         '''
-        return SetMemory(self.GetMemoryAddr(), Subtract, number)
+        return b.SetMemory(self.GetMemoryAddr(), b.Subtract, number)
 
     def QueueAssignTo(self, dest):
         '''
@@ -247,12 +227,12 @@ class EUDVariable:
         :returns: List of :class:`Action` needed for queueing assignment.
         '''
         if isinstance(dest, EUDVariable) or isinstance(dest, EUDLightVariable):
-            dest = EPD(dest.GetMemoryAddr())
+            dest = b.EPD(dest.GetMemoryAddr())
 
         return [
-            SetDeaths(EPD(self._varact + 16), SetTo, dest, 0),
-            SetDeaths(EPD(self._varact + 24), SetTo, 0x072D0000, 0),
-            SetDeaths(EPD(self._varact + 28), SetTo, 0, 0)
+            b.SetDeaths(b.EPD(self._varact + 16), b.SetTo, dest, 0),
+            b.SetDeaths(b.EPD(self._varact + 24), b.SetTo, 0x072D0000, 0),
+            b.SetDeaths(b.EPD(self._varact + 28), b.SetTo, 0, 0)
         ]
 
     def QueueAddTo(self, dest):
@@ -268,12 +248,12 @@ class EUDVariable:
         :returns: List of :class:`Action` needed for queueing addition.
         '''
         if isinstance(dest, EUDVariable) or isinstance(dest, EUDLightVariable):
-            dest = EPD(dest.GetMemoryAddr())
+            dest = b.EPD(dest.GetMemoryAddr())
 
         return [
-            SetDeaths(EPD(self._varact + 16), SetTo, dest, 0),
-            SetDeaths(EPD(self._varact + 24), SetTo, 0x082D0000, 0),
-            SetDeaths(EPD(self._varact + 28), SetTo, 0, 0)
+            b.SetDeaths(b.EPD(self._varact + 16), b.SetTo, dest, 0),
+            b.SetDeaths(b.EPD(self._varact + 24), b.SetTo, 0x082D0000, 0),
+            b.SetDeaths(b.EPD(self._varact + 28), b.SetTo, 0, 0)
         ]
 
     def QueueSubtractTo(self, dest):
@@ -293,12 +273,12 @@ class EUDVariable:
             will yield 0.
         '''
         if isinstance(dest, EUDVariable) or isinstance(dest, EUDLightVariable):
-            dest = EPD(dest.GetMemoryAddr())
+            dest = b.EPD(dest.GetMemoryAddr())
 
         return [
-            SetDeaths(EPD(self._varact + 16), SetTo, dest, 0),
-            SetDeaths(EPD(self._varact + 24), SetTo, 0x092D0000, 0),
-            SetDeaths(EPD(self._varact + 28), SetTo, 0, 0)
+            b.SetDeaths(b.EPD(self._varact + 16), b.SetTo, dest, 0),
+            b.SetDeaths(b.EPD(self._varact + 24), b.SetTo, 0x092D0000, 0),
+            b.SetDeaths(b.EPD(self._varact + 28), b.SetTo, 0, 0)
         ]
 
     '''
@@ -308,7 +288,7 @@ class EUDVariable:
     def __add__(self, other):
         t = CreateTempVariable()
         va.SeqCompute([
-            (t, SetTo, self),
+            (t, b.SetTo, self),
             (t. Add, other)
         ])
         return t
@@ -319,16 +299,16 @@ class EUDVariable:
     def __sub__(self, other):
         t = CreateTempVariable()
         va.SeqCompute([
-            (t, SetTo, self),
-            (t, Subtract, other)
+            (t, b.SetTo, self),
+            (t, b.Subtract, other)
         ])
         return t
 
     def __rsub__(self, other):
         t = CreateTempVariable()
         va.SeqCompute((
-            (t, SetTo, other),
-            (t, Subtract, self)
+            (t, b.SetTo, other),
+            (t, b.Subtract, self)
         ))
         return t
 
@@ -349,22 +329,22 @@ class EUDVariable:
 
     def __iadd__(self, other):
         va.SeqCompute((
-            (self, Add, other),
+            (self, b.Add, other),
         ))
 
     def __isub__(self, other):
         va.SeqCompute((
-            (self, Subtract, other)
+            (self, b.Subtract, other)
         ))
 
     def __imul__(self, other):
         va.SeqCompute((
-            (self, SetTo, muldiv.f_mul(self, other))
+            (self, b.SetTo, muldiv.f_mul(self, other))
         ))
 
     def __ifloordiv__(self, other):
         va.SeqCompute((
-            (self, SetTo, muldiv.f_div(self, other)[0])
+            (self, b.SetTo, muldiv.f_div(self, other)[0])
         ))
 
 
@@ -396,14 +376,14 @@ def VTProc(vt, actions):
     :param actions: Actions to execute
     '''
 
-    nexttrg = Forward()
+    nexttrg = b.Forward()
 
-    Trigger(
+    b.Trigger(
         nextptr=vt,
-        actions=actions + [SetNextPtr(vt, nexttrg)]
+        actions=actions + [b.SetNextPtr(vt, nexttrg)]
     )
 
-    nexttrg << NextTrigger()
+    nexttrg << b.NextTrigger()
 
 
 '''
@@ -431,7 +411,7 @@ def _TmpProxifyVar(origvariable):
 
         t3 = @@EUDCreateTempVar()
         SeqCompute([
-            (t3, SetTo, t1),
+            (t3, b.SetTo, t1),
             (t3, Add, t2)
         ])
 
