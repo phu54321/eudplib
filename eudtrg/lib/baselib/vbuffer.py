@@ -22,13 +22,11 @@ freely, subject to the following restrictions:
    3. This notice may not be removed or altered from any source
    distribution.
 '''
-from eudtrg.base import *  # @UnusedWildImport
+from eudtrg import base as b
+from . import vtable as vt
 
 
-from . import vtable
-
-
-_lastvtvars = EUDVTable(32).GetVariables()
+_lastvtvars = None
 _lastvt_filled = 32
 
 
@@ -47,6 +45,11 @@ def EUDCreateVariables(varn):
     variables = []
 
     while varn:
+        if _lastvt_filled == 32:
+            vtable = vt.EUDVTable(32)
+            _lastvtvars = vtable.GetVariables()
+            _lastvt_filled = 0
+
         vt_popnum = min(32 - _lastvt_filled, varn)
         variables.extend(
             _lastvtvars[_lastvt_filled: _lastvt_filled + vt_popnum]
@@ -54,9 +57,4 @@ def EUDCreateVariables(varn):
         _lastvt_filled += vt_popnum
         varn -= vt_popnum
 
-        if _lastvt_filled == 32:
-            vt = vtable.EUDVTable(32)
-            _lastvtvars = vt.GetVariables()
-            _lastvt_filled = 0
-
-    return List2Assignable(variables)
+    return b.List2Assignable(variables)

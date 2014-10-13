@@ -1,8 +1,10 @@
 from .. import LICENSE
 
-from eudtrg.base import *  # @UnusedWildImport
-from .vtable import EUDVTable, EUDVariable
-from .varassign import SetVariables, SeqCompute
+from eudtrg import base as b
+from . import (
+    vtable as vt,
+    varassign as va
+)
 
 from functools import wraps
 import inspect
@@ -68,38 +70,38 @@ def EUDFunc(fdecl_func):
     argn = len(argspec[0])
 
     # Create function body
-    PushTriggerScope()
+    b.PushTriggerScope()
 
-    f_args = Assignable2List(EUDVTable(argn).GetVariables())
-    fstart = NextTrigger()
-    f_rets = Assignable2List(fdecl_func(*f_args))
-    fend = Trigger()
+    f_args = b.Assignable2List(vt.EUDVTable(argn).GetVariables())
+    fstart = b.NextTrigger()
+    f_rets = b.Assignable2List(fdecl_func(*f_args))
+    fend = b.Trigger()
 
-    PopTriggerScope()
+    b.PopTriggerScope()
 
     # Assert that all return values are EUDVariable.
     for i, ret in enumerate(f_rets):
-        assert isinstance(ret, EUDVariable), (
+        assert isinstance(ret, vt.EUDVariable), (
             'Returned value #%d of original function is not EUDVariable' % i)
 
     # Function to return
     @wraps(fdecl_func)
     def retfunc(*args):
         # Assign arguments into argument space
-        computeset = [(farg, SetTo, arg) for farg, arg in zip(f_args, args)]
-        SeqCompute(computeset)
+        computeset = [(farg, b.SetTo, arg) for farg, arg in zip(f_args, args)]
+        va.SeqCompute(computeset)
 
         # Call body
-        fcallend = Forward()
+        fcallend = b.Forward()
 
-        Trigger(
+        b.Trigger(
             nextptr=fstart,
-            actions=[SetNextPtr(fend, fcallend)]
+            actions=[b.SetNextPtr(fend, fcallend)]
         )
 
-        fcallend << NextTrigger()
+        fcallend << b.NextTrigger()
 
-        return List2Assignable(f_rets)
+        return b.List2Assignable(f_rets)
 
     # return
     return retfunc
