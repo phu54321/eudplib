@@ -1,5 +1,49 @@
-from eudtrg import LICENSE  # @UnusedImport
-from eudtrg.base import *  # @UnusedWildImport
+'''
+Copyright (c) 2014 trgk
+
+This software is provided 'as-is', without any express or implied
+warranty. In no event will the authors be held liable for any damages
+arising from the use of this software.
+
+Permission is granted to anyone to use this software for any purpose,
+including commercial applications, and to alter it and redistribute it
+freely, subject to the following restrictions:
+
+   1. The origin of this software must not be misrepresented; you must not
+   claim that you wrote the original software. If you use this software
+   in a product, an acknowledgment in the product documentation would be
+   appreciated but is not required.
+   2. Altered source versions must be plainly marked as such, and must not be
+   misrepresented as being the original software.
+   3. This notice may not be removed or altered from any source
+   distribution.
+'''
+
+from eudtrg.base import (
+    Trigger,
+    PushTriggerScope,
+    PopTriggerScope,
+    Forward,
+    Disabled,
+    SetDeaths,
+    SetTo,
+    EPD,
+    List2Assignable,
+    SetMemory,
+    Memory,
+    Db,
+    AtLeast,
+    AtMost,
+    Exactly,
+    Add,
+    Subtract,
+    SetNextPtr,
+    NextTrigger
+)
+
+from ..auxfunc import muldiv
+from . import varassign as va
+from . import vbuffer as vb
 
 
 class EUDVTable(Trigger):
@@ -52,6 +96,71 @@ class EUDVTable(Trigger):
             variable, return it.
         '''
         return List2Assignable(self._var)
+
+
+class EUDLightVariable:
+
+    '''
+    Light variable. EUDLightVariable occupies only 4 bytes.
+    '''
+
+    def __init__(self):
+        self._memory = Db(b'\0\0\0\0')
+
+    def GetMemoryAddr(self):
+        '''
+        :returns: Memory address where values are stored.
+        '''
+        return self._memory
+
+    def AtLeast(self, number):
+        '''
+        :param number: Number to compare variable with.
+        :returns: :class:`Condition` for checking if the variable is at least
+            given number.
+        '''
+        return Memory(self.GetMemoryAddr(), AtLeast, number)
+
+    def AtMost(self, number):
+        '''
+        :param number: Number to compare variable with.
+        :returns: :class:`Condition` for checking if the variable is at most
+            given number.
+        '''
+        return Memory(self.GetMemoryAddr(), AtMost, number)
+
+    def Exactly(self, number):
+        '''
+        :param number: Number to compare variable with.
+        :returns: :class:`Condition` for checking if the variable is at exactly
+            given number.
+        '''
+        return Memory(self.GetMemoryAddr(), Exactly, number)
+
+    def SetNumber(self, number):
+        '''
+        :param number: Number to assign.
+        :returns: :class:`Action` for assigning given number to variable.
+        '''
+        return SetMemory(self.GetMemoryAddr(), SetTo, number)
+
+    def AddNumber(self, number):
+        '''
+        :param number: Number to add.
+        :returns: :class:`Action` for adding given number to variable.
+        '''
+        return SetMemory(self.GetMemoryAddr(), Add, number)
+
+    def SubtractNumber(self, number):
+        '''
+        :param number: Number to subtract.
+        :returns: :class:`Action` for subtracting given number to variable.
+
+        .. warning::
+            Subtraction won't underflow. Subtracting values with bigger one
+            will yield 0.
+        '''
+        return SetMemory(self.GetMemoryAddr(), Subtract, number)
 
 
 class EUDVariable:
@@ -192,70 +301,71 @@ class EUDVariable:
             SetDeaths(EPD(self._varact + 28), SetTo, 0, 0)
         ]
 
-
-class EUDLightVariable:
-
     '''
-    Light variable. EUDLightVariable occupies only 4 bytes.
+    Simple wrapper for arithmetic operators.
     '''
 
-    def __init__(self):
-        self._memory = Db(b'\0\0\0\0')
+    def __add__(self, other):
+        t = CreateTempVariable()
+        va.SeqCompute([
+            (t, SetTo, self),
+            (t. Add, other)
+        ])
+        return t
 
-    def GetMemoryAddr(self):
-        '''
-        :returns: Memory address where values are stored.
-        '''
-        return self._memory
+    def __radd__(self, other):
+        return self + other
 
-    def AtLeast(self, number):
-        '''
-        :param number: Number to compare variable with.
-        :returns: :class:`Condition` for checking if the variable is at least
-            given number.
-        '''
-        return Memory(self.GetMemoryAddr(), AtLeast, number)
+    def __sub__(self, other):
+        t = CreateTempVariable()
+        va.SeqCompute([
+            (t, SetTo, self),
+            (t, Subtract, other)
+        ])
+        return t
 
-    def AtMost(self, number):
-        '''
-        :param number: Number to compare variable with.
-        :returns: :class:`Condition` for checking if the variable is at most
-            given number.
-        '''
-        return Memory(self.GetMemoryAddr(), AtMost, number)
+    def __rsub__(self, other):
+        t = CreateTempVariable()
+        va.SeqCompute((
+            (t, SetTo, other),
+            (t, Subtract, self)
+        ))
+        return t
 
-    def Exactly(self, number):
-        '''
-        :param number: Number to compare variable with.
-        :returns: :class:`Condition` for checking if the variable is at exactly
-            given number.
-        '''
-        return Memory(self.GetMemoryAddr(), Exactly, number)
+    def __mul__(self, other):
+        return muldiv.f_mul(self, other)
 
-    def SetNumber(self, number):
-        '''
-        :param number: Number to assign.
-        :returns: :class:`Action` for assigning given number to variable.
-        '''
-        return SetMemory(self.GetMemoryAddr(), SetTo, number)
+    def __rmul__(self, other):
+        return muldiv.f_mul(self, other)
 
-    def AddNumber(self, number):
-        '''
-        :param number: Number to add.
-        :returns: :class:`Action` for adding given number to variable.
-        '''
-        return SetMemory(self.GetMemoryAddr(), Add, number)
+    def __floordiv__(self, other):
+        return muldiv.f_div(self, other)[0]
 
-    def SubtractNumber(self, number):
-        '''
-        :param number: Number to subtract.
-        :returns: :class:`Action` for subtracting given number to variable.
+    def __rfloordiv__(self, other):
+        return muldiv.f_div(other, self)[0]
 
-        .. warning::
-            Subtraction won't underflow. Subtracting values with bigger one
-            will yield 0.
-        '''
-        return SetMemory(self.GetMemoryAddr(), Subtract, number)
+    def __eq__(self, other):
+        return (self - other).Exactly(0)
+
+    def __iadd__(self, other):
+        va.SeqCompute((
+            (self, Add, other),
+        ))
+
+    def __isub__(self, other):
+        va.SeqCompute((
+            (self, Subtract, other)
+        ))
+
+    def __imul__(self, other):
+        va.SeqCompute((
+            (self, SetTo, muldiv.f_mul(self, other))
+        ))
+
+    def __ifloordiv__(self, other):
+        va.SeqCompute((
+            (self, SetTo, muldiv.f_div(self, other)[0])
+        ))
 
 
 def VTProc(vt, actions):
@@ -294,3 +404,81 @@ def VTProc(vt, actions):
     )
 
     nexttrg << NextTrigger()
+
+
+'''
+Temporary variable storage
+'''
+
+_tmpvstorage = []
+
+
+def _TmpProxifyVar(origvariable):
+    '''
+    Proxy object for temporary variables.
+
+    EUDTempVariable is a proxy for temporary variable. Example:
+
+        a << 2*b + 3*c
+
+    The code is equivilant to the following:
+
+        t1 = @@EUDCreateTempVar()   # function not usable outside eudtrg.
+        SetVariable(t1, f_constmul(2)(b))
+
+        t2 = @@EUDCreateTempVar()
+        SetVariable(t2, f_constmul(3)(c))
+
+        t3 = @@EUDCreateTempVar()
+        SeqCompute([
+            (t3, SetTo, t1),
+            (t3, Add, t2)
+        ])
+
+        # t1, t2 unref after executing 't1 + t2'
+        @@EUDReleaseTempVar(t1)
+        @@EUDReleaseTempVar(t2)
+
+        SetVariable(a, t3)
+
+        # t3 unref after executing 'a := t3'
+        @@EUDReleaseTempVar(t3)
+
+    '''
+
+    class TmpVar(EUDVariable):
+        __metaclass__ = EUDVariable
+
+        def __new__():
+            pass
+
+        def __init__(self):
+            pass
+
+        def __del__(self):
+            _tmpvstorage.append(origvariable)
+
+        def __getattr__(self, attrname):
+            return getattr(origvariable, attrname)
+
+        def __getitem__(self, index):
+            return origvariable[index]
+
+        def __setattr__(self, attrname, newvalue):
+            setattr(origvariable, attrname, newvalue)
+
+        def __setitem__(self, index, newvalue):
+            origvariable[index] = newvalue
+
+    return TmpVar()
+
+
+def CreateTempVariable(EUDvariable):
+    global _tmpvstorage
+
+    if not _tmpvstorage:
+        newv = vb.EUDCreateVariables(1)
+        return _TmpProxifyVar(newv)
+
+    else:
+        return _TmpProxifyVar(_tmpvstorage.pop())

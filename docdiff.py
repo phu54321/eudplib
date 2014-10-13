@@ -52,7 +52,7 @@ for name, value in module_to_doc.__dict__.items():
     if value.__doc__ is None:
         continue
 
-    if type(value) is types.FunctionType:
+    if isinstance(value, types.FunctionType):
         doc_needed_functions.add(name)
 
     elif type(value) is type:
@@ -62,6 +62,7 @@ print('==================================')
 
 
 # Summary
+'''
 print('Current entries:')
 
 print('  Functions:')
@@ -73,6 +74,7 @@ for k in doc_needed_classes:
     print('    - %s' % k)
 
 print('==================================')
+'''
 
 # Diff
 unused_functions = documented_functions.difference(doc_needed_functions)
