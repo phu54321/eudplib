@@ -1,10 +1,7 @@
 from .. import LICENSE
 
 from eudtrg import base as b
-from . import (
-    vtable as vt,
-    varassign as va
-)
+from . import vtable as vt
 
 from functools import wraps
 import inspect
@@ -89,7 +86,7 @@ def EUDFunc(fdecl_func):
     def retfunc(*args):
         # Assign arguments into argument space
         computeset = [(farg, b.SetTo, arg) for farg, arg in zip(f_args, args)]
-        va.SeqCompute(computeset)
+        vt.SeqCompute(computeset)
 
         # Call body
         fcallend = b.Forward()
@@ -101,7 +98,11 @@ def EUDFunc(fdecl_func):
 
         fcallend << b.NextTrigger()
 
-        return b.List2Assignable(f_rets)
+        tmp_rets = [vt.CreateTempVariable() for _ in range(len(f_rets))]
+        vt.SeqCompute(
+            [(tmp_rets[i], b.SetTo, f_rets[i]) for i in range(len(f_rets))]
+        )
+        return b.List2Assignable(tmp_rets)
 
     # return
     return retfunc

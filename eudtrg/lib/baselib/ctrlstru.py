@@ -19,7 +19,7 @@ freely, subject to the following restrictions:
    distribution.
 '''
 
-from eudtrg.base import *  # @UnusedWildImport
+from eudtrg import base as b
 
 
 def DoActions(actions):
@@ -28,7 +28,7 @@ def DoActions(actions):
 
     :param actions: Trigger actions.
     '''
-    return Trigger(actions=FlattenList(actions))
+    return b.Trigger(actions=b.FlattenList(actions))
 
 
 def EUDJump(nextptr):
@@ -38,7 +38,7 @@ def EUDJump(nextptr):
 
     :param nextptr: Trigger to execute next.
     '''
-    return Trigger(nextptr=nextptr)
+    return b.Trigger(nextptr=nextptr)
 
 
 def EUDBranch(conditions, ontrue, onfalse):
@@ -49,21 +49,21 @@ def EUDBranch(conditions, ontrue, onfalse):
     :param ontrue: Trigger to execute when conditions are met.
     :param onfasle: Trigger to execute when conditions are not met.
     '''
-    brtrg = Forward()
-    ontruetrg = Forward()
+    brtrg = b.Forward()
+    ontruetrg = b.Forward()
 
-    brtrg << Trigger(
+    brtrg << b.Trigger(
         nextptr=onfalse,
         conditions=conditions,
         actions=[
-            SetNextPtr(brtrg, ontruetrg)
+            b.SetNextPtr(brtrg, ontruetrg)
         ]
     )
 
-    ontruetrg << Trigger(
+    ontruetrg << b.Trigger(
         nextptr=ontrue,
         actions=[
-            SetNextPtr(brtrg, onfalse)
+            b.SetNextPtr(brtrg, onfalse)
         ]
     )
 
@@ -77,26 +77,26 @@ def EUDJumpIf(conditions, ontrue):
     :param ontrue: Trigger to execute when conditions are met.
     '''
 
-    brtrg = Forward()
-    ontruetrg = Forward()
-    onfalse = Forward()
+    brtrg = b.Forward()
+    ontruetrg = b.Forward()
+    onfalse = b.Forward()
 
-    brtrg << Trigger(
+    brtrg << b.Trigger(
         nextptr=onfalse,
         conditions=conditions,
         actions=[
-            SetNextPtr(brtrg, ontruetrg)
+            b.SetNextPtr(brtrg, ontruetrg)
         ]
     )
 
-    ontruetrg << Trigger(
+    ontruetrg << b.Trigger(
         nextptr=ontrue,
         actions=[
-            SetNextPtr(brtrg, onfalse)
+            b.SetNextPtr(brtrg, onfalse)
         ]
     )
 
-    onfalse << NextTrigger()
+    onfalse << b.NextTrigger()
 
 
 def EUDJumpIfNot(conditions, onfalse):
@@ -108,19 +108,19 @@ def EUDJumpIfNot(conditions, onfalse):
     :param ontrue: Trigger to execute when conditions are not met.
     '''
 
-    brtrg = Forward()
-    ontrue = Forward()
+    brtrg = b.Forward()
+    ontrue = b.Forward()
 
-    brtrg << Trigger(
+    brtrg << b.Trigger(
         nextptr=onfalse,
         conditions=conditions,
         actions=[
-            SetNextPtr(brtrg, ontrue)
+            b.SetNextPtr(brtrg, ontrue)
         ]
     )
 
-    ontrue << Trigger(
+    ontrue << b.Trigger(
         actions=[
-            SetNextPtr(brtrg, onfalse)
+            b.SetNextPtr(brtrg, onfalse)
         ]
     )

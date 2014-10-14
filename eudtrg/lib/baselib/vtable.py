@@ -21,60 +21,7 @@ freely, subject to the following restrictions:
 
 from eudtrg import base as b
 
-from . import varassign as va
-from . import vbuffer as vb
-
-
-class EUDVTable(b.Trigger):
-
-    '''
-    Full Variable table. EUDVTable stores :class:`EUDVariable` objects.
-    EUDVTable serves as a key component of trigger programming.
-
-        vt = EUDVTable(3)
-        a, b, c = vt.GetVariables()
-        # use a, b, c for further calculations.
-
-    EUDVTable is as itself a :class:`Trigger`, so it can be executed. When
-    EUDVTable is executed, queued calculations are processed. You can queue
-    calculations with :meth:`EUDVariable.QueueAssignTo` and its family.
-
-    '''
-
-    def __init__(self, varn):
-        '''
-        EUDVTable constructor.
-        :param varn: Number of arguments EUDVTable should have. 0 < varn <= 32
-        :raises AssertionError: varn <= 0 or varn > 32.
-        '''
-        assert varn >= 0, "argn can't be less than 0."
-        assert varn <= 32, (
-            'EUDVTable with more than 32 variables are not supported')
-
-        if varn == 0:
-            self._var = []
-            return
-
-        b.PushTriggerScope()
-        variables = [b.Forward() for _ in range(varn)]
-
-        super().__init__(
-            actions=
-            [variables[i] << b.Disabled(b.SetDeaths(0, b.SetTo, 0, 0))
-                for i in range(varn)] +
-            [b.SetDeaths(b.EPD(variables[i] + 28), b.SetTo, 2, 0)
-                for i in range(varn)]
-        )
-
-        self._var = [EUDVariable(var, self) for var in variables]
-        b.PopTriggerScope()
-
-    def GetVariables(self):
-        '''
-        :returns: List of variables inside EUDVTable. If there is only one
-            variable, return it.
-        '''
-        return b.List2Assignable(self._var)
+from . import ctrlstru as cs
 
 
 class EUDLightVariable:
@@ -140,6 +87,58 @@ class EUDLightVariable:
             will yield 0.
         '''
         return b.SetMemory(self.GetMemoryAddr(), b.Subtract, number)
+
+
+class EUDVTable(b.Trigger):
+
+    '''
+    Full Variable table. EUDVTable stores :class:`EUDVariable` objects.
+    EUDVTable serves as a key component of trigger programming.
+
+        vt = EUDVTable(3)
+        a, b, c = vt.GetVariables()
+        # use a, b, c for further calculations.
+
+    EUDVTable is as itself a :class:`Trigger`, so it can be executed. When
+    EUDVTable is executed, queued calculations are processed. You can queue
+    calculations with :meth:`EUDVariable.QueueAssignTo` and its family.
+
+    '''
+
+    def __init__(self, varn):
+        '''
+        EUDVTable constructor.
+        :param varn: Number of arguments EUDVTable should have. 0 < varn <= 32
+        :raises AssertionError: varn <= 0 or varn > 32.
+        '''
+        assert varn >= 0, "argn can't be less than 0."
+        assert varn <= 32, (
+            'EUDVTable with more than 32 variables are not supported')
+
+        if varn == 0:
+            self._var = []
+            return
+
+        b.PushTriggerScope()
+        variables = [b.Forward() for _ in range(varn)]
+
+        super().__init__(
+            actions=
+            [variables[i] << b.Disabled(b.SetDeaths(0, b.SetTo, 0, 0))
+                for i in range(varn)] +
+            [b.SetDeaths(b.EPD(variables[i] + 28), b.SetTo, 2, 0)
+                for i in range(varn)]
+        )
+
+        self._var = [EUDVariable(var, self) for var in variables]
+        b.PopTriggerScope()
+
+    def GetVariables(self):
+        '''
+        :returns: List of variables inside EUDVTable. If there is only one
+            variable, return it.
+        '''
+        return b.List2Assignable(self._var)
 
 
 class EUDVariable:
@@ -286,7 +285,7 @@ class EUDVariable:
 
     def __add__(self, other):
         t = CreateTempVariable()
-        va.SeqCompute([
+        SeqCompute([
             (t, b.SetTo, self),
             (t. Add, other)
         ])
@@ -297,7 +296,7 @@ class EUDVariable:
 
     def __sub__(self, other):
         t = CreateTempVariable()
-        va.SeqCompute([
+        SeqCompute([
             (t, b.SetTo, self),
             (t, b.Subtract, other)
         ])
@@ -305,7 +304,7 @@ class EUDVariable:
 
     def __rsub__(self, other):
         t = CreateTempVariable()
-        va.SeqCompute((
+        SeqCompute((
             (t, b.SetTo, other),
             (t, b.Subtract, self)
         ))
@@ -315,13 +314,13 @@ class EUDVariable:
         return (self - other).Exactly(0)
 
     def __iadd__(self, other):
-        va.SeqCompute((
+        SeqCompute((
             (self, b.Add, other),
         ))
         return self
 
     def __isub__(self, other):
-        va.SeqCompute((
+        SeqCompute((
             (self, b.Subtract, other)
         ))
         return self
@@ -408,9 +407,6 @@ def _TmpProxifyVar(origvariable):
     class TmpVar(EUDVariable):
         __metaclass__ = EUDVariable
 
-        def __new__():
-            pass
-
         def __init__(self):
             pass
 
@@ -432,12 +428,175 @@ def _TmpProxifyVar(origvariable):
     return TmpVar()
 
 
-def CreateTempVariable(EUDvariable):
+def CreateTempVariable():
     global _tmpvstorage
 
     if not _tmpvstorage:
-        newv = vb.EUDCreateVariables(1)
+        newv = EUDCreateVariables(1)
         return _TmpProxifyVar(newv)
 
     else:
         return _TmpProxifyVar(_tmpvstorage.pop())
+
+
+# From vbuffer.py
+_lastvtvars = None
+_lastvt_filled = 32
+
+
+def EUDCreateVariables(varn):
+    '''
+    Create (varn) :class:`EUDVariables`. Returned variables are not guarranted
+    to be in the same variable table.
+
+    :param varn: Number of EUDVariables to create.
+    :returns: List of variables. If varn is 1, then a variable is returned.
+    '''
+
+    global _lastvt_filled
+    global _lastvtvars
+
+    variables = []
+
+    while varn:
+        if _lastvt_filled == 32:
+            vtable = EUDVTable(32)
+            _lastvtvars = vtable.GetVariables()
+            _lastvt_filled = 0
+
+        vt_popnum = min(32 - _lastvt_filled, varn)
+        variables.extend(
+            _lastvtvars[_lastvt_filled: _lastvt_filled + vt_popnum]
+            )
+        _lastvt_filled += vt_popnum
+        varn -= vt_popnum
+
+    return b.List2Assignable(variables)
+
+
+# from varassign.py
+
+
+def SetVariables(dstlist, srclist, mdtlist=None):
+    '''
+    Assigns values to variables/memory. This is just a syntax sugar for
+    :func:`SeqCompute`. Useful for retrieving function return values after
+    EUD Function call. ::
+
+        SetVariables([unitx, unity], f_dwbreak(position)[0:2])
+
+    :param dstlist: Nested list of EUDVariable/EUDLightVariable/Expr.
+
+        - :class:`EUDVariable` : Value is stored at variable.
+        - :class:`EUDLightVariable` : Value is stored at variable.
+        - :class:`Expr` : Value is stored at memory. Expr is interpreted
+            as EPD Player.
+
+    :param srclist: Nested list of EUDVariable/Expr.
+
+        - :class:`EUDVariable` : Value is pulled off from variable
+        - :class:`Expr` : Value is evaluated.
+
+    :param mdtlist: Nested list of SetTo/Add/Subtract. Default:
+        [SetTo * (Number of varaibles)]
+
+    :raises AssertionError: Raises when:
+
+        - len(dstlist), len(srclist), len(mdtlist) is different
+        - Type error of arguments.
+
+    .. warning::
+        Subtraction won't underflow. Subtracting values with bigger one will
+        yield 0.
+    '''
+
+    dstlist = b.FlattenList(dstlist)
+    srclist = b.FlattenList(srclist)
+    if mdtlist is None:
+        mdtlist = [b.SetTo] * len(dstlist)
+    else:
+        mdtlist = b.FlattenList(mdtlist)
+
+    assert len(dstlist) == len(srclist) == len(mdtlist), (
+        'Src/Dest/Mdt has different numbers of elements')
+
+    SeqCompute(list(zip(dstlist, mdtlist, srclist)))
+
+
+def SeqCompute(assignpairs):
+    '''
+    Do multiple assignment/addition/subtraction sequentially.
+
+    :param assignpairs: List of (dst, src, modtype)
+
+        - dst : Where to compute
+
+            - :class:`EUDVariable` : Value is stored at variable
+            - :class:`EUDLightVariable` : Value is stored at variable
+            - :class:`Expr` : Value is stored at memory. Expr is interpreted as
+                EPD player value.
+
+        - src : What value to use with computation
+
+            - :class:`EUDVariable` : Value is pulled of from variable.
+            - :class:`Expr` : Value is evaluated
+
+        - modtype : What type of computation to do.
+
+            - SetTo : Assignment. dst = src
+            - Add : Addition. dst += src
+            - Subtract : Subtraction. dst -= src
+
+
+    :raises AssertionError:
+        Raises when:
+
+        - EUDLightVariable is given as src : Light Variable cannot be direcly
+          assigned. They must be read with f_dwread, or be copied to.
+
+    .. warning::
+        Subtraction won't underflow. Subtracting values with bigger one will
+        yield 0.
+    '''
+
+    # Dictionary needed.
+    queueactiondict = {
+        b.SetTo: EUDVariable.QueueAssignTo,
+        b.Add: EUDVariable.QueueAddTo,
+        b.Subtract: EUDVariable.QueueSubtractTo
+    }
+
+    # action buffer
+    actionbuffer = []
+
+    def FlushActionBuffer():
+        nonlocal actionbuffer
+
+        if actionbuffer:
+            cs.DoActions(actionbuffer)
+        actionbuffer = []
+
+    for dst, mdt, src in assignpairs:
+        assert mdt != b.Set, (
+            "Change 'Set' in arguments for SeqCompute to 'SetTo'.")
+        assert not isinstance(src, EUDLightVariable), (
+            'Light variable cannot be assigned to other variables directly')
+        if isinstance(src, EUDVariable):
+            FlushActionBuffer()
+            VTProc(src.GetVTable(), [
+                queueactiondict[mdt].__get__(src, type(src))(dst)
+            ])
+
+        else:
+            if isinstance(dst, EUDVariable) or \
+                    isinstance(dst, EUDLightVariable):
+                dstaddr = b.EPD(dst.GetMemoryAddr())
+
+            else:
+                dstaddr = dst
+
+            actionbuffer.append(b.SetDeaths(dstaddr, mdt, src, 0))
+            if len(actionbuffer) == 64:
+                FlushActionBuffer()
+
+    FlushActionBuffer()
