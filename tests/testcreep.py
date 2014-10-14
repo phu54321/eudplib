@@ -8,33 +8,32 @@ from eudtrg import *
 Creep reading
 '''
 
-mapwidth, mapheight, creepaddr = EUDCreateVariables(3)
+mapwidth, mapheight, creepaddr_epd = EUDCreateVariables(3)
 
 
 @EUDFunc
 def f_creepread_init():
     # Get creepmap address
-    creepaddr << f_epd(f_dwread(EPD(0x6D0E84)))
+    creepaddr_epd << f_epd(f_dwread_epd(EPD(0x6D0E84)))
     SetVariables(
         [mapwidth, mapheight],
-        f_dwbreak(f_dwread(EPD(0x57F1D4)))[0:2]
+        f_dwbreak(f_dwread_epd(EPD(0x57F1D4)))[0:2]
     )
 
 
 @EUDFunc
 def f_creepread(x, y):
-    ret, creepindex, creeptileaddr, creepevenodd = EUDCreateVariables(4)
+    ret = EUDCreateVariables(1)
 
-    creepindex << f_mul(y, mapwidth) + x
-    SetVariables([creeptileaddr, creepevenodd], f_div(creepindex, 2))
-    creeptileaddr += creepaddr
+    creepindex = f_mul(y, mapwidth) + x
+    creepdwordindex, creepevenodd = f_div(creepindex, 2)
 
     # read tile data
-    creepdat = f_dwread(creeptileaddr)
-    creepdat_word0, creepdat_word1 = f_dwbreak(creepdat)[0:2]
+    creepdat_epd = creepaddr_epd + creepdwordindex
+    creepdat_word0, creepdat_word1 = f_dwbreak(f_dwread_epd(creepdat_epd))[0:2]
 
     # select word0/word1 by evenodd
-    if EUDIf(creepevenodd.Exactly(0)):
+    if EUDIf(creepevenodd == 0):
         ret << creepdat_word0
 
     if EUDElse():
@@ -51,108 +50,73 @@ Main logic
 
 LoadMap('outputmap/basemap/creeptest_basemap.scx')
 
-start = Trigger()
-f_creepread_init()
-start1 = Forward()
-start1 << Trigger(
-    actions=[
-        SetNextPtr(start, start1)
-    ]
-)
+# Iterate through each units.
+unitptr, unitepd = EUDCreateVariables(2)
 
+if EUDExecuteOnce():
+    f_creepread_init()
+EUDEndExecuteOnce()
 
 # Turbo trigger
 DoActions(SetDeaths(203151, SetTo, 1, 0))
-
-# Iterate through each units.
-vt = EUDVTable(7)
-unitptr, unitepd, tmpepd, unitx, unity, tileunitx, tileunity = vt.GetVariables()
-
-SetVariables(unitptr, f_dwread(EPD(0x628430)))
-
-# loop start
-loopout = Forward()
-loopstart = NextTrigger()
-loopcontinue = Forward()
+f_setcurpl(0)
 
 
-if 1:
-    EUDJumpIf([unitptr.Exactly(0)], loopout)  # traversed all units -> break
+# Loop for every units
+unitptr << f_dwread_epd(EPD(0x628430))
 
-    # Convert addr -> epd
-    SetVariables(unitepd, f_epd(unitptr))
+if EUDWhileNot(unitptr.Exactly(0)):
+    unitepd << f_epd(unitptr)
+    f_dwwrite_epd(EPD(0x58A370), unitptr)
+    f_dwwrite_epd(EPD(0x58A374), unitepd)
+    f_dwwrite_epd(EPD(0x58A378), creepaddr_epd)
 
-    # Get unit type
-    # +0x0064   uint16 unittype
-    VTProc(vt, [
-        tmpepd.SetNumber(0x64 // 4),
-        unitepd.QueueAddTo(tmpepd)
-    ])
-
-    # Continue if the unit is not zergling
-    ret_ut = f_dwbreak(f_dwread(tmpepd))[0]
-    # not zergling -> continue
-    EUDJumpIfNot([ret_ut.Exactly(37)], loopcontinue)
+    # check unittype
+    # /*0x064*/ u16         unitType;
+    unittype = f_dwbreak(f_dwread_epd(unitepd + (0x64 // 4)))[0]
+    EUDContinueIfNot(unittype == ParseUnit('Zerg Zergling'))
 
     # Get x, y coordinates of this unit.
-    VTProc(vt, [
-        tmpepd.SetNumber(0x28 // 4),
-        unitepd.QueueAddTo(tmpepd)
-    ])
+    # uint16 unitx : unit + 0x28
+    # uint16 unity : unit + 0x2A
+    coord = f_dwread_epd(unitepd + (0x28 // 4))
+    unitx, unity = f_dwbreak(coord)[0:2]
+    f_dwwrite_epd(EPD(0x58A388), coord)
+    f_dwwrite_epd(EPD(0x58A380), unitx)
+    f_dwwrite_epd(EPD(0x58A384), unity)
+    f_dwwrite_epd(EPD(0x58A38C), unitx.GetMemoryAddr())
 
-    SetVariables([unitx, unity], f_dwbreak(f_dwread(tmpepd))[0:2])
+    # Convert coordinates to tile coordinates
+    tileunitx = f_constdiv(32)(unitx)[0]
+    tileunity = f_constdiv(32)(unity)[0]
 
-    # Convert coordinates to tile coord
-    SetVariables(tileunitx, f_div(unitx, 32)[0])
-    SetVariables(tileunity, f_div(unity, 32)[0])
-
-    # If there is no creep, then continue
-    ret_creepval = f_creepread(tileunitx, tileunity)  # read creep value
-    EUDJumpIf([
-        ret_creepval.AtLeast(16),
-        ret_creepval.AtMost(31)
-    ], loopcontinue)  # not zergling -> continue
+    # creep -> continue
+    creepval = f_creepread(tileunitx, tileunity)
+    EUDContinueIf([creepval >= 16, creepval <= 31])
+    DoActions(SetMemory(0x58A368, SetTo, 1))
 
     # Slow down zergling.
     # Creating kakaru and killing them slows down zergling.
-    SetVariables(
-        [
-            EPD(0x0058DC60 + 0),
-            EPD(0x0058DC60 + 4),
-        ], [unitx, unity]
-    )
+    SeqCompute([
+        (EPD(0x58DC60 + 0), SetTo, unitx),
+        (EPD(0x58DC60 + 4), SetTo, unity),
+        (EPD(0x58DC60 + 8), SetTo, unitx),
+        (EPD(0x58DC60 + 12), SetTo, unity)
+    ])
+    f_dwwrite_epd(EPD(0x58A390), unitx)
+    f_dwwrite_epd(EPD(0x58A394), unity)
 
-    SetVariables(
-        [
-            EPD(0x0058DC60 + 8),
-            EPD(0x0058DC60 + 12)
-        ], [unitx, unity]
-    )
-
-    DoActions(CreateUnit(1, 'Kakaru (Twilight Critter)', 1, Player1))
-
-    # Loop done. Get next unit pointer
-    loopcontinue << NextTrigger()
-
-    VTProc(vt, [
-        tmpepd.SetNumber(1),
-        unitepd.QueueAddTo(tmpepd)
+    DoActions([
+        CreateUnit(1, 'Kakaru (Twilight Critter)', 1, Player1),
+        KillUnitAt(All, 'Kakaru (Twilight Critter)', 1, Player1)
     ])
 
-    SetVariables(unitptr, f_dwread(tmpepd))
+    # Loop done. Get next unit pointer
+    EUDSetContinuePoint()
+    unitptr << f_dwread_epd(unitepd + (4 // 4))
+    f_dwwrite_epd(EPD(0x58A370), unitptr)
 
-    Trigger(nextptr=loopstart)
-
-
-loopout << NextTrigger()
-
-
-Trigger(
-    nextptr=triggerend,
-    actions=[
-        RemoveUnit('Kakaru (Twilight Critter)', Player1),
-    ]
-)
+EUDEndWhile()
 
 
-SaveMap('outputmap/creeptest.scx', start)
+SaveMap('outputmap/creeptest.scx')

@@ -22,9 +22,36 @@ freely, subject to the following restrictions:
 from eudtrg.base import *  # @UnusedWildImport
 from eudtrg.lib.baselib import *  # @UnusedWildImport
 
+from .constmuldiv import f_constmul, f_constdiv
+
+
+def f_mul(a, b):
+    if isinstance(a, EUDVariable) and isinstance(b, EUDVariable):
+        return _f_mul(a, b)
+
+    elif isinstance(a, EUDVariable):
+        return f_constmul(b)(a)
+
+    elif isinstance(b, EUDVariable):
+        return f_constmul(a)(b)
+
+    else:
+        return a*b
+
+
+def f_div(a, b):
+    if isinstance(b, EUDVariable):
+        return _f_mul(a, b)
+
+    elif isinstance(a, EUDVariable):
+        return f_constdiv(b)(a)
+
+    else:
+        return a // b, a % b
+
 
 @EUDFunc
-def f_mul(a, b):
+def _f_mul(a, b):
     '''
     :returns: a * b
     '''
@@ -68,7 +95,7 @@ def f_mul(a, b):
 
 
 @EUDFunc
-def f_div(a, b):
+def _f_div(a, b):
     '''
     :returns: a//b, a % b
     '''

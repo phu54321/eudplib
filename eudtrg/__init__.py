@@ -11,7 +11,7 @@ from eudtrg import LICENSE #@UnusedImport
 from .base import *
 from .lib import *
 
-__version__ = "0.23-r2"
+__version__ = "0.30-r1-beta"
 
 def eudtrgVersion():
     return __version__

@@ -57,6 +57,9 @@ class Forward(Expr):
         self.target = item
         return item
 
+    def ForwardEmpty(self):
+        return self.target is None
+
     def GetDependencyList(self):
         return [self.target]
 

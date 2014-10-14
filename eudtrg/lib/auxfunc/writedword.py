@@ -23,7 +23,7 @@ from eudtrg.base import *  # @UnusedWildImport
 from eudtrg.lib.baselib import *  # @UnusedWildImport
 
 
-def f_dwwrite(targetplayer, value):
+def f_dwwrite_epd(targetplayer, value):
     '''
     Writes value to specified address.
 

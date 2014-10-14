@@ -2,7 +2,7 @@ from eudtrg import *
 from eudtrg.base.utils.sctbl import TBL
 from eudtrg.base.utils.ubconv import u2b
 from eudtrg.lib.baselib import *
-from ..auxfunc.readdword import f_dwread
+from ..auxfunc.readdword import f_dwread_epd
 
 
 class EUDTbl(EUDObject):
@@ -63,7 +63,7 @@ def f_initeudtbl():
     '''
     Backup original string table address.
     '''
-    SetVariables(_origtbladdr, f_dwread(EPD(0x5993D4)))
+    SetVariables(_origtbladdr, f_dwread_epd(EPD(0x5993D4)))
 
 
 def f_reseteudtbl():

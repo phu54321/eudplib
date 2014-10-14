@@ -24,7 +24,7 @@ from eudtrg.lib.baselib import *  # @UnusedWildImport
 
 
 @EUDFunc
-def f_dwread(targetplayer):
+def f_dwread_epd(targetplayer):
     '''
     Read dword from memory. This function can read any memory with read access.
     :param targetplayer: EPD Player for address to read.

@@ -22,8 +22,8 @@ freely, subject to the following restrictions:
 from eudtrg.base import *
 from eudtrg.lib.baselib import *
 
-from .readdword import f_dwread
-from .writedword import f_dwwrite
+from .readdword import f_dwread_epd
+from .writedword import f_dwwrite_epd
 from .dwordbreak import f_dwbreak
 from .muldiv import f_div
 
@@ -43,7 +43,7 @@ def f_repmovsd(dstepdp, srcepdp, copydwn):
     loopstart = NextTrigger()
     EUDJumpIf(copydwn.Exactly(0), repmovsd_end)
 
-    f_dwwrite(dstepdp, f_dwread(srcepdp))
+    f_dwwrite_epd(dstepdp, f_dwread_epd(srcepdp))
     SeqCompute([
         (srcepdp, Add, 1),
         (dstepdp, Add, 1),
@@ -82,7 +82,7 @@ class EUDByteReader:
             (self._suboffset, SetTo, 0)
         ])
 
-        SetVariables(self._dw, f_dwread(epdoffset))
+        SetVariables(self._dw, f_dwread_epd(epdoffset))
 
         SetVariables([
             self._b[0],
@@ -149,7 +149,7 @@ class EUDByteReader:
             (self._suboffset, SetTo, 0)
         ])
 
-        SetVariables(self._dw, f_dwread(self._offset))
+        SetVariables(self._dw, f_dwread_epd(self._offset))
         SetVariables([
             self._b[0],
             self._b[1],
@@ -178,7 +178,7 @@ class EUDByteWriter:
             (self._suboffset, SetTo, 0)
         ])
 
-        SetVariables(self._dw, f_dwread(epdoffset))
+        SetVariables(self._dw, f_dwread_epd(epdoffset))
 
         SetVariables([
             self._b[0],
@@ -240,7 +240,7 @@ class EUDByteWriter:
             (self._suboffset, SetTo, 0)
         ])
 
-        SetVariables(self._dw, f_dwread(self._offset))
+        SetVariables(self._dw, f_dwread_epd(self._offset))
         SetVariables([
             self._b[0],
             self._b[1],
@@ -266,7 +266,7 @@ class EUDByteWriter:
                     ]
                 )
 
-        f_dwwrite(self._offset, self._dw)
+        f_dwwrite_epd(self._offset, self._dw)
 
 _br = EUDByteReader()
 _bw = EUDByteWriter()

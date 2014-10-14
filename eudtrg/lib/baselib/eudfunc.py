@@ -98,10 +98,9 @@ def EUDFunc(fdecl_func):
 
         fcallend << b.NextTrigger()
 
-        tmp_rets = [vt.CreateTempVariable() for _ in range(len(f_rets))]
-        vt.SeqCompute(
-            [(tmp_rets[i], b.SetTo, f_rets[i]) for i in range(len(f_rets))]
-        )
+        retn = len(f_rets)
+        tmp_rets = [vt.CreateTempVariable() for _ in range(retn)]
+        vt.SetVariables(tmp_rets, f_rets)
         return b.List2Assignable(tmp_rets)
 
     # return

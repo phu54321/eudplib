@@ -287,7 +287,7 @@ class EUDVariable:
         t = CreateTempVariable()
         SeqCompute([
             (t, b.SetTo, self),
-            (t. Add, other)
+            (t, b.Add, other)
         ])
         return t
 
@@ -310,9 +310,6 @@ class EUDVariable:
         ))
         return t
 
-    def __eq__(self, other):
-        return (self - other).Exactly(0)
-
     def __iadd__(self, other):
         SeqCompute((
             (self, b.Add, other),
@@ -327,9 +324,30 @@ class EUDVariable:
 
     def __lshift__(self, other):
         SeqCompute((
-            (self, b.SetTo, other)
+            (self, b.SetTo, other),
         ))
         return self
+
+    ''' Comparison operators '''
+
+    def __eq__(self, other):
+        if isinstance(other, EUDVariable):
+            return [(self - other).Exactly(0), (other - self).Exactly(0)]
+
+        else:
+            return self.Exactly(other)
+
+    def __le__(self, other):
+        if isinstance(other, EUDVariable):
+            return (self - other).Exactly(0)
+        else:
+            return self.AtMost(other)
+
+    def __ge__(self, other):
+        if isinstance(other, EUDVariable):
+            return (other - self).Exactly(0)
+        else:
+            return self.AtLeast(other)
 
 
 def VTProc(vt, actions):
@@ -376,55 +394,56 @@ Temporary variable storage
 
 _tmpvstorage = []
 _tmpn = 0
+_tmpused = set()
+
+
+'''
+Proxy object for temporary variables.
+
+EUDTempVariable is a proxy for temporary variable. Example:
+
+    a << 2*b + 3*c
+
+The code is equivilant to the following:
+
+    t1 = @@EUDCreateTempVar()   # function not usable outside eudtrg.
+    SetVariable(t1, f_constmul(2)(b))
+
+    t2 = @@EUDCreateTempVar()
+    SetVariable(t2, f_constmul(3)(c))
+
+    t3 = @@EUDCreateTempVar()
+    SeqCompute([
+        (t3, b.SetTo, t1),
+        (t3, Add, t2)
+    ])
+
+    # t1, t2 unref after executing 't1 + t2'
+    @@EUDReleaseTempVar(t1)
+    @@EUDReleaseTempVar(t2)
+
+    SetVariable(a, t3)
+
+    # t3 unref after executing 'a := t3'
+    @@EUDReleaseTempVar(t3)
+
+'''
 
 
 def _TmpProxifyVar(origvariable):
-    '''
-    Proxy object for temporary variables.
-
-    EUDTempVariable is a proxy for temporary variable. Example:
-
-        a << 2*b + 3*c
-
-    The code is equivilant to the following:
-
-        t1 = @@EUDCreateTempVar()   # function not usable outside eudtrg.
-        SetVariable(t1, f_constmul(2)(b))
-
-        t2 = @@EUDCreateTempVar()
-        SetVariable(t2, f_constmul(3)(c))
-
-        t3 = @@EUDCreateTempVar()
-        SeqCompute([
-            (t3, b.SetTo, t1),
-            (t3, Add, t2)
-        ])
-
-        # t1, t2 unref after executing 't1 + t2'
-        @@EUDReleaseTempVar(t1)
-        @@EUDReleaseTempVar(t2)
-
-        SetVariable(a, t3)
-
-        # t3 unref after executing 'a := t3'
-        @@EUDReleaseTempVar(t3)
-
-    '''
 
     class TmpVar(EUDVariable):
         __metaclass__ = EUDVariable
 
         def __init__(self):
-            global _tmpn
-            _tmpn += 1
-            print('Creating temporary object. Current : %d' % _tmpn)
             pass
 
+        '''
+        TODO : Fix the bug
+        '''
+
         def __del__(self):
-            global _tmpn
-            _tmpn -= 1
             _tmpvstorage.append(origvariable)
-            print('Deleting temporary object. Current : %d' % _tmpn)
 
         def __getattr__(self, attrname):
             return getattr(origvariable, attrname)
@@ -565,7 +584,7 @@ def SeqCompute(assignpairs):
         Raises when:
 
         - EUDLightVariable is given as src : Light Variable cannot be direcly
-          assigned. They must be read with f_dwread, or be copied to.
+          assigned. They must be read with f_dwread_epd, or be copied to.
 
     .. warning::
         Subtraction won't underflow. Subtracting values with bigger one will

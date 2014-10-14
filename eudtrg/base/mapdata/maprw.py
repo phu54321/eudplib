@@ -23,7 +23,7 @@ freely, subject to the following restrictions:
    distribution.
 '''
 
-from ..dataspec.trigger import Trigger
+from ..dataspec import trigger as trig
 
 from .mapdata import (
     locnametable,
@@ -40,6 +40,7 @@ from ..inject import injgen
 # private variables
 _chk = None
 _mpqcontent = None
+_starttrg = None
 
 
 def PutDict_NoDup(d, key, value):
@@ -58,7 +59,7 @@ def LoadMap(fname):
 
     print('Loading map %s' % fname)
 
-    global _chk, _mpqcontent
+    global _chk, _mpqcontent, _starttrg
 
     # read mpq content. The file will be copied to output file.
     _mpqcontent = open(fname, 'rb').read()
@@ -127,17 +128,19 @@ def LoadMap(fname):
     uprptable.clear()
     uprpdict.clear()
 
+    _starttrg = trig.NextTrigger()
 
-def SaveMap(fname, root):
+
+def SaveMap(fname):
     '''
     Save template map with EUDObjects & various files.
-
-    :param root: Starting trigger for each player. List of length 8.
 
     :param additionalfiles: List of (MPQ Filename, bytes) to be inserted into
         map MPQ. If different contents share the same MPQ filename, function
         will raise RuntimeError.
     '''
+
+    root = _starttrg
 
     print('Saving map %s' % fname)
 
