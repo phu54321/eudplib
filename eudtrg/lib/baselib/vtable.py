@@ -21,7 +21,6 @@ freely, subject to the following restrictions:
 
 from eudtrg import base as b
 
-from ..auxfunc import muldiv
 from . import varassign as va
 from . import vbuffer as vb
 
@@ -312,18 +311,6 @@ class EUDVariable:
         ))
         return t
 
-    def __mul__(self, other):
-        return muldiv.f_mul(self, other)
-
-    def __rmul__(self, other):
-        return muldiv.f_mul(self, other)
-
-    def __floordiv__(self, other):
-        return muldiv.f_div(self, other)[0]
-
-    def __rfloordiv__(self, other):
-        return muldiv.f_div(other, self)[0]
-
     def __eq__(self, other):
         return (self - other).Exactly(0)
 
@@ -331,21 +318,13 @@ class EUDVariable:
         va.SeqCompute((
             (self, b.Add, other),
         ))
+        return self
 
     def __isub__(self, other):
         va.SeqCompute((
             (self, b.Subtract, other)
         ))
-
-    def __imul__(self, other):
-        va.SeqCompute((
-            (self, b.SetTo, muldiv.f_mul(self, other))
-        ))
-
-    def __ifloordiv__(self, other):
-        va.SeqCompute((
-            (self, b.SetTo, muldiv.f_div(self, other)[0])
-        ))
+        return self
 
 
 def VTProc(vt, actions):
