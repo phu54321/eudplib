@@ -1,4 +1,5 @@
-import sys, os
+import sys
+import os
 sys.path.insert(0, os.path.abspath('..\\'))
 
 from eudtrg import *
@@ -6,10 +7,11 @@ from eudtrg import *
 LoadMap('outputmap/basemap/basemap.scx')
 
 a = Trigger(
-    nextptr = triggerend,
-    actions = [
+    nextptr=triggerend,
+    actions=[
         SetDeaths(Player1, SetTo, 12345678, 0),
-        CreateUnitWithProperties(1, 'Zerg Lurker', 'Anywhere', Player1, UnitProperty(burrowed = True))
+        CreateUnitWithProperties(
+            1, 'Zerg Lurker', 'Anywhere', Player1, UnitProperty(burrowed=True))
     ]
 )
 

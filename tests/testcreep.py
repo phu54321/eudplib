@@ -14,46 +14,33 @@ mapwidth, mapheight, creepaddr = EUDCreateVariables(3)
 @EUDFunc
 def f_creepread_init():
     # Get creepmap address
-    SetVariables(creepaddr, f_epd(f_dwread(EPD(0x6D0E84))))
-    # Get map width & height
+    creepaddr << f_epd(f_dwread(EPD(0x6D0E84)))
     SetVariables(
-        [mapwidth, mapheight], f_dwbreak(f_dwread(EPD(0x57F1D4)))[0:2])
+        [mapwidth, mapheight],
+        f_dwbreak(f_dwread(EPD(0x57F1D4)))[0:2]
+    )
 
 
 @EUDFunc
 def f_creepread(x, y):
     ret, creepindex, creeptileaddr, creepevenodd = EUDCreateVariables(4)
 
-    # calculate creepindex = y * mapwidth + x
-    SetVariables(creepindex, f_mul(y, mapwidth))
-    SetVariables(creepindex, x, Add)
-
-    # creeptileaddr = creepindex // 2, creepevenodd = creepindex % 2
+    creepindex << f_mul(y, mapwidth) + x
     SetVariables([creeptileaddr, creepevenodd], f_div(creepindex, 2))
-
-    # creeptileaddr += creepaddr
-    SetVariables(creeptileaddr, creepaddr, Add)
+    creeptileaddr += creepaddr
 
     # read tile data
-    ret_creeptiledata = f_dwread(creeptileaddr)
-    ret_creeptiledata_word0, ret_creeptiledata_word1 = f_dwbreak(
-        ret_creeptiledata)[0:2]
+    creepdat = f_dwread(creeptileaddr)
+    creepdat_word0, creepdat_word1 = f_dwbreak(creepdat)[0:2]
 
     # select word0/word1 by evenodd
-    creepbr0, creepbr1, creepbrend = Forward(), Forward(), Forward()
-    EUDBranch([creepevenodd.Exactly(0)], creepbr0, creepbr1)
+    if EUDIf(creepevenodd.Exactly(0)):
+        ret << creepdat_word0
 
-    # on even
-    creepbr0 << NextTrigger()
-    SetVariables(ret, ret_creeptiledata_word0)
-    EUDJump(creepbrend)
+    if EUDElse():
+        ret << creepdat_word1
 
-    # on odd
-    creepbr1 << NextTrigger()
-    SetVariables(ret, ret_creeptiledata_word1)
-
-    # end
-    creepbrend << NextTrigger()
+    EUDEndIf()
 
     return ret
 

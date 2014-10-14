@@ -321,7 +321,13 @@ class EUDVariable:
 
     def __isub__(self, other):
         SeqCompute((
-            (self, b.Subtract, other)
+            (self, b.Subtract, other),
+        ))
+        return self
+
+    def __lshift__(self, other):
+        SeqCompute((
+            (self, b.SetTo, other)
         ))
         return self
 
@@ -369,6 +375,7 @@ Temporary variable storage
 '''
 
 _tmpvstorage = []
+_tmpn = 0
 
 
 def _TmpProxifyVar(origvariable):
@@ -408,10 +415,16 @@ def _TmpProxifyVar(origvariable):
         __metaclass__ = EUDVariable
 
         def __init__(self):
+            global _tmpn
+            _tmpn += 1
+            print('Creating temporary object. Current : %d' % _tmpn)
             pass
 
         def __del__(self):
+            global _tmpn
+            _tmpn -= 1
             _tmpvstorage.append(origvariable)
+            print('Deleting temporary object. Current : %d' % _tmpn)
 
         def __getattr__(self, attrname):
             return getattr(origvariable, attrname)
