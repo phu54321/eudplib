@@ -28,7 +28,6 @@ Dependency graph library. Traverses through objects by dependencies, collecting
 required objects. Used internally in eudtrg.
 '''
 
-
 # Dependency graph library
 from ..dataspec.eudobj import EUDObject
 from ..dataspec.expr import GetDependencyList

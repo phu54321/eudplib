@@ -31,12 +31,10 @@ eudtrg consists of 2 subpackages.
 - lib  : Libraries made using 'base'.
 '''
 
-from eudtrg import LICENSE  # @UnusedImport
-
 from .base import *
 from .lib import *
 
-__version__ = "0.30-r1-beta"
+__version__ = "0.30-r2-beta"
 
 
 def eudtrgVersion():

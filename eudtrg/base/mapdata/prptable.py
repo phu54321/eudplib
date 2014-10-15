@@ -27,7 +27,6 @@
 Unit property table manager.
 '''
 
-
 from .unitprp import UnitProperty
 from .mapdata import uprptable, uprpdict
 

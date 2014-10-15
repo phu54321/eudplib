@@ -32,11 +32,6 @@ import struct
 from . import trigtrg as tt
 from . import doevents
 
-from ..dataspec.trigger import Trigger
-from ..dataspec.forward import Forward
-
-from ..stocktrg import SetDeaths
-from ..utils.utils import EPD
 from ..utils.sctbl import TBL
 
 

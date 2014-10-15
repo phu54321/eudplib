@@ -27,7 +27,6 @@
 Defiens class UnitProperty
 '''
 
-
 from ctypes import *  # @UnusedWildImport
 
 

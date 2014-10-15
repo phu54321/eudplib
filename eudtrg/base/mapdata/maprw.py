@@ -26,9 +26,6 @@
 Implements LoadMap, SaveMap function
 '''
 
-
-from ..dataspec import trigger as trig
-
 from .mapdata import (
     locnametable,
     unitnametable,
