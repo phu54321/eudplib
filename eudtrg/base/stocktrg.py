@@ -14,29 +14,15 @@ ex) You want to create 'Create Unit' action:
 
     CreateUnit(30, 'Terran Marine', 'Anywhere', Player1)
 
-'''
+Trigger docstrings is from Staredit.Net wiki.
 
-from eudtrg import LICENSE  # pylint: disable=unused-import
+- Conditions : `<http://www.staredit.net/starcraft/List_of_Trigger_Conditions>`
+- Actions : `<http://www.staredit.net/starcraft/List_of_Trigger_Actions>`
+'''
 
 from .dataspec.trigger import Condition, Action
 from .utils.utils import EPD
-from .trgconst import (
-    ParseAllyStatus,
-    ParseComparison,
-    ParseModifier,
-    ParseOrder,
-    ParsePlayer,
-    ParsePropState,
-    ParseResource,
-    ParseScore,
-    ParseSwitchAction,
-    ParseSwitchState,
-    ParseCount,
-    ParseAIScript,
-
-    SetTo,  # Needed for SetNextPtr
-)
-
+from .trgconst import *
 from .mapdata.nametable import (
     ParseUnit,
     ParseLocation,
@@ -52,11 +38,30 @@ def NoCondition():
 
 
 def CountdownTimer(Comparison, Time):
+    """Checks countdown timer.
+    
+    Example::
+
+        CountdownTimer(AtLeast, 10)
+
+    Memory Layout::
+        
+        0000 0000 0000 0000 TTTT TTTT 0000 CP01 0000
+
+        T : Time, CP : Comparison.
+    """
     Comparison = ParseComparison(Comparison)
     return Condition(0, 0, Time, 0, Comparison, 1, 0, 0)
 
 
 def Command(Player, Comparison, Number, Unit):
+    """[Player] commands [Comparison] [Number] [Unit].
+
+    Example::
+        Command(Player1, AtLeast, 30, "Terran Marine")
+
+
+    """
     Player = ParsePlayer(Player)
     Comparison = ParseComparison(Comparison)
     Unit = ParseUnit(Unit)

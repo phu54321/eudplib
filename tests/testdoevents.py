@@ -20,8 +20,9 @@ if EUDWhile(a <= 5):
 
     EUDSetContinuePoint()
     a << a + 1
+    EUDDoEvents()
 
 EUDEndWhile()
 
 
-SaveMap('outputmap/blockstru.scx', mainstart)
+SaveMap('outputmap/doevents.scx', mainstart)

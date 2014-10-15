@@ -25,7 +25,8 @@ freely, subject to the following restrictions:
 
 import struct
 
-from .trigtrg import *  # @UnusedWildImport
+from . import trigtrg as tt
+from . import doevents
 
 from ..dataspec.trigger import Trigger
 from ..dataspec.forward import Forward
@@ -33,6 +34,7 @@ from ..dataspec.forward import Forward
 from ..stocktrg import SetDeaths
 from ..utils.utils import EPD
 from ..utils.sctbl import TBL
+
 
 from ..payload.payload import CreatePayload
 
@@ -43,26 +45,26 @@ def _CopyTrigger(player, conditions, iaddr, oaddrs, div4=False):
     triggers = []
 
     for i in range(31, 1, -1):
-        triggers.append(CreateTRIGTrigger(
+        triggers.append(tt.Trigger(
             players=[player],
             conditions=conditions +
-            [CreateTRIGMemory(iaddr, AtLeast, 1 << i)],
+            [tt.Memory(iaddr, tt.AtLeast, 1 << i)],
             actions=
-            [CreateTRIGSetMemory(iaddr, Subtract, 1 << i)] +
-            [CreateTRIGSetMemory(
-                oaddr, Add, 1 << i if not div4 else 1 << (i - 2))
+            [tt.SetMemory(iaddr, tt.Subtract, 1 << i)] +
+            [tt.SetMemory(
+                oaddr, tt.Add, 1 << i if not div4 else 1 << (i - 2))
                 for oaddr in oaddrs] +
-            [CreateTRIGSetDeaths(player, Add, 1 << i, 37)]  # 37 from whyask37
+            [tt.SetDeaths(player, tt.Add, 1 << i, 37)]  # 37 from whyask37
         ))
 
     for i in range(31, 1, -1):
-        triggers.append(CreateTRIGTrigger(
+        triggers.append(tt.Trigger(
             players=[player],
             conditions=conditions +
-            [CreateTRIGDeaths(player, AtLeast, 1 << i, 37)],
+            [tt.Deaths(player, tt.AtLeast, 1 << i, 37)],
             actions=[
-                CreateTRIGSetMemory(iaddr, Add, 1 << i),
-                CreateTRIGSetDeaths(player, Subtract, 1 << i, 37)
+                tt.SetMemory(iaddr, tt.Add, 1 << i),
+                tt.SetDeaths(player, tt.Subtract, 1 << i, 37)
             ]
         ))
 
@@ -72,10 +74,10 @@ def _CopyTrigger(player, conditions, iaddr, oaddrs, div4=False):
 def _AssignTrigger(player, conditions, value, oaddrs):
     assert len(oaddrs) < 64
 
-    return CreateTRIGTrigger(
+    return tt.Trigger(
         players=[player],
         conditions=conditions,
-        actions=[CreateTRIGSetMemory(oaddr, SetTo, value) for oaddr in oaddrs]
+        actions=[tt.SetMemory(oaddr, tt.SetTo, value) for oaddr in oaddrs]
     )
 
 
@@ -93,13 +95,13 @@ def _file2eudtrg(player, conditions, fdata, offset):
             code[len(code):] = b'0' * (4 - len(code))
 
         number = struct.unpack('L', code)[0]
-        actions.append(CreateTRIGSetMemory(offset, SetTo, number))
+        actions.append(tt.SetMemory(offset, tt.SetTo, number))
         offset += 4
 
     # pack actions to trigger
     index = 0
     while len(actions) > index:
-        triggers.append(CreateTRIGTrigger(
+        triggers.append(tt.Trigger(
             players=[player],
             conditions=conditions,
             actions=actions[index:index + 64]
@@ -158,30 +160,10 @@ def GenerateInjector(chkt, root):
 
     injector = cp[0]
 
-    # Add crash killer in front of the trigger
-    triggerend = ~(0x51A284 + injector * 12)
+    # Avoid crashing.
+    root = doevents.CreateTriggerStarter(root, injector)
 
-    # For programs who missed putting triggerend to their last trigger.
-    Trigger(nextptr=triggerend)
-
-    entry = Forward()
-    entry2 = Forward()
-
-    entry << Trigger(
-        nextptr=triggerend,
-        actions=[
-            SetDeaths(EPD(entry + 4), SetTo, entry2, 0)
-        ]
-    )
-
-    entry2 << Trigger(
-        nextptr=root,
-        actions=[
-            SetDeaths(EPD(entry + 4), SetTo, triggerend, 0)
-        ]
-    )
-
-    payload = CreatePayload(entry)
+    payload = CreatePayload(root)
 
     trgcode = payload.data
     ort = payload.orttable
@@ -210,41 +192,41 @@ def GenerateInjector(chkt, root):
     ptsinj = pts + 12 * injector
 
     # Stage 0 : Check if EUDA is enabled.
-    triggers.append(CreateTRIGTrigger(
+    triggers.append(tt.Trigger(
         players=[17],  # check for all players
         conditions=[
-            CreateTRIGMemory(time, Exactly, 2)
+            tt.Memory(time, tt.Exactly, 2)
         ],
         actions=[
-            CreateTRIGSetMemory(mrgn, SetTo, 1111)
+            tt.SetMemory(vloc, tt.SetTo, 1111)
         ]
     ))
 
-    triggers.append(CreateTRIGTrigger(
+    triggers.append(tt.Trigger(
         players=[17],  # check for all players
         conditions=[
-            CreateTRIGMemory(time, Exactly, 2),
-            CreateTRIGMemory(mrgn, Exactly, 0),
-            CreateTRIGSwitch(0, Cleared),
-            CreateTRIGSwitch(1, Cleared),
-            CreateTRIGSwitch(2, Cleared),
-            CreateTRIGSwitch(3, Cleared),
-            CreateTRIGSwitch(4, Cleared),
-            CreateTRIGSwitch(5, Cleared),
+            tt.Memory(time, tt.Exactly, 2),
+            tt.Memory(vloc, tt.Exactly, 0),
+            tt.Switch(0, tt.Cleared),
+            tt.Switch(1, tt.Cleared),
+            tt.Switch(2, tt.Cleared),
+            tt.Switch(3, tt.Cleared),
+            tt.Switch(4, tt.Cleared),
+            tt.Switch(5, tt.Cleared),
         ],
         actions=[
-            CreateTRIGDisplayTextMessage(noneuda_notify),
-            CreateTRIGDraw()
+            tt.DisplayTextMessage(noneuda_notify),
+            tt.Draw()
         ]
     ))
 
-    triggers.append(CreateTRIGTrigger(
+    triggers.append(tt.Trigger(
         players=[17],  # check for all players
         conditions=[
-            CreateTRIGMemory(time, Exactly, 2)
+            tt.Memory(time, tt.Exactly, 2)
         ],
         actions=[
-            CreateTRIGSetMemory(mrgn, SetTo, 0)
+            tt.SetMemory(vloc, tt.SetTo, 0)
         ]
     ))
 
@@ -252,7 +234,7 @@ def GenerateInjector(chkt, root):
     #
     # (pts[injector]->prev)->next = mrgn
     #   *(currentplayer) = player(pts[injector]->prev + 4)
-    #   * SetDeaths(currentplayer, SetTo, mrgn, 0)
+    #   * SetDeaths(currentplayer, tt.SetTo, mrgn, 0)
     #
     # (mrgn->next = *pts[injector]->next)
     #   *(mrgn + 4) = pts[injector]->next
@@ -261,18 +243,18 @@ def GenerateInjector(chkt, root):
     #   *(mrgn + 328 + 2048) = 4   for preserve trigger
     #
 
-    # Set basic things
-    triggers.append(CreateTRIGTrigger(
+    # tt.Set basic things
+    triggers.append(tt.Trigger(
         players=[injector],
         conditions=[
-            CreateTRIGMemory(time, Exactly, 2),
-            CreateTRIGSwitch(0, Cleared)
+            tt.Memory(time, tt.Exactly, 2),
+            tt.Switch(0, tt.Cleared)
         ],
         actions=[
             # *(mrgn + 328 + 2048) = EPD(4)  for preserve trigger
-            CreateTRIGSetMemory(mrgn + 328 + 2048, SetTo, 4),
+            tt.SetMemory(mrgn + 328 + 2048, tt.SetTo, 4),
             # *current_player = player(4)
-            CreateTRIGSetMemory(cpl, SetTo, Memory2Player(4)),
+            tt.SetMemory(cpl, tt.SetTo, tt.Memory2Player(4)),
         ]
     ))
 
@@ -280,8 +262,8 @@ def GenerateInjector(chkt, root):
     triggers.extend(_CopyTrigger(
         player=injector,
         conditions=[
-            CreateTRIGMemory(time, Exactly, 2),
-            CreateTRIGSwitch(0, Cleared)
+            tt.Memory(time, tt.Exactly, 2),
+            tt.Switch(0, tt.Cleared)
         ],
         iaddr=ptsinj + 4,
         oaddrs=[cpl],
@@ -292,24 +274,24 @@ def GenerateInjector(chkt, root):
     triggers.extend(_CopyTrigger(
         player=injector,
         conditions=[
-            CreateTRIGMemory(time, Exactly, 2),
-            CreateTRIGSwitch(0, Cleared)
+            tt.Memory(time, tt.Exactly, 2),
+            tt.Switch(0, tt.Cleared)
         ],
         iaddr=ptsinj + 8,
         oaddrs=[mrgn + 4],
     ))
 
-    #  SetDeaths(CurrentPlayer, SetTo, mrgn, 0)
-    triggers.append(CreateTRIGTrigger(
+    #  SetDeaths(CurrentPlayer, tt.SetTo, mrgn, 0)
+    triggers.append(tt.Trigger(
         players=[injector],
         conditions=[
-            CreateTRIGMemory(time, Exactly, 2),
-            CreateTRIGSwitch(0, Cleared)
+            tt.Memory(time, tt.Exactly, 2),
+            tt.Switch(0, tt.Cleared)
         ],
         actions=[
-            CreateTRIGSetDeaths(13, SetTo, mrgn, 0),  # 13 = current player
-            CreateTRIGSetMemory(cpl, SetTo, injector),
-            CreateTRIGSetSwitch(0, SwitchSet)  # Goto stage 2
+            tt.SetDeaths(13, tt.SetTo, mrgn, 0),  # 13 = current player
+            tt.SetMemory(cpl, tt.SetTo, injector),
+            tt.SetSwitch(0, tt.SwitchSet)  # Goto stage 2
         ]
     ))
 
@@ -326,11 +308,11 @@ def GenerateInjector(chkt, root):
     triggers.append(_AssignTrigger(
         player=injector,
         conditions=[
-            CreateTRIGMemory(time, Exactly, 2),
-            CreateTRIGSwitch(0, Set),
-            CreateTRIGSwitch(1, Cleared)
+            tt.Memory(time, tt.Exactly, 2),
+            tt.Switch(0, tt.Set),
+            tt.Switch(1, tt.Cleared)
         ],
-        value=Memory2Player(payload_offset),
+        value=tt.Memory2Player(payload_offset),
         oaddrs=[(mrgn + 328 + 32 * i + 16) for i in range(32)]
     ))
 
@@ -338,9 +320,9 @@ def GenerateInjector(chkt, root):
     triggers.extend(_CopyTrigger(
         player=injector,
         conditions=[
-            CreateTRIGMemory(time, Exactly, 2),
-            CreateTRIGSwitch(0, Set),
-            CreateTRIGSwitch(1, Cleared)
+            tt.Memory(time, tt.Exactly, 2),
+            tt.Switch(0, tt.Set),
+            tt.Switch(1, tt.Cleared)
         ],
         iaddr=strs,
         oaddrs=[(mrgn + 328 + 32 * i + 16) for i in range(32)],
@@ -351,9 +333,9 @@ def GenerateInjector(chkt, root):
     triggers.append(_AssignTrigger(
         player=injector,
         conditions=[
-            CreateTRIGMemory(time, Exactly, 2),
-            CreateTRIGSwitch(0, Set),
-            CreateTRIGSwitch(1, Cleared)
+            tt.Memory(time, tt.Exactly, 2),
+            tt.Switch(0, tt.Set),
+            tt.Switch(1, tt.Cleared)
         ],
         value=0x082D0000,
         oaddrs=[(mrgn + 328 + 32 * i + 24) for i in range(32)]
@@ -366,9 +348,9 @@ def GenerateInjector(chkt, root):
     triggers.append(_AssignTrigger(
         player=injector,
         conditions=[
-            CreateTRIGMemory(time, Exactly, 2),
-            CreateTRIGSwitch(0, Set),
-            CreateTRIGSwitch(1, Cleared)
+            tt.Memory(time, tt.Exactly, 2),
+            tt.Switch(0, tt.Set),
+            tt.Switch(1, tt.Cleared)
         ],
         value=payload_offset // 4,
         oaddrs=[(mrgn + 328 + 32 * i + 20) for i in range(32)]
@@ -378,9 +360,9 @@ def GenerateInjector(chkt, root):
     triggers.extend(_CopyTrigger(
         player=injector,
         conditions=[
-            CreateTRIGMemory(time, Exactly, 2),
-            CreateTRIGSwitch(0, Set),
-            CreateTRIGSwitch(1, Cleared)
+            tt.Memory(time, tt.Exactly, 2),
+            tt.Switch(0, tt.Set),
+            tt.Switch(1, tt.Cleared)
         ],
         iaddr=strs,
         oaddrs=[(mrgn + 328 + 32 * i + 20) for i in range(32)],
@@ -388,15 +370,15 @@ def GenerateInjector(chkt, root):
     ))
 
     # Jmp to next trigger (Stage 2)
-    triggers.append(CreateTRIGTrigger(
+    triggers.append(tt.Trigger(
         players=[injector],
         conditions=[
-            CreateTRIGMemory(time, Exactly, 2),
-            CreateTRIGSwitch(0, Set),
-            CreateTRIGSwitch(1, Cleared)
+            tt.Memory(time, tt.Exactly, 2),
+            tt.Switch(0, tt.Set),
+            tt.Switch(1, tt.Cleared)
         ],
         actions=[
-            CreateTRIGSetSwitch(1, SwitchSet)
+            tt.SetSwitch(1, tt.SwitchSet)
         ]
     ))
 
@@ -405,17 +387,17 @@ def GenerateInjector(chkt, root):
     loopn = (31 + len(prt)) // 32
 
     # Break condition
-    triggers.append(CreateTRIGTrigger(
+    triggers.append(tt.Trigger(
         players=[injector],
         conditions=[
-            CreateTRIGMemory(time, Exactly, 2),
-            CreateTRIGSwitch(1, Set),
-            CreateTRIGSwitch(2, Cleared),
-            CreateTRIGDeaths(injector, Exactly, loopn, 0)
+            tt.Memory(time, tt.Exactly, 2),
+            tt.Switch(1, tt.Set),
+            tt.Switch(2, tt.Cleared),
+            tt.Deaths(injector, tt.Exactly, loopn, 0)
         ],
         actions=[
-            CreateTRIGSetDeaths(injector, SetTo, 0, 0),
-            CreateTRIGSetSwitch(2, SwitchSet)
+            tt.SetDeaths(injector, tt.SetTo, 0, 0),
+            tt.SetSwitch(2, tt.SwitchSet)
         ]
     ))
 
@@ -429,29 +411,30 @@ def GenerateInjector(chkt, root):
         poffset = [(subprt[i] - addrcache[i]) // 4 for i in range(32)]
         addrcache = subprt
 
-        triggers.append(CreateTRIGTrigger(
+        triggers.append(tt.Trigger(
             players=[injector],
             conditions=[
-                CreateTRIGMemory(time, Exactly, 2),
-                CreateTRIGSwitch(1, Set),
-                CreateTRIGSwitch(2, Cleared),
-                CreateTRIGDeaths(injector, Exactly, i, 0)
+                tt.Memory(time, tt.Exactly, 2),
+                tt.Switch(1, tt.Set),
+                tt.Switch(2, tt.Cleared),
+                tt.Deaths(injector, tt.Exactly, i, 0)
             ],
-            actions=[CreateTRIGSetMemory(
-                mrgn + 328 + 32 * j + 16, Add, poffset[j]) for j in range(32)]
+            actions=[tt.SetMemory(
+                mrgn + 328 + 32 * j + 16, tt.Add, poffset[j])
+                for j in range(32)]
         ))
 
     # Advancer
-    triggers.append(CreateTRIGTrigger(
+    triggers.append(tt.Trigger(
         players=[injector],
         conditions=[
-            CreateTRIGMemory(time, Exactly, 2),
-            CreateTRIGSwitch(1, Set),
-            CreateTRIGSwitch(2, Cleared)
+            tt.Memory(time, tt.Exactly, 2),
+            tt.Switch(1, tt.Set),
+            tt.Switch(2, tt.Cleared)
         ],
         actions=[
-            CreateTRIGSetDeaths(injector, Add, 1, 0),
-            CreateTRIGPreserveTrigger()
+            tt.SetDeaths(injector, tt.Add, 1, 0),
+            tt.PreserveTrigger()
         ]
     ))
 
@@ -462,9 +445,9 @@ def GenerateInjector(chkt, root):
     triggers.append(_AssignTrigger(
         player=injector,
         conditions=[
-            CreateTRIGMemory(time, Exactly, 2),
-            CreateTRIGSwitch(2, Set),
-            CreateTRIGSwitch(3, Cleared)
+            tt.Memory(time, tt.Exactly, 2),
+            tt.Switch(2, tt.Set),
+            tt.Switch(3, tt.Cleared)
         ],
         value=payload_offset,
         oaddrs=[(mrgn + 328 + 32 * i + 20) for i in range(32)]
@@ -474,24 +457,24 @@ def GenerateInjector(chkt, root):
     triggers.extend(_CopyTrigger(
         player=injector,
         conditions=[
-            CreateTRIGMemory(time, Exactly, 2),
-            CreateTRIGSwitch(2, Set),
-            CreateTRIGSwitch(3, Cleared)
+            tt.Memory(time, tt.Exactly, 2),
+            tt.Switch(2, tt.Set),
+            tt.Switch(3, tt.Cleared)
         ],
         iaddr=strs,
         oaddrs=[(mrgn + 328 + 32 * i + 20) for i in range(32)],
     ))
 
     # Jmp to next stage
-    triggers.append(CreateTRIGTrigger(
+    triggers.append(tt.Trigger(
         players=[injector],
         conditions=[
-            CreateTRIGMemory(time, Exactly, 2),
-            CreateTRIGSwitch(2, Set),
-            CreateTRIGSwitch(3, Cleared)
+            tt.Memory(time, tt.Exactly, 2),
+            tt.Switch(2, tt.Set),
+            tt.Switch(3, tt.Cleared)
         ],
         actions=[
-            CreateTRIGSetSwitch(3, SwitchSet)
+            tt.SetSwitch(3, tt.SwitchSet)
         ]
     ))
 
@@ -500,17 +483,17 @@ def GenerateInjector(chkt, root):
     loopn = (31 + len(ort)) // 32
 
     # Break condition
-    triggers.append(CreateTRIGTrigger(
+    triggers.append(tt.Trigger(
         players=[injector],
         conditions=[
-            CreateTRIGMemory(time, Exactly, 2),
-            CreateTRIGSwitch(3, Set),
-            CreateTRIGSwitch(4, Cleared),
-            CreateTRIGDeaths(injector, Exactly, loopn, 0)
+            tt.Memory(time, tt.Exactly, 2),
+            tt.Switch(3, tt.Set),
+            tt.Switch(4, tt.Cleared),
+            tt.Deaths(injector, tt.Exactly, loopn, 0)
         ],
         actions=[
-            CreateTRIGSetDeaths(injector, SetTo, 0, 0),
-            CreateTRIGSetSwitch(4, SwitchSet)
+            tt.SetDeaths(injector, tt.SetTo, 0, 0),
+            tt.SetSwitch(4, tt.SwitchSet)
         ]
     ))
 
@@ -519,17 +502,17 @@ def GenerateInjector(chkt, root):
     loopn = (31 + len(ort)) // 32
 
     # Break condition
-    triggers.append(CreateTRIGTrigger(
+    triggers.append(tt.Trigger(
         players=[injector],
         conditions=[
-            CreateTRIGMemory(time, Exactly, 2),
-            CreateTRIGSwitch(3, Set),
-            CreateTRIGSwitch(4, Cleared),
-            CreateTRIGDeaths(injector, Exactly, loopn, 0)
+            tt.Memory(time, tt.Exactly, 2),
+            tt.Switch(3, tt.Set),
+            tt.Switch(4, tt.Cleared),
+            tt.Deaths(injector, tt.Exactly, loopn, 0)
         ],
         actions=[
-            CreateTRIGSetDeaths(injector, SetTo, 0, 0),
-            CreateTRIGSetSwitch(4, SwitchSet)
+            tt.SetDeaths(injector, tt.SetTo, 0, 0),
+            tt.SetSwitch(4, tt.SwitchSet)
         ]
     ))
 
@@ -543,29 +526,30 @@ def GenerateInjector(chkt, root):
         poffset = [(subort[j] - addrcache[j]) // 4 for j in range(32)]
         addrcache = subort
 
-        triggers.append(CreateTRIGTrigger(
+        triggers.append(tt.Trigger(
             players=[injector],
             conditions=[
-                CreateTRIGMemory(time, Exactly, 2),
-                CreateTRIGSwitch(3, Set),
-                CreateTRIGSwitch(4, Cleared),
-                CreateTRIGDeaths(injector, Exactly, i, 0)
+                tt.Memory(time, tt.Exactly, 2),
+                tt.Switch(3, tt.Set),
+                tt.Switch(4, tt.Cleared),
+                tt.Deaths(injector, tt.Exactly, i, 0)
             ],
-            actions=[CreateTRIGSetMemory(
-                mrgn + 328 + 32 * j + 16, Add, poffset[j]) for j in range(32)]
+            actions=[tt.SetMemory(
+                mrgn + 328 + 32 * j + 16, tt.Add, poffset[j])
+                for j in range(32)]
         ))
 
     # Advancer
-    triggers.append(CreateTRIGTrigger(
+    triggers.append(tt.Trigger(
         players=[injector],
         conditions=[
-            CreateTRIGMemory(time, Exactly, 2),
-            CreateTRIGSwitch(3, Set),
-            CreateTRIGSwitch(4, Cleared)
+            tt.Memory(time, tt.Exactly, 2),
+            tt.Switch(3, tt.Set),
+            tt.Switch(4, tt.Cleared)
         ],
         actions=[
-            CreateTRIGSetDeaths(injector, Add, 1, 0),
-            CreateTRIGPreserveTrigger()
+            tt.SetDeaths(injector, tt.Add, 1, 0),
+            tt.PreserveTrigger()
         ]
     ))
 
@@ -578,17 +562,17 @@ def GenerateInjector(chkt, root):
     #
 
     # Exit trap
-    triggers.append(CreateTRIGTrigger(
+    triggers.append(tt.Trigger(
         players=[injector],
         conditions=[
-            CreateTRIGMemory(time, Exactly, 2),
-            CreateTRIGSwitch(4, Set),
-            CreateTRIGSwitch(5, Cleared),
-            CreateTRIGDeaths(injector, Exactly, 1, 0)
+            tt.Memory(time, tt.Exactly, 2),
+            tt.Switch(4, tt.Set),
+            tt.Switch(5, tt.Cleared),
+            tt.Deaths(injector, tt.Exactly, 1, 0)
         ],
         actions=[
-            CreateTRIGSetDeaths(injector, SetTo, 0, 0),
-            CreateTRIGSetSwitch(5, SwitchSet)
+            tt.SetDeaths(injector, tt.SetTo, 0, 0),
+            tt.SetSwitch(5, tt.SwitchSet)
         ]
     ))
 
@@ -597,19 +581,19 @@ def GenerateInjector(chkt, root):
     # *(mrgn + 328 + 24) = 0x072D0000
     # *(mrgn + 328 + 32 + 24) = 0x00000000
 
-    triggers.append(CreateTRIGTrigger(
+    triggers.append(tt.Trigger(
         players=[injector],
         conditions=[
-            CreateTRIGMemory(time, Exactly, 2),
-            CreateTRIGSwitch(4, Set),
-            CreateTRIGSwitch(5, Cleared)
+            tt.Memory(time, tt.Exactly, 2),
+            tt.Switch(4, tt.Set),
+            tt.Switch(5, tt.Cleared)
         ],
         actions=[
-            CreateTRIGSetMemory(mrgn + 328 + 16, SetTo, Memory2Player(4)),
-            CreateTRIGSetMemory(mrgn + 328 + 20, SetTo, payload_offset),
-            CreateTRIGSetMemory(mrgn + 328 + 24, SetTo, 0x072D0000),
-            CreateTRIGSetMemory(mrgn + 328 + 32 + 24, SetTo, 0x00000000),
-            CreateTRIGSetDeaths(injector, SetTo, 1, 0),  # activates trap
+            tt.SetMemory(mrgn + 328 + 16, tt.SetTo, tt.Memory2Player(4)),
+            tt.SetMemory(mrgn + 328 + 20, tt.SetTo, payload_offset),
+            tt.SetMemory(mrgn + 328 + 24, tt.SetTo, 0x072D0000),
+            tt.SetMemory(mrgn + 328 + 32 + 24, tt.SetTo, 0x00000000),
+            tt.SetDeaths(injector, tt.SetTo, 1, 0),  # activates trap
         ]
     ))
 
@@ -617,9 +601,9 @@ def GenerateInjector(chkt, root):
     triggers.extend(_CopyTrigger(
         player=injector,
         conditions=[
-            CreateTRIGMemory(time, Exactly, 2),
-            CreateTRIGSwitch(4, Set),
-            CreateTRIGSwitch(5, Cleared)
+            tt.Memory(time, tt.Exactly, 2),
+            tt.Switch(4, tt.Set),
+            tt.Switch(5, tt.Cleared)
         ],
         iaddr=ptsinj + 4,
         oaddrs=[mrgn + 328 + 16],
@@ -630,9 +614,9 @@ def GenerateInjector(chkt, root):
     triggers.extend(_CopyTrigger(
         player=injector,
         conditions=[
-            CreateTRIGMemory(time, Exactly, 2),
-            CreateTRIGSwitch(4, Set),
-            CreateTRIGSwitch(5, Cleared)
+            tt.Memory(time, tt.Exactly, 2),
+            tt.Switch(4, tt.Set),
+            tt.Switch(5, tt.Cleared)
         ],
         iaddr=strs,
         oaddrs=[mrgn + 328 + 20]
@@ -646,26 +630,26 @@ def GenerateInjector(chkt, root):
     triggers.extend(_file2eudtrg(
         player=injector,
         conditions=[
-            CreateTRIGMemory(time, Exactly, 2),
-            CreateTRIGSwitch(5, Set)
+            tt.Memory(time, tt.Exactly, 2),
+            tt.Switch(5, tt.Set)
         ],
         fdata=section_mrgn,
         offset=mrgn
     ))
 
-    triggers.append(CreateTRIGTrigger(
+    triggers.append(tt.Trigger(
         players=[injector],
         conditions=[
-            CreateTRIGMemory(time, Exactly, 2),
-            CreateTRIGSwitch(5, Set)
+            tt.Memory(time, tt.Exactly, 2),
+            tt.Switch(5, tt.Set)
         ],
         actions=[
-            CreateTRIGSetSwitch(0, SwitchClear),
-            CreateTRIGSetSwitch(1, SwitchClear),
-            CreateTRIGSetSwitch(2, SwitchClear),
-            CreateTRIGSetSwitch(3, SwitchClear),
-            CreateTRIGSetSwitch(4, SwitchClear),
-            CreateTRIGSetSwitch(5, SwitchClear),
+            tt.SetSwitch(0, tt.SwitchClear),
+            tt.SetSwitch(1, tt.SwitchClear),
+            tt.SetSwitch(2, tt.SwitchClear),
+            tt.SetSwitch(3, tt.SwitchClear),
+            tt.SetSwitch(4, tt.SwitchClear),
+            tt.SetSwitch(5, tt.SwitchClear),
         ]
     ))
 
@@ -678,7 +662,7 @@ def GenerateInjector(chkt, root):
         bytes([0] * (payload_offset - len(section_str))) + trgcode
     chkt.setsection('STR ', section_str)
 
-    # Set mrgn to blank one.
+    # tt.Set mrgn to blank one.
     chkt.setsection('MRGN', b'\x00' * 5100)
 
     # Injection complete

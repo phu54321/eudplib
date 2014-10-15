@@ -91,16 +91,16 @@ def _bconstruct(vspair):
     return b''.join(btb)
 
 
-def CreateTRIGCondition(locid, player, amount, unitid,
-                        comparison, condtype, restype, flag):
+def Condition(locid, player, amount, unitid,
+              comparison, condtype, restype, flag):
     if player < 0:
         player += 0x100000000  # EPD
     return pack('<IIIHBBBBBB', locid, player, amount, unitid,
                 comparison, condtype, restype, flag, 0, 0)
 
 
-def CreateTRIGAction(locid1, strid, wavid, time, player1,
-                     player2, unitid, acttype, amount, flags):
+def Action(locid1, strid, wavid, time, player1,
+           player2, unitid, acttype, amount, flags):
     if player1 < 0:
         player1 += 0x100000000  # EPD
     if player2 < 0:
@@ -109,7 +109,7 @@ def CreateTRIGAction(locid1, strid, wavid, time, player1,
                 unitid, acttype, amount, flags, 0, 0, 0)
 
 
-def CreateTRIGTrigger(players, conditions, actions, preservetrigger=False):
+def Trigger(players, conditions, actions, preservetrigger=False):
     assert type(players) is list and type(
         conditions) is list and type(actions) is list
     assert len(conditions) <= 16
@@ -142,69 +142,69 @@ def WriteTRIGTrg(fp, triggers):
 
 
 # conditions
-def CreateTRIGDeaths(player, comparison, number, unit):
-    return CreateTRIGCondition(
+def Deaths(player, comparison, number, unit):
+    return Condition(
         0x00000000, player, number, unit,
         comparison, 0x0F, 0x00, 0x10)
 
 
-def CreateTRIGMemory(offset, comparison, number):
+def Memory(offset, comparison, number):
     assert offset % 4 == 0  # only this kind of comparison is possible
     player = Memory2Player(offset)
 
     if 0 <= player < 12 * 228:  # eud possible
         unit = player // 12
         player = player % 12
-        return CreateTRIGDeaths(player, comparison, number, unit)
+        return Deaths(player, comparison, number, unit)
 
     else:  # use epd
-        return CreateTRIGDeaths(player, comparison, number, 0)
+        return Deaths(player, comparison, number, 0)
 
 
-def CreateTRIGSwitch(Switch, State):
-    return CreateTRIGCondition(0, 0, 0, 0, State, 11, Switch, 0)
+def Switch(Switch, State):
+    return Condition(0, 0, 0, 0, State, 11, Switch, 0)
 
 
 # actions
-def CreateTRIGSetDeaths(player, settype, number, unit):
-    return CreateTRIGAction(
+def SetDeaths(player, settype, number, unit):
+    return Action(
         0x00000000, 0x00000000, 0x00000000, 0x00000000,
         player, number, unit, 0x2D, settype, 0x14)
 
 
-def CreateTRIGSetMemory(offset, settype, number):
+def SetMemory(offset, settype, number):
     assert offset % 4 == 0
     player = Memory2Player(offset)
 
     if 0 <= player < 12 * 228:  # eud possible
         unit = player // 12
         player = player % 12
-        return CreateTRIGSetDeaths(player, settype, number, unit)
+        return SetDeaths(player, settype, number, unit)
 
     else:  # use epd
-        return CreateTRIGSetDeaths(player, settype, number, 0)
+        return SetDeaths(player, settype, number, 0)
 
 
-def CreateTRIGSetSwitch(Switch, SwitchState):
-    return CreateTRIGAction(0, 0, 0, 0, 0, Switch, 0, 13, SwitchState, 4)
+def SetSwitch(Switch, SwitchState):
+    return Action(0, 0, 0, 0, 0, Switch, 0, 13, SwitchState, 4)
 
 
-def CreateTRIGPreserveTrigger():
-    return CreateTRIGAction(
+def PreserveTrigger():
+    return Action(
         0x00000000, 0x00000000, 0x00000000, 0x00000000,
         0x00000000, 0x00000000, 0x0000, 3, 0x00, 4)
 
 
-def CreateTRIGDisplayTextMessage(Text):
-    return CreateTRIGAction(0, Text, 0, 0, 0, 0, 0, 9, 0, 4)
+def DisplayTextMessage(Text):
+    return Action(0, Text, 0, 0, 0, 0, 0, 9, 0, 4)
 
 
-def CreateTRIGDraw():
-    return CreateTRIGAction(0, 0, 0, 0, 0, 0, 0, 56, 0, 4)
+def Draw():
+    return Action(0, 0, 0, 0, 0, 0, 0, 56, 0, 4)
 
 
 # helper f
-def CreateTRIGPlayerUnit2Memory(player, unit):
+def PlayerUnit2Memory(player, unit):
     return 0x0058A364 + (player + unit * 12) * 4
 
 

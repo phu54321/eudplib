@@ -50,6 +50,7 @@ from .dataspec.struoffset import CreateOffsetMapping
 
 from .mapdata.maprw import LoadMap, SaveMap
 from .mapdata.unitprp import UnitProperty
+from .mapdata.doevents import EUDDoEvents
 
 from .stocktrg import *
 from .trgconst import *

@@ -35,12 +35,11 @@ from .mapdata import (
 
 from ..utils import binio
 from . import chktok, mpqapi
-from ..inject import injgen
+from . import injgen
 
 # private variables
 _chk = None
 _mpqcontent = None
-_starttrg = None
 
 
 def PutDict_NoDup(d, key, value):
@@ -59,7 +58,7 @@ def LoadMap(fname):
 
     print('Loading map %s' % fname)
 
-    global _chk, _mpqcontent, _starttrg
+    global _chk, _mpqcontent
 
     # read mpq content. The file will be copied to output file.
     _mpqcontent = open(fname, 'rb').read()
@@ -128,10 +127,7 @@ def LoadMap(fname):
     uprptable.clear()
     uprpdict.clear()
 
-    _starttrg = trig.NextTrigger()
-
-
-def SaveMap(fname):
+def SaveMap(fname, root):
     '''
     Save template map with EUDObjects & various files.
 
@@ -139,8 +135,6 @@ def SaveMap(fname):
         map MPQ. If different contents share the same MPQ filename, function
         will raise RuntimeError.
     '''
-
-    root = _starttrg
 
     print('Saving map %s' % fname)
 

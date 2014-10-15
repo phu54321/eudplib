@@ -18,7 +18,6 @@ def f_add(a, b):
 
     return ret
 
-
 main = NextTrigger()
 retval = f_add(123, 456)
 VTProc(retval.GetVTable(), [

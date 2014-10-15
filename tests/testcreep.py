@@ -50,6 +50,8 @@ Main logic
 
 LoadMap('outputmap/basemap/creeptest_basemap.scx')
 
+mainstart = NextTrigger()
+
 # Iterate through each units.
 unitptr, unitepd = EUDCreateVariables(2)
 
@@ -109,4 +111,4 @@ if EUDWhileNot(unitptr.Exactly(0)):
 EUDEndWhile()
 
 
-SaveMap('outputmap/creeptest.scx')
+SaveMap('outputmap/creeptest.scx', mainstart)
