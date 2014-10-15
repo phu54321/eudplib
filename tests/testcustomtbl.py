@@ -10,8 +10,9 @@ LoadMap('outputmap/basemap/basemap.scx')
 
 tbl = EUDTbl()  # New string table
 
+EUDExecuteOnce()
 f_initeudtbl()  # Backup original STR section address
-
+EUDEndExecuteOnce()
 
 tbl.SetAsDefault()  # Use 'tbl' string table for DisplayText
 DoActions(DisplayText(tbl.StringIndex("Hello World!")))

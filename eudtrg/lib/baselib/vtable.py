@@ -388,87 +388,9 @@ def VTProc(vt, actions):
     nexttrg << b.NextTrigger()
 
 
-'''
-Temporary variable storage
-'''
-
-_tmpvstorage = []
-_tmpn = 0
-_tmpused = set()
-
-
-'''
-Proxy object for temporary variables.
-
-EUDTempVariable is a proxy for temporary variable. Example:
-
-    a << 2*b + 3*c
-
-The code is equivilant to the following:
-
-    t1 = @@EUDCreateTempVar()   # function not usable outside eudtrg.
-    SetVariable(t1, f_constmul(2)(b))
-
-    t2 = @@EUDCreateTempVar()
-    SetVariable(t2, f_constmul(3)(c))
-
-    t3 = @@EUDCreateTempVar()
-    SeqCompute([
-        (t3, b.SetTo, t1),
-        (t3, Add, t2)
-    ])
-
-    # t1, t2 unref after executing 't1 + t2'
-    @@EUDReleaseTempVar(t1)
-    @@EUDReleaseTempVar(t2)
-
-    SetVariable(a, t3)
-
-    # t3 unref after executing 'a := t3'
-    @@EUDReleaseTempVar(t3)
-
-'''
-
-
-def _TmpProxifyVar(origvariable):
-
-    class TmpVar(EUDVariable):
-        __metaclass__ = EUDVariable
-
-        def __init__(self):
-            pass
-
-        '''
-        TODO : Fix the bug
-        '''
-
-        def __del__(self):
-            _tmpvstorage.append(origvariable)
-
-        def __getattr__(self, attrname):
-            return getattr(origvariable, attrname)
-
-        def __getitem__(self, index):
-            return origvariable[index]
-
-        def __setattr__(self, attrname, newvalue):
-            setattr(origvariable, attrname, newvalue)
-
-        def __setitem__(self, index, newvalue):
-            origvariable[index] = newvalue
-
-    return TmpVar()
-
-
 def CreateTempVariable():
-    global _tmpvstorage
-
-    if not _tmpvstorage:
-        newv = EUDCreateVariables(1)
-        return _TmpProxifyVar(newv)
-
-    else:
-        return _TmpProxifyVar(_tmpvstorage.pop())
+    """ Create temporary variables for various uses. """
+    return EUDCreateVariables(1)
 
 
 # From vbuffer.py

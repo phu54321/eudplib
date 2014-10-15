@@ -1,22 +1,22 @@
 import eudtrg
 import types
-import textwrap
 import re
 
 module_to_doc = eudtrg
 
 exclude_types = [dict, str, types.ModuleType]
+allowed_type = [type, types.FunctionType]
 exclude_names = ['__loader__', '__path__', '__spec__']
 section_header_charr = ['=', '-', '\'', '~', '^']
 
 
 # Get list of already documented items
 print('Getting list of currently documented structures')
-rstinputs = open('docs/api.rst', 'r', encoding = 'utf-8').read().split('\n')
+rstinputs = open('docs/api.rst', 'r', encoding='utf-8').read().split('\n')
 documented_functions = set()
 documented_classes = set()
 
-func_regex  = re.compile(r'\.\. autofunction:: +eudtrg\.(.+)')
+func_regex = re.compile(r'\.\. autofunction:: +eudtrg\.(.+)')
 class_regex = re.compile(r'\.\. autoclass:: +eudtrg\.(.+)')
 
 for line in rstinputs:
@@ -24,16 +24,16 @@ for line in rstinputs:
     if func_match_result:
         funcname = func_match_result.groups(1)[0]
         if funcname in documented_functions:
-            print('[Warning] Duplicated function name %s was documented.' % funcname)
-        documented_functions.add(funcname)
+            print('[Warning] Document duplication of function %s.' % funcname)
+        documented_functions.add((funcname, True))
         continue
 
     class_match_result = class_regex.match(line)
     if class_match_result:
         classname = class_match_result.groups(1)[0]
         if classname in documented_classes:
-            print('[Warning] Duplicated class name %s was documented.' % classname)
-        documented_classes.add(classname)
+            print('[Warning] Document duplication of class %s.' % classname)
+        documented_classes.add((classname, True))
         continue
 
 
@@ -49,14 +49,20 @@ for name, value in module_to_doc.__dict__.items():
         continue
 
     # Undocumented -> ignore
-    if value.__doc__ is None:
+    if type(value) not in allowed_type:
         continue
 
+    if value.__doc__ is None:
+        documented = False
+
+    else:
+        documented = True
+
     if isinstance(value, types.FunctionType):
-        doc_needed_functions.add(name)
+        doc_needed_functions.add((name, documented))
 
     elif type(value) is type:
-        doc_needed_classes.add(name)
+        doc_needed_classes.add((name, documented))
 
 print('==================================')
 
@@ -85,12 +91,12 @@ if unused_functions or unused_classes:
     if unused_functions:
         print('  Unused functions:')
         for k in unused_functions:
-            print('    - %s' % k)
+            print('    - %s' % k[0])
 
     if unused_classes:
         print('  Unused classes:')
         for k in unused_classes:
-            print('    - %s' % k)
+            print('    - %s' % k[0])
 
     print('==================================')
 
@@ -104,12 +110,12 @@ if used_functions or used_classes:
     if used_functions:
         print('  New functions:')
         for k in used_functions:
-            print('    - %s' % k)
+            print('    - %s %s' % (k[0], "(Undocumented)" if not k[1] else ""))
 
     if used_classes:
         print('  New classes:')
         for k in used_classes:
-            print('    - %s' % k)
+            print('    - %s %s' % (k[0], "(Undocumented)" if not k[1] else ""))
 
     print('==================================')
 

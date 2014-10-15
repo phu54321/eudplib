@@ -26,6 +26,7 @@ from .constmuldiv import f_constmul, f_constdiv
 
 
 def f_mul(a, b):
+    """ returns a*b """
     if isinstance(a, EUDVariable) and isinstance(b, EUDVariable):
         return _f_mul(a, b)
 
@@ -40,6 +41,7 @@ def f_mul(a, b):
 
 
 def f_div(a, b):
+    """ returns (a//b, a%b) """
     if isinstance(b, EUDVariable):
         return _f_mul(a, b)
 
@@ -52,9 +54,6 @@ def f_div(a, b):
 
 @EUDFunc
 def _f_mul(a, b):
-    '''
-    :returns: a * b
-    '''
     ret, y0 = EUDCreateVariables(2)
 
     # Init
@@ -96,9 +95,6 @@ def _f_mul(a, b):
 
 @EUDFunc
 def _f_div(a, b):
-    '''
-    :returns: a//b, a % b
-    '''
     ret, x = EUDCreateVariables(2)
 
     # Init

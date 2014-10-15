@@ -67,9 +67,6 @@ unitptr << f_dwread_epd(EPD(0x628430))
 
 if EUDWhileNot(unitptr.Exactly(0)):
     unitepd << f_epd(unitptr)
-    f_dwwrite_epd(EPD(0x58A370), unitptr)
-    f_dwwrite_epd(EPD(0x58A374), unitepd)
-    f_dwwrite_epd(EPD(0x58A378), creepaddr_epd)
 
     # check unittype
     # /*0x064*/ u16         unitType;
@@ -81,10 +78,6 @@ if EUDWhileNot(unitptr.Exactly(0)):
     # uint16 unity : unit + 0x2A
     coord = f_dwread_epd(unitepd + (0x28 // 4))
     unitx, unity = f_dwbreak(coord)[0:2]
-    f_dwwrite_epd(EPD(0x58A388), coord)
-    f_dwwrite_epd(EPD(0x58A380), unitx)
-    f_dwwrite_epd(EPD(0x58A384), unity)
-    f_dwwrite_epd(EPD(0x58A38C), unitx.GetMemoryAddr())
 
     # Convert coordinates to tile coordinates
     tileunitx = f_constdiv(32)(unitx)[0]
@@ -103,8 +96,6 @@ if EUDWhileNot(unitptr.Exactly(0)):
         (EPD(0x58DC60 + 8), SetTo, unitx),
         (EPD(0x58DC60 + 12), SetTo, unity)
     ])
-    f_dwwrite_epd(EPD(0x58A390), unitx)
-    f_dwwrite_epd(EPD(0x58A394), unity)
 
     DoActions([
         CreateUnit(1, 'Kakaru (Twilight Critter)', 1, Player1),
@@ -114,7 +105,6 @@ if EUDWhileNot(unitptr.Exactly(0)):
     # Loop done. Get next unit pointer
     EUDSetContinuePoint()
     unitptr << f_dwread_epd(unitepd + (4 // 4))
-    f_dwwrite_epd(EPD(0x58A370), unitptr)
 
 EUDEndWhile()
 
