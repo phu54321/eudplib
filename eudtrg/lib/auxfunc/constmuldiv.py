@@ -1,23 +1,27 @@
-'''
-Copyright (c) 2014 trgk
+ #!/usr/bin/python
+# -*- coding: utf-8 -*-
 
-This software is provided 'as-is', without any express or implied
-warranty. In no event will the authors be held liable for any damages
-arising from the use of this software.
+# Copyright (c) 2014 trgk
 
-Permission is granted to anyone to use this software for any purpose,
-including commercial applications, and to alter it and redistribute it
-freely, subject to the following restrictions:
+# This software is provided 'as-is', without any express or implied
+# warranty. In no event will the authors be held liable for any damages
+# arising from the use of this software.
 
-   1. The origin of this software must not be misrepresented; you must not
-   claim that you wrote the original software. If you use this software
-   in a product, an acknowledgment in the product documentation would be
-   appreciated but is not required.
-   2. Altered source versions must be plainly marked as such, and must not be
-   misrepresented as being the original software.
-   3. This notice may not be removed or altered from any source
-   distribution.
-'''
+# Permission is granted to anyone to use this software for any purpose,
+# including commercial applications, and to alter it and redistribute it
+# freely, subject to the following restrictions:
+
+#    1. The origin of this software must not be misrepresented; you must not
+#    claim that you wrote the original software. If you use this software
+#    in a product, an acknowledgment in the product documentation would be
+#    appreciated but is not required.
+#    2. Altered source versions must be plainly marked as such, and must not be
+#    misrepresented as being the original software.
+#    3. This notice may not be removed or altered from any source
+#    distribution.
+#
+# See eudtrg.LICENSE for more info
+
 
 from eudtrg.base import *  # @UnusedWildImport
 from eudtrg.lib.baselib import *  # @UnusedWildImport
@@ -38,10 +42,10 @@ def f_constmul(number):
             ret << 0
             for i in range(31, -1, -1):
                 Trigger(
-                    conditions=a.AtLeast(2**i),
+                    conditions=a.AtLeast(2 ** i),
                     actions=[
-                        a.SubtractNumber(2**i),
-                        ret.AddNumber(2**i * number)
+                        a.SubtractNumber(2 ** i),
+                        ret.AddNumber(2 ** i * number)
                     ]
                 )
             return ret
@@ -65,14 +69,14 @@ def f_constdiv(number):
             ret << 0
             for i in range(31, -1, -1):
                 # number too big
-                if 2**i * number >= 2**32:
+                if 2 ** i * number >= 2 ** 32:
                     continue
 
                 Trigger(
-                    conditions=a.AtLeast(2**i * number),
+                    conditions=a.AtLeast(2 ** i * number),
                     actions=[
-                        a.SubtractNumber(2**i * number),
-                        ret.AddNumber(2**i)
+                        a.SubtractNumber(2 ** i * number),
+                        ret.AddNumber(2 ** i)
                     ]
                 )
             return ret, a
