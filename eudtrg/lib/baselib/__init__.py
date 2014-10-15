@@ -1,25 +1,46 @@
-'''
-Basic things
-'''
-
-from eudtrg import LICENSE #@UnusedImport
-
-from .eudfunc import EUDFunc
 from .ctrlstru import (
     DoActions,
     EUDJump,
     EUDBranch,
     EUDJumpIf,
     EUDJumpIfNot,
-    EUDWhile
 )
 
-from .varassign import SeqCompute, SetVariables
+from .blockstru import (
+    EUDIf,
+    EUDIfNot,
+    EUDElseIf,
+    EUDElseIfNot,
+    EUDElse,
+    EUDEndIf,
+
+    EUDWhile,
+    EUDWhileNot,
+    EUDEndWhile,
+
+    EUDDoWhile,
+    EUDEndDoWhile,
+
+    EUDExecuteOnce,
+    EUDEndExecuteOnce,
+
+    EUDSetContinuePoint,
+    EUDContinue,
+    EUDContinueIf,
+    EUDContinueIfNot,
+    EUDBreak,
+    EUDBreakIf,
+    EUDBreakIfNot,
+)
+
 from .vtable import (
     EUDVTable, 
     EUDVariable, 
     EUDLightVariable, 
-    VTProc
+    VTProc,
+    SeqCompute,
+    SetVariables,
+    EUDCreateVariables
 )
 
-from .vbuffer import EUDCreateVariables
+from .eudfunc import EUDFunc

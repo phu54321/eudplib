@@ -1,0 +1,170 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>튜토리얼 &mdash; eudtrg 0.3-r1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.3-r1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="eudtrg 0.3-r1 documentation" href="index.html" />
+    <link rel="next" title="튜토리얼 1 : Hello World!" href="example/ex1.html" />
+    <link rel="prev" title="eudtrg 시작하기" href="getting_started.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="example/ex1.html" title="튜토리얼 1 : Hello World!"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="getting_started.html" title="eudtrg 시작하기"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">eudtrg 0.3-r1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="tutorial">
+<span id="id1"></span><h1>튜토리얼<a class="headerlink" href="#tutorial" title="Permalink to this headline">¶</a></h1>
+<p>튜토리얼 예제들을 실행하기 위해서는 튜토리얼 .py 파일과 같은 폴더에
+<tt class="xref download docutils literal"><span class="pre">basemap.scx</span></tt> 를 같이 넣어두어야 합니다.</p>
+<p><strong>목록</strong></p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="example/ex1.html">튜토리얼 1 : Hello World!</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="example/ex1.html#id1">소스</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example/ex1.html#id2">결과</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example/ex1.html#id3">코드 설명</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="example/ex2.html">튜토리얼 2 : nextptr를 이용해서 트리거 실행 순서 지정하기</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="example/ex2.html#id1">소스</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example/ex2.html#id2">결과</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example/ex2.html#id3">코드 설명</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="example/ex2.html#forward">1. <tt class="docutils literal"><span class="pre">Forward</span></tt> 클래스</a></li>
+<li class="toctree-l3"><a class="reference internal" href="example/ex2.html#id4">2. 스타크래프트 트리거 엔진의 원리</a></li>
+<li class="toctree-l3"><a class="reference internal" href="example/ex2.html#id5">3. nextptr</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="example/ex3.html">튜토리얼 3 : nextptr 자동 연결, Trigger Scope</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="example/ex3.html#id1">소스</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example/ex3.html#id2">결과</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example/ex3.html#id3">코드 설명</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="example/ex3.html#nexptr">1. nexptr 자동 연결</a></li>
+<li class="toctree-l3"><a class="reference internal" href="example/ex3.html#nexttrigger">2. <tt class="docutils literal"><span class="pre">NextTrigger</span></tt></a></li>
+<li class="toctree-l3"><a class="reference internal" href="example/ex3.html#trigger-scope">3. Trigger Scope</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="example/ex4.html">튜토리얼 4 : 특정 플레이어에게서만 실행되는 트리거</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example/ex4.html#id2">플레이어별로 트리거 제작</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="example/ex4.html#id3">소스 1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example/ex4.html#id4">결과 1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example/ex4.html#id5">코드 설명 1</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="example/ex4.html#id6">플레이어간에 공통된 트리거 활용 1</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="example/ex4.html#id7">코드 2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example/ex4.html#id8">결과 2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example/ex4.html#id9">코드 설명 2</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="example/ex4.html#id10">플레이어간에 공통된 트리거 활용 2</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="example/ex4.html#id11">코드 3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example/ex4.html#id12">결과 3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example/ex4.html#id13">코드 설명 3</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="example/ex5.html">튜토리얼 5 : 기초적인 트리거 프로그래밍</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="example/ex5.html#id2">소스</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example/ex5.html#id3">결과</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example/ex5.html#id4">코드 설명</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="getting_started.html"
+                        title="previous chapter">eudtrg 시작하기</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="example/ex1.html"
+                        title="next chapter">튜토리얼 1 : Hello World!</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/tutorial.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="example/ex1.html" title="튜토리얼 1 : Hello World!"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="getting_started.html" title="eudtrg 시작하기"
+             >previous</a> |</li>
+        <li><a href="index.html">eudtrg 0.3-r1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, whyask37.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

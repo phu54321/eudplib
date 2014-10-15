@@ -1,0 +1,8 @@
+Note on distributing
+
+1. Check the consistency of documentation
+2. Check the consistency of documentation
+
+3. Run raisecollect.py. Check that every assertion has been properly documented.
+
+4. Check the bug.

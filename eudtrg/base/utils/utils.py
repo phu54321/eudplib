@@ -2,7 +2,8 @@
 Useful utilities. You may freely use these functions.
 '''
 
-from eudtrg import LICENSE #@UnusedImport
+ 
+
 
 def EPD(offset):
     '''
@@ -11,13 +12,14 @@ def EPD(offset):
     return (offset - 0x0058A364) // 4
 
 
-
 '''
 Nested list / Single item -> Flat list
  ex) FlattenList([a, [b, c], d]) -> [a, b, c, d]
  ex) FlattenList([a, b, c])      -> [a, b, c]
  ex) FlattenList(a)              -> [a]
 '''
+
+
 def FlattenList(l):
     try:
         ret = []
@@ -25,14 +27,15 @@ def FlattenList(l):
             ret.extend(FlattenList(item))
         return ret
 
-    except TypeError: # l is not iterable
+    except TypeError:  # l is not iterable
         return [l]
-
 
 
 '''
 Parses SCMDraft2 style text message
 '''
+
+
 def SCM2Text(s):
     #
     # normal -> xdigitinput1 -> xdigitinput2 -> xdigitinput3 -> normal
@@ -42,7 +45,7 @@ def SCM2Text(s):
     #                                        -> normal
     #                                        '>' emit x00
     #                                                        -> normal
-    #                                                      xdigit/normal  emit '<xx'
+    # xdigit/normal  emit '<xx'
     def toxdigit(i):
         if '0' <= i <= '9':
             return ord(i) - 48
@@ -104,14 +107,13 @@ def SCM2Text(s):
     return ''.join(out)
 
 
-
-
 '''
 To support syntax like this:
  a = f(1)     # f(1) returns 1 (not [1])
  a,b = f(2)   # f(2) returns [1,2]
  a,b,c = f(3) # f(3) returns [1,2,3]
 '''
+
 
 def List2Assignable(l):
     if len(l) == 1:
@@ -124,7 +126,7 @@ def List2Assignable(l):
 def Assignable2List(a):
     if a is None:
         return []
-        
+
     elif hasattr(a, '__iter__'):
         return list(a)
 

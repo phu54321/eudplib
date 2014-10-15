@@ -1,0 +1,247 @@
+.. _example4:
+
+튜토리얼 4 : 특정 플레이어에게서만 실행되는 트리거
+--------------------------------------------------
+
+eudtrg에서는 '트리거가 실행되는 플레이어'의 개념이 없습니다. 그냥 nextptr을
+따라서 그 트리거에 오면 그 트리거가 실행되는데, 이번 예제에서는 nextptr를 잘
+다뤄서 플레이어마다 다른 트리거가 실행되도록 하는 법을 배울겁니다. 크게 3가지
+방법을 배웁니다.
+
+
+플레이어별로 트리거 제작
+------------------------
+
+소스 1
+^^^^^^
+
+::
+
+    from eudtrg import *
+
+    LoadMap("basemap.scx")
+
+
+    pstart = [None] * 8
+
+    # P1용 트리거 생성
+    if 1:
+        a = Forward()
+
+        a << Trigger(actions = [ DisplayText('Trigger A') ])
+        Trigger(actions = [ DisplayText('Trigger B') ])
+        Trigger(actions = [ DisplayText('Trigger C') ])
+        Trigger(actions = [ DisplayText('Trigger D') ])
+        Trigger(actions = [ DisplayText('Trigger E') ])
+        Trigger(actions = [ DisplayText('Trigger F') ])
+        Trigger(actions = [ DisplayText('Trigger G') ])
+        Trigger(nextptr = triggerend, actions = [ DisplayText('Trigger H') ])
+        
+        pstart[0] = a
+
+
+
+    # P2 ~ P6용 트리거 생성
+    for i in range(1, 6):
+        a = Forward()
+
+        a << Trigger(actions = [ DisplayText('Trigger A') ])
+        Trigger(actions = [ DisplayText('Trigger E') ])
+        Trigger(actions = [ DisplayText('Trigger F') ])
+        Trigger(nextptr = triggerend, actions = [ DisplayText('Trigger G') ])
+
+        pstart[i] = a
+
+
+
+    psw = InitPlayerSwitch(pstart)
+
+    SaveMap("ex4_1.scx", psw)
+
+
+
+
+결과 1
+^^^^^^
+
+::
+
+    P1
+    Trigger A
+    Trigger B
+    Trigger C
+    Trigger D
+    Trigger E
+    Trigger F
+    Trigger G
+
+    P2~6
+    Trigger A
+    Trigger E
+    Trigger F
+    Trigger G
+
+    (무한반복)
+
+
+코드 설명 1
+^^^^^^^^^^^
+
+그냥 P1용 트리거랑 P2용 트리거랑 ... P6용 트리거랑 모두 따로따로 한벌씩
+만든겁니다. P2~P6은 트리거가 똑같으니까 P2용 트리거를 P2~P6에 대해서도
+재활용할 수 있겠죠. 플레이어별로 트리거를 똑같이 만드니까 좀 트리거 용량이
+많이 나갑니다. 제일 간단하지만 용량이 좀 나갑니다.
+
+
+
+플레이어간에 공통된 트리거 활용 1
+---------------------------------
+
+코드 2
+^^^^^^
+
+::
+
+    from eudtrg import *
+
+    LoadMap("basemap.scx")
+
+    # P1용 트리거 생성
+    if 1:
+        p1start = Forward()
+        p1start << Trigger(actions = [ DisplayText('Trigger A') ])
+        Trigger(actions = [ DisplayText('Trigger B') ])
+        Trigger(actions = [ DisplayText('Trigger C') ])
+        Trigger(actions = [ DisplayText('Trigger D') ])
+
+
+    # 공통 트리거 생성
+    common = Forward()
+
+    common << Trigger(actions = [ DisplayText('Trigger E') ])
+    Trigger(actions = [ DisplayText('Trigger F') ])
+    Trigger(nextptr = triggerend, actions = [ DisplayText('Trigger G') ])
+
+
+
+    psw = InitPlayerSwitch([ p1start, common, common, common, common, common, None, None ])
+    SaveMap("ex4_2.scx", psw)
+
+
+
+
+결과 2
+^^^^^^
+
+::
+
+    Trigger A [P1만]
+    Trigger B [P1만]
+    Trigger C [P1만]
+    Trigger D [P1만]
+    Trigger E
+    Trigger F
+    Trigger G
+
+    (무한반복)
+
+
+코드 설명 2
+^^^^^^^^^^^
+
+대부분의 맵에서 같은 팀에 있는 플레이어가 실행하는 트리거는 똑같습니다. 6명이
+플레이하는 폭피맵에서는 P1~P6의 트리거가 다 똑같고 P1에 강퇴 트리거같은것만
+있다던지 등이죠. P1에서는 P1에서만 실행되는 트리거를 먼저 실행하고, 그 다음
+P1~P6이 공통으로 실행하는 트리거를 실행하도록 하면 트리거 양도 줄이고 맵의
+용량도 정상적으로 만들 수 있습니다. 개인적으로 추천하는 트리거 방식입니다.
+
+
+
+플레이어간에 공통된 트리거 활용 2
+---------------------------------
+
+코드 3
+^^^^^^
+
+::
+
+    from eudtrg import *
+
+    currentplayer = 0x006509B0 # Current Player의 값을 저장하는 오프셋
+
+    LoadMap("basemap.scx")
+
+
+    pstart = NextTrigger()
+
+
+    Trigger( actions = [DisplayText('Trigger A')] )
+
+
+    block1end = Forward()
+    EUDJumpIfNot( [Memory(currentplayer, Exactly, 0)], block1end )
+    # Current Player가 Player 1(0)이 아니면 block1end로 점프
+    
+    Trigger( actions = [DisplayText('Trigger B')] )
+    Trigger( actions = [DisplayText('Trigger C')] )
+    Trigger( actions = [DisplayText('Trigger D')] )
+    block1end << NextTrigger()
+
+
+    Trigger( actions = [DisplayText('Trigger E')] )
+    Trigger( actions = [DisplayText('Trigger F')] )
+    Trigger( actions = [DisplayText('Trigger G')] )
+
+
+    block2end = Forward()
+    EUDJumpIfNot( [Memory(currentplayer, Exactly, 0)], block2end)
+    # Current Player가 Player 1(0)가 아니면 block2end로 점프
+
+    Trigger( actions = [DisplayText('Trigger H')] )
+    block2end << NextTrigger()
+
+
+    Trigger( nextptr = triggerend ) # 트리거 I
+
+
+
+    psw = InitPlayerSwitch([
+        pstart, pstart, pstart, pstart, pstart, pstart, None, None
+    ]) # pstart 리스트에 주어진대로 각 플레이어의 시작 트리거 설정.
+
+
+    SaveMap("ex7.scx", psw)
+
+결과 3
+^^^^^^
+
+::
+
+    [P1]
+    Trigger A
+    Trigger B
+    Trigger C
+    Trigger D
+    Trigger E
+    Trigger F
+    Trigger G
+    Trigger H
+
+    [P2~P6]
+    Trigger A
+    Trigger E
+    Trigger F
+    Trigger G
+    
+
+코드 설명 3
+^^^^^^^^^^^
+
+P1만 실행하는 트리거와 P1~P6이 공통으로 실행하는 트리거가 섞여있을 때 쓸만한
+방식입니다. 소스 2보다는 약간 더 복잡합니다.
+
+:func:`EUDJumpIfNot` 라는 함수가 나왔는데, 이 함수는 조건에 따라서 트리거의
+실행을 바꿔주는 역할을 합니다. 예제에서는 EUDJumpIfNot을 이용해서 현재 트리거를
+실행하고 있는 플레이어가 Player 1이 아닌 경우 P1 전용 트리거를 건너뛰고
+공통부분 트리거만 실행하도록 하고 있습니다. :func:`EUDJumpIfNot` 함수는 트리거
+프로그래밍을 이용해서 만든 함수입니다.

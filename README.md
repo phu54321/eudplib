@@ -1,7 +1,7 @@
-eudtrglib
+eudtrg
 =========
 
-eudtrglib is a simple library for generating eud programming triggers. It's
+eudtrg is a simple library for generating eud programming triggers. It's
 quite easier to use than eudasm, yet more powerful.
 
 

@@ -1,0 +1,88 @@
+sphinx-build -b html -d _build/doctrees   . _build/html
+Running Sphinx v1.2.2
+loading pickled environment... done
+building [html]: targets for 1 source files that are out of date
+updating environment: 0 added, 2 changed, 0 removed
+reading sources... [ 50%] example/ex1
+reading sources... [100%] tutorial
+
+looking for now-outdated files... none found
+pickling environment... done
+checking consistency... done
+preparing documents... done
+writing output... [ 33%] example/ex1
+writing output... [ 66%] index
+writing output... [100%] tutorial
+
+writing additional files... genindex py-modindex search
+copying downloadable files... [100%] C:\eudtrg\docs\examplemap\CreepDependentZergling.scx
+
+copying static files... done
+copying extra files... done
+dumping search index... done
+dumping object inventory... done
+build succeeded, 12 warnings.
+ECHO가 설정되어 있지 않습니다.
+"Build finished. The HTML pages are in _build/html."
+sphinx-build -b html -d _build/doctrees   . _build/html
+Making output directory...
+Running Sphinx v1.2.2
+loading pickled environment... failed: [Errno 2] No such file or directory: 'C:\\eudtrg\\docs\\_build\\doctrees\\environment.pickle'
+building [html]: targets for 20 source files that are out of date
+updating environment: 20 added, 0 changed, 0 removed
+reading sources... [  5%] api/eudtrg
+reading sources... [ 10%] api/eudtrg.base
+reading sources... [ 15%] api/eudtrg.base.dataspec
+reading sources... [ 20%] api/eudtrg.base.inject
+reading sources... [ 25%] api/eudtrg.base.mapdata
+reading sources... [ 30%] api/eudtrg.base.payload
+reading sources... [ 35%] api/eudtrg.base.utils
+reading sources... [ 40%] api/eudtrg.lib
+reading sources... [ 45%] api/eudtrg.lib.auxfunc
+reading sources... [ 50%] api/eudtrg.lib.auxobj
+reading sources... [ 55%] api/eudtrg.lib.baselib
+reading sources... [ 60%] api/modules
+reading sources... [ 65%] example/ex1
+reading sources... [ 70%] example/ex2
+reading sources... [ 75%] example/ex3
+reading sources... [ 80%] example/ex4
+reading sources... [ 85%] getting_started
+reading sources... [ 90%] index
+reading sources... [ 95%] intro
+reading sources... [100%] tutorial
+
+looking for now-outdated files... none found
+pickling environment... done
+checking consistency... done
+preparing documents... done
+writing output... [  5%] api/eudtrg
+writing output... [ 10%] api/eudtrg.base
+writing output... [ 15%] api/eudtrg.base.dataspec
+writing output... [ 20%] api/eudtrg.base.inject
+writing output... [ 25%] api/eudtrg.base.mapdata
+writing output... [ 30%] api/eudtrg.base.payload
+writing output... [ 35%] api/eudtrg.base.utils
+writing output... [ 40%] api/eudtrg.lib
+writing output... [ 45%] api/eudtrg.lib.auxfunc
+writing output... [ 50%] api/eudtrg.lib.auxobj
+writing output... [ 55%] api/eudtrg.lib.baselib
+writing output... [ 60%] api/modules
+writing output... [ 65%] example/ex1
+writing output... [ 70%] example/ex2
+writing output... [ 75%] example/ex3
+writing output... [ 80%] example/ex4
+writing output... [ 85%] getting_started
+writing output... [ 90%] index
+writing output... [ 95%] intro
+writing output... [100%] tutorial
+
+writing additional files... genindex py-modindex search
+copying downloadable files... [100%] C:\eudtrg\docs\examplemap\CreepDependentZergling.scx
+
+copying static files... done
+copying extra files... done
+dumping search index... done
+dumping object inventory... done
+build succeeded, 32 warnings.
+ECHO가 설정되어 있지 않습니다.
+"Build finished. The HTML pages are in _build/html."

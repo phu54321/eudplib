@@ -2,17 +2,15 @@
 Unicode(python) <-> Binary(starcraft) conversion. Used internally in eudtrg.
 '''
 
-from eudtrg import LICENSE #@UnusedImport
+ 
 
-import sys
-
-charset = 'cp949' # default : korean
+charset = 'cp949'  # default : korean
 
 
 def UbconvUseCharset(newencoding):
     global charset
     charset = newencoding
-    
+
 
 def Unicode2Bytes(string):
     if isinstance(string, bytes):
@@ -22,8 +20,8 @@ def Unicode2Bytes(string):
         return string.encode(charset)
 
     else:
-        raise TypeError('Unknown type %s given to Unicode2Bytes' % type(string))
-
+        raise TypeError(
+            'Unknown type %s given to Unicode2Bytes' % type(string))
 
 
 def Bytes2Unicode(b):
@@ -35,6 +33,7 @@ def Bytes2Unicode(b):
 
     else:
         raise TypeError('Unknown type %s given to Bytes2Unicode' % type(b))
+
 
 def main():
     print("Performing unicode - multibyte conversion library")

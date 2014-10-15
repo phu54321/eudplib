@@ -1,65 +1,160 @@
-'''
-Expression library wrapper. Used for calculating expression with addreses.
-Internally used in eudtrg.
-'''
+ #!/usr/bin/python
+# -*- coding: utf-8 -*-
 
-from eudtrg import LICENSE #@UnusedImport
-from ..payload.rlocint import RelocatableInt
+# Copyright (c) 2014 trgk
+
+# This software is provided 'as-is', without any express or implied
+# warranty. In no event will the authors be held liable for any damages
+# arising from the use of this software.
+
+# Permission is granted to anyone to use this software for any purpose,
+# including commercial applications, and to alter it and redistribute it
+# freely, subject to the following restrictions:
+
+#    1. The origin of this software must not be misrepresented; you must not
+#    claim that you wrote the original software. If you use this software
+#    in a product, an acknowledgment in the product documentation would be
+#    appreciated but is not required.
+#    2. Altered source versions must be plainly marked as such, and must not be
+#    misrepresented as being the original software.
+#    3. This notice may not be removed or altered from any source
+#    distribution.
+#
+# See eudtrg.LICENSE for more info
+
+
+from .rlocint import RelocatableInt
 
 # Expression caching
-_cachetoken = type('_ct', (), {})
+_cachetoken = 0
+
 
 def ExpireCacheToken():
+    ''' Internal function. Don't use '''
     global _cachetoken
-    _cachetoken = type('_ct', (), {})
+    _cachetoken += 1
+
 
 def GetCacheToken():
     return _cachetoken
 
 
 class Expr:
+
     '''
-    Base class for expression containing address of objects.
-    Any object derived from this class should implement these virtual methods:
-     - GetDependencyList : Get list of expressions this expression depents on.
-     - EvalImpl : Evaluate value of expressions.
+    Expression class. Handle expressions with unknown variables. Example::
+
+        a = Forward() # some unknown variable
+        b = Trigger() # some unknown variable
+            # b's value is determined with a call of SaveMap()
+
+        c = a + 5 - b # a + 5 - b is an expression with unknown variable.
+
+        # since a, b is undetermined yet, c needs to store expression tree of
+        # 'a + 5 - b', such as in form of (- (+ a 5) b). Expr class can be used
+        # to store such expressions.
+
+    Expr class supports basic arithmetic operators: addition, subtraction,
+    muliplication, and division. Derived class should implement following two
+    methods.
+
+    - GetDependencyList : List of other expression required for evaluation of
+      the expression. Circular dependency are supported.
+
+    - EvalImpl : Calculate value of the expression. Evaluate() caches result of
+      EvalImpl, so you should override EvalImpl method instead of Evaluate.
+
     '''
-    
+
     def __init__(self):
         self._cachetoken = None
 
     # operations with default actions
-    def __add__       (self, other): return _AddExpr(self, other)
-    def __sub__       (self, other): return _SubExpr(self, other)
-    def __mul__       (self, other): return _MulExpr(self, other)
-    def __floordiv__  (self, other): return _DivExpr(self, other)
+    def __add__(self, other):
+        return _AddExpr(self, other)
 
-    def __radd__      (self, other): return _AddExpr(other, self)
-    def __rsub__      (self, other): return _SubExpr(other, self)
-    def __rmul__      (self, other): return _MulExpr(other, self)
-    def __rfloordiv__ (self, other): return _DivExpr(other, self)
+    def __sub__(self, other):
+        return _SubExpr(self, other)
 
-    def __iadd__      (self, other): self = self + other; return self
-    def __isub__      (self, other): self = self - other; return self
-    def __imul__      (self, other): self = self * other; return self
-    def __ifloordiv__ (self, other): self = self // other; return self
+    def __mul__(self, other):
+        return _MulExpr(self, other)
 
+    def __floordiv__(self, other):
+        return _DivExpr(self, other)
+
+    def __radd__(self, other):
+        return _AddExpr(other, self)
+
+    def __rsub__(self, other):
+        return _SubExpr(other, self)
+
+    def __rmul__(self, other):
+        return _MulExpr(other, self)
+
+    def __rfloordiv__(self, other):
+        return _DivExpr(other, self)
+
+    def __iadd__(self, other):
+        self = self + other
+        return self
+
+    def __isub__(self, other):
+        self = self - other
+        return self
+
+    def __imul__(self, other):
+        self = self * other
+        return self
+
+    def __ifloordiv__(self, other):
+        self = self // other
+        return self
 
     def GetDependencyList(self):
-        raise NotImplementedError("Subclass %s should implement this" % str(type(self)))
+        '''
+        :returns: List of Expr instances self depends on.
+        :raises NotImplementedError: Derived class have not overridden this
+            method.
+
+        '''
+        raise NotImplementedError(
+            "Subclass %s should implement this" % str(type(self)))
 
     def Evaluate(self):
+        '''
+        :returns: Cached value of EvalImpl.
+
+        Remarks
+        -------
+        Evaluate function caches and returns the value of EvalImpl. cache token
+        expires or no values were cached before, Evaluate recaches its value by
+        calling EvalImpl. Cache expires with a call of SaveMap.
+
+        '''
+
+        # Cache has expired, or no cache has been stored yet
         if self._cachetoken != _cachetoken:
+            # Cache EvalImpl.
             self._cache = self.EvalImpl()
             self._cachetoken = _cachetoken
+
         return self._cache
 
     def EvalImpl(self):
-        raise NotImplementedError("Subclass %s should implement this" % str(type(self)))
+        '''
+        :returns: What the object should be evaluated to. For example,
+        EUDObject returns the data's address in Starcraft Memory by default.
+        Type of returned object should be one of int,
+        :class:`eudtrg.RelocatableInt`, or one having `Evaluate` method.
+
+        '''
+        raise NotImplementedError(
+            "Subclass %s should implement this" % str(type(self)))
 
 
 # Expression class for binary operators
 class BinopExpr(Expr):
+
     def __init__(self, exprA, exprB):
         super(BinopExpr, self).__init__()
         assert IsValidExpr(exprA), 'Lhs is not valid expression'
@@ -73,6 +168,7 @@ class BinopExpr(Expr):
 
 
 class _AddExpr(BinopExpr):
+
     def __init__(self, exprA, exprB):
         super(_AddExpr, self).__init__(exprA, exprB)
         self._cache = None
@@ -83,6 +179,7 @@ class _AddExpr(BinopExpr):
 
 
 class _SubExpr(BinopExpr):
+
     def __init__(self, exprA, exprB):
         super(_SubExpr, self).__init__(exprA, exprB)
         self._cache = None
@@ -93,6 +190,7 @@ class _SubExpr(BinopExpr):
 
 
 class _MulExpr(BinopExpr):
+
     def __init__(self, exprA, exprB):
         super(_MulExpr, self).__init__(exprA, exprB)
         self._cache = None
@@ -103,6 +201,7 @@ class _MulExpr(BinopExpr):
 
 
 class _DivExpr(BinopExpr):
+
     def __init__(self, exprA, exprB):
         super(_DivExpr, self).__init__(exprA, exprB)
 
@@ -110,17 +209,12 @@ class _DivExpr(BinopExpr):
         return Evaluate(self.exprA) // Evaluate(self.exprB)
 
 
-
-# Checks if expression is valid
+# Helper functions
 def IsValidExpr(x):
     if type(x) is int or isinstance(x, RelocatableInt):
         return True
     else:
         return isinstance(x, Expr)
-
-
-
-
 
 
 def GetDependencyList(item):
@@ -130,11 +224,10 @@ def GetDependencyList(item):
         return []
 
 
-
-# Expression evaluator
 def Evaluate(x):
     try:
         return x.Evaluate()
+
     except AttributeError:
         if type(x) is int:
             return RelocatableInt(x, 0)
