@@ -90,12 +90,12 @@ if unused_functions or unused_classes:
     print('Entrys now unused:')
     if unused_functions:
         print('  Unused functions:')
-        for k in unused_functions:
+        for k in sorted(list(unused_functions)):
             print('    - %s' % k[0])
 
     if unused_classes:
         print('  Unused classes:')
-        for k in unused_classes:
+        for k in sorted(list(unused_classes)):
             print('    - %s' % k[0])
 
     print('==================================')
@@ -109,12 +109,12 @@ if used_functions or used_classes:
     print('New entries:')
     if used_functions:
         print('  New functions:')
-        for k in used_functions:
+        for k in sorted(list(used_functions)):
             print('    - %s %s' % (k[0], "(Undocumented)" if not k[1] else ""))
 
     if used_classes:
         print('  New classes:')
-        for k in used_classes:
+        for k in sorted(list(used_classes)):
             print('    - %s %s' % (k[0], "(Undocumented)" if not k[1] else ""))
 
     print('==================================')
