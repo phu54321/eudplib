@@ -29,7 +29,7 @@ from . import ctrlstru as cs
 from .lightvar import EUDLightVariable
 
 
-vdp = 2408
+vdp = 60
 
 
 class _EUDVarBuffer(b.EUDObject):
