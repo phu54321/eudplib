@@ -34,8 +34,7 @@ def f_exp(a, b):
 
     ret = EUDCreateVariables(1)
 
-    expvt = EUDVTable(32)
-    expvar = expvt.GetVariables()
+    expvar = EUDCreateVariables(32)
 
     chain = [Forward() for _ in range(32)]
     ret << 1

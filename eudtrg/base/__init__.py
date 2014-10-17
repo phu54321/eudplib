@@ -10,8 +10,6 @@ Core defines
 
 '''
 
- 
-
 from .dataspec.eudobj import EUDObject  # noqa
 from .dataspec.forward import Forward
 from .dataspec.trigger import (

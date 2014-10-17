@@ -92,7 +92,7 @@ def EUDFunc(fdecl_func):
     # Create function body
     b.PushTriggerScope()
 
-    f_args = b.Assignable2List(vt.EUDVTable(argn).GetVariables())
+    f_args = b.Assignable2List(vt.EUDCreateVariables(argn))
     fstart = b.NextTrigger()
     f_rets = b.Assignable2List(fdecl_func(*f_args))
     fend = b.Trigger()
