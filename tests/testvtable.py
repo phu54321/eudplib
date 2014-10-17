@@ -5,41 +5,18 @@ sys.path.insert(0, os.path.abspath('..\\'))
 from eudtrg import *
 
 LoadMap('outputmap/basemap/basemap.scx')
-addvt = vtable.EUDVTable(3)
-a, b, ret = addvt.GetVariables()
+a, b, ret = EUDCreateVariables(3)
 
-add1 = Trigger()
+main = NextTrigger()
 
-add0 = Trigger(
-    nextptr=addvt,
-    actions=[
-        SetDeaths(1, SetTo, 1234, 0),
-        ret.SetNumber(0),
-        a.QueueAddTo(ret),
-        b.QueueAddTo(ret),
-        SetNextPtr(addvt, add1)
-    ]
-)
-
-
-main2 = Forward()
-
-main = Trigger(
-    nextptr=add0,
-    actions=[
-        SetDeaths(2, SetTo, 1234, 0),
-        a.SetNumber(123),
-        b.SetNumber(456),
-        SetNextPtr(add1, main2)
-    ]
-)
-
-main2 << Trigger(
-    nextptr=triggerend,
-    actions=[
-        SetDeaths(3, SetTo, 1234, 0),
-        ret.QueueAssignTo(EPD(0x58A364)),
-    ]
-)
+SeqCompute([
+    (EPD(0x58A364), SetTo, a.GetVTable()),
+    (EPD(0x58A368), SetTo, b.GetVTable()),
+    (EPD(0x58A36C), SetTo, ret.GetVTable()),
+    (a, SetTo, 10),
+    (b, SetTo, 20),
+    (ret, SetTo, a),
+    (ret, Add, b)
+])
 
 SaveMap('outputmap/vtable.scx', main)
