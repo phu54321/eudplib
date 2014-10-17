@@ -52,10 +52,10 @@ class _EUDVarBuffer(b.EUDObject):
         return []
 
     def GetDataSize(self):
-        return vdp + vdp * (self._varn - 1)
+        return 2408 + vdp * (self._varn - 1)
 
     def WritePayload(self, emitbuffer):
-        output = bytearray(vdp + vdp * (self._varn - 1))
+        output = bytearray(2408 + vdp * (self._varn - 1))
 
         for i in range(self._varn):
             output[vdp*i+2376:vdp*i+2380] = b'\x04\0\0\0'  # 'preserve trigger'
