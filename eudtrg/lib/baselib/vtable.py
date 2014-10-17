@@ -26,123 +26,43 @@
 from eudtrg import base as b
 
 from . import ctrlstru as cs
+from .lightvar import EUDLightVariable
 
 
-class EUDLightVariable:
+vdp = 2408
 
-    '''
-    Light variable. EUDLightVariable occupies only 4 bytes.
-    '''
+
+class _EUDVarBuffer(b.EUDObject):
+
+    """Variable buffer
+
+    40 bytes per variable.
+    """
 
     def __init__(self):
-        self._memory = b.Db(b'\0\0\0\0')
+        super().__init__()
+        self._varn = 0
 
-    def GetMemoryAddr(self):
-        '''
-        :returns: Memory address where values are stored.
-        '''
-        return self._memory
+    def CreateVarTrigger(self):
+        ret = self + (vdp * self._varn)
+        self._varn += 1
+        return ret
 
-    def AtLeast(self, number):
-        '''
-        :param number: Number to compare variable with.
-        :returns: :class:`Condition` for checking if the variable is at least
-            given number.
-        '''
-        return b.Memory(self.GetMemoryAddr(), b.AtLeast, number)
+    def GetDependencyList(self):
+        return []
 
-    def AtMost(self, number):
-        '''
-        :param number: Number to compare variable with.
-        :returns: :class:`Condition` for checking if the variable is at most
-            given number.
-        '''
-        return b.Memory(self.GetMemoryAddr(), b.AtMost, number)
+    def GetDataSize(self):
+        return vdp + vdp * (self._varn - 1)
 
-    def Exactly(self, number):
-        '''
-        :param number: Number to compare variable with.
-        :returns: :class:`Condition` for checking if the variable is at exactly
-            given number.
-        '''
-        return b.Memory(self.GetMemoryAddr(), b.Exactly, number)
+    def WritePayload(self, emitbuffer):
+        output = bytearray(vdp + vdp * (self._varn - 1))
 
-    def SetNumber(self, number):
-        '''
-        :param number: Number to assign.
-        :returns: :class:`Action` for assigning given number to variable.
-        '''
-        return b.SetMemory(self.GetMemoryAddr(), b.SetTo, number)
+        for i in range(self._varn):
+            output[vdp*i+2376:vdp*i+2380] = b'\x04\0\0\0'  # 'preserve trigger'
 
-    def AddNumber(self, number):
-        '''
-        :param number: Number to add.
-        :returns: :class:`Action` for adding given number to variable.
-        '''
-        return b.SetMemory(self.GetMemoryAddr(), b.Add, number)
+        emitbuffer.EmitBytes(output)
 
-    def SubtractNumber(self, number):
-        '''
-        :param number: Number to subtract.
-        :returns: :class:`Action` for subtracting given number to variable.
-
-        .. warning::
-            Subtraction won't underflow. Subtracting values with bigger one
-            will yield 0.
-        '''
-        return b.SetMemory(self.GetMemoryAddr(), b.Subtract, number)
-
-
-class EUDVTable(b.Trigger):
-
-    '''
-    Full Variable table. EUDVTable stores :class:`EUDVariable` objects.
-    EUDVTable serves as a key component of trigger programming.
-
-        vt = EUDVTable(3)
-        a, b, c = vt.GetVariables()
-        # use a, b, c for further calculations.
-
-    EUDVTable is as itself a :class:`Trigger`, so it can be executed. When
-    EUDVTable is executed, queued calculations are processed. You can queue
-    calculations with :meth:`EUDVariable.QueueAssignTo` and its family.
-
-    '''
-
-    def __init__(self, varn):
-        '''
-        EUDVTable constructor.
-        :param varn: Number of arguments EUDVTable should have. 0 < varn <= 32
-        :raises AssertionError: varn <= 0 or varn > 32.
-        '''
-        assert varn >= 0, "argn can't be less than 0."
-        assert varn <= 32, (
-            'EUDVTable with more than 32 variables are not supported')
-
-        if varn == 0:
-            self._var = []
-            return
-
-        b.PushTriggerScope()
-        variables = [b.Forward() for _ in range(varn)]
-
-        super().__init__(
-            actions=
-            [variables[i] << b.Disabled(b.SetDeaths(0, b.SetTo, 0, 0))
-                for i in range(varn)] +
-            [b.SetDeaths(b.EPD(variables[i] + 28), b.SetTo, 2, 0)
-                for i in range(varn)]
-        )
-
-        self._var = [EUDVariable(var, self) for var in variables]
-        b.PopTriggerScope()
-
-    def GetVariables(self):
-        '''
-        :returns: List of variables inside EUDVTable. If there is only one
-            variable, return it.
-        '''
-        return b.List2Assignable(self._var)
+_evb = _EUDVarBuffer()
 
 
 class EUDVariable:
@@ -151,21 +71,18 @@ class EUDVariable:
     Full variable.
     '''
 
-    def __init__(self, vartrigger, originvt):
-        self._varact = vartrigger
-        self._originvt = originvt
+    def __init__(self):
+        self._vartrigger = _evb.CreateVarTrigger()
+        self._varact = self._vartrigger + (8 + 320)
+
+    def GetVTable(self):
+        return self._vartrigger
 
     def GetMemoryAddr(self):
         '''
         :returns: Memory address where values are stored.
         '''
         return self._varact + 20
-
-    def GetVTable(self):
-        '''
-        :returns: Parent EUDVTable.
-        '''
-        return self._originvt
 
     def AtLeast(self, number):
         '''
@@ -234,7 +151,6 @@ class EUDVariable:
         return [
             b.SetDeaths(b.EPD(self._varact + 16), b.SetTo, dest, 0),
             b.SetDeaths(b.EPD(self._varact + 24), b.SetTo, 0x072D0000, 0),
-            b.SetDeaths(b.EPD(self._varact + 28), b.SetTo, 0, 0)
         ]
 
     def QueueAddTo(self, dest):
@@ -255,7 +171,6 @@ class EUDVariable:
         return [
             b.SetDeaths(b.EPD(self._varact + 16), b.SetTo, dest, 0),
             b.SetDeaths(b.EPD(self._varact + 24), b.SetTo, 0x082D0000, 0),
-            b.SetDeaths(b.EPD(self._varact + 28), b.SetTo, 0, 0)
         ]
 
     def QueueSubtractTo(self, dest):
@@ -280,7 +195,6 @@ class EUDVariable:
         return [
             b.SetDeaths(b.EPD(self._varact + 16), b.SetTo, dest, 0),
             b.SetDeaths(b.EPD(self._varact + 24), b.SetTo, 0x092D0000, 0),
-            b.SetDeaths(b.EPD(self._varact + 28), b.SetTo, 0, 0)
         ]
 
     '''
@@ -354,9 +268,9 @@ class EUDVariable:
             return self.AtLeast(other)
 
 
-def VTProc(vt, actions):
+def _VTProc(vt, actions):
     '''
-    Shortcut for :class:`EUDVTable` calculation. VTProc automatically inserts
+    Shortcut for :class:`_EUDVTable` calculation. _VTProc automatically inserts
     nextptr manipulation triggers, so you wouldn't have to write them every
     time.
 
@@ -375,7 +289,7 @@ def VTProc(vt, actions):
 
     After::
 
-        VTProc(v, [
+        _VTProc(v, [
             a.QueueSetTo(EPD(0x58A364))
         ])
 
@@ -411,25 +325,7 @@ def EUDCreateVariables(varn):
     :returns: List of variables. If varn is 1, then a variable is returned.
     '''
 
-    global _lastvt_filled
-    global _lastvtvars
-
-    variables = []
-
-    while varn:
-        if _lastvt_filled == 32:
-            vtable = EUDVTable(32)
-            _lastvtvars = vtable.GetVariables()
-            _lastvt_filled = 0
-
-        vt_popnum = min(32 - _lastvt_filled, varn)
-        variables.extend(
-            _lastvtvars[_lastvt_filled: _lastvt_filled + vt_popnum]
-        )
-        _lastvt_filled += vt_popnum
-        varn -= vt_popnum
-
-    return b.List2Assignable(variables)
+    return b.List2Assignable([EUDVariable() for _ in range(varn)])
 
 
 # from varassign.py
@@ -539,9 +435,10 @@ def SeqCompute(assignpairs):
             "Change 'Set' in arguments for SeqCompute to 'SetTo'.")
         assert not isinstance(src, EUDLightVariable), (
             'Light variable cannot be assigned to other variables directly')
+
         if isinstance(src, EUDVariable):
             FlushActionBuffer()
-            VTProc(src.GetVTable(), [
+            _VTProc(src.GetVTable(), [
                 queueactiondict[mdt].__get__(src, type(src))(dst)
             ])
 
