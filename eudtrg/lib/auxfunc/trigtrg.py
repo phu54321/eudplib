@@ -62,7 +62,7 @@ def f_inittrigtrg():
 
     # Merge effplayer[Force%d] and effplayer[Allplayers] to effplayer[player%d]
     for i in range(trign):
-        effplayer = origdata[2400-28:2400-1]
+        effplayer = trigsection[2400-28:2400-1]
         # Trigger applied to force %d
         for f in range(4):
             if effplayer[18+f]:
@@ -82,7 +82,7 @@ def f_inittrigtrg():
         effplayer[8:27] = b'\0' * 19
 
         # Assign to orig.
-        origdata[2400-28:2400-1] = effplayer
+        trigsection[2400-28:2400-1] = effplayer
 
     # Allocate space for raw trigger data
     origdata = Db(trigsection)
