@@ -2,8 +2,6 @@
 Useful utilities. You may freely use these functions.
 '''
 
- 
-
 
 def EPD(offset):
     '''
