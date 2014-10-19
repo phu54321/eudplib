@@ -1,4 +1,4 @@
-from .setcurpl import f_setcurpl
+from .currentp import f_setcurpl, f_getcurpl
 
 from .constmuldiv import f_constmul, f_constdiv
 from .muldiv import f_mul, f_div

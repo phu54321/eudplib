@@ -28,4 +28,10 @@ from eudtrg.lib.baselib import *  # @UnusedWildImport
 
 
 def f_setcurpl(p):
-    SeqCompute(((EPD(0x6509B0), SetTo, ParsePlayer(p)),))
+    SeqCompute((
+        (EPD(0x6509B0), SetTo, ParsePlayer(p)),
+    ))
+
+
+def f_getcurpl():
+    return f_dwread_epd(EPD(0x6509B0))

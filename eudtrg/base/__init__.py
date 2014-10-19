@@ -80,7 +80,7 @@ from .mapdata.nametable import (
 from .mapdata.prptable import ParseProperty
 
 # Map logic related
-from .mapdata.maprw import LoadMap, SaveMap
+from .mapdata.maprw import LoadMap, SaveMap, GetCHKSection
 from .mapdata.doevents import EUDDoEvents
 
 # Utilities
