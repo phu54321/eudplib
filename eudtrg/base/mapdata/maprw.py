@@ -129,7 +129,7 @@ def LoadMap(fname):
     uprpdict.clear()
 
 
-def GetSection(sectionname):
+def GetCHKSection(sectionname):
     return _chk.getsection(sectionname)
 
 
