@@ -62,7 +62,7 @@ def f_inittrigtrg():
 
     # Merge effplayer[Force%d] and effplayer[Allplayers] to effplayer[player%d]
     for i in range(trign):
-        effplayer = trigsection[2400-28:2400-1]
+        effplayer = trigsection[2400*i+2400-28:2400*i+2400-1]
         # Trigger applied to force %d
         for f in range(4):
             if effplayer[18+f]:
@@ -82,7 +82,7 @@ def f_inittrigtrg():
         effplayer[8:27] = b'\0' * 19
 
         # Assign to orig.
-        trigsection[2400-28:2400-1] = effplayer
+        trigsection[2400*i+2400-28:2400*i+2400-1] = effplayer
 
     # Allocate space for raw trigger data
     origdata = Db(trigsection)
@@ -90,6 +90,7 @@ def f_inittrigtrg():
     # Allocate space for triggers of each players.
     ptrign = [0] * 8
     for i in range(trign):
+        effplayer = trigsection[2400*i+2400-28:2400*i+2400-1]
         for p in range(8):
             if effplayer[p]:
                 ptrign[p] += 1
