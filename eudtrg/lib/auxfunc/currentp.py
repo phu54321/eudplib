@@ -26,10 +26,14 @@
 from eudtrg.base import *  # @UnusedWildImport
 from eudtrg.lib.baselib import *  # @UnusedWildImport
 
+from .readdword import f_dwread_epd
+
 
 def f_setcurpl(p):
+    if not isinstance(p, EUDVariable):
+        p = ParsePlayer(p)
     SeqCompute((
-        (EPD(0x6509B0), SetTo, ParsePlayer(p)),
+        (EPD(0x6509B0), SetTo, p),
     ))
 
 

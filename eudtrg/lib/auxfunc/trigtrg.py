@@ -27,18 +27,20 @@ from eudtrg.base import *  # @UnusedWildImport
 from eudtrg.lib.baselib import *  # @UnusedWildImport
 
 from .readdword import f_dwread_epd
+from .writedword import f_dwwrite_epd
+from .dwordbreak import f_dwbreak
 from .memcpy import f_repmovsd
 from .currentp import f_setcurpl, f_getcurpl
 
-_ptrigdata = None
-_ptrign = None
+_ptrigstart = [Forward() for _ in range(8)]
+_ptrigend = [Forward() for _ in range(8)]
 
 
 def f_inittrigtrg():
-    global _ptrigdata, _ptrign
+    global _ptrigstart, _ptrigend
     # Parse triggers
     trigsection = bytearray(GetCHKSection('TRIG'))
-    trign = origlen // 2400
+    trign = len(trigsection) // 2400
 
     '''Preprocess triggers'''
 
@@ -86,37 +88,38 @@ def f_inittrigtrg():
     origdata = Db(trigsection)
 
     # Allocate space for triggers of each players.
-    _ptrign = [0] * 8
+    ptrign = [0] * 8
     for i in range(trign):
         for p in range(8):
             if effplayer[p]:
-                _ptrign[p] += 1
+                ptrign[p] += 1
 
-    _ptrigdata = [Db(2408 * (_ptrign[p] + 1)) for p in range(8)]
+    ptrigdata = [Db(2408 * (ptrign[p] + 1)) for p in range(8)]
 
     # Create initialization trigger
-    trigepd = EUDVariable(9)
-    ptrigepd = [EUDVariable() for _ in range(8)]
-    ptrigaddr = [EUDVariable() for _ in range(8)]
+    trigepd = EUDVariable()
+    ptrigepd = EUDCreateVariables(8)
+    ptrigaddr = EUDCreateVariables(8)
 
     trigepd << EPD(origdata)
+
     for i in range(8):
-        ptrigepd[i] << EPD(_ptrigdata[i])
-        ptrigaddr[i] << _ptrigdata[i]
+        ptrigepd[i] << EPD(ptrigdata[i])
+        ptrigaddr[i] << ptrigdata[i]
 
     # Iterate through each triggers
-    if EUDWhile(trigepd <= EPD(origdata + origlen)):
+    if EUDWhile(trigepd <= EPD(origdata + 2400*trign)):
         # Get effplayer
         effp_a = f_dwread_epd(trigepd + 593)
         effp_b = f_dwread_epd(trigepd + 594)
         peff = [None]*8
         peff[0:4] = f_dwbreak(effp_a)[2:6]
-        peff[5:8] = f_dwbreak(effp_b)[2:6]
+        peff[4:8] = f_dwbreak(effp_b)[2:6]
 
         for p in range(8):
             if EUDIfNot(peff[p] == 0):  # Trigger is executed for player p
                 ptrigaddr[p] << ptrigaddr[p] + 2408
-                f_dwwrite(ptrigepd[p] + 1, ptrigaddr[p])  # nextptr
+                f_dwwrite_epd(ptrigepd[p] + 1, ptrigaddr[p])  # nextptr
                 f_repmovsd(ptrigepd[p] + 2, trigepd, 2400 // 4)  # content
                 ptrigepd[p] << ptrigepd[p] + (2408 // 4)
             EUDEndIf()
@@ -126,6 +129,12 @@ def f_inittrigtrg():
     EUDEndWhile()
 
     # Done!
+    # set ptrigstart, ptrigend
+    for i in range(8):
+        _ptrigstart[i].Reset()
+        _ptrigend[i].Reset()
+        _ptrigstart[i] << ptrigdata[i]
+        _ptrigend[i] << ptrigdata[i] + 2408 * ptrign[i]
 
 
 @EUDFunc
@@ -135,15 +144,13 @@ def f_exectrigtrg(player):
 
     for p in range(8):
         if EUDIf(player == p):
-            ptrigstart = _ptrigdata[p]
-            ptrigend = _ptrigdata[p] + 2408 * _ptrign[p]
 
             origcpl << f_getcurpl()
             f_setcurpl(p)
 
             Trigger(
-                nextptr=ptrigstart,
-                actions=SetNextPtr(ptrigend, endexec)
+                nextptr=_ptrigstart[p],
+                actions=SetNextPtr(_ptrigend[p], endexec)
             )
 
             f_setcurpl(origcpl)
