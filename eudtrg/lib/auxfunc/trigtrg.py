@@ -28,6 +28,7 @@ from eudtrg.lib.baselib import *  # @UnusedWildImport
 
 from .readdword import f_dwread_epd
 from .memcpy import f_repmovsd
+from .currentp import f_setcurpl, f_getcurpl
 
 _ptrigdata = None
 _ptrign = None
@@ -130,16 +131,22 @@ def f_inittrigtrg():
 @EUDFunc
 def f_exectrigtrg(player):
     endexec = Forward()
+    origcpl = EUDVariable()
 
     for p in range(8):
         if EUDIf(player == p):
             ptrigstart = _ptrigdata[p]
             ptrigend = _ptrigdata[p] + 2408 * _ptrign[p]
 
+            origcpl << f_getcurpl()
+            f_setcurpl(p)
+
             Trigger(
                 nextptr=ptrigstart,
                 actions=SetNextPtr(ptrigend, endexec)
             )
+
+            f_setcurpl(origcpl)
 
         EUDEndIf()
 
