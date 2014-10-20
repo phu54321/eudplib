@@ -27,7 +27,6 @@
 Declares payload class & various helper functions. Used internally in eudtrg.
 '''
 
-
 from . import depgraph
 from ..dataspec import expr
 from ..utils import binio

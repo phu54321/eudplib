@@ -27,7 +27,6 @@
 SFmpq.dll wrapper. Used internally inside eudtrg.
 '''
 
-
 from ctypes import *  # @UnusedWildImport
 from ..utils.ubconv import u2b
 

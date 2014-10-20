@@ -1,7 +1,6 @@
 from setuptools import setup, find_packages
 from eudtrg import __version__
 
-
 setup(
     name="eudtrg",
     version=__version__,

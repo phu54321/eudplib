@@ -40,6 +40,8 @@ class EUDGrp(EUDObject):
 
     def __init__(self, content):
         super().__init__()
+        if type(content) is str:
+            content = open(content, 'rb').read()
         self._content = content
 
     def EvalImpl(self):

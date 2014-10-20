@@ -27,7 +27,6 @@
 Parses strings that could refer to template maps.
 '''
 
-
 from ..trgstrconst import UnitNameDict
 from ..utils import ubconv
 from .mapdata import strtable, unitnametable, locnametable

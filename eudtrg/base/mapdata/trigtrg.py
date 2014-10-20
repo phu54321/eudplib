@@ -27,7 +27,6 @@
 Templates for TRIG section triggers. Uesd internally in eudtrg.
 '''
 
-
 from struct import pack
 from ..utils import binio
 

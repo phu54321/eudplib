@@ -34,13 +34,14 @@ from .blockstru import (
 )
 
 from .vtable import (
-    EUDVTable, 
-    EUDVariable, 
-    EUDLightVariable, 
-    VTProc,
+    EUDVariable,
+    EUDCreateVariables,
     SeqCompute,
     SetVariables,
-    EUDCreateVariables
+)
+
+from .lightvar import (
+    EUDLightVariable
 )
 
 from .eudfunc import EUDFunc

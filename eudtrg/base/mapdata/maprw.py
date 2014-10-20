@@ -26,9 +26,6 @@
 Implements LoadMap, SaveMap function
 '''
 
-
-from ..dataspec import trigger as trig
-
 from .mapdata import (
     locnametable,
     unitnametable,
@@ -132,7 +129,13 @@ def LoadMap(fname):
     uprpdict.clear()
 
 
+def GetCHKSection(sectionname):
+    return _chk.getsection(sectionname)
+
+
 def SaveMap(fname, root):
+    global _chk, _mpqcontent
+
     '''
     Save template map with EUDObjects & various files.
 

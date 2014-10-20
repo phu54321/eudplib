@@ -36,7 +36,7 @@ from ..dataspec.bytedump import Db
 from ..stocktrg import *
 
 PushTriggerScope()
-oepjmpflag = 0x58A380
+oepjmpflag = Db(4)
 oepjumper1 = Forward()
 oepjumper1 << Trigger(
     conditions=Memory(oepjmpflag, Exactly, 1),
