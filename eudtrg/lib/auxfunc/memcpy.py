@@ -23,8 +23,8 @@
 # See eudtrg.LICENSE for more info
 
 
-from eudtrg import base as b
-from eudtrg.lib import baselib as bl
+from eudtrg.base import *
+from eudtrg.lib.baselib import *
 
 from .readdword import f_dwread_epd
 from .writedword import f_dwwrite_epd
@@ -33,7 +33,7 @@ from .muldiv import f_div
 
 
 # Faster function
-@bl.EUDFunc
+@EUDFunc
 def f_repmovsd(dstepdp, srcepdp, copydwn):
     '''
     rep movsd equivilant in eudtrg. Copy dwords. Faster than f_memcpy.
@@ -42,23 +42,24 @@ def f_repmovsd(dstepdp, srcepdp, copydwn):
     :param srcepdp: EPD Player for source.
     :param copydwn: Count of dwords to copy.
     '''
-    repmovsd_end = b.Forward()
+    repmovsd_end = Forward()
 
-    loopstart = b.NextTrigger()
-    bl.EUDJumpIf(copydwn.Exactly(0), repmovsd_end)
+    loopstart = NextTrigger()
+    EUDJumpIf(copydwn.Exactly(0), repmovsd_end)
 
     f_dwwrite_epd(dstepdp, f_dwread_epd(srcepdp))
-    bl.SeqCompute([
-        (srcepdp, b.Add, 1),
-        (dstepdp, b.Add, 1),
-        (copydwn, b.Subtract, 1)
+    SeqCompute([
+        (srcepdp, Add, 1),
+        (dstepdp, Add, 1),
+        (copydwn, Subtract, 1)
     ])
 
-    bl.EUDJump(loopstart)
-    repmovsd_end << b.NextTrigger()
+    EUDJump(loopstart)
+
+    repmovsd_end << NextTrigger()
 
 
-_epd, _suboffset = bl.EUDCreateVariables(2)
+_epd, _suboffset = EUDCreateVariables(2)
 
 # String copy
 
@@ -73,21 +74,21 @@ class EUDByteReader:
         self._ret = None
 
         self._dw, self._b[0], self._b[1], self._b[2], self._b[3], \
-            self._suboffset, self._offset, self._ret = bl.EUDCreateVariables(8)
+            self._suboffset, self._offset, self._ret = EUDCreateVariables(8)
 
     '''
     Seek to epd address
     '''
 
     def seekepd(self, epdoffset):
-        bl.SeqCompute([
-            (self._offset, b.SetTo, epdoffset),
-            (self._suboffset, b.SetTo, 0)
+        SeqCompute([
+            (self._offset, SetTo, epdoffset),
+            (self._suboffset, SetTo, 0)
         ])
 
-        bl.SetVariables(self._dw, f_dwread_epd(epdoffset))
+        SetVariables(self._dw, f_dwread_epd(epdoffset))
 
-        bl.SetVariables([
+        SetVariables([
             self._b[0],
             self._b[1],
             self._b[2],
@@ -95,72 +96,72 @@ class EUDByteReader:
         ], f_dwbreak(self._dw)[2:6])
 
     '''
-    Seek to real b.address
+    Seek to real address
     '''
 
     def seekoffset(self, offset):
         global _epd, _suboffset
 
         # convert offset to epd offset & suboffset
-        bl.SetVariables([_epd, _suboffset], f_div(offset, 4))
-        bl.SeqCompute([(_epd, b.Add, (0x100000000 - 0x58A364) // 4)])
+        SetVariables([_epd, _suboffset], f_div(offset, 4))
+        SeqCompute([(_epd, Add, (0x100000000 - 0x58A364) // 4)])
 
         # seek to epd & set suboffset
         self.seekepd(_epd)
-        bl.SeqCompute([
-            (self._suboffset, b.SetTo, _suboffset)
+        SeqCompute([
+            (self._suboffset, SetTo, _suboffset)
         ])
 
     def readbyte(self):
-        case0, case1, case2, case3, swend = (
-            b.Forward(), b.Forward(), b.Forward(), b.Forward(), b.Forward())
+        case0, case1, case2, case3, swend = Forward(
+        ), Forward(), Forward(), Forward(), Forward()
 
         # suboffset == 0
-        case0 << b.NextTrigger()
-        bl.EUDJumpIfNot(self._suboffset.Exactly(0), case1)
-        bl.SeqCompute([
-            (self._ret, b.SetTo, self._b[0]),
-            (self._suboffset, b.Add, 1)
+        case0 << NextTrigger()
+        EUDJumpIfNot(self._suboffset.Exactly(0), case1)
+        SeqCompute([
+            (self._ret, SetTo, self._b[0]),
+            (self._suboffset, Add, 1)
         ])
-        bl.EUDJump(swend)
+        EUDJump(swend)
 
         # suboffset == 1
-        case1 << b.NextTrigger()
-        bl.EUDJumpIfNot(self._suboffset.Exactly(1), case2)
-        bl.SeqCompute([
-            (self._ret, b.SetTo, self._b[1]),
-            (self._suboffset, b.Add, 1)
+        case1 << NextTrigger()
+        EUDJumpIfNot(self._suboffset.Exactly(1), case2)
+        SeqCompute([
+            (self._ret, SetTo, self._b[1]),
+            (self._suboffset, Add, 1)
         ])
-        bl.EUDJump(swend)
+        EUDJump(swend)
 
         # suboffset == 2
-        case2 << b.NextTrigger()
-        bl.EUDJumpIfNot(self._suboffset.Exactly(2), case3)
-        bl.SeqCompute([
-            (self._ret, b.SetTo, self._b[2]),
-            (self._suboffset, b.Add, 1)
+        case2 << NextTrigger()
+        EUDJumpIfNot(self._suboffset.Exactly(2), case3)
+        SeqCompute([
+            (self._ret, SetTo, self._b[2]),
+            (self._suboffset, Add, 1)
         ])
-        bl.EUDJump(swend)
+        EUDJump(swend)
 
         # suboffset == 3
         # read more dword
-        case3 << b.NextTrigger()
+        case3 << NextTrigger()
 
-        bl.SeqCompute([
-            (self._ret, b.SetTo, self._b[3]),
-            (self._offset, b.Add, 1),
-            (self._suboffset, b.SetTo, 0)
+        SeqCompute([
+            (self._ret, SetTo, self._b[3]),
+            (self._offset, Add, 1),
+            (self._suboffset, SetTo, 0)
         ])
 
-        bl.SetVariables(self._dw, f_dwread_epd(self._offset))
-        bl.SetVariables([
+        SetVariables(self._dw, f_dwread_epd(self._offset))
+        SetVariables([
             self._b[0],
             self._b[1],
             self._b[2],
             self._b[3],
         ], f_dwbreak(self._dw)[2:6])
 
-        swend << b.NextTrigger()
+        swend << NextTrigger()
         return self._ret
 
 
@@ -171,19 +172,19 @@ class EUDByteWriter:
         self._suboffset = None
         self._offset = None
 
-        self._dw, self._suboffset, self._offset = bl.EUDCreateVariables(3)
+        self._dw, self._suboffset, self._offset = EUDCreateVariables(3)
 
-        self._b = [bl.EUDLightVariable() for _ in range(4)]
+        self._b = [EUDLightVariable() for _ in range(4)]
 
     def seekepd(self, epdoffset):
-        bl.SeqCompute([
-            (self._offset, b.SetTo, epdoffset),
-            (self._suboffset, b.SetTo, 0)
+        SeqCompute([
+            (self._offset, SetTo, epdoffset),
+            (self._suboffset, SetTo, 0)
         ])
 
-        bl.SetVariables(self._dw, f_dwread_epd(epdoffset))
+        SetVariables(self._dw, f_dwread_epd(epdoffset))
 
-        bl.SetVariables([
+        SetVariables([
             self._b[0],
             self._b[1],
             self._b[2],
@@ -194,72 +195,72 @@ class EUDByteWriter:
         global _epd, _suboffset
 
         # convert offset to epd offset & suboffset
-        bl.SetVariables([_epd, _suboffset], f_div(offset, 4))
-        bl.SeqCompute([(_epd, b.Add, (0x100000000 - 0x58A364) // 4)])
+        SetVariables([_epd, _suboffset], f_div(offset, 4))
+        SeqCompute([(_epd, Add, (0x100000000 - 0x58A364) // 4)])
 
         self.seekepd(_epd)
-        bl.SeqCompute([
-            (self._suboffset, b.SetTo, _suboffset)
+        SeqCompute([
+            (self._suboffset, SetTo, _suboffset)
         ])
 
     def writebyte(self, byte):
-        case0, case1, case2, case3, swend = (
-            b.Forward(), b.Forward(), b.Forward(), b.Forward(), b.Forward())
+        case0, case1, case2, case3, swend = Forward(
+        ), Forward(), Forward(), Forward(), Forward()
 
-        case0 << b.NextTrigger()
-        bl.EUDJumpIfNot(self._suboffset.Exactly(0), case1)
-        bl.SeqCompute([
-            (self._b[0], b.SetTo, byte),
-            (self._suboffset, b.Add, 1)
+        case0 << NextTrigger()
+        EUDJumpIfNot(self._suboffset.Exactly(0), case1)
+        SeqCompute([
+            (self._b[0], SetTo, byte),
+            (self._suboffset, Add, 1)
         ])
-        bl.EUDJump(swend)
+        EUDJump(swend)
 
-        case1 << b.NextTrigger()
-        bl.EUDJumpIfNot(self._suboffset.Exactly(1), case2)
-        bl.SeqCompute([
-            (self._b[1], b.SetTo, byte),
-            (self._suboffset, b.Add, 1)
+        case1 << NextTrigger()
+        EUDJumpIfNot(self._suboffset.Exactly(1), case2)
+        SeqCompute([
+            (self._b[1], SetTo, byte),
+            (self._suboffset, Add, 1)
         ])
-        bl.EUDJump(swend)
+        EUDJump(swend)
 
-        case2 << b.NextTrigger()
-        bl.EUDJumpIfNot(self._suboffset.Exactly(2), case3)
-        bl.SeqCompute([
-            (self._b[2], b.SetTo, byte),
-            (self._suboffset, b.Add, 1)
+        case2 << NextTrigger()
+        EUDJumpIfNot(self._suboffset.Exactly(2), case3)
+        SeqCompute([
+            (self._b[2], SetTo, byte),
+            (self._suboffset, Add, 1)
         ])
-        bl.EUDJump(swend)
+        EUDJump(swend)
 
-        case3 << b.NextTrigger()
+        case3 << NextTrigger()
 
-        bl.SeqCompute([
-            (self._b[3], b.SetTo, byte)
+        SeqCompute([
+            (self._b[3], SetTo, byte)
         ])
 
         self.flushdword()
 
-        bl.SeqCompute([
-            (self._offset, b.Add, 1),
-            (self._suboffset, b.SetTo, 0)
+        SeqCompute([
+            (self._offset, Add, 1),
+            (self._suboffset, SetTo, 0)
         ])
 
-        bl.SetVariables(self._dw, f_dwread_epd(self._offset))
-        bl.SetVariables([
+        SetVariables(self._dw, f_dwread_epd(self._offset))
+        SetVariables([
             self._b[0],
             self._b[1],
             self._b[2],
             self._b[3],
         ], f_dwbreak(self._dw)[2:6])
 
-        swend << b.NextTrigger()
+        swend << NextTrigger()
 
     def flushdword(self):
         # mux bytes
-        bl.DoActions(self._dw.SetNumber(0))
+        DoActions(self._dw.SetNumber(0))
 
         for i in range(7, -1, -1):
             for j in range(4):
-                b.Trigger(
+                Trigger(
                     conditions=[
                         self._b[j].AtLeast(2 ** i)
                     ],
@@ -275,53 +276,53 @@ _br = EUDByteReader()
 _bw = EUDByteWriter()
 
 
-@bl.EUDFunc
+@EUDFunc
 def f_memcpy(dst, src, copylen):
     '''
     memcpy equivilant in eudtrg. Copy bytes.
 
-    :param dst: Destination b.address. (Not EPD Player)
-    :param src: Source b.address. (Not EPD Player)
+    :param dst: Destination address. (Not EPD Player)
+    :param src: Source address. (Not EPD Player)
     :param copylen: Count of bytes to copy.
     '''
-    b = bl.EUDCreateVariables(1)
+    b = EUDCreateVariables(1)
 
     _br.seekoffset(src)
     _bw.seekoffset(dst)
 
-    loopstart = b.NextTrigger()
-    loopend = b.Forward()
+    loopstart = NextTrigger()
+    loopend = Forward()
 
-    bl.EUDJumpIf(copylen.Exactly(0), loopend)
+    EUDJumpIf(copylen.Exactly(0), loopend)
 
-    bl.SetVariables(b, _br.readbyte())
+    SetVariables(b, _br.readbyte())
     _bw.writebyte(b)
 
-    bl.DoActions(copylen.SubtractNumber(1))
-    bl.EUDJump(loopstart)
+    DoActions(copylen.SubtractNumber(1))
+    EUDJump(loopstart)
 
-    loopend << b.NextTrigger()
+    loopend << NextTrigger()
     _bw.flushdword()
 
 
-@bl.EUDFunc
+@EUDFunc
 def f_strcpy(dst, src):
     '''
     strcpy equivilant in eudtrg. Copy C-style string.
 
-    :param dst: Destination b.address. (Not EPD Player)
-    :param src: Source b.address. (Not EPD Player)
+    :param dst: Destination address. (Not EPD Player)
+    :param src: Source address. (Not EPD Player)
     '''
-    b = bl.EUDCreateVariables(1)
+    b = EUDCreateVariables(1)
 
     _br.seekoffset(src)
     _bw.seekoffset(dst)
 
-    loopstart = b.NextTrigger()
+    loopstart = NextTrigger()
 
-    bl.SetVariables(b, _br.readbyte())
+    SetVariables(b, _br.readbyte())
     _bw.writebyte(b)
 
-    bl.EUDJumpIfNot(b.Exactly(0), loopstart)
+    EUDJumpIfNot(b.Exactly(0), loopstart)
 
     _bw.flushdword()

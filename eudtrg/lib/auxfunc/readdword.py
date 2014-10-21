@@ -23,71 +23,71 @@
 # See eudtrg.LICENSE for more info
 
 
-from eudtrg import base as b
-from eudtrg.lib import baselib as bl
+from eudtrg.base import *  # @UnusedWildImport
+from eudtrg.lib.baselib import *  # @UnusedWildImport
 
 
-@bl.EUDFunc
+@EUDFunc
 def f_dwread_epd(targetplayer):
     '''
     Read dword from memory. This function can read any memory with read access.
     :param targetplayer: EPD Player for address to read.
-    :returns: b.Memory content.
+    :returns: Memory content.
     '''
-    ret = bl.EUDCreateVariables(1)
+    ret = EUDCreateVariables(1)
 
     # Common comparison trigger
-    b.PushTriggerScope()
-    cmp = b.Forward()
+    PushTriggerScope()
+    cmp = Forward()
     cmp_player = cmp + 4
     cmp_number = cmp + 8
-    cmpact = b.Forward()
+    cmpact = Forward()
 
-    cmptrigger = b.Forward()
-    cmptrigger << b.Trigger(
+    cmptrigger = Forward()
+    cmptrigger << Trigger(
         conditions=[
-            cmp << b.Memory(0, b.AtMost, 0)
+            cmp << Memory(0, AtMost, 0)
         ],
         actions=[
-            cmpact << b.SetMemory(cmptrigger + 4, b.SetTo, 0)
+            cmpact << SetMemory(cmptrigger + 4, SetTo, 0)
         ]
     )
     cmpact_ontrueaddr = cmpact + 20
-    b.PopTriggerScope()
+    PopTriggerScope()
 
     # static_for
-    chain1 = [b.Forward() for _ in range(32)]
-    chain2 = [b.Forward() for _ in range(32)]
+    chain1 = [Forward() for _ in range(32)]
+    chain2 = [Forward() for _ in range(32)]
 
     # Main logic start
-    bl.SeqCompute([
-        (b.EPD(cmp_player), b.SetTo, targetplayer),
-        (b.EPD(cmp_number), b.SetTo, 0xFFFFFFFF),
-        (ret,             b.SetTo, 0xFFFFFFFF)
+    SeqCompute([
+        (EPD(cmp_player), SetTo, targetplayer),
+        (EPD(cmp_number), SetTo, 0xFFFFFFFF),
+        (ret,             SetTo, 0xFFFFFFFF)
     ])
 
-    readend = b.Forward()
+    readend = Forward()
 
     for i in range(31, -1, -1):
         nextchain = chain1[i - 1] if i > 0 else readend
 
-        chain1[i] << b.Trigger(
+        chain1[i] << Trigger(
             nextptr=cmptrigger,
             actions=[
-                b.SetMemory(cmp_number, b.Subtract, 2 ** i),
+                SetMemory(cmp_number, Subtract, 2 ** i),
                 ret.SubtractNumber(2 ** i),
-                b.SetNextPtr(cmptrigger, chain2[i]),
-                b.SetMemory(cmpact_ontrueaddr, b.SetTo, nextchain)
+                SetNextPtr(cmptrigger, chain2[i]),
+                SetMemory(cmpact_ontrueaddr, SetTo, nextchain)
             ]
         )
 
-        chain2[i] << b.Trigger(
+        chain2[i] << Trigger(
             actions=[
-                b.SetMemory(cmp_number, b.Add, 2 ** i),
+                SetMemory(cmp_number, Add, 2 ** i),
                 ret.AddNumber(2 ** i)
             ]
         )
 
-    readend << b.NextTrigger()
+    readend << NextTrigger()
 
     return ret

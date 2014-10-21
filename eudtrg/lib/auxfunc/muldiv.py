@@ -23,71 +23,71 @@
 # See eudtrg.LICENSE for more info
 
 
-from eudtrg import base as b
-from eudtrg.lib import baselib as bl
+from eudtrg.base import *  # @UnusedWildImport
+from eudtrg.lib.baselib import *  # @UnusedWildImport
 
 from .constmuldiv import f_constmul, f_constdiv
 
 
-def f_mul(lhs, rhs):
-    """ returns lhs*rhs """
-    if isinstance(lhs, bl.EUDVariable) and isinstance(rhs, bl.EUDVariable):
-        return _f_mul(lhs, rhs)
+def f_mul(a, b):
+    """ returns a*b """
+    if isinstance(a, EUDVariable) and isinstance(b, EUDVariable):
+        return _f_mul(a, b)
 
-    elif isinstance(lhs, bl.EUDVariable):
-        return f_constmul(rhs)(lhs)
+    elif isinstance(a, EUDVariable):
+        return f_constmul(b)(a)
 
-    elif isinstance(rhs, bl.EUDVariable):
-        return f_constmul(lhs)(rhs)
-
-    else:
-        return lhs * rhs
-
-
-def f_div(lhs, rhs):
-    """ returns (lhs//rhs, lhs%rhs) """
-    if isinstance(rhs, bl.EUDVariable):
-        return _f_mul(lhs, rhs)
-
-    elif isinstance(lhs, bl.EUDVariable):
-        return f_constdiv(rhs)(lhs)
+    elif isinstance(b, EUDVariable):
+        return f_constmul(a)(b)
 
     else:
-        return lhs // rhs, lhs % rhs
+        return a * b
 
 
-@bl.EUDFunc
-def _f_mul(lhs, rhs):
-    ret, y0 = bl.EUDCreateVariables(2)
+def f_div(a, b):
+    """ returns (a//b, a%b) """
+    if isinstance(b, EUDVariable):
+        return _f_mul(a, b)
+
+    elif isinstance(a, EUDVariable):
+        return f_constdiv(b)(a)
+
+    else:
+        return a // b, a % b
+
+
+@EUDFunc
+def _f_mul(a, b):
+    ret, y0 = EUDCreateVariables(2)
 
     # Init
-    bl.SeqCompute([
-        (ret, b.SetTo, 0),
-        (y0, b.SetTo, rhs)
+    SeqCompute([
+        (ret, SetTo, 0),
+        (y0, SetTo, b)
     ])
 
-    chain = [b.Forward() for _ in range(32)]
-    chain_y0 = [b.Forward() for _ in range(32)]
+    chain = [Forward() for _ in range(32)]
+    chain_y0 = [Forward() for _ in range(32)]
 
     # Calculate chain_y0
     for i in range(32):
-        bl.SeqCompute((
-            (b.EPD(chain_y0[i]), b.SetTo, y0),
-            (y0, b.Add, y0)
+        SeqCompute((
+            (EPD(chain_y0[i]), SetTo, y0),
+            (y0, Add, y0)
         ))
         if i <= 30:
-            bl.EUDJumpIf(lhs.AtMost(2 ** (i + 1) - 1), chain[i])
+            EUDJumpIf(a.AtMost(2 ** (i + 1) - 1), chain[i])
 
     # Run multiplication chain
     for i in range(31, -1, -1):
-        cy0 = b.Forward()
+        cy0 = Forward()
 
-        chain[i] << b.Trigger(
+        chain[i] << Trigger(
             conditions=[
-                lhs.AtLeast(2 ** i)
+                a.AtLeast(2 ** i)
             ],
             actions=[
-                lhs.SubtractNumber(2 ** i),
+                a.SubtractNumber(2 ** i),
                 cy0 << ret.AddNumber(0)
             ]
         )
@@ -97,43 +97,43 @@ def _f_mul(lhs, rhs):
     return ret
 
 
-@bl.EUDFunc
-def _f_div(lhs, rhs):
-    ret, x = bl.EUDCreateVariables(2)
+@EUDFunc
+def _f_div(a, b):
+    ret, x = EUDCreateVariables(2)
 
     # Init
-    bl.SeqCompute([
-        (ret, b.SetTo, 0),
-        (x, b.SetTo, rhs),
+    SeqCompute([
+        (ret, SetTo, 0),
+        (x, SetTo, b),
     ])
 
-    # Chain b.forward decl
-    chain_x0 = [b.Forward() for _ in range(32)]
-    chain_x1 = [b.Forward() for _ in range(32)]
-    chain = [b.Forward() for _ in range(32)]
+    # Chain forward decl
+    chain_x0 = [Forward() for _ in range(32)]
+    chain_x1 = [Forward() for _ in range(32)]
+    chain = [Forward() for _ in range(32)]
 
     # Fill in chain
     for i in range(32):
-        bl.SeqCompute([
-            (b.EPD(chain_x0[i]), b.SetTo, x),
-            (b.EPD(chain_x1[i]), b.SetTo, x),
+        SeqCompute([
+            (EPD(chain_x0[i]), SetTo, x),
+            (EPD(chain_x1[i]), SetTo, x),
         ])
 
-        bl.EUDJumpIf(x.AtLeast(0x8000000), chain[i])
+        EUDJumpIf(x.AtLeast(0x8000000), chain[i])
 
-        bl.SeqCompute([
-            (x, b.Add, x),
+        SeqCompute([
+            (x, Add, x),
         ])
 
     # Run division chain
     for i in range(31, -1, -1):
-        cx0, cx1 = b.Forward(), b.Forward()
-        chain[i] << b.Trigger(
+        cx0, cx1 = Forward(), Forward()
+        chain[i] << Trigger(
             conditions=[
-                cx0 << lhs.AtLeast(0)
+                cx0 << a.AtLeast(0)
             ],
             actions=[
-                cx1 << lhs.SubtractNumber(0),
+                cx1 << a.SubtractNumber(0),
                 ret.AddNumber(2 ** i)
             ]
         )
@@ -141,4 +141,4 @@ def _f_div(lhs, rhs):
         chain_x0[i] << cx0 + 8
         chain_x1[i] << cx1 + 20
 
-    return ret, lhs  # lhs : remainder
+    return ret, a  # a : remainder

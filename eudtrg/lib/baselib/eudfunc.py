@@ -30,21 +30,6 @@ from functools import wraps
 import inspect
 
 
-def _decorate_at_first_call(decorator, func):
-    """ Simple decorator-decorator """
-    @wraps(func)
-    def f(*args):
-        nonlocal func
-
-        if hasattr(f, '_decorated'):
-            f._decorated = True
-            func = decorator(func)
-
-        return func(*args)
-
-    return f
-
-
 def EUDFunc(fdecl_func):
     '''
     Generates EUD Function. Usually used as decorators. EUD Function shouldn't
@@ -95,10 +80,6 @@ def EUDFunc(fdecl_func):
         fdecl_func recieves several EUDVariable and should return single/list
         of EUDVariable.
     '''
-    return _decorate_at_first_call(_EUDFunc, fdecl_func)
-
-
-def _EUDFunc(fdecl_func):
     # Get argument number of fdecl_func
     argspec = inspect.getargspec(fdecl_func)
     assert argspec[1] is None, (

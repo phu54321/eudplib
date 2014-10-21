@@ -27,11 +27,12 @@
 Defines class EUDGrp.
 '''
 
-import eudtrg.base as b
+from eudtrg.base import *
+
 import struct
 
 
-class EUDGrp(b.EUDObject):
+class EUDGrp(EUDObject):
 
     '''
     Object wrapper for GRP
@@ -56,8 +57,8 @@ class EUDGrp(b.EUDObject):
         buf.EmitBytes(b'\0\0')  # 2byte padding to align dwords at (*)
 
         # fill in grp header
-        content = self._content
-        fn, w, h = struct.unpack('<HHH', content[0:6])
+        b = self._content
+        fn, w, h = struct.unpack('<HHH', b[0:6])
         buf.EmitWord(fn)
         buf.EmitWord(w)
         buf.EmitWord(h)
@@ -68,11 +69,11 @@ class EUDGrp(b.EUDObject):
         for i in range(fn):
             fhoffset = 6 + 8 * i
             xoff, yoff, w, h, lto = struct.unpack(
-                '<BBBBI', content[fhoffset: fhoffset + 8])
+                '<BBBBI', b[fhoffset: fhoffset + 8])
             buf.EmitByte(xoff)
             buf.EmitByte(yoff)
             buf.EmitByte(w)
             buf.EmitByte(h)
             buf.EmitDword(lto + selfaddr)  # (*)
 
-        buf.EmitBytes(content[6 + 8 * fn:])
+        buf.EmitBytes(b[6 + 8 * fn:])

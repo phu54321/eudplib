@@ -23,11 +23,11 @@
 # See eudtrg.LICENSE for more info
 
 
-from eudtrg import base as b
-from eudtrg.lib import baselib as bl
+from eudtrg.base import *  # @UnusedWildImport
+from eudtrg.lib.baselib import *  # @UnusedWildImport
 
 
-@bl.EUDFunc
+@EUDFunc
 def f_dwbreak(number):
     '''
     Break dword into words & dwords.
@@ -44,10 +44,10 @@ def f_dwbreak(number):
     word = [None] * 2
     byte = [None] * 4
     (word[0], word[1], byte[0], byte[1],
-        byte[2], byte[3]) = bl.EUDCreateVariables(6)
+        byte[2], byte[3]) = EUDCreateVariables(6)
 
     # Clear byte[], word[]
-    bl.DoActions([
+    DoActions([
         word[0].SetNumber(0),
         word[1].SetNumber(0),
         byte[0].SetNumber(0),
@@ -62,7 +62,7 @@ def f_dwbreak(number):
         byteexp = i % 8
         wordexp = i % 16
 
-        b.Trigger(
+        Trigger(
             conditions=number.AtLeast(2 ** i),
             actions=[
                 byte[byteidx].AddNumber(2 ** byteexp),
