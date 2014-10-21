@@ -23,8 +23,8 @@
 # See eudtrg.LICENSE for more info
 
 
-from eudtrg.base import *  # @UnusedWildImport
-from eudtrg.lib.baselib import *  # @UnusedWildImport
+from eudtrg import base as b
+from eudtrg.lib import baselib as bl
 
 
 def f_dwwrite_epd(targetplayer, value):
@@ -34,15 +34,15 @@ def f_dwwrite_epd(targetplayer, value):
     :param targetplayer: EPD Player of address to write value.
     :param value: Value to write.
     '''
-    if isinstance(value, EUDVariable):
-        act = Forward()
-        SeqCompute([
-            (EPD(act + 16), SetTo, targetplayer),
-            (EPD(act + 20), SetTo, value)
+    if isinstance(value, bl.EUDVariable):
+        act = b.Forward()
+        bl.SeqCompute([
+            (b.EPD(act + 16), b.SetTo, targetplayer),
+            (b.EPD(act + 20), b.SetTo, value)
         ])
-        DoActions(act << SetMemory(0, SetTo, 0))
+        bl.DoActions(act << b.SetMemory(0, b.SetTo, 0))
 
     else:
-        act = Forward()
-        SeqCompute([(EPD(act + 16), SetTo, targetplayer)])
-        DoActions(act << SetMemory(0, SetTo, value))
+        act = b.Forward()
+        bl.SeqCompute([(b.EPD(act + 16), b.SetTo, targetplayer)])
+        bl.DoActions(act << b.SetMemory(0, b.SetTo, value))

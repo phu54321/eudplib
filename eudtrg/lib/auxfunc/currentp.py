@@ -23,19 +23,19 @@
 # See eudtrg.LICENSE for more info
 
 
-from eudtrg.base import *  # @UnusedWildImport
-from eudtrg.lib.baselib import *  # @UnusedWildImport
+from eudtrg import base as b
+from eudtrg.lib import baselib as bl
 
 from .readdword import f_dwread_epd
 
 
 def f_setcurpl(p):
-    if not isinstance(p, EUDVariable):
-        p = ParsePlayer(p)
-    SeqCompute((
-        (EPD(0x6509B0), SetTo, p),
+    if not isinstance(p, bl.EUDVariable):
+        p = b.ParsePlayer(p)
+    bl.SeqCompute((
+        (b.EPD(0x6509B0), b.SetTo, p),
     ))
 
 
 def f_getcurpl():
-    return f_dwread_epd(EPD(0x6509B0))
+    return f_dwread_epd(b.EPD(0x6509B0))

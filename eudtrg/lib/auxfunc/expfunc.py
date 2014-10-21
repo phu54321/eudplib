@@ -23,48 +23,49 @@
 # See eudtrg.LICENSE for more info
 
 
-from eudtrg.base import *
-from eudtrg.lib.baselib import *
+from eudtrg import base as b
+from eudtrg.lib import baselib as bl
+
 from .muldiv import f_mul, f_div
 
 
-@EUDFunc
-def f_exp(a, b):
+@bl.EUDFunc
+def f_exp(lhs, rhs):
     global f_exp
 
-    ret = EUDCreateVariables(1)
+    ret = bl.EUDCreateVariables(1)
 
-    expvar = EUDCreateVariables(32)
+    expvar = bl.EUDCreateVariables(32)
 
-    chain = [Forward() for _ in range(32)]
+    chain = [b.Forward() for _ in range(32)]
     ret << 1
-    expvar[0] << a
+    expvar[0] << lhs
 
     for i in range(1, 31):
-        EUDJumpIf(expvar[i - 1].Exactly(0), chain[i - 1])
-        EUDJumpIf(b.AtMost(2 ** i - 1), chain[i - 1])
+        bl.EUDJumpIf(expvar[i - 1].Exactly(0), chain[i - 1])
+        bl.EUDJumpIf(rhs.AtMost(2 ** i - 1), chain[i - 1])
 
-        SetVariables(expvar[i], f_mul(expvar[i - 1], expvar[i - 1]))
+        bl.SetVariables(expvar[i], f_mul(expvar[i - 1], expvar[i - 1]))
 
-        skipcond_skip = Forward()
-        EUDJumpIfNot(expvar[i].Exactly(1), skipcond_skip)
+        skipcond_skip = b.Forward()
+        bl.EUDJumpIfNot(expvar[i].Exactly(1), skipcond_skip)
 
-        SetVariables(b, f_div(b, 2 ** i)[1])
-        EUDJump(chain[i - 1])
+        bl.SetVariables(rhs, f_div(rhs, 2 ** i)[1])
+        bl.EUDJump(chain[i - 1])
 
-        skipcond_skip << NextTrigger()
+        skipcond_skip << b.NextTrigger()
 
     for i in range(31, -1, -1):
-        chain[i] << NextTrigger()
+        chain[i] << b.NextTrigger()
 
-        mul_skip = Forward()
-        EUDJumpIfNot(b.AtLeast(2 ** i), mul_skip)
+        mul_skip = b.Forward()
+        bl.EUDJumpIfNot(rhs.AtLeast(2 ** i), mul_skip)
 
-        SeqCompute((
-            (b, Subtract, 2 ** i),
-            (ret, SetTo, f_mul(ret, expvar[i]))
+        bl.SeqCompute((
+            (rhs, b.Subtract, 2 ** i),
+            (ret, b.SetTo, f_mul(ret, expvar[i]))
         ))
 
-        mul_skip << NextTrigger()
+        mul_skip << b.NextTrigger()
 
     return ret

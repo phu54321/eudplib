@@ -23,14 +23,14 @@
 # See eudtrg.LICENSE for more info
 
 
-from eudtrg import *
+from eudtrg import base as b
 from eudtrg.base.utils.sctbl import TBL
 from eudtrg.base.utils.ubconv import u2b
-from eudtrg.lib.baselib import *
+from eudtrg.lib import baselib as bl
 from ..auxfunc.readdword import f_dwread_epd
 
 
-class EUDTbl(EUDObject):
+class EUDTbl(b.EUDObject):
 
     '''
     Custom string table.
@@ -61,7 +61,7 @@ class EUDTbl(EUDObject):
             Always call :func:`f_initeudtbl` before using this function.
             Always call :func:`f_reseteudtbl` after using this function.
         '''
-        DoActions(SetMemory(0x5993D4, SetTo, self))
+        bl.DoActions(b.SetMemory(0x5993D4, b.SetTo, self))
 
     def SetAddress(self, addr):
         super().SetAddress(addr)
@@ -81,14 +81,14 @@ class EUDTbl(EUDObject):
         buf.EmitBytes(self._tbldata)
 
 
-_origtbladdr = EUDCreateVariables(1)
+_origtbladdr = bl.EUDCreateVariables(1)
 
 
 def f_initeudtbl():
     '''
     Backup original string table address.
     '''
-    SetVariables(_origtbladdr, f_dwread_epd(EPD(0x5993D4)))
+    bl.SetVariables(_origtbladdr, f_dwread_epd(b.EPD(0x5993D4)))
 
 
 def f_reseteudtbl():
@@ -96,4 +96,4 @@ def f_reseteudtbl():
     Restore string table address. If you used custom string table, then you
     should call this function before trigger loop ends.
     '''
-    SeqCompute([(EPD(0x5993D4), SetTo, _origtbladdr)])
+    bl.SeqCompute([(b.EPD(0x5993D4), b.SetTo, _origtbladdr)])

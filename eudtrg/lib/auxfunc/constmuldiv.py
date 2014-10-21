@@ -23,8 +23,8 @@
 # See eudtrg.LICENSE for more info
 
 
-from eudtrg.base import *  # @UnusedWildImport
-from eudtrg.lib.baselib import *  # @UnusedWildImport
+from eudtrg import base as b
+from eudtrg.lib import baselib as bl
 
 
 def f_constmul(number):
@@ -36,12 +36,12 @@ def f_constmul(number):
     try:
         return mulfdict[number]
     except KeyError:
-        @EUDFunc
+        @bl.EUDFunc
         def mulf(a):
-            ret = EUDCreateVariables(1)
+            ret = bl.EUDCreateVariables(1)
             ret << 0
             for i in range(31, -1, -1):
-                Trigger(
+                b.Trigger(
                     conditions=a.AtLeast(2 ** i),
                     actions=[
                         a.SubtractNumber(2 ** i),
@@ -63,16 +63,16 @@ def f_constdiv(number):
     try:
         return divfdict[number]
     except KeyError:
-        @EUDFunc
+        @bl.EUDFunc
         def divf(a):
-            ret = EUDCreateVariables(1)
+            ret = bl.EUDCreateVariables(1)
             ret << 0
             for i in range(31, -1, -1):
                 # number too big
                 if 2 ** i * number >= 2 ** 32:
                     continue
 
-                Trigger(
+                b.Trigger(
                     conditions=a.AtLeast(2 ** i * number),
                     actions=[
                         a.SubtractNumber(2 ** i * number),
