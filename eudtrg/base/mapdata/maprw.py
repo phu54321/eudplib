@@ -129,7 +129,13 @@ def LoadMap(fname):
     uprpdict.clear()
 
 
+def GetCHKSection(sectionname):
+    return _chk.getsection(sectionname)
+
+
 def SaveMap(fname, root):
+    global _chk, _mpqcontent
+
     '''
     Save template map with EUDObjects & various files.
 

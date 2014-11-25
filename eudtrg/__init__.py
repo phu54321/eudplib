@@ -34,7 +34,7 @@ eudtrg consists of 2 subpackages.
 from .base import *
 from .lib import *
 
-__version__ = "0.30-r3-beta"
+__version__ = "0.30-r3"
 
 
 def eudtrgVersion():
@@ -43,7 +43,7 @@ def eudtrgVersion():
 '''
 Changelog
 
-0.30-r3-beta
+0.30-r3
  - Faster variable manipluation, smaller memory footprint.
 
 0.30-r2-beta

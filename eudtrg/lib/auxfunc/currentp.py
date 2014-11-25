@@ -1,4 +1,4 @@
- #!/usr/bin/python
+# !/usr/bin/python
 # -*- coding: utf-8 -*-
 
 # Copyright (c) 2014 trgk
@@ -26,6 +26,16 @@
 from eudtrg.base import *  # @UnusedWildImport
 from eudtrg.lib.baselib import *  # @UnusedWildImport
 
+from .readdword import f_dwread_epd
+
 
 def f_setcurpl(p):
-    SeqCompute(((EPD(0x6509B0), SetTo, ParsePlayer(p)),))
+    if not isinstance(p, EUDVariable):
+        p = ParsePlayer(p)
+    SeqCompute((
+        (EPD(0x6509B0), SetTo, p),
+    ))
+
+
+def f_getcurpl():
+    return f_dwread_epd(EPD(0x6509B0))
