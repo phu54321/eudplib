@@ -2,8 +2,6 @@
 String table manager. Internally used in eudtrg.
 '''
 
- 
-
 from . import binio, ubconv
 
 
@@ -11,8 +9,8 @@ class TBL:
 
     def __init__(self, content=None):
         #
-        # datatb : table of strings                      : string data table
-        # dataindextb : string id -> data id             : string offset table
+        # datatb : table of strings                       : string data table
+        # dataindextb : string id -> data id              : string offset table
         # stringmap : string -> representative string id
         #
 
@@ -24,7 +22,7 @@ class TBL:
         if content is not None:
             self.LoadData(content)
 
-    def LoadData(self, content):
+    def LoadTBL(self, content):
         self._datatb.clear()
         self._stringmap.clear()
         self._capacity = 2
@@ -71,7 +69,8 @@ class TBL:
             return None
         else:
             try:
-                return self._datatb[index - 1]
+                dataindex = self._dataindextb[index - 1]
+                return self._datatb[dataindex]
             except IndexError:
                 return None
 

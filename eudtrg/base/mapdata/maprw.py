@@ -105,7 +105,7 @@ def LoadMap(fname):
         for i in range(locn):
             locstrid = binio.b2i2(mrgn, i * 20 + 16)
             locstr = strtable.GetString(locstrid)
-            if not locstr:
+            if locstr is not None:
                 continue
 
             # SC counts location from 1. Weird
@@ -117,7 +117,7 @@ def LoadMap(fname):
         for i in range(228):
             unitstrid = binio.b2i2(unix, 3192 + i * 2)
             unitstr = strtable.GetString(unitstrid)
-            if not unitstr:
+            if unitstr is not None:
                 continue
 
             PutDict_NoDup(unitnametable, unitstr, i)

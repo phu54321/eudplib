@@ -34,7 +34,7 @@ eudtrg consists of 2 subpackages.
 from .base import *
 from .lib import *
 
-__version__ = "0.30-r2-beta"
+__version__ = "0.30-r3-beta"
 
 
 def eudtrgVersion():
@@ -43,8 +43,16 @@ def eudtrgVersion():
 '''
 Changelog
 
-0.30-r1
- - SaveMap syntax changed.
+0.30-r3-beta
+ - Faster variable manipluation, smaller memory footprint.
+
+0.30-r2-beta
+ - Added DoEvents() function
+ - Now triggers are executed only once.
+
+0.30-r1-beta
+ - Added block structure builder. (EUDIf, EUDElseIf, EUDWhile, etc)
+ - Added a concept of temporary variable.
 
 0.23-r2
  - eudtrg now alerts about payload size.
