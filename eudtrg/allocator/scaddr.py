@@ -1,3 +1,6 @@
+from . import scalloc as sca
+
+
 class SCMemAddr:
 
     def __init__(self, baseobj, offset, rlocmode):
@@ -6,7 +9,7 @@ class SCMemAddr:
         self.rlocmode = rlocmode
 
     def Evaluate(self):
-        return self.baseobj.GetMemoryAddr() // self.rlocmode + self.offset
+        return sca.GetObjectAddr(self.baseobj) // self.rlocmode + self.offset
 
     def __add__(self, other):
         assert isinstance(other, int), 'Cannot add address with address'

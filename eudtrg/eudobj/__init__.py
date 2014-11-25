@@ -1,0 +1,1 @@
+from .eudobj import EUDObject
