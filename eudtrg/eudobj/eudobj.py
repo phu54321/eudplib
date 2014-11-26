@@ -1,10 +1,17 @@
-from ..allocator import scalloc
+from ..allocator import SCMemAddr
+from ..allocator.payload import GetObjectAddr
 
 
-class EUDObject:
+class EUDObject(SCMemAddr):
+
+    '''Class for standalone object
+    '''
 
     def __init__(self):
-        pass
+        super().__init__(self)
+
+    def Evaluate(self):
+        return GetObjectAddr(self)
 
     def GetDataSize(self):
         raise NotImplementedError('Override')

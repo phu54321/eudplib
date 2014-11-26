@@ -30,16 +30,16 @@ class PayloadBuffer:
             4: self._orttable
         }
 
-    def StartEmit(self):
+    def StartWrite(self):
         self._datastart = self._datalen
 
-    def EndEmit(self):
-        emitted_size = self._datalen - self._datastart
-        padding_byten = (-emitted_size & 0x3)
-        self.EmitBytes(bytes(padding_byten))
-        return emitted_size
+    def EndWrite(self):
+        Writeted_size = self._datalen - self._datastart
+        padding_byten = (-Writeted_size & 0x3)
+        self.WriteBytes(bytes(padding_byten))
+        return Writeted_size
 
-    def EmitByte(self, number):
+    def WriteByte(self, number):
         number = scaddr.Evaluate(number)
         assert number.offset_applied == 0, 'Non-constant given.'
         number.number &= 0xFF
@@ -47,7 +47,7 @@ class PayloadBuffer:
         self._datas.append(binio.i2b1(number.number))
         self._datalen += 1
 
-    def EmitWord(self, number):
+    def WriteWord(self, number):
         number = scaddr.Evaluate(number)
         assert number.offset_applied == 0, 'Non-constant given.'
         number.number &= 0xFFFF
@@ -55,7 +55,7 @@ class PayloadBuffer:
         self._datas.append(binio.i2b2(number.number))
         self._datalen += 2
 
-    def EmitDword(self, number):
+    def WriteDword(self, number):
         number = scaddr.Evaluate(number)
         number.number &= 0xFFFFFFFF
 
@@ -65,7 +65,7 @@ class PayloadBuffer:
         self._datas.append(binio.i2b4(number.number))
         self._datalen += 4
 
-    def EmitPack(self, structformat, *arglist):
+    def WritePack(self, structformat, *arglist):
         '''
         ======= =======
           Char   Type
@@ -81,7 +81,7 @@ class PayloadBuffer:
 
         _packerlist[structformat](self, *arglist)
 
-    def EmitBytes(self, b):
+    def WriteBytes(self, b):
         '''
         Write bytes object to buffer.
 

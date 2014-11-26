@@ -1,15 +1,16 @@
-from . import scalloc as sca
+import traceback
 
 
 class SCMemAddr:
 
-    def __init__(self, baseobj, offset, rlocmode):
+    def __init__(self, baseobj, offset=0, rlocmode=4):
         self.baseobj = baseobj
         self.offset = offset
         self.rlocmode = rlocmode
 
     def Evaluate(self):
-        return sca.GetObjectAddr(self.baseobj) // self.rlocmode + self.offset
+        assert self.rlocmode in [1, 4]
+        return Evaluate(self.baseobj) * (self.rlocmode // 4) + self.offset
 
     def __add__(self, other):
         assert isinstance(other, int), 'Cannot add address with address'
@@ -60,7 +61,35 @@ class SCMemAddr:
         return SCMemAddr(self.baseobj, self.offset // k, self.rlocmode // k)
 
 
+class Forward(SCMemAddr):
+
+    ''' Class for late definition
+    '''
+
+    def __init__(self):
+        super().__init__(self)
+        self._expr = None
+        self._traceback = '| ' + traceback.format_stack().join('| ')
+
+    def __lshift__(self, expr):
+        assert self._expr is None, 'Reforwarding is probibited'
+        assert expr is not None, 'Cannot forward to None'
+        self._expr = expr
+
+    def GetObjectAddr(self):
+        if self._expr is not None:
+            print('Forward not properly initialized')
+            print('Forward initialized at :')
+            print(self._traceback)
+            raise AssertionError('Forward not properly initialized')
+
+        return Evaluate(self.expr)
+
+
 def Evaluate(x):
+    '''
+    Evaluate expressions
+    '''
     try:
         return x.Evaluate()
     except AttributeError:
