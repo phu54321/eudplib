@@ -1,7 +1,5 @@
 import eudtrg as et
 
-et.PushTriggerScope()
-
 a = et.Trigger(
     conditions=[
         et.Memory(0x58A364, et.AtLeast, 30)
@@ -20,7 +18,7 @@ b = et.Trigger(
     ]
 )
 
-et.PopTriggerScope()
+et.Trigger(nextptr=0x80000000)
 
 pl = et.allocator.payload.CreatePayload(a)
 
