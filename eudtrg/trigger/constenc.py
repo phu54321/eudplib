@@ -1,3 +1,5 @@
+from . import stockact
+
 from .strenc import (
     EncodeAIScript,
     EncodeLocation,
@@ -67,7 +69,7 @@ Total = _Unique()
 Units = _Unique()
 Buildings = _Unique()
 UnitsAndBuildings = _Unique()
-Kills = _Unique()
+Kills = stockact.Kills  # Action name & Constant name conflict
 Razings = _Unique()
 KillsAndRazings = _Unique()
 Custom = _Unique()
@@ -173,7 +175,7 @@ SwitchStateDict = {
 }
 
 
-def EncodeConst(d, s):
+def _EncodeConst(d, s):
     try:
         return d.get(s, s)
     except TypeError:  # unhashable type
@@ -184,28 +186,28 @@ def EncodeAllyStatus(s):
     '''
     Convert [Enemy, Ally, AlliedVictory] to number [0, 1, 2].
     '''
-    return EncodeConst(AllyStatusDict, s)
+    return _EncodeConst(AllyStatusDict, s)
 
 
 def EncodeComparison(s):
     '''
     Convert [AtLeast, AtMost, Exactly] to number [0, 1, 10].
     '''
-    return EncodeConst(ComparisonDict, s)
+    return _EncodeConst(ComparisonDict, s)
 
 
 def EncodeModifier(s):
     '''
     Convert [SetTo, Add, Subtract] to number [7, 8, 9].
     '''
-    return EncodeConst(ModifierDict, s)
+    return _EncodeConst(ModifierDict, s)
 
 
 def EncodeOrder(s):
     '''
     Convert [Move, Patrol, Attack] to number [0, 1, 2].
     '''
-    return EncodeConst(OrderDict, s)
+    return _EncodeConst(OrderDict, s)
 
 
 def EncodePlayer(s):
@@ -252,21 +254,21 @@ def EncodePlayer(s):
     ======================= ========
 
     '''
-    return EncodeConst(PlayerDict, s)
+    return _EncodeConst(PlayerDict, s)
 
 
 def EncodePropState(s):
     '''
     Convert [Enable, Disable, Toogle] to number [4, 5, 6]
     '''
-    return EncodeConst(PropStateDict, s)
+    return _EncodeConst(PropStateDict, s)
 
 
 def EncodeResource(s):
     '''
     Convert [Ore, Gas, OreAndGas] to [0, 1, 2]
     '''
-    return EncodeConst(ResourceDict, s)
+    return _EncodeConst(ResourceDict, s)
 
 
 def EncodeScore(s):
@@ -287,21 +289,21 @@ def EncodeScore(s):
     ================= ========
 
     '''
-    return EncodeConst(ScoreDict, s)
+    return _EncodeConst(ScoreDict, s)
 
 
 def EncodeSwitchAction(s):
     '''
     Convert [Set, Clear, Toogle, Random] to [4, 5, 6, 11].
     '''
-    return EncodeConst(SwitchActionDict, s)
+    return _EncodeConst(SwitchActionDict, s)
 
 
 def EncodeSwitchState(s):
     '''
     Convert [Set, Cleared] to [2, 3].
     '''
-    return EncodeConst(SwitchStateDict, s)
+    return _EncodeConst(SwitchStateDict, s)
 
 
 def EncodeCount(s):

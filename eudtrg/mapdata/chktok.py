@@ -1,0 +1,130 @@
+'''
+scenario.chk section tokenizer. Internally used in eudtrg.
+'''
+
+from ..utils import ubconv, binio
+
+
+"""
+General CHK class.
+"""
+
+
+def sectionname_format(sn):
+    sn = ubconv.u2b(sn)
+
+    if len(sn) < 4:
+        sn += b' ' * (4 - len(sn))
+
+    elif len(sn) > 4:
+        raise RuntimeError('Length of section name cannot be longer than 4')
+
+    return sn
+
+
+class CHK:
+
+    def __init__(self):
+        self.sections = {}
+
+    def loadblank(self):
+        self.sections = {}
+
+    def loadchk(self, b):
+        # this code won't handle protection methods properly such as...
+        #  - duplicate section name
+        #  - jump section protection
+        #
+        # this program although handles
+        #  - invalid section length (too high)
+        #  - unused sections
+
+        t = self.sections  # temporarilly store
+        self.sections = {}
+
+        index = 0
+        while index < len(b):
+            # read data
+            sectionname = b[index: index+4]
+            sectionlength = binio.b2i4(b, index + 4)
+
+            if sectionlength < 0:
+                # jsp with negative section size.
+                self.sections = t
+                return False
+
+            section = b[index + 8: index + 8 + sectionlength]
+            index += sectionlength + 8
+
+            self.sections[sectionname] = section
+
+        return True
+
+    def savechk(self):
+        # calculate output size
+        blist = []
+        for name, binary in self.sections.items():
+            blist.append(name + binio.i2b4(len(binary)) + binary)
+
+        return b''.join(blist)
+
+    def enumsection(self):
+        return list(self.sections.keys())
+
+    def getsection(self, sectionname):
+        sectionname = sectionname_format(sectionname)
+        return self.sections[sectionname]  # Nameerror may be raised.
+
+    def setsection(self, sectionname, b):
+        sectionname = sectionname_format(sectionname)
+        self.sections[sectionname] = bytes(b)
+
+    def delsection(self, sectionname):
+        sectionname = sectionname_format(sectionname)
+        del self.sections[sectionname]
+
+    def optimize(self):
+
+        # Delete unused sections
+        used_section = [
+            b'VER ', b'VCOD', b'OWNR', b'ERA ', b'DIM ', b'SIDE', b'MTXM',
+            b'UNIT', b'THG2', b'MASK', b'STR ', b'UPRP', b'MRGN', b'TRIG',
+            b'MBRF', b'SPRP', b'FORC', b'COLR', b'PUNI', b'PUPx', b'PTEx',
+            b'UNIx', b'UPGx', b'TECx',
+        ]
+
+        unused_section = [
+            sn for sn in self.sections.keys() if sn not in used_section]
+        for sn in unused_section:
+            del self.sections[sn]
+
+        # Terrain optimization
+        dim = self.getsection(b'DIM ')
+        mapw = binio.b2i2(dim, 0)
+        maph = binio.b2i2(dim, 2)
+        terrainsize = mapw * maph
+
+        # MASK optimization : cancel 0xFFs.
+        mask = self.getsection(b'MASK')
+        clippos = 0
+        for i in range(terrainsize - 1, -1, -1):
+            if mask[i] != 0xff:
+                clippos = i + 1
+                break
+
+        mask = mask[:clippos]
+        self.setsection(b'MASK', mask)
+
+        # MTXM optimization
+        # MASK optimization : cancel 0xFFs.
+        mtxm = self.getsection(b'MTXM')
+        clippos = 0
+        for i in range(terrainsize - 1, -1, -1):
+            if mtxm[2 * i] != 0x00 or mtxm[2 * i + 1] != 0x00:
+                clippos = i + 1
+                break
+
+        mtxm = mtxm[:2 * clippos]
+        self.setsection(b'MTXM', mtxm)
+
+        # More optimization would be possible, but I don't care.
