@@ -66,8 +66,7 @@ def InitMpqLibrary():
         return True
 
     except OSError:
-        print('Loading SFmpq failed. '
-              'If you are using 64bit python, change to 32bit one.')
+        print('Loading SFmpq failed.')
         SFmpq = None
         return False
 

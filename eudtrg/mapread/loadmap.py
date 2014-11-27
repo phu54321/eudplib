@@ -1,4 +1,4 @@
-from ..mapdata import chktok, mapdata, mpqapi
+from ..core.mapdata import chktok, mpqapi, mapdata
 
 
 def LoadMap(fname):
