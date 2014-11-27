@@ -1,4 +1,5 @@
 import traceback
+from . import rlocint
 
 
 class SCMemAddr:
@@ -69,27 +70,32 @@ class Forward(SCMemAddr):
     def __init__(self):
         super().__init__(self)
         self._expr = None
-        self._traceback = '| ' + traceback.format_stack().join('| ')
+        self._traceback = (
+            '--| ' +
+            ''.join(traceback.format_stack()[:-1]).replace('\n', '\n  | ')
+        )
 
     def __lshift__(self, expr):
         assert self._expr is None, 'Reforwarding is probibited'
         assert expr is not None, 'Cannot forward to None'
         self._expr = expr
 
-    def GetObjectAddr(self):
-        if self._expr is not None:
-            print('Forward not properly initialized')
-            print('Forward initialized at :')
-            print(self._traceback)
-            raise AssertionError('Forward not properly initialized')
+    def Evaluate(self):
+        assert self._expr is not None, (
+            'Forward not properly initialized\n'
+            'Forward initialized at :\n'
+            + self._traceback
+        )
 
-        return Evaluate(self.expr)
+        return Evaluate(self._expr)
 
 
 def Evaluate(x):
     '''
     Evaluate expressions
     '''
+    if isinstance(x, int):
+        return rlocint.RlocInt(x, 0)
     try:
         return x.Evaluate()
     except AttributeError:

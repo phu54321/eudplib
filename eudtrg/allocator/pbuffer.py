@@ -41,28 +41,28 @@ class PayloadBuffer:
 
     def WriteByte(self, number):
         number = scaddr.Evaluate(number)
-        assert number.offset_applied == 0, 'Non-constant given.'
-        number.number &= 0xFF
+        assert number.rlocmode == 0, 'Non-constant given.'
+        number.offset &= 0xFF
 
-        self._datas.append(binio.i2b1(number.number))
+        self._datas.append(binio.i2b1(number.offset))
         self._datalen += 1
 
     def WriteWord(self, number):
         number = scaddr.Evaluate(number)
-        assert number.offset_applied == 0, 'Non-constant given.'
-        number.number &= 0xFFFF
+        assert number.rlocmode == 0, 'Non-constant given.'
+        number.offset &= 0xFFFF
 
-        self._datas.append(binio.i2b2(number.number))
+        self._datas.append(binio.i2b2(number.offset))
         self._datalen += 2
 
     def WriteDword(self, number):
         number = scaddr.Evaluate(number)
-        number.number &= 0xFFFFFFFF
+        number.offset &= 0xFFFFFFFF
 
-        if number.offset_applied:
-            self._tablebr[number.offset_applied].append(self._datalen)
+        if number.rlocmode:
+            self._tablebr[number.rlocmode].append(self._datalen)
 
-        self._datas.append(binio.i2b4(number.number))
+        self._datas.append(binio.i2b4(number.offset))
         self._datalen += 4
 
     def WritePack(self, structformat, *arglist):
@@ -118,7 +118,7 @@ def _CreateStructPacker(structformat):
         dlen = buf._datalen
 
         evals = [scaddr.Evaluate(arg) for arg in arglist]
-        evalnum = [ri.number & andvallist[i] for i, ri in enumerate(evals)]
+        evalnum = [ri.offset & andvallist[i] for i, ri in enumerate(evals)]
 
         # 1. Add binary data
         packed = struct.pack(structformat, *evalnum)
@@ -126,12 +126,12 @@ def _CreateStructPacker(structformat):
 
         # 2. Update relocation table
         for i, ri in enumerate(evals):
-            assert (ri.offset_applied == 0) or (sizelist[i] == 4)
+            assert (ri.rlocmode == 0) or (sizelist[i] == 4)
 
-            if ri.offset_applied == 1:
+            if ri.rlocmode == 1:
                 buf._prttable.append(dlen + dataoffsetlist[i])
 
-            elif ri.offset_applied == 4:
+            elif ri.rlocmode == 4:
                 buf._orttable.append(dlen + dataoffsetlist[i])
 
         buf._datalen += structlen

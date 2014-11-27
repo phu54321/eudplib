@@ -27,3 +27,15 @@ from .stockact import (
     ModifyUnitHangarCount, PauseTimer, UnpauseTimer, Draw,
     SetAllianceStatus, SetMemory, SetNextPtr,
 )
+
+from .constenc import (
+    All, Enemy, Ally, AlliedVictory, AtLeast, AtMost, Exactly, SetTo, Add,
+    Subtract, Move, Patrol, Attack, P1, P2, P3, P4, P5, P6, P7, P8, P9,
+    P10, P11, P12, Player1, Player2, Player3, Player4, Player5, Player6,
+    Player7, Player8, Player9, Player10, Player11, Player12,
+    CurrentPlayer, Foes, Allies, NeutralPlayers, AllPlayers, Force1,
+    Force2, Force3, Force4, NonAlliedVictoryPlayers, Enable, Disable,
+    Toggle, Ore, Gas, OreAndGas, Total, Units, Buildings,
+    UnitsAndBuildings, Kills, Razings, KillsAndRazings, Custom, Set,
+    Clear, Random, Cleared
+)

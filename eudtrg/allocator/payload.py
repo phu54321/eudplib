@@ -17,9 +17,9 @@ def CreatePayload(root):
 
     while _unwritten_objs:
         obj = _unwritten_objs.pop()
-        pbuf.StartEmit()
-        obj.WritePayload(pbuffer)
-        pbuf.EndEmit()
+        pbuf.StartWrite()
+        obj.WritePayload(pbuf)
+        pbuf.EndWrite()
 
     return pbuf.CreatePayload()
 

@@ -36,6 +36,7 @@ class Trigger(EUDObject):
         self._nextptr = nextptr
         self._conditions = conditions
         self._actions = actions
+        self._preserved = preserved
 
         for i, cond in enumerate(self._conditions):
             assert isinstance(cond, Condition)

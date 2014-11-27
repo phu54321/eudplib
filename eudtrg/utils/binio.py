@@ -26,7 +26,7 @@ def i2b2(i):
 def i2b4(i):
     return bytes((
         i & 0xFF,
-        (i >> 8) & 0xFF
+        (i >> 8) & 0xFF,
         (i >> 16) & 0xFF,
         (i >> 24) & 0xFF,
     ))

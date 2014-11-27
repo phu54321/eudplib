@@ -1,3 +1,5 @@
+import types
+
 from .condition import Condition
 from .constenc import (
     EncodeComparison,
@@ -8,6 +10,7 @@ from .constenc import (
     EncodeLocation,
     EncodeSwitch,
     EncodeUnit,
+    Kills  # for __calls__ binding
 )
 from ..utils import EPD
 
@@ -62,11 +65,15 @@ def Accumulate(Player, Comparison, Number, ResourceType):
     return Condition(0, Player, Number, 0, Comparison, 4, ResourceType, 0)
 
 
-def Kills(Player, Comparison, Number, Unit):
+# 'Kills' is already defined inside constenc, so we just add __call__ method
+# to there instead of creating new function
+def __Kills__internal(Player, Comparison, Number, Unit):
     Player = EncodePlayer(Player)
     Comparison = EncodeComparison(Comparison)
     Unit = EncodeUnit(Unit)
     return Condition(0, Player, Number, Unit, Comparison, 5, 0, 0)
+
+Kills._internalf = __Kills__internal
 
 
 def CommandMost(Unit):

@@ -4,7 +4,7 @@ _lastblockdict = {}
 
 def CreateBlock(name, userdata):
     block = (name, userdata)
-    _blockstru.push(block)
+    _blockstru.append(block)
 
     if name not in _lastblockdict:
         _lastblockdict[name] = []

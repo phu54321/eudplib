@@ -1,5 +1,3 @@
-from . import stockact
-
 from .strenc import (
     EncodeAIScript,
     EncodeLocation,
@@ -8,9 +6,17 @@ from .strenc import (
     EncodeUnit
 )
 
+from ..mapdata import GetPropertyIndex
+
 
 class _Unique:
     pass
+
+
+class _KillsSpecialized:
+
+    def __call__(self, a, b, c, d):
+        return self._internalf(a, b, c, d)
 
 All = _Unique()
 Enemy = _Unique()
@@ -69,7 +75,7 @@ Total = _Unique()
 Units = _Unique()
 Buildings = _Unique()
 UnitsAndBuildings = _Unique()
-Kills = stockact.Kills  # Action name & Constant name conflict
+Kills = _KillsSpecialized()  # Condition name & Constant name conflict. See stockcond
 Razings = _Unique()
 KillsAndRazings = _Unique()
 Custom = _Unique()
@@ -314,3 +320,9 @@ def EncodeCount(s):
         return 0
     else:
         return s
+
+# ========================
+
+
+def EncodeProperty(prop):
+    return GetPropertyIndex(prop)
