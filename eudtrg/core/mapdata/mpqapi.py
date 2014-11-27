@@ -4,6 +4,7 @@ SFmpq.dll wrapper. Used internally inside eudtrg.
 
 from ctypes import *  # @UnusedWildImport
 import struct
+import os
 
 from ..utils.ubconv import u2b
 
@@ -19,15 +20,17 @@ WAVCOMP_LOWQUALITY = 3
 
 SFmpq = None
 
+currentdir = os.path.dirname(__file__)
+
 
 def InitMpqLibrary():
     global SFmpq
 
     try:
         if struct.calcsize("P") == 4:  # 32bit
-            SFmpq = WinDLL('SFmpq32.dll')
+            SFmpq = WinDLL(os.path.join(currentdir, 'SFmpq32.dll'))
         else:
-            SFmpq = WinDLL('SFmpq64.dll')
+            SFmpq = WinDLL(os.path.join(currentdir, 'SFmpq64.dll'))
 
         # for MpqRead
         SFmpq.SFileOpenArchive.restype = c_int
