@@ -1,5 +1,5 @@
-from .stringmap import InitStringMap
-from .proptable import InitPropertyMap
+from .stringmap import InitStringMap, ApplyStringMap
+from .proptable import InitPropertyMap, ApplyPropertyMap
 
 _inited = False
 _chkt = None
@@ -16,9 +16,18 @@ def InitMapData(chkt, rawfile):
     _inited = True
 
 
+def UpdateMapData():
+    ApplyStringMap(_chkt)
+    ApplyPropertyMap(_chkt)
+
+
 def IsMapdataInitalized():
     return _inited
 
 
 def GetChkTokenized():
     return _chkt
+
+
+def GetRawFile():
+    return _rawfile

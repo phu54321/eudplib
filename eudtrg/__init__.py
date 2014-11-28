@@ -1,2 +1,4 @@
 from .core import *
-from .mapread import *
+from .varfunc import *
+
+from .maprw import *

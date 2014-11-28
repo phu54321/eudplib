@@ -1,4 +1,10 @@
 import eudtrg as et
+from  eudtrg.core.utils import blockstru as bs
+
+bsm = bs.BlockStruManager()
+bs.SetCurrentBlockStruManager(bsm)
+
+et.PushTriggerScope()
 
 a = et.Trigger(
     conditions=[
@@ -19,6 +25,9 @@ b = et.Trigger(
 )
 
 et.Trigger(nextptr=0x80000000)
+
+et.PopTriggerScope()
+bs.SetCurrentBlockStruManager(None)
 
 pl = et.allocator.payload.CreatePayload(a)
 

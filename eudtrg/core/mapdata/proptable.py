@@ -28,3 +28,8 @@ def GetPropertyIndex(prop):
         _uprptable.append(prop)
         _uprpdict[prop] = uprpindex
         return uprpindex + 1  # SC counts unit properties from 1. Sucks
+
+
+def ApplyPropertyMap(chkt):
+    uprpdata = b''.join(_uprptable) + bytes(20 * (64 - len(_uprptable)))
+    chkt.setsection('UPRP', uprpdata)
