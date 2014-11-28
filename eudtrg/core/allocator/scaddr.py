@@ -76,9 +76,15 @@ class Forward(SCMemAddr):
         )
 
     def __lshift__(self, expr):
-        assert self._expr is None, 'Reforwarding is probibited'
+        assert self._expr is None, 'Reforwarding without reset is not allowed'
         assert expr is not None, 'Cannot forward to None'
         self._expr = expr
+
+    def IsSet(self):
+        return self._expr is not None
+
+    def Reset(self):
+        self._expr = None
 
     def Evaluate(self):
         assert self._expr is not None, (
