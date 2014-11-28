@@ -6,6 +6,7 @@ def PushTriggerScope():
     CreateBlock('triggerscope', {
         'nexttrigger_list': []
     })
+    return True  # Allow `if PushTriggerScope()` syntax for indent
 
 
 def NextTrigger():
