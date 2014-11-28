@@ -18,7 +18,7 @@ def SetCurrentBlockStruManager(bsm):
     return old_bsm
 
 
-def CreateBlock(name, userdata):
+def EUDCreateBlock(name, userdata):
     _blockstru = _current_bsm._blockstru
     _lastblockdict = _current_bsm._lastblockdict
 
@@ -30,13 +30,18 @@ def CreateBlock(name, userdata):
     _lastblockdict[name].append(block)
 
 
-def GetLastBlock(name):
+def EUDGetLastBlock():
+    _blockstru = _current_bsm._blockstru
+    return _blockstru[-1]
+
+
+def EUDGetLastBlockOfName(name):
     _lastblockdict = _current_bsm._lastblockdict
 
     return _lastblockdict[name][-1]
 
 
-def PopBlock(name):
+def EUDPopBlock(name):
     _blockstru = _current_bsm._blockstru
     _lastblockdict = _current_bsm._lastblockdict
 
@@ -44,3 +49,7 @@ def PopBlock(name):
     assert lastblock[0] == name, 'Block starting/ending mismatch'
     _lastblockdict[name].pop()
     return lastblock
+
+
+def EUDGetBlockList():
+    return _current_bsm._blockstru
