@@ -3,3 +3,7 @@ from .scaddr import (
     Forward,
     Evaluate
 )
+
+from .payload import (
+    CreatePayload
+)

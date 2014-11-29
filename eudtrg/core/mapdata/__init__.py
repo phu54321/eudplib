@@ -12,3 +12,5 @@ from .proptable import (
 from .mapdata import (
     IsMapdataInitalized
 )
+
+from .tblformat import TBL
