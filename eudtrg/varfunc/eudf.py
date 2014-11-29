@@ -29,7 +29,9 @@ def EUDFunc(fdecl_func):
 
         f_args = c.Assignable2List(EUDCreateVariables(argn))
         fstart = c.NextTrigger()
-        f_rets = c.Assignable2List(fdecl_func(*f_args))
+        f_rets = fdecl_func(*f_args)
+        if f_rets is not None:
+            f_rets = c.Assignable2List(f_rets)
         fend = c.Trigger()
 
         c.PopTriggerScope()
@@ -38,9 +40,10 @@ def EUDFunc(fdecl_func):
     assert f_bsm.empty(), 'Block start/end mismatch inside function'
 
     # Assert that all return values are EUDVariable.
-    for i, ret in enumerate(f_rets):
-        assert isinstance(ret, EUDVariable), (
-            '#%d of returned value is not instance of EUDVariable' % i)
+    if f_rets is not None:  # Not void function
+        for i, ret in enumerate(f_rets):
+            assert isinstance(ret, EUDVariable), (
+                '#%d of returned value is not instance of EUDVariable' % i)
 
     # Function to return
     @wraps(fdecl_func)
@@ -61,10 +64,11 @@ def EUDFunc(fdecl_func):
 
         fcallend << c.NextTrigger()
 
-        retn = len(f_rets)
-        tmp_rets = [EUDVariable() for _ in range(retn)]
-        SeqCompute([(tr, c.SetTo, r) for tr, r in zip(tmp_rets, f_rets)])
-        return c.List2Assignable(tmp_rets)
+        if f_rets is not None:
+            retn = len(f_rets)
+            tmp_rets = [EUDVariable() for _ in range(retn)]
+            SeqCompute([(tr, c.SetTo, r) for tr, r in zip(tmp_rets, f_rets)])
+            return c.List2Assignable(tmp_rets)
 
     # return
     return retfunc
