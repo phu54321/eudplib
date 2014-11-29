@@ -9,7 +9,7 @@ from ... import ctrlstru as cs
 from ... import varfunc as vf
 
 
-def GenerateStage2(payload):
+def CreateStage2(payload):
     # We first build code injector.
     prtdb = c.Db(b''.join([c.i2b4(x // 4) for x in payload.prttable]))
     prtn = vf.EUDLightVariable(len(payload.prttable))

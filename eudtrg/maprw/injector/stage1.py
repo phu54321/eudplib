@@ -5,7 +5,7 @@
 '''
 
 from ... import core as c
-from .. import trigtrg as tt
+from . import trigtrg as tt
 
 
 trglist = []
@@ -60,7 +60,7 @@ def CopyDeaths(iplayer, oplayer, copyepd=False, initvalue=None):
         )
 
 
-def GenerateStage1(chkt, payload_stage2):
+def CreateAndApplyStage1(chkt, payload_stage2):
     global trglist
 
     # Append 'Require EUD enabler' string.
@@ -72,6 +72,7 @@ def GenerateStage1(chkt, payload_stage2):
     payload_offset = (len(str_section) + 3) & -3
     padding_length = payload_offset - len(str_section)
     str_section = str_section + bytes(padding_length) + payload_stage2.data
+    chkt.setsection('STR', str_section)
 
     # MAIN STAGE
     trglist.clear()
@@ -236,5 +237,29 @@ def GenerateStage1(chkt, payload_stage2):
     # now curpl = EPD(value(ptsprev) + 4)
     CopyDeaths(tt.CurrentPlayer, tt.EPD(strs), False, payload_offset)
 
-    # Stage 1 complete
-    return b''.join(trglist)
+    trigdata = b''.join(trglist)
+
+    # Stage 1 created
+
+    # -------
+
+    # Previous trigger datas
+
+    oldtrigraw = chkt.getsection('TRIG')
+    oldtrigs = \
+        [oldtrigraw[i:i + 2400] for i in range(0, len(oldtrigraw), 2400)]
+    proc_trigs = []
+
+    # Collect only enabled triggers
+    for trig in oldtrigs:
+        trig = bytearray(trig)
+        flag = c.b2i4(trig, 320 + 2048)
+        if flag & 8:  # Trigger already disabled
+            pass
+
+        flag ^= 8
+        trig[320 + 2048: 320 + 2048 + 4] = c.i2b4(flag)
+        proc_trigs.append(bytes(trig))
+
+    oldtrigraw_processed = b''.join(proc_trigs)
+    chkt.setsection('TRIG', trigdata + oldtrigraw_processed)

@@ -89,6 +89,4 @@ def CreateStage3(root):
 
     c.PopTriggerScope()
 
-    assert 
-
     return ret
