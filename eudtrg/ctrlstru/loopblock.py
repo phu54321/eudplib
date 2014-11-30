@@ -1,5 +1,5 @@
 from .. import core as c
-from .ctrlstru import (
+from .basicstru import (
     EUDJump,
     EUDJumpIf,
     EUDJumpIfNot
@@ -19,7 +19,7 @@ def EUDInfLoop():
 
 
 def EUDEndInfLoop():
-    lb = c.EUDPopBlock()
+    lb = c.EUDPopBlock('infloopblock')
     assert lb[0] == 'infloopblock', 'Block start/end mismatch'
     EUDJump(lb[1]['loopstart'])
     lb[1]['loopend'] << c.NextTrigger()
@@ -51,9 +51,8 @@ def EUDWhileNot(conditions):
     return True
 
 
-def EUDEndWhile(conditions):
-    lb = c.PopBlock()
-    assert lb[0] == 'whileblock', 'Block start/end mismatch'
+def EUDEndWhile():
+    lb = c.EUDPopBlock('whileblock')
     EUDJump(lb[1]['loopstart'])
     lb[1]['loopend'] << c.NextTrigger()
 

@@ -1,4 +1,4 @@
-from .ctrlstru import (
+from .basicstru import (
     DoActions,
     EUDJump,
     EUDBranch,

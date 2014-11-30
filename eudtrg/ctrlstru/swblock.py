@@ -1,5 +1,5 @@
 from .. import core as c
-from .ctrlstru import EUDJump, EUDBranch
+from .basicstru import EUDJump, EUDBranch
 
 
 def EUDSwitch(var):
@@ -43,10 +43,8 @@ def EUDSwitchBreak():
 
 
 def EUDEndSwitch():
-    lb = c.EUDPopBlock()
-    assert lb[0] == 'swblock', 'Block start/end mismatch'
+    lb = c.EUDPopBlock('swblock')
     block = lb[1]
-
     swend = block['swend']
     EUDJump(swend)  # Exit switch block
     c.PopTriggerScope()

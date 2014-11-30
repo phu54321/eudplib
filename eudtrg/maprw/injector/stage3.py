@@ -21,7 +21,7 @@ def FlipProp(initptr):
         propv = sf.f_dwread_epd(prop_epd)
         sf.f_dwwrite_epd(prop_epd, sf.f_bitxor(propv, 8))  # Flip bit 3
 
-        initptr << sf.f_epdread_epd(initepd + (4 // 4))
+        initptr << sf.f_epd(sf.f_dwread_epd(initepd + (4 // 4)))
 
     cs.EUDEndWhile()
 

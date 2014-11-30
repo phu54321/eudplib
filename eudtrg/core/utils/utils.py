@@ -5,11 +5,11 @@ def FlattenList(l):
     try:
         ret = []
         for item in l:
-            ret.append(FlattenList(item))
+            ret.extend(FlattenList(item))
         return ret
 
-    except TypeError:
-        return l
+    except TypeError:  # l is not iterable
+        return [l]
 
 
 def EPD(p):
@@ -58,40 +58,40 @@ def SCMD2Text(b):
             return None
 
     while i < len(b):
-        if b[i:i+2] == b'\\<'[0]:
+        if b[i:i + 2] == b'\\<'[0]:
             output.append('<')
             i += 2
 
-        elif b[i:i+2] == b'\\>'[0]:
+        elif b[i:i + 2] == b'\\>'[0]:
             output.append('>')
             i += 2
 
-        elif b[i:i+3] == b'<R>'[0]:
+        elif b[i:i + 3] == b'<R>'[0]:
             output.append(b'\x12')
             i += 3
 
-        elif b[i:i+3] == b'<C>'[0]:
+        elif b[i:i + 3] == b'<C>'[0]:
             output.append(b'\x13')
             i += 3
 
         elif (
             b[i] == b'<'[0] and
-            toxdigit(b[i+1]) is not None and
-            b[i+2] == b'>'[0]
+            toxdigit(b[i + 1]) is not None and
+            b[i + 2] == b'>'[0]
         ):
             output.append(bytes((
-                toxdigit(b[i+1]),
+                toxdigit(b[i + 1]),
             )))
             i += 3
 
         elif (
             b[i] == b'<'[0] and
-            toxdigit(b[i+1]) is not None and
-            toxdigit(b[i+2]) is not None and
-            b[i+3] == b'>'[0]
+            toxdigit(b[i + 1]) is not None and
+            toxdigit(b[i + 2]) is not None and
+            b[i + 3] == b'>'[0]
         ):
             output.append(bytes((
-                (toxdigit(b[i+1]) << 4) | toxdigit(b[i+2]),
+                (toxdigit(b[i + 1]) << 4) | toxdigit(b[i + 2]),
             )))
             i += 4
 

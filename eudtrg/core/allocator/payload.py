@@ -31,7 +31,7 @@ def RegisterObject(obj):
     if obj not in _alloctable:
         allocaddr = _alloc_lastaddr
         _alloctable[obj] = allocaddr
-        _alloc_lastaddr += obj.GetDataSize()
+        _alloc_lastaddr += (obj.GetDataSize() + 3) & -3
         _unwritten_objs.append(obj)
 
 

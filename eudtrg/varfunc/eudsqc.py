@@ -7,7 +7,7 @@ def _VProc(v, actions):
 
     c.Trigger(
         nextptr=v.GetVTable(),
-        actions=actions + [c.SetNextPtr(v.GetVTable(), nexttrg)]
+        actions=[actions] + [c.SetNextPtr(v.GetVTable(), nexttrg)]
     )
 
     nexttrg << c.NextTrigger()
@@ -20,25 +20,25 @@ def _VProc(v, actions):
 def SeqCompute(assignpairs):  # Same as _Basic_SeqCompute now.
     for dst, mdt, src in assignpairs:
         try:
-            dstaddr = c.EPD(dst.GetVariableMemoryAddr())
+            dstepd = c.EPD(dst.GetVariableMemoryAddr())
         except AttributeError:
-            dstaddr = dst
+            dstepd = dst
 
         if isinstance(src, EUDVariable):
             if mdt == c.SetTo:
                 _VProc(src, [
-                    src.QueueSetTo(dstaddr)
+                    src.QueueAssignTo(dstepd)
                 ])
 
             elif mdt == c.Add:
                 _VProc(src, [
-                    src.QueueAddTo(dstaddr)
+                    src.QueueAddTo(dstepd)
                 ])
 
             elif mdt == c.Subtract:
                 _VProc(src, [
-                    src.QueueSubtractTo(dstaddr)
+                    src.QueueSubtractTo(dstepd)
                 ])
 
         else:
-            c.Trigger(actions=c.SetMemory(dstaddr, mdt, src))
+            c.Trigger(actions=c.SetDeaths(dstepd, mdt, src, 0))

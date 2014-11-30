@@ -1,5 +1,5 @@
 import eudtrg as et
-from  eudtrg.core.utils import blockstru as bs
+from eudtrg.core.utils import blockstru as bs
 
 bsm = bs.BlockStruManager()
 bs.SetCurrentBlockStruManager(bsm)

@@ -70,15 +70,13 @@ class Forward(SCMemAddr):
     def __init__(self):
         super().__init__(self)
         self._expr = None
-        self._traceback = (
-            '--| ' +
-            ''.join(traceback.format_stack()[:-1]).replace('\n', '\n  | ')
-        )
+        # self._traceback = traceback.extract_stack()
 
     def __lshift__(self, expr):
         assert self._expr is None, 'Reforwarding without reset is not allowed'
         assert expr is not None, 'Cannot forward to None'
         self._expr = expr
+        return expr
 
     def IsSet(self):
         return self._expr is not None
@@ -90,7 +88,11 @@ class Forward(SCMemAddr):
         assert self._expr is not None, (
             'Forward not properly initialized\n'
             'Forward initialized at :\n'
-            + self._traceback
+            + (
+                '--| ' +
+                ''.join(traceback.format_list(self._traceback)()[:-1])
+                .replace('\n', '\n  | ')
+            )
         )
 
         return Evaluate(self._expr)

@@ -1,5 +1,5 @@
 from .. import core as c
-from .ctrlstru import EUDJump, EUDJumpIf, EUDJumpIfNot
+from .basicstru import EUDJump, EUDJumpIf, EUDJumpIfNot
 
 
 '''
@@ -69,7 +69,7 @@ def EUDElseIfNot(conditions):
 
 # -------
 
-def EUDElse(conditions):
+def EUDElse():
     lb = c.EUDGetLastBlock()
     assert lb[0] == 'ifblock', 'Block start/end mismatch'
     block = lb[1]
@@ -84,9 +84,8 @@ def EUDElse(conditions):
     return True
 
 
-def EUDEndIf(conditions):
-    lb = c.EUDPopBlock()
-    assert lb[0] == 'ifblock', 'Block start/end mismatch'
+def EUDEndIf():
+    lb = c.EUDPopBlock('ifblock')
     block = lb[1]
 
     # Finalize
@@ -114,7 +113,7 @@ def EUDExecuteOnce():
 
 
 def EUDEndExecuteOnce():
-    lb = c.PopBlock()
+    lb = c.EUDPopBlock('executeonceblock')
     assert lb[0] == 'executeonceblock', 'Block start/end mismatch'
     block = lb[1]
 

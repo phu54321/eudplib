@@ -102,21 +102,17 @@ class EUDVariable(VariableBase):
     def __sub__(self, other):
         t = EUDVariable()
         _Basic_SeqCompute([
-            (t, c.SetTo, 0xFFFFFFFF),
+            (t, c.SetTo, self),
             (t, c.Subtract, other)
-            (t, c.Add, self),
-            (t, c.Add, 1)
         ])
         return t
 
     def __rsub__(self, other):
         t = EUDVariable()
-        _Basic_SeqCompute((
-            (t, c.SetTo, 0xFFFFFFFF),
+        _Basic_SeqCompute([
+            (t, c.SetTo, other),
             (t, c.Subtract, self)
-            (t, c.Add, other),
-            (t, c.Add, 1)
-        ))
+        ])
         return t
 
     def __lshift__(self, other):
@@ -133,13 +129,6 @@ class EUDVariable(VariableBase):
 
         except TypeError:
             return (self - other).Exactly(0)
-
-    def __ne__(self, other):
-        if other == 0:  # Specialization.
-            return self.AtLeast(1)
-
-        else:
-            return (self - other).AtLeast(1)
 
     def __le__(self, other):
         try:
@@ -221,14 +210,6 @@ def _VProc(v, actions):
 
 # From vbuffer.py
 def EUDCreateVariables(varn):
-    '''
-    Create (varn) :class:`EUDVariables`. Returned variables are not guarranted
-    to be in the same variable table.
-
-    :param varn: Number of EUDVariables to create.
-    :returns: List of variables. If varn is 1, then a variable is returned.
-    '''
-
     return c.List2Assignable([EUDVariable() for _ in range(varn)])
 
 
@@ -243,7 +224,7 @@ def _Basic_SeqCompute(assignpairs):
         if isinstance(src, EUDVariable):
             if mdt == c.SetTo:
                 _VProc(src, [
-                    src.QueueSetTo(dstaddr)
+                    src.QueueAssignTo(dstaddr)
                 ])
 
             elif mdt == c.Add:
@@ -257,4 +238,4 @@ def _Basic_SeqCompute(assignpairs):
                 ])
 
         else:
-            c.Trigger(actions=c.SetMemory(dstaddr, mdt, src))
+            c.Trigger(actions=c.SetDeaths(dstaddr, mdt, src, 0))
