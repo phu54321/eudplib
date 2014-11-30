@@ -2,6 +2,10 @@ from .. import core as c
 from .basicstru import EUDJump, EUDBranch
 
 
+def _IsSwitchBlockId(idf):
+    return idf == 'swblock'
+
+
 def EUDSwitch(var):
     block = {
         'targetvar': var,

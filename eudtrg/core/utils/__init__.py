@@ -6,6 +6,9 @@ from .blockstru import (
     EUDGetLastBlockOfName,
     EUDPopBlock,
     EUDGetBlockList,
+
+    SetCurrentBlockStruManager,
+    BlockStruManager,
 )
 from .utils import (
     EPD,

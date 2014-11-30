@@ -1,7 +1,9 @@
 '''
 WARNING! This code is speciallized for use on eudtrg
- - Default player of trigger is 'All Player'.
- - Only conditions/actions used in eudtrg are declared
+- Default player of trigger is 'All Player'.
+- Only conditions/actions used in eudtrg are declared
+- Condition/Action input filtering (& 0xFFFFFFFF thing) are only applied to
+  player & number section of Deaths/SetDeaths
 Note this when using this code outside of eudtrg.
 '''
 
@@ -49,33 +51,37 @@ _bc_dict = {
 
 
 def FlattenList(l):
+    if type(l) is bytes or type(l) is str:
+        return [l]
+
     try:
         ret = []
         for item in l:
-            ret.append(FlattenList(item))
+            ret.extend(FlattenList(item))
         return ret
 
-    except TypeError:
-        return l
-
-
-def _bconstruct(vspair):
-    btb = []
-    for value, size in vspair:
-        btb.append(_bc_dict[size](value))
-    return b''.join(btb)
+    except TypeError:  # l is not iterable
+        return [l]
 
 
 def Condition(locid, player, amount, unitid,
               comparison, condtype, restype, flag):
     if player < 0:
         player += 0x100000000  # EPD
+
+    player &= 0xFFFFFFFF
+    amount &= 0xFFFFFFFF
+
     return pack('<IIIHBBBBBB', locid, player, amount, unitid,
                 comparison, condtype, restype, flag, 0, 0)
 
 
 def Action(locid1, strid, wavid, time, player1,
            player2, unitid, acttype, amount, flags):
+
+    player1 &= 0xFFFFFFFF
+    player2 &= 0xFFFFFFFF
+
     if player1 < 0:
         player1 += 0x100000000  # EPD
     if player2 < 0:
@@ -88,8 +94,9 @@ def Trigger(players=[AllPlayers], conditions=[], actions=[], prtrig=True):
     conditions = FlattenList(conditions)
     actions = FlattenList(actions)
 
-    assert type(players) is list and type(
-        conditions) is list and type(actions) is list
+    assert type(players) is list
+    assert type(conditions) is list
+    assert type(actions) is list
     assert len(conditions) <= 16
     assert len(actions) <= 64
 
@@ -97,13 +104,13 @@ def Trigger(players=[AllPlayers], conditions=[], actions=[], prtrig=True):
     for p in players:
         peff[p] = 1
 
-    b = _bconstruct(
-        [(cond, None) for cond in conditions] +
-        [(bytes(20 * (16 - len(conditions))), None)] +
-        [(act, None) for act in actions] +
-        [(bytes(32 * (64 - len(actions))), None)] +
-        [(b'\x04\0\0\0' if prtrig else b'\0\0\0\0', None)] +
-        [(bytes(peff), None)]
+    b = b''.join(
+        conditions +
+        [bytes(20 * (16 - len(conditions)))] +
+        actions +
+        [bytes(32 * (64 - len(actions)))] +
+        [prtrig and b'\x04\0\0\0' or b'\0\0\0\0'] +
+        [bytes(peff)]
     )
     assert len(b) == 2400
     return b

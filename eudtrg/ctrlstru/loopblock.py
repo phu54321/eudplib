@@ -8,11 +8,18 @@ from .basicstru import (
 _loopb_idset = set(['infloopblock', 'whileblock'])
 
 
+def _IsLoopBlockId(idf):
+    return idf in _loopb_idset
+
+
 def EUDInfLoop():
     block = {
         'loopstart': c.NextTrigger(),
-        'loopend': c.Forward()
+        'loopend': c.Forward(),
+        'contpoint': None,
     }
+    block['contpoint'] = block['loopstart']
+
     c.EUDCreateBlock('infloopblock', block)
 
     return True
@@ -30,8 +37,11 @@ def EUDEndInfLoop():
 def EUDWhile(conditions):
     block = {
         'loopstart': c.NextTrigger(),
-        'loopend': c.Forward()
+        'loopend': c.Forward(),
+        'contpoint': None,
     }
+    block['contpoint'] = block['loopstart']
+
     c.EUDCreateBlock('whileblock', block)
 
     EUDJumpIfNot(conditions, block['loopend'])
@@ -42,8 +52,11 @@ def EUDWhile(conditions):
 def EUDWhileNot(conditions):
     block = {
         'loopstart': c.NextTrigger(),
-        'loopend': c.Forward()
+        'loopend': c.Forward(),
+        'contpoint': None,
     }
+    block['contpoint'] = block['loopstart']
+
     c.EUDCreateBlock('whileblock', block)
 
     EUDJumpIf(conditions, block['loopend'])
@@ -68,30 +81,35 @@ def _GetLastLoopBlock():
 
 
 def EUDLoopContinue():
-    block = _GetLastLoopBlock()
-    EUDJump(block['loopstart'])
+    block = _GetLastLoopBlock()[1]
+    EUDJump(block['contpoint'])
 
 
 def EUDLoopContinueIf(conditions):
-    block = _GetLastLoopBlock()
-    EUDJumpIf(conditions, block['loopstart'])
+    block = _GetLastLoopBlock()[1]
+    EUDJumpIf(conditions, block['contpoint'])
 
 
 def EUDLoopContinueIfNot(conditions):
-    block = _GetLastLoopBlock()
-    EUDJumpIfNot(conditions, block['loopstart'])
+    block = _GetLastLoopBlock()[1]
+    EUDJumpIfNot(conditions, block['contpoint'])
+
+
+def EUDLoopSetContinuePoint():
+    block = _GetLastLoopBlock()[1]
+    block['contpoint'] = c.NextTrigger()
 
 
 def EUDLoopBreak():
-    block = _GetLastLoopBlock()
+    block = _GetLastLoopBlock()[1]
     EUDJump(block['loopend'])
 
 
 def EUDLoopBreakIf(conditions):
-    block = _GetLastLoopBlock()
+    block = _GetLastLoopBlock()[1]
     EUDJumpIf(conditions, block['loopend'])
 
 
 def EUDLoopBreakIfNot(conditions):
-    block = _GetLastLoopBlock()
+    block = _GetLastLoopBlock()[1]
     EUDJumpIfNot(conditions, block['loopend'])

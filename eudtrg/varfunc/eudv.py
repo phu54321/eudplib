@@ -1,9 +1,10 @@
 from .. import core as c
 from .vbase import VariableBase
+import weakref
 import traceback
 
 
-class _EUDVarBuffer(c.EUDObject):
+class EUDVarBuffer(c.EUDObject):
 
     """Variable buffer
 
@@ -32,7 +33,28 @@ class _EUDVarBuffer(c.EUDObject):
 
         emitbuffer.WriteBytes(output)
 
-_evb = _EUDVarBuffer()
+
+_evb = None
+
+
+def SetCurrentVariableBuffer(evb):
+    global _evb
+
+    oldevb = _evb
+    _evb = evb
+    return oldevb
+
+
+class VariableTriggerForward(c.SCMemAddr):
+
+    def __init__(self):
+        super().__init__(self)
+        self._expr = weakref.WeakKeyDictionary()
+
+    def Evaluate(self):
+        if _evb not in self._expr:
+            self._expr[_evb] = _evb.CreateVarTrigger()
+        return c.Evaluate(self._expr[_evb])
 
 
 class EUDVariable(VariableBase):
@@ -42,7 +64,7 @@ class EUDVariable(VariableBase):
     '''
 
     def __init__(self):
-        self._vartrigger = _evb.CreateVarTrigger()
+        self._vartrigger = VariableTriggerForward()
         self._varact = self._vartrigger + (8 + 320)
 
     def GetVTable(self):
@@ -124,17 +146,17 @@ class EUDVariable(VariableBase):
     # -------
 
     def __eq__(self, other):
-        try:
+        if c.IsValidSCMemAddr(other):
             return self.Exactly(other)
 
-        except TypeError:
+        else:
             return (self - other).Exactly(0)
 
     def __le__(self, other):
-        try:
+        if c.IsValidSCMemAddr(other):
             return self.AtMost(other)
 
-        except TypeError:
+        else:
             t = EUDVariable()
             _Basic_SeqCompute((
                 (t, c.SetTo, self),
@@ -143,10 +165,10 @@ class EUDVariable(VariableBase):
             return t.Exactly(0)
 
     def __ge__(self, other):
-        try:
+        if c.IsValidSCMemAddr(other):
             return self.AtLeast(other)
 
-        except TypeError:
+        else:
             t = EUDVariable()
             _Basic_SeqCompute((
                 (t, c.SetTo, other),
@@ -160,10 +182,10 @@ class EUDVariable(VariableBase):
             traceback.print_stack()
             return [c.Never()]  # No unsigned number is less than 0
 
-        try:
+        if c.IsValidSCMemAddr(other):
             return self.AtMost(other - 1)
 
-        except TypeError:
+        else:
             t = EUDVariable()
             _Basic_SeqCompute((
                 (t, c.SetTo, self),
@@ -172,19 +194,16 @@ class EUDVariable(VariableBase):
             ))
             return t.Exactly(0)
 
-        else:
-            return self.AtMost(other)
-
     def __gt__(self, other):
         if isinstance(other, int) and other >= 0xFFFFFFFF:
             print('[Warning] No unsigned int can be greater than %d' % other)
             traceback.print_stack()
             return [c.Never()]  # No unsigned number is less than 0
 
-        try:
+        if c.IsValidSCMemAddr(other):
             return self.AtLeast(other + 1)
 
-        except TypeError:
+        else:
             t = EUDVariable()
             _Basic_SeqCompute((
                 (t, c.SetTo, self),
@@ -193,16 +212,13 @@ class EUDVariable(VariableBase):
             ))
             return t.AtLeast(1)
 
-        else:
-            return self.AtMost(other)
-
 
 def _VProc(v, actions):
     nexttrg = c.Forward()
 
     c.Trigger(
         nextptr=v.GetVTable(),
-        actions=actions + [c.SetNextPtr(v.GetVTable(), nexttrg)]
+        actions=[actions] + [c.SetNextPtr(v.GetVTable(), nexttrg)]
     )
 
     nexttrg << c.NextTrigger()

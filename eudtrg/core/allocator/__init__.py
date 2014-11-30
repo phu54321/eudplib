@@ -1,7 +1,8 @@
 from .scaddr import (
     SCMemAddr,
     Forward,
-    Evaluate
+    Evaluate,
+    IsValidSCMemAddr
 )
 
 from .payload import (

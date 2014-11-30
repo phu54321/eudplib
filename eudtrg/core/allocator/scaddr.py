@@ -1,30 +1,34 @@
-import traceback
 from . import rlocint
 
 
 class SCMemAddr:
 
     def __init__(self, baseobj, offset=0, rlocmode=4):
-        assert rlocmode in [1, 4], (
-            'Creating SCMemAddr with rlocmode other than [1, 4] is prohibited')
         self.baseobj = baseobj
         self.offset = offset
         self.rlocmode = rlocmode
 
     def Evaluate(self):
         assert self.rlocmode in [1, 4]
-        return Evaluate(self.baseobj) * (self.rlocmode // 4) + self.offset
+        if self.rlocmode == 1:
+            return Evaluate(self.baseobj) + self.offset
+
+        else:
+            return Evaluate(self.baseobj) // 4 + self.offset
 
     def __add__(self, other):
-        assert isinstance(other, int), 'Cannot add address with address'
+        if not isinstance(other, int):
+            return NotImplemented
         return SCMemAddr(self.baseobj, self.offset + other, self.rlocmode)
 
     def __radd__(self, other):
-        assert isinstance(other, int), 'Cannot add address with address'
+        if not isinstance(other, int):
+            return NotImplemented
         return SCMemAddr(self.baseobj, self.offset + other, self.rlocmode)
 
     def __sub__(self, other):
-        assert isinstance(other, int), 'Cannot subtract address from address'
+        if not isinstance(other, int):
+            return NotImplemented
         if isinstance(other, SCMemAddr):
             assert (
                 self.baseobj == other.baseobj and
@@ -36,27 +40,32 @@ class SCMemAddr:
             return SCMemAddr(self.baseobj, self.offset - other, self.rlocmode)
 
     def __rsub__(self, other):
-        assert isinstance(other, int), 'Cannot subtract address from address'
         if isinstance(other, SCMemAddr):
             assert (
                 self.baseobj == other.baseobj and
                 self.rlocmode == other.rlocmode), (
-                'Cannot subtract between addresses btw two objects')
+                'Cannot subtract between addresses btw two distinct objects')
             return other.offset - self.offset
+
+        elif not isinstance(other, int):
+            return NotImplemented
 
         else:
             return SCMemAddr(self.baseobj, other - self.offset, -self.rlocmode)
 
     def __mul__(self, k):
-        assert isinstance(k, int), 'Cannot multiply address by address'
+        if not isinstance(k, int):
+            return NotImplemented
         return SCMemAddr(self.baseobj, self.offset * k, self.rlocmode * k)
 
     def __rmul__(self, k):
-        assert isinstance(k, int), 'Cannot multiply address by address'
+        if not isinstance(k, int):
+            return NotImplemented
         return SCMemAddr(self.baseobj, self.offset * k, self.rlocmode * k)
 
     def __floordiv__(self, k):
-        assert isinstance(k, int), 'Cannot multiply address by address'
+        if not isinstance(k, int):
+            return NotImplemented
         assert (
             (self.rlocmode == 0) or
             (self.rlocmode % k == 0 and self.offset % k == 0)), (
@@ -72,7 +81,6 @@ class Forward(SCMemAddr):
     def __init__(self):
         super().__init__(self)
         self._expr = None
-        # self._traceback = traceback.extract_stack()
 
     def __lshift__(self, expr):
         assert self._expr is None, 'Reforwarding without reset is not allowed'
@@ -87,16 +95,7 @@ class Forward(SCMemAddr):
         self._expr = None
 
     def Evaluate(self):
-        assert self._expr is not None, (
-            'Forward not properly initialized\n'
-            'Forward initialized at :\n'
-            + (
-                '--| ' +
-                ''.join(traceback.format_list(self._traceback)()[:-1])
-                .replace('\n', '\n  | ')
-            )
-        )
-
+        assert self._expr is not None, 'Forward not initialized'
         return Evaluate(self._expr)
 
 
@@ -110,3 +109,7 @@ def Evaluate(x):
         return x.Evaluate()
     except AttributeError:
         return x
+
+
+def IsValidSCMemAddr(x):
+    return isinstance(x, SCMemAddr) or isinstance(x, int)

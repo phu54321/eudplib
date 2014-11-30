@@ -2,6 +2,9 @@ import collections
 
 
 def FlattenList(l):
+    if type(l) is bytes or type(l) is str:
+        return [l]
+
     try:
         ret = []
         for item in l:

@@ -1,4 +1,4 @@
-from ..allocator import SCMemAddr, Evaluate
+from ..allocator import SCMemAddr, Evaluate, IsValidSCMemAddr
 
 
 class Condition(SCMemAddr):
@@ -27,6 +27,16 @@ class Condition(SCMemAddr):
                  comparison, condtype, restype, flags):
 
         super().__init__(self)
+
+        assert IsValidSCMemAddr(locid), 'Invalid arg %s' % locid
+        assert IsValidSCMemAddr(player), 'Invalid arg %s' % player
+        assert IsValidSCMemAddr(amount), 'Invalid arg %s' % amount
+        assert IsValidSCMemAddr(unitid), 'Invalid arg %s' % unitid
+        assert IsValidSCMemAddr(comparison), 'Invalid arg %s' % comparison
+        assert IsValidSCMemAddr(condtype), 'Invalid arg %s' % condtype
+        assert IsValidSCMemAddr(restype), 'Invalid arg %s' % restype
+        assert IsValidSCMemAddr(flags), 'Invalid arg %s' % flags
+
         self._locid = locid
         self._player = player
         self._amount = amount

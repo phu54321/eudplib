@@ -29,15 +29,27 @@ from .loopblock import(
     EUDLoopContinue,
     EUDLoopContinueIf,
     EUDLoopContinueIfNot,
+    EUDLoopSetContinuePoint,
     EUDLoopBreak,
     EUDLoopBreakIf,
     EUDLoopBreakIfNot,
 )
 
-from .swblock import(
+from .swblock import (
     EUDSwitch,
     EUDSwitchCase,
     EUDSwitchDefault,
     EUDSwitchBreak,
     EUDEndSwitch,
+)
+
+from .breakcont import (
+    EUDContinue,
+    EUDContinueIf,
+    EUDContinueIfNot,
+    EUDSetContinuePoint,
+
+    EUDBreak,
+    EUDBreakIf,
+    EUDBreakIfNot
 )

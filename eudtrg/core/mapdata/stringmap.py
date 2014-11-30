@@ -84,4 +84,4 @@ def GetUnitIndex(u):
 
 
 def ApplyStringMap(chkt):
-    chkt.setsection(strmap.SaveTBL())
+    chkt.setsection('STR', strmap.SaveTBL())

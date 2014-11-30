@@ -1,5 +1,5 @@
 import struct
-from . import scaddr
+from . import scaddr, rlocint
 from ..utils import binio
 
 
@@ -118,6 +118,8 @@ def _CreateStructPacker(structformat):
         dlen = buf._datalen
 
         evals = [scaddr.Evaluate(arg) for arg in arglist]
+        for i, ri in enumerate(evals):
+            assert type(ri) is rlocint.RlocInt
         evalnum = [ri.offset & andvallist[i] for i, ri in enumerate(evals)]
 
         # 1. Add binary data

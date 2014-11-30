@@ -11,7 +11,8 @@ def CreatePayload(root):
     _alloctable.clear()
     _alloc_lastaddr = 0
 
-    RegisterObject(root)
+    # Collect all objects.
+    root.Evaluate()
 
     pbuf = pbuffer.PayloadBuffer()
 
@@ -31,7 +32,7 @@ def RegisterObject(obj):
     if obj not in _alloctable:
         allocaddr = _alloc_lastaddr
         _alloctable[obj] = allocaddr
-        _alloc_lastaddr += (obj.GetDataSize() + 3) & -3
+        _alloc_lastaddr += (obj.GetDataSize() + 3) & ~3
         _unwritten_objs.append(obj)
 
 

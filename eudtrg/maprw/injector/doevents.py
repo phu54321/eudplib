@@ -9,6 +9,7 @@ def _MainStarter(mf):
 
     c.PushTriggerScope()
 
+    jumper = c.Forward()
     rootstarter = c.NextTrigger()
     mf()
     c.Trigger(
@@ -17,7 +18,7 @@ def _MainStarter(mf):
     )
 
     # Jumper
-    jumper = c.Trigger(nextptr=rootstarter)
+    jumper << c.Trigger(nextptr=rootstarter)
 
     c.PopTriggerScope()
 

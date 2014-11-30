@@ -1,4 +1,4 @@
-from ..allocator import SCMemAddr, Evaluate
+from ..allocator import SCMemAddr, Evaluate, IsValidSCMemAddr
 
 
 class Action(SCMemAddr):
@@ -31,6 +31,17 @@ class Action(SCMemAddr):
         See :mod:`eudtrg.base.stocktrg` for stock actions list.
         '''
         super().__init__(self)
+
+        assert IsValidSCMemAddr(locid1), 'Invalid arg %s' % locid1
+        assert IsValidSCMemAddr(strid), 'Invalid arg %s' % strid
+        assert IsValidSCMemAddr(wavid), 'Invalid arg %s' % wavid
+        assert IsValidSCMemAddr(time), 'Invalid arg %s' % time
+        assert IsValidSCMemAddr(player1), 'Invalid arg %s' % player1
+        assert IsValidSCMemAddr(player2), 'Invalid arg %s' % player2
+        assert IsValidSCMemAddr(unitid), 'Invalid arg %s' % unitid
+        assert IsValidSCMemAddr(acttype), 'Invalid arg %s' % acttype
+        assert IsValidSCMemAddr(amount), 'Invalid arg %s' % amount
+        assert IsValidSCMemAddr(flags), 'Invalid arg %s' % flags
 
         self._locid1 = locid1
         self._strid = strid

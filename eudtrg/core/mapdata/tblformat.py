@@ -20,7 +20,7 @@ class TBL:
         self._capacity = 2  # Size of STR section
 
         if content is not None:
-            self.LoadData(content)
+            self.LoadTBL(content)
 
     def LoadTBL(self, content):
         self._datatb.clear()

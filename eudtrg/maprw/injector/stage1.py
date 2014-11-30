@@ -21,19 +21,18 @@ def CopyDeaths(iplayer, oplayer, copyepd=False, initvalue=None):
 
     if initvalue is None:
         if copyepd:
-            initvalue = - 0x58A364 // 4
+            initvalue = tt.EPD(0)
         else:
             initvalue = 0
 
     Trigger(
-        players=[tt.AllPlayers],
         actions=[
             tt.SetDeaths(oplayer, tt.SetTo, initvalue, 0),
             tt.SetDeaths(tmpplayer, tt.SetTo, 0, 0),
         ]
     )
 
-    for i in range(31, -1, -1):
+    for i in range(31, 1, -1):
         if copyepd:
             subval = 2 ** (i - 2)
 
@@ -49,7 +48,7 @@ def CopyDeaths(iplayer, oplayer, copyepd=False, initvalue=None):
             ]
         )
 
-    for i in range(31, -1, -1):
+    for i in range(31, 1, -1):
         Trigger(
             players=[tt.AllPlayers],
             conditions=[tt.Deaths(tmpplayer, tt.AtLeast, 2 ** i, 0)],
@@ -69,7 +68,7 @@ def CreateAndApplyStage1(chkt, payload_stage2):
     eude_needed = strtb.GetStringIndex('This map requires EUD Enabler to run')
     str_section = strtb.SaveTBL()
 
-    payload_offset = (len(str_section) + 3) & -3
+    payload_offset = (len(str_section) + 3) & ~3
     padding_length = payload_offset - len(str_section)
     str_section = str_section + bytes(padding_length) + payload_stage2.data
     chkt.setsection('STR', str_section)
@@ -83,33 +82,42 @@ def CreateAndApplyStage1(chkt, payload_stage2):
         tt.SetDeaths(-12, tt.SetTo, 1, 1)
     ])
 
-    Trigger(actions=[
-        tt.DisplayTextMessage(eude_needed),
-        tt.Draw()
-    ])
+    Trigger(
+        conditions=[
+            tt.Deaths(0, tt.Exactly, 0, 0)
+        ],
+        actions=[
+            tt.DisplayTextMessage(eude_needed),
+            tt.Draw()
+        ]
+    )
 
     Trigger(actions=[
         tt.SetDeaths(-12, tt.SetTo, 0, 1)
     ])
+
+    # -------
 
     # Payload update
     curpl = 0x6509B0
     strs = 0x5993D4
     pts = 0x51A280
 
-    CopyDeaths(tt.EPD(strs), tt.EPD(curpl), True)
+    CopyDeaths(tt.EPD(strs), tt.EPD(curpl), True, tt.EPD(payload_offset))
 
-    # -------
+    # DEBUG
+    Trigger(actions=tt.SetDeaths(3, tt.SetTo, 0x1001, 0))
+    # DEBUG
 
     # Init prt
     for i in range(0, len(payload_stage2.prttable), 31):
-        prttb = [x // 4 for x in payload_stage2.prttable[i:i + 32]]
+        prttb = [x // 4 for x in payload_stage2.prttable[i:i + 31]]
         Trigger(actions=tt.SetMemory(curpl, tt.Add, prttb[0]))
 
         # Add by payload_offset // 4
         Trigger(actions=[
             (
-                tt.SetMemory(curpl, tt.Add, payload_offset // 4),
+                tt.SetDeaths(tt.CurrentPlayer, tt.Add, payload_offset // 4, 0),
                 tt.SetMemory(curpl, tt.Add,
                              prttb[i + 1 - len(prttb)] - prttb[i])
             ) for i in range(len(prttb))
@@ -119,13 +127,11 @@ def CreateAndApplyStage1(chkt, payload_stage2):
         for e in range(31, 1, -1):
             Trigger(
                 conditions=tt.Memory(strs, tt.AtLeast, 2 ** e),
-                actions=[
-                    (
-                        tt.SetMemory(curpl, tt.Add, 2 ** (e - 2)),
-                        tt.SetMemory(curpl, tt.Add,
-                                     prttb[i + 1 - len(prttb)] - prttb[i])
-                    ) for i in range(len(prttb))
-                ] +
+                actions=[(
+                    tt.SetDeaths(tt.CurrentPlayer, tt.Add, 2 ** (e - 2), 0),
+                    tt.SetMemory(curpl, tt.Add,
+                                 prttb[i + 1 - len(prttb)] - prttb[i])
+                ) for i in range(len(prttb))] +
                 [
                     tt.SetDeaths(11, tt.Add, 2 ** e, 0),
                     tt.SetMemory(strs, tt.Subtract, 2 ** e)
@@ -138,7 +144,7 @@ def CreateAndApplyStage1(chkt, payload_stage2):
                 conditions=tt.Deaths(11, tt.AtLeast, 2 ** e, 0),
                 actions=[
                     tt.SetDeaths(11, tt.Subtract, 2 ** e, 0),
-                    tt.SetMemory(strs, tt.Ad, 2 ** i)
+                    tt.SetMemory(strs, tt.Add, 2 ** e)
                 ]
             )
 
@@ -148,13 +154,13 @@ def CreateAndApplyStage1(chkt, payload_stage2):
 
     # Init orttable
     for i in range(0, len(payload_stage2.orttable), 31):
-        orttb = [x // 4 for x in payload_stage2.orttable[i:i + 32]]
+        orttb = [x // 4 for x in payload_stage2.orttable[i:i + 31]]
         Trigger(actions=tt.SetMemory(curpl, tt.Add, orttb[0]))
 
         # Add by payload_offset // 4
         Trigger(actions=[
             (
-                tt.SetMemory(curpl, tt.Add, payload_offset // 4),
+                tt.SetDeaths(tt.CurrentPlayer, tt.Add, payload_offset, 0),
                 tt.SetMemory(curpl, tt.Add,
                              orttb[i + 1 - len(orttb)] - orttb[i])
             ) for i in range(len(orttb))
@@ -164,13 +170,11 @@ def CreateAndApplyStage1(chkt, payload_stage2):
         for e in range(31, 1, -1):
             Trigger(
                 conditions=tt.Memory(strs, tt.AtLeast, 2 ** e),
-                actions=[
-                    (
-                        tt.SetMemory(curpl, tt.Add, 2 ** e),
-                        tt.SetMemory(curpl, tt.Add,
-                                     orttb[i + 1 - len(orttb)] - orttb[i])
-                    ) for i in range(len(orttb))
-                ] +
+                actions=[(
+                    tt.SetDeaths(tt.CurrentPlayer, tt.Add, 2 ** e, 0),
+                    tt.SetMemory(curpl, tt.Add,
+                                 orttb[i + 1 - len(orttb)] - orttb[i])
+                ) for i in range(len(orttb))] +
                 [
                     tt.SetDeaths(11, tt.Add, 2 ** e, 0),
                     tt.SetMemory(strs, tt.Subtract, 2 ** e)
@@ -183,7 +187,7 @@ def CreateAndApplyStage1(chkt, payload_stage2):
                 conditions=tt.Deaths(11, tt.AtLeast, 2 ** e, 0),
                 actions=[
                     tt.SetDeaths(11, tt.Subtract, 2 ** e, 0),
-                    tt.SetMemory(strs, tt.Ad, 2 ** i)
+                    tt.SetMemory(strs, tt.Add, 2 ** e)
                 ]
             )
 
@@ -193,10 +197,14 @@ def CreateAndApplyStage1(chkt, payload_stage2):
 
     # Jump to payload
 
+    # DEBUG
+    Trigger(actions=tt.SetDeaths(3, tt.SetTo, 0x1002, 0))
+    # DEBUG
+
     # Reset curpl
     Trigger(actions=[
         tt.SetDeaths(10, tt.SetTo, tt.EPD(4), 0),
-        tt.SetMemory(curpl, tt.SetTo, tt.EPD(4))
+        tt.SetMemory(curpl, tt.SetTo, tt.EPD(4)),
     ])
 
     for player in range(8):
@@ -235,7 +243,12 @@ def CreateAndApplyStage1(chkt, payload_stage2):
             )
 
     # now curpl = EPD(value(ptsprev) + 4)
-    CopyDeaths(tt.CurrentPlayer, tt.EPD(strs), False, payload_offset)
+    # value(EPD(value(ptsprev) + 4)) = strs + payload_offset
+    CopyDeaths(tt.EPD(strs), tt.CurrentPlayer, False, payload_offset)
+
+    # DEBUG
+    Trigger(actions=tt.SetDeaths(3, tt.SetTo, 0x1003, 0))
+    # DEBUG
 
     trigdata = b''.join(trglist)
 

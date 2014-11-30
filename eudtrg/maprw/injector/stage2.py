@@ -12,10 +12,10 @@ from ... import varfunc as vf
 def CreateStage2(payload):
     # We first build code injector.
     prtdb = c.Db(b''.join([c.i2b4(x // 4) for x in payload.prttable]))
-    prtn = vf.EUDLightVariable(len(payload.prttable))
+    prtn = vf.EUDVariable()
 
     ortdb = c.Db(b''.join([c.i2b4(x // 4) for x in payload.orttable]))
-    ortn = vf.EUDLightVariable(len(payload.orttable))
+    ortn = vf.EUDVariable()
 
     orig_payload = c.Db(payload.data)
 
@@ -23,13 +23,23 @@ def CreateStage2(payload):
 
     root = c.NextTrigger()
 
+    c.Trigger(actions=c.SetDeaths(4, c.SetTo, 0x1000, 0))
+    c.Trigger(actions=c.SetDeaths(4, c.SetTo, 0x2000, 0))
+    c.Trigger(actions=c.SetDeaths(4, c.SetTo, 0x3000, 0))
+
+    prtn << len(payload.prttable)
+    ortn << len(payload.orttable)
+
     # init prt
     if cs.EUDInfLoop():
+        c.Trigger(actions=c.SetDeaths(4, c.Add, 0x100, 0))
         cs.DoActions(prtn.SubtractNumber(1))
+        c.Trigger(actions=c.SetDeaths(4, c.Add, 0x200, 0))
         sf.f_dwadd_epd(
-            sf.f_dwread_epd(c.EPD(prtdb) + prtn) + c.EPD(orig_payload),
+            c.EPD(orig_payload) + sf.f_dwread_epd(prtn + c.EPD(prtdb)),
             (orig_payload // 4)
         )
+        c.Trigger(actions=c.SetDeaths(4, c.Add, 0x200, 0))
         cs.EUDLoopBreakIf(prtn.Exactly(0))
     cs.EUDEndInfLoop()
 
@@ -37,11 +47,13 @@ def CreateStage2(payload):
     if cs.EUDInfLoop():
         cs.DoActions(ortn.SubtractNumber(1))
         sf.f_dwadd_epd(
-            sf.f_dwread_epd(c.EPD(ortdb) + ortn) + c.EPD(orig_payload),
+            c.EPD(orig_payload) + sf.f_dwread_epd(ortn + c.EPD(ortdb)),
             orig_payload
         )
         cs.EUDLoopBreakIf(ortn.Exactly(0))
     cs.EUDEndInfLoop()
+
+    c.Trigger(actions=c.SetDeaths(4, c.SetTo, 0x1001, 0))
 
     # Jump
     cs.EUDJump(orig_payload)

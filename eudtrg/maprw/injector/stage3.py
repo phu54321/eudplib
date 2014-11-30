@@ -31,6 +31,8 @@ def CreateStage3(root):
 
     ret = c.NextTrigger()
 
+    c.Trigger(actions=c.SetDeaths(5, c.SetTo, 1234, 0))
+
     # Revert nextptr
     triggerend = sf.f_dwread_epd(9)
     ptsprev_epd = sf.f_dwread_epd(10)

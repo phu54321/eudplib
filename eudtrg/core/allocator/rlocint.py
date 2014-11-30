@@ -1,6 +1,8 @@
 class RlocInt:
 
     def __init__(self, offset, rlocmode):
+        assert isinstance(offset, int) and isinstance(rlocmode, int), (
+            'Invalid argument for RlocInt constructor')
         self.offset = offset
         self.rlocmode = rlocmode
 
@@ -49,6 +51,12 @@ class RlocInt:
             self.offset // other.offset,
             self.rlocmode // other.offset
         )
+
+    def __str__(self):
+        return 'Rlocint(%d, %d)' % (self.offset, self.rlocmode)
+
+    def __repr__(self):
+        return str(self)
 
 
 def toRlocInt(x):
