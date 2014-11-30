@@ -6,72 +6,86 @@ from ..core.utils.blockstru import (
 from .eudv import EUDVariable, EUDCreateVariables
 from .eudsqc import SeqCompute
 
-from functools import wraps
+import functools
 import inspect
 
 
-def EUDFunc(fdecl_func):
-    # Get argument number of fdecl_func
-    argspec = inspect.getargspec(fdecl_func)
-    assert argspec[1] is None, (
-        'No variadic arguments (*args) allowed for EUDFunc.')
-    assert argspec[2] is None, (
-        'No variadic keyword arguments (*kwargs) allowed for EUDFunc.')
+class EUDFunc:
 
-    argn = len(argspec[0])
+    def __init__(self, fdecl_func):
+        # Get argument number of fdecl_func
+        argspec = inspect.getargspec(fdecl_func)
+        assert argspec[1] is None, (
+            'No variadic arguments (*args) allowed for EUDFunc.')
+        assert argspec[2] is None, (
+            'No variadic keyword arguments (*kwargs) allowed for EUDFunc.')
 
-    # Create function body
-    f_bsm = BlockStruManager()
-    prev_bsm = SetCurrentBlockStruManager(f_bsm)
+        self._argn = len(argspec[0])
+        self._fdecl_func = fdecl_func
+        functools.update_wrapper(self, fdecl_func)
+        self._fstart = None
 
-    if 1:
-        c.PushTriggerScope()
+    def CreateFuncBody(self):
+        assert self._fstart is None
 
-        f_args = c.Assignable2List(EUDCreateVariables(argn))
-        fstart = c.NextTrigger()
-        f_rets = fdecl_func(*f_args)
-        if f_rets is not None:
-            f_rets = c.Assignable2List(f_rets)
-        fend = c.Trigger()
+        f_bsm = BlockStruManager()
+        prev_bsm = SetCurrentBlockStruManager(f_bsm)
 
-        c.PopTriggerScope()
+        if 1:
+            c.PushTriggerScope()
 
-    SetCurrentBlockStruManager(prev_bsm)
-    assert f_bsm.empty(), 'Block start/end mismatch inside function'
+            f_args = [EUDVariable() for _ in range(self._argn)]
+            fstart = c.NextTrigger()
+            f_rets = self._fdecl_func(*f_args)
+            if f_rets is not None:
+                f_rets = c.Assignable2List(f_rets)
+            fend = c.Trigger()
 
-    # Assert that all return values are EUDVariable.
-    if f_rets is not None:  # Not void function
-        for i, ret in enumerate(f_rets):
-            assert isinstance(ret, EUDVariable), (
-                '#%d of returned value is not instance of EUDVariable' % i)
+            c.PopTriggerScope()
 
-    # Function to return
-    @wraps(fdecl_func)
-    def retfunc(*args):
-        assert len(args) is argn, 'Argument number mismatch'
+        SetCurrentBlockStruManager(prev_bsm)
+        assert f_bsm.empty(), 'Block start/end mismatch inside function'
+
+        # Assert that all return values are EUDVariable.
+        if f_rets is not None:  # Not void function
+            for i, ret in enumerate(f_rets):
+                assert isinstance(ret, EUDVariable), (
+                    '#%d of returned value is not instance of EUDVariable' % i)
+
+        self._fstart = fstart
+        self._fend = fend
+        self._fargs = f_args
+        self._frets = f_rets
+
+        # Function to return
+    def __call__(self, *args):
+        if self._fstart is None:
+            self.CreateFuncBody()
+
+        assert len(args) is self._argn, 'Argument number mismatch'
 
         # Assign arguments into argument space
-        computeset = [(farg, c.SetTo, arg) for farg, arg in zip(f_args, args)]
-        SeqCompute(computeset)
+        SeqCompute(
+            [(farg, c.SetTo, arg) for farg, arg in zip(self._fargs, args)]
+        )
 
         # Call body
         fcallend = c.Forward()
 
         c.Trigger(
-            nextptr=fstart,
-            actions=[c.SetNextPtr(fend, fcallend)]
+            nextptr=self._fstart,
+            actions=[c.SetNextPtr(self._fend, fcallend)]
         )
 
         fcallend << c.NextTrigger()
 
-        if f_rets is not None:
-            retn = len(f_rets)
+        if self._frets is not None:
+            retn = len(self._frets)
             tmp_rets = [EUDVariable() for _ in range(retn)]
-            SeqCompute([(tr, c.SetTo, r) for tr, r in zip(tmp_rets, f_rets)])
+            SeqCompute(
+                [(tr, c.SetTo, r) for tr, r in zip(tmp_rets, self._frets)]
+            )
             return c.List2Assignable(tmp_rets)
-
-    # return
-    return retfunc
 
 
 def SetVariables(srclist, dstlist, mdtlist=None):

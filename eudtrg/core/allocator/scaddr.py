@@ -5,6 +5,8 @@ from . import rlocint
 class SCMemAddr:
 
     def __init__(self, baseobj, offset=0, rlocmode=4):
+        assert rlocmode in [1, 4], (
+            'Creating SCMemAddr with rlocmode other than [1, 4] is prohibited')
         self.baseobj = baseobj
         self.offset = offset
         self.rlocmode = rlocmode

@@ -24,7 +24,10 @@ b = et.Trigger(
     ]
 )
 
-et.Trigger(nextptr=0x80000000)
+c, d = et.EUDCreateVariables(2)
+p = et.f_mul(c, d)
+
+et.Trigger(nextptr=et.EPD(a))
 
 et.PopTriggerScope()
 bs.SetCurrentBlockStruManager(None)

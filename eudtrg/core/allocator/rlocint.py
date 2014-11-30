@@ -24,6 +24,16 @@ class RlocInt:
     def __rsub__(self, other):
         return toRlocInt(other) - self
 
+    def __mul__(self, other):
+        other = toRlocInt(other)
+        assert self.rlocmode == 0 or other.rlocmode == 0, (
+            'Cannot multiply two non-const RlocInts')
+
+        return RlocInt(
+            self.offset * other.offset,
+            self.rlocmode * other.offset + self.offset * other.rlocmode
+        )
+
     def __floordiv__(self, other):
         other = toRlocInt(other)
         assert other.rlocmode == 0, (
@@ -36,8 +46,8 @@ class RlocInt:
             'RlocInt not divisible by %d' % other.offset
         )
         return RlocInt(
-            self.rlocmode // other.offset,
-            self.offset // other.offset
+            self.offset // other.offset,
+            self.rlocmode // other.offset
         )
 
 
