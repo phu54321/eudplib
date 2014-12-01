@@ -30,16 +30,38 @@ def CreateStage2(payload):
     prtn << len(payload.prttable)
     ortn << len(payload.orttable)
 
+    c.Trigger(actions=c.SetDeaths(4, c.SetTo, 0x4000, 0))
+
+    # prtn << len(payload.prttable)
+    # ortn << len(payload.orttable)
+
     # init prt
     if cs.EUDInfLoop():
         c.Trigger(actions=c.SetDeaths(4, c.Add, 0x100, 0))
         cs.DoActions(prtn.SubtractNumber(1))
-        c.Trigger(actions=c.SetDeaths(4, c.Add, 0x200, 0))
+        c.Trigger(actions=c.SetDeaths(4, c.Add, 0x100, 0))
+        print('aaaaa')
+        iaddr = prtn + c.EPD(prtdb)
+        print('aaaaa')
+        c.Trigger(actions=c.SetDeaths(4, c.Add, 0x100, 0))
+        tp = c.EPD(orig_payload) + sf.f_dwread_epd(iaddr)
+        v = orig_payload // 4
+
+        c.Trigger(actions=c.SetDeaths(4, c.Add, 0x100, 0))
+
+        act = c.Forward()
+        vf.SeqCompute([(c.EPD(act + 16), c.SetTo, tp)])
+        c.Trigger(actions=c.SetDeaths(4, c.Add, 0x400, 0))
+        cs.DoActions(act << c.SetMemory(0, c.Add, v))
+
+        '''
         sf.f_dwadd_epd(
             c.EPD(orig_payload) + sf.f_dwread_epd(prtn + c.EPD(prtdb)),
             (orig_payload // 4)
         )
-        c.Trigger(actions=c.SetDeaths(4, c.Add, 0x200, 0))
+        '''
+
+        c.Trigger(actions=c.SetDeaths(4, c.Add, 0x500, 0))
         cs.EUDLoopBreakIf(prtn.Exactly(0))
     cs.EUDEndInfLoop()
 
@@ -60,4 +82,12 @@ def CreateStage2(payload):
 
     c.PopTriggerScope()
 
-    return c.CreatePayload(root)
+    ####
+    # return c.CreatePayload(root)
+    ####
+
+    payload = c.CreatePayload(root)
+    open('out.bin', 'wb').write(payload.data)
+    print(payload.prttable)
+    print(payload.orttable)
+    return payload

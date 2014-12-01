@@ -15,19 +15,24 @@ def SaveMap(fname, rootf):
     old_evb = vf.SetCurrentVariableBuffer(vf.EUDVarBuffer())
 
     c.PushTriggerScope()
+    print(' = = = = = = calling _mainstarter')
     root = doevents._MainStarter(rootf)
+    print(' = = = = = = calling createstage3')
     root = stage3.CreateStage3(root)
     c.PopTriggerScope()
+    print(' = = = = = = calling createpayload[1]')
     payload = c.CreatePayload(root)
 
     vf.SetCurrentVariableBuffer(vf.EUDVarBuffer())
 
     c.PushTriggerScope()
+    print(' = = = = = = calling createstage2')
     final_payload = stage2.CreateStage2(payload)
     c.PopTriggerScope()
     vf.SetCurrentVariableBuffer(old_evb)
     c.SetCurrentBlockStruManager(prev_bsm)
 
+    print(' = = = = = = calling createandapplystage1')
     stage1.CreateAndApplyStage1(chkt, final_payload)
 
     rawchk = chkt.savechk()

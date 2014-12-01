@@ -74,7 +74,7 @@ class Action(SCMemAddr):
     # -------
 
     def Evaluate(self):
-        return Evaluate(self._parenttrg) + 320 + 32 * self._actindex
+        return Evaluate(self._parenttrg) + 8 + 320 + 32 * self._actindex
 
     def WritePayload(self, pbuffer):
         pbuffer.WritePack(

@@ -3,7 +3,7 @@ from ..core.utils.blockstru import (
     BlockStruManager,
     SetCurrentBlockStruManager
 )
-from .eudv import EUDVariable, EUDCreateVariables
+from .eudv import EUDVariable
 from .eudsqc import SeqCompute
 
 import functools
@@ -57,17 +57,22 @@ class EUDFunc:
         self._fargs = f_args
         self._frets = f_rets
 
-        # Function to return
     def __call__(self, *args):
+        c.Trigger(actions=c.SetDeaths(4, c.Add, 0x50, 0))
+
         if self._fstart is None:
             self.CreateFuncBody()
 
-        assert len(args) is self._argn, 'Argument number mismatch'
+        assert len(args) == self._argn, 'Argument number mismatch'
+
+        c.Trigger(actions=c.SetDeaths(4, c.Add, 0x50, 0))
 
         # Assign arguments into argument space
         SeqCompute(
             [(farg, c.SetTo, arg) for farg, arg in zip(self._fargs, args)]
         )
+
+        c.Trigger(actions=c.SetDeaths(4, c.Add, 0x100, 0))
 
         # Call body
         fcallend = c.Forward()
@@ -78,6 +83,8 @@ class EUDFunc:
         )
 
         fcallend << c.NextTrigger()
+
+        c.Trigger(actions=c.SetDeaths(4, c.Add, 0x100, 0))
 
         if self._frets is not None:
             retn = len(self._frets)

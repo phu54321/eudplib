@@ -53,7 +53,7 @@ class RlocInt:
         )
 
     def __str__(self):
-        return 'Rlocint(%d, %d)' % (self.offset, self.rlocmode)
+        return 'Rlocint(0x%08X, %d)' % (self.offset, self.rlocmode)
 
     def __repr__(self):
         return str(self)

@@ -38,6 +38,7 @@ _evb = None
 
 
 def SetCurrentVariableBuffer(evb):
+    print('SetCurrentVariableBuffer[%s]' % evb)
     global _evb
 
     oldevb = _evb
@@ -111,6 +112,7 @@ class EUDVariable(VariableBase):
     # -------
 
     def __add__(self, other):
+        print('ccccc')
         t = EUDVariable()
         _Basic_SeqCompute([
             (t, c.SetTo, self),
@@ -233,25 +235,25 @@ def EUDCreateVariables(varn):
 def _Basic_SeqCompute(assignpairs):
     for dst, mdt, src in assignpairs:
         try:
-            dstaddr = c.EPD(dst.GetVariableMemoryAddr())
+            dstepd = c.EPD(dst.GetVariableMemoryAddr())
         except AttributeError:
-            dstaddr = dst
+            dstepd = dst
 
         if isinstance(src, EUDVariable):
             if mdt == c.SetTo:
                 _VProc(src, [
-                    src.QueueAssignTo(dstaddr)
+                    src.QueueAssignTo(dstepd)
                 ])
 
             elif mdt == c.Add:
                 _VProc(src, [
-                    src.QueueAddTo(dstaddr)
+                    src.QueueAddTo(dstepd)
                 ])
 
             elif mdt == c.Subtract:
                 _VProc(src, [
-                    src.QueueSubtractTo(dstaddr)
+                    src.QueueSubtractTo(dstepd)
                 ])
 
         else:
-            c.Trigger(actions=c.SetDeaths(dstaddr, mdt, src, 0))
+            c.Trigger(actions=c.SetDeaths(dstepd, mdt, src, 0))

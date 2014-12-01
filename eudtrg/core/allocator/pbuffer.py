@@ -34,10 +34,10 @@ class PayloadBuffer:
         self._datastart = self._datalen
 
     def EndWrite(self):
-        Writeted_size = self._datalen - self._datastart
-        padding_byten = (-Writeted_size & 0x3)
+        written_bytes = self._datalen - self._datastart
+        padding_byten = (-written_bytes & 0x3)
         self.WriteBytes(bytes(padding_byten))
-        return Writeted_size
+        return written_bytes
 
     def WriteByte(self, number):
         number = scaddr.Evaluate(number)
@@ -58,6 +58,8 @@ class PayloadBuffer:
     def WriteDword(self, number):
         number = scaddr.Evaluate(number)
         number.offset &= 0xFFFFFFFF
+
+        print('0x%08X : %s' % (self._datalen, number))
 
         if number.rlocmode:
             self._tablebr[number.rlocmode].append(self._datalen)
