@@ -1,3 +1,3 @@
 from .loadmap import LoadMap
 from .savemap import SaveMap
-from .injector.doevents import DoEvents
+from .injector.doevents import EUDDoEvents

@@ -105,10 +105,6 @@ def CreateAndApplyStage1(chkt, payload_stage2):
 
     CopyDeaths(tt.EPD(strs), tt.EPD(curpl), True, tt.EPD(payload_offset))
 
-    # DEBUG
-    Trigger(actions=tt.SetDeaths(3, tt.SetTo, 0x1001, 0))
-    # DEBUG
-
     # Init prt
     for i in range(0, len(payload_stage2.prttable), 31):
         prttb = [x // 4 for x in payload_stage2.prttable[i:i + 31]]
@@ -197,10 +193,6 @@ def CreateAndApplyStage1(chkt, payload_stage2):
 
     # Jump to payload
 
-    # DEBUG
-    Trigger(actions=tt.SetDeaths(3, tt.SetTo, 0x1002, 0))
-    # DEBUG
-
     # Reset curpl
     Trigger(actions=[
         tt.SetDeaths(10, tt.SetTo, tt.EPD(4), 0),
@@ -225,8 +217,8 @@ def CreateAndApplyStage1(chkt, payload_stage2):
                 conditions=tt.Memory(ptsprev, tt.AtLeast, 2 ** e),
                 actions=[
                     tt.SetMemory(ptsprev, tt.Subtract, 2 ** e),
-                    tt.SetDeaths(10, tt.Add, 2 ** e, 0),  # Used for nextptr
-                    # recovery in stage 2
+                    tt.SetDeaths(10, tt.Add, 2 ** (e - 2), 0),
+                    # Player 10 is used for nextptr recovery in stage 3
                     tt.SetDeaths(11, tt.Add, 2 ** e, 0),  # Temporary
                     tt.SetMemory(curpl, tt.Add, 2 ** (e - 2))
                 ]
@@ -245,10 +237,6 @@ def CreateAndApplyStage1(chkt, payload_stage2):
     # now curpl = EPD(value(ptsprev) + 4)
     # value(EPD(value(ptsprev) + 4)) = strs + payload_offset
     CopyDeaths(tt.EPD(strs), tt.CurrentPlayer, False, payload_offset)
-
-    # DEBUG
-    Trigger(actions=tt.SetDeaths(3, tt.SetTo, 0x1003, 0))
-    # DEBUG
 
     trigdata = b''.join(trglist)
 

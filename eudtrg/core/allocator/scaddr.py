@@ -11,10 +11,10 @@ class SCMemAddr:
     def Evaluate(self):
         assert self.rlocmode in [1, 4]
         if self.rlocmode == 1:
-            return Evaluate(self.baseobj) + self.offset
+            return Evaluate(self.baseobj) // 4 + self.offset
 
         else:
-            return Evaluate(self.baseobj) // 4 + self.offset
+            return Evaluate(self.baseobj) + self.offset
 
     def __add__(self, other):
         if not isinstance(other, int):

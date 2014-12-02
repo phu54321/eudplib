@@ -9,6 +9,7 @@ class Trigger(EUDObject):
 
     def __init__(
         self,
+        prevptr=None,
         nextptr=None,
         conditions=None,
         actions=None,
@@ -17,6 +18,9 @@ class Trigger(EUDObject):
         super().__init__()
 
         _RegisterTrigger(self)  # This should be called before (1)
+
+        if prevptr is None:
+            prevptr = 0
 
         if nextptr is None:
             nextptr = NextTrigger()  # (1)
@@ -33,6 +37,7 @@ class Trigger(EUDObject):
         assert len(conditions) <= 16, 'Too many conditions'
         assert len(actions) <= 64, 'Too many actions'
 
+        self._prevptr = prevptr
         self._nextptr = nextptr
         self._conditions = conditions
         self._actions = actions
@@ -50,7 +55,7 @@ class Trigger(EUDObject):
         return 2408
 
     def WritePayload(self, pbuffer):
-        pbuffer.WriteDword(0)
+        pbuffer.WriteDword(self._prevptr)
         pbuffer.WriteDword(self._nextptr)
 
         # Conditions

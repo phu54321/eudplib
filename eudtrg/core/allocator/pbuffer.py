@@ -59,8 +59,6 @@ class PayloadBuffer:
         number = scaddr.Evaluate(number)
         number.offset &= 0xFFFFFFFF
 
-        print('0x%08X : %s' % (self._datalen, number))
-
         if number.rlocmode:
             self._tablebr[number.rlocmode].append(self._datalen)
 

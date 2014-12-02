@@ -23,59 +23,30 @@ def CreateStage2(payload):
 
     root = c.NextTrigger()
 
-    c.Trigger(actions=c.SetDeaths(4, c.SetTo, 0x1000, 0))
-    c.Trigger(actions=c.SetDeaths(4, c.SetTo, 0x2000, 0))
-    c.Trigger(actions=c.SetDeaths(4, c.SetTo, 0x3000, 0))
-
     prtn << len(payload.prttable)
     ortn << len(payload.orttable)
 
-    c.Trigger(actions=c.SetDeaths(4, c.SetTo, 0x4000, 0))
-
-    # prtn << len(payload.prttable)
-    # ortn << len(payload.orttable)
-
     # init prt
-    if cs.EUDInfLoop():
-        c.Trigger(actions=c.SetDeaths(4, c.Add, 0x100, 0))
-        cs.DoActions(prtn.SubtractNumber(1))
-        c.Trigger(actions=c.SetDeaths(4, c.Add, 0x100, 0))
-        print('aaaaa')
-        iaddr = prtn + c.EPD(prtdb)
-        print('aaaaa')
-        c.Trigger(actions=c.SetDeaths(4, c.Add, 0x100, 0))
-        tp = c.EPD(orig_payload) + sf.f_dwread_epd(iaddr)
-        v = orig_payload // 4
-
-        c.Trigger(actions=c.SetDeaths(4, c.Add, 0x100, 0))
-
-        act = c.Forward()
-        vf.SeqCompute([(c.EPD(act + 16), c.SetTo, tp)])
-        c.Trigger(actions=c.SetDeaths(4, c.Add, 0x400, 0))
-        cs.DoActions(act << c.SetMemory(0, c.Add, v))
-
-        '''
-        sf.f_dwadd_epd(
-            c.EPD(orig_payload) + sf.f_dwread_epd(prtn + c.EPD(prtdb)),
-            (orig_payload // 4)
-        )
-        '''
-
-        c.Trigger(actions=c.SetDeaths(4, c.Add, 0x500, 0))
-        cs.EUDLoopBreakIf(prtn.Exactly(0))
-    cs.EUDEndInfLoop()
+    if payload.prttable:
+        if cs.EUDInfLoop():
+            cs.DoActions(prtn.SubtractNumber(1))
+            sf.f_dwadd_epd(
+                c.EPD(orig_payload) + sf.f_dwread_epd(prtn + c.EPD(prtdb)),
+                orig_payload // 4
+            )
+            cs.EUDLoopBreakIf(prtn.Exactly(0))
+        cs.EUDEndInfLoop()
 
     # init ort
-    if cs.EUDInfLoop():
-        cs.DoActions(ortn.SubtractNumber(1))
-        sf.f_dwadd_epd(
-            c.EPD(orig_payload) + sf.f_dwread_epd(ortn + c.EPD(ortdb)),
-            orig_payload
-        )
-        cs.EUDLoopBreakIf(ortn.Exactly(0))
-    cs.EUDEndInfLoop()
-
-    c.Trigger(actions=c.SetDeaths(4, c.SetTo, 0x1001, 0))
+    if payload.orttable:
+        if cs.EUDInfLoop():
+            cs.DoActions(ortn.SubtractNumber(1))
+            sf.f_dwadd_epd(
+                c.EPD(orig_payload) + sf.f_dwread_epd(ortn + c.EPD(ortdb)),
+                orig_payload
+            )
+            cs.EUDLoopBreakIf(ortn.Exactly(0))
+        cs.EUDEndInfLoop()
 
     # Jump
     cs.EUDJump(orig_payload)
@@ -88,6 +59,4 @@ def CreateStage2(payload):
 
     payload = c.CreatePayload(root)
     open('out.bin', 'wb').write(payload.data)
-    print(payload.prttable)
-    print(payload.orttable)
     return payload

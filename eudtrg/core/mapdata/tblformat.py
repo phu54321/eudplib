@@ -75,6 +75,9 @@ class TBL:
                 return None
 
     def GetStringIndex(self, string):
+        if type(string) is str:
+            string = ubconv.u2b(string)
+
         try:
             return self._stringmap[string] + 1
 

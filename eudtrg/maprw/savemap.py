@@ -6,7 +6,6 @@ from .injector import stage1, stage2, stage3, doevents
 
 def SaveMap(fname, rootf):
     print('Saving to %s...' % fname)
-    mapdata.UpdateMapData()
     chkt = mapdata.GetChkTokenized()
 
     # Create injector triggers
@@ -15,24 +14,33 @@ def SaveMap(fname, rootf):
     old_evb = vf.SetCurrentVariableBuffer(vf.EUDVarBuffer())
 
     c.PushTriggerScope()
-    print(' = = = = = = calling _mainstarter')
     root = doevents._MainStarter(rootf)
-    print(' = = = = = = calling createstage3')
     root = stage3.CreateStage3(root)
     c.PopTriggerScope()
-    print(' = = = = = = calling createpayload[1]')
     payload = c.CreatePayload(root)
 
     vf.SetCurrentVariableBuffer(vf.EUDVarBuffer())
 
     c.PushTriggerScope()
-    print(' = = = = = = calling createstage2')
     final_payload = stage2.CreateStage2(payload)
     c.PopTriggerScope()
     vf.SetCurrentVariableBuffer(old_evb)
     c.SetCurrentBlockStruManager(prev_bsm)
 
-    print(' = = = = = = calling createandapplystage1')
+    # Update string table & etc
+    # rootf can be EUDFunc, which can be evaluated later.
+    # User-defined strings inside eudtrg program is registered after rootf is
+    # called, when _MainStarter is called. So, UpdateMapData function should
+    # be called after `doevents._MainStarter(rootf)` call.
+    # Moreover, since it won't matter anyway, we update string table and
+    # property table after stage 2 is initialized.
+    mapdata.UpdateMapData()
+    # stage1.CreateAndApplyStage1 requires STR section to be constructed before
+    # it append stage2 payload after 'original' STR section. so UpdateMapData
+    # should be called before `stage1.CreateAndApplyStage1`.
+
+    # Create and apply stage 1 payload.
+    # Stage 1 initializes stage 2 (real payload initializer)
     stage1.CreateAndApplyStage1(chkt, final_payload)
 
     rawchk = chkt.savechk()

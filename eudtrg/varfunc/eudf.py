@@ -58,21 +58,15 @@ class EUDFunc:
         self._frets = f_rets
 
     def __call__(self, *args):
-        c.Trigger(actions=c.SetDeaths(4, c.Add, 0x50, 0))
-
         if self._fstart is None:
             self.CreateFuncBody()
 
         assert len(args) == self._argn, 'Argument number mismatch'
 
-        c.Trigger(actions=c.SetDeaths(4, c.Add, 0x50, 0))
-
         # Assign arguments into argument space
         SeqCompute(
             [(farg, c.SetTo, arg) for farg, arg in zip(self._fargs, args)]
         )
-
-        c.Trigger(actions=c.SetDeaths(4, c.Add, 0x100, 0))
 
         # Call body
         fcallend = c.Forward()
@@ -83,8 +77,6 @@ class EUDFunc:
         )
 
         fcallend << c.NextTrigger()
-
-        c.Trigger(actions=c.SetDeaths(4, c.Add, 0x100, 0))
 
         if self._frets is not None:
             retn = len(self._frets)
@@ -103,5 +95,5 @@ def SetVariables(srclist, dstlist, mdtlist=None):
     if mdtlist is None:
         mdtlist = [c.SetTo] * len(srclist)
 
-    sqa = [(src, dst, mdt) for src, dst, mdt in zip(srclist, dstlist, mdtlist)]
+    sqa = [(src, mdt, dst) for src, dst, mdt in zip(srclist, dstlist, mdtlist)]
     SeqCompute(sqa)

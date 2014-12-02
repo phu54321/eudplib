@@ -2,9 +2,9 @@ from . import rlocint, pbuffer
 from . import scaddr
 
 
-_searched_objects = None
-_searched_objects_set = None
-_unsearched_objects = None
+_found_objects = None
+_found_objects_set = None
+_untraversed_objects = None
 _alloctable = None
 
 
@@ -48,36 +48,35 @@ phase = None
 
 def CollectObjects(root):
     global phase
-    global _searched_objects, _searched_objects_set
-    global _unsearched_objects
+    global _found_objects
+    global _found_objects_set
+    global _untraversed_objects
 
     phase = PHASE_COLLECTING
 
     objc = ObjCollector()
-    _searched_objects = []
-    _searched_objects_set = set()
-    _unsearched_objects = []
+    _found_objects = []
+    _found_objects_set = set()
+    _untraversed_objects = []
 
-    # _unsearched_objects.append(root) won't work here, since root can also be
+    # _untraversed_objects.append(root) won't work here, since root can also be
     # Forward() object pointing to Trigger(). Forward().WritePayload() is not
     # defined.
     # Instead, we evaluate root to register objects associated with root to
     # register naturally with GetObjectAddr()
     scaddr.Evaluate(root)
 
-    while _unsearched_objects:
-        obj = _unsearched_objects.pop()
-        _searched_objects.append(obj)
-        _searched_objects_set.add(obj)
+    while _untraversed_objects:
+        obj = _untraversed_objects.pop()
         obj.WritePayload(objc)
 
-    _searched_objects_set = None
+    _found_objects_set = None
     phase = None
 
 
 def ConstructPayload(root):
     global phase
-    global _searched_objects
+    global _found_objects
     global _alloctable
 
     phase = PHASE_WRITING
@@ -86,14 +85,13 @@ def ConstructPayload(root):
     _alloctable = {}
     lastoffset = 0
 
-    for obj in _searched_objects:
+    for obj in _found_objects:
         objsize = obj.GetDataSize()
         objaddr = lastoffset
         lastoffset += (objsize + 3) & ~3
         _alloctable[obj] = [objaddr, objsize]
-        print('Registering object %s at 0x%08X' % (obj, objaddr))
 
-    for obj in _searched_objects:
+    for obj in _found_objects:
         objsize = _alloctable[obj][1]
 
         pbuf.StartWrite()
@@ -114,12 +112,15 @@ def CreatePayload(root):
 
 def GetObjectAddr(obj):
     global _alloctable
-    global _searched_objects
-    global _unsearched_objects
+    global _found_objects
+    global _found_objects_set
+    global _untraversed_objects
 
     if phase == PHASE_COLLECTING:
-        if obj not in _searched_objects:
-            _unsearched_objects.append(obj)
+        if obj not in _found_objects_set:
+            _untraversed_objects.append(obj)
+            _found_objects.append(obj)
+            _found_objects_set.add(obj)
 
         return rlocint.RlocInt(0, 4)
 

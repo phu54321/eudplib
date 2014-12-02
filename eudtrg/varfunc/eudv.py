@@ -38,7 +38,6 @@ _evb = None
 
 
 def SetCurrentVariableBuffer(evb):
-    print('SetCurrentVariableBuffer[%s]' % evb)
     global _evb
 
     oldevb = _evb
@@ -112,7 +111,6 @@ class EUDVariable(VariableBase):
     # -------
 
     def __add__(self, other):
-        print('ccccc')
         t = EUDVariable()
         _Basic_SeqCompute([
             (t, c.SetTo, self),

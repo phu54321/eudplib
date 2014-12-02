@@ -33,12 +33,12 @@ totstr = ''.join(totstrlist)
 
 open('out.html', 'w').write('''\
 <html>
-    <head>
-        <title> Output </title>
-        <style>{cssstyle}</style>
-    </head>
-    <body>
-        {totstr}
-    </body>
+<head>
+<title> Output </title>
+<style>{cssstyle}</style>
+</head>
+<body>
+{totstr}
+</body>
 </html>
 '''.format(**locals()))

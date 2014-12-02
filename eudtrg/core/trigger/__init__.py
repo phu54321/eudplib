@@ -37,5 +37,27 @@ from .constenc import (
     Force2, Force3, Force4, NonAlliedVictoryPlayers, Enable, Disable,
     Toggle, Ore, Gas, OreAndGas, Total, Units, Buildings,
     UnitsAndBuildings, Kills, Razings, KillsAndRazings, Custom, Set,
-    Clear, Random, Cleared
+    Clear, Random, Cleared,
+
+    # encoders
+    EncodeAllyStatus,
+    EncodeComparison,
+    EncodeCount,
+    EncodeModifier,
+    EncodeOrder,
+    EncodePlayer,
+    EncodeProperty,
+    EncodePropState,
+    EncodeResource,
+    EncodeScore,
+    EncodeSwitchAction,
+    EncodeSwitchState,
+)
+
+from .strenc import (
+    EncodeAIScript,
+    EncodeLocation,
+    EncodeString,
+    EncodeSwitch,
+    EncodeUnit,
 )
