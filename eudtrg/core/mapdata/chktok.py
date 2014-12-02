@@ -11,7 +11,8 @@ General CHK class.
 
 
 def sectionname_format(sn):
-    sn = ubconv.u2b(sn)
+    if type(sn) is str:
+        sn = ubconv.u2b(sn)
 
     if len(sn) < 4:
         sn += b' ' * (4 - len(sn))

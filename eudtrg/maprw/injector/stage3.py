@@ -72,7 +72,6 @@ def CreateStage3(root):
 
             # Time checker -> ensure that STR trigger is executed only once.
             curtime << sf.f_dwread_epd(c.EPD(0x57F23C))
-            vf.SeqCompute([(1, c.SetTo, curtime)])
             if cs.EUDIf(lasttime < curtime):
                 lasttime << curtime
                 cs.EUDJump(root)
@@ -91,7 +90,11 @@ def CreateStage3(root):
             ])
         cs.EUDEndIf()
 
-    # pts initialized. now jump to root
+    # lasttime << curtime
+    curtime << sf.f_dwread_epd(c.EPD(0x57F23C))
+    lasttime << curtime
+
+    # now jump to root
     cs.EUDJump(root)
 
     c.PopTriggerScope()

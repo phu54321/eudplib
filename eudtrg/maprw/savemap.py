@@ -43,6 +43,7 @@ def SaveMap(fname, rootf):
     # Stage 1 initializes stage 2 (real payload initializer)
     stage1.CreateAndApplyStage1(chkt, final_payload)
 
+    chkt.optimize()
     rawchk = chkt.savechk()
     print('Output scenario.chk : %.3fMB' % (len(rawchk) / 1000000))
 

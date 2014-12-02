@@ -12,13 +12,16 @@ def _IsLoopBlockId(idf):
     return idf in _loopb_idset
 
 
+# -------
+
+
 def EUDInfLoop():
     block = {
         'loopstart': c.NextTrigger(),
         'loopend': c.Forward(),
         'contpoint': None,
     }
-    block['contpoint'] = block['loopstart']
+    block['contpoint'] = c.Forward()
 
     c.EUDCreateBlock('infloopblock', block)
 
@@ -26,13 +29,15 @@ def EUDInfLoop():
 
 
 def EUDEndInfLoop():
-    lb = c.EUDPopBlock('infloopblock')
-    assert lb[0] == 'infloopblock', 'Block start/end mismatch'
-    EUDJump(lb[1]['loopstart'])
-    lb[1]['loopend'] << c.NextTrigger()
+    block = c.EUDPopBlock('infloopblock')[1]
+    if not block['contpoint'].IsSet():
+        block['contpoint'] << block['loopstart']
+    EUDJump(block['loopstart'])
+    block['loopend'] << c.NextTrigger()
 
 
 # -------
+
 
 def EUDWhile(conditions):
     block = {
@@ -40,7 +45,7 @@ def EUDWhile(conditions):
         'loopend': c.Forward(),
         'contpoint': None,
     }
-    block['contpoint'] = block['loopstart']
+    block['contpoint'] = c.Forward()
 
     c.EUDCreateBlock('whileblock', block)
 
@@ -55,7 +60,7 @@ def EUDWhileNot(conditions):
         'loopend': c.Forward(),
         'contpoint': None,
     }
-    block['contpoint'] = block['loopstart']
+    block['contpoint'] = c.Forward()
 
     c.EUDCreateBlock('whileblock', block)
 
@@ -65,16 +70,19 @@ def EUDWhileNot(conditions):
 
 
 def EUDEndWhile():
-    lb = c.EUDPopBlock('whileblock')
-    EUDJump(lb[1]['loopstart'])
-    lb[1]['loopend'] << c.NextTrigger()
+    block = c.EUDPopBlock('whileblock')[1]
+    if not block['contpoint'].IsSet():
+        block['contpoint'] << block['loopstart']
+    EUDJump(block['loopstart'])
+    block['loopend'] << c.NextTrigger()
 
 
 # -------
 
+
 def _GetLastLoopBlock():
     for block in reversed(c.EUDGetBlockList()):
-        if block[0] in _loopb_idset:
+        if _IsLoopBlockId(block[0]):
             return block
 
     raise AssertionError('No loop block surrounding this code area')
@@ -97,7 +105,7 @@ def EUDLoopContinueIfNot(conditions):
 
 def EUDLoopSetContinuePoint():
     block = _GetLastLoopBlock()[1]
-    block['contpoint'] = c.NextTrigger()
+    block['contpoint'] << c.NextTrigger()
 
 
 def EUDLoopBreak():
