@@ -344,7 +344,7 @@ def ModifyUnitResourceAmount(Count, Owner, Where, NewValue):
     Count = EncodeCount(Count)
     Owner = EncodePlayer(Owner)
     Where = EncodeLocation(Where)
-    return Action(Where, 0, 0, 0, Owner, 0, 0, 52, Count, 4)
+    return Action(Where, 0, 0, 0, Owner, NewValue, 0, 52, Count, 4)
 
 
 def ModifyUnitHangarCount(Add, Count, Unit, Owner, Where):
