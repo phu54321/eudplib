@@ -4,12 +4,12 @@
 from .eudv import (
     EUDVariable,
     EUDCreateVariables,
+    SeqCompute,
 
-    # Some weird thing
+    # Variable buffer thing
     EUDVarBuffer,
     SetCurrentVariableBuffer
 )
 
 from .eudlv import EUDLightVariable
-from .eudsqc import SeqCompute
 from .eudf import EUDFunc, SetVariables

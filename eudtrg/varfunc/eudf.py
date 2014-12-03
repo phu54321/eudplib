@@ -6,8 +6,7 @@ from ..core.utils.blockstru import (
     BlockStruManager,
     SetCurrentBlockStruManager
 )
-from .eudv import EUDVariable
-from .eudsqc import SeqCompute
+from .eudv import EUDVariable, SeqCompute
 
 import functools
 import inspect
@@ -30,6 +29,7 @@ class EUDFunc:
 
     def CreateFuncBody(self):
         assert self._fstart is None
+        print(self._fdecl_func)
 
         f_bsm = BlockStruManager()
         prev_bsm = SetCurrentBlockStruManager(f_bsm)

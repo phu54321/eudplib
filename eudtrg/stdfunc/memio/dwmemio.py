@@ -14,18 +14,148 @@ def f_epd(addr):
 @vf.EUDFunc
 def f_dwread_epd(targetplayer):
     ret = vf.EUDVariable()
+    cmpc, a1, a2 = c.Forward(), c.Forward(), c.Forward()
+
+    vf.SeqCompute([
+        (c.EPD(cmpc + 4), c.SetTo, targetplayer),
+        (c.EPD(a1 + 16), c.SetTo, targetplayer),
+        (ret, c.SetTo, 0)
+    ])
+
+    cmpt = c.Trigger(
+        conditions=[
+            cmpc << c.Memory(0, c.AtLeast, 0)
+        ],
+        actions=[
+            a1 << c.SetMemory(0, c.Subtract, 2**31),
+            a2 << ret.AddNumber(2**31)
+        ]
+    )
+
+    chain = [c.Forward() for _ in range(32)]
+    for i in range(30, -1, -1):
+        chain[i+1] << c.Trigger(
+            nextptr=cmpt,
+            actions=[
+                c.SetNextPtr(cmpt, chain[i]),
+                c.SetMemory(a1 + 20, c.SetTo, 2**i),
+                c.SetMemory(a2 + 20, c.SetTo, 2**i)
+            ]
+        )
+    chain[0] << c.Trigger(
+        actions=[
+            c.SetNextPtr(cmpt, chain[31]),
+            c.SetMemory(a1 + 20, c.SetTo, 2**31),
+            c.SetMemory(a2 + 20, c.SetTo, 2**31)
+        ]
+    )
+
+    return ret
+
+
+@vf.EUDFunc
+def f_epdread_epd(targetplayer):
+    ret = vf.EUDVariable()
+    cmpc, a1, a2 = c.Forward(), c.Forward(), c.Forward()
+
+    vf.SeqCompute([
+        (c.EPD(cmpc + 4), c.SetTo, targetplayer),
+        (c.EPD(a1 + 16), c.SetTo, targetplayer),
+        (ret, c.SetTo, c.EPD(0))
+    ])
+
+    cmpt = c.Trigger(
+        conditions=[
+            cmpc << c.Memory(0, c.AtLeast, 0)
+        ],
+        actions=[
+            a1 << c.SetMemory(0, c.Subtract, 2**31),
+            a2 << ret.AddNumber(2**29)
+        ]
+    )
+
+    chain = [c.Forward() for _ in range(30)]
+    for i in range(30, 1, -1):
+        chain[i-1] << c.Trigger(
+            nextptr=cmpt,
+            actions=[
+                c.SetNextPtr(cmpt, chain[i]),
+                c.SetMemory(a1 + 20, c.SetTo, 2**i),
+                c.SetMemory(a2 + 20, c.SetTo, 2**(i-2))
+            ]
+        )
+    chain[0] << c.Trigger(
+        actions=[
+            c.SetNextPtr(cmpt, chain[31]),
+            c.SetMemory(a1 + 20, c.SetTo, 2**31),
+            c.SetMemory(a2 + 20, c.SetTo, 2**29)
+        ]
+    )
+
+    return ret
+
+
+@vf.EUDFunc
+def f_dwepdread_epd(targetplayer):
+    dw, epd = vf.EUDVariable()
+    cmpc, a1, a2 = c.Forward(), c.Forward(), c.Forward()
+
+    vf.SeqCompute([
+        (c.EPD(cmpc + 4), c.SetTo, targetplayer),
+        (c.EPD(a1 + 16), c.SetTo, targetplayer),
+        (dw, c.SetTo, 0),
+        (epd, c.SetTo, c.EPD(0))
+    ])
+
+    cmpt = c.Trigger(
+        conditions=[
+            cmpc << c.Memory(0, c.AtLeast, 0)
+        ],
+        actions=[
+            a1 << c.SetMemory(0, c.Subtract, 2**31),
+            a2 << ret.AddNumber(2**31)
+        ]
+    )
+
+    chain = [c.Forward() for _ in range(32)]
+    for i in range(30, -1, -1):
+        chain[i+1] << c.Trigger(
+            nextptr=cmpt,
+            actions=[
+                c.SetNextPtr(cmpt, chain[i]),
+                c.SetMemory(a1 + 20, c.SetTo, 2**i),
+                c.SetMemory(a2 + 20, c.SetTo, 2**i)
+            ]
+        )
+    chain[0] << c.Trigger(
+        actions=[
+            c.SetNextPtr(cmpt, chain[31]),
+            c.SetMemory(a1 + 20, c.SetTo, 2**31),
+            c.SetMemory(a2 + 20, c.SetTo, 2**31)
+        ]
+    )
+
+    return ret
+
+
+# -------
+
+
+@vf.EUDFunc
+def f_dwread_epd_nw(targetplayer):
+    ret = vf.EUDVariable()
 
     # Common comparison trigger
     c.PushTriggerScope()
-    cmp = c.Forward()
-    cmp_player = cmp + 4
-    cmp_number = cmp + 8
+    cmpc = c.Forward()
+    cmp_player = cmpc + 4
+    cmp_number = cmpc + 8
     cmpact = c.Forward()
 
     cmptrigger = c.Forward()
     cmptrigger << c.Trigger(
         conditions=[
-            cmp << c.Memory(0, c.AtMost, 0)
+            cmpc << c.Memory(0, c.AtMost, 0)
         ],
         actions=[
             cmpact << c.SetMemory(cmptrigger + 4, c.SetTo, 0)
@@ -70,6 +200,9 @@ def f_dwread_epd(targetplayer):
     readend << c.NextTrigger()
 
     return ret
+
+
+# -------
 
 
 def f_dwwrite_epd(targetplayer, value):

@@ -9,13 +9,13 @@ LoadMap('outputmap/basemap/basemap.scx')
 
 @EUDFunc
 def main():
-    if EUDInfLoop():
+    if EUDWhile(Always()):
         f_setcurpl(Player1)
         DoActions(DisplayText("test a"))
         DoActions(DisplayText("test b"))
         DoActions(DisplayText("test c"))
         EUDDoEvents()
-    EUDEndInfLoop()
+    EUDEndWhile()
 
 
 SaveMap('outputmap\\blockstru.scx', main)

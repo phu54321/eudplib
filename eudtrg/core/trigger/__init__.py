@@ -1,7 +1,7 @@
 #!/usr/bin/python
 #-*- coding: utf-8 -*-
 
-from .trigger import Trigger
+from .trigger import Trigger, GetTriggerCount
 from .triggerscope import PushTriggerScope, PopTriggerScope, NextTrigger
 from .condition import Condition
 from .action import Action

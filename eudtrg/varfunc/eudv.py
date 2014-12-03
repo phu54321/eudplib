@@ -115,7 +115,7 @@ class EUDVariable(VariableBase):
 
     def __add__(self, other):
         t = EUDVariable()
-        _Basic_SeqCompute([
+        SeqCompute([
             (t, c.SetTo, self),
             (t, c.Add, other)
         ])
@@ -126,7 +126,7 @@ class EUDVariable(VariableBase):
 
     def __sub__(self, other):
         t = EUDVariable()
-        _Basic_SeqCompute([
+        SeqCompute([
             (t, c.SetTo, self),
             (t, c.Subtract, other)
         ])
@@ -134,14 +134,14 @@ class EUDVariable(VariableBase):
 
     def __rsub__(self, other):
         t = EUDVariable()
-        _Basic_SeqCompute([
+        SeqCompute([
             (t, c.SetTo, other),
             (t, c.Subtract, self)
         ])
         return t
 
     def __lshift__(self, other):
-        _Basic_SeqCompute((
+        SeqCompute((
             (self, c.SetTo, other),
         ))
         return self
@@ -161,7 +161,7 @@ class EUDVariable(VariableBase):
 
         else:
             t = EUDVariable()
-            _Basic_SeqCompute((
+            SeqCompute((
                 (t, c.SetTo, self),
                 (t, c.Subtract, other)
             ))
@@ -173,7 +173,7 @@ class EUDVariable(VariableBase):
 
         else:
             t = EUDVariable()
-            _Basic_SeqCompute((
+            SeqCompute((
                 (t, c.SetTo, other),
                 (t, c.Subtract, self)
             ))
@@ -190,7 +190,7 @@ class EUDVariable(VariableBase):
 
         else:
             t = EUDVariable()
-            _Basic_SeqCompute((
+            SeqCompute((
                 (t, c.SetTo, self),
                 (t, c.Add, 1),
                 (t, c.Subtract, other)
@@ -208,7 +208,7 @@ class EUDVariable(VariableBase):
 
         else:
             t = EUDVariable()
-            _Basic_SeqCompute((
+            SeqCompute((
                 (t, c.SetTo, self),
                 (t, c.Subtract, 1),
                 (t, c.Subtract, other)
@@ -232,8 +232,18 @@ def EUDCreateVariables(varn):
     return c.List2Assignable([EUDVariable() for _ in range(varn)])
 
 
-# _Basic_SeqCompute. Used only in eudv.py
-def _Basic_SeqCompute(assignpairs):
+# -------
+
+
+def SeqCompute(assignpairs):
+    actionset = []
+
+    def FlushActionSet():
+        nonlocal actionset
+        if actionset:
+            c.Trigger(actions=actionset)
+            actionset.clear()
+
     for dst, mdt, src in assignpairs:
         try:
             dstepd = c.EPD(dst.GetVariableMemoryAddr())
@@ -241,6 +251,8 @@ def _Basic_SeqCompute(assignpairs):
             dstepd = dst
 
         if isinstance(src, EUDVariable):
+            FlushActionSet()
+
             if mdt == c.SetTo:
                 _VProc(src, [
                     src.QueueAssignTo(dstepd)
@@ -257,4 +269,8 @@ def _Basic_SeqCompute(assignpairs):
                 ])
 
         else:
-            c.Trigger(actions=c.SetDeaths(dstepd, mdt, src, 0))
+            actionset.append(c.SetDeaths(dstepd, mdt, src, 0))
+            if len(actionset) == 64:
+                FlushActionSet()
+
+    FlushActionSet()

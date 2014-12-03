@@ -2,6 +2,14 @@
 #-*- coding: utf-8 -*-
 
 import collections
+import itertools
+
+
+def EPD(p):
+    return (p - 0x58A364) // 4
+
+
+# -------
 
 
 def FlattenList(l):
@@ -18,11 +26,18 @@ def FlattenList(l):
         return [l]
 
 
-def EPD(p):
-    return (p - 0x58A364) // 4
+def eqsplit(iterable, eqr):
+    if isinstance(iterable, list):
+        for i in range(0, len(iterable), eqr):
+            yield iterable[i:i+eqr]
 
+    else:
+        it = iter(iterable)
+        item = list(itertools.islice(it, eqr))
+        while item:
+            yield item
+            item = list(itertools.islice(it, eqr))
 
-# -------
 
 def List2Assignable(l):
     if len(l) == 1:

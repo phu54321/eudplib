@@ -8,6 +8,13 @@ from .condition import Condition
 from .action import Action
 
 
+_trgcount = 0  # Debugging purpose
+
+
+def GetTriggerCount():  # Debugging purpose
+    return _trgcount
+
+
 class Trigger(EUDObject):
 
     def __init__(
@@ -18,6 +25,9 @@ class Trigger(EUDObject):
         actions=None,
         preserved=True
     ):
+        global _trgcount  # Debugging purpose
+        _trgcount += 1  # Debugging purpose
+
         super().__init__()
 
         _RegisterTrigger(self)  # This should be called before (1)

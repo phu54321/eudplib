@@ -110,6 +110,7 @@ def ConstructPayload(root):
 
 def CreatePayload(root):
     CollectObjects(root)
+    print('%d objects found' % len(_found_objects))
     return ConstructPayload(root)
 
 
