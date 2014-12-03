@@ -1,3 +1,6 @@
+#!/usr/bin/python
+#-*- coding: utf-8 -*-
+
 from .trigger import Trigger
 from .triggerscope import PushTriggerScope, PopTriggerScope, NextTrigger
 from .condition import Condition

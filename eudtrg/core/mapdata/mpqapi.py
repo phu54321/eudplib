@@ -1,3 +1,6 @@
+#!/usr/bin/python
+#-*- coding: utf-8 -*-
+
 '''
 SFmpq.dll wrapper. Used internally inside eudtrg.
 '''

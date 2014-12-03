@@ -1,3 +1,6 @@
+#!/usr/bin/python
+#-*- coding: utf-8 -*-
+
 from ..eudobj import EUDObject
 from ..utils import FlattenList
 from .triggerscope import NextTrigger, _RegisterTrigger

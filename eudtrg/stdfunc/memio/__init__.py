@@ -1,3 +1,6 @@
+#!/usr/bin/python
+#-*- coding: utf-8 -*-
+
 from .dwmemio import (
     f_epd,
     f_dwread_epd,

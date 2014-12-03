@@ -88,7 +88,6 @@ def main():
             # creep -> continue
             creepval = f_creepread(tileunitx, tileunity)
             EUDContinueIf([creepval >= 16, creepval <= 31])
-            DoActions(SetMemory(0x58A368, SetTo, 1))
 
             # Slow down zergling.
             # Creating kakaru and killing them slows down zergling.

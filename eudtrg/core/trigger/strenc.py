@@ -1,3 +1,6 @@
+#!/usr/bin/python
+#-*- coding: utf-8 -*-
+
 from ..mapdata import (
     GetLocationIndex,
     GetStringIndex,

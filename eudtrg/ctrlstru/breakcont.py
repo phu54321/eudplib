@@ -1,3 +1,6 @@
+#!/usr/bin/python
+#-*- coding: utf-8 -*-
+
 from .import (
     loopblock as lb,
     swblock as sb

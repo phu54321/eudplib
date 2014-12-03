@@ -1,3 +1,6 @@
+#!/usr/bin/python
+#-*- coding: utf-8 -*-
+
 ''' Stage 3:
 - Fixes nextptr modification to TRIG triggers by stage 1
 - Flip property value by trig section

@@ -1,3 +1,6 @@
+#!/usr/bin/python
+#-*- coding: utf-8 -*-
+
 from . import tblformat
 from ..utils import b2i2, b2i4
 

@@ -1,3 +1,6 @@
+#!/usr/bin/python
+#-*- coding: utf-8 -*-
+
 def b2i1(b, index=0):
     return b[index]
 

@@ -1,3 +1,6 @@
+#!/usr/bin/python
+#-*- coding: utf-8 -*-
+
 from ..allocator import SCMemAddr
 from ..allocator.payload import GetObjectAddr
 

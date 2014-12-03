@@ -1,3 +1,6 @@
+#!/usr/bin/python
+#-*- coding: utf-8 -*-
+
 '''
 WARNING! This code is speciallized for use on eudtrg
 - Default player of trigger is 'All Player'.

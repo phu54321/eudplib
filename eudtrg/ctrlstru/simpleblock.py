@@ -1,3 +1,6 @@
+#!/usr/bin/python
+#-*- coding: utf-8 -*-
+
 from .. import core as c
 from .basicstru import EUDJump, EUDJumpIf, EUDJumpIfNot
 

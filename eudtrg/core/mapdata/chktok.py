@@ -1,3 +1,6 @@
+#!/usr/bin/python
+#-*- coding: utf-8 -*-
+
 '''
 scenario.chk section tokenizer. Internally used in eudtrg.
 '''

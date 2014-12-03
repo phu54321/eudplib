@@ -1,3 +1,6 @@
+#!/usr/bin/python
+#-*- coding: utf-8 -*-
+
 from .muldiv import f_mul, f_div
 from .bitwise import (
     f_bitand,

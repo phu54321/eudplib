@@ -1,3 +1,6 @@
+#!/usr/bin/python
+#-*- coding: utf-8 -*-
+
 ''' Stage 1 : works in TRIG section.
 - Check if EUD is available. If not, defeat
 - Initialize stage 2 & execute it

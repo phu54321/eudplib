@@ -1,3 +1,6 @@
+#!/usr/bin/python
+#-*- coding: utf-8 -*-
+
 from .. import core as c
 from .. import varfunc as vf
 from ..core.mapdata import mapdata, mpqapi

@@ -1,3 +1,6 @@
+#!/usr/bin/python
+#-*- coding: utf-8 -*-
+
 from .action import Action
 from .constenc import (
     EncodeAIScript,

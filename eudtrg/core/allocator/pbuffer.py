@@ -1,3 +1,6 @@
+#!/usr/bin/python
+#-*- coding: utf-8 -*-
+
 import struct
 from . import scaddr, rlocint
 from ..utils import binio

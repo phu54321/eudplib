@@ -1,3 +1,6 @@
+#!/usr/bin/python
+#-*- coding: utf-8 -*-
+
 class RlocInt:
 
     def __init__(self, offset, rlocmode):

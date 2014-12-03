@@ -1,3 +1,6 @@
+#!/usr/bin/python
+#-*- coding: utf-8 -*-
+
 ''' Stage 2 :
 - Initialize payload (stage3+ + user code) & execute it
 '''

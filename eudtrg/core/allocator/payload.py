@@ -1,3 +1,6 @@
+#!/usr/bin/python
+#-*- coding: utf-8 -*-
+
 from . import rlocint, pbuffer
 from . import scaddr
 

@@ -1,3 +1,6 @@
+#!/usr/bin/python
+#-*- coding: utf-8 -*-
+
 import locale
 
 g_encoding = locale.getpreferredencoding()

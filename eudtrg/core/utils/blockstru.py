@@ -1,3 +1,6 @@
+#!/usr/bin/python
+#-*- coding: utf-8 -*-
+
 class BlockStruManager:
 
     def __init__(self):
