@@ -15,7 +15,6 @@ from ... import stdfunc as sf
 
 @vf.EUDFunc
 def FlipProp(initepd):
-    print('a', c.GetTriggerCount())
     '''Iterate through triggers and flip 'Trigger disabled' flag'''
     if cs.EUDWhileNot([initepd >= 0x3FD56E6E, initepd <= 0x3FD56E86]):
         prop_epd = initepd + (8 + 320 + 2048) // 4
@@ -31,8 +30,6 @@ def FlipProp(initepd):
 
     cs.EUDEndWhile()
 
-    print('b', c.GetTriggerCount())
-
 
 def CreateStage3(root):
     pts = 0x51A280
@@ -40,8 +37,6 @@ def CreateStage3(root):
     c.PushTriggerScope()
 
     ret = c.NextTrigger()
-
-    print(c.GetTriggerCount())
 
     # Revert nextptr
     triggerend = sf.f_dwread_epd(9)
@@ -52,16 +47,12 @@ def CreateStage3(root):
         c.SetDeaths(10, c.SetTo, 0, 0)
     ])
 
-    print(c.GetTriggerCount())
-
     # Flip TRIG properties
     i = vf.EUDVariable()
     if cs.EUDWhile(i <= 7):
         FlipProp(sf.f_dwread_epd(c.EPD(pts + 8) + i + i + i))
         i << i + 1
     cs.EUDEndWhile()
-
-    print(c.GetTriggerCount())
 
     # Create payload for each players & Link them with pts
     lasttime = vf.EUDVariable()
@@ -103,8 +94,6 @@ def CreateStage3(root):
                 (c.EPD(_t0 + 8 + 320 + 20), c.SetTo, prevtstart)
             ])
         cs.EUDEndIf()
-
-    print(c.GetTriggerCount())
 
     # lasttime << curtime
     curtime << sf.f_dwread_epd(c.EPD(0x57F23C))

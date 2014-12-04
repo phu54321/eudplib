@@ -5,6 +5,7 @@ from .dwmemio import (
     f_epd,
     f_dwread_epd,
     f_epdread_epd,
+    f_dwepdread_epd,
     f_dwread_epd_nw,
     f_dwwrite_epd,
     f_dwadd_epd,

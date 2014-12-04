@@ -29,7 +29,6 @@ class EUDFunc:
 
     def CreateFuncBody(self):
         assert self._fstart is None
-        print(self._fdecl_func)
 
         f_bsm = BlockStruManager()
         prev_bsm = SetCurrentBlockStruManager(f_bsm)
