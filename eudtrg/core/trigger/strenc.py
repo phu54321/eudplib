@@ -5,8 +5,7 @@ from ..mapdata import (
     GetLocationIndex,
     GetStringIndex,
     GetSwitchIndex,
-    GetUnitIndex,
-    IsMapdataInitalized
+    GetUnitIndex
 )
 
 from ..utils import u2b, b2i4

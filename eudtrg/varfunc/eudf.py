@@ -1,15 +1,15 @@
 #!/usr/bin/python
 #-*- coding: utf-8 -*-
 
+import functools
+import inspect
+
 from .. import core as c
 from ..core.utils.blockstru import (
     BlockStruManager,
     SetCurrentBlockStruManager
 )
 from .eudv import EUDVariable, SeqCompute
-
-import functools
-import inspect
 
 
 class EUDFunc:

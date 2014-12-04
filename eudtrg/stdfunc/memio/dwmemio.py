@@ -72,12 +72,11 @@ def f_dwepdread_epd(targetplayer):
 
 
 def f_dwread_epd(targetplayer):
-    return f_dwread_epd_nw(targetplayer)
-    # return f_dwepdread_epd(targetplayer)[0]
+    return f_dwepdread_epd(targetplayer)[0]
+
 
 def f_epdread_epd(targetplayer):
-    return f_epd(f_dwread_epd_nw(targetplayer))
-    # return f_dwepdread_epd(targetplayer)[1]
+    return f_dwepdread_epd(targetplayer)[1]
 
 
 # -------

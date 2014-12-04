@@ -1,10 +1,11 @@
 #!/usr/bin/python
 #-*- coding: utf-8 -*-
 
-from .. import core as c
-from .vbase import VariableBase
 import weakref
 import traceback
+
+from .. import core as c
+from .vbase import VariableBase
 
 
 class EUDVarBuffer(c.EUDObject):

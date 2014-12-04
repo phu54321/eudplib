@@ -11,6 +11,7 @@ import os
 
 from ..utils.ubconv import u2b
 
+
 """
 find where sfmpq.dll is.
 """

@@ -50,7 +50,7 @@ def CreateStage3(root):
     # Flip TRIG properties
     i = vf.EUDVariable()
     if cs.EUDWhile(i <= 7):
-        FlipProp(sf.f_dwread_epd(c.EPD(pts + 8) + i + i + i))
+        FlipProp(sf.f_epdread_epd(c.EPD(pts + 8) + i + i + i))
         i << i + 1
     cs.EUDEndWhile()
 

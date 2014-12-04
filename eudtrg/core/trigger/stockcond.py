@@ -8,11 +8,15 @@ from .constenc import (
     EncodeResource,
     EncodeScore,
     EncodeSwitchState,
+    Kills  # for __calls__ binding
+)
+
+from .strenc import (
     EncodeLocation,
     EncodeSwitch,
     EncodeUnit,
-    Kills  # for __calls__ binding
 )
+
 from ..utils import EPD
 
 

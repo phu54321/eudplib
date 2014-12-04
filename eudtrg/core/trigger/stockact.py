@@ -3,7 +3,6 @@
 
 from .action import Action
 from .constenc import (
-    EncodeAIScript,
     EncodeAllyStatus,
     EncodeCount,
     EncodeModifier,
@@ -14,6 +13,10 @@ from .constenc import (
     EncodeResource,
     EncodeScore,
     EncodeSwitchAction,
+)
+
+from .strenc import (
+    EncodeAIScript,
     EncodeLocation,
     EncodeString,
     EncodeSwitch,

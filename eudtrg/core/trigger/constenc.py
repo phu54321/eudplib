@@ -1,14 +1,6 @@
 #!/usr/bin/python
 #-*- coding: utf-8 -*-
 
-from .strenc import (
-    EncodeAIScript,
-    EncodeLocation,
-    EncodeString,
-    EncodeSwitch,
-    EncodeUnit
-)
-
 from ..mapdata import GetPropertyIndex
 
 
