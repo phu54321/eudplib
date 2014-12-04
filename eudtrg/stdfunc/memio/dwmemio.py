@@ -25,7 +25,7 @@ def f_dwepdread_epd(targetplayer):
 
     cmpt = c.Trigger(
         conditions=[
-            cmpc << c.Memory(0, c.AtLeast, 0)
+            cmpc << c.Memory(0, c.AtLeast, 2**31)
         ],
         actions=[
             a1 << c.SetMemory(0, c.Subtract, 2**31),
@@ -66,14 +66,18 @@ def f_dwepdread_epd(targetplayer):
         ]
     )
 
+    f_dwwrite_epd(targetplayer, retdw)
+
     return retdw, retepd
 
 
 def f_dwread_epd(targetplayer):
-    return f_dwepdread_epd(targetplayer)[0]
+    return f_dwread_epd_nw(targetplayer)
+    # return f_dwepdread_epd(targetplayer)[0]
 
 def f_epdread_epd(targetplayer):
-    return f_dwepdread_epd(targetplayer)[1]
+    return f_epd(f_dwread_epd_nw(targetplayer))
+    # return f_dwepdread_epd(targetplayer)[1]
 
 
 # -------
