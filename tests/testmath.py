@@ -32,13 +32,16 @@ def main():
             ]
         )
 
-        i << i + 6
+        i << i + 2
         Trigger(
             conditions=[i >= 360],
             actions=[i.SubtractNumber(0)]
         )
 
-        DoActions(SetMemory(0x6509A0, SetTo, 0))
+        DoActions([
+            SetMemory(0x6509A0, SetTo, 0),
+            SetMemory(0x629D90, SetTo, 1),
+        ])
         EUDDoEvents()
     EUDEndInfLoop()
 

@@ -22,50 +22,51 @@ class PayloadBuffer:
     Buffer where EUDObject should write to.
     '''
 
-    def __init__(self):
-        self._datas = []
-        self._datalen = 0
+    def __init__(self, totlen):
+        self._data = bytearray(totlen)
+        self._totlen = totlen
+
         self._prttable = []
         self._orttable = []
-        self._tablebr = {
-            1: self._prttable,
-            4: self._orttable
-        }
 
-    def StartWrite(self):
-        self._datastart = self._datalen
+    def StartWrite(self, writeaddr):
+        self._datastart = writeaddr
+        self._datacur = writeaddr
 
     def EndWrite(self):
-        written_bytes = self._datalen - self._datastart
-        padding_byten = (-written_bytes & 0x3)
-        self.WriteBytes(bytes(padding_byten))
-        return written_bytes
+        return self._datacur - self._datastart
 
     def WriteByte(self, number):
         number = scaddr.Evaluate(number)
         assert number.rlocmode == 0, 'Non-constant given.'
         number.offset &= 0xFF
 
-        self._datas.append(binio.i2b1(number.offset))
-        self._datalen += 1
+        self._data[self._datacur] = binio.i2b1(number.offset)
+        self._datacur += 1
 
     def WriteWord(self, number):
         number = scaddr.Evaluate(number)
         assert number.rlocmode == 0, 'Non-constant given.'
         number.offset &= 0xFFFF
 
-        self._datas.append(binio.i2b2(number.offset))
-        self._datalen += 2
+        self._data[self._datacur: self._datacur+2] = binio.i2b2(number.offset)
+        self._datacur += 2
 
     def WriteDword(self, number):
         number = scaddr.Evaluate(number)
         number.offset &= 0xFFFFFFFF
 
         if number.rlocmode:
-            self._tablebr[number.rlocmode].append(self._datalen)
+            assert self._datacur % 4 == 0, 'Non-const must be aligned to 4byte'
+            if number.rlocmode == 1:
+                self._prttable.append(self._datacur)
+            elif number.rlocmode == 4:
+                self._orttable.append(self._datacur)
+            else:
+                raise AssertionError('rlocmode should be 1 or 4')
 
-        self._datas.append(binio.i2b4(number.offset))
-        self._datalen += 4
+        self._data[self._datacur: self._datacur + 4] = binio.i2b4(number.offset)
+        self._datacur += 4
 
     def WritePack(self, structformat, *arglist):
         '''
@@ -90,12 +91,15 @@ class PayloadBuffer:
         :param b: bytes object to write.
         '''
         b = bytes(b)
-        self._datas.append(b)
-        self._datalen += len(b)
+        self._data[self._datacur: self._datacur + len(b)] = b
+        self._datacur += len(b)
+
+    def WriteSpace(self, spacesize):
+        self._datacur += spacesize
 
     # Internally used
     def CreatePayload(self):
-        return Payload(b''.join(self._datas), self._prttable, self._orttable)
+        return Payload(bytes(self._data), self._prttable, self._orttable)
 
 
 def _CreateStructPacker(structformat):
@@ -117,7 +121,7 @@ def _CreateStructPacker(structformat):
         sizelist.append(datasize)
 
     def packer(buf, *arglist):
-        dlen = buf._datalen
+        dpos = buf._datacur
 
         evals = [scaddr.Evaluate(arg) for arg in arglist]
         for i, ri in enumerate(evals):
@@ -126,18 +130,21 @@ def _CreateStructPacker(structformat):
 
         # 1. Add binary data
         packed = struct.pack(structformat, *evalnum)
-        buf._datas.append(packed)
+        buf._data[dpos: dpos+len(packed)] = packed
 
         # 2. Update relocation table
         for i, ri in enumerate(evals):
-            assert (ri.rlocmode == 0) or (sizelist[i] == 4)
+            assert (ri.rlocmode == 0 or
+                    (sizelist[i] == 4 and dataoffsetlist[i] % 4 == 0)), (
+                'Cannot write non-const in byte/word/nonalligned dword.'
+            )
 
             if ri.rlocmode == 1:
-                buf._prttable.append(dlen + dataoffsetlist[i])
+                buf._prttable.append(dpos + dataoffsetlist[i])
 
             elif ri.rlocmode == 4:
-                buf._orttable.append(dlen + dataoffsetlist[i])
+                buf._orttable.append(dpos + dataoffsetlist[i])
 
-        buf._datalen += structlen
+        buf._datacur += structlen
 
     return packer
