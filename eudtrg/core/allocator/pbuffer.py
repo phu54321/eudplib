@@ -49,7 +49,7 @@ class PayloadBuffer:
         assert number.rlocmode == 0, 'Non-constant given.'
         number.offset &= 0xFFFF
 
-        self._data[self._datacur: self._datacur+2] = binio.i2b2(number.offset)
+        self._data[self._datacur: self._datacur + 2] = binio.i2b2(number.offset)
         self._datacur += 2
 
     def WriteDword(self, number):

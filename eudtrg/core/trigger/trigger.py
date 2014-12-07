@@ -74,13 +74,18 @@ class Trigger(EUDObject):
         for cond in self._conditions:
             cond.WritePayload(pbuffer)
 
-        pbuffer.WriteBytes(bytes(20 * (16 - len(self._conditions))))
+        if len(self._conditions) != 16:
+            pbuffer.WriteBytes(bytes(20))
+            pbuffer.WriteSpace(20 * (15 - len(self._conditions)))
+
 
         # Actions
         for act in self._actions:
             act.WritePayload(pbuffer)
 
-        pbuffer.WriteBytes(bytes(32 * (64 - len(self._actions))))
+        if len(self._conditions) != 64:
+            pbuffer.WriteBytes(bytes(32))
+            pbuffer.WriteSpace(32 * (63 - len(self._actions)))
 
         # Preserved flag
 
@@ -90,4 +95,4 @@ class Trigger(EUDObject):
         else:
             pbuffer.WriteDword(0)
 
-        pbuffer.WriteBytes(bytes(28))
+        pbuffer.WriteSpace(28)

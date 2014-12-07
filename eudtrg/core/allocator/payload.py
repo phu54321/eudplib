@@ -50,6 +50,9 @@ class ObjCollector:
     def WriteBytes(self, b):
         pass
 
+    def WriteSpace(self, spacesize):
+        pass
+
 
 def CollectObjects(root):
     global phase
@@ -158,7 +161,7 @@ def AllocObjects():
         for i in range(len(dwoccupmap)):
             if dwoccupmap[i] == 0:
                 dwoccupmap[i] = -1
-            elif i == 0 or dwoccupmap[i - 1] == 0:
+            elif i == 0 or dwoccupmap[i - 1] == -1:
                 dwoccupmap[i] = i
             else:
                 dwoccupmap[i] = dwoccupmap[i - 1]
@@ -206,8 +209,6 @@ def AllocObjects():
 
 def ConstructPayload():
     global phase
-    global _alloctable
-    global _payload_size
 
     phase = PHASE_WRITING
 
@@ -220,8 +221,8 @@ def ConstructPayload():
         obj.WritePayload(pbuf)
         written_bytes = pbuf.EndWrite()
         assert written_bytes == objsize, (
-            'obj.GetDataSize()(%d) != Real payload size(%d)'
-            % (objsize, written_bytes))
+            'obj.GetDataSize()(%d) != Real payload size(%d) for object %s'
+            % (objsize, written_bytes, obj))
 
     phase = None
     return pbuf.CreatePayload()
