@@ -1,7 +1,7 @@
 #!/usr/bin/python
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
-from ..memio import f_dwread_epd
+from ..memiof import f_dwread_epd
 from ... import core as c
 from ... import varfunc as vf
 

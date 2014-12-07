@@ -1,11 +1,10 @@
 #!/usr/bin/python
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
 from ctypes import *
 
 
 class UnitProperty(LittleEndianStructure):
-
     '''
     UnitProperty class. Used in 'Create Unit with Properties' action.
     '''
@@ -24,17 +23,17 @@ class UnitProperty(LittleEndianStructure):
     ]
 
     def __init__(
-        self,
-        hitpoint=None,
-        shield=None,
-        energy=None,
-        resource=None,
-        hanger=None,
-        clocked=None,
-        burrowed=None,
-        intransit=None,
-        hallucinated=None,
-        invincible=None
+            self,
+            hitpoint=None,
+            shield=None,
+            energy=None,
+            resource=None,
+            hanger=None,
+            clocked=None,
+            burrowed=None,
+            intransit=None,
+            hallucinated=None,
+            invincible=None
     ):
         '''
         Properties : Value/None (Don't care)
@@ -96,25 +95,25 @@ class UnitProperty(LittleEndianStructure):
 
         self.prpvalid = (
             prop2valid(hitpoint, 1 << 1) |
-            prop2valid(shield,   1 << 2) |
-            prop2valid(energy,   1 << 3) |
+            prop2valid(shield, 1 << 2) |
+            prop2valid(energy, 1 << 3) |
             prop2valid(resource, 1 << 4) |
-            prop2valid(hanger,   1 << 5)
+            prop2valid(hanger, 1 << 5)
         )
 
         # Set special properties
         self.sprpvalid = (
-            prop2valid(clocked,      1 << 0) |
-            prop2valid(burrowed,     1 << 1) |
-            prop2valid(intransit,    1 << 2) |
+            prop2valid(clocked, 1 << 0) |
+            prop2valid(burrowed, 1 << 1) |
+            prop2valid(intransit, 1 << 2) |
             prop2valid(hallucinated, 1 << 3) |
-            prop2valid(invincible,   1 << 4)
+            prop2valid(invincible, 1 << 4)
         )
 
         self.sprpflag = (
-            prop2flag(clocked,      1 << 0) |
-            prop2flag(burrowed,     1 << 1) |
-            prop2flag(intransit,    1 << 2) |
+            prop2flag(clocked, 1 << 0) |
+            prop2flag(burrowed, 1 << 1) |
+            prop2flag(intransit, 1 << 2) |
             prop2flag(hallucinated, 1 << 3) |
-            prop2flag(invincible,   1 << 4)
+            prop2flag(invincible, 1 << 4)
         )

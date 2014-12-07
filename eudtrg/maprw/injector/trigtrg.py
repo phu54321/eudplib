@@ -1,5 +1,5 @@
 #!/usr/bin/python
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
 '''
 WARNING! This code is speciallized for use on eudtrg
@@ -81,7 +81,6 @@ def Condition(locid, player, amount, unitid,
 
 def Action(locid1, strid, wavid, time, player1,
            player2, unitid, acttype, amount, flags):
-
     player1 &= 0xFFFFFFFF
     player2 &= 0xFFFFFFFF
 

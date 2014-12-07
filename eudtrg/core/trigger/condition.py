@@ -1,11 +1,10 @@
 #!/usr/bin/python
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
 from ..allocator import SCMemAddr, Evaluate, IsValidSCMemAddr
 
 
 class Condition(SCMemAddr):
-
     '''
     Condition class.
 
@@ -28,7 +27,6 @@ class Condition(SCMemAddr):
 
     def __init__(self, locid, player, amount, unitid,
                  comparison, condtype, restype, flags):
-
         super().__init__(self)
 
         assert IsValidSCMemAddr(locid), 'Invalid arg %s' % locid

@@ -1,10 +1,9 @@
 #!/usr/bin/python
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
 ''' Stage 2 :
 - Initialize payload (stage3+ + user code) & execute it
 '''
-
 
 from ... import core as c
 from ... import stdfunc as sf

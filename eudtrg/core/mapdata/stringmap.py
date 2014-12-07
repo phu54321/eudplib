@@ -1,12 +1,11 @@
 #!/usr/bin/python
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
 from . import tblformat
 from ..utils import b2i2, b2i4
 
 
 class StringIdMap:
-
     def __init__(self):
         self._s2id = {}
 

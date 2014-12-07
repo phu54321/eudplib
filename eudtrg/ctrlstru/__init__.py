@@ -1,5 +1,5 @@
 #!/usr/bin/python
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
 from .basicstru import (
     DoActions,
@@ -21,7 +21,7 @@ from .simpleblock import (
     EUDEndExecuteOnce,
 )
 
-from .loopblock import(
+from .loopblock import (
     EUDInfLoop,
     EUDEndInfLoop,
 

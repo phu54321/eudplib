@@ -1,8 +1,7 @@
 #!/usr/bin/python
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
 class BlockStruManager:
-
     def __init__(self):
         self._blockstru = []
         self._lastblockdict = {}

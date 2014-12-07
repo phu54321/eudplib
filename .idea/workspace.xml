@@ -2,9 +2,158 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ae861aca-0188-4483-b879-0580d2ce80c0" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/eudtrg/stdfunc/mathf/__init__.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/tests/testmath.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/eudtrg/stdfunc/mathf/trigonometric.py" />
+      <change type="DELETED" beforePath="C:\Users\Tatabox\PycharmProjects\eudtrglib\tests\testcustomtbl.py" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\Tatabox\PycharmProjects\eudtrglib\tests\testdoevents.py" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\Tatabox\PycharmProjects\eudtrglib\tests\testdwbreak.py" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\Tatabox\PycharmProjects\eudtrglib\tests\testeudtrg.py" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\Tatabox\PycharmProjects\eudtrglib\tests\testfunc.py" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\Tatabox\PycharmProjects\eudtrglib\tests\testgrp.py" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\Tatabox\PycharmProjects\eudtrglib\tests\testread.py" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\Tatabox\PycharmProjects\eudtrglib\tests\teststrcpy.py" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\Tatabox\PycharmProjects\eudtrglib\tests\testtrigtrg.py" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\Tatabox\PycharmProjects\eudtrglib\tests\testunitprp.py" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\Tatabox\PycharmProjects\eudtrglib\tests\testvtable.py" afterPath="" />
+      <change type="MOVED" beforePath="C:\Users\Tatabox\PycharmProjects\eudtrglib\eudtrg\stdfunc\math\__init__.py" afterPath="$PROJECT_DIR$/eudtrg/stdfunc/calcf/__init__.py" />
+      <change type="MOVED" beforePath="C:\Users\Tatabox\PycharmProjects\eudtrglib\eudtrg\stdfunc\math\bitwise.py" afterPath="$PROJECT_DIR$/eudtrg/stdfunc/calcf/bitwise.py" />
+      <change type="MOVED" beforePath="C:\Users\Tatabox\PycharmProjects\eudtrglib\eudtrg\stdfunc\math\muldiv.py" afterPath="$PROJECT_DIR$/eudtrg/stdfunc/calcf/muldiv.py" />
+      <change type="MOVED" beforePath="C:\Users\Tatabox\PycharmProjects\eudtrglib\eudtrg\stdfunc\memio\__init__.py" afterPath="$PROJECT_DIR$/eudtrg/stdfunc/memiof/__init__.py" />
+      <change type="MOVED" beforePath="C:\Users\Tatabox\PycharmProjects\eudtrglib\eudtrg\stdfunc\memio\byterw.py" afterPath="$PROJECT_DIR$/eudtrg/stdfunc/memiof/byterw.py" />
+      <change type="MOVED" beforePath="C:\Users\Tatabox\PycharmProjects\eudtrglib\eudtrg\stdfunc\memio\dwmemio.py" afterPath="$PROJECT_DIR$/eudtrg/stdfunc/memiof/dwmemio.py" />
+      <change type="MOVED" beforePath="C:\Users\Tatabox\PycharmProjects\eudtrglib\eudtrg\stdfunc\memio\mblockio.py" afterPath="$PROJECT_DIR$/eudtrg/stdfunc/memiof/mblockio.py" />
+      <change type="MOVED" beforePath="C:\Users\Tatabox\PycharmProjects\eudtrglib\eudtrg\stdfunc\memio\smemio.py" afterPath="$PROJECT_DIR$/eudtrg/stdfunc/memiof/smemio.py" />
+      <change type="MOVED" beforePath="C:\Users\Tatabox\PycharmProjects\eudtrglib\eudtrg\stdfunc\utils\__init__.py" afterPath="$PROJECT_DIR$/eudtrg/stdfunc/utilf/__init__.py" />
+      <change type="MOVED" beforePath="C:\Users\Tatabox\PycharmProjects\eudtrglib\eudtrg\stdfunc\utils\utilfunc.py" afterPath="$PROJECT_DIR$/eudtrg/stdfunc/utilf/utilfunc.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/outputmap/creeptest.scx" afterPath="$PROJECT_DIR$/tests/outputmap/creeptest.scx" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/out.bin" afterPath="$PROJECT_DIR$/tests/out.bin" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/stdfunc/memio/dwmemio.py" afterPath="$PROJECT_DIR$/eudtrg/stdfunc/memio/dwmemio.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg___init__.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg___init__.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core___init__.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core___init__.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_allocator___init__.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_allocator___init__.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_allocator_payload.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_allocator_payload.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_allocator_pbuffer.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_allocator_pbuffer.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_allocator_rlocint.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_allocator_rlocint.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_allocator_scaddr.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_allocator_scaddr.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_eudobj___init__.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_eudobj___init__.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_eudobj_bytedump.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_eudobj_bytedump.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_eudobj_eudobj.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_eudobj_eudobj.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_mapdata___init__.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_mapdata___init__.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_mapdata_chktok.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_mapdata_chktok.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_mapdata_mapdata.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_mapdata_mapdata.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_mapdata_mpqapi.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_mapdata_mpqapi.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_mapdata_proptable.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_mapdata_proptable.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_mapdata_stringmap.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_mapdata_stringmap.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_mapdata_tblformat.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_mapdata_tblformat.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_mapdata_unitprp.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_mapdata_unitprp.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_trigger___init__.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_trigger___init__.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_trigger_action.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_trigger_action.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_trigger_condition.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_trigger_condition.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_trigger_constenc.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_trigger_constenc.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_trigger_stockact.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_trigger_stockact.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_trigger_stockcond.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_trigger_stockcond.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_trigger_strdict.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_trigger_strdict.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_trigger_strenc.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_trigger_strenc.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_trigger_trigger.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_trigger_trigger.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_trigger_triggerscope.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_trigger_triggerscope.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_utils___init__.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_utils___init__.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_utils_binio.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_utils_binio.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_utils_blockstru.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_utils_blockstru.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_utils_ubconv.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_utils_ubconv.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_utils_utils.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_utils_utils.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_ctrlstru___init__.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_ctrlstru___init__.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_ctrlstru_basicstru.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_ctrlstru_basicstru.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_ctrlstru_breakcont.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_ctrlstru_breakcont.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_ctrlstru_loopblock.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_ctrlstru_loopblock.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_ctrlstru_simpleblock.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_ctrlstru_simpleblock.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_ctrlstru_swblock.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_ctrlstru_swblock.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_maprw___init__.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_maprw___init__.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_maprw_injector___init__.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_maprw_injector___init__.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_maprw_injector_doevents.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_maprw_injector_doevents.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_maprw_injector_stage1.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_maprw_injector_stage1.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_maprw_injector_stage2.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_maprw_injector_stage2.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_maprw_injector_stage3.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_maprw_injector_stage3.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_maprw_injector_trigtrg.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_maprw_injector_trigtrg.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_maprw_loadmap.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_maprw_loadmap.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_maprw_savemap.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_maprw_savemap.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_stdfunc___init__.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_stdfunc___init__.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_stdfunc_math___init__.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_stdfunc_math___init__.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_stdfunc_math_bitwise.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_stdfunc_math_bitwise.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_stdfunc_math_muldiv.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_stdfunc_math_muldiv.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_stdfunc_memio___init__.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_stdfunc_memio___init__.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_stdfunc_memio_byterw.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_stdfunc_memio_byterw.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_stdfunc_memio_dwmemio.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_stdfunc_memio_dwmemio.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_stdfunc_memio_mblockio.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_stdfunc_memio_mblockio.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_stdfunc_memio_smemio.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_stdfunc_memio_smemio.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_stdfunc_utils___init__.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_stdfunc_utils___init__.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_stdfunc_utils_utilfunc.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_stdfunc_utils_utilfunc.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_varfunc___init__.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_varfunc___init__.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_varfunc_eudf.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_varfunc_eudf.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_varfunc_eudlv.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_varfunc_eudlv.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_varfunc_eudv.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_varfunc_eudv.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_varfunc_vbase.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_varfunc_vbase.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/__init__.py" afterPath="$PROJECT_DIR$/eudtrg/__init__.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/core/__init__.py" afterPath="$PROJECT_DIR$/eudtrg/core/__init__.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/core/allocator/__init__.py" afterPath="$PROJECT_DIR$/eudtrg/core/allocator/__init__.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/core/eudobj/__init__.py" afterPath="$PROJECT_DIR$/eudtrg/core/eudobj/__init__.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/core/mapdata/__init__.py" afterPath="$PROJECT_DIR$/eudtrg/core/mapdata/__init__.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/core/trigger/__init__.py" afterPath="$PROJECT_DIR$/eudtrg/core/trigger/__init__.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/core/utils/__init__.py" afterPath="$PROJECT_DIR$/eudtrg/core/utils/__init__.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/ctrlstru/__init__.py" afterPath="$PROJECT_DIR$/eudtrg/ctrlstru/__init__.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/maprw/__init__.py" afterPath="$PROJECT_DIR$/eudtrg/maprw/__init__.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/maprw/injector/__init__.py" afterPath="$PROJECT_DIR$/eudtrg/maprw/injector/__init__.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/stdfunc/__init__.py" afterPath="$PROJECT_DIR$/eudtrg/stdfunc/__init__.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/varfunc/__init__.py" afterPath="$PROJECT_DIR$/eudtrg/varfunc/__init__.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/core/trigger/action.py" afterPath="$PROJECT_DIR$/eudtrg/core/trigger/action.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/ctrlstru/basicstru.py" afterPath="$PROJECT_DIR$/eudtrg/ctrlstru/basicstru.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/core/utils/binio.py" afterPath="$PROJECT_DIR$/eudtrg/core/utils/binio.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/core/utils/blockstru.py" afterPath="$PROJECT_DIR$/eudtrg/core/utils/blockstru.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/ctrlstru/breakcont.py" afterPath="$PROJECT_DIR$/eudtrg/ctrlstru/breakcont.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/core/eudobj/bytedump.py" afterPath="$PROJECT_DIR$/eudtrg/core/eudobj/bytedump.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/core/mapdata/chktok.py" afterPath="$PROJECT_DIR$/eudtrg/core/mapdata/chktok.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/core/trigger/condition.py" afterPath="$PROJECT_DIR$/eudtrg/core/trigger/condition.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/core/trigger/constenc.py" afterPath="$PROJECT_DIR$/eudtrg/core/trigger/constenc.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/maprw/injector/doevents.py" afterPath="$PROJECT_DIR$/eudtrg/maprw/injector/doevents.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/varfunc/eudf.py" afterPath="$PROJECT_DIR$/eudtrg/varfunc/eudf.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/varfunc/eudlv.py" afterPath="$PROJECT_DIR$/eudtrg/varfunc/eudlv.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/core/eudobj/eudobj.py" afterPath="$PROJECT_DIR$/eudtrg/core/eudobj/eudobj.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/varfunc/eudv.py" afterPath="$PROJECT_DIR$/eudtrg/varfunc/eudv.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/gprof2dot.py" afterPath="$PROJECT_DIR$/gprof2dot.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/index.html" afterPath="$PROJECT_DIR$/tests/htmlcov/index.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/maprw/loadmap.py" afterPath="$PROJECT_DIR$/eudtrg/maprw/loadmap.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/ctrlstru/loopblock.py" afterPath="$PROJECT_DIR$/eudtrg/ctrlstru/loopblock.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/core/mapdata/mapdata.py" afterPath="$PROJECT_DIR$/eudtrg/core/mapdata/mapdata.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/core/mapdata/mpqapi.py" afterPath="$PROJECT_DIR$/eudtrg/core/mapdata/mpqapi.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/core/allocator/payload.py" afterPath="$PROJECT_DIR$/eudtrg/core/allocator/payload.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/core/allocator/pbuffer.py" afterPath="$PROJECT_DIR$/eudtrg/core/allocator/pbuffer.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/core/mapdata/proptable.py" afterPath="$PROJECT_DIR$/eudtrg/core/mapdata/proptable.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/core/allocator/rlocint.py" afterPath="$PROJECT_DIR$/eudtrg/core/allocator/rlocint.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/maprw/savemap.py" afterPath="$PROJECT_DIR$/eudtrg/maprw/savemap.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/core/allocator/scaddr.py" afterPath="$PROJECT_DIR$/eudtrg/core/allocator/scaddr.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/setup.py" afterPath="$PROJECT_DIR$/setup.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/ctrlstru/simpleblock.py" afterPath="$PROJECT_DIR$/eudtrg/ctrlstru/simpleblock.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/maprw/injector/stage1.py" afterPath="$PROJECT_DIR$/eudtrg/maprw/injector/stage1.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/maprw/injector/stage2.py" afterPath="$PROJECT_DIR$/eudtrg/maprw/injector/stage2.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/maprw/injector/stage3.py" afterPath="$PROJECT_DIR$/eudtrg/maprw/injector/stage3.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/core/trigger/stockact.py" afterPath="$PROJECT_DIR$/eudtrg/core/trigger/stockact.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/core/trigger/stockcond.py" afterPath="$PROJECT_DIR$/eudtrg/core/trigger/stockcond.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/core/trigger/strenc.py" afterPath="$PROJECT_DIR$/eudtrg/core/trigger/strenc.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/core/mapdata/stringmap.py" afterPath="$PROJECT_DIR$/eudtrg/core/mapdata/stringmap.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/ctrlstru/swblock.py" afterPath="$PROJECT_DIR$/eudtrg/ctrlstru/swblock.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/core/mapdata/tblformat.py" afterPath="$PROJECT_DIR$/eudtrg/core/mapdata/tblformat.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/testblockstru.py" afterPath="$PROJECT_DIR$/tests/testblockstru.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/testcreep.html" afterPath="$PROJECT_DIR$/tests/htmlcov/testcreep.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/testcreep.py" afterPath="$PROJECT_DIR$/tests/testcreep.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/testperf.py" afterPath="$PROJECT_DIR$/tests/testperf.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testrandom.py" afterPath="$PROJECT_DIR$/testrandom.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/core/trigger/trigger.py" afterPath="$PROJECT_DIR$/eudtrg/core/trigger/trigger.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/core/trigger/triggerscope.py" afterPath="$PROJECT_DIR$/eudtrg/core/trigger/triggerscope.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/maprw/injector/trigtrg.py" afterPath="$PROJECT_DIR$/eudtrg/maprw/injector/trigtrg.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/core/utils/ubconv.py" afterPath="$PROJECT_DIR$/eudtrg/core/utils/ubconv.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/core/mapdata/unitprp.py" afterPath="$PROJECT_DIR$/eudtrg/core/mapdata/unitprp.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/core/utils/utils.py" afterPath="$PROJECT_DIR$/eudtrg/core/utils/utils.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/varfunc/vbase.py" afterPath="$PROJECT_DIR$/eudtrg/varfunc/vbase.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="eudtrglib.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -28,11 +177,23 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="testcreep.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/tests/testcreep.py">
+      <file leaf-file-name="trigonometric.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/eudtrg/stdfunc/mathf/trigonometric.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2337">
-              <caret line="9" column="0" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="1199" max-vertical-offset="1767">
+              <caret line="83" column="0" selection-start-line="83" selection-start-column="0" selection-end-line="84" selection-end-column="0" />
+              <folding>
+                <element signature="e#43#54#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="testperf.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/tests/testperf.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="627">
+              <caret line="12" column="4" selection-start-line="12" selection-start-column="4" selection-end-line="12" selection-end-column="44" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
               </folding>
@@ -40,11 +201,47 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="trigtrg.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/eudtrg/maprw/injector/trigtrg.py">
+      <file leaf-file-name="testmath.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/tests/testmath.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="3382">
-              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.602537" vertical-offset="247" max-vertical-offset="969">
+              <caret line="28" column="21" selection-start-line="28" selection-start-column="21" selection-end-line="28" selection-end-column="21" />
+              <folding>
+                <element signature="e#0#10#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="stage2.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/eudtrg/maprw/injector/stage2.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="800" max-vertical-offset="1330">
+              <caret line="55" column="23" selection-start-line="55" selection-start-column="23" selection-end-line="55" selection-end-column="23" />
+              <folding>
+                <element signature="e#118#143#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="dwmemio.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/eudtrg/stdfunc/memiof/dwmemio.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="1009" max-vertical-offset="3306">
+              <caret line="73" column="25" selection-start-line="73" selection-start-column="25" selection-end-line="73" selection-end-column="25" />
+              <folding>
+                <element signature="e#43#68#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="__init__.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/eudtrg/stdfunc/memiof/__init__.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="627">
+              <caret line="7" column="20" selection-start-line="7" selection-start-column="20" selection-end-line="7" selection-end-column="20" />
               <folding />
             </state>
           </provider>
@@ -53,81 +250,21 @@
       <file leaf-file-name="stage3.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/eudtrg/maprw/injector/stage3.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="381" max-vertical-offset="2090">
-              <caret line="95" column="21" selection-start-line="95" selection-start-column="21" selection-end-line="95" selection-end-column="21" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="363" max-vertical-offset="2147">
+              <caret line="80" column="0" selection-start-line="80" selection-start-column="0" selection-end-line="80" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
       <file leaf-file-name="__init__.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/eudtrg/__init__.py">
+        <entry file="file://$PROJECT_DIR$/eudtrg/stdfunc/__init__.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="323">
-              <caret line="11" column="0" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="247">
+              <caret line="7" column="0" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
               <folding>
-                <element signature="e#42#61#0" expanded="true" />
+                <element signature="e#43#64#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="__init__.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/eudtrg/maprw/injector/__init__.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="171">
-              <caret line="3" column="0" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="__init__.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/eudtrg/varfunc/__init__.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="190">
-              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="stage2.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/eudtrg/maprw/injector/stage2.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="591" max-vertical-offset="1292">
-              <caret line="26" column="26" selection-start-line="26" selection-start-column="26" selection-end-line="26" selection-end-column="26" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="dwmemio.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/eudtrg/stdfunc/memio/dwmemio.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.4820296" vertical-offset="1254" max-vertical-offset="4332">
-              <caret line="81" column="0" selection-start-line="81" selection-start-column="0" selection-end-line="81" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="__init__.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/eudtrg/stdfunc/memio/__init__.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="646">
-              <caret line="7" column="4" selection-start-line="7" selection-start-column="4" selection-end-line="7" selection-end-column="4" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="testrandom.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/testrandom.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="380">
-              <caret line="14" column="0" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -140,19 +277,44 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/eudtrg/varfunc/eudf.py" />
-        <option value="$PROJECT_DIR$/eudtrg/maprw/injector/stage3.py" />
         <option value="$PROJECT_DIR$/setup.py" />
         <option value="$PROJECT_DIR$/eudtrg/__init__.py" />
         <option value="$PROJECT_DIR$/eudtrg/stdfunc/memio/__init__.py" />
+        <option value="$PROJECT_DIR$/eudtrg/core/trigger/stockcond.py" />
+        <option value="$PROJECT_DIR$/eudtrg/core/trigger/stockact.py" />
+        <option value="$PROJECT_DIR$/tests/testcustomtbl.py" />
+        <option value="$PROJECT_DIR$/tests/testdwbreak.py" />
+        <option value="$PROJECT_DIR$/tests/testdoevents.py" />
+        <option value="$PROJECT_DIR$/tests/testeudtrg.py" />
+        <option value="$PROJECT_DIR$/tests/testfunc.py" />
+        <option value="$PROJECT_DIR$/tests/testgrp.py" />
+        <option value="$PROJECT_DIR$/eudtrg/varfunc/eudf.py" />
+        <option value="$PROJECT_DIR$/eudtrg/maprw/injector/trigtrg.py" />
+        <option value="$PROJECT_DIR$/eudtrg/maprw/injector/stage1.py" />
+        <option value="$PROJECT_DIR$/tests/testblockstru.py" />
+        <option value="$PROJECT_DIR$/eudtrg/varfunc/vbase.py" />
+        <option value="$PROJECT_DIR$/eudtrg/varfunc/eudv.py" />
+        <option value="$PROJECT_DIR$/eudtrg/stdfunc/memio/byterw.py" />
         <option value="$PROJECT_DIR$/eudtrg/stdfunc/memio/dwmemio.py" />
+        <option value="$PROJECT_DIR$/eudtrg/stdfunc/calc/__init__.py" />
+        <option value="$PROJECT_DIR$/eudtrg/stdfunc/calc/muldiv.py" />
+        <option value="$PROJECT_DIR$/eudtrg/ctrlstru/swblock.py" />
+        <option value="$PROJECT_DIR$/eudtrg/stdfunc/math/trigonometric.py" />
+        <option value="$PROJECT_DIR$/eudtrg/stdfunc/math/__init__.py" />
+        <option value="$PROJECT_DIR$/tests/testperf.py" />
+        <option value="$PROJECT_DIR$/eudtrg/stdfunc/__init__.py" />
+        <option value="$PROJECT_DIR$/eudtrg/stdfunc/mathf/trigonometric.py" />
+        <option value="$PROJECT_DIR$/eudtrg/stdfunc/memiof/__init__.py" />
+        <option value="$PROJECT_DIR$/eudtrg/stdfunc/memiof/dwmemio.py" />
+        <option value="$PROJECT_DIR$/eudtrg/maprw/injector/stage3.py" />
+        <option value="$PROJECT_DIR$/eudtrg/maprw/injector/stage2.py" />
+        <option value="$PROJECT_DIR$/tests/testmath.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
     <option name="x" value="-8" />
-    <option name="y" value="-8" />
-    <option name="width" value="1382" />
+    <option name="width" value="1378" />
     <option name="height" value="744" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
@@ -178,7 +340,6 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -207,6 +368,20 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="tests" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="eudtrglib" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="eudtrglib" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="eudtrg" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -247,66 +422,75 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="memio" />
+              <option name="myItemId" value="memiof" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="eudtrglib" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="eudtrglib" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="eudtrg" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="maprw" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="eudtrglib" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="eudtrglib" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="eudtrg" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="maprw" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="injector" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="last_opened_file_path" value="$PROJECT_DIR$/.." />
     <property name="FullScreen" value="false" />
-    <property name="options.lastSelected" value="configurable.group.project" />
+    <property name="options.lastSelected" value="preferences.lookFeel" />
     <property name="options.splitter.main.proportions" value="0.3" />
     <property name="options.splitter.details.proportions" value="0.2" />
     <property name="recentsLimit" value="5" />
+    <property name="LayoutCode.rearrangeEntries" value="true" />
   </component>
   <component name="PyConsoleOptionsProvider">
     <option name="myPythonConsoleState">
       <console-settings />
     </option>
   </component>
-  <component name="RunManager" selected="Python.testcreep">
-    <configuration default="false" name="test1" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="eudtrglib" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/test1.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <RunnerSettings RunnerId="PythonRunner" />
-      <ConfigurationWrapper RunnerId="PythonRunner" />
-      <method />
-    </configuration>
-    <configuration default="false" name="testblockstru" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="eudtrglib" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/tests/testblockstru.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <RunnerSettings RunnerId="PythonRunner" />
-      <ConfigurationWrapper RunnerId="PythonRunner" />
-      <method />
-    </configuration>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Tatabox\PycharmProjects\eudtrglib\eudtrg\stdfunc\calc" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Python.testmath">
     <configuration default="false" name="testcreep" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -322,23 +506,82 @@
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/tests/testcreep.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
+      <RunnerSettings RunnerId="PyDebugRunner" />
       <RunnerSettings RunnerId="PythonRunner" />
+      <ConfigurationWrapper RunnerId="PyDebugRunner" />
       <ConfigurationWrapper RunnerId="PythonRunner" />
       <method />
     </configuration>
-    <configuration default="false" name="testrandom" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration default="false" name="testgrp" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <module name="eudtrglib" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/testrandom.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/tests/testgrp.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <RunnerSettings RunnerId="PythonRunner" />
+      <ConfigurationWrapper RunnerId="PythonRunner" />
+      <method />
+    </configuration>
+    <configuration default="false" name="testperf" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="eudtrglib" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/tests/testperf.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <RunnerSettings RunnerId="PythonRunner" />
+      <ConfigurationWrapper RunnerId="PythonRunner" />
+      <method />
+    </configuration>
+    <configuration default="false" name="testmath" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="eudtrglib" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/tests/testmath.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <RunnerSettings RunnerId="PythonRunner" />
+      <ConfigurationWrapper RunnerId="PythonRunner" />
+      <method />
+    </configuration>
+    <configuration default="false" name="stage3" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/eudtrg/maprw/injector" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="eudtrglib" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/eudtrg/maprw/injector/stage3.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <RunnerSettings RunnerId="PythonRunner" />
@@ -467,18 +710,20 @@
       <option name="USE_PARAM" value="false" />
       <method />
     </configuration>
-    <list size="4">
-      <item index="0" class="java.lang.String" itemvalue="Python.test1" />
-      <item index="1" class="java.lang.String" itemvalue="Python.testblockstru" />
-      <item index="2" class="java.lang.String" itemvalue="Python.testcreep" />
-      <item index="3" class="java.lang.String" itemvalue="Python.testrandom" />
+    <list size="5">
+      <item index="0" class="java.lang.String" itemvalue="Python.testcreep" />
+      <item index="1" class="java.lang.String" itemvalue="Python.testgrp" />
+      <item index="2" class="java.lang.String" itemvalue="Python.testperf" />
+      <item index="3" class="java.lang.String" itemvalue="Python.testmath" />
+      <item index="4" class="java.lang.String" itemvalue="Python.stage3" />
     </list>
     <recent_temporary>
-      <list size="4">
-        <item index="0" class="java.lang.String" itemvalue="Python.testcreep" />
-        <item index="1" class="java.lang.String" itemvalue="Python.testrandom" />
-        <item index="2" class="java.lang.String" itemvalue="Python.testblockstru" />
-        <item index="3" class="java.lang.String" itemvalue="Python.test1" />
+      <list size="5">
+        <item index="0" class="java.lang.String" itemvalue="Python.testmath" />
+        <item index="1" class="java.lang.String" itemvalue="Python.testcreep" />
+        <item index="2" class="java.lang.String" itemvalue="Python.stage3" />
+        <item index="3" class="java.lang.String" itemvalue="Python.testperf" />
+        <item index="4" class="java.lang.String" itemvalue="Python.testgrp" />
       </list>
     </recent_temporary>
   </component>
@@ -505,32 +750,38 @@
       <option name="project" value="LOCAL" />
       <updated>1417688539123</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="import optimized, fixed bug. testcreep now works">
+      <created>1417700939372</created>
+      <option name="number" value="00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1417700939373</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1382" height="744" extended-state="0" />
+    <frame x="-8" y="0" width="1378" height="744" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.20204978" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.21069182" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.20264317" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32861635" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39937106" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32861635" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
@@ -551,20 +802,66 @@
     </option>
     <MESSAGE value="f_dwepdread_epd added&#10;&#10;f_dwread_epd, f_epdread_epd uses them now.&#10;&#10;" />
     <MESSAGE value="Added setup.py, cleaned things&#10;cc" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added setup.py, cleaned things&#10;cc" />
+    <MESSAGE value="import optimized, fixed bug. testcreep now works" />
+    <option name="LAST_COMMIT_MESSAGE" value="import optimized, fixed bug. testcreep now works" />
   </component>
   <component name="XDebuggerManager">
-    <breakpoint-manager />
+    <breakpoint-manager>
+      <option name="time" value="4" />
+    </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/tests/testcreep.py">
+    <entry file="file://$PROJECT_DIR$/eudtrg/stdfunc/mathf/trigonometric.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2337">
+        <state vertical-scroll-proportion="0.0" vertical-offset="989" max-vertical-offset="1596">
+          <caret line="76" column="0" selection-start-line="76" selection-start-column="0" selection-end-line="76" selection-end-column="0" />
+          <folding>
+            <element signature="e#43#54#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/eudtrg/stdfunc/mathf/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="114" max-vertical-offset="228">
+          <caret line="6" column="0" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/testperf.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="627">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/eudtrg/stdfunc/mathf/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="304" max-vertical-offset="494">
+          <caret line="16" column="19" selection-start-line="16" selection-start-column="6" selection-end-line="16" selection-end-column="19" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/eudtrg/stdfunc/mathf/trigonometric.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1216">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#43#54#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/testcreep.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2337">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
         </state>
       </provider>
     </entry>
@@ -573,7 +870,7 @@
         <state vertical-scroll-proportion="0.0" vertical-offset="361" max-vertical-offset="475">
           <caret line="19" column="0" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
           <folding>
-            <element signature="e#0#43#0" expanded="true" />
+            <element signature="e#0#43#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -582,9 +879,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="209" max-vertical-offset="323">
           <caret line="11" column="0" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
-          <folding>
-            <element signature="e#42#61#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -592,15 +886,16 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="685" max-vertical-offset="1292">
           <caret line="26" column="26" selection-start-line="26" selection-start-column="26" selection-end-line="26" selection-end-column="26" />
-          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/eudtrg/stdfunc/memio/dwmemio.py">
+    <entry file="file://$PROJECT_DIR$/eudtrg/stdfunc/memiof/dwmemio.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="1140" max-vertical-offset="4332">
           <caret line="78" column="47" selection-start-line="78" selection-start-column="47" selection-end-line="78" selection-end-column="47" />
-          <folding />
+          <folding>
+            <element signature="e#43#68#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -608,7 +903,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="266" max-vertical-offset="380">
           <caret line="14" column="0" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -616,9 +910,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="361" max-vertical-offset="2337">
           <caret line="19" column="51" selection-start-line="19" selection-start-column="51" selection-end-line="19" selection-end-column="51" />
-          <folding>
-            <element signature="e#0#10#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -627,7 +918,7 @@
         <state vertical-scroll-proportion="0.0" vertical-offset="361" max-vertical-offset="475">
           <caret line="19" column="0" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
           <folding>
-            <element signature="e#0#43#0" expanded="true" />
+            <element signature="e#0#43#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -636,9 +927,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="323">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#42#61#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -646,28 +934,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="266" max-vertical-offset="380">
           <caret line="14" column="0" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/eudtrg/varfunc/eudf.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.19095477" vertical-offset="342" max-vertical-offset="1881">
-          <caret line="30" column="35" selection-start-line="30" selection-start-column="35" selection-end-line="30" selection-end-column="35" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/eudtrg/stdfunc/math/muldiv.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.4524313" vertical-offset="223" max-vertical-offset="3553">
-          <caret line="25" column="19" selection-start-line="25" selection-start-column="19" selection-end-line="25" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tests/testblockstru.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.44186047" vertical-offset="0" max-vertical-offset="513">
-          <caret line="11" column="26" selection-start-line="11" selection-start-column="26" selection-end-line="11" selection-end-column="26" />
         </state>
       </provider>
     </entry>
@@ -676,16 +942,8 @@
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="475">
           <caret line="19" column="0" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
           <folding>
-            <element signature="e#0#43#0" expanded="true" />
+            <element signature="e#0#43#0" expanded="false" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/eudtrg/maprw/injector/stage2.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="685" max-vertical-offset="1292">
-          <caret line="26" column="26" selection-start-line="26" selection-start-column="26" selection-end-line="26" selection-end-column="26" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -693,33 +951,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="380">
           <caret line="14" column="0" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/eudtrg/maprw/injector/trigtrg.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="3382">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/eudtrg/maprw/injector/stage3.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="381" max-vertical-offset="2090">
-          <caret line="95" column="21" selection-start-line="95" selection-start-column="21" selection-end-line="95" selection-end-column="21" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tests/testcreep.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2337">
-          <caret line="9" column="0" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#10#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -727,9 +958,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="323">
           <caret line="11" column="0" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
-          <folding>
-            <element signature="e#42#61#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -737,7 +965,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="171">
           <caret line="3" column="0" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -745,23 +972,239 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="473">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/eudtrg/core/trigger/stockcond.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="3534">
+          <caret line="14" column="16" selection-start-line="14" selection-start-column="16" selection-end-line="14" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/eudtrg/core/trigger/stockact.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="7467">
+          <caret line="19" column="19" selection-start-line="19" selection-start-column="19" selection-end-line="19" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/eudtrg/core/allocator/scaddr.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="1477" max-vertical-offset="2318">
+          <caret line="86" column="0" selection-start-line="86" selection-start-column="0" selection-end-line="86" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/eudtrg/maprw/injector/trigtrg.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.4524313" vertical-offset="2579" max-vertical-offset="3363">
+          <caret line="147" column="39" selection-start-line="147" selection-start-column="39" selection-end-line="147" selection-end-column="39" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/eudtrg/maprw/injector/stage1.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="3035" max-vertical-offset="5206">
+          <caret line="173" column="56" selection-start-line="173" selection-start-column="56" selection-end-line="173" selection-end-column="56" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/testblockstru.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="475">
+          <caret line="20" column="0" selection-start-line="20" selection-start-column="0" selection-end-line="20" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/eudtrg/stdfunc/calcf/bitwise.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1292">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="64" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/eudtrg/varfunc/eudlv.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.2410148" vertical-offset="0" max-vertical-offset="473">
+          <caret line="7" column="29" selection-start-line="7" selection-start-column="29" selection-end-line="7" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/eudtrg/varfunc/eudf.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="456" max-vertical-offset="1862">
+          <caret line="37" column="28" selection-start-line="37" selection-start-column="28" selection-end-line="37" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/eudtrg/varfunc/vbase.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.47107437" vertical-offset="399" max-vertical-offset="1216">
+          <caret line="36" column="26" selection-start-line="36" selection-start-column="26" selection-end-line="36" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/eudtrg/varfunc/eudv.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.4280992" vertical-offset="2002" max-vertical-offset="5529">
+          <caret line="123" column="41" selection-start-line="123" selection-start-column="41" selection-end-line="123" selection-end-column="41" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/eudtrg/stdfunc/calcf/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.28118393" vertical-offset="0" max-vertical-offset="473">
+          <caret line="7" column="13" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/eudtrg/stdfunc/memiof/mblockio.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="1" max-vertical-offset="1197">
+          <caret line="12" column="38" selection-start-line="12" selection-start-column="38" selection-end-line="12" selection-end-column="38" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/eudtrg/stdfunc/memiof/byterw.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="690" max-vertical-offset="4180">
+          <caret line="44" column="0" selection-start-line="44" selection-start-column="0" selection-end-line="44" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/eudtrg/stdfunc/calcf/muldiv.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.8794926" vertical-offset="192" max-vertical-offset="3629">
+          <caret line="34" column="29" selection-start-line="34" selection-start-column="29" selection-end-line="34" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/eudtrg/ctrlstru/swblock.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="228" max-vertical-offset="1919">
+          <caret line="27" column="45" selection-start-line="27" selection-start-column="45" selection-end-line="27" selection-end-column="45" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/eudtrg/stdfunc/memiof/smemio.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-0.5264271" vertical-offset="306" max-vertical-offset="779">
+          <caret line="3" column="25" selection-start-line="3" selection-start-column="25" selection-end-line="3" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/eudtrg/stdfunc/utilf/utilfunc.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="473">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://E:/Program Files/Starcraft/maps/BroodWar/selfmade/extra/main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.12520593" vertical-offset="0" max-vertical-offset="1558">
+          <caret line="4" column="6" selection-start-line="4" selection-start-column="6" selection-end-line="4" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/testcreep.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.52219874" vertical-offset="1520" max-vertical-offset="2337">
+          <caret line="94" column="12" selection-start-line="94" selection-start-column="12" selection-end-line="99" selection-end-column="14" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/eudtrg/stdfunc/memio/__init__.py">
+    <entry file="file://$PROJECT_DIR$/eudtrg/stdfunc/mathf/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="646">
-          <caret line="7" column="4" selection-start-line="7" selection-start-column="4" selection-end-line="7" selection-end-column="4" />
+        <state vertical-scroll-proportion="0.2410148" vertical-offset="0" max-vertical-offset="473">
+          <caret line="6" column="0" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/eudtrg/stdfunc/memio/dwmemio.py">
+    <entry file="file://C:/Python34/Lib/site-packages/eudtrg/lib/baselib/vtable.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.4820296" vertical-offset="1254" max-vertical-offset="4332">
-          <caret line="81" column="0" selection-start-line="81" selection-start-column="0" selection-end-line="81" selection-end-column="0" />
+        <state vertical-scroll-proportion="-6.4164906" vertical-offset="4365" max-vertical-offset="8740">
+          <caret line="73" column="8" selection-start-line="73" selection-start-column="8" selection-end-line="73" selection-end-column="8" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/eudtrg/stdfunc/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="247">
+          <caret line="7" column="0" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
+          <folding>
+            <element signature="e#43#64#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/eudtrg/stdfunc/mathf/trigonometric.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="1199" max-vertical-offset="1767">
+          <caret line="83" column="0" selection-start-line="83" selection-start-column="0" selection-end-line="84" selection-end-column="0" />
+          <folding>
+            <element signature="e#43#54#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/testperf.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="627">
+          <caret line="12" column="4" selection-start-line="12" selection-start-column="4" selection-end-line="12" selection-end-column="44" />
+          <folding>
+            <element signature="e#0#10#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/eudtrg/stdfunc/memiof/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="627">
+          <caret line="7" column="20" selection-start-line="7" selection-start-column="20" selection-end-line="7" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/eudtrg/stdfunc/memiof/dwmemio.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="1009" max-vertical-offset="3306">
+          <caret line="73" column="25" selection-start-line="73" selection-start-column="25" selection-end-line="73" selection-end-column="25" />
+          <folding>
+            <element signature="e#43#68#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/eudtrg/maprw/injector/stage3.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="363" max-vertical-offset="2147">
+          <caret line="80" column="0" selection-start-line="80" selection-start-column="0" selection-end-line="80" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/eudtrg/maprw/injector/stage2.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="800" max-vertical-offset="1330">
+          <caret line="55" column="23" selection-start-line="55" selection-start-column="23" selection-end-line="55" selection-end-column="23" />
+          <folding>
+            <element signature="e#118#143#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/testmath.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.602537" vertical-offset="247" max-vertical-offset="969">
+          <caret line="28" column="21" selection-start-line="28" selection-start-column="21" selection-end-line="28" selection-end-column="21" />
+          <folding>
+            <element signature="e#0#10#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

@@ -1,5 +1,5 @@
 #!/usr/bin/python
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
 from ..utils import EUDCreateBlock, EUDGetLastBlockOfName, EUDPopBlock
 from ..allocator import Forward

@@ -1,12 +1,11 @@
 #!/usr/bin/python
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
 from ..allocator import SCMemAddr
 from ..allocator.payload import GetObjectAddr
 
 
 class EUDObject(SCMemAddr):
-
     '''Class for standalone object
     '''
 

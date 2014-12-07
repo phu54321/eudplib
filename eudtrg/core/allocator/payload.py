@@ -1,5 +1,5 @@
 #!/usr/bin/python
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
 from . import rlocint, pbuffer
 from . import scaddr
@@ -12,7 +12,6 @@ _alloctable = None
 
 
 class ObjCollector:
-
     '''
     Object having PayloadBuffer-like interfaces. Collects all objects by
     calling RegisterObject() for every related objects.

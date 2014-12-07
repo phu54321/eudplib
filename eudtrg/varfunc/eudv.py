@@ -1,5 +1,5 @@
 #!/usr/bin/python
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
 import weakref
 import traceback
@@ -9,7 +9,6 @@ from .vbase import VariableBase
 
 
 class EUDVarBuffer(c.EUDObject):
-
     """Variable buffer
 
     40 bytes per variable.
@@ -50,7 +49,6 @@ def SetCurrentVariableBuffer(evb):
 
 
 class VariableTriggerForward(c.SCMemAddr):
-
     def __init__(self):
         super().__init__(self)
         self._expr = weakref.WeakKeyDictionary()
@@ -62,7 +60,6 @@ class VariableTriggerForward(c.SCMemAddr):
 
 
 class EUDVariable(VariableBase):
-
     '''
     Full variable.
     '''
@@ -114,6 +111,23 @@ class EUDVariable(VariableBase):
 
     # -------
 
+    def Assign(self, other):
+        SeqCompute((
+            (self, c.SetTo, other),
+        ))
+        return self
+
+    def __lshift__(self, other):
+        self.Assign(other)
+
+    def __iadd__(self, other):
+        SeqCompute(((self, c.Add, other),))
+
+    def __isub__(self, other):
+        self << self - other
+
+    # -------
+
     def __add__(self, other):
         t = EUDVariable()
         SeqCompute([
@@ -128,24 +142,22 @@ class EUDVariable(VariableBase):
     def __sub__(self, other):
         t = EUDVariable()
         SeqCompute([
-            (t, c.SetTo, self),
-            (t, c.Subtract, other)
+            (t, c.SetTo, 0xffffffff),
+            (t, c.Subtract, other),
+            (t, c.Add, 1),
+            (t, c.Add, self),
         ])
         return t
 
     def __rsub__(self, other):
         t = EUDVariable()
         SeqCompute([
-            (t, c.SetTo, other),
-            (t, c.Subtract, self)
+            (t, c.SetTo, 0xffffffff),
+            (t, c.Subtract, self),
+            (t, c.Add, 1),
+            (t, c.Add, other),
         ])
         return t
-
-    def __lshift__(self, other):
-        SeqCompute((
-            (self, c.SetTo, other),
-        ))
-        return self
 
     # -------
 

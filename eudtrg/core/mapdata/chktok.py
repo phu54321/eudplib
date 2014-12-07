@@ -1,5 +1,5 @@
 #!/usr/bin/python
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
 '''
 scenario.chk section tokenizer. Internally used in eudtrg.
@@ -27,7 +27,6 @@ def sectionname_format(sn):
 
 
 class CHK:
-
     def __init__(self):
         self.sections = {}
 
@@ -49,7 +48,7 @@ class CHK:
         index = 0
         while index < len(b):
             # read data
-            sectionname = b[index: index+4]
+            sectionname = b[index: index + 4]
             sectionlength = binio.b2i4(b, index + 4)
 
             if sectionlength < 0:

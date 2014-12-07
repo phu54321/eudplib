@@ -1,5 +1,5 @@
 #!/usr/bin/python
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
 from ... import core as c
 from ... import ctrlstru as cs
@@ -45,6 +45,7 @@ def bw_gen(cond):
         return ret
 
     return f_bitsize_template
+
 
 f_bitand = bw_gen(lambda x: x.Exactly(2))
 f_bitor = bw_gen(lambda x: x.AtLeast(1))

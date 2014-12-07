@@ -1,5 +1,5 @@
 #!/usr/bin/python
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
 from .condition import Condition
 from .constenc import (
@@ -77,6 +77,7 @@ def __Kills__internal(Player, Comparison, Number, Unit):
     Comparison = EncodeComparison(Comparison)
     Unit = EncodeUnit(Unit)
     return Condition(0, Player, Number, Unit, Comparison, 5, 0, 0)
+
 
 Kills._internalf = __Kills__internal
 

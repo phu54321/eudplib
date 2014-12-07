@@ -1,8 +1,7 @@
 #!/usr/bin/python
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
 class RlocInt:
-
     def __init__(self, offset, rlocmode):
         assert isinstance(offset, int) and isinstance(rlocmode, int), (
             'Invalid argument for RlocInt constructor')

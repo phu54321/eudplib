@@ -1,5 +1,5 @@
 #!/usr/bin/python
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
 ''' Stage 3:
 - Fixes nextptr modification to TRIG triggers by stage 1
@@ -35,7 +35,6 @@ def CreateStage3(root):
     pts = 0x51A280
 
     c.PushTriggerScope()
-
     ret = c.NextTrigger()
 
     # Revert nextptr
@@ -58,6 +57,8 @@ def CreateStage3(root):
     lasttime = vf.EUDVariable()
     curtime = vf.EUDVariable()
 
+    tmcheckt = c.Forward()
+
     for player in range(8):
         if c.PushTriggerScope():  # Crash preventer code
 
@@ -70,19 +71,11 @@ def CreateStage3(root):
             )
 
             _t0 << c.Trigger(
+                nextptr=tmcheckt,
                 actions=[
                     c.SetNextPtr(tstart, 0)  # 0 -> pts[player].prev
                 ]
             )
-
-            # Time checker -> ensure that STR trigger is executed only once.
-            curtime << sf.f_dwread_epd(c.EPD(0x57F23C))
-            if cs.EUDIf(lasttime < curtime):
-                lasttime << curtime
-                cs.EUDJump(root)
-            cs.EUDEndIf()
-
-            cs.EUDJump(0x80000000)
 
         c.PopTriggerScope()
 
@@ -94,6 +87,16 @@ def CreateStage3(root):
                 (c.EPD(_t0 + 8 + 320 + 20), c.SetTo, prevtstart)
             ])
         cs.EUDEndIf()
+
+    if c.PushTriggerScope():
+        tmcheckt << c.NextTrigger()
+        curtime << sf.f_dwread_epd(c.EPD(0x57F23C))
+        if cs.EUDIf(lasttime < curtime):
+            lasttime << curtime
+            cs.EUDJump(root)
+        cs.EUDEndIf()
+        cs.EUDJump(0x80000000)
+    c.PopTriggerScope()
 
     # lasttime << curtime
     curtime << sf.f_dwread_epd(c.EPD(0x57F23C))

@@ -1,5 +1,5 @@
 #!/usr/bin/python
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
 '''
 String table manager. Internally used in eudtrg.
@@ -9,7 +9,6 @@ from ..utils import binio, ubconv
 
 
 class TBL:
-
     def __init__(self, content=None):
         #
         # datatb : table of strings                       : string data table

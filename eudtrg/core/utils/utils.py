@@ -1,5 +1,5 @@
 #!/usr/bin/python
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
 import collections
 import itertools
@@ -29,7 +29,7 @@ def FlattenList(l):
 def eqsplit(iterable, eqr):
     if isinstance(iterable, list):
         for i in range(0, len(iterable), eqr):
-            yield iterable[i:i+eqr]
+            yield iterable[i:i + eqr]
 
     else:
         it = iter(iterable)
@@ -96,9 +96,9 @@ def SCMD2Text(b):
             i += 3
 
         elif (
-            b[i] == b'<'[0] and
-            toxdigit(b[i + 1]) is not None and
-            b[i + 2] == b'>'[0]
+                            b[i] == b'<'[0] and
+                            toxdigit(b[i + 1]) is not None and
+                        b[i + 2] == b'>'[0]
         ):
             output.append(bytes((
                 toxdigit(b[i + 1]),
@@ -106,10 +106,10 @@ def SCMD2Text(b):
             i += 3
 
         elif (
-            b[i] == b'<'[0] and
-            toxdigit(b[i + 1]) is not None and
-            toxdigit(b[i + 2]) is not None and
-            b[i + 3] == b'>'[0]
+                                b[i] == b'<'[0] and
+                                toxdigit(b[i + 1]) is not None and
+                            toxdigit(b[i + 2]) is not None and
+                        b[i + 3] == b'>'[0]
         ):
             output.append(bytes((
                 (toxdigit(b[i + 1]) << 4) | toxdigit(b[i + 2]),

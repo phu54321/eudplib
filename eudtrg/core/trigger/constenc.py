@@ -1,5 +1,5 @@
 #!/usr/bin/python
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
 from ..mapdata import GetPropertyIndex
 
@@ -9,9 +9,9 @@ class _Unique:
 
 
 class _KillsSpecialized:
-
     def __call__(self, a, b, c, d):
         return self._internalf(a, b, c, d)
+
 
 All = _Unique()
 Enemy = _Unique()
@@ -315,6 +315,7 @@ def EncodeCount(s):
         return 0
     else:
         return s
+
 
 # ========================
 

@@ -1,11 +1,10 @@
 #!/usr/bin/python
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
 from ..allocator import SCMemAddr, Evaluate, IsValidSCMemAddr
 
 
 class Action(SCMemAddr):
-
     '''
     Action class.
 

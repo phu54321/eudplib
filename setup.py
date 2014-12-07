@@ -15,5 +15,5 @@ setup(
     description="EUD Trigger generator",
     license="zlib license",
     keywords="starcraft trigger eud",
-    url="http://blog.naver.com/whyask37/",   # project home page, if any
+    url="http://blog.naver.com/whyask37/",  # project home page, if any
 )

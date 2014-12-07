@@ -1,6 +1,7 @@
 #!/usr/bin/python
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
-from .math import *
-from .memio import *
-from .utils import *
+from .memiof import *
+from .utilf import *
+from .calcf import *
+from . import mathf

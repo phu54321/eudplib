@@ -1,33 +1,27 @@
 import sys
 import os
+
 sys.path.insert(0, os.path.abspath('..\\'))
 
 from eudtrg import *
 
 LoadMap('outputmap/basemap/basemap.scx')
 
-vt = EUDVTable(1)
-a = vt.GetVariables()
+@EUDFunc
+def main():
+    starttm = f_dwread_epd(EPD(0x51CE8C))
+    DoActions(SetMemory(0x6509A0, SetTo, 0))
 
-main = Trigger()
+    a = EUDVariable()
+    a << 200000
 
-DoActions(SetMemory(0x58A364, SetTo, 1234))
-DoActions(a.SetNumber(200000))
+    if EUDWhile(a >= 1):
+        a << a - 1
+    EUDEndWhile()
 
-loopstart, loopend = Forward(), Forward()
+    EUDDoEvents()
 
-loopstart << NextTrigger()
-EUDJumpIfNot(a.AtLeast(1), loopend)
-DoActions(a.SubtractNumber(1))
-EUDJump(loopstart)
-
-loopend << Trigger()
-
-DoActions([
-    SetMemory(0x58A364, SetTo, 5678),
-    SetDeaths(203151, SetTo, 0, 0)
-    #SetNextPtr(main, triggerend)
-])
-
+    endtm = f_dwread_epd(EPD(0x51CE8C))
+    SeqCompute([(EPD(0x58a364), SetTo, starttm - endtm)])
 
 SaveMap('outputmap/perfest.scx', main)

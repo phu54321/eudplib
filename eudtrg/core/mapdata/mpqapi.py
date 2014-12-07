@@ -1,5 +1,5 @@
 #!/usr/bin/python
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
 '''
 SFmpq.dll wrapper. Used internally inside eudtrg.
@@ -79,7 +79,6 @@ def InitMpqLibrary():
 
 
 class MpqRead:
-
     def __init__(self):
         self.mpqh = None
         self.SFmpq = SFmpq  # SFmpq are global variable. We cannot rely on it
@@ -179,7 +178,6 @@ WaveCmpDict = {
 
 
 class MpqWrite:
-
     def __init__(self):
         self.mpqh = None
 

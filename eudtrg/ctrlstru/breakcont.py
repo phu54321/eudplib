@@ -1,7 +1,7 @@
 #!/usr/bin/python
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
-from .import (
+from . import (
     loopblock as lb,
     swblock as sb
 )

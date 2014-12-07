@@ -1,5 +1,5 @@
 #!/usr/bin/python
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
 import functools
 import inspect
@@ -13,7 +13,6 @@ from .eudv import EUDVariable, SeqCompute
 
 
 class EUDFunc:
-
     def __init__(self, fdecl_func):
         # Get argument number of fdecl_func
         argspec = inspect.getargspec(fdecl_func)

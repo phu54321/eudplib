@@ -1,15 +1,13 @@
 #!/usr/bin/python
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
 from .. import core as c
 
-
 class VariableBase:
-
     def __init__(self):
         pass
 
-    def GetVariableMemoryAddr():
+    def GetVariableMemoryAddr(self):
         raise NotImplementedError('override')
 
     # -------
@@ -33,6 +31,20 @@ class VariableBase:
 
     def SubtractNumber(self, value):
         return c.SetMemory(self.GetVariableMemoryAddr(), c.Subtract, value)
+
+    # -------
+
+    def Assign(self, value):
+        c.Trigger(actions=c.SetMemory(self.GetVariableMemoryAddr(), c.SetTo, value))
+
+    def __lshift__(self, value):
+        self.Assign(value)
+
+    def __iadd__(self, value):
+        c.Trigger(actions=c.SetMemory(self.GetVariableMemoryAddr(), c.Add, value))
+
+    def __isub__(self, value):
+        c.Trigger(actions=c.SetMemory(self.GetVariableMemoryAddr(), c.Subtract, value))
 
     # -------
 

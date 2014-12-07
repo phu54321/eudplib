@@ -1,5 +1,5 @@
 #!/usr/bin/python
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
 from ..eudobj import EUDObject
 from ..utils import FlattenList
@@ -16,14 +16,13 @@ def GetTriggerCount():  # Debugging purpose
 
 
 class Trigger(EUDObject):
-
     def __init__(
-        self,
-        prevptr=None,
-        nextptr=None,
-        conditions=None,
-        actions=None,
-        preserved=True
+            self,
+            prevptr=None,
+            nextptr=None,
+            conditions=None,
+            actions=None,
+            preserved=True
     ):
         global _trgcount  # Debugging purpose
         _trgcount += 1  # Debugging purpose

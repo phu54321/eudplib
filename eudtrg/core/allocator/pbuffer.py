@@ -1,5 +1,5 @@
 #!/usr/bin/python
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
 import struct
 
@@ -8,7 +8,6 @@ from ..utils import binio
 
 
 class Payload:
-
     def __init__(self, data, prttable, orttable):
         self.data = data
         self.prttable = prttable
@@ -19,7 +18,6 @@ _packerlist = {}
 
 
 class PayloadBuffer:
-
     '''
     Buffer where EUDObject should write to.
     '''

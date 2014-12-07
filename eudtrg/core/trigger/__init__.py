@@ -1,5 +1,5 @@
 #!/usr/bin/python
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
 from .trigger import Trigger, GetTriggerCount
 from .triggerscope import PushTriggerScope, PopTriggerScope, NextTrigger
@@ -42,7 +42,7 @@ from .constenc import (
     UnitsAndBuildings, Kills, Razings, KillsAndRazings, Custom, Set,
     Clear, Random, Cleared,
 
-    # encoders
+# encoders
     EncodeAllyStatus,
     EncodeComparison,
     EncodeCount,

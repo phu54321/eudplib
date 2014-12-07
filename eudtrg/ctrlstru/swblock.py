@@ -1,5 +1,5 @@
 #!/usr/bin/python
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
 from .. import core as c
 from .basicstru import EUDJump, EUDBranch
@@ -23,9 +23,13 @@ def EUDSwitch(var):
     return True
 
 
-def EUDSwitchCase(number):
-    assert isinstance(number, int) or isinstance(number, c.SCMemAddr), (
-        'Invalid selector for EUDSwitch')
+def EUDSwitchCase(begin, end=None):
+    assert isinstance(begin, int) or isinstance(begin, c.SCMemAddr), (
+        'Invalid selector start for EUDSwitch')
+    if end is None:
+        end = begin + 1
+    assert isinstance(begin, int) or isinstance(begin, c.SCMemAddr), (
+        'Invalid selector end for EUDSwitch')
 
     lb = c.EUDGetLastBlock()
     assert lb[0] == 'swblock', 'Block start/end mismatch'
@@ -79,8 +83,8 @@ def EUDEndSwitch():
             midval = keys[midpos]
 
             EUDBranch(var <= midval, br1, br2)
-            br1 = KeySelector(keys[:midpos+1])
-            br2 = KeySelector(keys[midpos+1:])
+            br1 << KeySelector(keys[:midpos + 1])
+            br2 << KeySelector(keys[midpos + 1:])
 
         else:  # len(keys) == 0
             EUDJump(defbranch)

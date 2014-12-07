@@ -1,5 +1,5 @@
 #!/usr/bin/python
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
 from ... import core as c
 from ... import ctrlstru as cs
@@ -23,13 +23,16 @@ def f_mul(a, b):
 def f_div(a, b):
     """ returns (a//b, a%b) """
     if isinstance(b, vf.EUDVariable):
-        return _f_mul(a, b)
+        return _f_div(a, b)
 
     elif isinstance(a, vf.EUDVariable):
         return f_constdiv(b)(a)
 
     else:
-        return a // b, a % b
+        if b:
+            return a // b, a % b
+        else:
+            return 0xFFFFFFFF, a
 
 
 # -------
@@ -91,6 +94,7 @@ def f_constdiv(number):
 
         divfdict[number] = divf
         return divf
+
 
 # -------
 

@@ -1,5 +1,5 @@
 #!/usr/bin/python
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
 ''' Stage 1 : works in TRIG section.
 - Check if EUD is available. If not, defeat
@@ -127,14 +127,14 @@ def CreateAndApplyStage1(chkt, payload_stage2):
             Trigger(
                 conditions=tt.Memory(strs, tt.AtLeast, 2 ** e),
                 actions=[(
-                    tt.SetDeaths(tt.CurrentPlayer, tt.Add, 2 ** (e - 2), 0),
-                    tt.SetMemory(curpl, tt.Add,
-                                 prttb[i + 1 - len(prttb)] - prttb[i])
-                ) for i in range(len(prttb))] +
-                [
-                    tt.SetDeaths(11, tt.Add, 2 ** e, 0),
-                    tt.SetMemory(strs, tt.Subtract, 2 ** e)
-                ]
+                             tt.SetDeaths(tt.CurrentPlayer, tt.Add, 2 ** (e - 2), 0),
+                             tt.SetMemory(curpl, tt.Add,
+                                          prttb[i + 1 - len(prttb)] - prttb[i])
+                         ) for i in range(len(prttb))] +
+                        [
+                            tt.SetDeaths(11, tt.Add, 2 ** e, 0),
+                            tt.SetMemory(strs, tt.Subtract, 2 ** e)
+                        ]
             )
 
         # Revert value(strs)
@@ -170,14 +170,14 @@ def CreateAndApplyStage1(chkt, payload_stage2):
             Trigger(
                 conditions=tt.Memory(strs, tt.AtLeast, 2 ** e),
                 actions=[(
-                    tt.SetDeaths(tt.CurrentPlayer, tt.Add, 2 ** e, 0),
-                    tt.SetMemory(curpl, tt.Add,
-                                 orttb[i + 1 - len(orttb)] - orttb[i])
-                ) for i in range(len(orttb))] +
-                [
-                    tt.SetDeaths(11, tt.Add, 2 ** e, 0),
-                    tt.SetMemory(strs, tt.Subtract, 2 ** e)
-                ]
+                             tt.SetDeaths(tt.CurrentPlayer, tt.Add, 2 ** e, 0),
+                             tt.SetMemory(curpl, tt.Add,
+                                          orttb[i + 1 - len(orttb)] - orttb[i])
+                         ) for i in range(len(orttb))] +
+                        [
+                            tt.SetDeaths(11, tt.Add, 2 ** e, 0),
+                            tt.SetMemory(strs, tt.Subtract, 2 ** e)
+                        ]
             )
 
         # Revert value(strs)

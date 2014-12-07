@@ -1,11 +1,11 @@
 import sys
 import os
+
 sys.path.insert(0, os.path.abspath('..\\'))
 
 from eudtrg import *
 
 LoadMap('outputmap/basemap/basemap.scx')
-
 
 @EUDFunc
 def main():
@@ -16,6 +16,5 @@ def main():
         DoActions(DisplayText("test c"))
         EUDDoEvents()
     EUDEndWhile()
-
 
 SaveMap('outputmap\\blockstru.scx', main)

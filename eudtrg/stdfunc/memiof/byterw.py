@@ -1,19 +1,18 @@
 #!/usr/bin/python
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
 from ... import core as c
 from ... import ctrlstru as cs
 from ... import varfunc as vf
 
 from . import dwmemio as dwm
-from .. import math
+from .. import calcf
 
 
 _epd, _suboffset = vf.EUDCreateVariables(2)
 
 
 class EUDByteReader:
-
     def __init__(self):
         self._dw = vf.EUDVariable()
         self._b = vf.EUDCreateVariables(4)
@@ -34,11 +33,11 @@ class EUDByteReader:
         vf.SetVariables(self._dw, dwm.f_dwread_epd(epdoffset))
 
         vf.SetVariables([
-            self._b[0],
-            self._b[1],
-            self._b[2],
-            self._b[3],
-        ], dwm.f_dwbreak(self._dw)[2:6])
+                            self._b[0],
+                            self._b[1],
+                            self._b[2],
+                            self._b[3],
+                        ], dwm.f_dwbreak(self._dw)[2:6])
 
     '''
     Seek to real address
@@ -48,7 +47,7 @@ class EUDByteReader:
         global _epd, _suboffset
 
         # convert offset to epd offset & suboffset
-        vf.SetVariables([_epd, _suboffset], math.f_div(offset, 4))
+        vf.SetVariables([_epd, _suboffset], calcf.f_div(offset, 4))
         vf.SeqCompute([(_epd, c.Add, -0x58A364 // 4)])
 
         # seek to epd & set suboffset
@@ -99,18 +98,17 @@ class EUDByteReader:
 
         vf.SetVariables(self._dw, dwm.f_dwread_epd(self._offset))
         vf.SetVariables([
-            self._b[0],
-            self._b[1],
-            self._b[2],
-            self._b[3],
-        ], dwm.f_dwbreak(self._dw)[2:6])
+                            self._b[0],
+                            self._b[1],
+                            self._b[2],
+                            self._b[3],
+                        ], dwm.f_dwbreak(self._dw)[2:6])
 
         swend << c.NextTrigger()
         return self._ret
 
 
 class EUDByteWriter:
-
     def __init__(self):
         self._dw = None
         self._suboffset = None
@@ -129,17 +127,17 @@ class EUDByteWriter:
         vf.SetVariables(self._dw, dwm.f_dwread_epd(epdoffset))
 
         vf.SetVariables([
-            self._b[0],
-            self._b[1],
-            self._b[2],
-            self._b[3],
-        ], dwm.f_dwbreak(self._dw)[2:6])
+                            self._b[0],
+                            self._b[1],
+                            self._b[2],
+                            self._b[3],
+                        ], dwm.f_dwbreak(self._dw)[2:6])
 
     def seekoffset(self, offset):
         global _epd, _suboffset
 
         # convert offset to epd offset & suboffset
-        vf.SetVariables([_epd, _suboffset], math.f_div(offset, 4))
+        vf.SetVariables([_epd, _suboffset], calcf.f_div(offset, 4))
         vf.SeqCompute([(_epd, c.Add, (0x100000000 - 0x58A364) // 4)])
 
         self.seekepd(_epd)
@@ -189,11 +187,11 @@ class EUDByteWriter:
 
         vf.SetVariables(self._dw, dwm.f_dwread_epd(self._offset))
         vf.SetVariables([
-            self._b[0],
-            self._b[1],
-            self._b[2],
-            self._b[3],
-        ], dwm.f_dwbreak(self._dw)[2:6])
+                            self._b[0],
+                            self._b[1],
+                            self._b[2],
+                            self._b[3],
+                        ], dwm.f_dwbreak(self._dw)[2:6])
 
         swend << c.NextTrigger()
 

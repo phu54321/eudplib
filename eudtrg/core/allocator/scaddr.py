@@ -1,11 +1,10 @@
 #!/usr/bin/python
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
 from . import rlocint
 
 
 class SCMemAddr:
-
     def __init__(self, baseobj, offset=0, rlocmode=4):
         self.baseobj = baseobj
         self.offset = offset
@@ -77,7 +76,6 @@ class SCMemAddr:
 
 
 class Forward(SCMemAddr):
-
     ''' Class for late definition
     '''
 
