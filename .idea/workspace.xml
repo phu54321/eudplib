@@ -2,157 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ae861aca-0188-4483-b879-0580d2ce80c0" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/eudtrg/stdfunc/mathf/__init__.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/tests/testmath.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/eudtrg/stdfunc/mathf/trigonometric.py" />
-      <change type="DELETED" beforePath="C:\Users\Tatabox\PycharmProjects\eudtrglib\tests\testcustomtbl.py" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Tatabox\PycharmProjects\eudtrglib\tests\testdoevents.py" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Tatabox\PycharmProjects\eudtrglib\tests\testdwbreak.py" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Tatabox\PycharmProjects\eudtrglib\tests\testeudtrg.py" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Tatabox\PycharmProjects\eudtrglib\tests\testfunc.py" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Tatabox\PycharmProjects\eudtrglib\tests\testgrp.py" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Tatabox\PycharmProjects\eudtrglib\tests\testread.py" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Tatabox\PycharmProjects\eudtrglib\tests\teststrcpy.py" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Tatabox\PycharmProjects\eudtrglib\tests\testtrigtrg.py" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Tatabox\PycharmProjects\eudtrglib\tests\testunitprp.py" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Tatabox\PycharmProjects\eudtrglib\tests\testvtable.py" afterPath="" />
-      <change type="MOVED" beforePath="C:\Users\Tatabox\PycharmProjects\eudtrglib\eudtrg\stdfunc\math\__init__.py" afterPath="$PROJECT_DIR$/eudtrg/stdfunc/calcf/__init__.py" />
-      <change type="MOVED" beforePath="C:\Users\Tatabox\PycharmProjects\eudtrglib\eudtrg\stdfunc\math\bitwise.py" afterPath="$PROJECT_DIR$/eudtrg/stdfunc/calcf/bitwise.py" />
-      <change type="MOVED" beforePath="C:\Users\Tatabox\PycharmProjects\eudtrglib\eudtrg\stdfunc\math\muldiv.py" afterPath="$PROJECT_DIR$/eudtrg/stdfunc/calcf/muldiv.py" />
-      <change type="MOVED" beforePath="C:\Users\Tatabox\PycharmProjects\eudtrglib\eudtrg\stdfunc\memio\__init__.py" afterPath="$PROJECT_DIR$/eudtrg/stdfunc/memiof/__init__.py" />
-      <change type="MOVED" beforePath="C:\Users\Tatabox\PycharmProjects\eudtrglib\eudtrg\stdfunc\memio\byterw.py" afterPath="$PROJECT_DIR$/eudtrg/stdfunc/memiof/byterw.py" />
-      <change type="MOVED" beforePath="C:\Users\Tatabox\PycharmProjects\eudtrglib\eudtrg\stdfunc\memio\dwmemio.py" afterPath="$PROJECT_DIR$/eudtrg/stdfunc/memiof/dwmemio.py" />
-      <change type="MOVED" beforePath="C:\Users\Tatabox\PycharmProjects\eudtrglib\eudtrg\stdfunc\memio\mblockio.py" afterPath="$PROJECT_DIR$/eudtrg/stdfunc/memiof/mblockio.py" />
-      <change type="MOVED" beforePath="C:\Users\Tatabox\PycharmProjects\eudtrglib\eudtrg\stdfunc\memio\smemio.py" afterPath="$PROJECT_DIR$/eudtrg/stdfunc/memiof/smemio.py" />
-      <change type="MOVED" beforePath="C:\Users\Tatabox\PycharmProjects\eudtrglib\eudtrg\stdfunc\utils\__init__.py" afterPath="$PROJECT_DIR$/eudtrg/stdfunc/utilf/__init__.py" />
-      <change type="MOVED" beforePath="C:\Users\Tatabox\PycharmProjects\eudtrglib\eudtrg\stdfunc\utils\utilfunc.py" afterPath="$PROJECT_DIR$/eudtrg/stdfunc/utilf/utilfunc.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/outputmap/creeptest.scx" afterPath="$PROJECT_DIR$/tests/outputmap/creeptest.scx" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/out.bin" afterPath="$PROJECT_DIR$/tests/out.bin" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg___init__.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg___init__.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core___init__.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core___init__.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_allocator___init__.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_allocator___init__.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_allocator_payload.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_allocator_payload.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_allocator_pbuffer.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_allocator_pbuffer.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_allocator_rlocint.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_allocator_rlocint.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_allocator_scaddr.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_allocator_scaddr.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_eudobj___init__.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_eudobj___init__.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_eudobj_bytedump.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_eudobj_bytedump.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_eudobj_eudobj.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_eudobj_eudobj.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_mapdata___init__.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_mapdata___init__.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_mapdata_chktok.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_mapdata_chktok.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_mapdata_mapdata.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_mapdata_mapdata.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_mapdata_mpqapi.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_mapdata_mpqapi.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_mapdata_proptable.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_mapdata_proptable.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_mapdata_stringmap.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_mapdata_stringmap.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_mapdata_tblformat.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_mapdata_tblformat.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_mapdata_unitprp.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_mapdata_unitprp.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_trigger___init__.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_trigger___init__.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_trigger_action.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_trigger_action.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_trigger_condition.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_trigger_condition.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_trigger_constenc.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_trigger_constenc.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_trigger_stockact.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_trigger_stockact.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_trigger_stockcond.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_trigger_stockcond.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_trigger_strdict.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_trigger_strdict.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_trigger_strenc.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_trigger_strenc.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_trigger_trigger.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_trigger_trigger.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_trigger_triggerscope.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_trigger_triggerscope.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_utils___init__.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_utils___init__.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_utils_binio.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_utils_binio.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_utils_blockstru.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_utils_blockstru.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_utils_ubconv.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_utils_ubconv.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_utils_utils.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_core_utils_utils.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_ctrlstru___init__.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_ctrlstru___init__.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_ctrlstru_basicstru.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_ctrlstru_basicstru.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_ctrlstru_breakcont.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_ctrlstru_breakcont.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_ctrlstru_loopblock.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_ctrlstru_loopblock.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_ctrlstru_simpleblock.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_ctrlstru_simpleblock.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_ctrlstru_swblock.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_ctrlstru_swblock.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_maprw___init__.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_maprw___init__.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_maprw_injector___init__.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_maprw_injector___init__.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_maprw_injector_doevents.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_maprw_injector_doevents.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_maprw_injector_stage1.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_maprw_injector_stage1.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_maprw_injector_stage2.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_maprw_injector_stage2.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_maprw_injector_stage3.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_maprw_injector_stage3.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_maprw_injector_trigtrg.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_maprw_injector_trigtrg.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_maprw_loadmap.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_maprw_loadmap.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_maprw_savemap.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_maprw_savemap.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_stdfunc___init__.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_stdfunc___init__.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_stdfunc_math___init__.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_stdfunc_math___init__.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_stdfunc_math_bitwise.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_stdfunc_math_bitwise.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_stdfunc_math_muldiv.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_stdfunc_math_muldiv.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_stdfunc_memio___init__.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_stdfunc_memio___init__.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_stdfunc_memio_byterw.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_stdfunc_memio_byterw.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_stdfunc_memio_dwmemio.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_stdfunc_memio_dwmemio.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_stdfunc_memio_mblockio.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_stdfunc_memio_mblockio.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_stdfunc_memio_smemio.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_stdfunc_memio_smemio.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_stdfunc_utils___init__.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_stdfunc_utils___init__.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_stdfunc_utils_utilfunc.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_stdfunc_utils_utilfunc.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_varfunc___init__.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_varfunc___init__.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_varfunc_eudf.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_varfunc_eudf.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_varfunc_eudlv.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_varfunc_eudlv.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_varfunc_eudv.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_varfunc_eudv.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_varfunc_vbase.html" afterPath="$PROJECT_DIR$/tests/htmlcov/_Users_Tatabox_PycharmProjects_eudtrglib_eudtrg_varfunc_vbase.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/__init__.py" afterPath="$PROJECT_DIR$/eudtrg/__init__.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/core/__init__.py" afterPath="$PROJECT_DIR$/eudtrg/core/__init__.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/core/allocator/__init__.py" afterPath="$PROJECT_DIR$/eudtrg/core/allocator/__init__.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/core/eudobj/__init__.py" afterPath="$PROJECT_DIR$/eudtrg/core/eudobj/__init__.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/core/mapdata/__init__.py" afterPath="$PROJECT_DIR$/eudtrg/core/mapdata/__init__.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/core/trigger/__init__.py" afterPath="$PROJECT_DIR$/eudtrg/core/trigger/__init__.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/core/utils/__init__.py" afterPath="$PROJECT_DIR$/eudtrg/core/utils/__init__.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/ctrlstru/__init__.py" afterPath="$PROJECT_DIR$/eudtrg/ctrlstru/__init__.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/maprw/__init__.py" afterPath="$PROJECT_DIR$/eudtrg/maprw/__init__.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/maprw/injector/__init__.py" afterPath="$PROJECT_DIR$/eudtrg/maprw/injector/__init__.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/stdfunc/__init__.py" afterPath="$PROJECT_DIR$/eudtrg/stdfunc/__init__.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/varfunc/__init__.py" afterPath="$PROJECT_DIR$/eudtrg/varfunc/__init__.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/core/trigger/action.py" afterPath="$PROJECT_DIR$/eudtrg/core/trigger/action.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/ctrlstru/basicstru.py" afterPath="$PROJECT_DIR$/eudtrg/ctrlstru/basicstru.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/core/utils/binio.py" afterPath="$PROJECT_DIR$/eudtrg/core/utils/binio.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/core/utils/blockstru.py" afterPath="$PROJECT_DIR$/eudtrg/core/utils/blockstru.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/ctrlstru/breakcont.py" afterPath="$PROJECT_DIR$/eudtrg/ctrlstru/breakcont.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/core/eudobj/bytedump.py" afterPath="$PROJECT_DIR$/eudtrg/core/eudobj/bytedump.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/core/mapdata/chktok.py" afterPath="$PROJECT_DIR$/eudtrg/core/mapdata/chktok.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/core/trigger/condition.py" afterPath="$PROJECT_DIR$/eudtrg/core/trigger/condition.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/core/trigger/constenc.py" afterPath="$PROJECT_DIR$/eudtrg/core/trigger/constenc.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/maprw/injector/doevents.py" afterPath="$PROJECT_DIR$/eudtrg/maprw/injector/doevents.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/varfunc/eudf.py" afterPath="$PROJECT_DIR$/eudtrg/varfunc/eudf.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/varfunc/eudlv.py" afterPath="$PROJECT_DIR$/eudtrg/varfunc/eudlv.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/core/eudobj/eudobj.py" afterPath="$PROJECT_DIR$/eudtrg/core/eudobj/eudobj.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/varfunc/eudv.py" afterPath="$PROJECT_DIR$/eudtrg/varfunc/eudv.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/gprof2dot.py" afterPath="$PROJECT_DIR$/gprof2dot.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/index.html" afterPath="$PROJECT_DIR$/tests/htmlcov/index.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/maprw/loadmap.py" afterPath="$PROJECT_DIR$/eudtrg/maprw/loadmap.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/ctrlstru/loopblock.py" afterPath="$PROJECT_DIR$/eudtrg/ctrlstru/loopblock.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/core/mapdata/mapdata.py" afterPath="$PROJECT_DIR$/eudtrg/core/mapdata/mapdata.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/core/mapdata/mpqapi.py" afterPath="$PROJECT_DIR$/eudtrg/core/mapdata/mpqapi.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/core/allocator/payload.py" afterPath="$PROJECT_DIR$/eudtrg/core/allocator/payload.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/core/allocator/pbuffer.py" afterPath="$PROJECT_DIR$/eudtrg/core/allocator/pbuffer.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/core/mapdata/proptable.py" afterPath="$PROJECT_DIR$/eudtrg/core/mapdata/proptable.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/core/allocator/rlocint.py" afterPath="$PROJECT_DIR$/eudtrg/core/allocator/rlocint.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/maprw/savemap.py" afterPath="$PROJECT_DIR$/eudtrg/maprw/savemap.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/core/allocator/scaddr.py" afterPath="$PROJECT_DIR$/eudtrg/core/allocator/scaddr.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/setup.py" afterPath="$PROJECT_DIR$/setup.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/ctrlstru/simpleblock.py" afterPath="$PROJECT_DIR$/eudtrg/ctrlstru/simpleblock.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/maprw/injector/stage1.py" afterPath="$PROJECT_DIR$/eudtrg/maprw/injector/stage1.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/maprw/injector/stage2.py" afterPath="$PROJECT_DIR$/eudtrg/maprw/injector/stage2.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/maprw/injector/stage3.py" afterPath="$PROJECT_DIR$/eudtrg/maprw/injector/stage3.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/core/trigger/stockact.py" afterPath="$PROJECT_DIR$/eudtrg/core/trigger/stockact.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/core/trigger/stockcond.py" afterPath="$PROJECT_DIR$/eudtrg/core/trigger/stockcond.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/core/trigger/strenc.py" afterPath="$PROJECT_DIR$/eudtrg/core/trigger/strenc.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/core/mapdata/stringmap.py" afterPath="$PROJECT_DIR$/eudtrg/core/mapdata/stringmap.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/ctrlstru/swblock.py" afterPath="$PROJECT_DIR$/eudtrg/ctrlstru/swblock.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/core/mapdata/tblformat.py" afterPath="$PROJECT_DIR$/eudtrg/core/mapdata/tblformat.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/testblockstru.py" afterPath="$PROJECT_DIR$/tests/testblockstru.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/htmlcov/testcreep.html" afterPath="$PROJECT_DIR$/tests/htmlcov/testcreep.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/testcreep.py" afterPath="$PROJECT_DIR$/tests/testcreep.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/testperf.py" afterPath="$PROJECT_DIR$/tests/testperf.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/testrandom.py" afterPath="$PROJECT_DIR$/testrandom.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/core/trigger/trigger.py" afterPath="$PROJECT_DIR$/eudtrg/core/trigger/trigger.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/core/trigger/triggerscope.py" afterPath="$PROJECT_DIR$/eudtrg/core/trigger/triggerscope.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/maprw/injector/trigtrg.py" afterPath="$PROJECT_DIR$/eudtrg/maprw/injector/trigtrg.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/core/utils/ubconv.py" afterPath="$PROJECT_DIR$/eudtrg/core/utils/ubconv.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/core/mapdata/unitprp.py" afterPath="$PROJECT_DIR$/eudtrg/core/mapdata/unitprp.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/core/utils/utils.py" afterPath="$PROJECT_DIR$/eudtrg/core/utils/utils.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/varfunc/vbase.py" afterPath="$PROJECT_DIR$/eudtrg/varfunc/vbase.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="eudtrglib.iws" />
@@ -756,7 +605,13 @@
       <option name="project" value="LOCAL" />
       <updated>1417700939373</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Code reformatted, trigonometric function added">
+      <created>1417947265455</created>
+      <option name="number" value="00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1417947265455</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -765,6 +620,7 @@
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -777,7 +633,6 @@
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39937106" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -803,7 +658,8 @@
     <MESSAGE value="f_dwepdread_epd added&#10;&#10;f_dwread_epd, f_epdread_epd uses them now.&#10;&#10;" />
     <MESSAGE value="Added setup.py, cleaned things&#10;cc" />
     <MESSAGE value="import optimized, fixed bug. testcreep now works" />
-    <option name="LAST_COMMIT_MESSAGE" value="import optimized, fixed bug. testcreep now works" />
+    <MESSAGE value="Code reformatted, trigonometric function added" />
+    <option name="LAST_COMMIT_MESSAGE" value="Code reformatted, trigonometric function added" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1077,6 +933,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.8794926" vertical-offset="192" max-vertical-offset="3629">
           <caret line="34" column="29" selection-start-line="34" selection-start-column="29" selection-end-line="34" selection-end-column="29" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1084,6 +941,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="228" max-vertical-offset="1919">
           <caret line="27" column="45" selection-start-line="27" selection-start-column="45" selection-end-line="27" selection-end-column="45" />
+          <folding />
         </state>
       </provider>
     </entry>
