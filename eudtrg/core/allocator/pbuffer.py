@@ -40,8 +40,7 @@ class PayloadBuffer:
         number = scaddr.Evaluate(number)
         assert number.rlocmode == 0, 'Non-constant given.'
         number.offset &= 0xFF
-
-        self._data[self._datacur] = binio.i2b1(number.offset)
+        self._data[self._datacur : self._datacur + 1] = binio.i2b1(number.offset)
         self._datacur += 1
 
     def WriteWord(self, number):

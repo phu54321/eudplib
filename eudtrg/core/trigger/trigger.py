@@ -95,4 +95,5 @@ class Trigger(EUDObject):
         else:
             pbuffer.WriteDword(0)
 
-        pbuffer.WriteSpace(28)
+        pbuffer.WriteSpace(27)
+        pbuffer.WriteByte(0)
