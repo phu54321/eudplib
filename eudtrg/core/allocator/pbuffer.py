@@ -37,6 +37,9 @@ class PayloadBuffer:
         return self._datacur - self._datastart
 
     def WriteByte(self, number):
+        if number is None:
+            self._datacur += 1
+            return
         number = scaddr.Evaluate(number)
         assert number.rlocmode == 0, 'Non-constant given.'
         number.offset &= 0xFF
@@ -44,6 +47,10 @@ class PayloadBuffer:
         self._datacur += 1
 
     def WriteWord(self, number):
+        if number is None:
+            self._datacur += 2
+            return
+
         number = scaddr.Evaluate(number)
         assert number.rlocmode == 0, 'Non-constant given.'
         number.offset &= 0xFFFF
@@ -52,6 +59,10 @@ class PayloadBuffer:
         self._datacur += 2
 
     def WriteDword(self, number):
+        if number is None:
+            self._datacur += 4
+            return
+
         number = scaddr.Evaluate(number)
         number.offset &= 0xFFFFFFFF
 
@@ -103,47 +114,45 @@ class PayloadBuffer:
 
 def _CreateStructPacker(structformat):
     sizedict = {'B': 1, 'H': 2, 'I': 4}
-    anddict = {'B': 0xff, 'H': 0xffff, 'I': 0xffffffff}
+    fdict = {'B': binio.i2b1, 'H': binio.i2b2, 'I': binio.i2b4}
 
-    dataoffsetlist = []
-    andvallist = []
     sizelist = []
+    flist = []
 
     structlen = 0
 
     for s in structformat:
         datasize = sizedict[s]
-        dataoffsetlist.append(structlen)
         structlen += datasize
 
-        andvallist.append(anddict[s])
         sizelist.append(datasize)
+        flist.append(fdict[s])
 
     def packer(buf, *arglist):
         dpos = buf._datacur
+        data = buf._data
+        prttb = buf._prttable
+        orttb = buf._orttable
 
-        evals = [scaddr.Evaluate(arg) for arg in arglist]
-        for i, ri in enumerate(evals):
-            assert type(ri) is rlocint.RlocInt
-        evalnum = [ri.offset & andvallist[i] for i, ri in enumerate(evals)]
+        for i, arg in enumerate(arglist):
+            if arg is not None:
+                ri = scaddr.Evaluate(arg)
 
-        # 1. Add binary data
-        packed = struct.pack(structformat, *evalnum)
-        buf._data[dpos: dpos+len(packed)] = packed
+                assert (ri.rlocmode == 0 or
+                    (sizelist[i] == 4 and dpos % 4 == 0)), (
+                    'Cannot write non-const in byte/word/nonalligned dword.'
+                )
 
-        # 2. Update relocation table
-        for i, ri in enumerate(evals):
-            assert (ri.rlocmode == 0 or
-                    (sizelist[i] == 4 and dataoffsetlist[i] % 4 == 0)), (
-                'Cannot write non-const in byte/word/nonalligned dword.'
-            )
+                if ri.rlocmode == 1:
+                    prttb.append(dpos)
 
-            if ri.rlocmode == 1:
-                buf._prttable.append(dpos + dataoffsetlist[i])
+                elif ri.rlocmode == 4:
+                    orttb.append(dpos)
 
-            elif ri.rlocmode == 4:
-                buf._orttable.append(dpos + dataoffsetlist[i])
+                data[dpos: dpos + sizelist[i]] = flist[i](ri.offset)
 
-        buf._datacur += structlen
+            dpos += sizelist[i]
+
+        buf._datacur = dpos
 
     return packer

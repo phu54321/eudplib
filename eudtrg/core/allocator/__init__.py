@@ -9,5 +9,6 @@ from .scaddr import (
 )
 
 from .payload import (
-    CreatePayload
+    CreatePayload,
+    CompressPayload
 )

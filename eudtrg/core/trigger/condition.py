@@ -29,14 +29,22 @@ class Condition(SCMemAddr):
                  comparison, condtype, restype, flags):
         super().__init__(self)
 
-        assert IsValidSCMemAddr(locid), 'Invalid arg %s' % locid
-        assert IsValidSCMemAddr(player), 'Invalid arg %s' % player
-        assert IsValidSCMemAddr(amount), 'Invalid arg %s' % amount
-        assert IsValidSCMemAddr(unitid), 'Invalid arg %s' % unitid
-        assert IsValidSCMemAddr(comparison), 'Invalid arg %s' % comparison
-        assert IsValidSCMemAddr(condtype), 'Invalid arg %s' % condtype
-        assert IsValidSCMemAddr(restype), 'Invalid arg %s' % restype
-        assert IsValidSCMemAddr(flags), 'Invalid arg %s' % flags
+        assert locid is None or IsValidSCMemAddr(locid), (
+            'Invalid arg %s' % locid)
+        assert player is None or IsValidSCMemAddr(player), (
+            'Invalid arg %s' % player)
+        assert amount is None or IsValidSCMemAddr(amount), (
+            'Invalid arg %s' % amount)
+        assert unitid is None or IsValidSCMemAddr(unitid), (
+            'Invalid arg %s' % unitid)
+        assert comparison is None or IsValidSCMemAddr(comparison), (
+            'Invalid arg %s' % comparison)
+        assert condtype is None or IsValidSCMemAddr(condtype), (
+            'Invalid arg %s' % condtype)
+        assert restype is None or IsValidSCMemAddr(restype), (
+            'Invalid arg %s' % restype)
+        assert flags is None or IsValidSCMemAddr(flags), (
+            'Invalid arg %s' % flags)
 
         self._locid = locid
         self._player = player

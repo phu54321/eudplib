@@ -15,8 +15,20 @@ PHASE_ALLOCATING = 2
 PHASE_WRITING = 3
 phase = None
 
+_payload_compress = False
 
 # -------
+
+
+def CompressPayload(mode):
+    global _payload_compress
+    if mode not in [True, False]:
+        raise TypeError('Invalid type')
+
+    if mode:
+        _payload_compress = True
+    else:
+        _payload_compress = False
 
 
 class ObjCollector:
@@ -41,11 +53,13 @@ class ObjCollector:
         pass
 
     def WriteDword(self, number):
-        scaddr.Evaluate(number)
+        if number is not None:
+            scaddr.Evaluate(number)
 
     def WritePack(self, structformat, *arglist):
         for arg in arglist:
-            scaddr.Evaluate(arg)
+            if arg is not None:
+                scaddr.Evaluate(arg)
 
     def WriteBytes(self, b):
         pass
@@ -110,24 +124,38 @@ class ObjAllocator:
         return dwoccupmap
 
     def WriteByte(self, number):
-        scaddr.Evaluate(number)
-        self._occupmap.append(1)
+        if number is None:
+            self._occupmap.append(0)
+        else:
+            scaddr.Evaluate(number)
+            self._occupmap.append(1)
 
     def WriteWord(self, number):
-        scaddr.Evaluate(number)
-        self._occupmap.extend((1, 1))
+        if number is None:
+            self._occupmap.append((0, 0))
+        else:
+            scaddr.Evaluate(number)
+            self._occupmap.extend((1, 1))
 
     def WriteDword(self, number):
-        scaddr.Evaluate(number)
-        self._occupmap.extend((1, 1, 1, 1))
+        if number is None:
+            self._occupmap.append((0, 0, 0, 0))
+        else:
+            scaddr.Evaluate(number)
+            self._occupmap.extend((1, 1, 1, 1))
 
     def WritePack(self, structformat, *arglist):
-        for arg in arglist:
-            scaddr.Evaluate(arg)
-
+        ocm = []
         sizedict = {'B': 1, 'H': 2, 'I': 4}
-        structlen = sum([sizedict[ch] for ch in structformat])
-        self._occupmap.extend([1] * structlen)
+        for i, arg in enumerate(arglist):
+            isize = sizedict[structformat[i]]
+
+            if arg is None:
+                ocm += [0] * isize
+            else:
+                scaddr.Evaluate(arg)
+                ocm += [1] * isize
+        self._occupmap.extend(ocm)
 
     def WriteBytes(self, b):
         self._occupmap.extend([1] * len(b))
@@ -142,6 +170,18 @@ def AllocObjects():
     global _payload_size
 
     phase = PHASE_ALLOCATING
+
+    # Quick and less space-efficient approach
+    if not _payload_compress:
+        last_alloc_addr = 0
+        for obj in _found_objects:
+            objsize = (obj.GetDataSize() + 3) & ~3
+            _alloctable[obj] = last_alloc_addr, objsize
+            last_alloc_addr += objsize
+        _payload_size = last_alloc_addr
+        phase = None
+        return
+
     obja = ObjAllocator()
 
     _alloctable = {}
@@ -170,9 +210,7 @@ def AllocObjects():
     dwoccupmap_sum = [-1] * (dwoccupmap_max_size + 1)
 
     last_alloc_addr = 0
-    idx = 0
     for obj in _found_objects:
-        idx += 1
         dwoccupmap = dwoccupmap_dict[obj]
 
         # Find appropriate position to allocate object

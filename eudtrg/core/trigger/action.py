@@ -34,16 +34,26 @@ class Action(SCMemAddr):
         '''
         super().__init__(self)
 
-        assert IsValidSCMemAddr(locid1), 'Invalid arg %s' % locid1
-        assert IsValidSCMemAddr(strid), 'Invalid arg %s' % strid
-        assert IsValidSCMemAddr(wavid), 'Invalid arg %s' % wavid
-        assert IsValidSCMemAddr(time), 'Invalid arg %s' % time
-        assert IsValidSCMemAddr(player1), 'Invalid arg %s' % player1
-        assert IsValidSCMemAddr(player2), 'Invalid arg %s' % player2
-        assert IsValidSCMemAddr(unitid), 'Invalid arg %s' % unitid
-        assert IsValidSCMemAddr(acttype), 'Invalid arg %s' % acttype
-        assert IsValidSCMemAddr(amount), 'Invalid arg %s' % amount
-        assert IsValidSCMemAddr(flags), 'Invalid arg %s' % flags
+        assert locid1 is None or IsValidSCMemAddr(locid1), (
+            'Invalid arg %s' % locid1)
+        assert strid is None or IsValidSCMemAddr(strid), (
+            'Invalid arg %s' % strid)
+        assert wavid is None or IsValidSCMemAddr(wavid), (
+            'Invalid arg %s' % wavid)
+        assert time is None or IsValidSCMemAddr(time), (
+            'Invalid arg %s' % time)
+        assert player1 is None or IsValidSCMemAddr(player1), (
+            'Invalid arg %s' % player1)
+        assert player2 is None or IsValidSCMemAddr(player2), (
+            'Invalid arg %s' % player2)
+        assert unitid is None or IsValidSCMemAddr(unitid), (
+            'Invalid arg %s' % unitid)
+        assert acttype is None or IsValidSCMemAddr(acttype), (
+            'Invalid arg %s' % acttype)
+        assert amount is None or IsValidSCMemAddr(amount), (
+            'Invalid arg %s' % amount)
+        assert flags is None or IsValidSCMemAddr(flags), (
+            'Invalid arg %s' % flags)
 
         self._locid1 = locid1
         self._strid = strid
