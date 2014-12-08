@@ -10,7 +10,7 @@ class BlockStruManager:
         return not self._blockstru
 
 
-_current_bsm = None
+_current_bsm = BlockStruManager()  # Default one
 
 
 def SetCurrentBlockStruManager(bsm):

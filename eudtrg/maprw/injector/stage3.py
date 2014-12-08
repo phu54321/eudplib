@@ -11,6 +11,7 @@ from ... import core as c
 from ... import ctrlstru as cs
 from ... import varfunc as vf
 from ... import stdfunc as sf
+from ...trigtrg import runtrigtrg as rtt
 
 
 @vf.EUDFunc
@@ -18,9 +19,9 @@ def FlipProp(initepd):
     '''Iterate through triggers and flip 'Trigger disabled' flag'''
     if cs.EUDWhileNot([initepd >= 0x3FD56E6E, initepd <= 0x3FD56E86]):
         prop_epd = initepd + (8 + 320 + 2048) // 4
-        propv = sf.f_epdread_epd(prop_epd)
+        propv = sf.f_dwread_epd(prop_epd)
 
-        if cs.EUDIf(propv == 1):
+        if cs.EUDIf(propv == 4):  # Preserved
             sf.f_dwwrite_epd(prop_epd, 8)
         if cs.EUDElse():
             sf.f_dwsubtract_epd(prop_epd, 8)
@@ -56,36 +57,47 @@ def CreateStage3(root):
     # Create payload for each players & Link them with pts
     lasttime = vf.EUDVariable()
     curtime = vf.EUDVariable()
-
     tmcheckt = c.Forward()
 
     for player in range(8):
-        if c.PushTriggerScope():  # Crash preventer code
+        trs = rtt._trigtrg_runner_start[player]
+        tre = rtt._trigtrg_runner_end[player]
 
-            # Crash preventer
-            tstart, _t0 = c.Forward(), c.Forward()
-            tstart << c.Trigger(
-                prevptr=pts + player * 12 + 4,
-                nextptr=0,  # 0 -> pts[player].prev
-                actions=[c.SetNextPtr(tstart, _t0)]
-            )
+        c.PushTriggerScope()
 
-            _t0 << c.Trigger(
-                nextptr=tmcheckt,
-                actions=[
-                    c.SetNextPtr(tstart, 0)  # 0 -> pts[player].prev
-                ]
-            )
+        # Crash preventer
+        tstart, _t0 = c.Forward(), c.Forward()
+        tstart << c.Trigger(
+            prevptr=pts + player * 12 + 4,
+            nextptr=trs,
+            actions=[c.SetNextPtr(tstart, _t0)]
+        )
+
+        _t0 << c.Trigger(
+            nextptr=tmcheckt,
+            actions=[
+                # reset
+                c.SetNextPtr(tstart, trs)
+            ]
+        )
 
         c.PopTriggerScope()
 
         prevtstart = sf.f_dwread_epd(c.EPD(pts + player * 12 + 8))
-        if cs.EUDIfNot(prevtstart == pts + player * 12 + 4):
+        prevtend = sf.f_dwread_epd(c.EPD(pts + player * 12 + 4))
+
+        # Modify pts
+        vf.SeqCompute([
+            (c.EPD(pts + player * 12 + 8), c.SetTo, tstart),
+            (c.EPD(pts + player * 12 + 4), c.SetTo, tre),
+        ])
+
+        if cs.EUDIfNot(prevtstart == ~(pts + player * 12 + 4)):  # If there were triggers
+            # link trs, tre with them
             vf.SeqCompute([
-                (c.EPD(pts + player * 12 + 8), c.SetTo, tstart),
-                (c.EPD(tstart + 4), c.SetTo, prevtstart),
-                (c.EPD(_t0 + 8 + 320 + 20), c.SetTo, prevtstart)
+                (c.EPD(trs + 4), c.SetTo, prevtstart),
             ])
+            sf.f_dwwrite_epd(sf.f_epd(prevtend) + 1, tre)
         cs.EUDEndIf()
 
     if c.PushTriggerScope():
@@ -95,12 +107,17 @@ def CreateStage3(root):
             lasttime << curtime
             cs.EUDJump(root)
         cs.EUDEndIf()
+
+        cs.DoActions(c.SetMemory(0x6509B0, c.SetTo, 0))  # Current player = 1
+
         cs.EUDJump(0x80000000)
     c.PopTriggerScope()
 
     # lasttime << curtime
     curtime << sf.f_dwread_epd(c.EPD(0x57F23C))
     lasttime << curtime
+
+    cs.DoActions(c.SetMemory(0x6509B0, c.SetTo, 0))  # Current player = 1
 
     # now jump to root
     cs.EUDJump(root)
