@@ -35,7 +35,7 @@ class CHK:
 
     def loadchk(self, b):
         # this code won't handle protection methods properly such as...
-        #  - duplicate section name
+        # - duplicate section name
         #  - jump section protection
         #
         # this program although handles

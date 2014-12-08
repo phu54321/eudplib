@@ -43,7 +43,7 @@ class PayloadBuffer:
         number = scaddr.Evaluate(number)
         assert number.rlocmode == 0, 'Non-constant given.'
         number.offset &= 0xFF
-        self._data[self._datacur : self._datacur + 1] = binio.i2b1(number.offset)
+        self._data[self._datacur: self._datacur + 1] = binio.i2b1(number.offset)
         self._datacur += 1
 
     def WriteWord(self, number):
@@ -139,7 +139,7 @@ def _CreateStructPacker(structformat):
                 ri = scaddr.Evaluate(arg)
 
                 assert (ri.rlocmode == 0 or
-                    (sizelist[i] == 4 and dpos % 4 == 0)), (
+                        (sizelist[i] == 4 and dpos % 4 == 0)), (
                     'Cannot write non-const in byte/word/nonalligned dword.'
                 )
 

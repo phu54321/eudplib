@@ -3,6 +3,7 @@
 
 from .. import core as c
 
+
 class VariableBase:
     def __init__(self):
         pass

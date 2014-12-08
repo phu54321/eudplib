@@ -51,8 +51,8 @@ def f_dwepdread_epd(targetplayer):
     for i in range(31, -1, -1):
         nextchain = chain1[i - 1] if i > 0 else readend
         if i >= 2:
-            epdsubact = [retepd.AddNumber(-2**(i-2))]
-            epdaddact = [retepd.AddNumber(2**(i-2))]
+            epdsubact = [retepd.AddNumber(-2 ** (i - 2))]
+            epdaddact = [retepd.AddNumber(2 ** (i - 2))]
         else:
             epdsubact = []
             epdaddact = []
@@ -60,18 +60,18 @@ def f_dwepdread_epd(targetplayer):
         chain1[i] << c.Trigger(
             nextptr=cmptrigger,
             actions=[
-                c.SetMemory(cmp_number, c.Subtract, 2 ** i),
-                c.SetNextPtr(cmptrigger, chain2[i]),
-                c.SetMemory(cmpact_ontrueaddr, c.SetTo, nextchain),
-                ret.SubtractNumber(2 ** i),
-            ] + epdsubact
+                        c.SetMemory(cmp_number, c.Subtract, 2 ** i),
+                        c.SetNextPtr(cmptrigger, chain2[i]),
+                        c.SetMemory(cmpact_ontrueaddr, c.SetTo, nextchain),
+                        ret.SubtractNumber(2 ** i),
+                    ] + epdsubact
         )
 
         chain2[i] << c.Trigger(
             actions=[
-                c.SetMemory(cmp_number, c.Add, 2 ** i),
-                ret.AddNumber(2 ** i),
-            ] + epdaddact
+                        c.SetMemory(cmp_number, c.Add, 2 ** i),
+                        ret.AddNumber(2 ** i),
+                    ] + epdaddact
         )
 
     readend << c.NextTrigger()

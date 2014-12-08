@@ -17,6 +17,7 @@ import inspect
 def DoActions(actions, nextptr=None):
     return c.Trigger(nextptr=nextptr, actions=actions)
 
+
 def CreateStage2(payload):
     # We first build code injector.
     prtdb = c.Db(b''.join([c.i2b4(x // 4) for x in payload.prttable]))

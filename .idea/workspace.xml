@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="ae861aca-0188-4483-b879-0580d2ce80c0" name="Default" comment="Smaller stage2, hence smaller stage1">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/eudtrg/trigtrg/runtrigtrg.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/tests/testtrigtrg.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/outputmap/creeptest.scx" afterPath="$PROJECT_DIR$/tests/outputmap/creeptest.scx" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/out.bin" afterPath="$PROJECT_DIR$/tests/out.bin" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/__init__.py" afterPath="$PROJECT_DIR$/eudtrg/__init__.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/trigtrg/__init__.py" afterPath="$PROJECT_DIR$/eudtrg/trigtrg/__init__.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/core/utils/blockstru.py" afterPath="$PROJECT_DIR$/eudtrg/core/utils/blockstru.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/maprw/injector/stage3.py" afterPath="$PROJECT_DIR$/eudtrg/maprw/injector/stage3.py" />
+    <list default="true" id="ae861aca-0188-4483-b879-0580d2ce80c0" name="Default" comment="refactored">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/core/mapdata/chktok.py" afterPath="$PROJECT_DIR$/eudtrg/core/mapdata/chktok.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/stdfunc/memiof/dwmemio.py" afterPath="$PROJECT_DIR$/eudtrg/stdfunc/memiof/dwmemio.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/core/allocator/payload.py" afterPath="$PROJECT_DIR$/eudtrg/core/allocator/payload.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/core/allocator/pbuffer.py" afterPath="$PROJECT_DIR$/eudtrg/core/allocator/pbuffer.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/maprw/injector/stage2.py" afterPath="$PROJECT_DIR$/eudtrg/maprw/injector/stage2.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/varfunc/vbase.py" afterPath="$PROJECT_DIR$/eudtrg/varfunc/vbase.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="eudtrglib.iws" />
@@ -34,79 +32,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="blockstru.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/eudtrg/core/utils/blockstru.py">
+      <file leaf-file-name="__init__.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/eudtrg/stdfunc/mathf/__init__.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1197">
-              <caret line="12" column="48" selection-start-line="12" selection-start-column="48" selection-end-line="12" selection-end-column="48" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="runtrigtrg.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/eudtrg/trigtrg/runtrigtrg.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="154" max-vertical-offset="627">
-              <caret line="18" column="50" selection-start-line="18" selection-start-column="50" selection-end-line="18" selection-end-column="50" />
-              <folding>
-                <element signature="e#0#24#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="stage3.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/eudtrg/maprw/injector/stage3.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="230" max-vertical-offset="2527">
-              <caret line="23" column="45" selection-start-line="23" selection-start-column="45" selection-end-line="23" selection-end-column="45" />
-              <folding>
-                <element signature="e#192#217#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="testtrigtrg.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/tests/testtrigtrg.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.7632135" vertical-offset="0" max-vertical-offset="475">
-              <caret line="19" column="0" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
-              <folding>
-                <element signature="e#0#10#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="__init__.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/eudtrg/trigtrg/__init__.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="133">
-              <caret line="1" column="0" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="stage2.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/eudtrg/maprw/injector/stage2.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="1781" max-vertical-offset="2565">
-              <caret line="109" column="0" selection-start-line="109" selection-start-column="0" selection-end-line="109" selection-end-column="0" />
-              <folding>
-                <element signature="e#318#343#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="testcreep.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/tests/testcreep.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="627" max-vertical-offset="2337">
-              <caret line="46" column="0" selection-start-line="46" selection-start-column="0" selection-end-line="46" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.2410148" vertical-offset="0" max-vertical-offset="473">
+              <caret line="6" column="0" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -162,6 +92,8 @@
         <option value="$PROJECT_DIR$/eudtrg/maprw/injector/stage3.py" />
         <option value="$PROJECT_DIR$/eudtrg/trigtrg/runtrigtrg.py" />
         <option value="$PROJECT_DIR$/tests/testtrigtrg.py" />
+        <option value="$PROJECT_DIR$/eudtrg/stdfunc/mathf/isqrt.py" />
+        <option value="$PROJECT_DIR$/eudtrg/stdfunc/mathf/__init__.py" />
       </list>
     </option>
   </component>
@@ -223,20 +155,6 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="tests" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="eudtrglib" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="eudtrglib" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
               <option name="myItemId" value="eudtrg" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -277,47 +195,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="memiof" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="eudtrglib" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="eudtrglib" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="eudtrg" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="maprw" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="eudtrglib" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="eudtrglib" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="eudtrg" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="maprw" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="injector" />
+              <option name="myItemId" value="mathf" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -346,7 +224,7 @@
       <recent name="C:\Users\Tatabox\PycharmProjects\eudtrglib\eudtrg\stdfunc\calc" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.testtrigtrg">
+  <component name="RunManager" selected="Python.testcreep">
     <configuration default="false" name="testcreep" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -365,25 +243,6 @@
       <RunnerSettings RunnerId="PyDebugRunner" />
       <RunnerSettings RunnerId="PythonRunner" />
       <ConfigurationWrapper RunnerId="PyDebugRunner" />
-      <ConfigurationWrapper RunnerId="PythonRunner" />
-      <method />
-    </configuration>
-    <configuration default="false" name="testperf" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="eudtrglib" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/tests/testperf.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <RunnerSettings RunnerId="PythonRunner" />
       <ConfigurationWrapper RunnerId="PythonRunner" />
       <method />
     </configuration>
@@ -440,6 +299,25 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <module name="eudtrglib" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/tests/testtrigtrg.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <RunnerSettings RunnerId="PythonRunner" />
+      <ConfigurationWrapper RunnerId="PythonRunner" />
+      <method />
+    </configuration>
+    <configuration default="false" name="linecounter" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="eudtrglib" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/linecounter.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <RunnerSettings RunnerId="PythonRunner" />
@@ -570,18 +448,18 @@
     </configuration>
     <list size="5">
       <item index="0" class="java.lang.String" itemvalue="Python.testcreep" />
-      <item index="1" class="java.lang.String" itemvalue="Python.testperf" />
-      <item index="2" class="java.lang.String" itemvalue="Python.testmath" />
-      <item index="3" class="java.lang.String" itemvalue="Python.stage3" />
-      <item index="4" class="java.lang.String" itemvalue="Python.testtrigtrg" />
+      <item index="1" class="java.lang.String" itemvalue="Python.testmath" />
+      <item index="2" class="java.lang.String" itemvalue="Python.stage3" />
+      <item index="3" class="java.lang.String" itemvalue="Python.testtrigtrg" />
+      <item index="4" class="java.lang.String" itemvalue="Python.linecounter" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Python.testtrigtrg" />
-        <item index="1" class="java.lang.String" itemvalue="Python.testcreep" />
-        <item index="2" class="java.lang.String" itemvalue="Python.testmath" />
-        <item index="3" class="java.lang.String" itemvalue="Python.stage3" />
-        <item index="4" class="java.lang.String" itemvalue="Python.testperf" />
+        <item index="0" class="java.lang.String" itemvalue="Python.testcreep" />
+        <item index="1" class="java.lang.String" itemvalue="Python.linecounter" />
+        <item index="2" class="java.lang.String" itemvalue="Python.testtrigtrg" />
+        <item index="3" class="java.lang.String" itemvalue="Python.testmath" />
+        <item index="4" class="java.lang.String" itemvalue="Python.stage3" />
       </list>
     </recent_temporary>
   </component>
@@ -650,7 +528,13 @@
       <option name="project" value="LOCAL" />
       <updated>1418006181510</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="RunTrigTrg function complete (1)">
+      <created>1418015864350</created>
+      <option name="number" value="00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1418015864350</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -664,9 +548,10 @@
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.21069182" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.21069182" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.20204978" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32861635" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39937106" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -675,7 +560,6 @@
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32861635" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
@@ -703,7 +587,8 @@
     <MESSAGE value="Bug fixed. Code compression works" />
     <MESSAGE value="Added code compression flag, None for some asdfinf" />
     <MESSAGE value="Smaller stage2, hence smaller stage1" />
-    <option name="LAST_COMMIT_MESSAGE" value="Smaller stage2, hence smaller stage1" />
+    <MESSAGE value="RunTrigTrg function complete (1)" />
+    <option name="LAST_COMMIT_MESSAGE" value="RunTrigTrg function complete (1)" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
@@ -713,37 +598,10 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/setup.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="361" max-vertical-offset="475">
-          <caret line="19" column="0" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#43#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/eudtrg/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="323">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/testrandom.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="266" max-vertical-offset="380">
           <caret line="14" column="0" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/setup.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="475">
-          <caret line="19" column="0" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#43#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -859,13 +717,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/eudtrg/stdfunc/mathf/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.2410148" vertical-offset="0" max-vertical-offset="473">
-          <caret line="6" column="0" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://C:/Python34/Lib/site-packages/eudtrg/lib/baselib/vtable.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-6.4164906" vertical-offset="4365" max-vertical-offset="8740">
@@ -895,6 +746,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.79915434" vertical-offset="1199" max-vertical-offset="1767">
           <caret line="83" column="0" selection-start-line="83" selection-start-column="0" selection-end-line="84" selection-end-column="0" />
+          <folding>
+            <element signature="e#43#54#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -989,7 +843,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/eudtrg/maprw/injector/stage2.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1667" max-vertical-offset="2565">
+        <state vertical-scroll-proportion="0.6131078" vertical-offset="1781" max-vertical-offset="2565">
           <caret line="109" column="0" selection-start-line="109" selection-start-column="0" selection-end-line="109" selection-end-column="0" />
           <folding>
             <element signature="e#318#343#0" expanded="true" />
@@ -1027,7 +881,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/eudtrg/trigtrg/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="133">
+        <state vertical-scroll-proportion="0.040169135" vertical-offset="0" max-vertical-offset="473">
           <caret line="1" column="0" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
           <folding />
         </state>
@@ -1098,26 +952,52 @@
         <state vertical-scroll-proportion="0.0" vertical-offset="154" max-vertical-offset="627">
           <caret line="18" column="50" selection-start-line="18" selection-start-column="50" selection-end-line="18" selection-end-column="50" />
           <folding>
-            <element signature="e#0#24#0" expanded="true" />
+            <element signature="e#0#24#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/tests/testcreep.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="627" max-vertical-offset="2337">
+        <state vertical-scroll-proportion="0.4820296" vertical-offset="627" max-vertical-offset="2337">
           <caret line="46" column="0" selection-start-line="46" selection-start-column="0" selection-end-line="46" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/setup.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.6828753" vertical-offset="0" max-vertical-offset="473">
+          <caret line="18" column="1" selection-start-line="18" selection-start-column="1" selection-end-line="18" selection-end-column="1" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/tests/testtrigtrg.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.7632135" vertical-offset="0" max-vertical-offset="475">
-          <caret line="19" column="0" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.7632135" vertical-offset="38" max-vertical-offset="513">
+          <caret line="21" column="0" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/linecounter.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.7589852" vertical-offset="477" max-vertical-offset="950">
+          <caret line="44" column="0" selection-start-line="44" selection-start-column="0" selection-end-line="44" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/eudtrg/stdfunc/mathf/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.2410148" vertical-offset="0" max-vertical-offset="473">
+          <caret line="6" column="0" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>

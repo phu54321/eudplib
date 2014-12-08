@@ -119,7 +119,7 @@ class ObjAllocator:
         # Count by dword
         dwoccupmap = []
         for i in range(0, len(self._occupmap), 4):
-            dwoccupmap.append(self._occupmap[i:i+4] != [0, 0, 0, 0])
+            dwoccupmap.append(self._occupmap[i:i + 4] != [0, 0, 0, 0])
 
         return dwoccupmap
 
@@ -237,7 +237,6 @@ def AllocObjects():
         _alloctable[obj] = (last_alloc_addr * 4, objsize)
         if last_alloc_addr * 4 + objsize > _payload_size:
             _payload_size = last_alloc_addr * 4 + objsize
-
 
     phase = None
 
