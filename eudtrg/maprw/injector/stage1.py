@@ -8,7 +8,7 @@
 '''
 
 from ... import core as c
-from . import trigtrg as tt
+from ...trigtrg import trigtrg as tt
 
 
 trglist = []
