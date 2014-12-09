@@ -14,7 +14,6 @@ def SaveMap(fname, rootf):
     # Create injector triggers
     bsm = c.BlockStruManager()
     prev_bsm = c.SetCurrentBlockStruManager(bsm)
-    old_evb = vf.SetCurrentVariableBuffer(vf.EUDVarBuffer())
 
     c.PushTriggerScope()
     root = doevents._MainStarter(rootf)
@@ -22,21 +21,15 @@ def SaveMap(fname, rootf):
     c.PopTriggerScope()
     payload = c.CreatePayload(root)
 
-    vf.SetCurrentVariableBuffer(vf.EUDVarBuffer())
-
     c.PushTriggerScope()
     final_payload = stage2.CreateStage2(payload)
     c.PopTriggerScope()
-    vf.SetCurrentVariableBuffer(old_evb)
     c.SetCurrentBlockStruManager(prev_bsm)
 
     # Update string table & etc
-    # rootf can be EUDFunc, which can be evaluated later.
-    # User-defined strings inside eudtrg program is registered after rootf is
-    # called, when _MainStarter is called. So, UpdateMapData function should
+    # User-defined strings in eudtrg program is registered after rootf is
+    # called. This happens when _MainStarter is called, so UpdateMapData function should
     # be called after `doevents._MainStarter(rootf)` call.
-    # Moreover, since it won't matter anyway, we update string table and
-    # property table after stage 2 is initialized.
     mapdata.UpdateMapData()
     # stage1.CreateAndApplyStage1 requires STR section to be constructed before
     # it append stage2 payload after 'original' STR section. so UpdateMapData

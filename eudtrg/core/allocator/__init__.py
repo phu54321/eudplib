@@ -8,7 +8,10 @@ from .scaddr import (
     IsValidSCMemAddr
 )
 
+from .rlocint import RlocInt, toRlocInt
+
 from .payload import (
     CreatePayload,
-    CompressPayload
+    CompressPayload,
+    RegisterCreatePayloadCallback,
 )

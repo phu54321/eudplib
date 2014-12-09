@@ -40,13 +40,12 @@ class EUDVarBuffer(c.EUDObject):
 _evb = None
 
 
-def SetCurrentVariableBuffer(evb):
+def RegisterNewVariableBuffer():
     global _evb
+    _evb = EUDVarBuffer()
 
-    oldevb = _evb
-    _evb = evb
-    return oldevb
 
+c.RegisterCreatePayloadCallback(RegisterNewVariableBuffer)
 
 class VariableTriggerForward(c.SCMemAddr):
     def __init__(self):

@@ -17,7 +17,9 @@ def f_mul(a, b):
         return f_constmul(a)(b)
 
     else:
-        return a * b
+        ret = vf.EUDVariable()
+        ret << a * b
+        return ret
 
 
 def f_div(a, b):
@@ -30,9 +32,14 @@ def f_div(a, b):
 
     else:
         if b:
-            return a // b, a % b
+            q, m = a // b, a % b
         else:
-            return 0xFFFFFFFF, a
+            q, m = 0xFFFFFFFF, a
+        vq, vm = vf.EUDCreateVariables(2)
+        vf.SeqCompute([
+            (vq, c.SetTo, q),
+            (vm, c.SetTo, vm)
+        ])
 
 
 # -------

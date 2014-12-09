@@ -7,8 +7,7 @@ from .eudv import (
     SeqCompute,
 
 # Variable buffer thing
-    EUDVarBuffer,
-    SetCurrentVariableBuffer
+    EUDVarBuffer
 )
 
 from .eudlv import EUDLightVariable

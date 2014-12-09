@@ -175,9 +175,10 @@ def AllocObjects():
     if not _payload_compress:
         last_alloc_addr = 0
         for obj in _found_objects:
-            objsize = (obj.GetDataSize() + 3) & ~3
+            objsize = obj.GetDataSize()
+            allocsize = (objsize + 3) & ~3
             _alloctable[obj] = last_alloc_addr, objsize
-            last_alloc_addr += objsize
+            last_alloc_addr += allocsize
         _payload_size = last_alloc_addr
         phase = None
         return
@@ -265,7 +266,17 @@ def ConstructPayload():
     return pbuf.CreatePayload()
 
 
+_on_create_payload_callbacks = []
+
+
+def RegisterCreatePayloadCallback(f):
+    _on_create_payload_callbacks.append(f)
+
+
 def CreatePayload(root):
+    # Call callbacks
+    for f in _on_create_payload_callbacks:
+        f()
     CollectObjects(root)
     AllocObjects()
     print('%d objects found' % len(_found_objects))

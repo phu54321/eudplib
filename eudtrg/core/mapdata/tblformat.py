@@ -41,8 +41,9 @@ class TBL:
             self.AddString(string)
 
     def AddString(self, string):
-        if type(string) is str:
-            string = ubconv.u2b(string)  # Starcraft uses multibyte encoding.
+        string = ubconv.u2b(string)  # Starcraft uses multibyte encoding.
+        if not isinstance(string, bytes):
+            raise TypeError('Invalid type for string')
 
         stringindex = len(self._dataindextb)
 
@@ -77,8 +78,9 @@ class TBL:
                 return None
 
     def GetStringIndex(self, string):
-        if type(string) is str:
-            string = ubconv.u2b(string)
+        string = ubconv.u2b(string)
+        if not isinstance(string, bytes):
+            raise TypeError('Invalid type for string')
 
         try:
             return self._stringmap[string] + 1
