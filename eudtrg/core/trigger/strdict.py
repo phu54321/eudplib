@@ -1,3 +1,6 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
 DefLocationDict = dict(
     list({"Location %d" % i: i for i in range(255)}.items()) +
     [('Anywhere', 63)]

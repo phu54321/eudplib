@@ -1,3 +1,6 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
 # This code uses LCG with constants defined from ANSI C
 # See http://en.wikipedia.org/wiki/Linear_congruential_generator
 

@@ -1,3 +1,6 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
 from .bitwise import (
     f_bitand,
     f_bitor,
