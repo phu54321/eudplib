@@ -11,6 +11,7 @@ from .scaddr import (
 from .rlocint import RlocInt, toRlocInt
 
 from .payload import (
+    GetObjectAddr,
     CreatePayload,
     CompressPayload,
     RegisterCreatePayloadCallback,

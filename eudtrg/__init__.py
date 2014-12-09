@@ -5,6 +5,7 @@ from .core import *
 from .varfunc import *
 from .ctrlstru import *
 from .stdfunc import *
+from .stdobj import *
 from .trigtrg import *
 from .maprw import *
 
