@@ -5,8 +5,6 @@ begining_str = """\
 # -*- coding: utf-8 -*-
 
 '''
-The MIT License (MIT)
-
 Copyright (c) 2014 trgk
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -30,13 +28,14 @@ THE SOFTWARE.
 
 """
 
-print('Auto "# -*- coding: utf-8 -*-" inserter')
+print('Auto "license inserter')
 
 for root, dirs, files in os.walk('eudtrg'):
     for f in files:
         if f[-3:] == '.py':
             finalpath = os.path.join(root, f)
             code = open(finalpath, 'r', encoding='utf-8').read()
+
             if not code.startswith(begining_str):
                 print('%s' % finalpath)
                 code = begining_str + code
