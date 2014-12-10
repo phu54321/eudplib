@@ -24,7 +24,7 @@ THE SOFTWARE.
 '''
 
 from .. import core as c
-from .basicstru import EUDJump, EUDBranch
+from .basicstru import EUDJump, EUDJumpIf, EUDBranch
 
 
 def _IsSwitchBlockId(idf):
@@ -45,13 +45,9 @@ def EUDSwitch(var):
     return True
 
 
-def EUDSwitchCase(begin, end=None):
-    assert isinstance(begin, int) or isinstance(begin, c.SCMemAddr), (
+def EUDSwitchCase(number):
+    assert isinstance(number, int) or isinstance(number, c.SCMemAddr), (
         'Invalid selector start for EUDSwitch')
-    if end is None:
-        end = begin + 1
-    assert isinstance(begin, int) or isinstance(begin, c.SCMemAddr), (
-        'Invalid selector end for EUDSwitch')
 
     lb = c.EUDGetLastBlock()
     assert lb[0] == 'swblock', 'Block start/end mismatch'
@@ -103,13 +99,13 @@ def EUDEndSwitch():
             br2 = c.Forward()
             midpos = len(keys) // 2
             midval = keys[midpos]
-
+            EUDJumpIf(var == midval, casebrlist[midval])
             EUDBranch(var <= midval, br1, br2)
-            br1 << KeySelector(keys[:midpos + 1])
+            br1 << KeySelector(keys[:midpos])
             br2 << KeySelector(keys[midpos + 1:])
 
         else:  # len(keys) == 0
-            EUDJump(defbranch)
+            return defbranch
 
         return ret
 

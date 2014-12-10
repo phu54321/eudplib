@@ -38,27 +38,38 @@ class EUDArray:
         self._varlist = vf.EUDCreateVariables(len)
         self._varlen = len
         self._debugstring = c.Db(c.u2b('[EUDArray::get] Out of bounds : %s' % hex(id(self))))
+        self._getter = None
+        self._setter = None
 
     def get(self, key):
         varn = self._varlen
         vlist = self._varlist
-        ret = vf.EUDVariable()
 
         if isinstance(key, int):  # Faster path
+            ret = vf.EUDVariable()
             ret << vlist[key]  # May throw indexerror
             return ret
 
-        cs.EUDSwitch(key)
-        for i in range(varn):
-            cs.EUDSwitchCase(i)
-            ret << vlist[i]  # May throw indexerror
-            cs.EUDBreak()
+        if self._getter is None:
+            @vf.EUDFunc
+            def _getter(key):
+                ret = vf.EUDVariable()
+                cs.EUDSwitch(key)
+                for i in range(varn):
+                    cs.EUDSwitchCase(i)
+                    ret << vlist[i]  # May throw indexerror
+                    cs.EUDBreak()
 
-        cs.EUDSwitchDefault()  # out of bound
-        sf.f_strcpy(0x58D740, self._debugstring)
-        cs.EUDJump(0)  # crash
+                cs.EUDSwitchDefault()  # out of bound
+                sf.f_strcpy(0x58D740, self._debugstring)
+                cs.EUDJump(0)  # crash
 
-        cs.EUDEndSwitch()
+                cs.EUDEndSwitch()
+                return ret
+
+            self._getter = _getter
+
+        return self._getter(key)
 
     def set(self, key, item):
         varn = self._varlen
@@ -68,16 +79,23 @@ class EUDArray:
             vlist[key] << item
             return
 
-        cs.EUDSwitch(key)
-        for i in range(varn):
-            cs.EUDSwitchCase(i)
-            vlist[i] << item
-            cs.EUDBreak()
+        if self._setter is None:
+            @vf.EUDFunc
+            def _setter(key, item):
+                cs.EUDSwitch(key)
+                for i in range(varn):
+                    cs.EUDSwitchCase(i)
+                    vlist[i] << item
+                    cs.EUDBreak()
 
-        cs.EUDSwitchDefault()
-        cs.DoActions([
-            c.DisplayText('[EUDArray::set] Out of bounds : %s' % self),
-            c.Draw()
-        ])
+                cs.EUDSwitchDefault()
+                cs.DoActions([
+                    c.DisplayText('[EUDArray::set] Out of bounds : %s' % self),
+                    c.Draw()
+                ])
 
-        cs.EUDEndSwitch()
+                cs.EUDEndSwitch()
+
+            self._setter = _setter
+
+        self._setter(key, item)

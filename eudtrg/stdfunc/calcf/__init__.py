@@ -31,6 +31,9 @@ from .bitwise import (
     f_bitnor,
     f_bitnxor,
     f_bitnot,
+    f_bitlshift,
+    f_bitrshift,
+    f_bitsplit,
 )
 
 from .muldiv import (

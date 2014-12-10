@@ -33,3 +33,6 @@ from .maprw import *
 
 __version__ = '0.40-r2-beta'
 
+
+def eudtrgVersion():
+    return __version__

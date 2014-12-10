@@ -26,6 +26,7 @@ THE SOFTWARE.
 from ... import core as c
 from ... import ctrlstru as cs
 from ... import varfunc as vf
+from .muldiv import f_mul, f_div
 
 
 def bw_gen(cond):
@@ -84,3 +85,60 @@ def f_bitnxor(a, b):
 
 def f_bitnot(a):
     return 0xFFFFFFFF - a
+
+
+# -------
+
+
+@vf.EUDFunc
+def f_bitsplit(a):
+    bits = [vf.EUDCreateVariables(32)]
+    for i in range(31, -1, -1):
+        cs.DoActions(bits[i].SetNumber(0))
+        c.Trigger(
+            conditions=a.AtLeast(2 ** i),
+            actions=[
+                a.SubtractNumber(2 ** i),
+                bits[i].SetNumber(1)
+            ]
+        )
+    return bits
+
+
+# -------
+
+@vf.EUDFunc
+def _exp2_vv(n):
+    ret = vf.EUDVariable()
+    cs.EUDSwitch(n)
+    for i in range(32):
+        cs.EUDSwitchCase(i)
+        ret << 1 ** i
+    cs.EUDSwitchDefault()
+    ret << 0  # overflow
+    cs.EUDEndSwitch()
+    return ret
+
+
+def _exp2(n):
+    if isinstance(n, int):
+        return 1 << n
+
+    else:
+        return _exp2_vv(n)
+
+
+def f_bitlshift(a, b):
+    return f_mul(a, _exp2(b))
+
+
+def f_bitrshift(a, b):
+    if isinstance(b, int) and b >= 32:
+        return 0
+
+    ret = vf.EUDVariable()
+    if cs.EUDIf(b >= 32):
+        ret << 0
+    if cs.EUDElse():
+        ret << f_div(a, _exp2(b))
+    return ret

@@ -31,10 +31,11 @@ from .modcurpl import (
 from .userpl import f_getuserplayerid
 
 from .random import (
-    getseed,
-    srand,
-    rand,
-    dwrand
+    f_getseed,
+    f_srand,
+    f_rand,
+    f_dwrand,
+    f_randomize
 )
 
 from .extstr import (
