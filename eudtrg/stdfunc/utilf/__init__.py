@@ -6,6 +6,8 @@ from .modcurpl import (
     f_getcurpl
 )
 
+from .userpl import f_getuserplayerid
+
 from .random import (
     getseed,
     srand,

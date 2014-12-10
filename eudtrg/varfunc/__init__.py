@@ -1,13 +1,12 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+from .vbuf import EUDVarBuffer, GetCurrentVariableBuffer
+
 from .eudv import (
     EUDVariable,
     EUDCreateVariables,
     SeqCompute,
-
-# Variable buffer thing
-    EUDVarBuffer
 )
 
 from .eudlv import EUDLightVariable

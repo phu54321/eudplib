@@ -25,6 +25,9 @@ class EUDFunc:
         self._fdecl_func = fdecl_func
         functools.update_wrapper(self, fdecl_func)
         self._fstart = None
+        self._fend = None
+        self._fargs = None
+        self._frets = None
 
     def CreateFuncBody(self):
         assert self._fstart is None
@@ -32,20 +35,17 @@ class EUDFunc:
         f_bsm = BlockStruManager()
         prev_bsm = SetCurrentBlockStruManager(f_bsm)
 
-        if 1:
-            c.PushTriggerScope()
-
+        if c.PushTriggerScope():
             f_args = [EUDVariable() for _ in range(self._argn)]
             fstart = c.NextTrigger()
             f_rets = self._fdecl_func(*f_args)
             if f_rets is not None:
                 f_rets = c.Assignable2List(f_rets)
             fend = c.Trigger()
+        c.PopTriggerScope()
 
-            c.PopTriggerScope()
-
-        SetCurrentBlockStruManager(prev_bsm)
         assert f_bsm.empty(), 'Block start/end mismatch inside function'
+        SetCurrentBlockStruManager(prev_bsm)
 
         # Assert that all return values are EUDVariable.
         if f_rets is not None:  # Not void function
