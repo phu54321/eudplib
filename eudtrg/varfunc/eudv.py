@@ -28,7 +28,7 @@ import traceback
 
 from .. import core as c
 from .vbase import VariableBase
-from .vbuf import _evb
+from .vbuf import GetCurrentVariableBuffer
 
 
 class VariableTriggerForward(c.SCMemAddr):
@@ -37,9 +37,10 @@ class VariableTriggerForward(c.SCMemAddr):
         self._expr = weakref.WeakKeyDictionary()
 
     def Evaluate(self):
-        if _evb not in self._expr:
-            self._expr[_evb] = _evb.CreateVarTrigger()
-        return c.Evaluate(self._expr[_evb])
+        evb = GetCurrentVariableBuffer()
+        if evb not in self._expr:
+            self._expr[evb] = evb.CreateVarTrigger()
+        return c.Evaluate(self._expr[evb])
 
 
 class EUDVariable(VariableBase):

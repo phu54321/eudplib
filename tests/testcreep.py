@@ -110,9 +110,11 @@ def main():
 
         EUDEndWhile()
 
+        DoActions(KillUnit('Kakaru (Twilight Critter)', Player1))
+
         EUDDoEvents()
 
     EUDEndWhile()
 
 
-SaveMap('outputmap/creeptest.scx', main)
+SaveMap('outputmap/testcreep.scx', main)

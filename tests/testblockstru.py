@@ -17,4 +17,5 @@ def main():
         EUDDoEvents()
     EUDEndWhile()
 
-SaveMap('outputmap\\blockstru.scx', main)
+
+SaveMap('outputmap/testblockstrublockstru.scx', main)

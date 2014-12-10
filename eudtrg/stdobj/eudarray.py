@@ -37,11 +37,36 @@ class EUDArray:
     def __init__(self, len):
         self._varlist = vf.EUDCreateVariables(len)
         self._varlen = len
-        self._debugstring = c.Db('[EUDArray::get] Out of bounds : %s' % hex(id(self)))
+        self._debugstring = c.Db(c.u2b('[EUDArray::get] Out of bounds : %s' % hex(id(self))))
+
+    def get(self, key):
+        varn = self._varlen
+        vlist = self._varlist
+        ret = vf.EUDVariable()
+
+        if isinstance(key, int):  # Faster path
+            ret << vlist[key]  # May throw indexerror
+            return ret
+
+        cs.EUDSwitch(key)
+        for i in range(varn):
+            cs.EUDSwitchCase(i)
+            ret << vlist[i]  # May throw indexerror
+            cs.EUDBreak()
+
+        cs.EUDSwitchDefault()  # out of bound
+        sf.f_strcpy(0x58D740, self._debugstring)
+        cs.EUDJump(0)  # crash
+
+        cs.EUDEndSwitch()
 
     def set(self, key, item):
         varn = self._varlen
         vlist = self._varlist
+
+        if isinstance(key, int):  # Faster path
+            vlist[key] << item
+            return
 
         cs.EUDSwitch(key)
         for i in range(varn):
@@ -54,22 +79,5 @@ class EUDArray:
             c.DisplayText('[EUDArray::set] Out of bounds : %s' % self),
             c.Draw()
         ])
-
-        cs.EUDEndSwitch()
-
-    def set(self, key, item):
-        varn = self._varlen
-        vlist = self._varlist
-        ret = vf.EUDVariable()
-
-        cs.EUDSwitch(key)
-        for i in range(varn):
-            cs.EUDSwitchCase(i)
-            ret << vlist[i]
-            cs.EUDBreak()
-
-        cs.EUDSwitchDefault()  # out of bound
-        sf.f_strcpy(0x58D740, self._debugstring)
-        cs.EUDJump(0)  # crash
 
         cs.EUDEndSwitch()
