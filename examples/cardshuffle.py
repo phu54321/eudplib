@@ -39,10 +39,12 @@ def PrepareDeck():
 
 
 def main():
-    PrepareDeck()
-    for i in range(54):
-        SeqCompute([(EPD(0x58D740) + i, SetTo, cards.get(i))])
-
+    if EUDInfLoop():
+        PrepareDeck()
+        for i in range(54):
+            SeqCompute([(EPD(0x58D740) + i, SetTo, cards.get(i))])
+        EUDDoEvents()
+    EUDEndInfLoop()
 
 LoadMap('basemap/basemap.scx')
 # CompressPayload(True)
