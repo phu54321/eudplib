@@ -23,10 +23,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-from ..allocator import SCMemAddr, Evaluate, IsValidSCMemAddr
+from ..allocator import Expr, Evaluate, IsValidSCMemAddr
 
 
-class Action(SCMemAddr):
+class Action(Expr):
     '''
     Action class.
 

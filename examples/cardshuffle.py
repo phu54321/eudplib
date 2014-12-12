@@ -1,5 +1,5 @@
 '''
-simple eudtrg importer
+Card shuffling part only on mycardgame.py
 '''
 
 import sys

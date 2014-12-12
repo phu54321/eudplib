@@ -25,7 +25,7 @@ THE SOFTWARE.
 
 import struct
 
-from . import scaddr, rlocint
+from . import expr, rlocint
 from ..utils import binio
 
 
@@ -62,7 +62,7 @@ class PayloadBuffer:
         if number is None:
             self._datacur += 1
             return
-        number = scaddr.Evaluate(number)
+        number = expr.Evaluate(number)
         assert number.rlocmode == 0, 'Non-constant given.'
         number.offset &= 0xFF
         self._data[self._datacur: self._datacur + 1] = binio.i2b1(number.offset)
@@ -73,7 +73,7 @@ class PayloadBuffer:
             self._datacur += 2
             return
 
-        number = scaddr.Evaluate(number)
+        number = expr.Evaluate(number)
         assert number.rlocmode == 0, 'Non-constant given.'
         number.offset &= 0xFFFF
 
@@ -85,7 +85,7 @@ class PayloadBuffer:
             self._datacur += 4
             return
 
-        number = scaddr.Evaluate(number)
+        number = expr.Evaluate(number)
         number.offset &= 0xFFFFFFFF
 
         if number.rlocmode:
@@ -158,7 +158,7 @@ def _CreateStructPacker(structformat):
 
         for i, arg in enumerate(arglist):
             if arg is not None:
-                ri = scaddr.Evaluate(arg)
+                ri = expr.Evaluate(arg)
 
                 assert (ri.rlocmode == 0 or
                         (sizelist[i] == 4 and dpos % 4 == 0)), (

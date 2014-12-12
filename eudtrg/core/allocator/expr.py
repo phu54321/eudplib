@@ -26,7 +26,7 @@ THE SOFTWARE.
 from . import rlocint
 
 
-class SCMemAddr:
+class Expr:
     def __init__(self, baseobj, offset=0, rlocmode=4):
         self.baseobj = baseobj
         self.offset = offset
@@ -43,17 +43,17 @@ class SCMemAddr:
     def __add__(self, other):
         if not isinstance(other, int):
             return NotImplemented
-        return SCMemAddr(self.baseobj, self.offset + other, self.rlocmode)
+        return Expr(self.baseobj, self.offset + other, self.rlocmode)
 
     def __radd__(self, other):
         if not isinstance(other, int):
             return NotImplemented
-        return SCMemAddr(self.baseobj, self.offset + other, self.rlocmode)
+        return Expr(self.baseobj, self.offset + other, self.rlocmode)
 
     def __sub__(self, other):
         if not isinstance(other, int):
             return NotImplemented
-        if isinstance(other, SCMemAddr):
+        if isinstance(other, Expr):
             assert (
                 self.baseobj == other.baseobj and
                 self.rlocmode == other.rlocmode), (
@@ -61,10 +61,10 @@ class SCMemAddr:
             return self.offset - other.offset
 
         else:
-            return SCMemAddr(self.baseobj, self.offset - other, self.rlocmode)
+            return Expr(self.baseobj, self.offset - other, self.rlocmode)
 
     def __rsub__(self, other):
-        if isinstance(other, SCMemAddr):
+        if isinstance(other, Expr):
             assert (
                 self.baseobj == other.baseobj and
                 self.rlocmode == other.rlocmode), (
@@ -75,17 +75,17 @@ class SCMemAddr:
             return NotImplemented
 
         else:
-            return SCMemAddr(self.baseobj, other - self.offset, -self.rlocmode)
+            return Expr(self.baseobj, other - self.offset, -self.rlocmode)
 
     def __mul__(self, k):
         if not isinstance(k, int):
             return NotImplemented
-        return SCMemAddr(self.baseobj, self.offset * k, self.rlocmode * k)
+        return Expr(self.baseobj, self.offset * k, self.rlocmode * k)
 
     def __rmul__(self, k):
         if not isinstance(k, int):
             return NotImplemented
-        return SCMemAddr(self.baseobj, self.offset * k, self.rlocmode * k)
+        return Expr(self.baseobj, self.offset * k, self.rlocmode * k)
 
     def __floordiv__(self, k):
         if not isinstance(k, int):
@@ -94,10 +94,10 @@ class SCMemAddr:
             (self.rlocmode == 0) or
             (self.rlocmode % k == 0 and self.offset % k == 0)), (
             'Address not divisible')
-        return SCMemAddr(self.baseobj, self.offset // k, self.rlocmode // k)
+        return Expr(self.baseobj, self.offset // k, self.rlocmode // k)
 
 
-class Forward(SCMemAddr):
+class Forward(Expr):
     ''' Class for late definition
     '''
 
@@ -135,4 +135,4 @@ def Evaluate(x):
 
 
 def IsValidSCMemAddr(x):
-    return isinstance(x, SCMemAddr) or isinstance(x, int)
+    return isinstance(x, Expr) or isinstance(x, int)

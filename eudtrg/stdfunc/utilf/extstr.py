@@ -54,7 +54,7 @@ class ExtendedString(c.EUDObject):
         return acts
 
 
-class ExtendedStringIndex_FW(c.SCMemAddr):
+class ExtendedStringIndex_FW(c.Expr):
     def __init__(self, resetter):
         super().__init__(self)
         self._resetter = resetter

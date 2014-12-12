@@ -1,14 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="ae861aca-0188-4483-b879-0580d2ce80c0" name="Default" comment="EUDSwitch default case fix, shuffler example">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/examples/cardshuffle.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/__init__.py" afterPath="$PROJECT_DIR$/eudtrg/__init__.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/stdfunc/calcf/__init__.py" afterPath="$PROJECT_DIR$/eudtrg/stdfunc/calcf/__init__.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/stdfunc/utilf/__init__.py" afterPath="$PROJECT_DIR$/eudtrg/stdfunc/utilf/__init__.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/stdfunc/calcf/bitwise.py" afterPath="$PROJECT_DIR$/eudtrg/stdfunc/calcf/bitwise.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/stdobj/eudarray.py" afterPath="$PROJECT_DIR$/eudtrg/stdobj/eudarray.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/stdfunc/utilf/random.py" afterPath="$PROJECT_DIR$/eudtrg/stdfunc/utilf/random.py" />
+    <list default="true" id="ae861aca-0188-4483-b879-0580d2ce80c0" name="Default" comment="shuffle example completed">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/examples/prj_cardgame_stack.py" />
+      <change type="MOVED" beforePath="C:\Users\Tatabox\PycharmProjects\eudtrglib\eudtrg\core\allocator\scaddr.py" afterPath="$PROJECT_DIR$/eudtrg/core/allocator/expr.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/core/allocator/__init__.py" afterPath="$PROJECT_DIR$/eudtrg/core/allocator/__init__.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/core/trigger/__init__.py" afterPath="$PROJECT_DIR$/eudtrg/core/trigger/__init__.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/varfunc/__init__.py" afterPath="$PROJECT_DIR$/eudtrg/varfunc/__init__.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/core/trigger/action.py" afterPath="$PROJECT_DIR$/eudtrg/core/trigger/action.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/examples/cardshuffle.py" afterPath="$PROJECT_DIR$/examples/cardshuffle.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/core/trigger/condition.py" afterPath="$PROJECT_DIR$/eudtrg/core/trigger/condition.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/core/eudobj/eudobj.py" afterPath="$PROJECT_DIR$/eudtrg/core/eudobj/eudobj.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/varfunc/eudv.py" afterPath="$PROJECT_DIR$/eudtrg/varfunc/eudv.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/stdfunc/utilf/extstr.py" afterPath="$PROJECT_DIR$/eudtrg/stdfunc/utilf/extstr.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/core/allocator/payload.py" afterPath="$PROJECT_DIR$/eudtrg/core/allocator/payload.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/core/allocator/pbuffer.py" afterPath="$PROJECT_DIR$/eudtrg/core/allocator/pbuffer.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/core/trigger/stockact.py" afterPath="$PROJECT_DIR$/eudtrg/core/trigger/stockact.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/ctrlstru/swblock.py" afterPath="$PROJECT_DIR$/eudtrg/ctrlstru/swblock.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
@@ -34,14 +41,46 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="cardshuffle.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="cardshuffle.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/examples/cardshuffle.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.5983087" vertical-offset="553" max-vertical-offset="1045">
-              <caret line="44" column="0" selection-start-line="44" selection-start-column="0" selection-end-line="44" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="247" max-vertical-offset="1083">
+              <caret line="13" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="51" selection-end-column="0" />
               <folding>
-                <element signature="e#32#42#0" expanded="true" />
+                <element signature="e#51#61#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="prj_cardgame_stack.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/examples/prj_cardgame_stack.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="2263" max-vertical-offset="3287">
+              <caret line="140" column="23" selection-start-line="140" selection-start-column="23" selection-end-line="140" selection-end-column="23" />
+              <folding>
+                <element signature="e#1812#1822#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="expr.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/eudtrg/core/allocator/expr.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.92389005" vertical-offset="0" max-vertical-offset="2736">
+              <caret line="23" column="3" selection-start-line="23" selection-start-column="3" selection-end-line="23" selection-end-column="3" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="stockact.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/eudtrg/core/trigger/stockact.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="7013" max-vertical-offset="7562">
+              <caret line="413" column="0" selection-start-line="413" selection-start-column="0" selection-end-line="413" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -102,16 +141,6 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="__init__.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/eudtrg/stdfunc/calcf/__init__.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="303" max-vertical-offset="912">
-              <caret line="33" column="4" selection-start-line="33" selection-start-column="4" selection-end-line="34" selection-end-column="16" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="random.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/eudtrg/stdfunc/utilf/random.py">
           <provider selected="true" editor-type-id="text-editor">
@@ -119,18 +148,6 @@
               <caret line="58" column="5" selection-start-line="58" selection-start-column="5" selection-end-line="58" selection-end-column="5" />
               <folding>
                 <element signature="e#1304#1329#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="__init__.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/eudtrg/__init__.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="344" max-vertical-offset="836">
-              <caret line="38" column="0" selection-start-line="38" selection-start-column="0" selection-end-line="38" selection-end-column="0" />
-              <folding>
-                <element signature="e#1100#1119#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -144,10 +161,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/eudtrg/core/trigger/trigger.py" />
-        <option value="$PROJECT_DIR$/eudtrg/core/allocator/pbuffer.py" />
-        <option value="$PROJECT_DIR$/eudtrg/core/allocator/scaddr.py" />
-        <option value="$PROJECT_DIR$/eudtrg/maprw/injector/stage1.py" />
         <option value="$PROJECT_DIR$/eudtrg/core/utils/blockstru.py" />
         <option value="$PROJECT_DIR$/eudtrg/trigtrg/__init__.py" />
         <option value="$PROJECT_DIR$/eudtrg/maprw/injector/stage3.py" />
@@ -173,7 +186,6 @@
         <option value="$PROJECT_DIR$/eudtrg/varfunc/eudvbuf.py" />
         <option value="$PROJECT_DIR$/eudtrg/varfunc/vbuf.py" />
         <option value="$PROJECT_DIR$/eudtrg/varfunc/eudvarr.py" />
-        <option value="$PROJECT_DIR$/eudtrg/varfunc/__init__.py" />
         <option value="$PROJECT_DIR$/eudtrg/stdobj/eudvarr.py" />
         <option value="$PROJECT_DIR$/eudtrg/stdobj/__init__.py" />
         <option value="$PROJECT_DIR$/eudtrg/stdfunc/utilf/userpl.py" />
@@ -195,6 +207,11 @@
         <option value="$PROJECT_DIR$/eudtrg/ctrlstru/swblock.py" />
         <option value="$PROJECT_DIR$/eudtrg/stdobj/eudarray.py" />
         <option value="$PROJECT_DIR$/examples/cardshuffle.py" />
+        <option value="$PROJECT_DIR$/eudtrg/varfunc/__init__.py" />
+        <option value="$PROJECT_DIR$/eudtrg/core/trigger/stockact.py" />
+        <option value="$PROJECT_DIR$/eudtrg/core/trigger/__init__.py" />
+        <option value="$PROJECT_DIR$/examples/prj_cardgame_stack.py" />
+        <option value="$PROJECT_DIR$/eudtrg/core/allocator/expr.py" />
       </list>
     </option>
   </component>
@@ -256,20 +273,6 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="tests" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="eudtrglib" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="eudtrglib" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
               <option name="myItemId" value="examples" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -285,6 +288,42 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="eudtrg" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="eudtrglib" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="eudtrglib" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="eudtrg" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="varfunc" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="eudtrglib" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="eudtrglib" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="eudtrg" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="trigtrg" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -342,11 +381,73 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="stdfunc" />
+              <option name="myItemId" value="core" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="eudtrglib" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="eudtrglib" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="calcf" />
+              <option name="myItemId" value="eudtrg" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="core" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="trigger" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="eudtrglib" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="eudtrglib" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="eudtrg" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="core" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="eudobj" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="eudtrglib" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="eudtrglib" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="eudtrg" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="core" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="allocator" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -363,6 +464,7 @@
     <property name="recentsLimit" value="5" />
     <property name="LayoutCode.rearrangeEntries" value="true" />
     <property name="restartRequiresConfirmation" value="true" />
+    <property name="LayoutCode.rearrangeEntriesPython" value="false" />
   </component>
   <component name="PyConsoleOptionsProvider">
     <option name="myPythonConsoleState">
@@ -719,11 +821,23 @@
       <option name="project" value="LOCAL" />
       <updated>1418192694330</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="EUDSwitch default case fix, shuffler example">
+      <created>1418215493990</created>
+      <option name="number" value="00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1418215493990</updated>
+    </task>
+    <task id="LOCAL-00018" summary="shuffle example completed">
+      <created>1418215812290</created>
+      <option name="number" value="00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1418215812290</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
+    <frame x="-8" y="-8" width="1382" height="744" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -733,7 +847,7 @@
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32861635" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.21069182" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.21069182" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
@@ -802,51 +916,24 @@
     <MESSAGE value="License header added" />
     <MESSAGE value="EUDArray tested" />
     <MESSAGE value="EUDSwitch default case fix, shuffler example" />
-    <option name="LAST_COMMIT_MESSAGE" value="EUDSwitch default case fix, shuffler example" />
+    <MESSAGE value="shuffle example completed" />
+    <option name="LAST_COMMIT_MESSAGE" value="shuffle example completed" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="8" />
+      <breakpoints>
+        <line-breakpoint enabled="true" type="python-line">
+          <url>file://$PROJECT_DIR$/eudtrg/core/trigger/__init__.py</url>
+          <line>25</line>
+          <option name="timeStamp" value="8" />
+        </line-breakpoint>
+      </breakpoints>
+      <option name="time" value="9" />
     </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/eudtrg/stdfunc/mathf/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="228">
-          <caret line="6" column="0" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/eudtrg/stdfunc/mathf/trigonometric.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.20084566" vertical-offset="0" max-vertical-offset="1767">
-          <caret line="5" column="0" selection-start-line="5" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/eudtrg/core/utils/ubconv.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.91966176" vertical-offset="116" max-vertical-offset="665">
-          <caret line="29" column="0" selection-start-line="29" selection-start-column="0" selection-end-line="29" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/eudtrg/maprw/injector/stage3.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="133" max-vertical-offset="2527">
-          <caret line="22" column="0" selection-start-line="22" selection-start-column="0" selection-end-line="22" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/eudtrg/core/allocator/scaddr.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.2410148" vertical-offset="0" max-vertical-offset="2318">
-          <caret line="6" column="6" selection-start-line="6" selection-start-column="6" selection-end-line="6" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/eudtrg/core/allocator/rlocint.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1425">
@@ -956,7 +1043,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.7336152" vertical-offset="4840" max-vertical-offset="5871">
           <caret line="274" column="0" selection-start-line="274" selection-start-column="0" selection-end-line="274" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -971,22 +1057,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-0.28541225" vertical-offset="135" max-vertical-offset="1235">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/eudtrg/varfunc/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="418" max-vertical-offset="779">
-          <caret line="25" column="56" selection-start-line="25" selection-start-column="32" selection-end-line="25" selection-end-column="56" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/eudtrg/stdfunc/utilf/modcurpl.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.3615222" vertical-offset="0" max-vertical-offset="473">
-          <caret line="11" column="37" selection-start-line="11" selection-start-column="9" selection-end-line="11" selection-end-column="37" />
         </state>
       </provider>
     </entry>
@@ -1008,7 +1078,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="1.2452431" vertical-offset="0" max-vertical-offset="1311">
           <caret line="31" column="23" selection-start-line="31" selection-start-column="23" selection-end-line="31" selection-end-column="23" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1016,7 +1085,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.3615222" vertical-offset="0" max-vertical-offset="1463">
           <caret line="9" column="19" selection-start-line="9" selection-start-column="18" selection-end-line="9" selection-end-column="19" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1087,9 +1155,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="342" max-vertical-offset="5301">
           <caret line="155" column="37" selection-start-line="155" selection-start-column="37" selection-end-line="155" selection-end-column="37" />
-          <folding>
-            <element signature="e#1100#1114#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1104,9 +1169,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="344" max-vertical-offset="836">
           <caret line="38" column="0" selection-start-line="38" selection-start-column="0" selection-end-line="38" selection-end-column="0" />
-          <folding>
-            <element signature="e#1100#1119#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1121,7 +1183,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="303" max-vertical-offset="912">
           <caret line="33" column="4" selection-start-line="33" selection-start-column="4" selection-end-line="34" selection-end-column="16" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1149,9 +1210,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.56236786" vertical-offset="0" max-vertical-offset="513">
           <caret line="14" column="24" selection-start-line="14" selection-start-column="24" selection-end-line="14" selection-end-column="24" />
-          <folding>
-            <element signature="e#0#10#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1193,11 +1251,66 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/examples/cardshuffle.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.5983087" vertical-offset="553" max-vertical-offset="1045">
-          <caret line="44" column="0" selection-start-line="44" selection-start-column="0" selection-end-line="44" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1083">
+          <caret line="13" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="51" selection-end-column="0" />
           <folding>
-            <element signature="e#32#42#0" expanded="true" />
+            <element signature="e#51#61#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/eudtrg/trigtrg/runtrigtrg.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1083">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="1" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/eudtrg/varfunc/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.35729387" vertical-offset="306" max-vertical-offset="779">
+          <caret line="25" column="18" selection-start-line="25" selection-start-column="18" selection-end-line="25" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/eudtrg/stdfunc/utilf/modcurpl.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.80338264" vertical-offset="209" max-vertical-offset="817">
+          <caret line="33" column="23" selection-start-line="33" selection-start-column="15" selection-end-line="33" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/eudtrg/core/trigger/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.35095137" vertical-offset="822" max-vertical-offset="1786">
+          <caret line="52" column="62" selection-start-line="52" selection-start-column="62" selection-end-line="52" selection-end-column="62" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/eudtrg/core/trigger/stockact.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="7013" max-vertical-offset="7562">
+          <caret line="413" column="0" selection-start-line="413" selection-start-column="0" selection-end-line="413" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/examples/prj_cardgame_stack.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="2263" max-vertical-offset="3287">
+          <caret line="140" column="23" selection-start-line="140" selection-start-column="23" selection-end-line="140" selection-end-column="23" />
+          <folding>
+            <element signature="e#1812#1822#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/eudtrg/core/allocator/expr.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.92389005" vertical-offset="0" max-vertical-offset="2736">
+          <caret line="23" column="3" selection-start-line="23" selection-start-column="3" selection-end-line="23" selection-end-column="3" />
+          <folding />
         </state>
       </provider>
     </entry>

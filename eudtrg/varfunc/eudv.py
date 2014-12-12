@@ -31,7 +31,7 @@ from .vbase import VariableBase
 from .vbuf import GetCurrentVariableBuffer
 
 
-class VariableTriggerForward(c.SCMemAddr):
+class VariableTriggerForward(c.Expr):
     def __init__(self):
         super().__init__(self)
         self._expr = weakref.WeakKeyDictionary()

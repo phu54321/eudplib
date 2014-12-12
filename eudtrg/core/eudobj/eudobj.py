@@ -23,11 +23,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-from ..allocator import SCMemAddr
+from ..allocator import Expr
 from ..allocator.payload import GetObjectAddr
 
 
-class EUDObject(SCMemAddr):
+class EUDObject(Expr):
     '''Class for standalone object
     '''
 

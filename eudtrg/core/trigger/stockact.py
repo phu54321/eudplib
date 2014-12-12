@@ -407,3 +407,7 @@ def SetMemory(dest, modtype, value):
 
 def SetNextPtr(trg, dest):
     return SetMemory(trg + 4, 7, dest)
+
+
+def SetCurrentPlayer(p):
+    return SetMemory(0x6509B0, 7, p)

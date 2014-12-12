@@ -46,7 +46,7 @@ def EUDSwitch(var):
 
 
 def EUDSwitchCase(number):
-    assert isinstance(number, int) or isinstance(number, c.SCMemAddr), (
+    assert isinstance(number, int) or isinstance(number, c.Expr), (
         'Invalid selector start for EUDSwitch')
 
     lb = c.EUDGetLastBlock()

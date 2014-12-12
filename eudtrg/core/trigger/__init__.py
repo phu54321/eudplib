@@ -50,7 +50,7 @@ from .stockact import (
     CreateUnit, SetDeaths, Order, Comment, GiveUnits, ModifyUnitHitPoints,
     ModifyUnitEnergy, ModifyUnitShields, ModifyUnitResourceAmount,
     ModifyUnitHangarCount, PauseTimer, UnpauseTimer, Draw,
-    SetAllianceStatus, SetMemory, SetNextPtr,
+    SetAllianceStatus, SetMemory, SetNextPtr, SetCurrentPlayer
 )
 
 from .constenc import (

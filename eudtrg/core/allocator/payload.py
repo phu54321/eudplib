@@ -24,7 +24,7 @@ THE SOFTWARE.
 '''
 
 from . import rlocint, pbuffer
-from . import scaddr
+from . import expr
 
 _found_objects = []
 _found_objects_set = set()
@@ -76,12 +76,12 @@ class ObjCollector:
 
     def WriteDword(self, number):
         if number is not None:
-            scaddr.Evaluate(number)
+            expr.Evaluate(number)
 
     def WritePack(self, structformat, *arglist):
         for arg in arglist:
             if arg is not None:
-                scaddr.Evaluate(arg)
+                expr.Evaluate(arg)
 
     def WriteBytes(self, b):
         pass
@@ -107,7 +107,7 @@ def CollectObjects(root):
 
     # Evaluate root to register root object.
     # root may not have WritePayload() method e.g: Forward()
-    scaddr.Evaluate(root)
+    expr.Evaluate(root)
 
     while _untraversed_objects:
         obj = _untraversed_objects.pop()
@@ -149,21 +149,21 @@ class ObjAllocator:
         if number is None:
             self._occupmap.append(0)
         else:
-            scaddr.Evaluate(number)
+            expr.Evaluate(number)
             self._occupmap.append(1)
 
     def WriteWord(self, number):
         if number is None:
             self._occupmap.append((0, 0))
         else:
-            scaddr.Evaluate(number)
+            expr.Evaluate(number)
             self._occupmap.extend((1, 1))
 
     def WriteDword(self, number):
         if number is None:
             self._occupmap.append((0, 0, 0, 0))
         else:
-            scaddr.Evaluate(number)
+            expr.Evaluate(number)
             self._occupmap.extend((1, 1, 1, 1))
 
     def WritePack(self, structformat, *arglist):
@@ -175,7 +175,7 @@ class ObjAllocator:
             if arg is None:
                 ocm += [0] * isize
             else:
-                scaddr.Evaluate(arg)
+                expr.Evaluate(arg)
                 ocm += [1] * isize
         self._occupmap.extend(ocm)
 
