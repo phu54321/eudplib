@@ -128,7 +128,7 @@ def EUDExecuteOnce():
     block = {
         'blockend': c.Forward()
     }
-    c.EUDCreateBlock('executeonceblock')
+    c.EUDCreateBlock('executeonceblock', block)
 
     tv = c.Db(4)
 
