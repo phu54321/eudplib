@@ -49,7 +49,7 @@ swmap = None
 
 
 def IgnoreColor(s):
-    return ''.join(filter(lambda x: not (0x01 <= x <= 0x1F or x == 0x7F), s))
+    return bytes(filter(lambda x: not (0x01 <= x <= 0x1F or x == 0x7F), s))
 
 
 def InitStringMap(chkt):

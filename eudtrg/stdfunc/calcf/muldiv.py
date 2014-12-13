@@ -62,6 +62,7 @@ def f_div(a, b):
             (vq, c.SetTo, q),
             (vm, c.SetTo, vm)
         ])
+        return vq, vm
 
 
 # -------

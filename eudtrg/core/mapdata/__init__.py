@@ -30,12 +30,7 @@ from .stringmap import (
     GetUnitIndex
 )
 
-from .proptable import (
-    GetPropertyIndex
-)
-
-from .mapdata import (
-    IsMapdataInitalized
-)
-
+from .proptable import GetPropertyIndex
+from .unitprp import UnitProperty
+from .mapdata import IsMapdataInitalized
 from .tblformat import TBL

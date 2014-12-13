@@ -101,7 +101,7 @@ def main():
 
             DoActions([
                 CreateUnit(1, 'Kakaru (Twilight Critter)', 1, Player1),
-                KillUnitAt(All, 'Kakaru (Twilight Critter)', 1, Player1)
+                RemoveUnitAt(All, 'Kakaru (Twilight Critter)', 1, Player1)
             ])
 
             # Loop done. Get next unit pointer
