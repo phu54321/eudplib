@@ -56,73 +56,75 @@ class Action(Expr):
         '''
         super().__init__(self)
 
-        assert locid1 is None or IsValidSCMemAddr(locid1), (
-            'Invalid arg %s' % locid1)
-        assert strid is None or IsValidSCMemAddr(strid), (
-            'Invalid arg %s' % strid)
-        assert wavid is None or IsValidSCMemAddr(wavid), (
-            'Invalid arg %s' % wavid)
-        assert time is None or IsValidSCMemAddr(time), (
-            'Invalid arg %s' % time)
-        assert player1 is None or IsValidSCMemAddr(player1), (
-            'Invalid arg %s' % player1)
-        assert player2 is None or IsValidSCMemAddr(player2), (
-            'Invalid arg %s' % player2)
-        assert unitid is None or IsValidSCMemAddr(unitid), (
-            'Invalid arg %s' % unitid)
-        assert acttype is None or IsValidSCMemAddr(acttype), (
-            'Invalid arg %s' % acttype)
-        assert amount is None or IsValidSCMemAddr(amount), (
-            'Invalid arg %s' % amount)
-        assert flags is None or IsValidSCMemAddr(flags), (
-            'Invalid arg %s' % flags)
+        self.locid1 = locid1
+        self.strid = strid
+        self.wavid = wavid
+        self.time = time
+        self.player1 = player1
+        self.player2 = player2
+        self.unitid = unitid
+        self.acttype = acttype
+        self.amount = amount
+        self.flags = flags
 
-        self._locid1 = locid1
-        self._strid = strid
-        self._wavid = wavid
-        self._time = time
-        self._player1 = player1
-        self._player2 = player2
-        self._unitid = unitid
-        self._acttype = acttype
-        self._amount = amount
-        self._flags = flags
-
-        self._parenttrg = None
-        self._actindex = None
+        self.parenttrg = None
+        self.actindex = None
 
     def Disable(self):
-        self._flags |= 2
+        self.flags |= 2
+
+    # -------
+
+    def CheckArgs(self):
+        assert self.locid1 is None or IsValidSCMemAddr(self.locid1), (
+            'Invalid arg %s' % self.locid1)
+        assert self.strid is None or IsValidSCMemAddr(self.strid), (
+            'Invalid arg %s' % self.strid)
+        assert self.wavid is None or IsValidSCMemAddr(self.wavid), (
+            'Invalid arg %s' % self.wavid)
+        assert self.time is None or IsValidSCMemAddr(self.time), (
+            'Invalid arg %s' % self.time)
+        assert self.player1 is None or IsValidSCMemAddr(self.player1), (
+            'Invalid arg %s' % self.player1)
+        assert self.player2 is None or IsValidSCMemAddr(self.player2), (
+            'Invalid arg %s' % self.player2)
+        assert self.unitid is None or IsValidSCMemAddr(self.unitid), (
+            'Invalid arg %s' % self.unitid)
+        assert self.acttype is None or IsValidSCMemAddr(self.acttype), (
+            'Invalid arg %s' % self.acttype)
+        assert self.amount is None or IsValidSCMemAddr(self.amount), (
+            'Invalid arg %s' % self.amount)
+        assert self.flags is None or IsValidSCMemAddr(self.flags), (
+            'Invalid arg %s' % self.flags)
+        return True
 
     def SetParentTrigger(self, trg, index):
-        assert self._parenttrg is None, (
+        assert self.parenttrg is None, (
             'Action cannot be shared by two triggers.'
             'Deep copy each conditions')
 
         assert trg is not None, 'Trigger should not be null.'
         assert 0 <= index < 64, 'WTF'
 
-        self._parenttrg = trg
-        self._actindex = index
-
-    # -------
+        self.parenttrg = trg
+        self.actindex = index
 
     def Evaluate(self):
-        return Evaluate(self._parenttrg) + 8 + 320 + 32 * self._actindex
+        return Evaluate(self.parenttrg) + 8 + 320 + 32 * self.actindex
 
     def WritePayload(self, pbuffer):
         pbuffer.WritePack(
             'IIIIIIHBBBBH',
-            self._locid1,
-            self._strid,
-            self._wavid,
-            self._time,
-            self._player1,
-            self._player2,
-            self._unitid,
-            self._acttype,
-            self._amount,
-            self._flags,
+            self.locid1,
+            self.strid,
+            self.wavid,
+            self.time,
+            self.player1,
+            self.player2,
+            self.unitid,
+            self.acttype,
+            self.amount,
+            self.flags,
             0,
             0
         )

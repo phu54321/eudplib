@@ -51,65 +51,67 @@ class Condition(Expr):
                  comparison, condtype, restype, flags):
         super().__init__(self)
 
-        assert locid is None or IsValidSCMemAddr(locid), (
-            'Invalid arg %s' % locid)
-        assert player is None or IsValidSCMemAddr(player), (
-            'Invalid arg %s' % player)
-        assert amount is None or IsValidSCMemAddr(amount), (
-            'Invalid arg %s' % amount)
-        assert unitid is None or IsValidSCMemAddr(unitid), (
-            'Invalid arg %s' % unitid)
-        assert comparison is None or IsValidSCMemAddr(comparison), (
-            'Invalid arg %s' % comparison)
-        assert condtype is None or IsValidSCMemAddr(condtype), (
-            'Invalid arg %s' % condtype)
-        assert restype is None or IsValidSCMemAddr(restype), (
-            'Invalid arg %s' % restype)
-        assert flags is None or IsValidSCMemAddr(flags), (
-            'Invalid arg %s' % flags)
+        self.locid = locid
+        self.player = player
+        self.amount = amount
+        self.unitid = unitid
+        self.comparison = comparison
+        self.condtype = condtype
+        self.restype = restype
+        self.flags = flags
 
-        self._locid = locid
-        self._player = player
-        self._amount = amount
-        self._unitid = unitid
-        self._comparison = comparison
-        self._condtype = condtype
-        self._restype = restype
-        self._flags = flags
-
-        self._parenttrg = None
-        self._condindex = None
+        self.parenttrg = None
+        self.condindex = None
 
     def Disable(self):
-        self._flags |= 2
+        self.flags |= 2
 
     # -------
 
+    def CheckArgs(self):
+        assert self.locid is None or IsValidSCMemAddr(self.locid), (
+            'Invalid arg %s' % self.locid)
+        assert self.player is None or IsValidSCMemAddr(self.player), (
+            'Invalid arg %s' % self.player)
+        assert self.amount is None or IsValidSCMemAddr(self.amount), (
+            'Invalid arg %s' % self.amount)
+        assert self.unitid is None or IsValidSCMemAddr(self.unitid), (
+            'Invalid arg %s' % self.unitid)
+        assert self.comparison is None or IsValidSCMemAddr(self.comparison), (
+            'Invalid arg %s' % self.comparison)
+        assert self.condtype is None or IsValidSCMemAddr(self.condtype), (
+            'Invalid arg %s' % self.condtype)
+        assert self.restype is None or IsValidSCMemAddr(self.restype), (
+            'Invalid arg %s' % self.restype)
+        assert self.flags is None or IsValidSCMemAddr(self.flags), (
+            'Invalid arg %s' % self.flags)
+        return True
+
     def SetParentTrigger(self, trg, index):
-        assert self._parenttrg is None, (
+        assert self.parenttrg is None, (
             'Condition cannot be shared by two triggers. '
             'Deep copy each conditions')
 
         assert trg is not None, 'Trigger should not be null.'
         assert 0 <= index < 16, 'WTF'
 
-        self._parenttrg = trg
-        self._condindex = index
+        self.parenttrg = trg
+        self.condindex = index
 
     def Evaluate(self):
-        assert self._parenttrg is not None, 'Orphan condition'
-        return Evaluate(self._parenttrg) + 8 + self._condindex * 20
+        assert self.parenttrg is not None, 'Orphan condition'
+        return Evaluate(self.parenttrg) + 8 + self.condindex * 20
 
     def WritePayload(self, pbuffer):
         pbuffer.WritePack(
             'IIIHBBBBH',
-            self._locid,
-            self._player,
-            self._amount,
-            self._unitid,
-            self._comparison,
-            self._condtype,
-            self._restype,
-            self._flags,
+            self.locid,
+            self.player,
+            self.amount,
+            self.unitid,
+            self.comparison,
+            self.condtype,
+            self.restype,
+            self.flags,
             0
         )

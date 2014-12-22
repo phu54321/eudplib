@@ -26,4 +26,5 @@ THE SOFTWARE.
 from .memiof import *
 from .utilf import *
 from .calcf import *
+from .vmixedtrig import VarMixedTrigger
 from . import mathf

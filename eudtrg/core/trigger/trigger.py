@@ -79,10 +79,22 @@ class Trigger(EUDObject):
 
         for i, cond in enumerate(self._conditions):
             assert isinstance(cond, Condition)
+            try:
+                cond.CheckArgs()
+            except AssertionError:
+                print('Error on condition %d' % i)
+                raise
+
             cond.SetParentTrigger(self, i)
 
         for i, act in enumerate(self._actions):
             assert isinstance(act, Action)
+            try:
+                act.CheckArgs()
+            except AssertionError:
+                print('Error on action %d' % i)
+                raise
+
             act.SetParentTrigger(self, i)
 
     def GetDataSize(self):
