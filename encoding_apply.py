@@ -30,7 +30,7 @@ THE SOFTWARE.
 
 print('Auto "license inserter')
 
-for root, dirs, files in os.walk('eudtrg'):
+for root, dirs, files in os.walk('eudplib'):
     for f in files:
         if f[-3:] == '.py':
             finalpath = os.path.join(root, f)

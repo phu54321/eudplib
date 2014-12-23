@@ -52,7 +52,7 @@ class Action(Expr):
     def __init__(self, locid1, strid, wavid, time, player1, player2,
                  unitid, acttype, amount, flags):
         '''
-        See :mod:`eudtrg.base.stocktrg` for stock actions list.
+        See :mod:`eudplib.base.stocktrg` for stock actions list.
         '''
         super().__init__(self)
 

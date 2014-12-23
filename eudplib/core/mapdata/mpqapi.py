@@ -24,7 +24,7 @@ THE SOFTWARE.
 '''
 
 '''
-SFmpq.dll wrapper. Used internally inside eudtrg.
+SFmpq.dll wrapper. Used internally inside eudplib.
 '''
 
 from ctypes import *  # @UnusedWildImport

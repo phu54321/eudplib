@@ -24,7 +24,7 @@ THE SOFTWARE.
 '''
 
 '''
-scenario.chk section tokenizer. Internally used in eudtrg.
+scenario.chk section tokenizer. Internally used in eudplib.
 '''
 
 from ..utils import ubconv, binio

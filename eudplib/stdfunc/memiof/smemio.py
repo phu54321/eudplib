@@ -37,7 +37,7 @@ _bw = bm.EUDByteWriter()
 @vf.EUDFunc
 def f_strcpy(dst, src):
     '''
-    strcpy equivilant in eudtrg. Copy C-style string.
+    strcpy equivilant in eudplib. Copy C-style string.
 
     :param dst: Destination address. (Not EPD Player)
     :param src: Source address. (Not EPD Player)

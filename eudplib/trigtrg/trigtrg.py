@@ -24,12 +24,12 @@ THE SOFTWARE.
 '''
 
 '''
-WARNING! This code is speciallized for use on eudtrg
+WARNING! This code is speciallized for use on eudplib
 - Default player of trigger is 'All Player'.
-- Only conditions/actions used in eudtrg are declared
+- Only conditions/actions used in eudplib are declared
 - Condition/Action input filtering (& 0xFFFFFFFF thing) are only applied to
   player & number section of Deaths/SetDeaths
-Note this when using this code outside of eudtrg.
+Note this when using this code outside of eudplib.
 '''
 
 from struct import pack

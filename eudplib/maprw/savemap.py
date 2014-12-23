@@ -49,7 +49,7 @@ def SaveMap(fname, rootf):
     c.SetCurrentBlockStruManager(prev_bsm)
 
     # Update string table & etc
-    # User-defined strings in eudtrg program is registered after rootf is
+    # User-defined strings in eudplib program is registered after rootf is
     # called. This happens when _MainStarter is called, so UpdateMapData function should
     # be called after `doevents._MainStarter(rootf)` call.
     mapdata.UpdateMapData()

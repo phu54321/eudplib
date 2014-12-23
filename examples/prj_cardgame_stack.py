@@ -71,7 +71,7 @@ import sys
 import os
 
 sys.path.insert(0, os.path.abspath('..\\'))
-from eudtrg import *
+from eudplib import *
 
 # Global variable : card deck
 deck1 = EUDArray(53)

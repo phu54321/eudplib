@@ -24,7 +24,7 @@ THE SOFTWARE.
 '''
 
 '''
-String table manager. Internally used in eudtrg.
+String table manager. Internally used in eudplib.
 '''
 
 from ..utils import binio, ubconv

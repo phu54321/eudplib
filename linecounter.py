@@ -10,7 +10,7 @@ totstrlist = []
 lexer = get_lexer_by_name("python", stripall=True)
 formatter = HtmlFormatter(linenos=True)
 
-for root, dirs, files in os.walk('eudtrg'):
+for root, dirs, files in os.walk('eudplib'):
     for f in files:
         if f[-3:] == '.py':
             finalpath = os.path.join(root, f)
