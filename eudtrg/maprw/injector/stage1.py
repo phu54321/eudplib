@@ -102,12 +102,13 @@ def CreateAndApplyStage1(chkt, payload):
       SetMemory(payload, Add, payload_offset // 4)
 
     MRGN <-> STR0  =  Trigger(actions=[
-             STR1        [SetMemory(mrgn.action[i].player, Add, prttable[j+63] - prttable[j]) for i in range(63)],
+             STR1        [SetMemory(mrgn.action[i].player, Add, prttable[j+packn] - prttable[j]) for i in range(packn)],
              STR2        SetNextPtr(mrgn, STR[k+1])
              ...      )
     '''
 
     mrgn = 0x58DC60
+    packn = 15
 
     #############
     # STR SECTION
@@ -118,14 +119,14 @@ def CreateAndApplyStage1(chkt, payload):
 
     # apply prt
     prttrg_start = 2408 * len(str_sled)  # = 0
-    prevoffset = [-1] * 63  # mrgn.action[i].player = EPD(payload_offset) + prevoffset[i]
-    for i in range(0, len(payload.prttable), 63):
-        prts = list(map(lambda x: x // 4, payload.prttable[i: i + 63]))
-        prts = prts + [-1] * (63 - len(prts))  # -1 : dummy space
-        pch = [prts[j] - prevoffset[j] for j in range(63)]
+    prevoffset = [-1] * packn  # mrgn.action[i].player = EPD(payload_offset) + prevoffset[i]
+    for i in range(0, len(payload.prttable), packn):
+        prts = list(map(lambda x: x // 4, payload.prttable[i: i + packn]))
+        prts = prts + [-1] * (packn - len(prts))  # -1 : dummy space
+        pch = [prts[j] - prevoffset[j] for j in range(packn)]
         str_sled.append(sledheader_prt + tt.Trigger(
             actions=[
-                [tt.SetMemory(mrgn + 328 + 32 * j + 16, tt.Add, pch[j]) for j in range(63)],
+                [tt.SetMemory(mrgn + 328 + 32 * j + 16, tt.Add, pch[j]) for j in range(packn)],
             ]
         ))
 
@@ -133,14 +134,14 @@ def CreateAndApplyStage1(chkt, payload):
 
     # apply ort
     orttrg_start = 2408 * len(str_sled)  # = 0
-    prevoffset = [-1] * 63  # mrgn.action[i].player = EPD(payload_offset) + prevoffset[i]
-    for i in range(0, len(payload.orttable), 63):
-        orts = list(map(lambda x: x // 4, payload.orttable[i: i + 63]))
-        orts = orts + [-1] * (63 - len(orts))  # -1 : dummy space
-        pch = [orts[j] - prevoffset[j] for j in range(63)]
+    prevoffset = [-1] * packn  # mrgn.action[i].player = EPD(payload_offset) + prevoffset[i]
+    for i in range(0, len(payload.orttable), packn):
+        orts = list(map(lambda x: x // 4, payload.orttable[i: i + packn]))
+        orts = orts + [-1] * (packn - len(orts))  # -1 : dummy space
+        pch = [orts[j] - prevoffset[j] for j in range(packn)]
         str_sled.append(sledheader_ort + tt.Trigger(
             actions=[
-                [tt.SetMemory(mrgn + 2408 + 328 + 32 * j + 16, tt.Add, pch[j]) for j in range(63)],
+                [tt.SetMemory(mrgn + 2408 + 328 + 32 * j + 16, tt.Add, pch[j]) for j in range(packn)],
             ]
         ))
 
@@ -149,7 +150,7 @@ def CreateAndApplyStage1(chkt, payload):
     # jump to ort
     str_sled.append(sledheader_ort + tt.Trigger(
         actions=[
-            [tt.SetMemory(mrgn + 2408 + 328 + 32 * j + 16, tt.Add, 0xFFFFFFFF - prevoffset[j]) for j in range(63)],
+            [tt.SetMemory(mrgn + 2408 + 328 + 32 * j + 16, tt.Add, 0xFFFFFFFF - prevoffset[j]) for j in range(packn)],
             tt.SetMemory(mrgn + 2408 + 4, tt.Add, 4)  # skip garbage area
         ]
     ))
@@ -173,7 +174,7 @@ def CreateAndApplyStage1(chkt, payload):
         tt.Trigger(
             actions=[
                 # SetDeaths actions in MRGN initially points to EPD(payload - 4)
-                [tt.SetMemory(payload_offset - 4, tt.Add, payload_offset // 4) for _ in range(63)],
+                [tt.SetMemory(payload_offset - 4, tt.Add, payload_offset // 4) for _ in range(packn)],
                 tt.SetMemory(mrgn + 4, tt.Add, 2408)
             ]
         )
@@ -183,7 +184,7 @@ def CreateAndApplyStage1(chkt, payload):
         bytes(4) + c.i2b4(orttrg_start + strsled_offset) +
         tt.Trigger(
             actions=[
-                [tt.SetMemory(payload_offset - 4, tt.Add, payload_offset) for _ in range(63)],
+                [tt.SetMemory(payload_offset - 4, tt.Add, payload_offset) for _ in range(packn)],
                 tt.SetMemory(mrgn + 2408 + 4, tt.Add, 2408)
             ]
         )
@@ -227,35 +228,13 @@ def CreateAndApplyStage1(chkt, payload):
         Trigger(
             conditions=tt.Memory(strs, tt.AtLeast, 2 ** e),
             actions=[
-                [tt.SetMemory(mrgn + 328 + 32 * i + 16, tt.Add, 2 ** (e - 2)) for i in range(63)],
-                tt.SetDeaths(11, tt.Add, 2 ** e, 0)
-            ]
-        )
-
-        # number
-        Trigger(
-            conditions=tt.Memory(strs, tt.AtLeast, 2 ** e),
-            actions=[
-                [tt.SetMemory(mrgn + 328 + 32 * i + 20, tt.Add, 2 ** (e - 2)) for i in range(63)],
+                [tt.SetMemory(mrgn + 328 + 32 * i + 16, tt.Add, 2 ** (e - 2)) for i in range(packn)],
+                tt.SetDeaths(11, tt.Add, 2 ** e, 0),
+                [tt.SetMemory(mrgn + 328 + 32 * i + 20, tt.Add, 2 ** (e - 2)) for i in range(packn)],
                 tt.SetMemory(mrgn + 4, tt.Add, 2 ** e),
-            ]
-        )
-
-        # ort table
-        # player
-        Trigger(
-            conditions=tt.Memory(strs, tt.AtLeast, 2 ** e),
-            actions=[
-                [tt.SetMemory(mrgn + 2408 + 328 + 32 * i + 16, tt.Add, 2 ** (e - 2)) for i in range(63)],
+                [tt.SetMemory(mrgn + 2408 + 328 + 32 * i + 16, tt.Add, 2 ** (e - 2)) for i in range(packn)],
                 tt.SetMemory(mrgn + 2408 + 4, tt.Add, 2 ** e),
-            ]
-        )
-
-        # number
-        Trigger(
-            conditions=tt.Memory(strs, tt.AtLeast, 2 ** e),
-            actions=[
-                [tt.SetMemory(mrgn + 2408 + 328 + 32 * i + 20, tt.Add, 2 ** e) for i in range(63)],
+                [tt.SetMemory(mrgn + 2408 + 328 + 32 * i + 20, tt.Add, 2 ** e) for i in range(packn)],
                 tt.SetMemory(strs, tt.Subtract, 2 ** e),
             ]
         )
@@ -330,6 +309,7 @@ def CreateAndApplyStage1(chkt, payload):
     CopyDeaths(tt.EPD(strs), tt.CurrentPlayer, False, strsled_offset)
 
     # Done!
+    print(len(trglist))
     trigdata = b''.join(trglist)
 
     # Stage 1 created

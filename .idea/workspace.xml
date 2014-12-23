@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="ae861aca-0188-4483-b879-0580d2ce80c0" name="Default" comment="Created VarMixedTrigger. Not yet tested">
-      <change type="DELETED" beforePath="C:\Users\phu54_000\PycharmProjects\eudtrglib\tests\outputmap\creeptest.scx" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/maprw/savemap.py" afterPath="$PROJECT_DIR$/eudtrg/maprw/savemap.py" />
+    <list default="true" id="ae861aca-0188-4483-b879-0580d2ce80c0" name="Default" comment="New injector made">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/maprw/injector/stage1.py" afterPath="$PROJECT_DIR$/eudtrg/maprw/injector/stage1.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eudtrg/maprw/injector/stage3.py" afterPath="$PROJECT_DIR$/eudtrg/maprw/injector/stage3.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="eudtrglib.iws" />
@@ -55,8 +52,8 @@
       <file leaf-file-name="stage1.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/eudtrg/maprw/injector/stage1.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.50606585" vertical-offset="4648" max-vertical-offset="6897">
-              <caret line="260" column="9" selection-start-line="260" selection-start-column="9" selection-end-line="260" selection-end-column="9" />
+            <state vertical-scroll-proportion="0.592721" vertical-offset="4294" max-vertical-offset="6517">
+              <caret line="244" column="21" selection-start-line="244" selection-start-column="21" selection-end-line="244" selection-end-column="21" />
               <folding>
                 <element signature="e#1289#1314#0" expanded="true" />
               </folding>
@@ -715,7 +712,13 @@
       <option name="project" value="LOCAL" />
       <updated>1419258111177</updated>
     </task>
-    <option name="localTasksCounter" value="23" />
+    <task id="LOCAL-00023" summary="New injector made">
+      <created>1419323095640</created>
+      <option name="number" value="00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1419323095640</updated>
+    </task>
+    <option name="localTasksCounter" value="24" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -803,7 +806,8 @@
     <MESSAGE value="bugfix #1.&#10;TODO : Code review" />
     <MESSAGE value="r3 release (only bugfix#1 applied)" />
     <MESSAGE value="Created VarMixedTrigger. Not yet tested" />
-    <option name="LAST_COMMIT_MESSAGE" value="Created VarMixedTrigger. Not yet tested" />
+    <MESSAGE value="New injector made" />
+    <option name="LAST_COMMIT_MESSAGE" value="New injector made" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
@@ -1197,8 +1201,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/eudtrg/maprw/injector/stage1.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.50606585" vertical-offset="4648" max-vertical-offset="6897">
-          <caret line="260" column="9" selection-start-line="260" selection-start-column="9" selection-end-line="260" selection-end-column="9" />
+        <state vertical-scroll-proportion="0.592721" vertical-offset="4294" max-vertical-offset="6517">
+          <caret line="244" column="21" selection-start-line="244" selection-start-column="21" selection-end-line="244" selection-end-column="21" />
           <folding>
             <element signature="e#1289#1314#0" expanded="true" />
           </folding>
