@@ -54,7 +54,7 @@ def FlipProp(initepd):
     cs.EUDEndWhile()
 
 
-def CreateStage3(root):
+def CreateStage3(root, mrgndata):
     pts = 0x51A280
 
     c.PushTriggerScope()
@@ -68,6 +68,10 @@ def CreateStage3(root):
         c.SetDeaths(9, c.SetTo, 0, 0),
         c.SetDeaths(10, c.SetTo, 0, 0)
     ])
+
+    # revert mrgndata
+    mrgndata_db = c.Db(mrgndata)
+    sf.f_repmovsd_epd(c.EPD(0x58DC60), c.EPD(mrgndata_db), 5100 // 4)
 
     # Flip TRIG properties
     i = vf.EUDVariable()

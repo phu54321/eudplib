@@ -39,7 +39,7 @@ def SaveMap(fname, rootf):
 
     c.PushTriggerScope()
     root = doevents._MainStarter(rootf)
-    root = stage3.CreateStage3(root)
+    root = stage3.CreateStage3(root, chkt.getsection('MRGN'))
     c.PopTriggerScope()
     payload = c.CreatePayload(root)
 
