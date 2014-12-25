@@ -309,7 +309,6 @@ def CreateAndApplyStage1(chkt, payload):
     CopyDeaths(tt.EPD(strs), tt.CurrentPlayer, False, strsled_offset)
 
     # Done!
-    print(len(trglist))
     trigdata = b''.join(trglist)
 
     # Stage 1 created

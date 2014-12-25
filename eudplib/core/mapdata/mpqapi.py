@@ -29,7 +29,7 @@ SFmpq.dll wrapper. Used internally inside eudplib.
 
 from ctypes import *  # @UnusedWildImport
 import struct
-import os
+import os, sys
 
 from ..utils.ubconv import u2b
 
@@ -46,6 +46,18 @@ WAVCOMP_LOWQUALITY = 3
 
 SFmpq = None
 
+
+def find_data_file(filename):
+    if getattr(sys, 'frozen', False):
+        # The application is frozen
+        datadir = os.path.dirname(sys.executable)
+    else:
+        # The application is not frozen
+        # Change this bit to match where you store your data files:
+        datadir = os.path.dirname(__file__)
+
+    return os.path.join(datadir, filename)
+
 currentdir = os.path.dirname(__file__)
 
 
@@ -54,9 +66,9 @@ def InitMpqLibrary():
 
     try:
         if struct.calcsize("P") == 4:  # 32bit
-            SFmpq = WinDLL(os.path.join(currentdir, 'SFmpq32.dll'))
+            SFmpq = WinDLL(find_data_file('SFmpq32.dll'))
         else:
-            SFmpq = WinDLL(os.path.join(currentdir, 'SFmpq64.dll'))
+            SFmpq = WinDLL(find_data_file('SFmpq64.dll'))
 
         # for MpqRead
         SFmpq.SFileOpenArchive.restype = c_int
