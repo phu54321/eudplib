@@ -37,7 +37,7 @@ import inspect
 
 
 def DoActions(actions, nextptr=None):
-    return c.Trigger(nextptr=nextptr, actions=actions)
+    return c.BasicTrigger(nextptr=nextptr, actions=actions)
 
 
 def CreateStage2(payload):
@@ -64,7 +64,7 @@ def CreateStage2(payload):
 
         loopstart << c.NextTrigger()
 
-        c.Trigger(
+        c.BasicTrigger(
             actions=[
                 c.SetMemory(adda + 16, c.SetTo, c.EPD(orig_payload)),  # Reset adder
                 c.SetMemory(loopcond + 8, c.Subtract, 1),  # Loop variable
@@ -75,7 +75,7 @@ def CreateStage2(payload):
 
         # Read from table & write to adder action
         for i in range(29, -1, -1):
-            chain[i] << c.Trigger(
+            chain[i] << c.BasicTrigger(
                 conditions=[
                     c.Memory(0, c.AtLeast, 2 ** i)  # Read from table
                 ],
@@ -93,7 +93,7 @@ def CreateStage2(payload):
              ) for i in range(30)],
         ])
 
-        loopend << c.Trigger(
+        loopend << c.BasicTrigger(
             nextptr=0,
             conditions=[
                 # Player 1's marine death should be 0 here, so we keep
@@ -106,14 +106,14 @@ def CreateStage2(payload):
 
         # Loopend
 
-        tableiniter_end << c.Trigger()
+        tableiniter_end << c.BasicTrigger()
     c.PopTriggerScope()
 
     def QueueTable(db, addv, repn):
         dbepd = c.EPD(db)
 
         nexttrg = c.Forward()
-        c.Trigger(
+        c.BasicTrigger(
             nextptr=tableiniter_start,
             actions=[
                 c.SetNextPtr(tableiniter_end, nexttrg),
@@ -139,7 +139,7 @@ def CreateStage2(payload):
         QueueTable(ortdb, orig_payload, len(payload.orttable))
 
     # Jump
-    c.Trigger(nextptr=orig_payload)
+    c.BasicTrigger(nextptr=orig_payload)
 
     c.PopTriggerScope()
 

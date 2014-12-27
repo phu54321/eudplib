@@ -25,7 +25,7 @@ def main():
             (EPD(0x58DC60 + 12), SetTo, y)
         ])
 
-        Trigger(
+        BasicTrigger(
             actions=[
                 CreateUnit(1, "Zerg Zergling", 1, P1),
                 KillUnitAt(All, "Zerg Zergling", 1, P1)
@@ -33,7 +33,7 @@ def main():
         )
 
         i << i + 2
-        Trigger(
+        BasicTrigger(
             conditions=[i >= 360],
             actions=[i.SubtractNumber(0)]
         )

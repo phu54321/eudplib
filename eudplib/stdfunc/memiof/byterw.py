@@ -25,7 +25,7 @@ THE SOFTWARE.
 
 from ... import core as c
 from ... import ctrlstru as cs
-from ... import varfunc as vf
+from eudplib.core import varfunc as vf
 
 from . import dwmemio as dwm
 from .. import calcf
@@ -219,11 +219,11 @@ class EUDByteWriter:
 
     def flushdword(self):
         # mux bytes
-        c.Trigger(actions=self._dw.SetNumber(0))
+        c.BasicTrigger(actions=self._dw.SetNumber(0))
 
         for i in range(7, -1, -1):
             for j in range(4):
-                c.Trigger(
+                c.BasicTrigger(
                     conditions=[
                         self._b[j].AtLeast(2 ** i)
                     ],

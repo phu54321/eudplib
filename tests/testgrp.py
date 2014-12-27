@@ -11,7 +11,7 @@ LoadMap('outputmap/basemap/grpbasemap.scx')
 @EUDFunc
 def main():
     grp = EUDGrp('outputmap/basemap/inputgrp.grp')
-    Trigger(
+    BasicTrigger(
         actions=SetMemory(0x51CED0 + 4 * 54, SetTo, grp),
         preserved=False
     )

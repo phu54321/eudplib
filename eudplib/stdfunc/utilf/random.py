@@ -34,9 +34,9 @@ THE SOFTWARE.
 #
 
 from ... import core as c
-from ... import varfunc as vf
+from eudplib.core import varfunc as vf
 from ..memiof import f_dwbreak, f_dwread_epd
-from ..calcf import f_bitxor, f_mul
+from ..calcf import f_mul
 
 _seed = vf.EUDVariable()
 
@@ -53,7 +53,7 @@ def f_srand(seed):
 
 def f_randomize():
     current_rv = f_dwread_epd(c.EPD(0x51CA14))
-    c.Trigger(
+    c.BasicTrigger(
         conditions=current_rv.Exactly(0),
         actions=current_rv.SetNumber(30)
     )
@@ -77,7 +77,7 @@ def f_dwrand():
 
     # HIWORD
     for i in range(31, 15, -1):
-        c.Trigger(
+        c.BasicTrigger(
             conditions=seed1.AtLeast(2 ** i),
             actions=[
                 seed1.SubtractNumber(2 ** i),
@@ -87,7 +87,7 @@ def f_dwrand():
 
     # LOWORD
     for i in range(31, 15, -1):
-        c.Trigger(
+        c.BasicTrigger(
             conditions=seed2.AtLeast(2 ** i),
             actions=[
                 seed2.SubtractNumber(2 ** i),

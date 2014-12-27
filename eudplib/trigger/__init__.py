@@ -1,1 +1,1 @@
-__author__ = 'phu54_000'
+from .vmixedtrig import Trigger

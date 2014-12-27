@@ -25,7 +25,7 @@ THE SOFTWARE.
 
 from ... import core as c
 from ... import ctrlstru as cs
-from ... import varfunc as vf
+from eudplib.core import varfunc as vf
 from .. import calcf
 
 
@@ -37,7 +37,7 @@ def f_epd(addr):
 def f_dwepdread_epd(targetplayer):
     ret, retepd = vf.EUDVariable(), vf.EUDVariable()
 
-    # Common comparison trigger
+    # Common comparison basictrigger
     c.PushTriggerScope()
     cmpc = c.Forward()
     cmp_player = cmpc + 4
@@ -45,7 +45,7 @@ def f_dwepdread_epd(targetplayer):
     cmpact = c.Forward()
 
     cmptrigger = c.Forward()
-    cmptrigger << c.Trigger(
+    cmptrigger << c.BasicTrigger(
         conditions=[
             cmpc << c.Memory(0, c.AtMost, 0)
         ],
@@ -79,7 +79,7 @@ def f_dwepdread_epd(targetplayer):
             epdsubact = []
             epdaddact = []
 
-        chain1[i] << c.Trigger(
+        chain1[i] << c.BasicTrigger(
             nextptr=cmptrigger,
             actions=[
                         c.SetMemory(cmp_number, c.Subtract, 2 ** i),
@@ -89,7 +89,7 @@ def f_dwepdread_epd(targetplayer):
                     ] + epdsubact
         )
 
-        chain2[i] << c.Trigger(
+        chain2[i] << c.BasicTrigger(
             actions=[
                         c.SetMemory(cmp_number, c.Add, 2 ** i),
                         ret.AddNumber(2 ** i),
@@ -178,7 +178,7 @@ def f_dwbreak(number):
         byteexp = i % 8
         wordexp = i % 16
 
-        c.Trigger(
+        c.BasicTrigger(
             conditions=number.AtLeast(2 ** i),
             actions=[
                 byte[byteidx].AddNumber(2 ** byteexp),

@@ -59,7 +59,7 @@ def main():
 
     f_creepread_init()
 
-    # Turbo trigger
+    # Turbo basictrigger
 
     if EUDWhile(Always()):
         DoActions(SetDeaths(203151, SetTo, 1, 0))

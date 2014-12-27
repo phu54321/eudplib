@@ -27,7 +27,7 @@ import math
 
 from ... import core as c
 from ... import ctrlstru as cs
-from ... import varfunc as vf
+from eudplib.core import varfunc as vf
 from ..calcf import f_mul, f_div
 from ..memiof import f_dwread_epd
 

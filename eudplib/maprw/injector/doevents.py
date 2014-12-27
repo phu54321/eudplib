@@ -37,13 +37,13 @@ def _MainStarter(mf):
 
     rootstarter = c.NextTrigger()
     mf()
-    c.Trigger(
+    c.BasicTrigger(
         nextptr=0x80000000,
         actions=c.SetNextPtr(jumper, 0x80000000)
     )
     c.PopTriggerScope()
 
-    jumper << c.Trigger(nextptr=rootstarter)
+    jumper << c.BasicTrigger(nextptr=rootstarter)
     return jumper
 
 

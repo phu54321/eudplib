@@ -24,7 +24,6 @@ THE SOFTWARE.
 '''
 
 from .. import core as c
-from .. import varfunc as vf
 from ..core.mapdata import mapdata, mpqapi
 from .injector import stage1, stage2, stage3, doevents
 

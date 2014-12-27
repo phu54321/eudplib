@@ -23,148 +23,90 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-from eudplib import core as c
-from eudplib.core.varfunc import EUDVariable, SeqCompute
-from eudplib.stdfunc.calcf import f_div, f_mul
-from eudplib.stdfunc.memiof import f_dwread_epd, f_dwbreak
+from .. import core as c
+from .filler import filldw, fillwbb, fillbbbb
 
+def HasEUDVariable(l):
+    for i in l:
+        if isinstance(i, c.EUDVariable):
+            return True
+    return False
+
+def ApplyPatchTable(initepd, obj, patchtable):
+    for i, pt in enumerate(patchtable):
+        attrs = patchtable
+        filler = {
+            'd':1,
+            'wbb':3,
+            'bbbb':4
+        }[len(attrs)]
+        attrs = c.Assignable2List(attrs)
+
+        vars = [getattr(obj, attr) if type(attr) is str else attr for attr in attrs]
+        if HasEUDVariable(vars):
+            filler(initepd + i, *vars)
+            for attr in attrs:
+                if type(attr) is str:
+                    setattr(obj, attr, 0)
+
+condpt = [
+    ['locid'],
+    ['player'],
+    ['amount'],
+    ['unitid', 'comparison', 'condtype'],
+    ['restype', 'flags', 0, 0],
+]
+
+actpt = [
+    ['locid1'],
+    ['strid'],
+    ['wavid'],
+    ['time'],
+    ['player1'],
+    ['player2'],
+    ['unitid', 'acttype', 'amount'],
+    ['flags', 0, 0, 0]
+]
 
 # TODO : test this function
-def VarMixedTrigger(
+class Trigger(c.Expr):
+    def __init__(
+        self,
         conditions=None,
         actions=None,
         preserved=True
-):
-    if conditions is None:
-        conditions = []
-    if actions is None:
-        actions = []
+    ):
+        super().__init__()
+        if conditions is None:
+            conditions = []
+        if actions is None:
+            actions = []
+        conditions = c.FlattenList(conditions)
+        actions = c.FlattenList(actions)
 
-    conditions = c.FlattenList(conditions)
-    actions = c.FlattenList(actions)
-    trg = c.Forward()
+        triggerstart = c.NextTrigger()
+        trg = c.Forward()
 
-    sqs = []
-    # conditions
-    for i, cond in enumerate(conditions):
-        # locid
-        if isinstance(cond.locid, EUDVariable):
-            sqs.append((c.EPD(trg + 8 + 20 * i + 0), c.SetTo, cond.locid))
-            cond.locid = 0
+        # conditions
+        for i, cond in enumerate(conditions):
+            ApplyPatchTable(c.EPD(trg + 8 + 20 * i), cond, condpt)
 
-        # player
-        if isinstance(cond.player, EUDVariable):
-            sqs.append((c.EPD(trg + 8 + 20 * i + 4), c.SetTo, cond.player))
-            cond.player = 0
+        # actions
+        for i, act in enumerate(actions):
+            ApplyPatchTable(c.EPD(trg + 328 + 32 * i), act, actpt)
 
-        # amount
-        if isinstance(cond.amount, EUDVariable):
-            sqs.append((c.EPD(trg + 8 + 20 * i + 8), c.SetTo, cond.amount))
-            cond.amount = 0
+        trg << c.BasicTrigger(
+            conditions=conditions,
+            actions=actions,
+            preserved=preserved
+        )
 
-        # unitid, comparison, condtype
-        if (
-                        isinstance(cond.unitid, EUDVariable) or
-                        isinstance(cond.comparison, EUDVariable) or
-                    isinstance(cond.condtype, EUDVariable)
-        ):
-            cond.unitid = f_div(cond.unitid, 65536)[1]
-            cond.comparison = f_div(cond.comparison, 256)[1]
-            cond.condtype = f_div(cond.condtype, 256)[1]
-            sqs.append((
-                c.EPD(trg + 8 + 20 * i + 12),
-                c.SetTo,
-                f_mul(0x1000000, cond.condtype) + f_mul(0x10000, cond.comparison) + cond.unitid
-            ))
+        self.tstart = triggerstart
+        self.tmain = trg
 
-            cond.unitid = 0
-            cond.comparison = 0
-            cond.condtype = 0
+    def Evaluate(self):
+        return c.Evaluate(self.tstart)
 
-        # restype, flags
-        if (
-                    isinstance(cond.restype, EUDVariable) or
-                    isinstance(cond.flags, EUDVariable)
-        ):
-            cond.restype = f_div(cond.restype, 256)[1]
-            cond.flags = f_div(cond.flags, 256)[1]
+    def GetNextPtrMemory(self):
+        return self.tmain + 4
 
-            internal = f_dwbreak(f_dwread_epd(c.EPD(trg + 8 + 20 * i + 16)))[1]
-            sqs.append((
-                c.EPD(trg + 8 + 20 * i + 16),
-                c.SetTo,
-                f_mul(0x10000, internal) + (f_mul(0x100, cond.flags) + cond.restype)
-            ))
-
-            cond.restype = 0
-            cond.flags = 0
-
-    # actions
-    for i, act in enumerate(actions):
-        # locid1
-        if isinstance(act.locid1, EUDVariable):
-            sqs.append((c.EPD(trg + 328 + 32 * i + 0), c.SetTo, act.locid1))
-            act.locid1 = 0
-
-        # strid
-        if isinstance(act.strid, EUDVariable):
-            sqs.append((c.EPD(trg + 328 + 32 * i + 4), c.SetTo, act.strid))
-            act.strid = 0
-
-        # wavid
-        if isinstance(act.wavid, EUDVariable):
-            sqs.append((c.EPD(trg + 328 + 32 * i + 8), c.SetTo, act.wavid))
-            act.wavid = 0
-
-        # time
-        if isinstance(act.time, EUDVariable):
-            sqs.append((c.EPD(trg + 328 + 32 * i + 12), c.SetTo, act.time))
-            act.time = 0
-
-        # player1
-        if isinstance(act.player1, EUDVariable):
-            sqs.append((c.EPD(trg + 328 + 32 * i + 16), c.SetTo, act.player1))
-            act.player1 = 0
-
-        # player2
-        if isinstance(act.player2, EUDVariable):
-            sqs.append((c.EPD(trg + 328 + 32 * i + 20), c.SetTo, act.player2))
-            act.player2 = 0
-
-        # unitid, acttype, amount
-        if (
-                        isinstance(act.unitid, EUDVariable) or
-                        isinstance(act.acttype, EUDVariable) or
-                    isinstance(act.amount, EUDVariable)
-        ):
-            act.unitid = f_div(act.unitid, 65536)[1]
-            act.acttype = f_div(act.acttype, 256)[1]
-            act.amount = f_div(act.amount, 256)[1]
-            sqs.append((
-                c.EPD(trg + 328 + 32 * i + 24),
-                c.SetTo,
-                f_mul(0x1000000, act.amount) + f_mul(0x10000, act.acttype) + act.unitid
-            ))
-
-            act.unitid = 0
-            act.acttype = 0
-            act.amount = 0
-
-        # flags
-        if isinstance(act.flags, EUDVariable):
-            br = f_dwbreak(f_dwread_epd(c.EPD(trg + 328 + 32 * i + 28)))
-            sqs.append((
-                c.EPD(trg + 328 + 32 * i + 28),
-                c.SetTo,
-                f_mul(0x10000, br[1]) + f_mul(0x100, br[3]) + act.flags
-            ))
-            act.flags = 0
-
-    if sqs:
-        SeqCompute(sqs)
-
-    c.BasicTrigger(
-        conditions=conditions,
-        actions=actions,
-        preserved=preserved
-    )

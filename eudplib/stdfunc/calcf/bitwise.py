@@ -25,7 +25,7 @@ THE SOFTWARE.
 
 from ... import core as c
 from ... import ctrlstru as cs
-from ... import varfunc as vf
+from eudplib.core import varfunc as vf
 from .muldiv import f_mul, f_div
 
 
@@ -38,7 +38,7 @@ def bw_gen(cond):
         ret << 0
 
         for i in range(31, -1, -1):
-            c.Trigger(
+            c.BasicTrigger(
                 conditions=[
                     a.AtLeast(2 ** i)
                 ],
@@ -48,7 +48,7 @@ def bw_gen(cond):
                 ]
             )
 
-            c.Trigger(
+            c.BasicTrigger(
                 conditions=[
                     b.AtLeast(2 ** i)
                 ],
@@ -58,7 +58,7 @@ def bw_gen(cond):
                 ]
             )
 
-            c.Trigger(
+            c.BasicTrigger(
                 conditions=cond(tmp),
                 actions=ret.AddNumber(2 ** i)
             )
@@ -95,7 +95,7 @@ def f_bitsplit(a):
     bits = [vf.EUDCreateVariables(32)]
     for i in range(31, -1, -1):
         cs.DoActions(bits[i].SetNumber(0))
-        c.Trigger(
+        c.BasicTrigger(
             conditions=a.AtLeast(2 ** i),
             actions=[
                 a.SubtractNumber(2 ** i),

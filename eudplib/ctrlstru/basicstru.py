@@ -27,18 +27,18 @@ from .. import core as c
 
 
 def DoActions(actions):
-    return c.Trigger(actions=c.FlattenList(actions))
+    return c.BasicTrigger(actions=c.FlattenList(actions))
 
 
 def EUDJump(nextptr):
-    return c.Trigger(nextptr=nextptr)
+    return c.BasicTrigger(nextptr=nextptr)
 
 
 def EUDBranch(conditions, ontrue, onfalse):
     brtrg = c.Forward()
     ontruetrg = c.Forward()
 
-    brtrg << c.Trigger(
+    brtrg << c.BasicTrigger(
         nextptr=onfalse,
         conditions=conditions,
         actions=[
@@ -46,7 +46,7 @@ def EUDBranch(conditions, ontrue, onfalse):
         ]
     )
 
-    ontruetrg << c.Trigger(
+    ontruetrg << c.BasicTrigger(
         nextptr=ontrue,
         actions=[
             c.SetNextPtr(brtrg, onfalse)

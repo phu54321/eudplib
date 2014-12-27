@@ -25,7 +25,7 @@ THE SOFTWARE.
 
 from ... import core as c
 from ... import ctrlstru as cs
-from ... import varfunc as vf
+from eudplib.core import varfunc as vf
 
 
 def f_mul(a, b):
@@ -82,7 +82,7 @@ def f_constmul(number):
             ret = vf.EUDVariable()
             ret << 0
             for i in range(31, -1, -1):
-                c.Trigger(
+                c.BasicTrigger(
                     conditions=a.AtLeast(2 ** i),
                     actions=[
                         a.SubtractNumber(2 ** i),
@@ -113,7 +113,7 @@ def f_constdiv(number):
                 if 2 ** i * number >= 2 ** 32:
                     continue
 
-                c.Trigger(
+                c.BasicTrigger(
                     conditions=a.AtLeast(2 ** i * number),
                     actions=[
                         a.SubtractNumber(2 ** i * number),
@@ -155,7 +155,7 @@ def _f_mul(a, b):
     for i in range(31, -1, -1):
         cy0 = c.Forward()
 
-        chain[i] << c.Trigger(
+        chain[i] << c.BasicTrigger(
             conditions=[
                 a.AtLeast(2 ** i)
             ],
@@ -201,7 +201,7 @@ def _f_div(a, b):
     # Run division chain
     for i in range(31, -1, -1):
         cx0, cx1 = c.Forward(), c.Forward()
-        chain[i] << c.Trigger(
+        chain[i] << c.BasicTrigger(
             conditions=[
                 cx0 << a.AtLeast(0)
             ],

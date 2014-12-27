@@ -133,7 +133,7 @@ def EUDExecuteOnce():
     tv = c.Db(4)
 
     EUDJumpIf(c.Memory(tv, c.Exactly, 1), block['blockend'])
-    c.Trigger(actions=c.SetMemory(tv, c.SetTo, 1))
+    c.BasicTrigger(actions=c.SetMemory(tv, c.SetTo, 1))
 
     return True
 

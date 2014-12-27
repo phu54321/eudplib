@@ -134,5 +134,5 @@ def Evaluate(x):
         return x
 
 
-def IsValidSCMemAddr(x):
+def IsValidExpr(x):
     return isinstance(x, Expr) or isinstance(x, int)

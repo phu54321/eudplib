@@ -25,7 +25,7 @@ THE SOFTWARE.
 
 from ..memiof import f_dwread_epd
 from ... import core as c
-from ... import varfunc as vf
+from eudplib.core import varfunc as vf
 
 
 def f_setcurpl(cp):

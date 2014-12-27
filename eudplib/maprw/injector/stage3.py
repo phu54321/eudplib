@@ -31,7 +31,7 @@ THE SOFTWARE.
 
 from ... import core as c
 from ... import ctrlstru as cs
-from ... import varfunc as vf
+from eudplib.core import varfunc as vf
 from ... import stdfunc as sf
 from ...trigtrg import runtrigtrg as rtt
 
@@ -93,13 +93,13 @@ def CreateStage3(root, mrgndata):
 
         # Crash preventer
         tstart, _t0 = c.Forward(), c.Forward()
-        tstart << c.Trigger(
+        tstart << c.BasicTrigger(
             prevptr=pts + player * 12 + 4,
             nextptr=trs,
             actions=[c.SetNextPtr(tstart, _t0)]
         )
 
-        _t0 << c.Trigger(
+        _t0 << c.BasicTrigger(
             nextptr=tmcheckt,
             actions=[
                 # reset
