@@ -31,8 +31,8 @@ from .stdobj import *
 from .trigtrg import *
 from .maprw import *
 
-__version__ = '0.40-r4-stable'
+__version__ = '0.40.4'
 
 
-def eudtrgVersion():
+def eudplibVersion():
     return __version__
