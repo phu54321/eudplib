@@ -23,10 +23,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-from .. import core as c
-from ..varfunc import EUDVariable, SeqCompute
-from ..stdfunc.calcf import f_div, f_mul
-from ..stdfunc.memiof import f_dwread_epd, f_dwbreak
+from eudplib import core as c
+from eudplib.core.varfunc import EUDVariable, SeqCompute
+from eudplib.stdfunc.calcf import f_div, f_mul
+from eudplib.stdfunc.memiof import f_dwread_epd, f_dwbreak
 
 
 # TODO : test this function
@@ -163,7 +163,7 @@ def VarMixedTrigger(
     if sqs:
         SeqCompute(sqs)
 
-    c.Trigger(
+    c.BasicTrigger(
         conditions=conditions,
         actions=actions,
         preserved=preserved
