@@ -25,12 +25,11 @@ THE SOFTWARE.
 
 from ..memiof import f_dwread_epd
 from ... import core as c
-from ... import varfunc as vf
 
 
 def f_setcurpl(cp):
     cp = c.EncodePlayer(cp)
-    vf.SeqCompute([
+    c.SeqCompute([
         (c.EPD(0x6509B0), c.SetTo, cp)
     ])
 

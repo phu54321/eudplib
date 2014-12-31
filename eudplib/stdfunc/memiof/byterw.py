@@ -25,41 +25,40 @@ THE SOFTWARE.
 
 from ... import core as c
 from ... import ctrlstru as cs
-from ... import varfunc as vf
 
 from . import dwmemio as dwm
 from .. import calcf
 
 
-_epd, _suboffset = vf.EUDCreateVariables(2)
+_epd, _suboffset = c.EUDCreateVariables(2)
 
 
 class EUDByteReader:
     def __init__(self):
-        self._dw = vf.EUDVariable()
-        self._b = vf.EUDCreateVariables(4)
-        self._suboffset = vf.EUDVariable()
-        self._offset = vf.EUDVariable()
-        self._ret = vf.EUDVariable()
+        self._dw = c.EUDVariable()
+        self._b = c.EUDCreateVariables(4)
+        self._suboffset = c.EUDVariable()
+        self._offset = c.EUDVariable()
+        self._ret = c.EUDVariable()
 
     '''
     Seek to epd address
     '''
 
     def seekepd(self, epdoffset):
-        vf.SeqCompute([
+        c.SeqCompute([
             (self._offset, c.SetTo, epdoffset),
             (self._suboffset, c.SetTo, 0)
         ])
 
-        vf.SetVariables(self._dw, dwm.f_dwread_epd(epdoffset))
+        c.SetVariables(self._dw, dwm.f_dwread_epd(epdoffset))
 
-        vf.SetVariables([
-                            self._b[0],
-                            self._b[1],
-                            self._b[2],
-                            self._b[3],
-                        ], dwm.f_dwbreak(self._dw)[2:6])
+        c.SetVariables([
+                           self._b[0],
+                           self._b[1],
+                           self._b[2],
+                           self._b[3],
+                       ], dwm.f_dwbreak(self._dw)[2:6])
 
     '''
     Seek to real address
@@ -69,12 +68,12 @@ class EUDByteReader:
         global _epd, _suboffset
 
         # convert offset to epd offset & suboffset
-        vf.SetVariables([_epd, _suboffset], calcf.f_div(offset, 4))
-        vf.SeqCompute([(_epd, c.Add, -0x58A364 // 4)])
+        c.SetVariables([_epd, _suboffset], calcf.f_div(offset, 4))
+        c.SeqCompute([(_epd, c.Add, -0x58A364 // 4)])
 
         # seek to epd & set suboffset
         self.seekepd(_epd)
-        vf.SeqCompute([
+        c.SeqCompute([
             (self._suboffset, c.SetTo, _suboffset)
         ])
 
@@ -84,7 +83,7 @@ class EUDByteReader:
         # suboffset == 0
         case0 << c.NextTrigger()
         cs.EUDJumpIfNot(self._suboffset.Exactly(0), case1)
-        vf.SeqCompute([
+        c.SeqCompute([
             (self._ret, c.SetTo, self._b[0]),
             (self._suboffset, c.Add, 1)
         ])
@@ -93,7 +92,7 @@ class EUDByteReader:
         # suboffset == 1
         case1 << c.NextTrigger()
         cs.EUDJumpIfNot(self._suboffset.Exactly(1), case2)
-        vf.SeqCompute([
+        c.SeqCompute([
             (self._ret, c.SetTo, self._b[1]),
             (self._suboffset, c.Add, 1)
         ])
@@ -102,7 +101,7 @@ class EUDByteReader:
         # suboffset == 2
         case2 << c.NextTrigger()
         cs.EUDJumpIfNot(self._suboffset.Exactly(2), case3)
-        vf.SeqCompute([
+        c.SeqCompute([
             (self._ret, c.SetTo, self._b[2]),
             (self._suboffset, c.Add, 1)
         ])
@@ -112,19 +111,19 @@ class EUDByteReader:
         # read more dword
         case3 << c.NextTrigger()
 
-        vf.SeqCompute([
+        c.SeqCompute([
             (self._ret, c.SetTo, self._b[3]),
             (self._offset, c.Add, 1),
             (self._suboffset, c.SetTo, 0)
         ])
 
-        vf.SetVariables(self._dw, dwm.f_dwread_epd(self._offset))
-        vf.SetVariables([
-                            self._b[0],
-                            self._b[1],
-                            self._b[2],
-                            self._b[3],
-                        ], dwm.f_dwbreak(self._dw)[2:6])
+        c.SetVariables(self._dw, dwm.f_dwread_epd(self._offset))
+        c.SetVariables([
+                           self._b[0],
+                           self._b[1],
+                           self._b[2],
+                           self._b[3],
+                       ], dwm.f_dwbreak(self._dw)[2:6])
 
         swend << c.NextTrigger()
         return self._ret
@@ -136,34 +135,34 @@ class EUDByteWriter:
         self._suboffset = None
         self._offset = None
 
-        self._dw, self._suboffset, self._offset = vf.EUDCreateVariables(3)
+        self._dw, self._suboffset, self._offset = c.EUDCreateVariables(3)
 
-        self._b = [vf.EUDLightVariable() for _ in range(4)]
+        self._b = [c.EUDLightVariable() for _ in range(4)]
 
     def seekepd(self, epdoffset):
-        vf.SeqCompute([
+        c.SeqCompute([
             (self._offset, c.SetTo, epdoffset),
             (self._suboffset, c.SetTo, 0)
         ])
 
-        vf.SetVariables(self._dw, dwm.f_dwread_epd(epdoffset))
+        c.SetVariables(self._dw, dwm.f_dwread_epd(epdoffset))
 
-        vf.SetVariables([
-                            self._b[0],
-                            self._b[1],
-                            self._b[2],
-                            self._b[3],
-                        ], dwm.f_dwbreak(self._dw)[2:6])
+        c.SetVariables([
+                           self._b[0],
+                           self._b[1],
+                           self._b[2],
+                           self._b[3],
+                       ], dwm.f_dwbreak(self._dw)[2:6])
 
     def seekoffset(self, offset):
         global _epd, _suboffset
 
         # convert offset to epd offset & suboffset
-        vf.SetVariables([_epd, _suboffset], calcf.f_div(offset, 4))
-        vf.SeqCompute([(_epd, c.Add, (0x100000000 - 0x58A364) // 4)])
+        c.SetVariables([_epd, _suboffset], calcf.f_div(offset, 4))
+        c.SeqCompute([(_epd, c.Add, (0x100000000 - 0x58A364) // 4)])
 
         self.seekepd(_epd)
-        vf.SeqCompute([
+        c.SeqCompute([
             (self._suboffset, c.SetTo, _suboffset)
         ])
 
@@ -172,7 +171,7 @@ class EUDByteWriter:
 
         case0 << c.NextTrigger()
         cs.EUDJumpIfNot(self._suboffset.Exactly(0), case1)
-        vf.SeqCompute([
+        c.SeqCompute([
             (self._b[0], c.SetTo, byte),
             (self._suboffset, c.Add, 1)
         ])
@@ -180,7 +179,7 @@ class EUDByteWriter:
 
         case1 << c.NextTrigger()
         cs.EUDJumpIfNot(self._suboffset.Exactly(1), case2)
-        vf.SeqCompute([
+        c.SeqCompute([
             (self._b[1], c.SetTo, byte),
             (self._suboffset, c.Add, 1)
         ])
@@ -188,7 +187,7 @@ class EUDByteWriter:
 
         case2 << c.NextTrigger()
         cs.EUDJumpIfNot(self._suboffset.Exactly(2), case3)
-        vf.SeqCompute([
+        c.SeqCompute([
             (self._b[2], c.SetTo, byte),
             (self._suboffset, c.Add, 1)
         ])
@@ -196,34 +195,34 @@ class EUDByteWriter:
 
         case3 << c.NextTrigger()
 
-        vf.SeqCompute([
+        c.SeqCompute([
             (self._b[3], c.SetTo, byte)
         ])
 
         self.flushdword()
 
-        vf.SeqCompute([
+        c.SeqCompute([
             (self._offset, c.Add, 1),
             (self._suboffset, c.SetTo, 0)
         ])
 
-        vf.SetVariables(self._dw, dwm.f_dwread_epd(self._offset))
-        vf.SetVariables([
-                            self._b[0],
-                            self._b[1],
-                            self._b[2],
-                            self._b[3],
-                        ], dwm.f_dwbreak(self._dw)[2:6])
+        c.SetVariables(self._dw, dwm.f_dwread_epd(self._offset))
+        c.SetVariables([
+                           self._b[0],
+                           self._b[1],
+                           self._b[2],
+                           self._b[3],
+                       ], dwm.f_dwbreak(self._dw)[2:6])
 
         swend << c.NextTrigger()
 
     def flushdword(self):
         # mux bytes
-        c.Trigger(actions=self._dw.SetNumber(0))
+        c.RawTrigger(actions=self._dw.SetNumber(0))
 
         for i in range(7, -1, -1):
             for j in range(4):
-                c.Trigger(
+                c.RawTrigger(
                     conditions=[
                         self._b[j].AtLeast(2 ** i)
                     ],

@@ -130,10 +130,9 @@ def EUDExecuteOnce():
     }
     c.EUDCreateBlock('executeonceblock', block)
 
-    tv = c.Db(4)
-
-    EUDJumpIf(c.Memory(tv, c.Exactly, 1), block['blockend'])
-    c.Trigger(actions=c.SetMemory(tv, c.SetTo, 1))
+    tv = c.EUDLightVariable()
+    EUDJumpIf(tv == 1, block['blockend'])
+    tv << 1
 
     return True
 

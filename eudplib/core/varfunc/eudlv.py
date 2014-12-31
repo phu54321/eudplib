@@ -23,13 +23,15 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-from .. import core as c
+from ..eudobj import Db
+from ..utils import i2b4
 from .vbase import VariableBase
 
 
 class EUDLightVariable(VariableBase):
     def __init__(self, initvalue=0):
-        self._memaddr = c.Db(c.i2b4(initvalue))
+        super().__init__()
+        self._memaddr = Db(i2b4(initvalue))
 
     def GetVariableMemoryAddr(self):
         return self._memaddr

@@ -27,7 +27,7 @@ from .expr import (
     Expr,
     Forward,
     Evaluate,
-    IsValidSCMemAddr
+    IsValidExpr
 )
 
 from .rlocint import RlocInt, toRlocInt

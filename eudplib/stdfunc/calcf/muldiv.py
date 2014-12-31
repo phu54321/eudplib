@@ -25,31 +25,30 @@ THE SOFTWARE.
 
 from ... import core as c
 from ... import ctrlstru as cs
-from ... import varfunc as vf
 
 
 def f_mul(a, b):
-    if isinstance(a, vf.EUDVariable) and isinstance(b, vf.EUDVariable):
+    if isinstance(a, c.EUDVariable) and isinstance(b, c.EUDVariable):
         return _f_mul(a, b)
 
-    elif isinstance(a, vf.EUDVariable):
+    elif isinstance(a, c.EUDVariable):
         return f_constmul(b)(a)
 
-    elif isinstance(b, vf.EUDVariable):
+    elif isinstance(b, c.EUDVariable):
         return f_constmul(a)(b)
 
     else:
-        ret = vf.EUDVariable()
+        ret = c.EUDVariable()
         ret << a * b
         return ret
 
 
 def f_div(a, b):
     """ returns (a//b, a%b) """
-    if isinstance(b, vf.EUDVariable):
+    if isinstance(b, c.EUDVariable):
         return _f_div(a, b)
 
-    elif isinstance(a, vf.EUDVariable):
+    elif isinstance(a, c.EUDVariable):
         return f_constdiv(b)(a)
 
     else:
@@ -57,8 +56,8 @@ def f_div(a, b):
             q, m = a // b, a % b
         else:
             q, m = 0xFFFFFFFF, a
-        vq, vm = vf.EUDCreateVariables(2)
-        vf.SeqCompute([
+        vq, vm = c.EUDCreateVariables(2)
+        c.SeqCompute([
             (vq, c.SetTo, q),
             (vm, c.SetTo, vm)
         ])
@@ -77,12 +76,12 @@ def f_constmul(number):
     try:
         return mulfdict[number]
     except KeyError:
-        @vf.EUDFunc
+        @c.EUDFunc
         def mulf(a):
-            ret = vf.EUDVariable()
+            ret = c.EUDVariable()
             ret << 0
             for i in range(31, -1, -1):
-                c.Trigger(
+                c.RawTrigger(
                     conditions=a.AtLeast(2 ** i),
                     actions=[
                         a.SubtractNumber(2 ** i),
@@ -104,16 +103,16 @@ def f_constdiv(number):
     try:
         return divfdict[number]
     except KeyError:
-        @vf.EUDFunc
+        @c.EUDFunc
         def divf(a):
-            ret = vf.EUDVariable()
+            ret = c.EUDVariable()
             ret << 0
             for i in range(31, -1, -1):
                 # number too big
                 if 2 ** i * number >= 2 ** 32:
                     continue
 
-                c.Trigger(
+                c.RawTrigger(
                     conditions=a.AtLeast(2 ** i * number),
                     actions=[
                         a.SubtractNumber(2 ** i * number),
@@ -129,12 +128,12 @@ def f_constdiv(number):
 # -------
 
 
-@vf.EUDFunc
+@c.EUDFunc
 def _f_mul(a, b):
-    ret, y0 = vf.EUDCreateVariables(2)
+    ret, y0 = c.EUDCreateVariables(2)
 
     # Init
-    vf.SeqCompute([
+    c.SeqCompute([
         (ret, c.SetTo, 0),
         (y0, c.SetTo, b)
     ])
@@ -144,7 +143,7 @@ def _f_mul(a, b):
 
     # Calculate chain_y0
     for i in range(32):
-        vf.SeqCompute((
+        c.SeqCompute((
             (c.EPD(chain_y0[i]), c.SetTo, y0),
             (y0, c.Add, y0)
         ))
@@ -155,7 +154,7 @@ def _f_mul(a, b):
     for i in range(31, -1, -1):
         cy0 = c.Forward()
 
-        chain[i] << c.Trigger(
+        chain[i] << c.RawTrigger(
             conditions=[
                 a.AtLeast(2 ** i)
             ],
@@ -170,12 +169,12 @@ def _f_mul(a, b):
     return ret
 
 
-@vf.EUDFunc
+@c.EUDFunc
 def _f_div(a, b):
-    ret, x = vf.EUDCreateVariables(2)
+    ret, x = c.EUDCreateVariables(2)
 
     # Init
-    vf.SeqCompute([
+    c.SeqCompute([
         (ret, c.SetTo, 0),
         (x, c.SetTo, b),
     ])
@@ -187,21 +186,21 @@ def _f_div(a, b):
 
     # Fill in chain
     for i in range(32):
-        vf.SeqCompute([
+        c.SeqCompute([
             (c.EPD(chain_x0[i]), c.SetTo, x),
             (c.EPD(chain_x1[i]), c.SetTo, x),
         ])
 
         cs.EUDJumpIf(x.AtLeast(0x8000000), chain[i])
 
-        vf.SeqCompute([
+        c.SeqCompute([
             (x, c.Add, x),
         ])
 
     # Run division chain
     for i in range(31, -1, -1):
         cx0, cx1 = c.Forward(), c.Forward()
-        chain[i] << c.Trigger(
+        chain[i] << c.RawTrigger(
             conditions=[
                 cx0 << a.AtLeast(0)
             ],

@@ -26,12 +26,22 @@ THE SOFTWARE.
 import weakref
 import traceback
 
-from .. import core as c
+from .. import rawtrigger as bt
+from ..allocator import (
+    Evaluate,
+    Forward,
+    Expr,
+    IsValidExpr
+)
+from ..utils import (
+    EPD,
+    List2Assignable
+)
 from .vbase import VariableBase
 from .vbuf import GetCurrentVariableBuffer
 
 
-class VariableTriggerForward(c.Expr):
+class VariableTriggerForward(Expr):
     def __init__(self):
         super().__init__(self)
         self._expr = weakref.WeakKeyDictionary()
@@ -40,7 +50,7 @@ class VariableTriggerForward(c.Expr):
         evb = GetCurrentVariableBuffer()
         if evb not in self._expr:
             self._expr[evb] = evb.CreateVarTrigger()
-        return c.Evaluate(self._expr[evb])
+        return Evaluate(self._expr[evb])
 
 
 class EUDVariable(VariableBase):
@@ -62,42 +72,42 @@ class EUDVariable(VariableBase):
 
     def QueueAssignTo(self, dest):
         try:
-            dest = c.EPD(dest.GetVariableMemoryAddr())
+            dest = EPD(dest.GetVariableMemoryAddr())
         except AttributeError:
             pass
 
         return [
-            c.SetDeaths(c.EPD(self._varact + 16), c.SetTo, dest, 0),
-            c.SetDeaths(c.EPD(self._varact + 24), c.SetTo, 0x072D0000, 0),
+            bt.SetDeaths(EPD(self._varact + 16), bt.SetTo, dest, 0),
+            bt.SetDeaths(EPD(self._varact + 24), bt.SetTo, 0x072D0000, 0),
         ]
 
     def QueueAddTo(self, dest):
         try:
-            dest = c.EPD(dest.GetVariableMemoryAddr())
+            dest = EPD(dest.GetVariableMemoryAddr())
         except AttributeError:
             pass
 
         return [
-            c.SetDeaths(c.EPD(self._varact + 16), c.SetTo, dest, 0),
-            c.SetDeaths(c.EPD(self._varact + 24), c.SetTo, 0x082D0000, 0),
+            bt.SetDeaths(EPD(self._varact + 16), bt.SetTo, dest, 0),
+            bt.SetDeaths(EPD(self._varact + 24), bt.SetTo, 0x082D0000, 0),
         ]
 
     def QueueSubtractTo(self, dest):
         try:
-            dest = c.EPD(dest.GetVariableMemoryAddr())
+            dest = EPD(dest.GetVariableMemoryAddr())
         except AttributeError:
             pass
 
         return [
-            c.SetDeaths(c.EPD(self._varact + 16), c.SetTo, dest, 0),
-            c.SetDeaths(c.EPD(self._varact + 24), c.SetTo, 0x092D0000, 0),
+            bt.SetDeaths(EPD(self._varact + 16), bt.SetTo, dest, 0),
+            bt.SetDeaths(EPD(self._varact + 24), bt.SetTo, 0x092D0000, 0),
         ]
 
     # -------
 
     def Assign(self, other):
         SeqCompute((
-            (self, c.SetTo, other),
+            (self, bt.SetTo, other),
         ))
         return self
 
@@ -105,7 +115,7 @@ class EUDVariable(VariableBase):
         self.Assign(other)
 
     def __iadd__(self, other):
-        SeqCompute(((self, c.Add, other),))
+        SeqCompute(((self, bt.Add, other),))
 
     def __isub__(self, other):
         self << self - other
@@ -115,8 +125,8 @@ class EUDVariable(VariableBase):
     def __add__(self, other):
         t = EUDVariable()
         SeqCompute([
-            (t, c.SetTo, self),
-            (t, c.Add, other)
+            (t, bt.SetTo, self),
+            (t, bt.Add, other)
         ])
         return t
 
@@ -126,53 +136,53 @@ class EUDVariable(VariableBase):
     def __sub__(self, other):
         t = EUDVariable()
         SeqCompute([
-            (t, c.SetTo, 0xffffffff),
-            (t, c.Subtract, other),
-            (t, c.Add, 1),
-            (t, c.Add, self),
+            (t, bt.SetTo, 0xffffffff),
+            (t, bt.Subtract, other),
+            (t, bt.Add, 1),
+            (t, bt.Add, self),
         ])
         return t
 
     def __rsub__(self, other):
         t = EUDVariable()
         SeqCompute([
-            (t, c.SetTo, 0xffffffff),
-            (t, c.Subtract, self),
-            (t, c.Add, 1),
-            (t, c.Add, other),
+            (t, bt.SetTo, 0xffffffff),
+            (t, bt.Subtract, self),
+            (t, bt.Add, 1),
+            (t, bt.Add, other),
         ])
         return t
 
     # -------
 
     def __eq__(self, other):
-        if c.IsValidSCMemAddr(other):
+        if IsValidExpr(other):
             return self.Exactly(other)
 
         else:
             return (self - other).Exactly(0)
 
     def __le__(self, other):
-        if c.IsValidSCMemAddr(other):
+        if IsValidExpr(other):
             return self.AtMost(other)
 
         else:
             t = EUDVariable()
             SeqCompute((
-                (t, c.SetTo, self),
-                (t, c.Subtract, other)
+                (t, bt.SetTo, self),
+                (t, bt.Subtract, other)
             ))
             return t.Exactly(0)
 
     def __ge__(self, other):
-        if c.IsValidSCMemAddr(other):
+        if IsValidExpr(other):
             return self.AtLeast(other)
 
         else:
             t = EUDVariable()
             SeqCompute((
-                (t, c.SetTo, other),
-                (t, c.Subtract, self)
+                (t, bt.SetTo, other),
+                (t, bt.Subtract, self)
             ))
             return t.Exactly(0)
 
@@ -180,17 +190,17 @@ class EUDVariable(VariableBase):
         if isinstance(other, int) and other <= 0:
             print('[Warning] No unsigned number can be leq than %d' % other)
             traceback.print_stack()
-            return [c.Never()]  # No unsigned number is less than 0
+            return [bt.Never()]  # No unsigned number is less than 0
 
-        if c.IsValidSCMemAddr(other):
+        if IsValidExpr(other):
             return self.AtMost(other - 1)
 
         else:
             t = EUDVariable()
             SeqCompute((
-                (t, c.SetTo, self),
-                (t, c.Add, 1),
-                (t, c.Subtract, other)
+                (t, bt.SetTo, self),
+                (t, bt.Add, 1),
+                (t, bt.Subtract, other)
             ))
             return t.Exactly(0)
 
@@ -198,35 +208,35 @@ class EUDVariable(VariableBase):
         if isinstance(other, int) and other >= 0xFFFFFFFF:
             print('[Warning] No unsigned int can be greater than %d' % other)
             traceback.print_stack()
-            return [c.Never()]  # No unsigned number is less than 0
+            return [bt.Never()]  # No unsigned number is less than 0
 
-        if c.IsValidSCMemAddr(other):
+        if IsValidExpr(other):
             return self.AtLeast(other + 1)
 
         else:
             t = EUDVariable()
             SeqCompute((
-                (t, c.SetTo, self),
-                (t, c.Subtract, 1),
-                (t, c.Subtract, other)
+                (t, bt.SetTo, self),
+                (t, bt.Subtract, 1),
+                (t, bt.Subtract, other)
             ))
             return t.AtLeast(1)
 
 
 def _VProc(v, actions):
-    nexttrg = c.Forward()
+    nexttrg = Forward()
 
-    c.Trigger(
+    bt.RawTrigger(
         nextptr=v.GetVTable(),
-        actions=[actions] + [c.SetNextPtr(v.GetVTable(), nexttrg)]
+        actions=[actions] + [bt.SetNextPtr(v.GetVTable(), nexttrg)]
     )
 
-    nexttrg << c.NextTrigger()
+    nexttrg << bt.NextTrigger()
 
 
 # From vbuffer.py
 def EUDCreateVariables(varn):
-    return c.List2Assignable([EUDVariable() for _ in range(varn)])
+    return List2Assignable([EUDVariable() for _ in range(varn)])
 
 
 # -------
@@ -238,35 +248,35 @@ def SeqCompute(assignpairs):
     def FlushActionSet():
         nonlocal actionset
         if actionset:
-            c.Trigger(actions=actionset)
+            bt.RawTrigger(actions=actionset)
             actionset.clear()
 
     for dst, mdt, src in assignpairs:
         try:
-            dstepd = c.EPD(dst.GetVariableMemoryAddr())
+            dstepd = EPD(dst.GetVariableMemoryAddr())
         except AttributeError:
             dstepd = dst
 
         if isinstance(src, EUDVariable):
             FlushActionSet()
 
-            if mdt == c.SetTo:
+            if mdt == bt.SetTo:
                 _VProc(src, [
                     src.QueueAssignTo(dstepd)
                 ])
 
-            elif mdt == c.Add:
+            elif mdt == bt.Add:
                 _VProc(src, [
                     src.QueueAddTo(dstepd)
                 ])
 
-            elif mdt == c.Subtract:
+            elif mdt == bt.Subtract:
                 _VProc(src, [
                     src.QueueSubtractTo(dstepd)
                 ])
 
         else:
-            actionset.append(c.SetDeaths(dstepd, mdt, src, 0))
+            actionset.append(bt.SetDeaths(dstepd, mdt, src, 0))
             if len(actionset) == 64:
                 FlushActionSet()
 

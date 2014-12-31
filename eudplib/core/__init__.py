@@ -25,6 +25,7 @@ THE SOFTWARE.
 
 from .allocator import *
 from .eudobj import *
-from .trigger import *
+from .rawtrigger import *
 from .utils import *
 from .mapdata import *
+from .varfunc import *

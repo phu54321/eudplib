@@ -31,12 +31,11 @@ THE SOFTWARE.
 
 from ... import core as c
 from ... import ctrlstru as cs
-from ... import varfunc as vf
 from ... import stdfunc as sf
 from ...trigtrg import runtrigtrg as rtt
 
 
-@vf.EUDFunc
+@c.EUDFunc
 def FlipProp(initepd):
     '''Iterate through triggers and flip 'Trigger disabled' flag'''
     if cs.EUDWhileNot([initepd >= 0x3FD56E6E, initepd <= 0x3FD56E86]):
@@ -74,15 +73,15 @@ def CreateStage3(root, mrgndata):
     sf.f_repmovsd_epd(c.EPD(0x58DC60), c.EPD(mrgndata_db), 5100 // 4)
 
     # Flip TRIG properties
-    i = vf.EUDVariable()
+    i = c.EUDVariable()
     if cs.EUDWhile(i <= 7):
         FlipProp(sf.f_epdread_epd(c.EPD(pts + 8) + i + i + i))
         i << i + 1
     cs.EUDEndWhile()
 
     # Create payload for each players & Link them with pts
-    lasttime = vf.EUDVariable()
-    curtime = vf.EUDVariable()
+    lasttime = c.EUDVariable()
+    curtime = c.EUDVariable()
     tmcheckt = c.Forward()
 
     for player in range(8):
@@ -93,13 +92,13 @@ def CreateStage3(root, mrgndata):
 
         # Crash preventer
         tstart, _t0 = c.Forward(), c.Forward()
-        tstart << c.Trigger(
+        tstart << c.RawTrigger(
             prevptr=pts + player * 12 + 4,
             nextptr=trs,
             actions=[c.SetNextPtr(tstart, _t0)]
         )
 
-        _t0 << c.Trigger(
+        _t0 << c.RawTrigger(
             nextptr=tmcheckt,
             actions=[
                 # reset
@@ -113,14 +112,14 @@ def CreateStage3(root, mrgndata):
         prevtend = sf.f_dwread_epd(c.EPD(pts + player * 12 + 4))
 
         # Modify pts
-        vf.SeqCompute([
+        c.SeqCompute([
             (c.EPD(pts + player * 12 + 8), c.SetTo, tstart),
             (c.EPD(pts + player * 12 + 4), c.SetTo, tre),
         ])
 
         if cs.EUDIfNot(prevtstart == ~(pts + player * 12 + 4)):  # If there were triggers
             # link trs, tre with them
-            vf.SeqCompute([
+            c.SeqCompute([
                 (c.EPD(trs + 4), c.SetTo, prevtstart),
             ])
             sf.f_dwwrite_epd(sf.f_epd(prevtend) + 1, tre)

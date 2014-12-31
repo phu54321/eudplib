@@ -27,22 +27,21 @@ THE SOFTWARE.
 #
 # unsigned long xor() {
 # static unsigned long y=2463534242;
-#     yˆ=(y<<13);
+# yˆ=(y<<13);
 #     y=(y>>17);
 #     return (yˆ=(y<<5));
 # }
 #
 
 from ... import core as c
-from ... import varfunc as vf
 from ..memiof import f_dwbreak, f_dwread_epd
-from ..calcf import f_bitxor, f_mul
+from ..calcf import f_mul
 
-_seed = vf.EUDVariable()
+_seed = c.EUDVariable()
 
 
 def f_getseed():
-    t = vf.EUDVariable()
+    t = c.EUDVariable()
     t << _seed
     return t
 
@@ -53,31 +52,31 @@ def f_srand(seed):
 
 def f_randomize():
     current_rv = f_dwread_epd(c.EPD(0x51CA14))
-    c.Trigger(
+    c.RawTrigger(
         conditions=current_rv.Exactly(0),
         actions=current_rv.SetNumber(30)
     )
     _seed << current_rv
 
 
-@vf.EUDFunc
+@c.EUDFunc
 def f_rand():
     _seed << f_mul(_seed, 1103515245) + 12345
     return f_dwbreak(_seed)[1]  # Only HIWORD is returned
 
 
-@vf.EUDFunc
+@c.EUDFunc
 def f_dwrand():
     seed1 = f_mul(_seed, 1103515245) + 12345
     seed2 = f_mul(seed1, 1103515245) + 12345
     _seed << seed2
 
-    ret = vf.EUDVariable()
+    ret = c.EUDVariable()
     ret << 0
 
     # HIWORD
     for i in range(31, 15, -1):
-        c.Trigger(
+        c.RawTrigger(
             conditions=seed1.AtLeast(2 ** i),
             actions=[
                 seed1.SubtractNumber(2 ** i),
@@ -87,7 +86,7 @@ def f_dwrand():
 
     # LOWORD
     for i in range(31, 15, -1):
-        c.Trigger(
+        c.RawTrigger(
             conditions=seed2.AtLeast(2 ** i),
             actions=[
                 seed2.SubtractNumber(2 ** i),

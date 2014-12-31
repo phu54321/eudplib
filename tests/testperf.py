@@ -7,6 +7,7 @@ from eudplib import *
 
 LoadMap('outputmap/basemap/basemap.scx')
 
+
 @EUDFunc
 def main():
     starttm = f_dwread_epd(EPD(0x51CE8C))
@@ -23,5 +24,6 @@ def main():
 
     endtm = f_dwread_epd(EPD(0x51CE8C))
     SeqCompute([(EPD(0x58a364), SetTo, starttm - endtm)])
+
 
 SaveMap('outputmap/perfest.scx', main)

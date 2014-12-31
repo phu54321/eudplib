@@ -26,12 +26,17 @@ THE SOFTWARE.
 import functools
 import inspect
 
-from .. import core as c
-from ..core.utils.blockstru import (
+from .eudv import EUDVariable, SeqCompute
+from ..utils import (
+    FlattenList,
+    List2Assignable,
+    Assignable2List,
     BlockStruManager,
     SetCurrentBlockStruManager
 )
-from .eudv import EUDVariable, SeqCompute
+
+from ..allocator import Forward
+from .. import rawtrigger as bt
 
 
 class EUDFunc:
@@ -57,14 +62,14 @@ class EUDFunc:
         f_bsm = BlockStruManager()
         prev_bsm = SetCurrentBlockStruManager(f_bsm)
 
-        if c.PushTriggerScope():
-            f_args = [EUDVariable() for _ in range(self._argn)]
-            fstart = c.NextTrigger()
-            f_rets = self._fdecl_func(*f_args)
-            if f_rets is not None:
-                f_rets = c.Assignable2List(f_rets)
-            fend = c.Trigger()
-        c.PopTriggerScope()
+        bt.PushTriggerScope()
+        f_args = [EUDVariable() for _ in range(self._argn)]
+        fstart = bt.NextTrigger()
+        f_rets = self._fdecl_func(*f_args)
+        if f_rets is not None:
+            f_rets = Assignable2List(f_rets)
+        fend = bt.RawTrigger()
+        bt.PopTriggerScope()
 
         assert f_bsm.empty(), 'Block start/end mismatch inside function'
         SetCurrentBlockStruManager(prev_bsm)
@@ -88,35 +93,35 @@ class EUDFunc:
 
         # Assign arguments into argument space
         SeqCompute(
-            [(farg, c.SetTo, arg) for farg, arg in zip(self._fargs, args)]
+            [(farg, bt.SetTo, arg) for farg, arg in zip(self._fargs, args)]
         )
 
         # Call body
-        fcallend = c.Forward()
+        fcallend = Forward()
 
-        c.Trigger(
+        bt.RawTrigger(
             nextptr=self._fstart,
-            actions=[c.SetNextPtr(self._fend, fcallend)]
+            actions=[bt.SetNextPtr(self._fend, fcallend)]
         )
 
-        fcallend << c.NextTrigger()
+        fcallend << bt.NextTrigger()
 
         if self._frets is not None:
             retn = len(self._frets)
             tmp_rets = [EUDVariable() for _ in range(retn)]
             SeqCompute(
-                [(tr, c.SetTo, r) for tr, r in zip(tmp_rets, self._frets)]
+                [(tr, bt.SetTo, r) for tr, r in zip(tmp_rets, self._frets)]
             )
-            return c.List2Assignable(tmp_rets)
+            return List2Assignable(tmp_rets)
 
 
 def SetVariables(srclist, dstlist, mdtlist=None):
-    srclist = c.FlattenList(srclist)
-    dstlist = c.FlattenList(dstlist)
+    srclist = FlattenList(srclist)
+    dstlist = FlattenList(dstlist)
     assert len(srclist) == len(dstlist), 'Input/output size mismatch'
 
     if mdtlist is None:
-        mdtlist = [c.SetTo] * len(srclist)
+        mdtlist = [bt.SetTo] * len(srclist)
 
     sqa = [(src, mdt, dst) for src, dst, mdt in zip(srclist, dstlist, mdtlist)]
     SeqCompute(sqa)

@@ -52,6 +52,7 @@ Main logic
 LoadMap('outputmap/basemap/creeptest_basemap.scx')
 CompressPayload(True)
 
+
 @EUDFunc
 def main():
     # Iterate through each units.
@@ -59,7 +60,7 @@ def main():
 
     f_creepread_init()
 
-    # Turbo trigger
+    # Turbo rawtrigger
 
     if EUDWhile(Always()):
         DoActions(SetDeaths(203151, SetTo, 1, 0))

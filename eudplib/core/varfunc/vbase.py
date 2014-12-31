@@ -23,7 +23,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-from .. import core as c
+from .. import rawtrigger as bt
 
 
 class VariableBase:
@@ -36,38 +36,38 @@ class VariableBase:
     # -------
 
     def AtLeast(self, value):
-        return c.Memory(self.GetVariableMemoryAddr(), c.AtLeast, value)
+        return bt.Memory(self.GetVariableMemoryAddr(), bt.AtLeast, value)
 
     def AtMost(self, value):
-        return c.Memory(self.GetVariableMemoryAddr(), c.AtMost, value)
+        return bt.Memory(self.GetVariableMemoryAddr(), bt.AtMost, value)
 
     def Exactly(self, value):
-        return c.Memory(self.GetVariableMemoryAddr(), c.Exactly, value)
+        return bt.Memory(self.GetVariableMemoryAddr(), bt.Exactly, value)
 
     # -------
 
     def SetNumber(self, value):
-        return c.SetMemory(self.GetVariableMemoryAddr(), c.SetTo, value)
+        return bt.SetMemory(self.GetVariableMemoryAddr(), bt.SetTo, value)
 
     def AddNumber(self, value):
-        return c.SetMemory(self.GetVariableMemoryAddr(), c.Add, value)
+        return bt.SetMemory(self.GetVariableMemoryAddr(), bt.Add, value)
 
     def SubtractNumber(self, value):
-        return c.SetMemory(self.GetVariableMemoryAddr(), c.Subtract, value)
+        return bt.SetMemory(self.GetVariableMemoryAddr(), bt.Subtract, value)
 
     # -------
 
     def Assign(self, value):
-        c.Trigger(actions=c.SetMemory(self.GetVariableMemoryAddr(), c.SetTo, value))
+        bt.RawTrigger(actions=bt.SetMemory(self.GetVariableMemoryAddr(), bt.SetTo, value))
 
     def __lshift__(self, value):
         self.Assign(value)
 
     def __iadd__(self, value):
-        c.Trigger(actions=c.SetMemory(self.GetVariableMemoryAddr(), c.Add, value))
+        bt.RawTrigger(actions=bt.SetMemory(self.GetVariableMemoryAddr(), bt.Add, value))
 
     def __isub__(self, value):
-        c.Trigger(actions=c.SetMemory(self.GetVariableMemoryAddr(), c.Subtract, value))
+        bt.RawTrigger(actions=bt.SetMemory(self.GetVariableMemoryAddr(), bt.Subtract, value))
 
     # -------
 

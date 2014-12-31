@@ -25,7 +25,6 @@ THE SOFTWARE.
 
 from ... import core as c
 from ... import ctrlstru as cs
-from ... import varfunc as vf
 from ..memiof import f_dwread_epd, f_dwwrite_epd
 
 
@@ -103,11 +102,11 @@ def DisplayExtText(text):
 
 def f_initextstr():
     rb = ResetterBuffer()
-    ptr, v = vf.EUDVariable(), vf.EUDVariable()
+    ptr, v = c.EUDVariable(), c.EUDVariable()
     ptr << c.EPD(rb)
     origstrptr = f_dwread_epd(c.EPD(0x5993D4))
 
-    vf.SeqCompute((
+    c.SeqCompute((
         (1, c.SetTo, origstrptr),
         (2, c.SetTo, origstrptr.GetVariableMemoryAddr()),
         (3, c.SetTo, ptr)

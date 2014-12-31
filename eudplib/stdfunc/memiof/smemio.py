@@ -25,7 +25,6 @@ THE SOFTWARE.
 
 from ... import core as c
 from ... import ctrlstru as cs
-from ... import varfunc as vf
 
 from . import byterw as bm
 
@@ -34,7 +33,7 @@ _br = bm.EUDByteReader()
 _bw = bm.EUDByteWriter()
 
 
-@vf.EUDFunc
+@c.EUDFunc
 def f_strcpy(dst, src):
     '''
     strcpy equivilant in eudplib. Copy C-style string.
@@ -42,14 +41,14 @@ def f_strcpy(dst, src):
     :param dst: Destination address. (Not EPD Player)
     :param src: Source address. (Not EPD Player)
     '''
-    b = vf.EUDVariable()
+    b = c.EUDVariable()
 
     _br.seekoffset(src)
     _bw.seekoffset(dst)
 
     loopstart = c.NextTrigger()
 
-    vf.SetVariables(b, _br.readbyte())
+    c.SetVariables(b, _br.readbyte())
     _bw.writebyte(b)
 
     cs.EUDJumpIfNot(b.Exactly(0), loopstart)

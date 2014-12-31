@@ -24,15 +24,15 @@ THE SOFTWARE.
 '''
 
 from .core import *
-from .varfunc import *
+from .trigger import *
 from .ctrlstru import *
 from .stdfunc import *
 from .stdobj import *
 from .trigtrg import *
 from .maprw import *
 
-__version__ = '0.40.4'
+__version__ = '0.40-r3-beta'
 
 
-def eudplibVersion():
+def eudtrgVersion():
     return __version__

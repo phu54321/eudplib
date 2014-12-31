@@ -7,6 +7,7 @@ from eudplib import *
 
 LoadMap('outputmap/basemap/basemap.scx')
 
+
 @EUDFunc
 def main():
     if EUDWhile(Always()):
@@ -18,4 +19,4 @@ def main():
     EUDEndWhile()
 
 
-SaveMap('outputmap/testblockstrublockstru.scx', main)
+SaveMap('outputmap/testblockstru.scx', main)

@@ -23,32 +23,49 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-from ..utils import EUDCreateBlock, EUDGetLastBlockOfName, EUDPopBlock
-from ..allocator import Forward
+from ..eudobj import EUDObject
+from ..allocator import RegisterCreatePayloadCallback
 
 
-def PushTriggerScope():
-    EUDCreateBlock('triggerscope', {
-        'nexttrigger_list': []
-    })
-    return True  # Allow `if PushTriggerScope()` syntax for indent
+class EUDVarBuffer(EUDObject):
+    """Variable buffer
+
+    40 bytes per variable.
+    """
+
+    def __init__(self):
+        super().__init__()
+
+        self._varn = 0
+
+    def CreateVarTrigger(self):
+        ret = self + (60 * self._varn)
+        self._varn += 1
+        return ret
+
+    def GetDataSize(self):
+        return 2408 + 60 * (self._varn - 1)
+
+    def WritePayload(self, emitbuffer):
+        output = bytearray(2408 + 60 * (self._varn - 1))
+
+        for i in range(self._varn):
+            # 'preserve rawtrigger'
+            output[60 * i + 2376:60 * i + 2380] = b'\x04\0\0\0'
+
+        emitbuffer.WriteBytes(output)
 
 
-def NextTrigger():
-    fw = Forward()
-    nt_list = EUDGetLastBlockOfName('triggerscope')[1]['nexttrigger_list']
-    nt_list.append(fw)
-    return fw
+_evb = None
 
 
-def _RegisterTrigger(trg):
-    nt_list = EUDGetLastBlockOfName('triggerscope')[1]['nexttrigger_list']
-    for fw in nt_list:
-        fw << trg
-    nt_list.clear()
+def RegisterNewVariableBuffer():
+    global _evb
+    _evb = EUDVarBuffer()
 
 
-def PopTriggerScope():
-    nt_list = EUDPopBlock('triggerscope')[1]['nexttrigger_list']
-    for fw in nt_list:
-        fw << 0
+def GetCurrentVariableBuffer():
+    return _evb
+
+
+RegisterCreatePayloadCallback(RegisterNewVariableBuffer)

@@ -25,7 +25,7 @@ THE SOFTWARE.
 
 '''
 WARNING! This code is speciallized for use on eudplib
-- Default player of trigger is 'All Player'.
+- Default player of rawtrigger is 'All Player'.
 - Only conditions/actions used in eudplib are declared
 - Condition/Action input filtering (& 0xFFFFFFFF thing) are only applied to
   player & number section of Deaths/SetDeaths

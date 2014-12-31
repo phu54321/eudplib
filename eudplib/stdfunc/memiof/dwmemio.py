@@ -25,7 +25,6 @@ THE SOFTWARE.
 
 from ... import core as c
 from ... import ctrlstru as cs
-from ... import varfunc as vf
 from .. import calcf
 
 
@@ -33,11 +32,11 @@ def f_epd(addr):
     return calcf.f_div(addr + (0x100000000 - 0x58A364), 4)[0]
 
 
-@vf.EUDFunc
+@c.EUDFunc
 def f_dwepdread_epd(targetplayer):
-    ret, retepd = vf.EUDVariable(), vf.EUDVariable()
+    ret, retepd = c.EUDVariable(), c.EUDVariable()
 
-    # Common comparison trigger
+    # Common comparison rawtrigger
     c.PushTriggerScope()
     cmpc = c.Forward()
     cmp_player = cmpc + 4
@@ -45,7 +44,7 @@ def f_dwepdread_epd(targetplayer):
     cmpact = c.Forward()
 
     cmptrigger = c.Forward()
-    cmptrigger << c.Trigger(
+    cmptrigger << c.RawTrigger(
         conditions=[
             cmpc << c.Memory(0, c.AtMost, 0)
         ],
@@ -61,7 +60,7 @@ def f_dwepdread_epd(targetplayer):
     chain2 = [c.Forward() for _ in range(32)]
 
     # Main logic start
-    vf.SeqCompute([
+    c.SeqCompute([
         (c.EPD(cmp_player), c.SetTo, targetplayer),
         (c.EPD(cmp_number), c.SetTo, 0xFFFFFFFF),
         (ret, c.SetTo, 0xFFFFFFFF),
@@ -79,7 +78,7 @@ def f_dwepdread_epd(targetplayer):
             epdsubact = []
             epdaddact = []
 
-        chain1[i] << c.Trigger(
+        chain1[i] << c.RawTrigger(
             nextptr=cmptrigger,
             actions=[
                         c.SetMemory(cmp_number, c.Subtract, 2 ** i),
@@ -89,7 +88,7 @@ def f_dwepdread_epd(targetplayer):
                     ] + epdsubact
         )
 
-        chain2[i] << c.Trigger(
+        chain2[i] << c.RawTrigger(
             actions=[
                         c.SetMemory(cmp_number, c.Add, 2 ** i),
                         ret.AddNumber(2 ** i),
@@ -113,9 +112,9 @@ def f_epdread_epd(targetplayer):
 
 
 def f_dwwrite_epd(targetplayer, value):
-    if isinstance(value, vf.EUDVariable):
+    if isinstance(value, c.EUDVariable):
         act = c.Forward()
-        vf.SeqCompute([
+        c.SeqCompute([
             (c.EPD(act + 16), c.SetTo, targetplayer),
             (c.EPD(act + 20), c.SetTo, value)
         ])
@@ -123,14 +122,14 @@ def f_dwwrite_epd(targetplayer, value):
 
     else:
         act = c.Forward()
-        vf.SeqCompute([(c.EPD(act + 16), c.SetTo, targetplayer)])
+        c.SeqCompute([(c.EPD(act + 16), c.SetTo, targetplayer)])
         cs.DoActions(act << c.SetMemory(0, c.SetTo, value))
 
 
 def f_dwadd_epd(targetplayer, value):
-    if isinstance(value, vf.EUDVariable):
+    if isinstance(value, c.EUDVariable):
         act = c.Forward()
-        vf.SeqCompute([
+        c.SeqCompute([
             (c.EPD(act + 16), c.SetTo, targetplayer),
             (c.EPD(act + 20), c.SetTo, value)
         ])
@@ -138,14 +137,14 @@ def f_dwadd_epd(targetplayer, value):
 
     else:
         act = c.Forward()
-        vf.SeqCompute([(c.EPD(act + 16), c.SetTo, targetplayer)])
+        c.SeqCompute([(c.EPD(act + 16), c.SetTo, targetplayer)])
         cs.DoActions(act << c.SetMemory(0, c.Add, value))
 
 
 def f_dwsubtract_epd(targetplayer, value):
-    if isinstance(value, vf.EUDVariable):
+    if isinstance(value, c.EUDVariable):
         act = c.Forward()
-        vf.SeqCompute([
+        c.SeqCompute([
             (c.EPD(act + 16), c.SetTo, targetplayer),
             (c.EPD(act + 20), c.SetTo, value)
         ])
@@ -153,14 +152,14 @@ def f_dwsubtract_epd(targetplayer, value):
 
     else:
         act = c.Forward()
-        vf.SeqCompute([(c.EPD(act + 16), c.SetTo, targetplayer)])
+        c.SeqCompute([(c.EPD(act + 16), c.SetTo, targetplayer)])
         cs.DoActions(act << c.SetMemory(0, c.Subtract, value))
 
 
-@vf.EUDFunc
+@c.EUDFunc
 def f_dwbreak(number):
-    word = vf.EUDCreateVariables(2)
-    byte = vf.EUDCreateVariables(4)
+    word = c.EUDCreateVariables(2)
+    byte = c.EUDCreateVariables(4)
 
     # Clear byte[], word[]
     cs.DoActions([
@@ -178,7 +177,7 @@ def f_dwbreak(number):
         byteexp = i % 8
         wordexp = i % 16
 
-        c.Trigger(
+        c.RawTrigger(
             conditions=number.AtLeast(2 ** i),
             actions=[
                 byte[byteidx].AddNumber(2 ** byteexp),
