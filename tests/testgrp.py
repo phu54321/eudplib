@@ -1,17 +1,21 @@
 import sys
 import os
+
 sys.path.insert(0, os.path.abspath('..\\'))
 
-from eudtrg import *
+from eudplib import *
 
 LoadMap('outputmap/basemap/grpbasemap.scx')
 
-a = EUDGrp(open('outputmap/basemap/inputgrp.grp', 'rb').read())
 
-# change zergling grp to inputgrp.grp
-k = Trigger(
-    actions=SetMemory(0x51CED0 + 4 * 54, SetTo, a),
-    preserved=False
-)
+@EUDFunc
+def main():
+    grp = EUDGrp('outputmap/basemap/inputgrp.grp')
+    RawTrigger(
+        actions=SetMemory(0x51CED0 + 4 * 54, SetTo, grp),
+        preserved=False
+    )
 
-SaveMap('outputmap/grptest.scx', k)
+
+SaveMap('outputmap/testgrp.scx', main)
+

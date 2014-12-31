@@ -1,27 +1,22 @@
 import sys
 import os
+
 sys.path.insert(0, os.path.abspath('..\\'))
 
-from eudtrg import *
+from eudplib import *
 
 LoadMap('outputmap/basemap/basemap.scx')
 
-mainstart = NextTrigger()
+
+@EUDFunc
+def main():
+    if EUDWhile(Always()):
+        f_setcurpl(Player1)
+        DoActions(DisplayText("test a"))
+        DoActions(DisplayText("test b"))
+        DoActions(DisplayText("test c"))
+        EUDDoEvents()
+    EUDEndWhile()
 
 
-a = EUDCreateVariables(1)
-a << 1
-if EUDWhile(a <= 5):
-    f_setcurpl(Player1)
-    DoActions(DisplayText("test a"))
-    EUDContinueIf(a == 2)
-    EUDBreakIf(a == 4)
-    DoActions(DisplayText("test b"))
-
-    EUDSetContinuePoint()
-    a << a + 1
-
-EUDEndWhile()
-
-
-SaveMap('outputmap/blockstru.scx', mainstart)
+SaveMap('outputmap/testblockstru.scx', main)

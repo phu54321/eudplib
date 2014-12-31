@@ -1,23 +1,21 @@
 import sys
 import os
+
 sys.path.insert(0, os.path.abspath('..\\'))
 
-from eudtrg import *
+from eudplib import *
 
-LoadMap('outputmap/basemap/basemap.scx')
+LoadMap('outputmap/basemap/basemap_trigtrg.scx')
 
-main = NextTrigger()
+CompressPayload(True)
 
-f_inittrigtrg()
 
-if EUDWhile(Always()):
-    p = EUDVariable()
-    p << 0
-    if EUDWhile(p <= 7):
-        f_exectrigtrg(p)
-        p << p + 1
-    EUDEndWhile()
-    EUDDoEvents()
-EUDEndWhile()
+@EUDFunc
+def main():
+    if EUDInfLoop():
+        RunTrigTrigger()  # 기존 트리거 실행
+        EUDDoEvents()
+    EUDEndInfLoop()
 
-SaveMap('outputmap/trigtrg.scx', main)
+
+SaveMap('outputmap/testtrigtrgcall.scx', main)

@@ -1,8 +1,8 @@
 from setuptools import setup, find_packages
-from eudtrg import __version__
+from eudplib import __version__
 
 setup(
-    name="eudtrg",
+    name="eudplib",
     version=__version__,
     packages=find_packages(),
     package_data={
@@ -13,9 +13,7 @@ setup(
     author="Trgk",
     author_email="whyask37@naver.com",
     description="EUD Trigger generator",
-    license="zlib license",
-    keywords="starcraft trigger eud",
-    url="http://blog.naver.com/whyask37/",   # project home page, if any
-
-    # could also include long_description, download_url, classifiers, etc.
+    license="MIT license",
+    keywords="starcraft rawtrigger eud",
+    url="http://blog.naver.com/whyask37/",  # project home page, if any
 )
