@@ -26,19 +26,21 @@ THE SOFTWARE.
 from .. import core as c
 from .filler import filldw, fillwbb, fillbbbb
 
+
 def HasEUDVariable(l):
     for i in l:
         if isinstance(i, c.EUDVariable):
             return True
     return False
 
+
 def ApplyPatchTable(initepd, obj, patchtable):
     for i, pt in enumerate(patchtable):
-        attrs = patchtable
+        attrs = pt
         filler = {
-            'd':1,
-            'wbb':3,
-            'bbbb':4
+            1: filldw,
+            3: fillwbb,
+            4: fillbbbb,
         }[len(attrs)]
         attrs = c.Assignable2List(attrs)
 
@@ -48,6 +50,7 @@ def ApplyPatchTable(initepd, obj, patchtable):
             for attr in attrs:
                 if type(attr) is str:
                     setattr(obj, attr, 0)
+
 
 condpt = [
     ['locid'],
@@ -68,45 +71,11 @@ actpt = [
     ['flags', 0, 0, 0]
 ]
 
-# TODO : test this function
-class Trigger(c.Expr):
-    def __init__(
-        self,
-        conditions=None,
-        actions=None,
-        preserved=True
-    ):
-        super().__init__()
-        if conditions is None:
-            conditions = []
-        if actions is None:
-            actions = []
-        conditions = c.FlattenList(conditions)
-        actions = c.FlattenList(actions)
 
-        triggerstart = c.NextTrigger()
-        trg = c.Forward()
+def PatchCondition(cond):
+    ApplyPatchTable(c.EPD(cond), cond, condpt)
 
-        # conditions
-        for i, cond in enumerate(conditions):
-            ApplyPatchTable(c.EPD(trg + 8 + 20 * i), cond, condpt)
 
-        # actions
-        for i, act in enumerate(actions):
-            ApplyPatchTable(c.EPD(trg + 328 + 32 * i), act, actpt)
-
-        trg << c.BasicTrigger(
-            conditions=conditions,
-            actions=actions,
-            preserved=preserved
-        )
-
-        self.tstart = triggerstart
-        self.tmain = trg
-
-    def Evaluate(self):
-        return c.Evaluate(self.tstart)
-
-    def GetNextPtrMemory(self):
-        return self.tmain + 4
+def PatchAction(act):
+    ApplyPatchTable(c.EPD(act), act, actpt)
 

@@ -24,6 +24,7 @@ THE SOFTWARE.
 '''
 
 from .core import *
+from .trigger import *
 from .ctrlstru import *
 from .stdfunc import *
 from .stdobj import *

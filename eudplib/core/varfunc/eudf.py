@@ -36,8 +36,7 @@ from ..utils import (
 )
 
 from ..allocator import Forward
-from .. import basictrigger as bt
-
+from .. import rawtrigger as bt
 
 
 class EUDFunc:
@@ -69,7 +68,7 @@ class EUDFunc:
         f_rets = self._fdecl_func(*f_args)
         if f_rets is not None:
             f_rets = Assignable2List(f_rets)
-        fend = bt.BasicTrigger()
+        fend = bt.RawTrigger()
         bt.PopTriggerScope()
 
         assert f_bsm.empty(), 'Block start/end mismatch inside function'
@@ -100,7 +99,7 @@ class EUDFunc:
         # Call body
         fcallend = Forward()
 
-        bt.BasicTrigger(
+        bt.RawTrigger(
             nextptr=self._fstart,
             actions=[bt.SetNextPtr(self._fend, fcallend)]
         )

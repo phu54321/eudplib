@@ -431,7 +431,7 @@ class Profile(Object):
 
         # Pass 1:  function_total gets the sum of call[event] for all
         # incoming arrows.  Same for cycle_total for all arrows
-        #          that are coming into the *cycle* but are not part of it.
+        # that are coming into the *cycle* but are not part of it.
         for function in compat_itervalues(self.functions):
             for call in compat_itervalues(function.calls):
                 if call.callee_id != function.id:
@@ -947,7 +947,7 @@ class XmlTokenMismatch(Exception):
 
     def __str__(self):
         return '%u:%u: %s expected, %s found' % (
-        self.found.line, self.found.column, str(self.expected), str(self.found))
+            self.found.line, self.found.column, str(self.expected), str(self.found))
 
 
 class XmlParser(Parser):
@@ -1262,7 +1262,7 @@ class GprofParser(Parser):
 # Clone&hack of GprofParser for VTune Amplifier XE 2013 gprof-cc output.
 # Tested only with AXE 2013 for Windows.
 # - Use total times as reported by AXE.
-#   - In the absence of call counts, call ratios are faked from the relative
+# - In the absence of call counts, call ratios are faked from the relative
 #     proportions of total time.  This affects only the weighting of the calls.
 #   - Different header, separator, and end marker.
 #   - Extra whitespace after function names.

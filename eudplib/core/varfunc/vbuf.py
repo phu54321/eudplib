@@ -26,6 +26,7 @@ THE SOFTWARE.
 from ..eudobj import EUDObject
 from ..allocator import RegisterCreatePayloadCallback
 
+
 class EUDVarBuffer(EUDObject):
     """Variable buffer
 
@@ -49,7 +50,7 @@ class EUDVarBuffer(EUDObject):
         output = bytearray(2408 + 60 * (self._varn - 1))
 
         for i in range(self._varn):
-            # 'preserve basictrigger'
+            # 'preserve rawtrigger'
             output[60 * i + 2376:60 * i + 2380] = b'\x04\0\0\0'
 
         emitbuffer.WriteBytes(output)

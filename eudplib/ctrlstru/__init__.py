@@ -26,7 +26,6 @@ THE SOFTWARE.
 from .basicstru import (
     DoActions,
     EUDJump,
-    EUDBranch,
     EUDJumpIf,
     EUDJumpIfNot,
 )

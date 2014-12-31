@@ -58,6 +58,7 @@ def find_data_file(filename):
 
     return os.path.join(datadir, filename)
 
+
 currentdir = os.path.dirname(__file__)
 
 

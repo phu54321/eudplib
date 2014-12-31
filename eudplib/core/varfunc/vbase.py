@@ -23,8 +23,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-
-from .. import basictrigger as bt
+from .. import rawtrigger as bt
 
 
 class VariableBase:
@@ -59,16 +58,16 @@ class VariableBase:
     # -------
 
     def Assign(self, value):
-        bt.BasicTrigger(actions=bt.SetMemory(self.GetVariableMemoryAddr(), bt.SetTo, value))
+        bt.RawTrigger(actions=bt.SetMemory(self.GetVariableMemoryAddr(), bt.SetTo, value))
 
     def __lshift__(self, value):
         self.Assign(value)
 
     def __iadd__(self, value):
-        bt.BasicTrigger(actions=bt.SetMemory(self.GetVariableMemoryAddr(), bt.Add, value))
+        bt.RawTrigger(actions=bt.SetMemory(self.GetVariableMemoryAddr(), bt.Add, value))
 
     def __isub__(self, value):
-        bt.BasicTrigger(actions=bt.SetMemory(self.GetVariableMemoryAddr(), bt.Subtract, value))
+        bt.RawTrigger(actions=bt.SetMemory(self.GetVariableMemoryAddr(), bt.Subtract, value))
 
     # -------
 

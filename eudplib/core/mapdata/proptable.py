@@ -37,6 +37,17 @@ def InitPropertyMap(chkt):
     global _prptable, _uprpdict
     _uprpdict.clear()
     _uprptable.clear()
+    _uprptable.extend([None] * 64)
+
+    # Backup UPRP data
+    uprp = chkt.getsection('UPRP')
+    upus = chkt.getsection('UPUS')
+
+    for i in range(64):
+        if upus[i] == 1:
+            uprpdata = uprp[20 * i, 20 * i + 20]
+            _uprpdict[uprpdata] = i
+            _uprptable[i] = uprpdata
 
 
 def GetPropertyIndex(prop):
@@ -47,14 +58,17 @@ def GetPropertyIndex(prop):
         return _uprpdict[prop] + 1  # SC counts unit properties from 1. Sucks
 
     except KeyError:
-        uprpindex = len(_uprptable)
+        for uprpindex in range(64):
+            if _uprptable[uprpindex] is None:
+                break
+
         assert uprpindex < 64, 'Unit property table overflow'
 
-        _uprptable.append(prop)
+        _uprptable[uprpindex] = prop
         _uprpdict[prop] = uprpindex
         return uprpindex + 1  # SC counts unit properties from 1. Sucks
 
 
 def ApplyPropertyMap(chkt):
-    uprpdata = b''.join(_uprptable) + bytes(20 * (64 - len(_uprptable)))
+    uprpdata = b''.join([uprpdata or bytes(20) for uprpdata in _uprptable])
     chkt.setsection('UPRP', uprpdata)

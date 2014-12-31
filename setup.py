@@ -14,6 +14,6 @@ setup(
     author_email="whyask37@naver.com",
     description="EUD Trigger generator",
     license="MIT license",
-    keywords="starcraft basictrigger eud",
+    keywords="starcraft rawtrigger eud",
     url="http://blog.naver.com/whyask37/",  # project home page, if any
 )

@@ -26,7 +26,7 @@ THE SOFTWARE.
 ''' Stage 1 : works in TRIG section.
 - Check if EUD is available. If not, defeat
 - Initialize stage 2 & execute it
-- Modifies TRIG basictrigger's nextptr. Modification is fixed in stage 3.
+- Modifies TRIG rawtrigger's nextptr. Modification is fixed in stage 3.
 '''
 
 from ... import core as c
@@ -220,7 +220,7 @@ def CreateAndApplyStage1(chkt, payload):
 
     # -------
 
-    # Init mrgn basictrigger
+    # Init mrgn rawtrigger
     strs = 0x5993D4
     for e in range(31, 1, -1):
         # prt table
@@ -315,7 +315,7 @@ def CreateAndApplyStage1(chkt, payload):
 
     # -------
 
-    # Previous basictrigger datas
+    # Previous rawtrigger datas
 
     oldtrigraw = chkt.getsection('TRIG')
     oldtrigs = [oldtrigraw[i:i + 2400] for i in range(0, len(oldtrigraw), 2400)]

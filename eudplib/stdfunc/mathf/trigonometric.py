@@ -27,12 +27,11 @@ import math
 
 from ... import core as c
 from ... import ctrlstru as cs
-from eudplib.core import varfunc as vf
 from ..calcf import f_mul, f_div
 from ..memiof import f_dwread_epd
 
 
-@vf.EUDFunc
+@c.EUDFunc
 def f_lengthdir(length, angle):
     # sin, cos table
     clist = []
@@ -56,9 +55,9 @@ def f_lengthdir(length, angle):
     cs.EUDEndIf()
 
     cs.DoActions(c.SetDeaths(1, c.Add, 1, 0))
-    ldir_x, ldir_y = vf.EUDVariable(), vf.EUDVariable()  # cos, sin * 65536
-    csign, ssign = vf.EUDLightVariable(), vf.EUDLightVariable()  # sign of cos, sin
-    tableangle = vf.EUDVariable()
+    ldir_x, ldir_y = c.EUDVariable(), c.EUDVariable()  # cos, sin * 65536
+    csign, ssign = c.EUDLightVariable(), c.EUDLightVariable()  # sign of cos, sin
+    tableangle = c.EUDVariable()
 
     cs.DoActions(c.SetDeaths(1, c.Add, 1, 0))
     # get cos, sin from table

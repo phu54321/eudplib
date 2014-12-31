@@ -24,43 +24,24 @@ THE SOFTWARE.
 '''
 
 from .. import core as c
+from .. import trigger as tg
 
 
 def DoActions(actions):
-    return c.BasicTrigger(actions=c.FlattenList(actions))
+    tg.Trigger(actions=c.FlattenList(actions))
 
 
 def EUDJump(nextptr):
-    return c.BasicTrigger(nextptr=nextptr)
-
-
-def EUDBranch(conditions, ontrue, onfalse):
-    brtrg = c.Forward()
-    ontruetrg = c.Forward()
-
-    brtrg << c.BasicTrigger(
-        nextptr=onfalse,
-        conditions=conditions,
-        actions=[
-            c.SetNextPtr(brtrg, ontruetrg)
-        ]
-    )
-
-    ontruetrg << c.BasicTrigger(
-        nextptr=ontrue,
-        actions=[
-            c.SetNextPtr(brtrg, onfalse)
-        ]
-    )
+    c.RawTrigger(nextptr=nextptr)
 
 
 def EUDJumpIf(conditions, ontrue):
     onfalse = c.Forward()
-    EUDBranch(conditions, ontrue, onfalse)
+    tg.Branch(conditions, ontrue, onfalse)
     onfalse << c.NextTrigger()
 
 
 def EUDJumpIfNot(conditions, onfalse):
     ontrue = c.Forward()
-    EUDBranch(conditions, ontrue, onfalse)
+    tg.Branch(conditions, ontrue, onfalse)
     ontrue << c.NextTrigger()

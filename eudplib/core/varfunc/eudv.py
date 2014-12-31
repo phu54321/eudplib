@@ -26,7 +26,7 @@ THE SOFTWARE.
 import weakref
 import traceback
 
-from .. import basictrigger as bt
+from .. import rawtrigger as bt
 from ..allocator import (
     Evaluate,
     Forward,
@@ -226,7 +226,7 @@ class EUDVariable(VariableBase):
 def _VProc(v, actions):
     nexttrg = Forward()
 
-    bt.BasicTrigger(
+    bt.RawTrigger(
         nextptr=v.GetVTable(),
         actions=[actions] + [bt.SetNextPtr(v.GetVTable(), nexttrg)]
     )
@@ -248,7 +248,7 @@ def SeqCompute(assignpairs):
     def FlushActionSet():
         nonlocal actionset
         if actionset:
-            bt.BasicTrigger(actions=actionset)
+            bt.RawTrigger(actions=actionset)
             actionset.clear()
 
     for dst, mdt, src in assignpairs:

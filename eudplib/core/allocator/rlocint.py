@@ -23,6 +23,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
+
 class RlocInt:
     def __init__(self, offset, rlocmode):
         assert isinstance(offset, int) and isinstance(rlocmode, int), (

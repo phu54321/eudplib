@@ -25,9 +25,8 @@ THE SOFTWARE.
 
 from ..memiof import f_dwread_epd
 from ... import core as c
-from eudplib.core import varfunc as vf
 
 
-@vf.EUDFunc
+@c.EUDFunc
 def f_getuserplayerid():
     return f_dwread_epd(c.EPD(0x512684))

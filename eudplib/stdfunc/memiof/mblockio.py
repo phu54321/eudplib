@@ -25,13 +25,12 @@ THE SOFTWARE.
 
 from ... import core as c
 from ... import ctrlstru as cs
-from eudplib.core import varfunc as vf
 
 from . import dwmemio as dwm
 from . import byterw as bm
 
 
-@vf.EUDFunc
+@c.EUDFunc
 def f_repmovsd_epd(dstepdp, srcepdp, copydwn):
     repmovsd_end = c.Forward()
 
@@ -39,7 +38,7 @@ def f_repmovsd_epd(dstepdp, srcepdp, copydwn):
     cs.EUDJumpIf(copydwn.Exactly(0), repmovsd_end)
 
     dwm.f_dwwrite_epd(dstepdp, dwm.f_dwread_epd(srcepdp))
-    vf.SeqCompute([
+    c.SeqCompute([
         (srcepdp, c.Add, 1),
         (dstepdp, c.Add, 1),
         (copydwn, c.Subtract, 1)
@@ -57,9 +56,9 @@ _br = bm.EUDByteReader()
 _bw = bm.EUDByteWriter()
 
 
-@vf.EUDFunc
+@c.EUDFunc
 def f_memcpy(dst, src, copylen):
-    b = vf.EUDVariable()
+    b = c.EUDVariable()
 
     _br.seekoffset(src)
     _bw.seekoffset(dst)
@@ -69,7 +68,7 @@ def f_memcpy(dst, src, copylen):
 
     cs.EUDJumpIf(copylen.Exactly(0), loopend)
 
-    vf.SetVariables(b, _br.readbyte())
+    c.SetVariables(b, _br.readbyte())
     _bw.writebyte(b)
 
     cs.DoActions(copylen.SubtractNumber(1))

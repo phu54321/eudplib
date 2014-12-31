@@ -7,6 +7,7 @@ from eudplib import *
 
 LoadMap('outputmap/basemap/basemap.scx')
 
+
 @EUDFunc
 def main():
     i = EUDVariable()
@@ -25,7 +26,7 @@ def main():
             (EPD(0x58DC60 + 12), SetTo, y)
         ])
 
-        BasicTrigger(
+        RawTrigger(
             actions=[
                 CreateUnit(1, "Zerg Zergling", 1, P1),
                 KillUnitAt(All, "Zerg Zergling", 1, P1)
@@ -33,7 +34,7 @@ def main():
         )
 
         i << i + 2
-        BasicTrigger(
+        RawTrigger(
             conditions=[i >= 360],
             actions=[i.SubtractNumber(0)]
         )
@@ -44,5 +45,6 @@ def main():
         ])
         EUDDoEvents()
     EUDEndInfLoop()
+
 
 SaveMap('outputmap/testtrigmet.scx', main)

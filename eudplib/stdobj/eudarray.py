@@ -24,7 +24,6 @@ THE SOFTWARE.
 '''
 
 from .. import core as c
-from eudplib.core import varfunc as vf
 from .. import ctrlstru as cs
 from .. import stdfunc as sf
 
@@ -35,7 +34,7 @@ class EUDArray:
     '''
 
     def __init__(self, len):
-        self._varlist = vf.EUDCreateVariables(len)
+        self._varlist = c.EUDCreateVariables(len)
         self._varlen = len
         self._debugstring = c.Db(c.u2b('[EUDArray::get] Out of bounds : %s' % hex(id(self))))
         self._getter = None
@@ -46,14 +45,14 @@ class EUDArray:
         vlist = self._varlist
 
         if isinstance(key, int):  # Faster path
-            ret = vf.EUDVariable()
+            ret = c.EUDVariable()
             ret << vlist[key]  # May throw indexerror
             return ret
 
         if self._getter is None:
-            @vf.EUDFunc
+            @c.EUDFunc
             def _getter(key):
-                ret = vf.EUDVariable()
+                ret = c.EUDVariable()
                 cs.EUDSwitch(key)
                 for i in range(varn):
                     cs.EUDSwitchCase(i)
@@ -80,7 +79,7 @@ class EUDArray:
             return
 
         if self._setter is None:
-            @vf.EUDFunc
+            @c.EUDFunc
             def _setter(key, item):
                 cs.EUDSwitch(key)
                 for i in range(varn):

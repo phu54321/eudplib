@@ -24,7 +24,8 @@ THE SOFTWARE.
 '''
 
 from .. import core as c
-from .basicstru import EUDJump, EUDJumpIf, EUDBranch
+from .. import trigger as tg
+from .basicstru import EUDJump, EUDJumpIf
 
 
 def _IsSwitchBlockId(idf):
@@ -92,7 +93,7 @@ def EUDEndSwitch():
         # Uses simple binary search
         ret = c.NextTrigger()
         if len(keys) == 1:  # Only one keys on the list
-            EUDBranch(var == keys[0], casebrlist[keys[0]], defbranch)
+            tg.Branch(var == keys[0], casebrlist[keys[0]], defbranch)
 
         elif len(keys) >= 2:
             br1 = c.Forward()
@@ -100,7 +101,7 @@ def EUDEndSwitch():
             midpos = len(keys) // 2
             midval = keys[midpos]
             EUDJumpIf(var == midval, casebrlist[midval])
-            EUDBranch(var <= midval, br1, br2)
+            tg.Branch(var <= midval, br1, br2)
             br1 << KeySelector(keys[:midpos])
             br2 << KeySelector(keys[midpos + 1:])
 

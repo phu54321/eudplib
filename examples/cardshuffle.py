@@ -46,6 +46,7 @@ def main():
         EUDDoEvents()
     EUDEndInfLoop()
 
+
 LoadMap('basemap/basemap.scx')
 # CompressPayload(True)
 SaveMap('outputmap/shuffle.scx', main)

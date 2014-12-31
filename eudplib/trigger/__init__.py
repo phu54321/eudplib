@@ -1,1 +1,2 @@
-from .vmixedtrig import Trigger
+from .triggerdef import Trigger
+from .branch import Branch
