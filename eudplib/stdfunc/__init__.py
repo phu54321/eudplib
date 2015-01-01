@@ -26,4 +26,5 @@ THE SOFTWARE.
 from .memiof import *
 from .utilf import *
 from .calcf import *
-from . import mathf
+from .qgcf import *
+from .mathf import *
