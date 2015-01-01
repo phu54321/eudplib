@@ -220,4 +220,5 @@ pip-log.txt
 dist/
 build/
 eudtrg.egg-info/
-.idea/
+.idea/workspace.xml
+.idea/tasks.xml
