@@ -34,67 +34,17 @@ class EUDArray:
     '''
 
     def __init__(self, len):
-        self._varlist = c.EUDCreateVariables(len)
+        self._dattable = c.Db(4 * len)
         self._varlen = len
-        self._debugstring = c.Db(c.u2b('[EUDArray::get] Out of bounds : %s' % hex(id(self))))
-        self._getter = None
-        self._setter = None
+
+    def GetArrayMemory(self):
+        return self._dattable
+
+    def GetLength(self):
+        return self._varlen
 
     def get(self, key):
-        varn = self._varlen
-        vlist = self._varlist
-
-        if isinstance(key, int):  # Faster path
-            ret = c.EUDVariable()
-            ret << vlist[key]  # May throw indexerror
-            return ret
-
-        if self._getter is None:
-            @c.EUDFunc
-            def _getter(key):
-                ret = c.EUDVariable()
-                cs.EUDSwitch(key)
-                for i in range(varn):
-                    cs.EUDSwitchCase(i)
-                    ret << vlist[i]  # May throw indexerror
-                    cs.EUDBreak()
-
-                cs.EUDSwitchDefault()  # out of bound
-                sf.f_strcpy(0x58D740, self._debugstring)
-                cs.EUDJump(0)  # crash
-
-                cs.EUDEndSwitch()
-                return ret
-
-            self._getter = _getter
-
-        return self._getter(key)
+        return sf.f_dwread_epd(c.EPD(self._dattable) + key)
 
     def set(self, key, item):
-        varn = self._varlen
-        vlist = self._varlist
-
-        if isinstance(key, int):  # Faster path
-            vlist[key] << item
-            return
-
-        if self._setter is None:
-            @c.EUDFunc
-            def _setter(key, item):
-                cs.EUDSwitch(key)
-                for i in range(varn):
-                    cs.EUDSwitchCase(i)
-                    vlist[i] << item
-                    cs.EUDBreak()
-
-                cs.EUDSwitchDefault()
-                cs.DoActions([
-                    c.DisplayText('[EUDArray::set] Out of bounds : %s' % self),
-                    c.Draw()
-                ])
-
-                cs.EUDEndSwitch()
-
-            self._setter = _setter
-
-        self._setter(key, item)
+        return sf.f_dwwrite_epd(c.EPD(self._dattable) + key, item)
