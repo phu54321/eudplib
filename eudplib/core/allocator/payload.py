@@ -299,7 +299,6 @@ def CreatePayload(root):
         f()
     CollectObjects(root)
     AllocObjects()
-    print('%d objects found' % len(_found_objects))
     return ConstructPayload()
 
 
