@@ -46,5 +46,12 @@ class EUDArray:
     def get(self, key):
         return sf.f_dwread_epd(c.EPD(self._dattable) + key)
 
+    def __getitem__(self, key):
+        return self.get(key)
+
     def set(self, key, item):
         return sf.f_dwwrite_epd(c.EPD(self._dattable) + key, item)
+
+    def __setitem__(self, key, item):
+        return self.set(key, item)
+
