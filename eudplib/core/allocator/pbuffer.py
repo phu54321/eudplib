@@ -59,9 +59,6 @@ class PayloadBuffer:
         return self._datacur - self._datastart
 
     def WriteByte(self, number):
-        if number is None:
-            self._datacur += 1
-            return
         number = expr.Evaluate(number)
         assert number.rlocmode == 0, 'Non-constant given.'
         number.offset &= 0xFF
@@ -69,10 +66,6 @@ class PayloadBuffer:
         self._datacur += 1
 
     def WriteWord(self, number):
-        if number is None:
-            self._datacur += 2
-            return
-
         number = expr.Evaluate(number)
         assert number.rlocmode == 0, 'Non-constant given.'
         number.offset &= 0xFFFF
@@ -81,10 +74,6 @@ class PayloadBuffer:
         self._datacur += 2
 
     def WriteDword(self, number):
-        if number is None:
-            self._datacur += 4
-            return
-
         number = expr.Evaluate(number)
         number.offset &= 0xFFFFFFFF
 

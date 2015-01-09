@@ -75,13 +75,11 @@ class ObjCollector:
         pass
 
     def WriteDword(self, number):
-        if number is not None:
-            expr.Evaluate(number)
+        expr.Evaluate(number)
 
     def WritePack(self, structformat, *arglist):
         for arg in arglist:
-            if arg is not None:
-                expr.Evaluate(arg)
+            expr.Evaluate(arg)
 
     def WriteBytes(self, b):
         pass

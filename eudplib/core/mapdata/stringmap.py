@@ -82,7 +82,8 @@ def InitStringMap(chkt):
             unitstr = strmap.GetString(unitstrid)
             if unitstr:
                 unitmap.AddItem(unitstr, i)
-                unitmap.AddItem(IgnoreColor(unitstr), i)
+                if unitstr != IgnoreColor(unitstr):
+                    unitmap.AddItem(IgnoreColor(unitstr), i)
 
     # Get switch names
     if swnm:
