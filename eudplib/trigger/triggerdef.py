@@ -2,7 +2,7 @@ from .. import core as c
 from .tpatcher import PatchCondition, PatchAction
 
 
-def Trigger(conditions=None, actions=None):
+def Trigger(conditions=None, actions=None, preserved=True):
     if conditions is None:
         conditions = []
     if actions is None:
@@ -19,7 +19,7 @@ def Trigger(conditions=None, actions=None):
         for act in actions:
             PatchAction(act)
 
-        c.RawTrigger(conditions=conditions, actions=actions)
+        c.RawTrigger(conditions=conditions, actions=actions, preserved=preserved)
 
     else:
         # Extended trigger
@@ -44,6 +44,11 @@ def Trigger(conditions=None, actions=None):
 
             condts.append(cts)
 
+        skipt = c.Forward()
+        if not preserved:
+            a = c.RawTrigger()
+            c.RawTrigger(actions=c.SetNextPtr(a, skipt))
+
         # Execute actions
         for i in range(0, len(actions), 64):
             acts = actions[i:i + 64]
@@ -51,6 +56,9 @@ def Trigger(conditions=None, actions=None):
                 PatchAction(act)
 
             c.RawTrigger(actions=acts)
+
+        if not preserved:
+            skipt << c.NextTrigger()
 
         # Revert conditions
         cend << c.NextTrigger()

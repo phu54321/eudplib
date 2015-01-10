@@ -27,8 +27,8 @@ from .. import core as c
 from .. import trigger as tg
 
 
-def DoActions(actions):
-    tg.Trigger(actions=c.FlattenList(actions))
+def DoActions(actions, preserved=True):
+    tg.Trigger(actions=c.FlattenList(actions), preserved=preserved)
 
 
 def EUDJump(nextptr):
