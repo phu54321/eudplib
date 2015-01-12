@@ -26,6 +26,8 @@ THE SOFTWARE.
 from . import rlocint, pbuffer
 from . import expr
 
+import random
+
 _found_objects = []
 _found_objects_set = set()
 _untraversed_objects = []
@@ -113,6 +115,15 @@ def CollectObjects(root):
         obj.WritePayload(objc)
         _dwoccupmap_dict[obj] = objc.EndWrite()
 
+    if len(_found_objects) == 0:
+        raise RuntimeError('No object collected')
+
+    # Shuffle objects -> Randomize(?) addresses
+    fo2 = _found_objects[1:]
+    random.shuffle(fo2)
+    _found_objects = [_found_objects[0]] + fo2
+
+    # cleanup
     _found_objects_set = None
     phase = None
 

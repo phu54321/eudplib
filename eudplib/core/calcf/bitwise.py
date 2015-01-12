@@ -23,9 +23,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-from ... import core as c
-from ... import ctrlstru as cs
-from .muldiv import f_mul, f_div
+from eudplib import core as c
+from eudplib import ctrlstru as cs
+from eudplib.core.calcf.muldiv import f_mul, f_div
 
 
 def bw_gen(cond):

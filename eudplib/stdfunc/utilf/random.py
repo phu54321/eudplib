@@ -35,7 +35,7 @@ THE SOFTWARE.
 
 from ... import core as c
 from ..memiof import f_dwbreak, f_dwread_epd
-from ..calcf import f_mul
+from eudplib.core.calcf import f_mul
 
 _seed = c.EUDVariable()
 

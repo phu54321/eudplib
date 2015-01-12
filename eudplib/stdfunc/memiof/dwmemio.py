@@ -25,7 +25,7 @@ THE SOFTWARE.
 
 from ... import core as c
 from ... import ctrlstru as cs
-from .. import calcf
+from eudplib.core import calcf
 
 
 def f_epd(addr):

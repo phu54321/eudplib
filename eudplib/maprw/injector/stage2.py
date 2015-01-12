@@ -1,145 +1,99 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-'''
-Copyright (c) 2014 trgk
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-'''
-
 ''' Stage 2 :
 - Initialize payload (stage3+ + user code) & execute it
-
-Since stage 2 has to be small, (stage 1's size is proportional to Stage 2's
-size, and stage 1 is very big) code here don't utilize anything else than
-core functionallity. (hence importing core only)
 '''
 
 from ... import core as c
+from ... import stdfunc as sf
+from ... import ctrlstru as cs
+from ... import varfunc as vf
 
-import inspect
+
+@c.EUDFunc
+def f_fletcher64(payload_epd, dwn):
+    a = c.EUDVariable()
+    b = c.EUDVariable()
+    a << 0xF65411E5
+    b << 0x4A00C740
+
+    if cs.EUDWhile(dwn > 0):
+
+        tmpa = a + sf.f_dwread_epd(payload_epd)
+        c.RawTrigger(conditions=tmpa < a, actions=tmpa.AddNumber(1))
+        a << tmpa
+
+        tmpb = b + a
+        c.RawTrigger(conditions=tmpb < b, actions=tmpb.AddNumber(1))
+        b << tmpb
+
+        payload_epd += 1
+        dwn -= 1
+    cs.EUDEndWhile()
+
+    return a, b
 
 
-def DoActions(actions, nextptr=None):
-    return c.RawTrigger(nextptr=nextptr, actions=actions)
+def fl64(b):
+    a = 0xF65411E5
+    b = 0x4A00C740
+    dwn = len(b) // 4
+
+    for i in range(dwn):
+        a = (a + c.b2i4(b, i * 4)) % 0xFFFFFFFF
+        b = (b + a) % 0xFFFFFFFF
+    return a, b
 
 
 def CreateStage2(payload):
     # We first build code injector.
     prtdb = c.Db(b''.join([c.i2b4(x // 4) for x in payload.prttable]))
+    prtn = vf.EUDVariable()
+
     ortdb = c.Db(b''.join([c.i2b4(x // 4) for x in payload.orttable]))
+    ortn = vf.EUDVariable()
+
     orig_payload = c.Db(payload.data)
 
-    ## TABLE INITER
-    if c.PushTriggerScope():
-        tableiniter_start = c.NextTrigger()
-        tableiniter_end = c.Forward()
-
-        adda = c.Forward()
-        loopstart = c.Forward()
-        loopend = c.Forward()
-        loopcond = c.Forward()
-
-        ## BEGIN ==========
-
-        DoActions([
-            c.SetNextPtr(loopend, loopstart),  # Reset loop
-        ])
-
-        loopstart << c.NextTrigger()
-
-        c.RawTrigger(
-            actions=[
-                c.SetMemory(adda + 16, c.SetTo, c.EPD(orig_payload)),  # Reset adder
-                c.SetMemory(loopcond + 8, c.Subtract, 1),  # Loop variable
-            ]
-        )
-
-        chain = [c.Forward() for _ in range(30)]
-
-        # Read from table & write to adder action
-        for i in range(29, -1, -1):
-            chain[i] << c.RawTrigger(
-                conditions=[
-                    c.Memory(0, c.AtLeast, 2 ** i)  # Read from table
-                ],
-                actions=[
-                    c.SetMemory(0, c.Subtract, 2 ** i),  # Read from table
-                    c.SetMemory(adda + 16, c.Add, 2 ** i)  # Write to adder
-                ]
-            )
-
-        DoActions([
-            adda << c.SetMemory(0, c.Add, 0),  # Adder action
-            [(
-                 c.SetMemory(chain[i] + 8 + 4, c.Add, 1),  # readepd += 1
-                 c.SetMemory(chain[i] + 8 + 320 + 16, c.Add, 1)  # readepd += 1
-             ) for i in range(30)],
-        ])
-
-        loopend << c.RawTrigger(
-            nextptr=0,
-            conditions=[
-                # Player 1's marine death should be 0 here, so we keep
-                # decrementing cmpt's number until it reaches 0, when
-                # it breaks out
-                loopcond << c.Deaths(0, c.Exactly, 0, 0)
-            ],
-            actions=c.SetNextPtr(loopend, tableiniter_end)
-        )
-
-        # Loopend
-
-        tableiniter_end << c.RawTrigger()
-    c.PopTriggerScope()
-
-    def QueueTable(db, addv, repn):
-        dbepd = c.EPD(db)
-
-        nexttrg = c.Forward()
-        c.RawTrigger(
-            nextptr=tableiniter_start,
-            actions=[
-                c.SetNextPtr(tableiniter_end, nexttrg),
-                [(
-                     c.SetMemory(chain[i] + 8 + 4, c.SetTo, dbepd),  # readepd += 1
-                     c.SetMemory(chain[i] + 8 + 320 + 16, c.SetTo, dbepd)  # readepd += 1
-                 ) for i in range(30)],
-                c.SetMemory(adda + 20, c.SetTo, addv),
-                c.SetMemory(loopcond + 8, c.SetTo, repn)
-            ]
-        )
-        nexttrg << c.NextTrigger()
-
-    ## MAIN LOGIC
     c.PushTriggerScope()
+
     root = c.NextTrigger()
 
+    # Checksum
+    chka, chkb = fl64(payload.data)
+    fla, flb = f_fletcher64(c.EPD(orig_payload), len(orig_payload) // 4)
+    if cs.EUDIfNot([fla == chka, flb == chkb]):
+        cs.DoActions(cs.SetDeaths(0, SetTo, 0))
+    cs.EUDEndIf()
+
+    prtn << len(payload.prttable)
+    ortn << len(payload.orttable)
+
+    # init prt
     if payload.prttable:
-        QueueTable(prtdb, orig_payload // 4, len(payload.prttable))
+        if cs.EUDInfLoop():
+            cs.DoActions(prtn.SubtractNumber(1))
+            sf.f_dwadd_epd(
+                c.EPD(orig_payload) + sf.f_dwread_epd(prtn + c.EPD(prtdb)),
+                orig_payload // 4
+            )
+            cs.EUDLoopBreakIf(prtn.Exactly(0))
+        cs.EUDEndInfLoop()
 
     # init ort
     if payload.orttable:
-        QueueTable(ortdb, orig_payload, len(payload.orttable))
+        if cs.EUDInfLoop():
+            cs.DoActions(ortn.SubtractNumber(1))
+            sf.f_dwadd_epd(
+                c.EPD(orig_payload) + sf.f_dwread_epd(ortn + c.EPD(ortdb)),
+                orig_payload
+            )
+            cs.EUDLoopBreakIf(ortn.Exactly(0))
+        cs.EUDEndInfLoop()
 
     # Jump
-    c.RawTrigger(nextptr=orig_payload)
+    cs.EUDJump(orig_payload)
 
     c.PopTriggerScope()
 
@@ -148,4 +102,5 @@ def CreateStage2(payload):
     ####
 
     payload = c.CreatePayload(root)
+    open('out.bin', 'wb').write(payload.data)
     return payload

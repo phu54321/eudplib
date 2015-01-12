@@ -27,7 +27,6 @@ import math
 
 from ... import core as c
 from ... import ctrlstru as cs
-from ..calcf import f_mul, f_div
 from ..memiof import f_dwread_epd
 
 
@@ -51,7 +50,7 @@ def f_lengthdir(length, angle):
 
     cs.DoActions(c.SetDeaths(1, c.Add, 1, 0))
     if cs.EUDIf(angle >= 360):
-        angle << f_div(angle, 360)[1]
+        angle << c.f_div(angle, 360)[1]
     cs.EUDEndIf()
 
     cs.DoActions(c.SetDeaths(1, c.Add, 1, 0))
@@ -89,8 +88,8 @@ def f_lengthdir(length, angle):
 
     cs.DoActions(c.SetDeaths(1, c.Add, 1, 0))
     # calculate lengthdir
-    ldir_x << f_div(f_mul(tablecos, length), 65536)[0]
-    ldir_y << f_div(f_mul(tablesin, length), 65536)[0]
+    ldir_x << c.f_div(c.f_mul(tablecos, length), 65536)[0]
+    ldir_y << c.f_div(c.f_mul(tablesin, length), 65536)[0]
 
     cs.DoActions(c.SetDeaths(1, c.Add, 1, 0))
     # restore sign of cos, sin

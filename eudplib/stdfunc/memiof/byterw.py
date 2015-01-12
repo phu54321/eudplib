@@ -27,7 +27,6 @@ from ... import core as c
 from ... import ctrlstru as cs
 
 from . import dwmemio as dwm
-from .. import calcf
 
 
 _epd, _suboffset = c.EUDCreateVariables(2)
@@ -68,7 +67,7 @@ class EUDByteReader:
         global _epd, _suboffset
 
         # convert offset to epd offset & suboffset
-        c.SetVariables([_epd, _suboffset], calcf.f_div(offset, 4))
+        c.SetVariables([_epd, _suboffset], c.f_div(offset, 4))
         c.SeqCompute([(_epd, c.Add, -0x58A364 // 4)])
 
         # seek to epd & set suboffset
@@ -158,7 +157,7 @@ class EUDByteWriter:
         global _epd, _suboffset
 
         # convert offset to epd offset & suboffset
-        c.SetVariables([_epd, _suboffset], calcf.f_div(offset, 4))
+        c.SetVariables([_epd, _suboffset], c.f_div(offset, 4))
         c.SeqCompute([(_epd, c.Add, (0x100000000 - 0x58A364) // 4)])
 
         self.seekepd(_epd)
