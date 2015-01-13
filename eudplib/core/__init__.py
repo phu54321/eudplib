@@ -29,3 +29,4 @@ from .rawtrigger import *
 from .utils import *
 from .mapdata import *
 from .varfunc import *
+from .calcf import *

@@ -1,13 +1,17 @@
-bucketn = 10
+import math
 
-x = 1
-freq = [0] * bucketn
+a = [
+    29,
+    43,
+    167,
+    193,
+    431,
+    601,
+    677,
+    733,
+    941,
+    997,
+]
 
-for _ in range(10000):
-    x = (x * 1664525 + 1013904223) & 0xFFFFFFFF
-    freq[x % bucketn] += 1
-
-print(freq)
-
-for i in range(len(freq)):
-    print('%d %d' % (freq[i], freq[i + 1 - len(freq)]))
+for n in a:
+    print("0x%08X" % math.floor(4294967296 / n))

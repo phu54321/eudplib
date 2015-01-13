@@ -23,21 +23,20 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-from eudplib import core as c
-from eudplib import ctrlstru as cs
-from eudplib.core.calcf.muldiv import f_mul, f_div
-
+from .. import varfunc as vf
+from .. import rawtrigger as rt
+from .muldiv import f_mul, f_div
 
 def bw_gen(cond):
-    @c.EUDFunc
+    @vf.EUDFunc
     def f_bitsize_template(a, b):
-        tmp = c.EUDLightVariable()
-        ret = c.EUDVariable()
+        tmp = vf.EUDLightVariable()
+        ret = vf.EUDVariable()
 
         ret << 0
 
         for i in range(31, -1, -1):
-            c.RawTrigger(
+            rt.RawTrigger(
                 conditions=[
                     a.AtLeast(2 ** i)
                 ],
@@ -47,7 +46,7 @@ def bw_gen(cond):
                 ]
             )
 
-            c.RawTrigger(
+            rt.RawTrigger(
                 conditions=[
                     b.AtLeast(2 ** i)
                 ],
@@ -57,12 +56,12 @@ def bw_gen(cond):
                 ]
             )
 
-            c.RawTrigger(
+            rt.RawTrigger(
                 conditions=cond(tmp),
                 actions=ret.AddNumber(2 ** i)
             )
 
-            cs.DoActions(tmp.SetNumber(0))
+            tmp << 0
 
         return ret
 
@@ -77,7 +76,7 @@ f_bitnand = bw_gen(lambda x: x.Exactly(0))
 f_bitnor = bw_gen(lambda x: x.AtMost(1))
 
 
-@c.EUDFunc
+@vf.EUDFunc
 def f_bitnxor(a, b):
     return f_bitnot(f_bitxor(a, b))
 
@@ -89,12 +88,12 @@ def f_bitnot(a):
 # -------
 
 
-@c.EUDFunc
+@vf.EUDFunc
 def f_bitsplit(a):
-    bits = [c.EUDCreateVariables(32)]
+    bits = [vf.EUDCreateVariables(32)]
     for i in range(31, -1, -1):
-        cs.DoActions(bits[i].SetNumber(0))
-        c.RawTrigger(
+        bits[i] << 0
+        rt.RawTrigger(
             conditions=a.AtLeast(2 ** i),
             actions=[
                 a.SubtractNumber(2 ** i),
@@ -106,16 +105,14 @@ def f_bitsplit(a):
 
 # -------
 
-@c.EUDFunc
+@vf.EUDFunc
 def _exp2_vv(n):
-    ret = c.EUDVariable()
-    cs.EUDSwitch(n)
+    ret = vf.EUDVariable()
     for i in range(32):
-        cs.EUDSwitchCase(i)
-        ret << 1 ** i
-    cs.EUDSwitchDefault()
-    ret << 0  # overflow
-    cs.EUDEndSwitch()
+        rt.RawTrigger(
+            conditions=[n == i],
+            actions=[ret.SetNumber((2 ** i))]
+        )
     return ret
 
 
@@ -135,9 +132,6 @@ def f_bitrshift(a, b):
     if isinstance(b, int) and b >= 32:
         return 0
 
-    ret = c.EUDVariable()
-    if cs.EUDIf(b >= 32):
-        ret << 0
-    if cs.EUDElse():
-        ret << f_div(a, _exp2(b))
+    ret = vf.EUDVariable()
+    ret << f_div(a, _exp2(b))
     return ret

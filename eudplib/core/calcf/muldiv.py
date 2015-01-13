@@ -23,32 +23,35 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-from eudplib import core as c
-from eudplib import ctrlstru as cs
-
+from .. import (
+    varfunc as vf,
+    rawtrigger as rt,
+    allocator as ac,
+    utils as ut
+)
 
 def f_mul(a, b):
-    if isinstance(a, c.EUDVariable) and isinstance(b, c.EUDVariable):
+    if isinstance(a, vf.EUDVariable) and isinstance(b, vf.EUDVariable):
         return _f_mul(a, b)
 
-    elif isinstance(a, c.EUDVariable):
+    elif isinstance(a, vf.EUDVariable):
         return f_constmul(b)(a)
 
-    elif isinstance(b, c.EUDVariable):
+    elif isinstance(b, vf.EUDVariable):
         return f_constmul(a)(b)
 
     else:
-        ret = c.EUDVariable()
+        ret = vf.EUDVariable()
         ret << a * b
         return ret
 
 
 def f_div(a, b):
     """ returns (a//b, a%b) """
-    if isinstance(b, c.EUDVariable):
+    if isinstance(b, vf.EUDVariable):
         return _f_div(a, b)
 
-    elif isinstance(a, c.EUDVariable):
+    elif isinstance(a, vf.EUDVariable):
         return f_constdiv(b)(a)
 
     else:
@@ -56,10 +59,10 @@ def f_div(a, b):
             q, m = a // b, a % b
         else:
             q, m = 0xFFFFFFFF, a
-        vq, vm = c.EUDCreateVariables(2)
-        c.SeqCompute([
-            (vq, c.SetTo, q),
-            (vm, c.SetTo, vm)
+        vq, vm = vf.EUDCreateVariables(2)
+        vf.SeqCompute([
+            (vq, rt.SetTo, q),
+            (vm, rt.SetTo, vm)
         ])
         return vq, vm
 
@@ -76,12 +79,12 @@ def f_constmul(number):
     try:
         return mulfdict[number]
     except KeyError:
-        @c.EUDFunc
+        @vf.EUDFunc
         def mulf(a):
-            ret = c.EUDVariable()
+            ret = vf.EUDVariable()
             ret << 0
             for i in range(31, -1, -1):
-                c.RawTrigger(
+                rt.RawTrigger(
                     conditions=a.AtLeast(2 ** i),
                     actions=[
                         a.SubtractNumber(2 ** i),
@@ -103,16 +106,16 @@ def f_constdiv(number):
     try:
         return divfdict[number]
     except KeyError:
-        @c.EUDFunc
+        @vf.EUDFunc
         def divf(a):
-            ret = c.EUDVariable()
+            ret = vf.EUDVariable()
             ret << 0
             for i in range(31, -1, -1):
                 # number too big
                 if 2 ** i * number >= 2 ** 32:
                     continue
 
-                c.RawTrigger(
+                rt.RawTrigger(
                     conditions=a.AtLeast(2 ** i * number),
                     actions=[
                         a.SubtractNumber(2 ** i * number),
@@ -128,33 +131,43 @@ def f_constdiv(number):
 # -------
 
 
-@c.EUDFunc
+@vf.EUDFunc
 def _f_mul(a, b):
-    ret, y0 = c.EUDCreateVariables(2)
+    ret, y0 = vf.EUDCreateVariables(2)
 
     # Init
-    c.SeqCompute([
-        (ret, c.SetTo, 0),
-        (y0, c.SetTo, b)
+    vf.SeqCompute([
+        (ret, rt.SetTo, 0),
+        (y0, rt.SetTo, b)
     ])
 
-    chain = [c.Forward() for _ in range(32)]
-    chain_y0 = [c.Forward() for _ in range(32)]
+    chain = [ac.Forward() for _ in range(32)]
+    chain_y0 = [ac.Forward() for _ in range(32)]
 
     # Calculate chain_y0
     for i in range(32):
-        c.SeqCompute((
-            (c.EPD(chain_y0[i]), c.SetTo, y0),
-            (y0, c.Add, y0)
+        vf.SeqCompute((
+            (ut.EPD(chain_y0[i]), rt.SetTo, y0),
+            (y0, rt.Add, y0)
         ))
         if i <= 30:
-            cs.EUDJumpIf(a.AtMost(2 ** (i + 1) - 1), chain[i])
+            p1, p2, p3 = ac.Forward(), ac.Forward(), ac.Forward()
+            p1 << rt.RawTrigger(
+                nextptr=p2,
+                conditions=a.AtMost(2 ** (i + 1) - 1),
+                actions=rt.SetNextPtr(p1, p3)
+            )
+            p3 << rt.RawTrigger(
+                nextptr=chain[i],
+                actions=rt.SetNextPtr(p1, p2)
+            )
+            p2 << rt.NextTrigger()
 
     # Run multiplication chain
     for i in range(31, -1, -1):
-        cy0 = c.Forward()
+        cy0 = ac.Forward()
 
-        chain[i] << c.RawTrigger(
+        chain[i] << rt.RawTrigger(
             conditions=[
                 a.AtLeast(2 ** i)
             ],
@@ -169,38 +182,48 @@ def _f_mul(a, b):
     return ret
 
 
-@c.EUDFunc
+@vf.EUDFunc
 def _f_div(a, b):
-    ret, x = c.EUDCreateVariables(2)
+    ret, x = vf.EUDCreateVariables(2)
 
     # Init
-    c.SeqCompute([
-        (ret, c.SetTo, 0),
-        (x, c.SetTo, b),
+    vf.SeqCompute([
+        (ret, rt.SetTo, 0),
+        (x, rt.SetTo, b),
     ])
 
-    # Chain c.forward decl
-    chain_x0 = [c.Forward() for _ in range(32)]
-    chain_x1 = [c.Forward() for _ in range(32)]
-    chain = [c.Forward() for _ in range(32)]
+    # Chain ac.Forward decl
+    chain_x0 = [ac.Forward() for _ in range(32)]
+    chain_x1 = [ac.Forward() for _ in range(32)]
+    chain = [ac.Forward() for _ in range(32)]
 
     # Fill in chain
     for i in range(32):
-        c.SeqCompute([
-            (c.EPD(chain_x0[i]), c.SetTo, x),
-            (c.EPD(chain_x1[i]), c.SetTo, x),
+        vf.SeqCompute([
+            (ut.EPD(chain_x0[i]), rt.SetTo, x),
+            (ut.EPD(chain_x1[i]), rt.SetTo, x),
         ])
 
-        cs.EUDJumpIf(x.AtLeast(0x8000000), chain[i])
+        p1, p2, p3 = ac.Forward(), ac.Forward(), ac.Forward()
+        p1 << rt.RawTrigger(
+            nextptr=p2,
+            conditions=x.AtLeast(0x8000000),
+            actions=rt.SetNextPtr(p1, p3)
+        )
+        p3 << rt.RawTrigger(
+            nextptr=chain[i],
+            actions=rt.SetNextPtr(p1, p2)
+        )
+        p2 << rt.NextTrigger()
 
-        c.SeqCompute([
-            (x, c.Add, x),
+        vf.SeqCompute([
+            (x, rt.Add, x),
         ])
 
     # Run division chain
     for i in range(31, -1, -1):
-        cx0, cx1 = c.Forward(), c.Forward()
-        chain[i] << c.RawTrigger(
+        cx0, cx1 = ac.Forward(), ac.Forward()
+        chain[i] << rt.RawTrigger(
             conditions=[
                 cx0 << a.AtLeast(0)
             ],

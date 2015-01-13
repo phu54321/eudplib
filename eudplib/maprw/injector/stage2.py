@@ -9,41 +9,84 @@ from ... import core as c
 from ... import stdfunc as sf
 from ... import ctrlstru as cs
 from ... import varfunc as vf
+from ... import trigger as trig
 
+cargs = [
+    0x08D3DCB1,
+    0x05F417D1,
+    0x01886E5F,
+    0x01539095,
+    0x00980E41,
+    0x006D0B81,
+    0x0060CDB5,
+    0x0059686D,
+    0x0045A523,
+    0x0041BBB3,
+]
 
 @c.EUDFunc
-def f_fletcher64(payload_epd, dwn):
-    a = c.EUDVariable()
-    b = c.EUDVariable()
-    a << 0xF65411E5
-    b << 0x4A00C740
+def f_verify(payload_epd, dwn):
+    counts = c.EUDCreateVariables(len(cargs))
+    t = [c.Forward() for _ in range(len(cargs))]
+    trig.Trigger(
+        actions=[
+            [
+                c.SetMemory(t[i] + 4, c.SetTo, payload_epd),
+                c.SetMemory(t[i] + 8, c.SetTo, 12345 * carg),
+                counts[i].SetNumber(0),
+            ]
+            for i, carg in enumerate(cargs)
+        ]
+    )
 
     if cs.EUDWhile(dwn > 0):
+        # Functionally equivilant to:
+        #   for i in range(len(cargs)):
+        #       if dw >= compv[i]:
+        #           counts[i] += 1
+        #       compv[i] = (compv[i] + cargs[i]) & 0xFFFFFFFF
+        for i in range(len(cargs)):
+            c.RawTrigger(
+                conditions=[
+                    t[i] << c.Memory(0, c.AtLeast, 0)
+                ],
+                actions=[
+                    counts[i].AddNumber(1),
+                ]
+            )
 
-        tmpa = a + sf.f_dwread_epd(payload_epd)
-        c.RawTrigger(conditions=tmpa < a, actions=tmpa.AddNumber(1))
-        a << tmpa
-
-        tmpb = b + a
-        c.RawTrigger(conditions=tmpb < b, actions=tmpb.AddNumber(1))
-        b << tmpb
-
-        payload_epd += 1
-        dwn -= 1
+        # i++
+        c.RawTrigger(
+            actions=[
+                [
+                    c.SetMemory(t[i] + 4, c.Add, 1),
+                    c.SetMemory(t[i] + 8, c.Add, carg)
+                ]
+                for i, carg in enumerate(cargs)
+            ] + [
+                dwn.SubtractNumber(1)
+            ]
+        )
     cs.EUDEndWhile()
 
-    return a, b
+    return counts
 
 
-def fl64(b):
-    a = 0xF65411E5
-    b = 0x4A00C740
-    dwn = len(b) // 4
+def verifyf(buf):
+    counts = [0] * len(cargs)
+    compv = [(12345 * carg) & 0xFFFFFFFF for carg in cargs]
+    dwn = len(buf) // 4
+
 
     for i in range(dwn):
-        a = (a + c.b2i4(b, i * 4)) % 0xFFFFFFFF
-        b = (b + a) % 0xFFFFFFFF
-    return a, b
+        dw = c.b2i4(buf, i * 4)
+
+        for i in range(len(cargs)):
+            if dw >= compv[i]:
+                counts[i] += 1
+            compv[i] = (compv[i] + cargs[i]) & 0xFFFFFFFF
+
+    return counts
 
 
 def CreateStage2(payload):
@@ -60,11 +103,20 @@ def CreateStage2(payload):
 
     root = c.NextTrigger()
 
-    # Checksum
-    chka, chkb = fl64(payload.data)
-    fla, flb = f_fletcher64(c.EPD(orig_payload), len(orig_payload) // 4)
-    if cs.EUDIfNot([fla == chka, flb == chkb]):
-        cs.DoActions(cs.SetDeaths(0, SetTo, 0))
+    # Verify payload
+    # Note : this is very, very basic protection method. Intended attackers should be
+    # able to penetrate through this very easily
+    vchks = f_verify(c.EPD(orig_payload), len(payload.data) // 4)
+    origchks = verifyf(payload.data)
+    trig.Trigger(actions=[
+        c.SetDeaths(i, c.SetTo, vchk, 1)
+        for i, vchk in enumerate(vchks)
+    ])
+    if cs.EUDIfNot([origchk == vchk for origchk, vchk in zip(origchks, vchks)]):
+        cs.DoActions([
+            c.Defeat(),
+            c.SetMemory(0, c.SetTo, 0),
+        ])
     cs.EUDEndIf()
 
     prtn << len(payload.prttable)
