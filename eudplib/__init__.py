@@ -31,7 +31,7 @@ from .stdobj import *
 from .trigtrg import *
 from .maprw import *
 
-__version__ = '0.41b2'
+__version__ = '0.41b3'
 
 
 def eudtrgVersion():

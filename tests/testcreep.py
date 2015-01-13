@@ -50,7 +50,7 @@ Main logic
 '''
 
 LoadMap('outputmap/basemap/creeptest_basemap.scx')
-CompressPayload(True)
+# CompressPayload(True)
 
 
 @EUDFunc

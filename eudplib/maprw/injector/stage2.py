@@ -5,6 +5,8 @@
 - Initialize payload (stage3+ + user code) & execute it
 '''
 
+import struct
+
 from ... import core as c
 from ... import stdfunc as sf
 from ... import ctrlstru as cs
@@ -74,20 +76,19 @@ def f_verify(payload_epd, dwn):
 
 def verifyf(buf):
     counts = [0] * len(cargs)
-    compv = [(12345 * carg) & 0xFFFFFFFF for carg in cargs]
     dwn = len(buf) // 4
+    dwlist = struct.unpack('%dL' % dwn, buf)
 
-
-    for i in range(dwn):
-        dw = c.b2i4(buf, i * 4)
-
-        for i in range(len(cargs)):
-            if dw >= compv[i]:
-                counts[i] += 1
-            compv[i] = (compv[i] + cargs[i]) & 0xFFFFFFFF
+    for i, carg in enumerate(cargs):
+        compv = (12345 * carg) & 0xFFFFFFFF
+        count = 0
+        for dw in dwlist:
+            if dw >= compv:
+                count += 1
+            compv = (compv + carg) & 0xFFFFFFFF
+        counts[i] = count
 
     return counts
-
 
 def CreateStage2(payload):
     # We first build code injector.
@@ -103,6 +104,9 @@ def CreateStage2(payload):
 
     root = c.NextTrigger()
 
+    '''
+    # TODO : make verifyf faster and re-enable this code
+    #
     # Verify payload
     # Note : this is very, very basic protection method. Intended attackers should be
     # able to penetrate through this very easily
@@ -118,6 +122,7 @@ def CreateStage2(payload):
             c.SetMemory(0, c.SetTo, 0),
         ])
     cs.EUDEndIf()
+    '''
 
     prtn << len(payload.prttable)
     ortn << len(payload.orttable)
