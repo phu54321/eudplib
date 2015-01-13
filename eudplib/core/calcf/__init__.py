@@ -23,7 +23,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-from eudplib.core.calcf.bitwise import (
+from .bitwise import (
     f_bitand,
     f_bitor,
     f_bitxor,
@@ -36,7 +36,7 @@ from eudplib.core.calcf.bitwise import (
     f_bitsplit,
 )
 
-from eudplib.core.calcf.muldiv import (
+from .muldiv import (
     f_mul,
     f_div,
 )

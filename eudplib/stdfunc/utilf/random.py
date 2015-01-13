@@ -35,7 +35,6 @@ THE SOFTWARE.
 
 from ... import core as c
 from ..memiof import f_dwbreak, f_dwread_epd
-from eudplib.core.calcf import f_mul
 
 _seed = c.EUDVariable()
 
@@ -61,14 +60,14 @@ def f_randomize():
 
 @c.EUDFunc
 def f_rand():
-    _seed << f_mul(_seed, 1103515245) + 12345
+    _seed << c.f_mul(_seed, 1103515245) + 12345
     return f_dwbreak(_seed)[1]  # Only HIWORD is returned
 
 
 @c.EUDFunc
 def f_dwrand():
-    seed1 = f_mul(_seed, 1103515245) + 12345
-    seed2 = f_mul(seed1, 1103515245) + 12345
+    seed1 = c.f_mul(_seed, 1103515245) + 12345
+    seed2 = c.f_mul(seed1, 1103515245) + 12345
     _seed << seed2
 
     ret = c.EUDVariable()

@@ -25,11 +25,10 @@ THE SOFTWARE.
 
 from ... import core as c
 from ... import ctrlstru as cs
-from eudplib.core import calcf
 
 
 def f_epd(addr):
-    return calcf.f_div(addr + (0x100000000 - 0x58A364), 4)[0]
+    return c.f_div(addr + (0x100000000 - 0x58A364), 4)[0]
 
 
 @c.EUDFunc
