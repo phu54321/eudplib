@@ -8,7 +8,7 @@
 import struct
 
 from ... import core as c
-from ... import stdfunc as sf
+from ... import eudlib as sf
 from ... import ctrlstru as cs
 from ... import varfunc as vf
 from ... import trigger as trig

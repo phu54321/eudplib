@@ -23,5 +23,30 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-from .eudgrp import EUDGrp
-from .eudarray import EUDArray
+from .modcurpl import (
+    f_setcurpl,
+    f_getcurpl
+)
+
+from .userpl import f_getuserplayerid
+
+from .random import (
+    f_getseed,
+    f_srand,
+    f_rand,
+    f_dwrand,
+    f_randomize
+)
+
+from .extstr import (
+    DBString,
+    DisplayExtText,
+    f_initextstr,
+)
+
+from .mempatch import (
+    f_mempatch_epd,
+    f_dwpatch_epd,
+    f_unpatchall,
+)
+

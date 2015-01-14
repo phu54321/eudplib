@@ -23,15 +23,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-from .core import *
-from .trigger import *
-from .ctrlstru import *
-from .eudlib import *
-from .trigtrg import *
-from .maprw import *
+from .memiof import *
+from .utilf import *
+from .qgcf import *
+from .mathf import *
 
-__version__ = '0.41b3'
-
-
-def eudtrgVersion():
-    return __version__
+from .eudarray import EUDArray
+from .eudgrp import EUDGrp

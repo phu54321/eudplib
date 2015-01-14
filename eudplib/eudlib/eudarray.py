@@ -23,24 +23,40 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-from .modcurpl import (
-    f_setcurpl,
-    f_getcurpl
-)
+from .. import core as c
+from .memiof import f_dwread_epd, f_dwwrite_epd
 
-from .userpl import f_getuserplayerid
 
-from .random import (
-    f_getseed,
-    f_srand,
-    f_rand,
-    f_dwrand,
-    f_randomize
-)
+class EUDArray:
+    '''
+    Full variable.
+    '''
 
-from .extstr import (
-    DBString,
-    DisplayExtText,
-    f_initextstr,
-)
+    def __init__(self, arrlen):
+        try:
+            dbs = b''.join([c.i2b4(i) for i in arrlen])
+            self._dattable = c.Db(dbs)
+            self._varlen = len(dbs) // 4
+
+        except TypeError:
+            self._dattable = c.Db(4 * arrlen)
+            self._varlen = arrlen
+
+    def GetArrayMemory(self):
+        return self._dattable
+
+    def GetLength(self):
+        return self._varlen
+
+    def get(self, key):
+        return f_dwread_epd(c.EPD(self._dattable) + key)
+
+    def __getitem__(self, key):
+        return self.get(key)
+
+    def set(self, key, item):
+        return f_dwwrite_epd(c.EPD(self._dattable) + key, item)
+
+    def __setitem__(self, key, item):
+        return self.set(key, item)
 
