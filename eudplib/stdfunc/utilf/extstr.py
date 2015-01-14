@@ -28,10 +28,13 @@ from ... import ctrlstru as cs
 from ..memiof import f_dwread_epd, f_dwwrite_epd
 
 
-class ExtendedString(c.EUDObject):
+class DBString(c.EUDObject):
     def __init__(self, content):
         super().__init__()
         self.content = c.u2b(content)
+
+    def GetStringMemoryAddr(self):
+        return self + 4
 
     def GetDataSize(self):
         return len(self.content) + 5
@@ -96,7 +99,7 @@ _extstr_dict = {}
 def DisplayExtText(text):
     text = c.u2b(text)
     if text not in _extstr_dict:
-        _extstr_dict[text] = ExtendedString(text)
+        _extstr_dict[text] = DBString(text)
     return _extstr_dict[text].GetDisplayAction()
 
 

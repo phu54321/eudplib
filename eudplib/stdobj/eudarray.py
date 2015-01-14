@@ -34,8 +34,14 @@ class EUDArray:
     '''
 
     def __init__(self, len):
-        self._dattable = c.Db(4 * len)
-        self._varlen = len
+        try:
+            dbs = b''.join([c.i2b4(i) for i in len])
+            self._dattable = c.Db(4 * len)
+            self._varlen = len(dbs) // 4
+
+        except AttributeError:
+            self._dattable = c.Db(4 * len)
+            self._varlen = len
 
     def GetArrayMemory(self):
         return self._dattable

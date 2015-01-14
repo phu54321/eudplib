@@ -39,6 +39,7 @@ from .random import (
 )
 
 from .extstr import (
+    DBString,
     DisplayExtText,
     f_initextstr,
 )
