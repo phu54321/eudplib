@@ -159,5 +159,4 @@ def CreateStage2(payload):
     ####
 
     payload = c.CreatePayload(root)
-    open('out.bin', 'wb').write(payload.data)
     return payload
