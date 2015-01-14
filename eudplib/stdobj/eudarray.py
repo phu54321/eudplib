@@ -33,15 +33,15 @@ class EUDArray:
     Full variable.
     '''
 
-    def __init__(self, len):
+    def __init__(self, arrlen):
         try:
-            dbs = b''.join([c.i2b4(i) for i in len])
-            self._dattable = c.Db(4 * len)
+            dbs = b''.join([c.i2b4(i) for i in arrlen])
+            self._dattable = c.Db(dbs)
             self._varlen = len(dbs) // 4
 
-        except AttributeError:
-            self._dattable = c.Db(4 * len)
-            self._varlen = len
+        except TypeError:
+            self._dattable = c.Db(4 * arrlen)
+            self._varlen = arrlen
 
     def GetArrayMemory(self):
         return self._dattable

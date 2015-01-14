@@ -153,10 +153,5 @@ def CreateStage2(payload):
     cs.EUDJump(orig_payload)
 
     c.PopTriggerScope()
+    return c.CreatePayload(root)
 
-    ####
-    # return c.CreatePayload(root)
-    ####
-
-    payload = c.CreatePayload(root)
-    return payload
