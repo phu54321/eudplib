@@ -31,7 +31,10 @@ from ..memiof import f_dwread_epd, f_dwwrite_epd
 class DBString(c.EUDObject):
     def __init__(self, content):
         super().__init__()
-        self.content = c.u2b(content)
+        if isinstance(content, int):
+            self.content = bytes(content)
+        else:
+            self.content = c.u2b(content)
 
     def GetStringMemoryAddr(self):
         return self + 4

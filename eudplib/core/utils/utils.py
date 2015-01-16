@@ -35,7 +35,7 @@ def EPD(p):
 
 
 def FlattenList(l):
-    if type(l) is bytes or type(l) is str:
+    if isinstance(l, bytes) or isinstance(l, str):
         return [l]
 
     try:
