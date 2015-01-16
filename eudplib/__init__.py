@@ -30,7 +30,7 @@ from .eudlib import *
 from .trigtrg import *
 from .maprw import *
 
-__version__ = '0.41b3'
+__version__ = '0.41b4'
 
 
 def eudtrgVersion():
