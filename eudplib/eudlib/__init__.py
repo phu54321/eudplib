@@ -24,6 +24,7 @@ THE SOFTWARE.
 '''
 
 from .memiof import *
+from .stringf import *
 from .utilf import *
 from .qgcf import *
 from .mathf import *

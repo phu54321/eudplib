@@ -30,7 +30,7 @@ from .basicstru import (
     EUDJumpIfNot
 )
 
-_loopb_idset = set(['infloopblock', 'whileblock'])
+_loopb_idset = {'infloopblock', 'loopnblock', 'whileblock'}
 
 
 def _IsLoopBlockId(idf):
@@ -44,9 +44,8 @@ def EUDInfLoop():
     block = {
         'loopstart': c.NextTrigger(),
         'loopend': c.Forward(),
-        'contpoint': None,
+        'contpoint': c.Forward()
     }
-    block['contpoint'] = c.Forward()
 
     c.EUDCreateBlock('infloopblock', block)
 
@@ -64,13 +63,42 @@ def EUDEndInfLoop():
 # -------
 
 
+def EUDLoopN(n):
+    vardb = c.Db(4)
+    c.RawTrigger(actions=c.SetMemory(vardb, c.SetTo, n))
+
+    block = {
+        'loopstart': c.NextTrigger(),
+        'loopend': c.Forward(),
+        'contpoint': c.Forward(),
+        'vardb': vardb
+    }
+
+    c.EUDCreateBlock('loopnblock', block)
+    EUDJumpIf(c.Memory(vardb, c.Exactly, 0), block['loopend'])
+    return True
+
+
+def EUDEndLoopN():
+    block = c.EUDPopBlock('loopnblock')[1]
+    if not block['contpoint'].IsSet():
+        block['contpoint'] << block['loopstart']
+
+    vardb = block['vardb']
+    c.RawTrigger(actions=c.SetMemory(vardb, c.Subtract, 1))
+    EUDJump(block['loopstart'])
+    block['loopend'] << c.NextTrigger()
+
+
+# -------
+
+
 def EUDWhile(conditions):
     block = {
         'loopstart': c.NextTrigger(),
         'loopend': c.Forward(),
-        'contpoint': None,
+        'contpoint': c.Forward(),
     }
-    block['contpoint'] = c.Forward()
 
     c.EUDCreateBlock('whileblock', block)
 
@@ -83,9 +111,8 @@ def EUDWhileNot(conditions):
     block = {
         'loopstart': c.NextTrigger(),
         'loopend': c.Forward(),
-        'contpoint': None,
+        'contpoint': c.Forward(),
     }
-    block['contpoint'] = c.Forward()
 
     c.EUDCreateBlock('whileblock', block)
 

@@ -46,6 +46,9 @@ from .loopblock import (
     EUDInfLoop,
     EUDEndInfLoop,
 
+    EUDLoopN,
+    EUDEndLoopN,
+
     EUDWhile,
     EUDWhileNot,
     EUDEndWhile,

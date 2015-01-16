@@ -26,12 +26,7 @@ THE SOFTWARE.
 from ... import core as c
 from ... import ctrlstru as cs
 
-from . import byterw as bm
-
-
-_br = bm.EUDByteReader()
-_bw = bm.EUDByteWriter()
-
+from .rwcommon import br, bw
 
 @c.EUDFunc
 def f_strcpy(dst, src):
@@ -40,17 +35,20 @@ def f_strcpy(dst, src):
 
     :param dst: Destination address. (Not EPD Player)
     :param src: Source address. (Not EPD Player)
+
+    :return: same as dst
     '''
     b = c.EUDVariable()
 
-    _br.seekoffset(src)
-    _bw.seekoffset(dst)
+    br.seekoffset(src)
+    bw.seekoffset(dst)
 
-    loopstart = c.NextTrigger()
+    if cs.EUDInfLoop():
+        c.SetVariables(b, br.readbyte())
+        bw.writebyte(b)
+        cs.EUDBreakIf(b == 0)
+    cs.EUDEndInfLoop()
 
-    c.SetVariables(b, _br.readbyte())
-    _bw.writebyte(b)
+    bw.flushdword()
 
-    cs.EUDJumpIfNot(b.Exactly(0), loopstart)
-
-    _bw.flushdword()
+    return dst

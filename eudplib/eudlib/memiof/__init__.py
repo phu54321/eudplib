@@ -44,6 +44,3 @@ from .mblockio import (
     f_memcpy,
 )
 
-from .smemio import (
-    f_strcpy,
-)

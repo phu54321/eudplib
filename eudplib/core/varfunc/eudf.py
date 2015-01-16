@@ -39,16 +39,19 @@ from ..allocator import Forward
 from .. import rawtrigger as bt
 
 
-class EUDFunc:
-    def __init__(self, fdecl_func):
-        # Get argument number of fdecl_func
-        argspec = inspect.getargspec(fdecl_func)
-        assert argspec[1] is None, (
-            'No variadic arguments (*args) allowed for EUDFunc.')
-        assert argspec[2] is None, (
-            'No variadic keyword arguments (*kwargs) allowed for EUDFunc.')
+def EUDFunc(fdecl_func):
+    argspec = inspect.getargspec(fdecl_func)
+    assert argspec[1] is None, (
+        'No variadic arguments (*args) allowed for EUDFunc.')
+    assert argspec[2] is None, (
+        'No variadic keyword arguments (*kwargs) allowed for EUDFunc.')
 
-        self._argn = len(argspec[0])
+    return EUDFuncN(fdecl_func, len(argspec[0]))
+
+
+class EUDFuncN:
+    def __init__(self, fdecl_func, argn):
+        self._argn = argn
         self._fdecl_func = fdecl_func
         functools.update_wrapper(self, fdecl_func)
         self._fstart = None
