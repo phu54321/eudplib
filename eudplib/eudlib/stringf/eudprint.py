@@ -132,9 +132,9 @@ def f_eudprint(dst, *args):
     args = c.FlattenList(args)
     for arg in args:
         if isinstance(arg, bytes):
-            dst = f_stradd(dst, c.Db(arg))
+            dst = f_stradd(dst, c.Db(arg) + b'\0')
         elif isinstance(arg, str):
-            dst = f_stradd(dst, c.Db(c.u2b(arg)))
+            dst = f_stradd(dst, c.Db(c.u2b(arg) + b'\0'))
         elif isinstance(arg, int):
             # int and c.EUDVariable should act the same if possible.
             # EUDVariable has a value of 32bit unsigned integer.
