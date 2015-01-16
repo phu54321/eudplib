@@ -27,7 +27,7 @@ from ... import core as c
 from ... import ctrlstru as cs
 
 from .rwcommon import br, bw
-
+from .dbstr import DBString
 
 @c.EUDFunc
 def f_stradd(dst, src):
@@ -129,12 +129,17 @@ def f_dwadd(dst, number):
 
 
 def f_eudprint(dst, *args):
+    if isinstance(dst, DBString):
+        dst = dst.GetStringMemoryAddr()
+
     args = c.FlattenList(args)
     for arg in args:
         if isinstance(arg, bytes):
             dst = f_stradd(dst, c.Db(arg) + b'\0')
         elif isinstance(arg, str):
             dst = f_stradd(dst, c.Db(c.u2b(arg) + b'\0'))
+        elif isinstance(arg, DBString):
+            dst = f_stradd(dst, arg.GetStringMemoryAddr())
         elif isinstance(arg, int):
             # int and c.EUDVariable should act the same if possible.
             # EUDVariable has a value of 32bit unsigned integer.
