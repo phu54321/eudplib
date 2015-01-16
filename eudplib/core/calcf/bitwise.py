@@ -76,7 +76,6 @@ f_bitnand = bw_gen(lambda x: x.Exactly(0))
 f_bitnor = bw_gen(lambda x: x.AtMost(1))
 
 
-@vf.EUDFunc
 def f_bitnxor(a, b):
     return f_bitnot(f_bitxor(a, b))
 
