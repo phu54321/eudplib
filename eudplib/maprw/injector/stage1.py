@@ -91,6 +91,7 @@ def CreateAndApplyStage1(chkt, payload):
     str_section = chkt.getsection('STR')
     strtb = c.TBL(str_section)
     eude_needed = strtb.GetStringIndex('This map requires EUD Enabler to run')
+    no_singlep = strtb.GetStringIndex('This map cannot run on single-player mode')
     str_section = strtb.SaveTBL()
 
     '''
@@ -198,6 +199,15 @@ def CreateAndApplyStage1(chkt, payload):
     # TRIG SECTION
     ##############
     trglist.clear()
+
+    # Check if single player mode
+    Trigger(
+        conditions=tt.Memory(0x57F0B4, tt.Exactly, 0),
+        actions=[
+            tt.DisplayTextMessage(no_singlep),
+            tt.Draw()
+        ]
+    )
 
     # Check if epd is supported
     Trigger(actions=[

@@ -23,25 +23,19 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-from .modcurpl import (
-    f_setcurpl,
-    f_getcurpl
-)
+from ..memiof import f_dwread_epd
+from ... import core as c
+from ... import ctrlstru as cs
 
-from .userpl import f_getuserplayerid
 
-from .random import (
-    f_getseed,
-    f_srand,
-    f_rand,
-    f_dwrand,
-    f_randomize
-)
+@c.EUDFunc
+def f_playerexist(player):
+    pts = 0x51A280
 
-from .mempatch import (
-    f_mempatch_epd,
-    f_dwpatch_epd,
-    f_unpatchall,
-)
-
-from .pexist import f_playerexist
+    ret = c.EUDVariable()
+    prevtstart = f_dwread_epd(c.EPD(pts + player * 12 + 8))
+    if cs.EUDIf(prevtstart == ~(pts + player * 12 + 4)):
+        ret << 0
+    else:
+        ret << 1
+    return ret

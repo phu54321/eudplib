@@ -111,13 +111,13 @@ def CreateStage3(root, mrgndata):
         prevtstart = sf.f_dwread_epd(c.EPD(pts + player * 12 + 8))
         prevtend = sf.f_dwread_epd(c.EPD(pts + player * 12 + 4))
 
-        # Modify pts
-        c.SeqCompute([
-            (c.EPD(pts + player * 12 + 8), c.SetTo, tstart),
-            (c.EPD(pts + player * 12 + 4), c.SetTo, tre),
-        ])
-
         if cs.EUDIfNot(prevtstart == ~(pts + player * 12 + 4)):  # If there were triggers
+            # Modify pts
+            c.SeqCompute([
+                (c.EPD(pts + player * 12 + 8), c.SetTo, tstart),
+                (c.EPD(pts + player * 12 + 4), c.SetTo, tre),
+            ])
+
             # link trs, tre with them
             c.SeqCompute([
                 (c.EPD(trs + 4), c.SetTo, prevtstart),
