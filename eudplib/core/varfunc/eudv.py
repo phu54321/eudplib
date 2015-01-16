@@ -109,16 +109,18 @@ class EUDVariable(VariableBase):
         SeqCompute((
             (self, bt.SetTo, other),
         ))
-        return self
 
     def __lshift__(self, other):
         self.Assign(other)
+        return self
 
     def __iadd__(self, other):
         SeqCompute(((self, bt.Add, other),))
+        return self
 
     def __isub__(self, other):
         self << self - other
+        return self
 
     # -------
 
@@ -222,6 +224,28 @@ class EUDVariable(VariableBase):
             ))
             return t.AtLeast(1)
 
+    # operator placeholders
+    def __mul__(self, a): pass
+    def __rmul__(self, a): pass
+    def __imul__(self, a): pass
+    def __floordiv__(self, a): pass
+    def __rfloordiv__(self, a): pass
+    def __ifloordiv__(self, a): pass
+    def __mod__(self, a): pass
+    def __rmod__(self, a): pass
+    def __imod__(self, a): pass
+    def __and__(self, a): pass
+    def __rand__(self, a): pass
+    def __iand__(self, a): pass
+    def __or__(self, a): pass
+    def __ror__(self, a): pass
+    def __ior__(self, a): pass
+    def __xor__(self, a): pass
+    def __rxor__(self, a): pass
+    def __ixor__(self, a): pass
+
+
+
 
 def _VProc(v, actions):
     nexttrg = Forward()
@@ -246,7 +270,6 @@ def SeqCompute(assignpairs):
     actionset = []
 
     def FlushActionSet():
-        nonlocal actionset
         if actionset:
             bt.RawTrigger(actions=actionset)
             actionset.clear()

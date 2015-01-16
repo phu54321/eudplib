@@ -65,9 +65,11 @@ class VariableBase:
 
     def __iadd__(self, value):
         bt.RawTrigger(actions=bt.SetMemory(self.GetVariableMemoryAddr(), bt.Add, value))
+        return self
 
     def __isub__(self, value):
         bt.RawTrigger(actions=bt.SetMemory(self.GetVariableMemoryAddr(), bt.Subtract, value))
+        return self
 
     # -------
 

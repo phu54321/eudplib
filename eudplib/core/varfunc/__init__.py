@@ -33,3 +33,4 @@ from .eudv import (
 
 from .eudlv import EUDLightVariable
 from .eudf import EUDFunc, SetVariables
+from .mtdvf import EUDFuncMethod

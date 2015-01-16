@@ -26,7 +26,7 @@ def f_creepread_init():
 def f_creepread(x, y):
     ret = EUDCreateVariables(1)
 
-    creepindex = f_mul(y, mapwidth) + x
+    creepindex = mapwidth * y + x
     creepdwordindex, creepevenodd = f_div(creepindex, 2)
 
     # read tile data
@@ -50,7 +50,7 @@ Main logic
 '''
 
 LoadMap('outputmap/basemap/creeptest_basemap.scx')
-CompressPayload(True)
+# CompressPayload(True)
 
 
 @EUDFunc

@@ -44,6 +44,7 @@ class RawTrigger(EUDObject):
             nextptr=None,
             conditions=None,
             actions=None,
+            preserved=True
     ):
         global _trgcount  # Debugging purpose
         _trgcount += 1  # Debugging purpose
@@ -95,6 +96,8 @@ class RawTrigger(EUDObject):
 
             act.SetParentTrigger(self, i)
 
+        self.preserved = preserved
+
     def GetNextPtrMemory(self):
         return self + 4
 
@@ -124,6 +127,10 @@ class RawTrigger(EUDObject):
 
         # Preserved flag
 
-        pbuffer.WriteDword(4)
+        if self.preserved:
+            pbuffer.WriteDword(4)
+        else:
+            pbuffer.WriteDword(0)
+
         pbuffer.WriteSpace(27)
         pbuffer.WriteByte(0)

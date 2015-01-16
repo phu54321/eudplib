@@ -26,12 +26,11 @@ THE SOFTWARE.
 from .core import *
 from .trigger import *
 from .ctrlstru import *
-from .stdfunc import *
-from .stdobj import *
+from .eudlib import *
 from .trigtrg import *
 from .maprw import *
 
-__version__ = '0.41b1'
+__version__ = '0.41b4'
 
 
 def eudtrgVersion():
