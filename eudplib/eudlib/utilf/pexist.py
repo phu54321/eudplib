@@ -36,6 +36,7 @@ def f_playerexist(player):
     prevtstart = f_dwread_epd(c.EPD(pts + player * 12 + 8))
     if cs.EUDIf(prevtstart == ~(pts + player * 12 + 4)):
         ret << 0
-    else:
+    if cs.EUDElse():
         ret << 1
+    cs.EUDEndIf()
     return ret
