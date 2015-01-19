@@ -146,22 +146,20 @@ def _CreateStructPacker(structformat):
         orttb = buf._orttable
 
         for i, arg in enumerate(arglist):
-            if arg is not None:
-                ri = expr.Evaluate(arg)
+            ri = expr.Evaluate(arg)
 
-                assert (ri.rlocmode == 0 or
-                        (sizelist[i] == 4 and dpos % 4 == 0)), (
-                    'Cannot write non-const in byte/word/nonalligned dword.'
-                )
+            assert (ri.rlocmode == 0 or
+                    (sizelist[i] == 4 and dpos % 4 == 0)), (
+                'Cannot write non-const in byte/word/nonalligned dword.'
+            )
 
-                if ri.rlocmode == 1:
-                    prttb.append(dpos)
+            if ri.rlocmode == 1:
+                prttb.append(dpos)
 
-                elif ri.rlocmode == 4:
-                    orttb.append(dpos)
+            elif ri.rlocmode == 4:
+                orttb.append(dpos)
 
-                data[dpos: dpos + sizelist[i]] = flist[i](ri.offset)
-
+            data[dpos: dpos + sizelist[i]] = flist[i](ri.offset)
             dpos += sizelist[i]
 
         buf._datacur = dpos

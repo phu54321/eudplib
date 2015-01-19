@@ -4,14 +4,14 @@ pyximport.install()
 import verifyf
 import os
 
-testvector = bytearray(os.urandom(10 * 1024 * 1024))
+testvector = bytearray(os.urandom(10))
 
 
 import cProfile
 import pstats
 
 cProfile.runctx(
-    'verifyf.verifyf(testvector)',
+    'verifyf.verifyf(testvector, len(testvector))',
     globals(),
     locals(),
     "Profile.prof"
@@ -20,4 +20,3 @@ cProfile.runctx(
 s = pstats.Stats("Profile.prof")
 s.strip_dirs().sort_stats('time').print_stats()
 
-print(verifyf.verifyf(testvector))

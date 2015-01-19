@@ -139,61 +139,87 @@ class ObjAllocator:
     '''
 
     def __init__(self):
-        pass
+        self._sizes = {}
 
     def StartWrite(self):
+        self._suboccupmap = True
+        self._suboccupidx = 0
         self._occupmap = []
 
+
+    def _Occup0(self):
+        self._suboccupidx = 1
+        if self._suboccupidx == 4:
+            self._occupmap.append(self._suboccupmap)
+            self._suboccupidx = 0
+            self._suboccupmap = False
+
+    def _Occup1(self):
+        self._suboccupmap = True
+        self._suboccupidx += 1
+        if self._suboccupidx == 4:
+            self._occupmap.append(self._suboccupmap)
+            self._suboccupidx = 0
+            self._suboccupmap = False
+
     def EndWrite(self):
-        dlen = (len(self._occupmap) + 3) & ~3
-        self._occupmap.extend([0] * (dlen - len(self._occupmap)))
+        if len(self._occupmap) & 3:
+            self._occupmap.append(self._suboccupmap)
 
-        # Count by dword
-        dwoccupmap = []
-        for i in range(0, len(self._occupmap), 4):
-            dwoccupmap.append(self._occupmap[i:i + 4] != [0, 0, 0, 0])
-
-        return dwoccupmap
+        return self._occupmap
 
     def WriteByte(self, number):
         if number is None:
-            self._occupmap.append(0)
+            self._Occup0()
         else:
-            expr.Evaluate(number)
-            self._occupmap.append(1)
+            self._Occup1()
 
     def WriteWord(self, number):
         if number is None:
-            self._occupmap.append((0, 0))
+            self._Occup0()
+            self._Occup0()
         else:
-            expr.Evaluate(number)
-            self._occupmap.extend((1, 1))
+            self._Occup1()
+            self._Occup1()
 
     def WriteDword(self, number):
         if number is None:
-            self._occupmap.append((0, 0, 0, 0))
+            self._occupmap.append(self._suboccupmap)
         else:
-            expr.Evaluate(number)
-            self._occupmap.extend((1, 1, 1, 1))
+            self._occupmap.append(True)
 
     def WritePack(self, structformat, *arglist):
-        ocm = []
-        sizedict = {'B': 1, 'H': 2, 'I': 4}
-        for i, arg in enumerate(arglist):
-            isize = sizedict[structformat[i]]
+        if structformat not in self._sizes:
+            ssize = 0
+            sizedict = {'B': 1, 'H': 2, 'I': 4}
+            for i in range(len(arglist)):
+                ssize += sizedict[structformat[i]]
+            self._sizes[structformat] = ssize
 
-            if arg is None:
-                ocm += [0] * isize
-            else:
-                expr.Evaluate(arg)
-                ocm += [1] * isize
-        self._occupmap.extend(ocm)
+        ssize = self._sizes[structformat]
+
+        # Add occupiation index
+        self._occupmap.extend([True] * (ssize >> 2))
+        ssize &= 3
+        for i in range(ssize):
+            self._Occup1()
 
     def WriteBytes(self, b):
-        self._occupmap.extend([1] * len(b))
+        ssize = len(b)
+        self._occupmap.extend([True] * (ssize >> 2))
+        ssize &= 3
+        for i in range(ssize):
+            self._Occup1()
 
-    def WriteSpace(self, spacesize):
-        self._occupmap.extend([0] * spacesize)
+    def WriteSpace(self, ssize):
+        while ssize and self._suboccupidx:
+            self._Occup0()
+            ssize -= 1
+
+        self._occupmap.extend([False] * (ssize >> 2))
+        ssize &= 3
+        for i in range(ssize):
+            self._Occup0()
 
 
 def AllocObjects():

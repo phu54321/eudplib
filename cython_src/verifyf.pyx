@@ -1,9 +1,6 @@
 #cython: boundscheck=False
 
-import cython
-
-
-cargs = [
+cdef int* cargs = [
     0x08D3DCB1,
     0x05F417D1,
     0x01886E5F,
@@ -16,17 +13,17 @@ cargs = [
     0x0041BBB3,
 ]
 
-def verifyf(unsigned char[:] buf):
-    cdef int i, j, compv, count, idx, carg, dw
+def verifyf(unsigned char* buf, int buflen):
+    cdef unsigned int i, j, compv, count, idx, carg, dw
 
-    counts = [0] * len(cargs)
+    counts = [0] * 10
 
-    for idx in range(len(cargs)):
+    for idx in range(10):
         carg = cargs[idx]
 
         compv = 12345 * carg
         count = 0
-        for j in range(0, len(buf), 4):
+        for j in range(0, buflen, 4):
             dw = (
                 (buf[j + 0] << 0) |
                 (buf[j + 1] << 8) |
