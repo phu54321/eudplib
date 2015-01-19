@@ -91,6 +91,8 @@ def CreateAndApplyStage1(chkt, payload):
     str_section = chkt.getsection('STR')
     strtb = c.TBL(str_section)
     eude_needed = strtb.GetStringIndex('This map requires EUD Enabler to run')
+    nosinglep = strtb.GetStringIndex(
+        'This map cannot run on single-player mode')
     str_section = strtb.SaveTBL()
 
     '''
@@ -119,14 +121,16 @@ def CreateAndApplyStage1(chkt, payload):
 
     # apply prt
     prttrg_start = 2408 * len(str_sled)  # = 0
-    prevoffset = [-1] * packn  # mrgn.action[i].player = EPD(payload_offset) + prevoffset[i]
+    # mrgn.action[i].player = EPD(payload_offset) + prevoffset[i]
+    prevoffset = [-1] * packn
     for i in range(0, len(payload.prttable), packn):
         prts = list(map(lambda x: x // 4, payload.prttable[i: i + packn]))
         prts = prts + [-1] * (packn - len(prts))  # -1 : dummy space
         pch = [prts[j] - prevoffset[j] for j in range(packn)]
         str_sled.append(sledheader_prt + tt.Trigger(
             actions=[
-                [tt.SetMemory(mrgn + 328 + 32 * j + 16, tt.Add, pch[j]) for j in range(packn)],
+                [tt.SetMemory(mrgn + 328 + 32 * j + 16, tt.Add, pch[j])
+                 for j in range(packn)],
             ]
         ))
 
@@ -134,14 +138,16 @@ def CreateAndApplyStage1(chkt, payload):
 
     # apply ort
     orttrg_start = 2408 * len(str_sled)  # = 0
-    prevoffset = [-1] * packn  # mrgn.action[i].player = EPD(payload_offset) + prevoffset[i]
+    # mrgn.action[i].player = EPD(payload_offset) + prevoffset[i]
+    prevoffset = [-1] * packn
     for i in range(0, len(payload.orttable), packn):
         orts = list(map(lambda x: x // 4, payload.orttable[i: i + packn]))
         orts = orts + [-1] * (packn - len(orts))  # -1 : dummy space
         pch = [orts[j] - prevoffset[j] for j in range(packn)]
         str_sled.append(sledheader_ort + tt.Trigger(
             actions=[
-                [tt.SetMemory(mrgn + 2408 + 328 + 32 * j + 16, tt.Add, pch[j]) for j in range(packn)],
+                [tt.SetMemory(mrgn + 2408 + 328 + 32 * j + 16, tt.Add, pch[j])
+                 for j in range(packn)],
             ]
         ))
 
@@ -150,7 +156,8 @@ def CreateAndApplyStage1(chkt, payload):
     # jump to ort
     str_sled.append(sledheader_ort + tt.Trigger(
         actions=[
-            [tt.SetMemory(mrgn + 2408 + 328 + 32 * j + 16, tt.Add, 0xFFFFFFFF - prevoffset[j]) for j in range(packn)],
+            [tt.SetMemory(mrgn + 2408 + 328 + 32 * j + 16, tt.Add,
+                          0xFFFFFFFF - prevoffset[j]) for j in range(packn)],
             tt.SetMemory(mrgn + 2408 + 4, tt.Add, 4)  # skip garbage area
         ]
     ))
@@ -161,9 +168,9 @@ def CreateAndApplyStage1(chkt, payload):
     str_padding_length = -len(str_section) & 3
     strsled_offset = len(str_section) + str_padding_length
     payload_offset = strsled_offset + len(str_sled) + 4
-    str_section = str_section + bytes(str_padding_length) + str_sled + b'\0\0\0\0' + payload.data
+    str_section = str_section + \
+        bytes(str_padding_length) + str_sled + b'\0\0\0\0' + payload.data
     chkt.setsection('STR', str_section)
-
 
     ##############
     # MRGN SECTION
@@ -173,8 +180,10 @@ def CreateAndApplyStage1(chkt, payload):
         bytes(4) + c.i2b4(prttrg_start + strsled_offset) +
         tt.Trigger(
             actions=[
-                # SetDeaths actions in MRGN initially points to EPD(payload - 4)
-                [tt.SetMemory(payload_offset - 4, tt.Add, payload_offset // 4) for _ in range(packn)],
+                # SetDeaths actions in MRGN initially points to EPD(payload -
+                # 4)
+                [tt.SetMemory(payload_offset - 4, tt.Add, payload_offset // 4)
+                 for _ in range(packn)],
                 tt.SetMemory(mrgn + 4, tt.Add, 2408)
             ]
         )
@@ -184,7 +193,8 @@ def CreateAndApplyStage1(chkt, payload):
         bytes(4) + c.i2b4(orttrg_start + strsled_offset) +
         tt.Trigger(
             actions=[
-                [tt.SetMemory(payload_offset - 4, tt.Add, payload_offset) for _ in range(packn)],
+                [tt.SetMemory(payload_offset - 4, tt.Add, payload_offset)
+                 for _ in range(packn)],
                 tt.SetMemory(mrgn + 2408 + 4, tt.Add, 2408)
             ]
         )
@@ -193,11 +203,19 @@ def CreateAndApplyStage1(chkt, payload):
     mrgn_section = b''.join(mrgn_trigger) + bytes(5100 - 2408 * 2)
     chkt.setsection('MRGN', mrgn_section)
 
-
     ##############
     # TRIG SECTION
     ##############
     trglist.clear()
+
+    # Check if single player mode
+    Trigger(
+        conditions=tt.Memory(0x57F0B4, tt.Exactly, 0),
+        actions=[
+            tt.DisplayTextMessage(nosinglep),
+            tt.Draw()
+        ]
+    )
 
     # Check if epd is supported
     Trigger(actions=[
@@ -228,13 +246,17 @@ def CreateAndApplyStage1(chkt, payload):
         Trigger(
             conditions=tt.Memory(strs, tt.AtLeast, 2 ** e),
             actions=[
-                [tt.SetMemory(mrgn + 328 + 32 * i + 16, tt.Add, 2 ** (e - 2)) for i in range(packn)],
+                [tt.SetMemory(mrgn + 328 + 32 * i + 16, tt.Add, 2 ** (e - 2))
+                 for i in range(packn)],
                 tt.SetDeaths(11, tt.Add, 2 ** e, 0),
-                [tt.SetMemory(mrgn + 328 + 32 * i + 20, tt.Add, 2 ** (e - 2)) for i in range(packn)],
+                [tt.SetMemory(mrgn + 328 + 32 * i + 20, tt.Add, 2 ** (e - 2))
+                 for i in range(packn)],
                 tt.SetMemory(mrgn + 4, tt.Add, 2 ** e),
-                [tt.SetMemory(mrgn + 2408 + 328 + 32 * i + 16, tt.Add, 2 ** (e - 2)) for i in range(packn)],
+                [tt.SetMemory(
+                    mrgn + 2408 + 328 + 32 * i + 16, tt.Add, 2 ** (e - 2)) for i in range(packn)],
                 tt.SetMemory(mrgn + 2408 + 4, tt.Add, 2 ** e),
-                [tt.SetMemory(mrgn + 2408 + 328 + 32 * i + 20, tt.Add, 2 ** e) for i in range(packn)],
+                [tt.SetMemory(mrgn + 2408 + 328 + 32 * i + 20, tt.Add, 2 ** e)
+                 for i in range(packn)],
                 tt.SetMemory(strs, tt.Subtract, 2 ** e),
             ]
         )
@@ -299,7 +321,8 @@ def CreateAndApplyStage1(chkt, payload):
             conditions=tt.Deaths(11, tt.AtLeast, 2 ** e, 0),
             actions=[
                 tt.SetDeaths(11, tt.Subtract, 2 ** e, 0),
-                tt.SetDeaths(10, tt.Add, 2 ** (e - 2), 0),  # used for nextptr recovery in stage 3
+                # used for nextptr recovery in stage 3
+                tt.SetDeaths(10, tt.Add, 2 ** (e - 2), 0),
                 tt.SetMemory(curpl, tt.Add, 2 ** (e - 2))
             ]
         )
@@ -318,7 +341,8 @@ def CreateAndApplyStage1(chkt, payload):
     # Previous rawtrigger datas
 
     oldtrigraw = chkt.getsection('TRIG')
-    oldtrigs = [oldtrigraw[i:i + 2400] for i in range(0, len(oldtrigraw), 2400)]
+    oldtrigs = [oldtrigraw[i:i + 2400]
+                for i in range(0, len(oldtrigraw), 2400)]
     proc_trigs = []
 
     # Collect only enabled triggers
