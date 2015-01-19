@@ -23,6 +23,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
+import pyximport
+pyximport.install()
+
 from .core import *
 from .trigger import *
 from .ctrlstru import *

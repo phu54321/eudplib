@@ -25,6 +25,7 @@ THE SOFTWARE.
 
 from . import rlocint, pbuffer
 from . import expr
+from .stackobjs import StackObjects
 
 import random
 
@@ -204,13 +205,13 @@ def AllocObjects():
 
     # Quick and less space-efficient approach
     if not _payload_compress:
-        last_alloc_addr = 0
+        lallocaddr = 0
         for obj in _found_objects:
             objsize = obj.GetDataSize()
             allocsize = (objsize + 3) & ~3
-            _alloctable[obj] = last_alloc_addr, objsize
-            last_alloc_addr += allocsize
-        _payload_size = last_alloc_addr
+            _alloctable[obj] = lallocaddr, objsize
+            lallocaddr += allocsize
+        _payload_size = lallocaddr
         phase = None
         return
 
@@ -238,37 +239,7 @@ def AllocObjects():
             else:
                 dwoccupmap[i] = dwoccupmap[i - 1]
 
-    # Buffer to sum all dwoccupmaps
-    dwoccupmap_sum = [-1] * (dwoccupmap_max_size + 1)
-
-    last_alloc_addr = 0
-    for obj in _found_objects:
-        dwoccupmap = dwoccupmap_dict[obj]
-
-        # Find appropriate position to allocate object
-        j = 0
-        while j < len(dwoccupmap):
-            if dwoccupmap[j] != -1 and dwoccupmap_sum[last_alloc_addr + j] != -1:  # conflict
-                # last_alloc_addr = (dwoccupmap_sum[last_alloc_addr + j] - j) + (j - dwoccupmap[j])
-                last_alloc_addr = dwoccupmap_sum[last_alloc_addr + j] - dwoccupmap[j]
-                j = 0
-
-            else:
-                j += 1
-
-        # Apply occupation map
-        for j in range(len(dwoccupmap) - 1, -1, -1):
-            curoff = last_alloc_addr + j
-            if dwoccupmap[j] != -1 or dwoccupmap_sum[curoff] != -1:
-                if dwoccupmap_sum[curoff + 1] == -1:
-                    dwoccupmap_sum[curoff] = curoff + 1
-                else:
-                    dwoccupmap_sum[curoff] = dwoccupmap_sum[curoff + 1]
-
-        objsize = obj.GetDataSize()
-        _alloctable[obj] = (last_alloc_addr * 4, objsize)
-        if last_alloc_addr * 4 + objsize > _payload_size:
-            _payload_size = last_alloc_addr * 4 + objsize
+    StackObjects(_found_objects, dwoccupmap_dict, _alloctable)
 
     phase = None
 

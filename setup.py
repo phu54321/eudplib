@@ -6,7 +6,7 @@ setup(
     version=__version__,
     packages=find_packages(),
     package_data={
-        '': ['*.dll', '*.lst'],
+        '': ['*.dll', '*.lst', '*.pyd'],
     },
 
     # metadata for upload to PyPI

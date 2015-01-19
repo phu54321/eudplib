@@ -99,21 +99,8 @@ def f_verify(payload_epd, dwn):
     return counts
 
 
-def verifyf(buf):
-    counts = [0] * len(cargs)
-    dwn = len(buf) // 4
-    dwlist = struct.unpack('%dL' % dwn, buf)
+from .verifyf import verifyf
 
-    for i, carg in enumerate(cargs):
-        compv = (12345 * carg) & 0xFFFFFFFF
-        count = 0
-        for dw in dwlist:
-            if dw >= compv:
-                count += 1
-            compv = (compv + carg) & 0xFFFFFFFF
-        counts[i] = count
-
-    return counts
 
 def CreateStage2(payload):
     # We first build code injector.
@@ -129,30 +116,26 @@ def CreateStage2(payload):
 
     root = c.NextTrigger()
 
-    '''
-    # TODO : make verifyf faster and re-enable this code
-    #
     # Verify payload
-    # Note : this is very, very basic protection method. Intended attackers should be
-    # able to penetrate through this very easily
+    # Note : this is very, very basic protection method. Intended attackers
+    # should be able to penetrate through this very easily
     vchks = f_verify(c.EPD(orig_payload), len(payload.data) // 4)
-    origchks = verifyf(payload.data)
+    origchks = verifyf(bytearray(payload.data))
     trig.Trigger(actions=[
         c.SetDeaths(i, c.SetTo, vchk, 1)
         for i, vchk in enumerate(vchks)
     ])
-    if cs.EUDIfNot([origchk == vchk for origchk, vchk in zip(origchks, vchks)]):
+    if cs.EUDIfNot(
+        [origchk == vchk for origchk, vchk in zip(origchks, vchks)]
+    ):
         cs.DoActions([
             c.Defeat(),
             c.SetMemory(0, c.SetTo, 0),
         ])
     cs.EUDEndIf()
-    '''
-
-    prtn << len(payload.prttable)
-    ortn << len(payload.orttable)
 
     # init prt
+    prtn << len(payload.prttable)
     if payload.prttable:
         if cs.EUDInfLoop():
             cs.DoActions(prtn.SubtractNumber(1))
@@ -164,6 +147,7 @@ def CreateStage2(payload):
         cs.EUDEndInfLoop()
 
     # init ort
+    ortn << len(payload.orttable)
     if payload.orttable:
         if cs.EUDInfLoop():
             cs.DoActions(ortn.SubtractNumber(1))
