@@ -24,10 +24,12 @@ THE SOFTWARE.
 '''
 
 from .. import core as c
+from eudplib import utils as ut
 from .memiof import f_dwread_epd, f_dwwrite_epd
 
 
 class EUDArray(c.EUDObject):
+
     '''
     Full variable.
     '''
@@ -43,7 +45,7 @@ class EUDArray(c.EUDObject):
         else:
             for item in arr:
                 ut.ep_assert(c.IsValidExpr(item), 'Invalid item given to array'
-)
+                             )
             self._datas = arr
             self._arrlen = len(arr)
 
@@ -72,4 +74,3 @@ class EUDArray(c.EUDObject):
 
     def __setitem__(self, key, item):
         return self.set(key, item)
-

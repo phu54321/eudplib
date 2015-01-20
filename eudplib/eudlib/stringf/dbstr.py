@@ -23,18 +23,22 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-from eudplib import core as c
-from eudplib import ctrlstru as cs
-from eudplib.eudlib.memiof import f_dwread_epd, f_dwwrite_epd
+from eudplib import (
+    core as c,
+    ctrlstru as cs,
+    utils as ut
+)
+from ..memiof import f_dwread_epd, f_dwwrite_epd
 
 
 class DBString(c.EUDObject):
+
     def __init__(self, content):
         super().__init__()
         if isinstance(content, int):
             self.content = bytes(content)
         else:
-            self.content = c.u2b(content)
+            self.content = ut.u2b(content)
 
     def GetStringMemoryAddr(self):
         return self + 4
@@ -60,6 +64,7 @@ class DBString(c.EUDObject):
 
 
 class ExtendedStringIndex_FW(c.Expr):
+
     def __init__(self, resetter):
         super().__init__(self)
         self._resetter = resetter
@@ -84,6 +89,7 @@ def _RegisterResetterAction(resetteract):
 
 
 class ResetterBuffer(c.EUDObject):
+
     def __init__(self):
         super().__init__()
 
@@ -100,7 +106,7 @@ _extstr_dict = {}
 
 
 def DisplayExtText(text):
-    text = c.u2b(text)
+    text = ut.u2b(text)
     if text not in _extstr_dict:
         _extstr_dict[text] = DBString(text)
     return _extstr_dict[text].GetDisplayAction()
@@ -111,12 +117,6 @@ def f_initextstr():
     ptr, v = c.EUDVariable(), c.EUDVariable()
     ptr << ut.EPD(rb)
     origstrptr = f_dwread_epd(ut.EPD(0x5993D4))
-
-    c.SeqCompute((
-        (1, c.SetTo, origstrptr),
-        (2, c.SetTo, origstrptr.GetVariableMemoryAddr()),
-        (3, c.SetTo, ptr)
-    ))
 
     if cs.EUDInfLoop():
         v << f_dwread_epd(ptr)

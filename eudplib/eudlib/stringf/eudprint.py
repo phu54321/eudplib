@@ -23,11 +23,15 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-from ... import core as c
-from ... import ctrlstru as cs
+from eudplib import (
+    core as c,
+    ctrlstru as cs,
+    utils as ut,
+)
 
 from .rwcommon import br, bw
 from .dbstr import DBString
+
 
 @c.EUDFunc
 def f_stradd(dst, src):
@@ -137,7 +141,7 @@ def f_eudprint(dst, *args):
         if isinstance(arg, bytes):
             dst = f_stradd(dst, c.Db(arg) + b'\0')
         elif isinstance(arg, str):
-            dst = f_stradd(dst, c.Db(c.u2b(arg) + b'\0'))
+            dst = f_stradd(dst, c.Db(ut.u2b(arg) + b'\0'))
         elif isinstance(arg, DBString):
             dst = f_stradd(dst, arg.GetStringMemoryAddr())
         elif isinstance(arg, int):
@@ -148,6 +152,9 @@ def f_eudprint(dst, *args):
         elif isinstance(arg, c.EUDVariable):
             dst = f_dwadd(dst, arg)
         else:
-            raise ut.EPError('Object wit unknown parameter type %s given to f_eudprint.' % type(arg))
+            raise ut.EPError(
+                'Object wit unknown parameter type %s given to f_eudprint.'
+                % type(arg)
+            )
 
     return dst

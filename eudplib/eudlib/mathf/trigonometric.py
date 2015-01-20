@@ -25,8 +25,12 @@ THE SOFTWARE.
 
 import math
 
-from ... import core as c
-from ... import ctrlstru as cs
+from eudplib import (
+    core as c,
+    ctrlstru as cs,
+    utils as ut,
+)
+
 from ..memiof import f_dwread_epd
 
 
@@ -46,7 +50,7 @@ def f_lengthdir(length, angle):
     cdb = c.Db(b''.join(clist))
     sdb = c.Db(b''.join(slist))
 
-    ## MAIN LOGIC
+    # MAIN LOGIC
 
     cs.DoActions(c.SetDeaths(1, c.Add, 1, 0))
     if cs.EUDIf(angle >= 360):
@@ -55,7 +59,8 @@ def f_lengthdir(length, angle):
 
     cs.DoActions(c.SetDeaths(1, c.Add, 1, 0))
     ldir_x, ldir_y = c.EUDVariable(), c.EUDVariable()  # cos, sin * 65536
-    csign, ssign = c.EUDLightVariable(), c.EUDLightVariable()  # sign of cos, sin
+    # sign of cos, sin
+    csign, ssign = c.EUDLightVariable(), c.EUDLightVariable()
     tableangle = c.EUDVariable()
 
     cs.DoActions(c.SetDeaths(1, c.Add, 1, 0))
@@ -103,5 +108,3 @@ def f_lengthdir(length, angle):
 
     cs.DoActions(c.SetDeaths(1, c.Add, 1, 0))
     return ldir_x, ldir_y
-
-
