@@ -25,6 +25,7 @@ THE SOFTWARE.
 
 from . import rlocint, pbuffer
 from . import expr
+from eudplib import utils as ut
 from .stackobjs import StackObjects
 
 import random
@@ -48,7 +49,7 @@ _payload_compress = False
 def CompressPayload(mode):
     global _payload_compress
     if mode not in [True, False]:
-        raise TypeError('Invalid type')
+        raise ut.EPError.EPError('Invalid type')
 
     if mode:
         _payload_compress = True
@@ -117,7 +118,7 @@ def CollectObjects(root):
         _dwoccupmap_dict[obj] = objc.EndWrite()
 
     if len(_found_objects) == 0:
-        raise RuntimeError('No object collected')
+        raise ut.EPError('No object collected')
 
     # Shuffle objects -> Randomize(?) addresses
     fo2 = _found_objects[1:]
@@ -286,9 +287,10 @@ def ConstructPayload():
         pbuf.StartWrite(objaddr)
         obj.WritePayload(pbuf)
         written_bytes = pbuf.EndWrite()
-        assert written_bytes == objsize, (
+        ut.ep_assert(written_bytes == objsize, 
             'obj.GetDataSize()(%d) != Real payload size(%d) for object %s'
-            % (objsize, written_bytes, obj))
+            % (objsize, written_bytes, obj)
+        )
 
     phase = None
     return pbuf.CreatePayload()

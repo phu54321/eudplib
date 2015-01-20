@@ -24,7 +24,7 @@ THE SOFTWARE.
 '''
 
 from .. import core as c
-from .. import utils as ut
+from eudplib import utils as ut
 from .basicstru import EUDJump, EUDJumpIf, EUDJumpIfNot
 
 
@@ -62,10 +62,12 @@ def EUDIfNot(conditions):
 
 def EUDElseIf(conditions):
     lb = ut.EUDGetLastBlock()
-    assert lb[0] == 'ifblock', 'Block start/end mismatch'
+    ut.ep_assert(lb[0] == 'ifblock', 'Block start/end mismatch')
     block = lb[1]
-    assert block['next_elseif'] is not None, (
-        'Cannot have EUDElseIf after EUDElse')
+    ut.ep_assert(
+        block['next_elseif'] is not None,
+        'Cannot have EUDElseIf after EUDElse'
+    )
 
     # Finish previous if/elseif block
     EUDJump(block['ifend'])
@@ -79,10 +81,12 @@ def EUDElseIf(conditions):
 
 def EUDElseIfNot(conditions):
     lb = ut.EUDGetLastBlock()
-    assert lb[0] == 'ifblock', 'Block start/end mismatch'
+    ut.ep_assert(lb[0] == 'ifblock', 'Block start/end mismatch')
     block = lb[1]
-    assert block['next_elseif'] is not None, (
-        'Cannot have EUDElseIfNot after EUDElse')
+    ut.ep_assert(
+        block['next_elseif'] is not None,
+        'Cannot have EUDElseIfNot after EUDElse'
+    )
 
     # Finish previous if/elseif block
     EUDJump(block['ifend'])
@@ -98,10 +102,12 @@ def EUDElseIfNot(conditions):
 
 def EUDElse():
     lb = ut.EUDGetLastBlock()
-    assert lb[0] == 'ifblock', 'Block start/end mismatch'
+    ut.ep_assert(lb[0] == 'ifblock', 'Block start/end mismatch')
     block = lb[1]
-    assert block['next_elseif'] is not None, (
-        'Cannot have EUDElse after EUDElse')
+    ut.ep_assert(
+        block['next_elseif'] is not None,
+        'Cannot have EUDElse after EUDElse'
+    )
 
     # Finish previous if/elseif block
     EUDJump(block['ifend'])
@@ -140,7 +146,7 @@ def EUDExecuteOnce():
 
 def EUDEndExecuteOnce():
     lb = ut.EUDPopBlock('executeonceblock')
-    assert lb[0] == 'executeonceblock', 'Block start/end mismatch'
+    ut.ep_assert(lb[0] == 'executeonceblock', 'Block start/end mismatch')
     block = lb[1]
 
     block['blockend'] << c.NextTrigger()

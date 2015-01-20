@@ -43,7 +43,7 @@ def sectionname_format(sn):
         sn += b' ' * (4 - len(sn))
 
     elif len(sn) > 4:
-        raise RuntimeError('Length of section name cannot be longer than 4')
+        raise ut.EPError('Length of section name cannot be longer than 4')
 
     return sn
 

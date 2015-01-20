@@ -29,7 +29,7 @@ from .. import (
     allocator as ac,
 )
 
-from ... import utils as ut
+from eudplib import utils as ut
 
 
 def f_mul(a, b):

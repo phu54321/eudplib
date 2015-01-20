@@ -25,7 +25,7 @@ THE SOFTWARE.
 
 from .. import core as c
 from .tpatcher import PatchCondition, PatchAction
-from .. import utils as ut
+from eudplib import utils as ut
 
 
 def Trigger(conditions=None, actions=None, preserved=True):

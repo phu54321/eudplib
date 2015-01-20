@@ -38,7 +38,7 @@ class EUDObject(Expr):
         return GetObjectAddr(self)
 
     def GetDataSize(self):
-        raise NotImplementedError('Override')
+        raise ut.EPError('Override')
 
     def WritePayload(self, pbuffer):
-        raise NotImplementedError('Override')
+        raise ut.EPError('Override')

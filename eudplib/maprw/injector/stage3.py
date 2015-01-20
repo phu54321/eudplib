@@ -26,7 +26,7 @@ THE SOFTWARE.
 from ... import core as c
 from ... import ctrlstru as cs
 from ... import eudlib as sf
-from ... import utils as ut
+from eudplib import utils as ut
 from ...trigtrg import runtrigtrg as rtt
 
 

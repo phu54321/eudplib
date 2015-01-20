@@ -30,7 +30,7 @@ THE SOFTWARE.
 '''
 
 from ... import core as c
-from ... import utils as ut
+from eudplib import utils as ut
 from ...trigtrg import trigtrg as tt
 
 

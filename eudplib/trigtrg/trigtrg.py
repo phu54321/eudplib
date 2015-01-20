@@ -33,6 +33,7 @@ Note this when using this code outside of eudplib.
 '''
 
 from struct import pack
+from eudplib import utils as ut
 
 
 def i2b1(i):
@@ -118,12 +119,11 @@ def Trigger(players=[AllPlayers], conditions=[], actions=[], prtrig=True):
     conditions = FlattenList(conditions)
     actions = FlattenList(actions)
 
-    assert type(players) is list
-    assert type(conditions) is list
-    assert type(actions) is list
-    assert len(conditions) <= 16
-    assert len(actions) <= 64
-
+    ut.ep_assert(type(players) is list)
+    ut.ep_assert(type(conditions) is list)
+    ut.ep_assert(type(actions) is list)
+    ut.ep_assert(len(conditions) <= 16)
+    ut.ep_assert(len(actions) <= 64)
     peff = bytearray(28)
     for p in players:
         peff[p] = 1
@@ -136,7 +136,7 @@ def Trigger(players=[AllPlayers], conditions=[], actions=[], prtrig=True):
         [prtrig and b'\x04\0\0\0' or b'\0\0\0\0'] +
         [bytes(peff)]
     )
-    assert len(b) == 2400
+    ut.ep_assert(len(b) == 2400)
     return b
 
 
@@ -148,7 +148,7 @@ def Deaths(player, comparison, number, unit):
 
 
 def Memory(offset, comparison, number):
-    assert offset % 4 == 0  # only this kind of comparison is possible
+    ut.ep_assert(offset % 4 == 0)  # only this kind of comparison is possible
     player = EPD(offset)
 
     if 0 <= player < 12 * 228:  # eud possible
@@ -168,7 +168,7 @@ def SetDeaths(player, settype, number, unit):
 
 
 def SetMemory(offset, settype, number):
-    assert offset % 4 == 0
+    ut.ep_assert(offset % 4 == 0)
     player = EPD(offset)
 
     if 0 <= player < 12 * 228:  # eud possible
@@ -189,5 +189,5 @@ def Draw():
 
 
 def EPD(offset):
-    assert offset % 4 == 0
+    ut.ep_assert(offset % 4 == 0)
     return (offset - 0x0058A364) // 4

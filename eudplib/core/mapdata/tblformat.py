@@ -27,7 +27,7 @@ THE SOFTWARE.
 String table manager. Internally used in eudplib.
 '''
 
-from ...utils import binio, ubconv
+from eudplib import utils as ut
 
 
 class TBL:
@@ -51,10 +51,10 @@ class TBL:
         self._stringmap.clear()
         self._capacity = 2
 
-        stringcount = binio.b2i2(content, 0)
+        stringcount = ut.b2i2(content, 0)
         for i in range(stringcount):
             i += 1
-            stringoffset = binio.b2i2(content, i * 2)
+            stringoffset = ut.b2i2(content, i * 2)
             send = stringoffset
             while content[send] != 0:
                 send += 1
@@ -63,9 +63,9 @@ class TBL:
             self.AddString(string)
 
     def AddString(self, string):
-        string = ubconv.u2b(string)  # Starcraft uses multibyte encoding.
+        string = ut.u2b(string)  # Starcraft uses multibyte encoding.
         if not isinstance(string, bytes):
-            raise TypeError('Invalid type for string')
+            raise ut.EPError('Invalid type for string')
 
         stringindex = len(self._dataindextb)
 
@@ -85,7 +85,7 @@ class TBL:
             # string + b'\0' + string offset
             self._capacity += len(string) + 1 + 2
 
-        assert self._capacity < 65536, 'String table overflow'
+        ut.ep_assert(self._capacity < 65536, 'String table overflow')
 
         return stringindex
 
@@ -100,9 +100,9 @@ class TBL:
                 return None
 
     def GetStringIndex(self, string):
-        string = ubconv.u2b(string)
+        string = ut.u2b(string)
         if not isinstance(string, bytes):
-            raise TypeError('Invalid type for string')
+            raise ut.EPError('Invalid type for string')
 
         try:
             return self._stringmap[string] + 1
@@ -121,11 +121,11 @@ class TBL:
             outindex += len(s) + 1
 
         # String count
-        outbytes.append(binio.i2b2(len(self._dataindextb)))
+        outbytes.append(ut.i2b2(len(self._dataindextb)))
 
         # String offsets
         for dataidx in self._dataindextb:
-            outbytes.append(binio.i2b2(stroffset[dataidx]))
+            outbytes.append(ut.i2b2(stroffset[dataidx]))
 
         # String data
         for s in self._datatb:

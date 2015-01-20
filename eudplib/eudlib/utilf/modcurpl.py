@@ -24,7 +24,7 @@ THE SOFTWARE.
 '''
 
 from ..memiof import f_dwread_epd
-from ... import utils as ut
+from eudplib import utils as ut
 from ... import core as c
 
 

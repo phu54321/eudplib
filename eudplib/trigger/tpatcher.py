@@ -25,7 +25,7 @@ THE SOFTWARE.
 
 from .. import core as c
 from .filler import filldw, fillwbb, fillbbbb
-from .. import utils as ut
+from eudplib import utils as ut
 
 
 def HasEUDVariable(l):

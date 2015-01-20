@@ -24,7 +24,7 @@ THE SOFTWARE.
 '''
 
 from .. import core as c
-from .. import utils as ut
+from eudplib import utils as ut
 from ..core.mapdata import mapdata, mpqapi
 from .injector import stage1, stage2, stage3, doevents
 

@@ -25,7 +25,7 @@ THE SOFTWARE.
 
 from ... import core as c
 from ... import ctrlstru as cs
-from ... import utils as ut
+from eudplib import utils as ut
 
 
 def f_epd(addr):

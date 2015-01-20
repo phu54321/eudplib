@@ -25,7 +25,7 @@ THE SOFTWARE.
 
 from .. import core as c
 from .. import trigger as tg
-from .. import utils as ut
+from eudplib import utils as ut
 
 
 def DoActions(actions, preserved=True):

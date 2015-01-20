@@ -28,7 +28,7 @@ from ... import eudlib as sf
 from ... import ctrlstru as cs
 from ... import varfunc as vf
 from ... import trigger as trig
-from ... import utils as ut
+from eudplib import utils as ut
 from .verifyf import verifyf
 
 ''' Stage 2 :

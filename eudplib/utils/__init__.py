@@ -42,3 +42,8 @@ from .etc import (
     Assignable2List,
     SCMD2Text
 )
+
+from .eperror import (
+    EPError,
+    ep_assert
+)

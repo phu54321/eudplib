@@ -42,8 +42,8 @@ class EUDArray(c.EUDObject):
 
         else:
             for item in arr:
-                assert c.IsValidExpr(item), 'Invalid item given to array'
-
+                ut.ep_assert(c.IsValidExpr(item), 'Invalid item given to array'
+)
             self._datas = arr
             self._arrlen = len(arr)
 

@@ -25,7 +25,7 @@ THE SOFTWARE.
 
 from .. import core as c
 from .. import trigger as tg
-from .. import utils as ut
+from eudplib import utils as ut
 from .basicstru import EUDJump, EUDJumpIf
 
 
@@ -48,23 +48,25 @@ def EUDSwitch(var):
 
 
 def EUDSwitchCase(number):
-    assert isinstance(number, int) or isinstance(number, c.Expr), (
-        'Invalid selector start for EUDSwitch')
+    ut.ep_assert(
+        isinstance(number, int) or isinstance(number, c.Expr),
+        'Invalid selector start for EUDSwitch'
+    )
 
     lb = ut.EUDGetLastBlock()
-    assert lb[0] == 'swblock', 'Block start/end mismatch'
+    ut.ep_assert(lb[0] == 'swblock', 'Block start/end mismatch')
     block = lb[1]
 
-    assert number not in block['casebrlist'], 'Duplicate cases'
+    ut.ep_assert(number not in block['casebrlist'], 'Duplicate cases')
     block['casebrlist'][number] = c.NextTrigger()
 
 
 def EUDSwitchDefault():
     lb = ut.EUDGetLastBlock()
-    assert lb[0] == 'swblock', 'Block start/end mismatch'
+    ut.ep_assert(lb[0] == 'swblock', 'Block start/end mismatch')
     block = lb[1]
 
-    assert not block['defaultbr'].IsSet(), 'Duplicate default'
+    ut.ep_assert(not block['defaultbr'].IsSet(), 'Duplicate default')
     block['defaultbr'] << c.NextTrigger()
 
 

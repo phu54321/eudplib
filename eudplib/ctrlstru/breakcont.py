@@ -59,7 +59,7 @@ def EUDBreak():
             sb.EUDSwitchBreak()
             return
 
-    raise AssertionError('No loop/switch block surrounding this code area')
+    raise ut.EPError('No loop/switch block surrounding this code area')
 
 
 def EUDBreakIf(conditions):
@@ -71,7 +71,7 @@ def EUDBreakIf(conditions):
             sb.EUDSwitchBreakIf(conditions)
             return
 
-    raise AssertionError('No loop/switch block surrounding this code area')
+    raise ut.EPError('No loop/switch block surrounding this code area')
 
 
 def EUDBreakIfNot(conditions):
@@ -83,4 +83,4 @@ def EUDBreakIfNot(conditions):
             sb.EUDSwitchBreakIfNot(conditions)
             return
 
-    raise AssertionError('No loop/switch block surrounding this code area')
+    raise ut.EPError('No loop/switch block surrounding this code area')

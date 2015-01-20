@@ -23,8 +23,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
+from .eperror import ep_assert
+
 
 class BlockStruManager:
+
     def __init__(self):
         self._blockstru = []
         self._lastblockdict = {}
@@ -71,7 +74,7 @@ def EUDPopBlock(name):
     _lastblockdict = _current_bsm._lastblockdict
 
     lastblock = _blockstru.pop()
-    assert lastblock[0] == name, 'Block starting/ending mismatch'
+    ep_assert(lastblock[0] == name, 'Block starting/ending mismatch')
     _lastblockdict[name].pop()
     return lastblock
 

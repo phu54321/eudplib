@@ -148,6 +148,6 @@ def f_eudprint(dst, *args):
         elif isinstance(arg, c.EUDVariable):
             dst = f_dwadd(dst, arg)
         else:
-            raise RuntimeError('Object wit unknown parameter type %s given to f_eudprint.' % type(arg))
+            raise ut.EPError('Object wit unknown parameter type %s given to f_eudprint.' % type(arg))
 
     return dst

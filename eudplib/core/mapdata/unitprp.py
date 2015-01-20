@@ -24,9 +24,11 @@ THE SOFTWARE.
 '''
 
 from ctypes import *
+from eudplib import utils as ut
 
 
 class UnitProperty(LittleEndianStructure):
+
     '''
     UnitProperty class. Used in 'Create Unit with Properties' action.
     '''
@@ -76,17 +78,17 @@ class UnitProperty(LittleEndianStructure):
 
         >>> UnitProperty(hitpoint = 50, burrowed = True) # HP 50%, burrowed
         '''
-        assert hitpoint is None or 0 <= hitpoint <= 100
-        assert shield is None or 0 <= shield <= 100
-        assert energy is None or 0 <= energy <= 100
-        assert resource is None or 0 <= resource
-        assert hanger is None or 0 <= hanger <= 255
+        ut.ep_assert(hitpoint is None or 0 <= hitpoint <= 100)
+        ut.ep_assert(shield is None or 0 <= shield <= 100)
+        ut.ep_assert(energy is None or 0 <= energy <= 100)
+        ut.ep_assert(resource is None or 0 <= resource)
+        ut.ep_assert(hanger is None or 0 <= hanger <= 255)
 
-        assert clocked in [None, True, False]
-        assert burrowed in [None, True, False]
-        assert intransit in [None, True, False]
-        assert hallucinated in [None, True, False]
-        assert invincible in [None, True, False]
+        ut.ep_assert(clocked in [None, True, False])
+        ut.ep_assert(burrowed in [None, True, False])
+        ut.ep_assert(intransit in [None, True, False])
+        ut.ep_assert(hallucinated in [None, True, False])
+        ut.ep_assert(invincible in [None, True, False])
 
         def prop2int(p):
             if p is None:

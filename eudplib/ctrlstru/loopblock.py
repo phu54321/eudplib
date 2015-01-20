@@ -24,7 +24,7 @@ THE SOFTWARE.
 '''
 
 from .. import core as c
-from .. import utils as ut
+from eudplib import utils as ut
 from .basicstru import (
     EUDJump,
     EUDJumpIf,
@@ -138,7 +138,7 @@ def _GetLastLoopBlock():
         if _IsLoopBlockId(block[0]):
             return block
 
-    raise AssertionError('No loop block surrounding this code area')
+    raise ut.EPError('No loop block surrounding this code area')
 
 
 def EUDLoopContinue():
