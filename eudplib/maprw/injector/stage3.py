@@ -23,16 +23,18 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
+from ... import core as c
+from ... import ctrlstru as cs
+from ... import eudlib as sf
+from ... import utils as ut
+from ...trigtrg import runtrigtrg as rtt
+
+
 ''' Stage 3:
 - Fixes nextptr modification to TRIG triggers by stage 1
 - Flip property value by trig section
 - Create infinite executer for root
 '''
-
-from ... import core as c
-from ... import ctrlstru as cs
-from ... import eudlib as sf
-from ...trigtrg import runtrigtrg as rtt
 
 
 @c.EUDFunc
@@ -70,12 +72,12 @@ def CreateStage3(root, mrgndata):
 
     # revert mrgndata
     mrgndata_db = c.Db(mrgndata)
-    sf.f_repmovsd_epd(c.EPD(0x58DC60), c.EPD(mrgndata_db), 5100 // 4)
+    sf.f_repmovsd_epd(ut.EPD(0x58DC60), ut.EPD(mrgndata_db), 5100 // 4)
 
     # Flip TRIG properties
     i = c.EUDVariable()
     if cs.EUDWhile(i <= 7):
-        FlipProp(sf.f_epdread_epd(c.EPD(pts + 8) + i + i + i))
+        FlipProp(sf.f_epdread_epd(ut.EPD(pts + 8) + i + i + i))
         i << i + 1
     cs.EUDEndWhile()
 
@@ -108,26 +110,26 @@ def CreateStage3(root, mrgndata):
 
         c.PopTriggerScope()
 
-        prevtstart = sf.f_dwread_epd(c.EPD(pts + player * 12 + 8))
-        prevtend = sf.f_dwread_epd(c.EPD(pts + player * 12 + 4))
+        prevtstart = sf.f_dwread_epd(ut.EPD(pts + player * 12 + 8))
+        prevtend = sf.f_dwread_epd(ut.EPD(pts + player * 12 + 4))
 
         if cs.EUDIfNot(prevtstart == ~(pts + player * 12 + 4)):  # If there were triggers
             # Modify pts
             c.SeqCompute([
-                (c.EPD(pts + player * 12 + 8), c.SetTo, tstart),
-                (c.EPD(pts + player * 12 + 4), c.SetTo, tre),
+                (ut.EPD(pts + player * 12 + 8), c.SetTo, tstart),
+                (ut.EPD(pts + player * 12 + 4), c.SetTo, tre),
             ])
 
             # link trs, tre with them
             c.SeqCompute([
-                (c.EPD(trs + 4), c.SetTo, prevtstart),
+                (ut.EPD(trs + 4), c.SetTo, prevtstart),
             ])
             sf.f_dwwrite_epd(sf.f_epd(prevtend) + 1, tre)
         cs.EUDEndIf()
 
     if c.PushTriggerScope():
         tmcheckt << c.NextTrigger()
-        curtime << sf.f_dwread_epd(c.EPD(0x57F23C))
+        curtime << sf.f_dwread_epd(ut.EPD(0x57F23C))
         if cs.EUDIf(lasttime < curtime):
             lasttime << curtime
             cs.EUDJump(root)
@@ -139,7 +141,7 @@ def CreateStage3(root, mrgndata):
     c.PopTriggerScope()
 
     # lasttime << curtime
-    curtime << sf.f_dwread_epd(c.EPD(0x57F23C))
+    curtime << sf.f_dwread_epd(ut.EPD(0x57F23C))
     lasttime << curtime
 
     cs.DoActions(c.SetMemory(0x6509B0, c.SetTo, 0))  # Current player = 1

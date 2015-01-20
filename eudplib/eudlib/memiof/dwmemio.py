@@ -25,6 +25,7 @@ THE SOFTWARE.
 
 from ... import core as c
 from ... import ctrlstru as cs
+from ... import utils as ut
 
 
 def f_epd(addr):
@@ -60,10 +61,10 @@ def f_dwepdread_epd(targetplayer):
 
     # Main logic start
     c.SeqCompute([
-        (c.EPD(cmp_player), c.SetTo, targetplayer),
-        (c.EPD(cmp_number), c.SetTo, 0xFFFFFFFF),
+        (ut.EPD(cmp_player), c.SetTo, targetplayer),
+        (ut.EPD(cmp_number), c.SetTo, 0xFFFFFFFF),
         (ret, c.SetTo, 0xFFFFFFFF),
-        (retepd, c.SetTo, c.EPD(0) + 0x3FFFFFFF)
+        (retepd, c.SetTo, ut.EPD(0) + 0x3FFFFFFF)
     ])
 
     readend = c.Forward()
@@ -114,14 +115,14 @@ def f_dwwrite_epd(targetplayer, value):
     if isinstance(value, c.EUDVariable):
         act = c.Forward()
         c.SeqCompute([
-            (c.EPD(act + 16), c.SetTo, targetplayer),
-            (c.EPD(act + 20), c.SetTo, value)
+            (ut.EPD(act + 16), c.SetTo, targetplayer),
+            (ut.EPD(act + 20), c.SetTo, value)
         ])
         cs.DoActions(act << c.SetMemory(0, c.SetTo, 0))
 
     else:
         act = c.Forward()
-        c.SeqCompute([(c.EPD(act + 16), c.SetTo, targetplayer)])
+        c.SeqCompute([(ut.EPD(act + 16), c.SetTo, targetplayer)])
         cs.DoActions(act << c.SetMemory(0, c.SetTo, value))
 
 
@@ -129,14 +130,14 @@ def f_dwadd_epd(targetplayer, value):
     if isinstance(value, c.EUDVariable):
         act = c.Forward()
         c.SeqCompute([
-            (c.EPD(act + 16), c.SetTo, targetplayer),
-            (c.EPD(act + 20), c.SetTo, value)
+            (ut.EPD(act + 16), c.SetTo, targetplayer),
+            (ut.EPD(act + 20), c.SetTo, value)
         ])
         cs.DoActions(act << c.SetMemory(0, c.Add, 0))
 
     else:
         act = c.Forward()
-        c.SeqCompute([(c.EPD(act + 16), c.SetTo, targetplayer)])
+        c.SeqCompute([(ut.EPD(act + 16), c.SetTo, targetplayer)])
         cs.DoActions(act << c.SetMemory(0, c.Add, value))
 
 
@@ -144,14 +145,14 @@ def f_dwsubtract_epd(targetplayer, value):
     if isinstance(value, c.EUDVariable):
         act = c.Forward()
         c.SeqCompute([
-            (c.EPD(act + 16), c.SetTo, targetplayer),
-            (c.EPD(act + 20), c.SetTo, value)
+            (ut.EPD(act + 16), c.SetTo, targetplayer),
+            (ut.EPD(act + 20), c.SetTo, value)
         ])
         cs.DoActions(act << c.SetMemory(0, c.Subtract, 0))
 
     else:
         act = c.Forward()
-        c.SeqCompute([(c.EPD(act + 16), c.SetTo, targetplayer)])
+        c.SeqCompute([(ut.EPD(act + 16), c.SetTo, targetplayer)])
         cs.DoActions(act << c.SetMemory(0, c.Subtract, value))
 
 

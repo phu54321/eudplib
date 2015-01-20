@@ -26,7 +26,7 @@ THE SOFTWARE.
 import struct
 
 from . import expr, rlocint
-from ..utils import binio
+from ...utils import binio
 
 
 class Payload:

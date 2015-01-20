@@ -40,8 +40,8 @@ def f_lengthdir(length, angle):
     for i in range(91):
         cosv = math.floor(math.cos(math.pi / 180 * i) * 65536 + 0.5)
         sinv = math.floor(math.sin(math.pi / 180 * i) * 65536 + 0.5)
-        clist.append(c.i2b4(cosv))
-        slist.append(c.i2b4(sinv))
+        clist.append(ut.i2b4(cosv))
+        slist.append(ut.i2b4(sinv))
 
     cdb = c.Db(b''.join(clist))
     sdb = c.Db(b''.join(slist))
@@ -83,8 +83,8 @@ def f_lengthdir(length, angle):
     cs.EUDEndIf()
 
     cs.DoActions(c.SetDeaths(1, c.Add, 1, 0))
-    tablecos = f_dwread_epd(c.EPD(cdb) + tableangle)
-    tablesin = f_dwread_epd(c.EPD(sdb) + tableangle)
+    tablecos = f_dwread_epd(ut.EPD(cdb) + tableangle)
+    tablesin = f_dwread_epd(ut.EPD(sdb) + tableangle)
 
     cs.DoActions(c.SetDeaths(1, c.Add, 1, 0))
     # calculate lengthdir

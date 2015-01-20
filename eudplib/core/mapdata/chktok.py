@@ -27,7 +27,7 @@ THE SOFTWARE.
 scenario.chk section tokenizer. Internally used in eudplib.
 '''
 
-from ..utils import ubconv, binio
+from ...utils import ubconv, binio
 
 
 """

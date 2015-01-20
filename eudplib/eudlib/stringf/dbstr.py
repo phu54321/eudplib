@@ -92,7 +92,7 @@ class ResetterBuffer(c.EUDObject):
 
     def WritePayload(self, pbuf):
         for ra in _resetteracts:
-            pbuf.WriteDword(c.EPD(ra + 20))
+            pbuf.WriteDword(ut.EPD(ra + 20))
         pbuf.WriteDword(0xFFFFFFFF)
 
 
@@ -109,8 +109,8 @@ def DisplayExtText(text):
 def f_initextstr():
     rb = ResetterBuffer()
     ptr, v = c.EUDVariable(), c.EUDVariable()
-    ptr << c.EPD(rb)
-    origstrptr = f_dwread_epd(c.EPD(0x5993D4))
+    ptr << ut.EPD(rb)
+    origstrptr = f_dwread_epd(ut.EPD(0x5993D4))
 
     c.SeqCompute((
         (1, c.SetTo, origstrptr),

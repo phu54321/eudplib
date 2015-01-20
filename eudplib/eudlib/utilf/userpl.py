@@ -29,4 +29,4 @@ from ... import core as c
 
 @c.EUDFunc
 def f_getuserplayerid():
-    return f_dwread_epd(c.EPD(0x512684))
+    return f_dwread_epd(ut.EPD(0x512684))

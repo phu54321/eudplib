@@ -35,7 +35,7 @@ from .blockstru import (
     SetCurrentBlockStruManager,
     BlockStruManager,
 )
-from .utils import (
+from .etc import (
     EPD,
     FlattenList,
     List2Assignable,

@@ -132,7 +132,7 @@ def f_eudprint(dst, *args):
     if isinstance(dst, DBString):
         dst = dst.GetStringMemoryAddr()
 
-    args = c.FlattenList(args)
+    args = ut.FlattenList(args)
     for arg in args:
         if isinstance(arg, bytes):
             dst = f_stradd(dst, c.Db(arg) + b'\0')

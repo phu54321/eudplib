@@ -33,7 +33,7 @@ def f_playerexist(player):
     pts = 0x51A280
 
     ret = c.EUDVariable()
-    prevtstart = f_dwread_epd(c.EPD(pts + player * 12 + 8))
+    prevtstart = f_dwread_epd(ut.EPD(pts + player * 12 + 8))
     if cs.EUDIf(prevtstart == ~(pts + player * 12 + 4)):
         ret << 0
     if cs.EUDElse():

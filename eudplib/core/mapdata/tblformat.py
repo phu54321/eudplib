@@ -27,7 +27,7 @@ THE SOFTWARE.
 String table manager. Internally used in eudplib.
 '''
 
-from ..utils import binio, ubconv
+from ...utils import binio, ubconv
 
 
 class TBL:

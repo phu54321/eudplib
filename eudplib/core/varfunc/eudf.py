@@ -27,7 +27,7 @@ import functools
 import inspect
 
 from .eudv import EUDVariable, SeqCompute
-from ..utils import (
+from ...utils import (
     FlattenList,
     List2Assignable,
     Assignable2List,

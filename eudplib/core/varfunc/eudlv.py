@@ -24,7 +24,7 @@ THE SOFTWARE.
 '''
 
 from ..eudobj import Db
-from ..utils import i2b4
+from ...utils import i2b4
 from .vbase import VariableBase
 
 

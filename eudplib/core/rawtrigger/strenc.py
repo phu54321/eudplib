@@ -30,7 +30,7 @@ from ..mapdata import (
     GetUnitIndex
 )
 
-from ..utils import u2b, b2i4
+from ...utils import u2b, b2i4
 
 from .strdict import (
     DefAIScriptDict,

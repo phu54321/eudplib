@@ -24,6 +24,7 @@ THE SOFTWARE.
 '''
 
 from .. import core as c
+from .. import utils as ut
 from .tpatcher import PatchCondition, PatchAction
 
 
@@ -31,7 +32,7 @@ def Branch(conditions, ontrue, onfalse):
     flag = c.EUDLightVariable()
     flag << 0
 
-    conditions = c.FlattenList(conditions)
+    conditions = ut.FlattenList(conditions)
 
     if len(conditions) == 0:
         c.RawTrigger(nextptr=ontrue)  # Just jump

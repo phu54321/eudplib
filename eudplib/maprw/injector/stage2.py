@@ -28,6 +28,7 @@ from ... import eudlib as sf
 from ... import ctrlstru as cs
 from ... import varfunc as vf
 from ... import trigger as trig
+from ... import utils as ut
 from .verifyf import verifyf
 
 ''' Stage 2 :
@@ -98,10 +99,10 @@ def f_verify(payload_epd, dwn):
 
 def CreateStage2(payload):
     # We first build code injector.
-    prtdb = c.Db(b''.join([c.i2b4(x // 4) for x in payload.prttable]))
+    prtdb = c.Db(b''.join([ut.i2b4(x // 4) for x in payload.prttable]))
     prtn = vf.EUDVariable()
 
-    ortdb = c.Db(b''.join([c.i2b4(x // 4) for x in payload.orttable]))
+    ortdb = c.Db(b''.join([ut.i2b4(x // 4) for x in payload.orttable]))
     ortn = vf.EUDVariable()
 
     orig_payload = c.Db(payload.data)
@@ -113,7 +114,7 @@ def CreateStage2(payload):
     # Verify payload
     # Note : this is very, very basic protection method. Intended attackers
     # should be able to penetrate through this very easily
-    vchks = f_verify(c.EPD(orig_payload), len(payload.data) // 4)
+    vchks = f_verify(ut.EPD(orig_payload), len(payload.data) // 4)
     origchks = verifyf(bytearray(payload.data), len(payload.data))
 
     trig.Trigger(actions=[
@@ -135,7 +136,7 @@ def CreateStage2(payload):
         if cs.EUDInfLoop():
             cs.DoActions(prtn.SubtractNumber(1))
             sf.f_dwadd_epd(
-                c.EPD(orig_payload) + sf.f_dwread_epd(prtn + c.EPD(prtdb)),
+                ut.EPD(orig_payload) + sf.f_dwread_epd(prtn + ut.EPD(prtdb)),
                 orig_payload // 4
             )
             cs.EUDLoopBreakIf(prtn.Exactly(0))
@@ -147,7 +148,7 @@ def CreateStage2(payload):
         if cs.EUDInfLoop():
             cs.DoActions(ortn.SubtractNumber(1))
             sf.f_dwadd_epd(
-                c.EPD(orig_payload) + sf.f_dwread_epd(ortn + c.EPD(ortdb)),
+                ut.EPD(orig_payload) + sf.f_dwread_epd(ortn + ut.EPD(ortdb)),
                 orig_payload
             )
             cs.EUDLoopBreakIf(ortn.Exactly(0))

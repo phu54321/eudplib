@@ -61,14 +61,14 @@ class EUDArray(c.EUDObject):
 
     @c.EUDFuncMethod
     def get(self, key):
-        return f_dwread_epd(c.EPD(self) + key)
+        return f_dwread_epd(ut.EPD(self) + key)
 
     def __getitem__(self, key):
         return self.get(key)
 
     @c.EUDFuncMethod
     def set(self, key, item):
-        return f_dwwrite_epd(c.EPD(self) + key, item)
+        return f_dwwrite_epd(ut.EPD(self) + key, item)
 
     def __setitem__(self, key, item):
         return self.set(key, item)

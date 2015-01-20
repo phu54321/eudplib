@@ -31,7 +31,7 @@ from ctypes import *  # @UnusedWildImport
 import struct
 import os, sys
 
-from ..utils.ubconv import u2b
+from ...utils.ubconv import u2b
 
 
 """

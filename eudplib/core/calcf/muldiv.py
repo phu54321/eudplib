@@ -27,8 +27,10 @@ from .. import (
     varfunc as vf,
     rawtrigger as rt,
     allocator as ac,
-    utils as ut
 )
+
+from ... import utils as ut
+
 
 def f_mul(a, b):
     if isinstance(a, vf.EUDVariable) and isinstance(b, vf.EUDVariable):
@@ -62,7 +64,7 @@ def f_div(a, b):
         vq, vm = vf.EUDCreateVariables(2)
         vf.SeqCompute([
             (vq, rt.SetTo, q),
-            (vm, rt.SetTo, vm)
+            (vm, rt.SetTo, m)
         ])
         return vq, vm
 

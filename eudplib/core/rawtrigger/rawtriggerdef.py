@@ -24,7 +24,7 @@ THE SOFTWARE.
 '''
 
 from ..eudobj import EUDObject
-from ..utils import FlattenList
+from ...utils import FlattenList
 from .triggerscope import NextTrigger, _RegisterTrigger
 from .condition import Condition
 from .action import Action

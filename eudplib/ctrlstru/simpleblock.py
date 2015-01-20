@@ -24,6 +24,7 @@ THE SOFTWARE.
 '''
 
 from .. import core as c
+from .. import utils as ut
 from .basicstru import EUDJump, EUDJumpIf, EUDJumpIfNot
 
 
@@ -38,7 +39,7 @@ def EUDIf(conditions):
         'ifend': c.Forward(),
         'next_elseif': c.Forward()
     }
-    c.EUDCreateBlock('ifblock', block)
+    ut.EUDCreateBlock('ifblock', block)
 
     EUDJumpIfNot(conditions, block['next_elseif'])
 
@@ -50,7 +51,7 @@ def EUDIfNot(conditions):
         'ifend': c.Forward(),
         'next_elseif': c.Forward()
     }
-    c.EUDCreateBlock('ifblock', block)
+    ut.EUDCreateBlock('ifblock', block)
 
     EUDJumpIf(conditions, block['next_elseif'])
 
@@ -60,7 +61,7 @@ def EUDIfNot(conditions):
 # -------
 
 def EUDElseIf(conditions):
-    lb = c.EUDGetLastBlock()
+    lb = ut.EUDGetLastBlock()
     assert lb[0] == 'ifblock', 'Block start/end mismatch'
     block = lb[1]
     assert block['next_elseif'] is not None, (
@@ -77,7 +78,7 @@ def EUDElseIf(conditions):
 
 
 def EUDElseIfNot(conditions):
-    lb = c.EUDGetLastBlock()
+    lb = ut.EUDGetLastBlock()
     assert lb[0] == 'ifblock', 'Block start/end mismatch'
     block = lb[1]
     assert block['next_elseif'] is not None, (
@@ -96,7 +97,7 @@ def EUDElseIfNot(conditions):
 
 
 def EUDElse():
-    lb = c.EUDGetLastBlock()
+    lb = ut.EUDGetLastBlock()
     assert lb[0] == 'ifblock', 'Block start/end mismatch'
     block = lb[1]
     assert block['next_elseif'] is not None, (
@@ -111,7 +112,7 @@ def EUDElse():
 
 
 def EUDEndIf():
-    lb = c.EUDPopBlock('ifblock')
+    lb = ut.EUDPopBlock('ifblock')
     block = lb[1]
 
     # Finalize
@@ -128,7 +129,7 @@ def EUDExecuteOnce():
     block = {
         'blockend': c.Forward()
     }
-    c.EUDCreateBlock('executeonceblock', block)
+    ut.EUDCreateBlock('executeonceblock', block)
 
     tv = c.EUDLightVariable()
     EUDJumpIf(tv == 1, block['blockend'])
@@ -138,7 +139,7 @@ def EUDExecuteOnce():
 
 
 def EUDEndExecuteOnce():
-    lb = c.EUDPopBlock('executeonceblock')
+    lb = ut.EUDPopBlock('executeonceblock')
     assert lb[0] == 'executeonceblock', 'Block start/end mismatch'
     block = lb[1]
 

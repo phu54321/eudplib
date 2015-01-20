@@ -23,7 +23,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-from ..utils import EUDCreateBlock, EUDGetLastBlockOfName, EUDPopBlock
+from ...utils import EUDCreateBlock, EUDGetLastBlockOfName, EUDPopBlock
 from ..allocator import Forward
 
 

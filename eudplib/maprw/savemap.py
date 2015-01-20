@@ -24,6 +24,7 @@ THE SOFTWARE.
 '''
 
 from .. import core as c
+from .. import utils as ut
 from ..core.mapdata import mapdata, mpqapi
 from .injector import stage1, stage2, stage3, doevents
 
@@ -33,8 +34,8 @@ def SaveMap(fname, rootf):
     chkt = mapdata.GetChkTokenized()
 
     # Create injector triggers
-    bsm = c.BlockStruManager()
-    prev_bsm = c.SetCurrentBlockStruManager(bsm)
+    bsm = ut.BlockStruManager()
+    prev_bsm = ut.SetCurrentBlockStruManager(bsm)
 
     c.PushTriggerScope()
     root = doevents._MainStarter(rootf)
@@ -45,7 +46,7 @@ def SaveMap(fname, rootf):
     c.PushTriggerScope()
     final_payload = stage2.CreateStage2(payload)
     c.PopTriggerScope()
-    c.SetCurrentBlockStruManager(prev_bsm)
+    ut.SetCurrentBlockStruManager(prev_bsm)
 
     # Update string table & etc
     # User-defined strings in eudplib program is registered after rootf is

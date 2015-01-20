@@ -25,6 +25,7 @@ THE SOFTWARE.
 
 from .. import core as c
 from .. import trigger as tg
+from .. import utils as ut
 from .basicstru import EUDJump, EUDJumpIf
 
 
@@ -41,7 +42,7 @@ def EUDSwitch(var):
     }
 
     c.PushTriggerScope()
-    c.EUDCreateBlock('swblock', block)
+    ut.EUDCreateBlock('swblock', block)
 
     return True
 
@@ -50,7 +51,7 @@ def EUDSwitchCase(number):
     assert isinstance(number, int) or isinstance(number, c.Expr), (
         'Invalid selector start for EUDSwitch')
 
-    lb = c.EUDGetLastBlock()
+    lb = ut.EUDGetLastBlock()
     assert lb[0] == 'swblock', 'Block start/end mismatch'
     block = lb[1]
 
@@ -59,7 +60,7 @@ def EUDSwitchCase(number):
 
 
 def EUDSwitchDefault():
-    lb = c.EUDGetLastBlock()
+    lb = ut.EUDGetLastBlock()
     assert lb[0] == 'swblock', 'Block start/end mismatch'
     block = lb[1]
 
@@ -68,12 +69,12 @@ def EUDSwitchDefault():
 
 
 def EUDSwitchBreak():
-    block = c.EUDGetLastBlockOfName('swblock')[1]
+    block = ut.EUDGetLastBlockOfName('swblock')[1]
     EUDJump(block['swend'])
 
 
 def EUDEndSwitch():
-    lb = c.EUDPopBlock('swblock')
+    lb = ut.EUDPopBlock('swblock')
     block = lb[1]
     swend = block['swend']
     EUDJump(swend)  # Exit switch block

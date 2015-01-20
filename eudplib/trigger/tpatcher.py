@@ -25,6 +25,7 @@ THE SOFTWARE.
 
 from .. import core as c
 from .filler import filldw, fillwbb, fillbbbb
+from .. import utils as ut
 
 
 def HasEUDVariable(l):
@@ -42,7 +43,7 @@ def ApplyPatchTable(initepd, obj, patchtable):
             3: fillwbb,
             4: fillbbbb,
         }[len(attrs)]
-        attrs = c.Assignable2List(attrs)
+        attrs = ut.Assignable2List(attrs)
 
         vars = [getattr(obj, attr) if type(attr) is str else attr for attr in attrs]
         if HasEUDVariable(vars):
@@ -73,9 +74,9 @@ actpt = [
 
 
 def PatchCondition(cond):
-    ApplyPatchTable(c.EPD(cond), cond, condpt)
+    ApplyPatchTable(ut.EPD(cond), cond, condpt)
 
 
 def PatchAction(act):
-    ApplyPatchTable(c.EPD(act), act, actpt)
+    ApplyPatchTable(ut.EPD(act), act, actpt)
 

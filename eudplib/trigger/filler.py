@@ -33,8 +33,8 @@ from .. import core as c
 def dww(dstepd, v):
     act = c.Forward()
     c.SeqCompute((
-        (c.EPD(act + 16), c.SetTo, dstepd),
-        (c.EPD(act + 20), c.SetTo, v),
+        (ut.EPD(act + 16), c.SetTo, dstepd),
+        (ut.EPD(act + 20), c.SetTo, v),
     ))
     c.RawTrigger(
         actions=(act << c.SetMemory(0, c.SetTo, 0))

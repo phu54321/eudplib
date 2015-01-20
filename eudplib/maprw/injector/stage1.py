@@ -30,6 +30,7 @@ THE SOFTWARE.
 '''
 
 from ... import core as c
+from ... import utils as ut
 from ...trigtrg import trigtrg as tt
 
 
@@ -91,8 +92,6 @@ def CreateAndApplyStage1(chkt, payload):
     str_section = chkt.getsection('STR')
     strtb = c.TBL(str_section)
     eude_needed = strtb.GetStringIndex('This map requires EUD Enabler to run')
-    nosinglep = strtb.GetStringIndex(
-        'This map cannot run on single-player mode')
     str_section = strtb.SaveTBL()
 
     '''
@@ -104,7 +103,11 @@ def CreateAndApplyStage1(chkt, payload):
       SetMemory(payload, Add, payload_offset // 4)
 
     MRGN <-> STR0  =  Trigger(actions=[
-             STR1        [SetMemory(mrgn.action[i].player, Add, prttable[j+packn] - prttable[j]) for i in range(packn)],
+             STR1        [SetMemory(
+                            mrgn.action[i].player,
+                            Add,
+                            prttable[j+packn] - prttable[j]
+                          ) for i in range(packn)],
              STR2        SetNextPtr(mrgn, STR[k+1])
              ...      )
     '''
@@ -116,8 +119,8 @@ def CreateAndApplyStage1(chkt, payload):
     # STR SECTION
     #############
     str_sled = []
-    sledheader_prt = b'\0\0\0\0' + c.i2b4(mrgn)
-    sledheader_ort = b'\0\0\0\0' + c.i2b4(mrgn + 2408)
+    sledheader_prt = b'\0\0\0\0' + ut.i2b4(mrgn)
+    sledheader_ort = b'\0\0\0\0' + ut.i2b4(mrgn + 2408)
 
     # apply prt
     prttrg_start = 2408 * len(str_sled)  # = 0
@@ -177,7 +180,7 @@ def CreateAndApplyStage1(chkt, payload):
     ##############
     mrgn_trigger = []
     mrgn_trigger.append(
-        bytes(4) + c.i2b4(prttrg_start + strsled_offset) +
+        bytes(4) + ut.i2b4(prttrg_start + strsled_offset) +
         tt.Trigger(
             actions=[
                 # SetDeaths actions in MRGN initially points to EPD(payload -
@@ -190,7 +193,7 @@ def CreateAndApplyStage1(chkt, payload):
     )
 
     mrgn_trigger.append(
-        bytes(4) + c.i2b4(orttrg_start + strsled_offset) +
+        bytes(4) + ut.i2b4(orttrg_start + strsled_offset) +
         tt.Trigger(
             actions=[
                 [tt.SetMemory(payload_offset - 4, tt.Add, payload_offset)
@@ -207,15 +210,6 @@ def CreateAndApplyStage1(chkt, payload):
     # TRIG SECTION
     ##############
     trglist.clear()
-
-    # Check if single player mode
-    Trigger(
-        conditions=tt.Memory(0x57F0B4, tt.Exactly, 0),
-        actions=[
-            tt.DisplayTextMessage(nosinglep),
-            tt.Draw()
-        ]
-    )
 
     # Check if epd is supported
     Trigger(actions=[
@@ -286,7 +280,7 @@ def CreateAndApplyStage1(chkt, payload):
         Trigger(
             players=[player],
             actions=[
-                tt.SetMemory(curpl, tt.SetTo, c.EPD(pts + 12 * player + 4)),
+                tt.SetMemory(curpl, tt.SetTo, ut.EPD(pts + 12 * player + 4)),
                 tt.SetDeaths(9, tt.SetTo, triggerend, 0)  # Used in stage 2
             ]
         )
@@ -313,8 +307,8 @@ def CreateAndApplyStage1(chkt, payload):
 
     # apply to curpl
     Trigger(actions=[
-        tt.SetDeaths(10, tt.SetTo, c.EPD(4), 0),
-        tt.SetMemory(curpl, tt.SetTo, c.EPD(4))
+        tt.SetDeaths(10, tt.SetTo, ut.EPD(4), 0),
+        tt.SetMemory(curpl, tt.SetTo, ut.EPD(4))
     ])
     for e in range(31, 1, -1):
         Trigger(
@@ -348,12 +342,12 @@ def CreateAndApplyStage1(chkt, payload):
     # Collect only enabled triggers
     for trig in oldtrigs:
         trig = bytearray(trig)
-        flag = c.b2i4(trig, 320 + 2048)
+        flag = ut.b2i4(trig, 320 + 2048)
         if flag & 8:  # Trigger already disabled
             pass
 
         flag ^= 8  # Disable it temporarilly. It will be re-enabled at stage 3
-        trig[320 + 2048: 320 + 2048 + 4] = c.i2b4(flag)
+        trig[320 + 2048: 320 + 2048 + 4] = ut.i2b4(flag)
         proc_trigs.append(bytes(trig))
 
     oldtrigraw_processed = b''.join(proc_trigs)
