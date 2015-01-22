@@ -29,9 +29,10 @@ SFmpq.dll wrapper. Used internally inside eudplib.
 
 from ctypes import *  # @UnusedWildImport
 import struct
-import os, sys
+import os
+import sys
 
-from ..utils.ubconv import u2b
+from eudplib import utils as ut
 
 
 """
@@ -114,6 +115,7 @@ def InitMpqLibrary():
 
 
 class MpqRead:
+
     def __init__(self):
         self.mpqh = None
         self.SFmpq = SFmpq  # SFmpq are global variable. We cannot rely on it
@@ -123,10 +125,10 @@ class MpqRead:
 
     def Open(self, fname):
         if self.mpqh is not None:
-            raise RuntimeError("double open")
+            raise ut.EPError("double open")
 
         h = c_int()
-        ret = self.SFmpq.SFileOpenArchive(u2b(fname), 0, 0, byref(h))
+        ret = self.SFmpq.SFileOpenArchive(ut.u2b(fname), 0, 0, byref(h))
         if not ret:
             self.mpqh = None
             return False
@@ -157,7 +159,7 @@ class MpqRead:
         # Open file
         fileh = c_int()
         ret = self.SFmpq.SFileOpenFileEx(
-            self.mpqh, u2b(fname), 0, byref(fileh))
+            self.mpqh, ut.u2b(fname), 0, byref(fileh))
         if not ret:
             return None
         fileh = fileh.value
@@ -175,7 +177,7 @@ class MpqRead:
             readbyte = c_int()
             ret = self.SFmpq.SFileReadFile(
                 fileh, buffer, readleft, byref(readbyte), 0)
-            assert readbyte.value <= readleft
+            ut.ep_assert(readbyte.value <= readleft)
             if not ret or readbyte.value == 0:  # read failed
                 self.SFmpq.SFileCloseFile(fileh)
                 return None
@@ -213,6 +215,7 @@ WaveCmpDict = {
 
 
 class MpqWrite:
+
     def __init__(self):
         self.mpqh = None
 
@@ -221,14 +224,14 @@ class MpqWrite:
 
     def Open(self, fname, preserve_content=True):
         if self.mpqh:
-            raise RuntimeError("double open")
+            raise ut.EPError("double open")
 
         if preserve_content:
             flag = MOAU_OPEN_ALWAYS | MOAU_MAINTAIN_LISTFILE
         else:
             flag = MOAU_CREATE_ALWAYS | MOAU_MAINTAIN_LISTFILE
 
-        ret = SFmpq.MpqOpenArchiveForUpdate(u2b(fname), flag, 1024)
+        ret = SFmpq.MpqOpenArchiveForUpdate(ut.u2b(fname), flag, 1024)
         if not ret:
             return False
 
@@ -257,7 +260,7 @@ class MpqWrite:
         cmptype = MAFA_COMPRESS_STANDARD
 
         ret = SFmpq.MpqAddFileFromBufferEx(
-            self.mpqh, buffer, len(buffer), u2b(fname), flag, cmptype, 0)
+            self.mpqh, buffer, len(buffer), ut.u2b(fname), flag, cmptype, 0)
         if not ret:
             return False
 
@@ -274,7 +277,7 @@ class MpqWrite:
         flag = MAFA_ENCRYPT | MAFA_COMPRESS | MAFA_REPLACE_EXISTING
 
         ret = SFmpq.MpqAddWaveFromBuffer(
-            self.mpqh, buffer, len(buffer), u2b(fname), flag, cmplevel)
+            self.mpqh, buffer, len(buffer), ut.u2b(fname), flag, cmplevel)
         if not ret:
             return False
         return True
@@ -290,4 +293,4 @@ class MpqWrite:
 
 
 if not InitMpqLibrary():
-    raise RuntimeError("Cannot load SFmpq.dll. SFmpq not initalized")
+    raise ut.EPError("Cannot load SFmpq.dll. SFmpq not initalized")

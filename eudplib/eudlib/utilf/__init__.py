@@ -38,15 +38,10 @@ from .random import (
     f_randomize
 )
 
-from .extstr import (
-    DBString,
-    DisplayExtText,
-    f_initextstr,
-)
-
 from .mempatch import (
     f_mempatch_epd,
     f_dwpatch_epd,
     f_unpatchall,
 )
 
+from .pexist import f_playerexist

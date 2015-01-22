@@ -28,7 +28,7 @@ from . import (
     swblock as sb
 )
 
-from .. import core as c
+from .. import utils as ut
 
 
 def EUDContinue():
@@ -51,7 +51,7 @@ def EUDSetContinuePoint():
 
 
 def EUDBreak():
-    for block in reversed(c.EUDGetBlockList()):
+    for block in reversed(ut.EUDGetBlockList()):
         if lb._IsLoopBlockId(block[0]):
             lb.EUDLoopBreak()
             return
@@ -59,11 +59,11 @@ def EUDBreak():
             sb.EUDSwitchBreak()
             return
 
-    raise AssertionError('No loop/switch block surrounding this code area')
+    raise ut.EPError('No loop/switch block surrounding this code area')
 
 
 def EUDBreakIf(conditions):
-    for block in reversed(c.EUDGetBlockList()):
+    for block in reversed(ut.EUDGetBlockList()):
         if lb._IsLoopBlockId(block[0]):
             lb.EUDLoopBreakIf(conditions)
             return
@@ -71,11 +71,11 @@ def EUDBreakIf(conditions):
             sb.EUDSwitchBreakIf(conditions)
             return
 
-    raise AssertionError('No loop/switch block surrounding this code area')
+    raise ut.EPError('No loop/switch block surrounding this code area')
 
 
 def EUDBreakIfNot(conditions):
-    for block in reversed(c.EUDGetBlockList()):
+    for block in reversed(ut.EUDGetBlockList()):
         if lb._IsLoopBlockId(block[0]):
             lb.EUDLoopBreakIfNot(conditions)
             return
@@ -83,4 +83,4 @@ def EUDBreakIfNot(conditions):
             sb.EUDSwitchBreakIfNot(conditions)
             return
 
-    raise AssertionError('No loop/switch block surrounding this code area')
+    raise ut.EPError('No loop/switch block surrounding this code area')

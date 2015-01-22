@@ -33,7 +33,7 @@ THE SOFTWARE.
 # }
 #
 
-from ... import core as c
+from eudplib import core as c
 from ..memiof import f_dwbreak, f_dwread_epd
 
 _seed = c.EUDVariable()
@@ -50,7 +50,7 @@ def f_srand(seed):
 
 
 def f_randomize():
-    current_rv = f_dwread_epd(c.EPD(0x51CA14))
+    current_rv = f_dwread_epd(ut.EPD(0x51CA14))
     c.RawTrigger(
         conditions=current_rv.Exactly(0),
         actions=current_rv.SetNumber(30)

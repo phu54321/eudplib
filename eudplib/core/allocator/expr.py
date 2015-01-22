@@ -24,16 +24,18 @@ THE SOFTWARE.
 '''
 
 from . import rlocint
+from eudplib import utils as ut
 
 
 class Expr:
+
     def __init__(self, baseobj, offset=0, rlocmode=4):
         self.baseobj = baseobj
         self.offset = offset
         self.rlocmode = rlocmode
 
     def Evaluate(self):
-        assert self.rlocmode in [1, 4]
+        ut.ep_assert(self.rlocmode in [1, 4])
         if self.rlocmode == 1:
             return Evaluate(self.baseobj) // 4 + self.offset
 
@@ -54,10 +56,11 @@ class Expr:
         if not isinstance(other, int):
             return NotImplemented
         if isinstance(other, Expr):
-            assert (
+            ut.ep_assert(
                 self.baseobj == other.baseobj and
-                self.rlocmode == other.rlocmode), (
-                'Cannot subtract between addresses btw two objects')
+                self.rlocmode == other.rlocmode,
+                'Cannot subtract between addresses btw two objects'
+            )
             return self.offset - other.offset
 
         else:
@@ -65,10 +68,11 @@ class Expr:
 
     def __rsub__(self, other):
         if isinstance(other, Expr):
-            assert (
+            ut.ep_assert(
                 self.baseobj == other.baseobj and
-                self.rlocmode == other.rlocmode), (
-                'Cannot subtract between addresses btw two distinct objects')
+                self.rlocmode == other.rlocmode,
+                'Cannot subtract between addresses btw two distinct objects'
+            )
             return other.offset - self.offset
 
         elif not isinstance(other, int):
@@ -90,14 +94,16 @@ class Expr:
     def __floordiv__(self, k):
         if not isinstance(k, int):
             return NotImplemented
-        assert (
+        ut.ep_assert(
             (self.rlocmode == 0) or
-            (self.rlocmode % k == 0 and self.offset % k == 0)), (
-            'Address not divisible')
+            (self.rlocmode % k == 0 and self.offset % k == 0),
+            'Address not divisible'
+        )
         return Expr(self.baseobj, self.offset // k, self.rlocmode // k)
 
 
 class Forward(Expr):
+
     ''' Class for late definition
     '''
 
@@ -106,8 +112,11 @@ class Forward(Expr):
         self._expr = None
 
     def __lshift__(self, expr):
-        assert self._expr is None, 'Reforwarding without reset is not allowed'
-        assert expr is not None, 'Cannot forward to None'
+        ut.ep_assert(
+            self._expr is None,
+            'Reforwarding without reset is not allowed'
+        )
+        ut.ep_assert(expr is not None, 'Cannot forward to None')
         self._expr = expr
         return expr
 
@@ -118,7 +127,7 @@ class Forward(Expr):
         self._expr = None
 
     def Evaluate(self):
-        assert self._expr is not None, 'Forward not initialized'
+        ut.ep_assert(self._expr is not None, 'Forward not initialized')
         return Evaluate(self._expr)
 
 

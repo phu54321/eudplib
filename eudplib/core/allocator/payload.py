@@ -25,6 +25,8 @@ THE SOFTWARE.
 
 from . import rlocint, pbuffer
 from . import expr
+from eudplib import utils as ut
+from eudplib.utils.stackobjs import StackObjects
 
 import random
 
@@ -47,7 +49,7 @@ _payload_compress = False
 def CompressPayload(mode):
     global _payload_compress
     if mode not in [True, False]:
-        raise TypeError('Invalid type')
+        raise ut.EPError.EPError('Invalid type')
 
     if mode:
         _payload_compress = True
@@ -56,6 +58,7 @@ def CompressPayload(mode):
 
 
 class ObjCollector:
+
     '''
     Object having PayloadBuffer-like interfaces. Collects all objects by
     calling RegisterObject() for every related objects.
@@ -116,7 +119,7 @@ def CollectObjects(root):
         _dwoccupmap_dict[obj] = objc.EndWrite()
 
     if len(_found_objects) == 0:
-        raise RuntimeError('No object collected')
+        raise ut.EPError('No object collected')
 
     # Shuffle objects -> Randomize(?) addresses
     fo2 = _found_objects[1:]
@@ -132,67 +135,90 @@ def CollectObjects(root):
 
 
 class ObjAllocator:
+
     '''
     Object having PayloadBuffer-like interfaces. Collects all objects by
     calling RegisterObject() for every related objects.
     '''
 
     def __init__(self):
-        pass
+        self._sizes = {}
 
     def StartWrite(self):
+        self._suboccupmap = 0
+        self._suboccupidx = 0
         self._occupmap = []
 
+    def _Occup0(self):
+        self._suboccupidx += 1
+        if self._suboccupidx == 4:
+            self._occupmap.append(self._suboccupmap)
+            self._suboccupidx = 0
+            self._suboccupmap = 0
+
+    def _Occup1(self):
+        self._suboccupmap = 1
+        self._suboccupidx += 1
+        if self._suboccupidx == 4:
+            self._occupmap.append(self._suboccupmap)
+            self._suboccupidx = 0
+            self._suboccupmap = 0
+
     def EndWrite(self):
-        dlen = (len(self._occupmap) + 3) & ~3
-        self._occupmap.extend([0] * (dlen - len(self._occupmap)))
-
-        # Count by dword
-        dwoccupmap = []
-        for i in range(0, len(self._occupmap), 4):
-            dwoccupmap.append(self._occupmap[i:i + 4] != [0, 0, 0, 0])
-
-        return dwoccupmap
+        if self._suboccupidx:
+            self._occupmap.append(self._suboccupmap)
+            self._suboccupidx = 0
+        return self._occupmap
 
     def WriteByte(self, number):
         if number is None:
-            self._occupmap.append(0)
+            self._Occup0()
         else:
-            expr.Evaluate(number)
-            self._occupmap.append(1)
+            self._Occup1()
 
     def WriteWord(self, number):
         if number is None:
-            self._occupmap.append((0, 0))
+            self._Occup0()
+            self._Occup0()
         else:
-            expr.Evaluate(number)
-            self._occupmap.extend((1, 1))
+            self._Occup1()
+            self._Occup1()
 
     def WriteDword(self, number):
-        if number is None:
-            self._occupmap.append((0, 0, 0, 0))
-        else:
-            expr.Evaluate(number)
-            self._occupmap.extend((1, 1, 1, 1))
+        self._occupmap.append(1)
 
     def WritePack(self, structformat, *arglist):
-        ocm = []
-        sizedict = {'B': 1, 'H': 2, 'I': 4}
-        for i, arg in enumerate(arglist):
-            isize = sizedict[structformat[i]]
+        if structformat not in self._sizes:
+            ssize = 0
+            sizedict = {'B': 1, 'H': 2, 'I': 4}
+            for i in range(len(arglist)):
+                ssize += sizedict[structformat[i]]
+            self._sizes[structformat] = ssize
 
-            if arg is None:
-                ocm += [0] * isize
-            else:
-                expr.Evaluate(arg)
-                ocm += [1] * isize
-        self._occupmap.extend(ocm)
+        ssize = self._sizes[structformat]
+
+        # Add occupiation index
+        self._occupmap.extend([1] * (ssize >> 2))
+        ssize &= 3
+        for i in range(ssize):
+            self._Occup1()
 
     def WriteBytes(self, b):
-        self._occupmap.extend([1] * len(b))
+        ssize = len(b)
+        self._occupmap.extend([1] * (ssize >> 2))
+        ssize &= 3
+        for i in range(ssize):
+            self._Occup1()
 
-    def WriteSpace(self, spacesize):
-        self._occupmap.extend([0] * spacesize)
+    def WriteSpace(self, ssize):
+        while ssize and self._suboccupidx:
+            self._Occup0()
+            ssize -= 1
+
+        self._occupmap.extend([0] * (ssize >> 2))
+        ssize &= 3
+        for i in range(ssize):
+            self._Occup0()
 
 
 def AllocObjects():
@@ -204,13 +230,13 @@ def AllocObjects():
 
     # Quick and less space-efficient approach
     if not _payload_compress:
-        last_alloc_addr = 0
+        lallocaddr = 0
         for obj in _found_objects:
             objsize = obj.GetDataSize()
             allocsize = (objsize + 3) & ~3
-            _alloctable[obj] = last_alloc_addr, objsize
-            last_alloc_addr += allocsize
-        _payload_size = last_alloc_addr
+            _alloctable[obj] = lallocaddr
+            lallocaddr += allocsize
+        _payload_size = lallocaddr
         phase = None
         return
 
@@ -218,57 +244,25 @@ def AllocObjects():
 
     _alloctable = {}
     dwoccupmap_dict = {}
-    dwoccupmap_max_size = 0
 
     # Get occupation map for all objects
     for obj in _found_objects:
         obja.StartWrite()
         obj.WritePayload(obja)
         dwoccupmap = obja.EndWrite()
-
-        dwoccupmap_max_size += len(dwoccupmap)
         dwoccupmap_dict[obj] = dwoccupmap
+        ut.ep_assert(
+            len(dwoccupmap) == (obj.GetDataSize() + 3) >> 2,
+            'Occupation map length & Object size mismatch for object'
+        )
+    StackObjects(_found_objects, dwoccupmap_dict, _alloctable)
 
-        # preprocess dwoccupmap
-        for i in range(len(dwoccupmap)):
-            if dwoccupmap[i] == 0:
-                dwoccupmap[i] = -1
-            elif i == 0 or dwoccupmap[i - 1] == -1:
-                dwoccupmap[i] = i
-            else:
-                dwoccupmap[i] = dwoccupmap[i - 1]
-
-    # Buffer to sum all dwoccupmaps
-    dwoccupmap_sum = [-1] * (dwoccupmap_max_size + 1)
-
-    last_alloc_addr = 0
+    # Get payload length
+    _payload_size = 0
     for obj in _found_objects:
-        dwoccupmap = dwoccupmap_dict[obj]
-
-        # Find appropriate position to allocate object
-        j = 0
-        while j < len(dwoccupmap):
-            if dwoccupmap[j] != -1 and dwoccupmap_sum[last_alloc_addr + j] != -1:  # conflict
-                # last_alloc_addr = (dwoccupmap_sum[last_alloc_addr + j] - j) + (j - dwoccupmap[j])
-                last_alloc_addr = dwoccupmap_sum[last_alloc_addr + j] - dwoccupmap[j]
-                j = 0
-
-            else:
-                j += 1
-
-        # Apply occupation map
-        for j in range(len(dwoccupmap) - 1, -1, -1):
-            curoff = last_alloc_addr + j
-            if dwoccupmap[j] != -1 or dwoccupmap_sum[curoff] != -1:
-                if dwoccupmap_sum[curoff + 1] == -1:
-                    dwoccupmap_sum[curoff] = curoff + 1
-                else:
-                    dwoccupmap_sum[curoff] = dwoccupmap_sum[curoff + 1]
-
-        objsize = obj.GetDataSize()
-        _alloctable[obj] = (last_alloc_addr * 4, objsize)
-        if last_alloc_addr * 4 + objsize > _payload_size:
-            _payload_size = last_alloc_addr * 4 + objsize
+        psize2 = _alloctable[obj] + obj.GetDataSize()
+        if _payload_size < psize2:
+            _payload_size = psize2
 
     phase = None
 
@@ -284,14 +278,16 @@ def ConstructPayload():
     pbuf = pbuffer.PayloadBuffer(_payload_size)
 
     for obj in _found_objects:
-        objaddr, objsize = _alloctable[obj]
+        objaddr, objsize = _alloctable[obj], obj.GetDataSize()
 
         pbuf.StartWrite(objaddr)
         obj.WritePayload(pbuf)
         written_bytes = pbuf.EndWrite()
-        assert written_bytes == objsize, (
+        ut.ep_assert(
+            written_bytes == objsize,
             'obj.GetDataSize()(%d) != Real payload size(%d) for object %s'
-            % (objsize, written_bytes, obj))
+            % (objsize, written_bytes, obj)
+        )
 
     phase = None
     return pbuf.CreatePayload()
@@ -331,4 +327,4 @@ def GetObjectAddr(obj):
         return rlocint.RlocInt(0, 4)
 
     elif phase == PHASE_WRITING:
-        return rlocint.RlocInt(_alloctable[obj][0], 4)
+        return rlocint.RlocInt(_alloctable[obj], 4)

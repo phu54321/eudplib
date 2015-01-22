@@ -23,13 +23,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-import struct
-
-from . import expr, rlocint
-from ..utils import binio
+from . import expr
+from eudplib import utils as ut
 
 
 class Payload:
+
     def __init__(self, data, prttable, orttable):
         self.data = data
         self.prttable = prttable
@@ -40,6 +39,7 @@ _packerlist = {}
 
 
 class PayloadBuffer:
+
     '''
     Buffer where EUDObject should write to.
     '''
@@ -60,17 +60,19 @@ class PayloadBuffer:
 
     def WriteByte(self, number):
         number = expr.Evaluate(number)
-        assert number.rlocmode == 0, 'Non-constant given.'
+        ut.ep_assert(number.rlocmode == 0, 'Non-constant given.')
         number.offset &= 0xFF
-        self._data[self._datacur: self._datacur + 1] = binio.i2b1(number.offset)
+        self._data[
+            self._datacur: self._datacur + 1] = ut.i2b1(number.offset)
         self._datacur += 1
 
     def WriteWord(self, number):
         number = expr.Evaluate(number)
-        assert number.rlocmode == 0, 'Non-constant given.'
+        ut.ep_assert(number.rlocmode == 0, 'Non-constant given.')
         number.offset &= 0xFFFF
 
-        self._data[self._datacur: self._datacur + 2] = binio.i2b2(number.offset)
+        self._data[
+            self._datacur: self._datacur + 2] = ut.i2b2(number.offset)
         self._datacur += 2
 
     def WriteDword(self, number):
@@ -78,15 +80,19 @@ class PayloadBuffer:
         number.offset &= 0xFFFFFFFF
 
         if number.rlocmode:
-            assert self._datacur % 4 == 0, 'Non-const must be aligned to 4byte'
+            ut.ep_assert(
+                self._datacur % 4 == 0,
+                'Non-const dwords must be aligned to 4byte'
+            )
             if number.rlocmode == 1:
                 self._prttable.append(self._datacur)
             elif number.rlocmode == 4:
                 self._orttable.append(self._datacur)
             else:
-                raise AssertionError('rlocmode should be 1 or 4')
+                raise ut.EPError('rlocmode should be 1 or 4')
 
-        self._data[self._datacur: self._datacur + 4] = binio.i2b4(number.offset)
+        self._data[
+            self._datacur: self._datacur + 4] = ut.i2b4(number.offset)
         self._datacur += 4
 
     def WritePack(self, structformat, *arglist):
@@ -125,7 +131,7 @@ class PayloadBuffer:
 
 def _CreateStructPacker(structformat):
     sizedict = {'B': 1, 'H': 2, 'I': 4}
-    fdict = {'B': binio.i2b1, 'H': binio.i2b2, 'I': binio.i2b4}
+    fdict = {'B': ut.i2b1, 'H': ut.i2b2, 'I': ut.i2b4}
 
     sizelist = []
     flist = []
@@ -146,22 +152,20 @@ def _CreateStructPacker(structformat):
         orttb = buf._orttable
 
         for i, arg in enumerate(arglist):
-            if arg is not None:
-                ri = expr.Evaluate(arg)
+            ri = expr.Evaluate(arg)
 
-                assert (ri.rlocmode == 0 or
-                        (sizelist[i] == 4 and dpos % 4 == 0)), (
-                    'Cannot write non-const in byte/word/nonalligned dword.'
-                )
+            ut.ep_assert(
+                ri.rlocmode == 0 or (sizelist[i] == 4 and dpos % 4 == 0),
+                'Cannot write non-const in byte/word/nonalligned dword.'
+            )
 
-                if ri.rlocmode == 1:
-                    prttb.append(dpos)
+            if ri.rlocmode == 1:
+                prttb.append(dpos)
 
-                elif ri.rlocmode == 4:
-                    orttb.append(dpos)
+            elif ri.rlocmode == 4:
+                orttb.append(dpos)
 
-                data[dpos: dpos + sizelist[i]] = flist[i](ri.offset)
-
+            data[dpos: dpos + sizelist[i]] = flist[i](ri.offset)
             dpos += sizelist[i]
 
         buf._datacur = dpos

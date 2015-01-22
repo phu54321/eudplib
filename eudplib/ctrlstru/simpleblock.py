@@ -24,6 +24,7 @@ THE SOFTWARE.
 '''
 
 from .. import core as c
+from eudplib import utils as ut
 from .basicstru import EUDJump, EUDJumpIf, EUDJumpIfNot
 
 
@@ -38,7 +39,7 @@ def EUDIf(conditions):
         'ifend': c.Forward(),
         'next_elseif': c.Forward()
     }
-    c.EUDCreateBlock('ifblock', block)
+    ut.EUDCreateBlock('ifblock', block)
 
     EUDJumpIfNot(conditions, block['next_elseif'])
 
@@ -50,7 +51,7 @@ def EUDIfNot(conditions):
         'ifend': c.Forward(),
         'next_elseif': c.Forward()
     }
-    c.EUDCreateBlock('ifblock', block)
+    ut.EUDCreateBlock('ifblock', block)
 
     EUDJumpIf(conditions, block['next_elseif'])
 
@@ -60,11 +61,13 @@ def EUDIfNot(conditions):
 # -------
 
 def EUDElseIf(conditions):
-    lb = c.EUDGetLastBlock()
-    assert lb[0] == 'ifblock', 'Block start/end mismatch'
+    lb = ut.EUDGetLastBlock()
+    ut.ep_assert(lb[0] == 'ifblock', 'Block start/end mismatch')
     block = lb[1]
-    assert block['next_elseif'] is not None, (
-        'Cannot have EUDElseIf after EUDElse')
+    ut.ep_assert(
+        block['next_elseif'] is not None,
+        'Cannot have EUDElseIf after EUDElse'
+    )
 
     # Finish previous if/elseif block
     EUDJump(block['ifend'])
@@ -77,11 +80,13 @@ def EUDElseIf(conditions):
 
 
 def EUDElseIfNot(conditions):
-    lb = c.EUDGetLastBlock()
-    assert lb[0] == 'ifblock', 'Block start/end mismatch'
+    lb = ut.EUDGetLastBlock()
+    ut.ep_assert(lb[0] == 'ifblock', 'Block start/end mismatch')
     block = lb[1]
-    assert block['next_elseif'] is not None, (
-        'Cannot have EUDElseIfNot after EUDElse')
+    ut.ep_assert(
+        block['next_elseif'] is not None,
+        'Cannot have EUDElseIfNot after EUDElse'
+    )
 
     # Finish previous if/elseif block
     EUDJump(block['ifend'])
@@ -96,11 +101,13 @@ def EUDElseIfNot(conditions):
 
 
 def EUDElse():
-    lb = c.EUDGetLastBlock()
-    assert lb[0] == 'ifblock', 'Block start/end mismatch'
+    lb = ut.EUDGetLastBlock()
+    ut.ep_assert(lb[0] == 'ifblock', 'Block start/end mismatch')
     block = lb[1]
-    assert block['next_elseif'] is not None, (
-        'Cannot have EUDElse after EUDElse')
+    ut.ep_assert(
+        block['next_elseif'] is not None,
+        'Cannot have EUDElse after EUDElse'
+    )
 
     # Finish previous if/elseif block
     EUDJump(block['ifend'])
@@ -111,7 +118,7 @@ def EUDElse():
 
 
 def EUDEndIf():
-    lb = c.EUDPopBlock('ifblock')
+    lb = ut.EUDPopBlock('ifblock')
     block = lb[1]
 
     # Finalize
@@ -128,7 +135,7 @@ def EUDExecuteOnce():
     block = {
         'blockend': c.Forward()
     }
-    c.EUDCreateBlock('executeonceblock', block)
+    ut.EUDCreateBlock('executeonceblock', block)
 
     tv = c.EUDLightVariable()
     EUDJumpIf(tv == 1, block['blockend'])
@@ -138,8 +145,8 @@ def EUDExecuteOnce():
 
 
 def EUDEndExecuteOnce():
-    lb = c.EUDPopBlock('executeonceblock')
-    assert lb[0] == 'executeonceblock', 'Block start/end mismatch'
+    lb = ut.EUDPopBlock('executeonceblock')
+    ut.ep_assert(lb[0] == 'executeonceblock', 'Block start/end mismatch')
     block = lb[1]
 
     block['blockend'] << c.NextTrigger()

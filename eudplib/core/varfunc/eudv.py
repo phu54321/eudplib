@@ -33,7 +33,7 @@ from ..allocator import (
     Expr,
     IsValidExpr
 )
-from ..utils import (
+from ...utils import (
     EPD,
     List2Assignable
 )

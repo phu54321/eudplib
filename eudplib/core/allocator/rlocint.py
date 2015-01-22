@@ -23,11 +23,16 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
+from eudplib import utils as ut
+
 
 class RlocInt:
+
     def __init__(self, offset, rlocmode):
-        assert isinstance(offset, int) and isinstance(rlocmode, int), (
-            'Invalid argument for RlocInt constructor')
+        ut.ep_assert(
+            isinstance(offset, int) and isinstance(rlocmode, int),
+            'Invalid argument for RlocInt constructor'
+        )
         self.offset = offset
         self.rlocmode = rlocmode
 
@@ -53,8 +58,10 @@ class RlocInt:
 
     def __mul__(self, other):
         other = toRlocInt(other)
-        assert self.rlocmode == 0 or other.rlocmode == 0, (
-            'Cannot multiply two non-const RlocInts')
+        ut.ep_assert(
+            self.rlocmode == 0 or other.rlocmode == 0,
+            'Cannot multiply two non-const RlocInts'
+        )
 
         return RlocInt(
             self.offset * other.offset,
@@ -63,13 +70,15 @@ class RlocInt:
 
     def __floordiv__(self, other):
         other = toRlocInt(other)
-        assert other.rlocmode == 0, (
-            'Cannot divide RlocInt with non-const')
-        assert other.offset != 0, 'Divide by zero'
-        assert (
+        ut.ep_assert(
+            other.rlocmode == 0,
+            'Cannot divide RlocInt with non-const'
+        )
+        ut.ep_assert(other.offset != 0, 'Divide by zero')
+        ut.ep_assert(
             (self.rlocmode == 0) or
             (self.rlocmode % other.offset == 0 and
-             self.offset % other.offset == 0)), (
+             self.offset % other.offset == 0),
             'RlocInt not divisible by %d' % other.offset
         )
         return RlocInt(

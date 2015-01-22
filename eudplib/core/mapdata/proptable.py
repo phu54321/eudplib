@@ -23,10 +23,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-'''
-Unit property table manager.
-'''
 
+from eudplib import utils as ut
 from .unitprp import UnitProperty
 
 _uprpdict = {}
@@ -51,7 +49,7 @@ def InitPropertyMap(chkt):
 
 
 def GetPropertyIndex(prop):
-    assert isinstance(prop, UnitProperty)
+    ut.ep_assert(isinstance(prop, UnitProperty), 'Invalid type')
 
     prop = bytes(prop)
     try:
@@ -62,7 +60,7 @@ def GetPropertyIndex(prop):
             if _uprptable[uprpindex] is None:
                 break
 
-        assert uprpindex < 64, 'Unit property table overflow'
+        ut.ep_assert(uprpindex < 64, 'Unit property table overflow')
 
         _uprptable[uprpindex] = prop
         _uprpdict[prop] = uprpindex

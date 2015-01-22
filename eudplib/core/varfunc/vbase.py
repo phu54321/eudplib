@@ -31,7 +31,7 @@ class VariableBase:
         pass
 
     def GetVariableMemoryAddr(self):
-        raise NotImplementedError('override')
+        raise ut.EPError('override')
 
     # -------
 

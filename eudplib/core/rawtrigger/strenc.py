@@ -30,7 +30,7 @@ from ..mapdata import (
     GetUnitIndex
 )
 
-from ..utils import u2b, b2i4
+from eudplib import utils as ut
 
 from .strdict import (
     DefAIScriptDict,
@@ -42,16 +42,16 @@ from .strdict import (
 
 def EncodeAIScript(ais):
     if type(ais) is str:
-        ais = u2b(ais)
+        ais = ut.u2b(ais)
 
     if type(ais) is bytes:
-        assert len(ais) >= 4, 'AIScript name too short'
+        ut.ep_assert(len(ais) >= 4, 'AIScript name too short')
 
         if len(ais) > 4:
-            return b2i4(DefAIScriptDict[ais])
+            return ut.b2i4(DefAIScriptDict[ais])
 
         elif len(ais) == 4:
-            return b2i4(ais)
+            return ut.b2i4(ais)
 
     else:
         return ais

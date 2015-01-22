@@ -27,7 +27,7 @@ THE SOFTWARE.
 scenario.chk section tokenizer. Internally used in eudplib.
 '''
 
-from ..utils import ubconv, binio
+from ...utils import ubconv, binio
 
 
 """
@@ -43,7 +43,7 @@ def sectionname_format(sn):
         sn += b' ' * (4 - len(sn))
 
     elif len(sn) > 4:
-        raise RuntimeError('Length of section name cannot be longer than 4')
+        raise ut.EPError('Length of section name cannot be longer than 4')
 
     return sn
 

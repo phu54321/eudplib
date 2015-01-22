@@ -24,6 +24,7 @@ THE SOFTWARE.
 '''
 
 from .. import core as c
+from eudplib import utils as ut
 from .basicstru import (
     EUDJump,
     EUDJumpIf,
@@ -47,13 +48,13 @@ def EUDInfLoop():
         'contpoint': c.Forward()
     }
 
-    c.EUDCreateBlock('infloopblock', block)
+    ut.EUDCreateBlock('infloopblock', block)
 
     return True
 
 
 def EUDEndInfLoop():
-    block = c.EUDPopBlock('infloopblock')[1]
+    block = ut.EUDPopBlock('infloopblock')[1]
     if not block['contpoint'].IsSet():
         block['contpoint'] << block['loopstart']
     EUDJump(block['loopstart'])
@@ -74,13 +75,13 @@ def EUDLoopN(n):
         'vardb': vardb
     }
 
-    c.EUDCreateBlock('loopnblock', block)
+    ut.EUDCreateBlock('loopnblock', block)
     EUDJumpIf(c.Memory(vardb, c.Exactly, 0), block['loopend'])
     return True
 
 
 def EUDEndLoopN():
-    block = c.EUDPopBlock('loopnblock')[1]
+    block = ut.EUDPopBlock('loopnblock')[1]
     if not block['contpoint'].IsSet():
         block['contpoint'] << block['loopstart']
 
@@ -100,7 +101,7 @@ def EUDWhile(conditions):
         'contpoint': c.Forward(),
     }
 
-    c.EUDCreateBlock('whileblock', block)
+    ut.EUDCreateBlock('whileblock', block)
 
     EUDJumpIfNot(conditions, block['loopend'])
 
@@ -114,7 +115,7 @@ def EUDWhileNot(conditions):
         'contpoint': c.Forward(),
     }
 
-    c.EUDCreateBlock('whileblock', block)
+    ut.EUDCreateBlock('whileblock', block)
 
     EUDJumpIf(conditions, block['loopend'])
 
@@ -122,7 +123,7 @@ def EUDWhileNot(conditions):
 
 
 def EUDEndWhile():
-    block = c.EUDPopBlock('whileblock')[1]
+    block = ut.EUDPopBlock('whileblock')[1]
     if not block['contpoint'].IsSet():
         block['contpoint'] << block['loopstart']
     EUDJump(block['loopstart'])
@@ -133,11 +134,11 @@ def EUDEndWhile():
 
 
 def _GetLastLoopBlock():
-    for block in reversed(c.EUDGetBlockList()):
+    for block in reversed(ut.EUDGetBlockList()):
         if _IsLoopBlockId(block[0]):
             return block
 
-    raise AssertionError('No loop block surrounding this code area')
+    raise ut.EPError('No loop block surrounding this code area')
 
 
 def EUDLoopContinue():

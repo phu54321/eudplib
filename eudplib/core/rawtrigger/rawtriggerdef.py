@@ -24,10 +24,10 @@ THE SOFTWARE.
 '''
 
 from ..eudobj import EUDObject
-from ..utils import FlattenList
 from .triggerscope import NextTrigger, _RegisterTrigger
 from .condition import Condition
 from .action import Action
+from eudplib import utils as ut
 
 
 _trgcount = 0  # Debugging purpose
@@ -38,6 +38,7 @@ def GetTriggerCount():  # Debugging purpose
 
 
 class RawTrigger(EUDObject):
+
     def __init__(
             self,
             prevptr=None,
@@ -65,11 +66,11 @@ class RawTrigger(EUDObject):
         if actions is None:
             actions = []
 
-        conditions = FlattenList(conditions)
-        actions = FlattenList(actions)
+        conditions = ut.FlattenList(conditions)
+        actions = ut.FlattenList(actions)
 
-        assert len(conditions) <= 16, 'Too many conditions'
-        assert len(actions) <= 64, 'Too many actions'
+        ut.ep_assert(len(conditions) <= 16, 'Too many conditions')
+        ut.ep_assert(len(actions) <= 64, 'Too many actions')
 
         self._prevptr = prevptr
         self._nextptr = nextptr
@@ -77,20 +78,20 @@ class RawTrigger(EUDObject):
         self._actions = actions
 
         for i, cond in enumerate(self._conditions):
-            assert isinstance(cond, Condition)
+            ut.ep_assert(isinstance(cond, Condition))
             try:
                 cond.CheckArgs()
-            except AssertionError:
+            except ut.EPError:
                 print('Error on condition %d' % i)
                 raise
 
             cond.SetParentTrigger(self, i)
 
         for i, act in enumerate(self._actions):
-            assert isinstance(act, Action)
+            ut.ep_assert(isinstance(act, Action))
             try:
                 act.CheckArgs()
-            except AssertionError:
+            except ut.EPError:
                 print('Error on action %d' % i)
                 raise
 
@@ -115,7 +116,6 @@ class RawTrigger(EUDObject):
         if len(self._conditions) != 16:
             pbuffer.WriteBytes(bytes(20))
             pbuffer.WriteSpace(20 * (15 - len(self._conditions)))
-
 
         # Actions
         for act in self._actions:

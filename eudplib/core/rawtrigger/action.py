@@ -24,9 +24,11 @@ THE SOFTWARE.
 '''
 
 from ..allocator import Expr, Evaluate, IsValidExpr
+from eudplib import utils as ut
 
 
 class Action(Expr):
+
     '''
     Action class.
 
@@ -76,35 +78,56 @@ class Action(Expr):
     # -------
 
     def CheckArgs(self):
-        assert self.locid1 is None or IsValidExpr(self.locid1), (
-            'Invalid arg %s' % self.locid1)
-        assert self.strid is None or IsValidExpr(self.strid), (
-            'Invalid arg %s' % self.strid)
-        assert self.wavid is None or IsValidExpr(self.wavid), (
-            'Invalid arg %s' % self.wavid)
-        assert self.time is None or IsValidExpr(self.time), (
-            'Invalid arg %s' % self.time)
-        assert self.player1 is None or IsValidExpr(self.player1), (
-            'Invalid arg %s' % self.player1)
-        assert self.player2 is None or IsValidExpr(self.player2), (
-            'Invalid arg %s' % self.player2)
-        assert self.unitid is None or IsValidExpr(self.unitid), (
-            'Invalid arg %s' % self.unitid)
-        assert self.acttype is None or IsValidExpr(self.acttype), (
-            'Invalid arg %s' % self.acttype)
-        assert self.amount is None or IsValidExpr(self.amount), (
-            'Invalid arg %s' % self.amount)
-        assert self.flags is None or IsValidExpr(self.flags), (
-            'Invalid arg %s' % self.flags)
+        ut.ep_assert(
+            self.locid1 is None or IsValidExpr(self.locid1),
+            'Invalid arg %s' % self.locid1
+        )
+        ut.ep_assert(
+            self.strid is None or IsValidExpr(self.strid),
+            'Invalid arg %s' % self.strid
+        )
+        ut.ep_assert(
+            self.wavid is None or IsValidExpr(self.wavid),
+            'Invalid arg %s' % self.wavid
+        )
+        ut.ep_assert(
+            self.time is None or IsValidExpr(self.time),
+            'Invalid arg %s' % self.time
+        )
+        ut.ep_assert(
+            self.player1 is None or IsValidExpr(self.player1),
+            'Invalid arg %s' % self.player1
+        )
+        ut.ep_assert(
+            self.player2 is None or IsValidExpr(self.player2),
+            'Invalid arg %s' % self.player2
+        )
+        ut.ep_assert(
+            self.unitid is None or IsValidExpr(self.unitid),
+            'Invalid arg %s' % self.unitid
+        )
+        ut.ep_assert(
+            self.acttype is None or IsValidExpr(self.acttype),
+            'Invalid arg %s' % self.acttype
+        )
+        ut.ep_assert(
+            self.amount is None or IsValidExpr(self.amount),
+            'Invalid arg %s' % self.amount
+        )
+        ut.ep_assert(
+            self.flags is None or IsValidExpr(self.flags),
+            'Invalid arg %s' % self.flags
+        )
         return True
 
     def SetParentTrigger(self, trg, index):
-        assert self.parenttrg is None, (
-            'Action cannot be shared by two triggers.'
-            'Deep copy each conditions')
+        ut.ep_assert(
+            self.parenttrg is None,
+            'Actions cannot be shared by two triggers.'
+        )
 
-        assert trg is not None, 'Trigger should not be null.'
-        assert 0 <= index < 64, 'WTF'
+        ut.ep_assert(trg is not None, 'Trigger should not be null.')
+        ut.ep_assert(0 <= index < 64, 'Triggers out of range')
 
         self.parenttrg = trg
         self.actindex = index

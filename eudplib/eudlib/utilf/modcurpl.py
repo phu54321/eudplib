@@ -24,15 +24,18 @@ THE SOFTWARE.
 '''
 
 from ..memiof import f_dwread_epd
-from ... import core as c
+from eudplib import (
+    core as c,
+    utils as ut
+)
 
 
 def f_setcurpl(cp):
     cp = c.EncodePlayer(cp)
     c.SeqCompute([
-        (c.EPD(0x6509B0), c.SetTo, cp)
+        (ut.EPD(0x6509B0), c.SetTo, cp)
     ])
 
 
 def f_getcurpl():
-    return f_dwread_epd(c.EPD(0x6509B0))
+    return f_dwread_epd(ut.EPD(0x6509B0))

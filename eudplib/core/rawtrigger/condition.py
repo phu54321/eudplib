@@ -24,9 +24,11 @@ THE SOFTWARE.
 '''
 
 from ..allocator import Expr, Evaluate, IsValidExpr
+from eudplib import utils as ut
 
 
 class Condition(Expr):
+
     '''
     Condition class.
 
@@ -69,37 +71,54 @@ class Condition(Expr):
     # -------
 
     def CheckArgs(self):
-        assert self.locid is None or IsValidExpr(self.locid), (
-            'Invalid arg %s' % self.locid)
-        assert self.player is None or IsValidExpr(self.player), (
-            'Invalid arg %s' % self.player)
-        assert self.amount is None or IsValidExpr(self.amount), (
-            'Invalid arg %s' % self.amount)
-        assert self.unitid is None or IsValidExpr(self.unitid), (
-            'Invalid arg %s' % self.unitid)
-        assert self.comparison is None or IsValidExpr(self.comparison), (
-            'Invalid arg %s' % self.comparison)
-        assert self.condtype is None or IsValidExpr(self.condtype), (
-            'Invalid arg %s' % self.condtype)
-        assert self.restype is None or IsValidExpr(self.restype), (
-            'Invalid arg %s' % self.restype)
-        assert self.flags is None or IsValidExpr(self.flags), (
-            'Invalid arg %s' % self.flags)
+        ut.ep_assert(
+            self.locid is None or IsValidExpr(self.locid),
+            'Invalid arg %s' % self.locid
+        )
+        ut.ep_assert(
+            self.player is None or IsValidExpr(self.player),
+            'Invalid arg %s' % self.player
+        )
+        ut.ep_assert(
+            self.amount is None or IsValidExpr(self.amount),
+            'Invalid arg %s' % self.amount
+        )
+        ut.ep_assert(
+            self.unitid is None or IsValidExpr(self.unitid),
+            'Invalid arg %s' % self.unitid
+        )
+        ut.ep_assert(
+            self.comparison is None or IsValidExpr(self.comparison),
+            'Invalid arg %s' % self.comparison
+        )
+        ut.ep_assert(
+            self.condtype is None or IsValidExpr(self.condtype),
+            'Invalid arg %s' % self.condtype
+        )
+        ut.ep_assert(
+            self.restype is None or IsValidExpr(self.restype),
+            'Invalid arg %s' % self.restype
+        )
+        ut.ep_assert(
+            self.flags is None or IsValidExpr(self.flags),
+            'Invalid arg %s' % self.flags
+        )
         return True
 
     def SetParentTrigger(self, trg, index):
-        assert self.parenttrg is None, (
+        ut.ep_assert(
+            self.parenttrg is None,
             'Condition cannot be shared by two triggers. '
-            'Deep copy each conditions')
+        )
 
-        assert trg is not None, 'Trigger should not be null.'
-        assert 0 <= index < 16, 'WTF'
+        ut.ep_assert(trg is not None, 'Trigger should not be null.')
+        ut.ep_assert(0 <= index < 16, 'WTF')
 
         self.parenttrg = trg
         self.condindex = index
 
     def Evaluate(self):
-        assert self.parenttrg is not None, 'Orphan condition'
+        ut.ep_assert(self.parenttrg is not None, 'Orphan condition')
         return Evaluate(self.parenttrg) + 8 + self.condindex * 20
 
     def WritePayload(self, pbuffer):

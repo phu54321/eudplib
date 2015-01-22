@@ -25,10 +25,11 @@ THE SOFTWARE.
 
 from .. import core as c
 from .. import trigger as tg
+from eudplib import utils as ut
 
 
 def DoActions(actions, preserved=True):
-    tg.Trigger(actions=c.FlattenList(actions), preserved=preserved)
+    tg.Trigger(actions=ut.FlattenList(actions), preserved=preserved)
 
 
 def EUDJump(nextptr):

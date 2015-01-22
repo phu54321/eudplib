@@ -27,7 +27,7 @@ import functools
 import inspect
 
 from .eudv import EUDVariable, SeqCompute
-from ..utils import (
+from ...utils import (
     FlattenList,
     List2Assignable,
     Assignable2List,
@@ -38,18 +38,25 @@ from ..utils import (
 from ..allocator import Forward
 from .. import rawtrigger as bt
 
+from eudplib import utils as ut
+
 
 def EUDFunc(fdecl_func):
     argspec = inspect.getargspec(fdecl_func)
-    assert argspec[1] is None, (
-        'No variadic arguments (*args) allowed for EUDFunc.')
-    assert argspec[2] is None, (
-        'No variadic keyword arguments (*kwargs) allowed for EUDFunc.')
+    ut.ep_assert(
+        argspec[1] is None,
+        'No variadic arguments (*args) allowed for EUDFunc.'
+    )
+    ut.ep_assert(
+        argspec[2] is None,
+        'No variadic keyword arguments (*kwargs) allowed for EUDFunc.'
+    )
 
     return EUDFuncN(fdecl_func, len(argspec[0]))
 
 
 class EUDFuncN:
+
     def __init__(self, fdecl_func, argn):
         self._argn = argn
         self._fdecl_func = fdecl_func
@@ -60,7 +67,7 @@ class EUDFuncN:
         self._frets = None
 
     def CreateFuncBody(self):
-        assert self._fstart is None
+        ut.ep_assert(self._fstart is None)
 
         f_bsm = BlockStruManager()
         prev_bsm = SetCurrentBlockStruManager(f_bsm)
@@ -74,14 +81,16 @@ class EUDFuncN:
         fend = bt.RawTrigger()
         bt.PopTriggerScope()
 
-        assert f_bsm.empty(), 'Block start/end mismatch inside function'
+        ut.ep_assert(f_bsm.empty(), 'Block start/end mismatch inside function')
         SetCurrentBlockStruManager(prev_bsm)
 
-        # Assert that all return values are EUDVariable.
+        # ut.ep_assert(that all return values are EUDVariable.)
         if f_rets is not None:  # Not void function
             for i, ret in enumerate(f_rets):
-                assert isinstance(ret, EUDVariable), (
-                    '#%d of returned value is not instance of EUDVariable' % i)
+                ut.ep_assert(
+                    isinstance(ret, EUDVariable),
+                    '#%d of returned value is not instance of EUDVariable' % i
+                )
 
         self._fstart = fstart
         self._fend = fend
@@ -92,7 +101,7 @@ class EUDFuncN:
         if self._fstart is None:
             self.CreateFuncBody()
 
-        assert len(args) == self._argn, 'Argument number mismatch'
+        ut.ep_assert(len(args) == self._argn, 'Argument number mismatch')
 
         # Assign arguments into argument space
         SeqCompute(
@@ -121,7 +130,7 @@ class EUDFuncN:
 def SetVariables(srclist, dstlist, mdtlist=None):
     srclist = FlattenList(srclist)
     dstlist = FlattenList(dstlist)
-    assert len(srclist) == len(dstlist), 'Input/output size mismatch'
+    ut.ep_assert(len(srclist) == len(dstlist), 'Input/output size mismatch')
 
     if mdtlist is None:
         mdtlist = [bt.SetTo] * len(srclist)

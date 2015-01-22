@@ -25,6 +25,7 @@ THE SOFTWARE.
 
 from .. import core as c
 from .tpatcher import PatchCondition, PatchAction
+from eudplib import utils as ut
 
 
 def Trigger(conditions=None, actions=None, preserved=True):
@@ -33,8 +34,8 @@ def Trigger(conditions=None, actions=None, preserved=True):
     if actions is None:
         actions = None
 
-    conditions = c.FlattenList(conditions)
-    actions = c.FlattenList(actions)
+    conditions = ut.FlattenList(conditions)
+    actions = ut.FlattenList(actions)
 
     # Normal
     if len(conditions) <= 16 and len(actions) <= 64:

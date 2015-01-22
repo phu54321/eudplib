@@ -24,41 +24,53 @@ THE SOFTWARE.
 '''
 
 from .. import core as c
+from eudplib import utils as ut
 from .memiof import f_dwread_epd, f_dwwrite_epd
 
 
-class EUDArray:
+class EUDArray(c.EUDObject):
+
     '''
     Full variable.
     '''
 
-    def __init__(self, arrlen):
-        try:
-            dbs = b''.join([c.i2b4(i) for i in arrlen])
-            self._dattable = c.Db(dbs)
-            self._varlen = len(dbs) // 4
+    def __init__(self, arr):
+        super().__init__()
 
-        except TypeError:
-            self._dattable = c.Db(4 * arrlen)
-            self._varlen = arrlen
+        if isinstance(arr, int):
+            arrlen = arr
+            self._datas = [0] * arrlen
+            self._arrlen = arrlen
 
-    def GetArrayMemory(self):
-        return self._dattable
+        else:
+            for item in arr:
+                ut.ep_assert(c.IsValidExpr(item), 'Invalid item given to array'
+                             )
+            self._datas = arr
+            self._arrlen = len(arr)
+
+    def GetDataSize(self):
+        return self._arrlen * 4
+
+    def WritePayload(self, buf):
+        for item in self._datas:
+            buf.WriteDword(item)
+
+    # --------
 
     def GetLength(self):
-        return self._varlen
+        return self._arrlen
 
     @c.EUDFuncMethod
     def get(self, key):
-        return f_dwread_epd(c.EPD(self._dattable) + key)
+        return f_dwread_epd(ut.EPD(self) + key)
 
     def __getitem__(self, key):
         return self.get(key)
 
     @c.EUDFuncMethod
     def set(self, key, item):
-        return f_dwwrite_epd(c.EPD(self._dattable) + key, item)
+        return f_dwwrite_epd(ut.EPD(self) + key, item)
 
     def __setitem__(self, key, item):
         return self.set(key, item)
-

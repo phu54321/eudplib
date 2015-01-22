@@ -23,22 +23,20 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-'''
-Defines subfunctions used inside variable-mixed trigger
-'''
-
 from .. import core as c
+from .. import utils as ut
 
 
 def dww(dstepd, v):
     act = c.Forward()
     c.SeqCompute((
-        (c.EPD(act + 16), c.SetTo, dstepd),
-        (c.EPD(act + 20), c.SetTo, v),
+        (ut.EPD(act + 16), c.SetTo, dstepd),
+        (ut.EPD(act + 20), c.SetTo, v),
     ))
     c.RawTrigger(
         actions=(act << c.SetMemory(0, c.SetTo, 0))
     )
+
 
 def filldw(dstepd, v1):
     c.SeqCompute((
