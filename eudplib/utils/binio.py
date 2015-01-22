@@ -46,10 +46,12 @@ def i2b1(i):
 
 
 def i2b2(i):
+    i &= 0xFFFF
     return bytes((i & 0xFF, (i >> 8) & 0xFF))
 
 
 def i2b4(i):
+    i &= 0xFFFFFFFF
     return bytes((
         i & 0xFF,
         (i >> 8) & 0xFF,

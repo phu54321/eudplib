@@ -26,7 +26,7 @@ THE SOFTWARE.
 from . import rlocint, pbuffer
 from . import expr
 from eudplib import utils as ut
-from .stackobjs import StackObjects
+from eudplib.utils.stackobjs import StackObjects
 
 import random
 
