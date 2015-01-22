@@ -23,8 +23,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-from ... import core as c
-from ... import ctrlstru as cs
+from eudplib import (
+    core as c,
+    ctrlstru as cs,
+    utils as ut
+)
 from ..eudarray import EUDArray
 from ..memiof import f_dwread_epd, f_dwwrite_epd, f_repmovsd_epd
 

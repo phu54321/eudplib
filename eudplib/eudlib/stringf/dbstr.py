@@ -26,7 +26,7 @@ THE SOFTWARE.
 from eudplib import (
     core as c,
     ctrlstru as cs,
-    utils as ut
+    utils as ut,
 )
 from ..memiof import f_dwread_epd, f_dwwrite_epd
 

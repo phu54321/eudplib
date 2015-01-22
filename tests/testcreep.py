@@ -117,5 +117,5 @@ def main():
 
     EUDEndWhile()
 
-# CompressPayload(True)
+CompressPayload(True)
 SaveMap('outputmap/testcreep.scx', main)

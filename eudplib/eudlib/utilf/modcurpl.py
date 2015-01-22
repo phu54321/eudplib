@@ -24,8 +24,10 @@ THE SOFTWARE.
 '''
 
 from ..memiof import f_dwread_epd
-from eudplib import utils as ut
-from ... import core as c
+from eudplib import (
+    core as c,
+    utils as ut
+)
 
 
 def f_setcurpl(cp):

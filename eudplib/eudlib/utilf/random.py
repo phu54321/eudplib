@@ -33,7 +33,7 @@ THE SOFTWARE.
 # }
 #
 
-from ... import core as c
+from eudplib import core as c
 from ..memiof import f_dwbreak, f_dwread_epd
 
 _seed = c.EUDVariable()

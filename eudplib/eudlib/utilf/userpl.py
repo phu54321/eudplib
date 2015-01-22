@@ -23,8 +23,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
+from eudplib import (
+    core as c,
+    utils as ut
+)
 from ..memiof import f_dwread_epd
-from ... import core as c
 
 
 @c.EUDFunc

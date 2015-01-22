@@ -58,6 +58,7 @@ def CompressPayload(mode):
 
 
 class ObjCollector:
+
     '''
     Object having PayloadBuffer-like interfaces. Collects all objects by
     calling RegisterObject() for every related objects.
@@ -134,6 +135,7 @@ def CollectObjects(root):
 
 
 class ObjAllocator:
+
     '''
     Object having PayloadBuffer-like interfaces. Collects all objects by
     calling RegisterObject() for every related objects.
@@ -143,30 +145,29 @@ class ObjAllocator:
         self._sizes = {}
 
     def StartWrite(self):
-        self._suboccupmap = True
+        self._suboccupmap = 0
         self._suboccupidx = 0
         self._occupmap = []
 
-
     def _Occup0(self):
-        self._suboccupidx = 1
-        if self._suboccupidx == 4:
-            self._occupmap.append(self._suboccupmap)
-            self._suboccupidx = 0
-            self._suboccupmap = False
-
-    def _Occup1(self):
-        self._suboccupmap = True
         self._suboccupidx += 1
         if self._suboccupidx == 4:
             self._occupmap.append(self._suboccupmap)
             self._suboccupidx = 0
-            self._suboccupmap = False
+            self._suboccupmap = 0
+
+    def _Occup1(self):
+        self._suboccupmap = 1
+        self._suboccupidx += 1
+        if self._suboccupidx == 4:
+            self._occupmap.append(self._suboccupmap)
+            self._suboccupidx = 0
+            self._suboccupmap = 0
 
     def EndWrite(self):
-        if len(self._occupmap) & 3:
+        if self._suboccupidx:
             self._occupmap.append(self._suboccupmap)
-
+            self._suboccupidx = 0
         return self._occupmap
 
     def WriteByte(self, number):
@@ -184,10 +185,7 @@ class ObjAllocator:
             self._Occup1()
 
     def WriteDword(self, number):
-        if number is None:
-            self._occupmap.append(self._suboccupmap)
-        else:
-            self._occupmap.append(True)
+        self._occupmap.append(1)
 
     def WritePack(self, structformat, *arglist):
         if structformat not in self._sizes:
@@ -200,14 +198,14 @@ class ObjAllocator:
         ssize = self._sizes[structformat]
 
         # Add occupiation index
-        self._occupmap.extend([True] * (ssize >> 2))
+        self._occupmap.extend([1] * (ssize >> 2))
         ssize &= 3
         for i in range(ssize):
             self._Occup1()
 
     def WriteBytes(self, b):
         ssize = len(b)
-        self._occupmap.extend([True] * (ssize >> 2))
+        self._occupmap.extend([1] * (ssize >> 2))
         ssize &= 3
         for i in range(ssize):
             self._Occup1()
@@ -217,7 +215,7 @@ class ObjAllocator:
             self._Occup0()
             ssize -= 1
 
-        self._occupmap.extend([False] * (ssize >> 2))
+        self._occupmap.extend([0] * (ssize >> 2))
         ssize &= 3
         for i in range(ssize):
             self._Occup0()
@@ -236,7 +234,7 @@ def AllocObjects():
         for obj in _found_objects:
             objsize = obj.GetDataSize()
             allocsize = (objsize + 3) & ~3
-            _alloctable[obj] = lallocaddr, objsize
+            _alloctable[obj] = lallocaddr
             lallocaddr += allocsize
         _payload_size = lallocaddr
         phase = None
@@ -246,27 +244,25 @@ def AllocObjects():
 
     _alloctable = {}
     dwoccupmap_dict = {}
-    dwoccupmap_max_size = 0
 
     # Get occupation map for all objects
     for obj in _found_objects:
         obja.StartWrite()
         obj.WritePayload(obja)
         dwoccupmap = obja.EndWrite()
-
-        dwoccupmap_max_size += len(dwoccupmap)
         dwoccupmap_dict[obj] = dwoccupmap
-
-        # preprocess dwoccupmap
-        for i in range(len(dwoccupmap)):
-            if dwoccupmap[i] == 0:
-                dwoccupmap[i] = -1
-            elif i == 0 or dwoccupmap[i - 1] == -1:
-                dwoccupmap[i] = i
-            else:
-                dwoccupmap[i] = dwoccupmap[i - 1]
-
+        ut.ep_assert(
+            len(dwoccupmap) == (obj.GetDataSize() + 3) >> 2,
+            'Occupation map length & Object size mismatch for object'
+        )
     StackObjects(_found_objects, dwoccupmap_dict, _alloctable)
+
+    # Get payload length
+    _payload_size = 0
+    for obj in _found_objects:
+        psize2 = _alloctable[obj] + obj.GetDataSize()
+        if _payload_size < psize2:
+            _payload_size = psize2
 
     phase = None
 
@@ -282,12 +278,13 @@ def ConstructPayload():
     pbuf = pbuffer.PayloadBuffer(_payload_size)
 
     for obj in _found_objects:
-        objaddr, objsize = _alloctable[obj]
+        objaddr, objsize = _alloctable[obj], obj.GetDataSize()
 
         pbuf.StartWrite(objaddr)
         obj.WritePayload(pbuf)
         written_bytes = pbuf.EndWrite()
-        ut.ep_assert(written_bytes == objsize, 
+        ut.ep_assert(
+            written_bytes == objsize,
             'obj.GetDataSize()(%d) != Real payload size(%d) for object %s'
             % (objsize, written_bytes, obj)
         )
@@ -330,4 +327,4 @@ def GetObjectAddr(obj):
         return rlocint.RlocInt(0, 4)
 
     elif phase == PHASE_WRITING:
-        return rlocint.RlocInt(_alloctable[obj][0], 4)
+        return rlocint.RlocInt(_alloctable[obj], 4)

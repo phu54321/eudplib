@@ -8,7 +8,7 @@ def StackObjects(
 ):
     cdef int dwoccupmap_max_size = 0
     for obj in found_objects:
-        dwoccupmap_max_size += obj.GetDataSize()
+        dwoccupmap_max_size += len(dwoccupmap_dict[obj])
 
     # Buffer to sum all dwoccupmaps
     cdef int* dwoccupmap_sum = <int*> PyMem_Malloc((dwoccupmap_max_size + 1) * sizeof(int))
@@ -20,10 +20,20 @@ def StackObjects(
     cdef int curoff, objsize, j, oclen
 
     for obj in found_objects:
+        # Convert to faster c array
         py_dwoccupmap = dwoccupmap_dict[obj]
         oclen = len(py_dwoccupmap)
         for j in range(oclen):
             dwoccupmap[j] = py_dwoccupmap[j]
+
+        # preprocess dwoccupmap
+        for i in range(oclen):
+            if dwoccupmap[i] == 0:
+                dwoccupmap[i] = -1
+            elif i == 0 or dwoccupmap[i - 1] == -1:
+                dwoccupmap[i] = i
+            else:
+                dwoccupmap[i] = dwoccupmap[i - 1]
 
         # Find appropriate position to allocate object
         j = 0
@@ -45,11 +55,9 @@ def StackObjects(
                 else:
                     dwoccupmap_sum[curoff] = dwoccupmap_sum[curoff + 1]
 
-        objsize = obj.GetDataSize()
-        alloctable[obj] = (lallocaddr * 4, objsize)
-        if lallocaddr * 4 + objsize > payload_size:
-            payload_size = lallocaddr * 4 + objsize
+        alloctable[obj] = lallocaddr * 4
+        if (lallocaddr + oclen) * 4 > payload_size:
+            payload_size = (lallocaddr + oclen) * 4
 
     PyMem_Free(dwoccupmap)
     PyMem_Free(dwoccupmap_sum)
-

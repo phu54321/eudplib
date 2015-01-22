@@ -23,10 +23,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
+
 class EPError(Exception):
     pass
 
 
 def ep_assert(statement, message="Assertion failed"):
     if not statement:
-        raise ut.EPError(message)
+        raise EPError(message)

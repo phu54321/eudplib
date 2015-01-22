@@ -24,8 +24,11 @@ THE SOFTWARE.
 '''
 
 from ..memiof import f_dwread_epd
-from ... import core as c
-from ... import ctrlstru as cs
+from eudplib import (
+    core as c,
+    ctrlstru as cs,
+    utils as ut
+)
 
 
 @c.EUDFunc

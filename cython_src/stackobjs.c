@@ -508,24 +508,6 @@ static int __Pyx_ParseOptionalKeywords(PyObject *kwds, PyObject **argnames[], \
     PyObject *kwds2, PyObject *values[], Py_ssize_t num_pos_args, \
     const char* function_name);
 
-#if CYTHON_COMPILING_IN_CPYTHON
-static CYTHON_INLINE PyObject* __Pyx_PyObject_Call(PyObject *func, PyObject *arg, PyObject *kw);
-#else
-#define __Pyx_PyObject_Call(func, arg, kw) PyObject_Call(func, arg, kw)
-#endif
-
-#if CYTHON_COMPILING_IN_CPYTHON
-static CYTHON_INLINE PyObject* __Pyx_PyObject_CallMethO(PyObject *func, PyObject *arg);
-#endif
-
-static CYTHON_INLINE PyObject* __Pyx_PyObject_CallOneArg(PyObject *func, PyObject *arg);
-
-#if CYTHON_COMPILING_IN_CPYTHON
-static CYTHON_INLINE PyObject* __Pyx_PyObject_CallNoArg(PyObject *func);
-#else
-#define __Pyx_PyObject_CallNoArg(func) __Pyx_PyObject_Call(func, __pyx_empty_tuple, NULL)
-#endif
-
 #define __Pyx_GetItemInt(o, i, type, is_signed, to_py_func, is_list, wraparound, boundscheck) \
     (__Pyx_fits_Py_ssize_t(i, type, is_signed) ? \
     __Pyx_GetItemInt_Fast(o, (Py_ssize_t)i, is_list, wraparound, boundscheck) : \
@@ -546,6 +528,12 @@ static CYTHON_INLINE PyObject *__Pyx_GetItemInt_Tuple_Fast(PyObject *o, Py_ssize
 static CYTHON_INLINE PyObject *__Pyx_GetItemInt_Generic(PyObject *o, PyObject* j);
 static CYTHON_INLINE PyObject *__Pyx_GetItemInt_Fast(PyObject *o, Py_ssize_t i,
                                                      int is_list, int wraparound, int boundscheck);
+
+#if CYTHON_COMPILING_IN_CPYTHON
+static CYTHON_INLINE PyObject* __Pyx_PyObject_Call(PyObject *func, PyObject *arg, PyObject *kw);
+#else
+#define __Pyx_PyObject_Call(func, arg, kw) PyObject_Call(func, arg, kw)
+#endif
 
 typedef struct {
     int code_line;
@@ -588,6 +576,7 @@ int __pyx_module_is_main_stackobjs = 0;
 /* Implementation of 'stackobjs' */
 static PyObject *__pyx_builtin_range;
 static PyObject *__pyx_pf_9stackobjs_StackObjects(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_found_objects, PyObject *__pyx_v_dwoccupmap_dict, PyObject *__pyx_v_alloctable); /* proto */
+static char __pyx_k_i[] = "i";
 static char __pyx_k_j[] = "j";
 static char __pyx_k_obj[] = "obj";
 static char __pyx_k_main[] = "__main__";
@@ -600,7 +589,6 @@ static char __pyx_k_stackobjs[] = "stackobjs";
 static char __pyx_k_alloctable[] = "alloctable";
 static char __pyx_k_dwoccupmap[] = "dwoccupmap";
 static char __pyx_k_lallocaddr[] = "lallocaddr";
-static char __pyx_k_GetDataSize[] = "GetDataSize";
 static char __pyx_k_StackObjects[] = "StackObjects";
 static char __pyx_k_payload_size[] = "payload_size";
 static char __pyx_k_found_objects[] = "found_objects";
@@ -610,7 +598,6 @@ static char __pyx_k_dwoccupmap_dict[] = "dwoccupmap_dict";
 static char __pyx_k_dwoccupmap_max_size[] = "dwoccupmap_max_size";
 static char __pyx_k_C_Users_phu54_000_Documents_GitH[] = "C:\\Users\\phu54_000\\Documents\\GitHub\\eudtrglib\\cython_src\\stackobjs.pyx";
 static PyObject *__pyx_kp_s_C_Users_phu54_000_Documents_GitH;
-static PyObject *__pyx_n_s_GetDataSize;
 static PyObject *__pyx_n_s_StackObjects;
 static PyObject *__pyx_n_s_alloctable;
 static PyObject *__pyx_n_s_curoff;
@@ -619,6 +606,7 @@ static PyObject *__pyx_n_s_dwoccupmap_dict;
 static PyObject *__pyx_n_s_dwoccupmap_max_size;
 static PyObject *__pyx_n_s_dwoccupmap_sum;
 static PyObject *__pyx_n_s_found_objects;
+static PyObject *__pyx_n_s_i;
 static PyObject *__pyx_n_s_j;
 static PyObject *__pyx_n_s_lallocaddr;
 static PyObject *__pyx_n_s_main;
@@ -630,6 +618,8 @@ static PyObject *__pyx_n_s_py_dwoccupmap;
 static PyObject *__pyx_n_s_range;
 static PyObject *__pyx_n_s_stackobjs;
 static PyObject *__pyx_n_s_test;
+static PyObject *__pyx_int_0;
+static PyObject *__pyx_int_1;
 static PyObject *__pyx_tuple_;
 static PyObject *__pyx_codeobj__2;
 
@@ -720,25 +710,26 @@ static PyObject *__pyx_pf_9stackobjs_StackObjects(CYTHON_UNUSED PyObject *__pyx_
   int __pyx_v_lallocaddr;
   int __pyx_v_payload_size;
   int __pyx_v_curoff;
-  int __pyx_v_objsize;
   int __pyx_v_j;
   int __pyx_v_oclen;
   PyObject *__pyx_v_py_dwoccupmap = NULL;
+  PyObject *__pyx_v_i = NULL;
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
   Py_ssize_t __pyx_t_2;
   PyObject *(*__pyx_t_3)(PyObject *);
   PyObject *__pyx_t_4 = NULL;
-  PyObject *__pyx_t_5 = NULL;
-  PyObject *__pyx_t_6 = NULL;
-  PyObject *__pyx_t_7 = NULL;
+  Py_ssize_t __pyx_t_5;
+  int __pyx_t_6;
+  int __pyx_t_7;
   int __pyx_t_8;
-  Py_ssize_t __pyx_t_9;
-  int __pyx_t_10;
-  int __pyx_t_11;
+  PyObject *__pyx_t_9 = NULL;
+  PyObject *(*__pyx_t_10)(PyObject *);
+  Py_ssize_t __pyx_t_11;
   int __pyx_t_12;
   int __pyx_t_13;
+  Py_ssize_t __pyx_t_14;
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
@@ -749,7 +740,7 @@ static PyObject *__pyx_pf_9stackobjs_StackObjects(CYTHON_UNUSED PyObject *__pyx_
  * ):
  *     cdef int dwoccupmap_max_size = 0             # <<<<<<<<<<<<<<
  *     for obj in found_objects:
- *         dwoccupmap_max_size += obj.GetDataSize()
+ *         dwoccupmap_max_size += len(dwoccupmap_dict[obj])
  */
   __pyx_v_dwoccupmap_max_size = 0;
 
@@ -757,7 +748,7 @@ static PyObject *__pyx_pf_9stackobjs_StackObjects(CYTHON_UNUSED PyObject *__pyx_
  * ):
  *     cdef int dwoccupmap_max_size = 0
  *     for obj in found_objects:             # <<<<<<<<<<<<<<
- *         dwoccupmap_max_size += obj.GetDataSize()
+ *         dwoccupmap_max_size += len(dwoccupmap_dict[obj])
  * 
  */
   if (likely(PyList_CheckExact(__pyx_v_found_objects)) || PyTuple_CheckExact(__pyx_v_found_objects)) {
@@ -803,45 +794,21 @@ static PyObject *__pyx_pf_9stackobjs_StackObjects(CYTHON_UNUSED PyObject *__pyx_
     /* "stackobjs.pyx":11
  *     cdef int dwoccupmap_max_size = 0
  *     for obj in found_objects:
- *         dwoccupmap_max_size += obj.GetDataSize()             # <<<<<<<<<<<<<<
+ *         dwoccupmap_max_size += len(dwoccupmap_dict[obj])             # <<<<<<<<<<<<<<
  * 
  *     # Buffer to sum all dwoccupmaps
  */
-    __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_dwoccupmap_max_size); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 11; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_4 = PyObject_GetItem(__pyx_v_dwoccupmap_dict, __pyx_v_obj); if (unlikely(__pyx_t_4 == NULL)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 11; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
     __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_v_obj, __pyx_n_s_GetDataSize); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 11; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-    __Pyx_GOTREF(__pyx_t_6);
-    __pyx_t_7 = NULL;
-    if (CYTHON_COMPILING_IN_CPYTHON && likely(PyMethod_Check(__pyx_t_6))) {
-      __pyx_t_7 = PyMethod_GET_SELF(__pyx_t_6);
-      if (likely(__pyx_t_7)) {
-        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_6);
-        __Pyx_INCREF(__pyx_t_7);
-        __Pyx_INCREF(function);
-        __Pyx_DECREF_SET(__pyx_t_6, function);
-      }
-    }
-    if (__pyx_t_7) {
-      __pyx_t_5 = __Pyx_PyObject_CallOneArg(__pyx_t_6, __pyx_t_7); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 11; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-      __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-    } else {
-      __pyx_t_5 = __Pyx_PyObject_CallNoArg(__pyx_t_6); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 11; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-    }
-    __Pyx_GOTREF(__pyx_t_5);
-    __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-    __pyx_t_6 = PyNumber_InPlaceAdd(__pyx_t_4, __pyx_t_5); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 11; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-    __Pyx_GOTREF(__pyx_t_6);
+    __pyx_t_5 = PyObject_Length(__pyx_t_4); if (unlikely(__pyx_t_5 == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 11; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-    __pyx_t_8 = __Pyx_PyInt_As_int(__pyx_t_6); if (unlikely((__pyx_t_8 == (int)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 11; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-    __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-    __pyx_v_dwoccupmap_max_size = __pyx_t_8;
+    __pyx_v_dwoccupmap_max_size = (__pyx_v_dwoccupmap_max_size + __pyx_t_5);
 
     /* "stackobjs.pyx":10
  * ):
  *     cdef int dwoccupmap_max_size = 0
  *     for obj in found_objects:             # <<<<<<<<<<<<<<
- *         dwoccupmap_max_size += obj.GetDataSize()
+ *         dwoccupmap_max_size += len(dwoccupmap_dict[obj])
  * 
  */
   }
@@ -896,8 +863,8 @@ static PyObject *__pyx_pf_9stackobjs_StackObjects(CYTHON_UNUSED PyObject *__pyx_
  *     cdef int curoff, objsize, j, oclen
  * 
  *     for obj in found_objects:             # <<<<<<<<<<<<<<
+ *         # Convert to faster c array
  *         py_dwoccupmap = dwoccupmap_dict[obj]
- *         oclen = len(py_dwoccupmap)
  */
   if (likely(PyList_CheckExact(__pyx_v_found_objects)) || PyTuple_CheckExact(__pyx_v_found_objects)) {
     __pyx_t_1 = __pyx_v_found_objects; __Pyx_INCREF(__pyx_t_1); __pyx_t_2 = 0;
@@ -912,21 +879,21 @@ static PyObject *__pyx_pf_9stackobjs_StackObjects(CYTHON_UNUSED PyObject *__pyx_
       if (likely(PyList_CheckExact(__pyx_t_1))) {
         if (__pyx_t_2 >= PyList_GET_SIZE(__pyx_t_1)) break;
         #if CYTHON_COMPILING_IN_CPYTHON
-        __pyx_t_6 = PyList_GET_ITEM(__pyx_t_1, __pyx_t_2); __Pyx_INCREF(__pyx_t_6); __pyx_t_2++; if (unlikely(0 < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 22; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        __pyx_t_4 = PyList_GET_ITEM(__pyx_t_1, __pyx_t_2); __Pyx_INCREF(__pyx_t_4); __pyx_t_2++; if (unlikely(0 < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 22; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
         #else
-        __pyx_t_6 = PySequence_ITEM(__pyx_t_1, __pyx_t_2); __pyx_t_2++; if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 22; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        __pyx_t_4 = PySequence_ITEM(__pyx_t_1, __pyx_t_2); __pyx_t_2++; if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 22; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
         #endif
       } else {
         if (__pyx_t_2 >= PyTuple_GET_SIZE(__pyx_t_1)) break;
         #if CYTHON_COMPILING_IN_CPYTHON
-        __pyx_t_6 = PyTuple_GET_ITEM(__pyx_t_1, __pyx_t_2); __Pyx_INCREF(__pyx_t_6); __pyx_t_2++; if (unlikely(0 < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 22; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        __pyx_t_4 = PyTuple_GET_ITEM(__pyx_t_1, __pyx_t_2); __Pyx_INCREF(__pyx_t_4); __pyx_t_2++; if (unlikely(0 < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 22; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
         #else
-        __pyx_t_6 = PySequence_ITEM(__pyx_t_1, __pyx_t_2); __pyx_t_2++; if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 22; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        __pyx_t_4 = PySequence_ITEM(__pyx_t_1, __pyx_t_2); __pyx_t_2++; if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 22; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
         #endif
       }
     } else {
-      __pyx_t_6 = __pyx_t_3(__pyx_t_1);
-      if (unlikely(!__pyx_t_6)) {
+      __pyx_t_4 = __pyx_t_3(__pyx_t_1);
+      if (unlikely(!__pyx_t_4)) {
         PyObject* exc_type = PyErr_Occurred();
         if (exc_type) {
           if (likely(exc_type == PyExc_StopIteration || PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
@@ -934,59 +901,204 @@ static PyObject *__pyx_pf_9stackobjs_StackObjects(CYTHON_UNUSED PyObject *__pyx_
         }
         break;
       }
-      __Pyx_GOTREF(__pyx_t_6);
+      __Pyx_GOTREF(__pyx_t_4);
     }
-    __Pyx_XDECREF_SET(__pyx_v_obj, __pyx_t_6);
-    __pyx_t_6 = 0;
+    __Pyx_XDECREF_SET(__pyx_v_obj, __pyx_t_4);
+    __pyx_t_4 = 0;
 
-    /* "stackobjs.pyx":23
- * 
+    /* "stackobjs.pyx":24
  *     for obj in found_objects:
+ *         # Convert to faster c array
  *         py_dwoccupmap = dwoccupmap_dict[obj]             # <<<<<<<<<<<<<<
  *         oclen = len(py_dwoccupmap)
  *         for j in range(oclen):
  */
-    __pyx_t_6 = PyObject_GetItem(__pyx_v_dwoccupmap_dict, __pyx_v_obj); if (unlikely(__pyx_t_6 == NULL)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 23; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
-    __Pyx_GOTREF(__pyx_t_6);
-    __Pyx_XDECREF_SET(__pyx_v_py_dwoccupmap, __pyx_t_6);
-    __pyx_t_6 = 0;
+    __pyx_t_4 = PyObject_GetItem(__pyx_v_dwoccupmap_dict, __pyx_v_obj); if (unlikely(__pyx_t_4 == NULL)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 24; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
+    __Pyx_GOTREF(__pyx_t_4);
+    __Pyx_XDECREF_SET(__pyx_v_py_dwoccupmap, __pyx_t_4);
+    __pyx_t_4 = 0;
 
-    /* "stackobjs.pyx":24
- *     for obj in found_objects:
+    /* "stackobjs.pyx":25
+ *         # Convert to faster c array
  *         py_dwoccupmap = dwoccupmap_dict[obj]
  *         oclen = len(py_dwoccupmap)             # <<<<<<<<<<<<<<
  *         for j in range(oclen):
  *             dwoccupmap[j] = py_dwoccupmap[j]
  */
-    __pyx_t_9 = PyObject_Length(__pyx_v_py_dwoccupmap); if (unlikely(__pyx_t_9 == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 24; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-    __pyx_v_oclen = __pyx_t_9;
+    __pyx_t_5 = PyObject_Length(__pyx_v_py_dwoccupmap); if (unlikely(__pyx_t_5 == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 25; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_v_oclen = __pyx_t_5;
 
-    /* "stackobjs.pyx":25
+    /* "stackobjs.pyx":26
  *         py_dwoccupmap = dwoccupmap_dict[obj]
  *         oclen = len(py_dwoccupmap)
  *         for j in range(oclen):             # <<<<<<<<<<<<<<
  *             dwoccupmap[j] = py_dwoccupmap[j]
  * 
  */
-    __pyx_t_8 = __pyx_v_oclen;
-    for (__pyx_t_10 = 0; __pyx_t_10 < __pyx_t_8; __pyx_t_10+=1) {
-      __pyx_v_j = __pyx_t_10;
+    __pyx_t_6 = __pyx_v_oclen;
+    for (__pyx_t_7 = 0; __pyx_t_7 < __pyx_t_6; __pyx_t_7+=1) {
+      __pyx_v_j = __pyx_t_7;
 
-      /* "stackobjs.pyx":26
+      /* "stackobjs.pyx":27
  *         oclen = len(py_dwoccupmap)
  *         for j in range(oclen):
  *             dwoccupmap[j] = py_dwoccupmap[j]             # <<<<<<<<<<<<<<
  * 
- *         # Find appropriate position to allocate object
+ *         # preprocess dwoccupmap
  */
-      __pyx_t_6 = __Pyx_GetItemInt(__pyx_v_py_dwoccupmap, __pyx_v_j, int, 1, __Pyx_PyInt_From_int, 0, 1, 1); if (unlikely(__pyx_t_6 == NULL)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 26; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
-      __Pyx_GOTREF(__pyx_t_6);
-      __pyx_t_11 = __Pyx_PyInt_As_int(__pyx_t_6); if (unlikely((__pyx_t_11 == (int)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 26; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-      __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-      (__pyx_v_dwoccupmap[__pyx_v_j]) = __pyx_t_11;
+      __pyx_t_4 = __Pyx_GetItemInt(__pyx_v_py_dwoccupmap, __pyx_v_j, int, 1, __Pyx_PyInt_From_int, 0, 1, 1); if (unlikely(__pyx_t_4 == NULL)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 27; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
+      __Pyx_GOTREF(__pyx_t_4);
+      __pyx_t_8 = __Pyx_PyInt_As_int(__pyx_t_4); if (unlikely((__pyx_t_8 == (int)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 27; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+      (__pyx_v_dwoccupmap[__pyx_v_j]) = __pyx_t_8;
     }
 
-    /* "stackobjs.pyx":29
+    /* "stackobjs.pyx":30
+ * 
+ *         # preprocess dwoccupmap
+ *         for i in range(oclen):             # <<<<<<<<<<<<<<
+ *             if dwoccupmap[i] == 0:
+ *                 dwoccupmap[i] = -1
+ */
+    __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_oclen); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 30; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __Pyx_GOTREF(__pyx_t_4);
+    __pyx_t_9 = PyTuple_New(1); if (unlikely(!__pyx_t_9)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 30; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __Pyx_GOTREF(__pyx_t_9);
+    PyTuple_SET_ITEM(__pyx_t_9, 0, __pyx_t_4);
+    __Pyx_GIVEREF(__pyx_t_4);
+    __pyx_t_4 = 0;
+    __pyx_t_4 = __Pyx_PyObject_Call(__pyx_builtin_range, __pyx_t_9, NULL); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 30; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __Pyx_GOTREF(__pyx_t_4);
+    __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
+    if (likely(PyList_CheckExact(__pyx_t_4)) || PyTuple_CheckExact(__pyx_t_4)) {
+      __pyx_t_9 = __pyx_t_4; __Pyx_INCREF(__pyx_t_9); __pyx_t_5 = 0;
+      __pyx_t_10 = NULL;
+    } else {
+      __pyx_t_5 = -1; __pyx_t_9 = PyObject_GetIter(__pyx_t_4); if (unlikely(!__pyx_t_9)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 30; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __Pyx_GOTREF(__pyx_t_9);
+      __pyx_t_10 = Py_TYPE(__pyx_t_9)->tp_iternext; if (unlikely(!__pyx_t_10)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 30; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    }
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    for (;;) {
+      if (likely(!__pyx_t_10)) {
+        if (likely(PyList_CheckExact(__pyx_t_9))) {
+          if (__pyx_t_5 >= PyList_GET_SIZE(__pyx_t_9)) break;
+          #if CYTHON_COMPILING_IN_CPYTHON
+          __pyx_t_4 = PyList_GET_ITEM(__pyx_t_9, __pyx_t_5); __Pyx_INCREF(__pyx_t_4); __pyx_t_5++; if (unlikely(0 < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 30; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+          #else
+          __pyx_t_4 = PySequence_ITEM(__pyx_t_9, __pyx_t_5); __pyx_t_5++; if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 30; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+          #endif
+        } else {
+          if (__pyx_t_5 >= PyTuple_GET_SIZE(__pyx_t_9)) break;
+          #if CYTHON_COMPILING_IN_CPYTHON
+          __pyx_t_4 = PyTuple_GET_ITEM(__pyx_t_9, __pyx_t_5); __Pyx_INCREF(__pyx_t_4); __pyx_t_5++; if (unlikely(0 < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 30; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+          #else
+          __pyx_t_4 = PySequence_ITEM(__pyx_t_9, __pyx_t_5); __pyx_t_5++; if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 30; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+          #endif
+        }
+      } else {
+        __pyx_t_4 = __pyx_t_10(__pyx_t_9);
+        if (unlikely(!__pyx_t_4)) {
+          PyObject* exc_type = PyErr_Occurred();
+          if (exc_type) {
+            if (likely(exc_type == PyExc_StopIteration || PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
+            else {__pyx_filename = __pyx_f[0]; __pyx_lineno = 30; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+          }
+          break;
+        }
+        __Pyx_GOTREF(__pyx_t_4);
+      }
+      __Pyx_XDECREF_SET(__pyx_v_i, __pyx_t_4);
+      __pyx_t_4 = 0;
+
+      /* "stackobjs.pyx":31
+ *         # preprocess dwoccupmap
+ *         for i in range(oclen):
+ *             if dwoccupmap[i] == 0:             # <<<<<<<<<<<<<<
+ *                 dwoccupmap[i] = -1
+ *             elif i == 0 or dwoccupmap[i - 1] == -1:
+ */
+      __pyx_t_11 = __Pyx_PyIndex_AsSsize_t(__pyx_v_i); if (unlikely((__pyx_t_11 == (Py_ssize_t)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 31; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_12 = (((__pyx_v_dwoccupmap[__pyx_t_11]) == 0) != 0);
+      if (__pyx_t_12) {
+
+        /* "stackobjs.pyx":32
+ *         for i in range(oclen):
+ *             if dwoccupmap[i] == 0:
+ *                 dwoccupmap[i] = -1             # <<<<<<<<<<<<<<
+ *             elif i == 0 or dwoccupmap[i - 1] == -1:
+ *                 dwoccupmap[i] = i
+ */
+        __pyx_t_11 = __Pyx_PyIndex_AsSsize_t(__pyx_v_i); if (unlikely((__pyx_t_11 == (Py_ssize_t)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 32; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        (__pyx_v_dwoccupmap[__pyx_t_11]) = -1;
+        goto __pyx_L11;
+      }
+
+      /* "stackobjs.pyx":33
+ *             if dwoccupmap[i] == 0:
+ *                 dwoccupmap[i] = -1
+ *             elif i == 0 or dwoccupmap[i - 1] == -1:             # <<<<<<<<<<<<<<
+ *                 dwoccupmap[i] = i
+ *             else:
+ */
+      __pyx_t_4 = PyObject_RichCompare(__pyx_v_i, __pyx_int_0, Py_EQ); __Pyx_XGOTREF(__pyx_t_4); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 33; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_13 = __Pyx_PyObject_IsTrue(__pyx_t_4); if (unlikely(__pyx_t_13 < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 33; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+      if (!__pyx_t_13) {
+      } else {
+        __pyx_t_12 = __pyx_t_13;
+        goto __pyx_L12_bool_binop_done;
+      }
+      __pyx_t_4 = PyNumber_Subtract(__pyx_v_i, __pyx_int_1); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 33; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __Pyx_GOTREF(__pyx_t_4);
+      __pyx_t_11 = __Pyx_PyIndex_AsSsize_t(__pyx_t_4); if (unlikely((__pyx_t_11 == (Py_ssize_t)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 33; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+      __pyx_t_13 = (((__pyx_v_dwoccupmap[__pyx_t_11]) == -1) != 0);
+      __pyx_t_12 = __pyx_t_13;
+      __pyx_L12_bool_binop_done:;
+      if (__pyx_t_12) {
+
+        /* "stackobjs.pyx":34
+ *                 dwoccupmap[i] = -1
+ *             elif i == 0 or dwoccupmap[i - 1] == -1:
+ *                 dwoccupmap[i] = i             # <<<<<<<<<<<<<<
+ *             else:
+ *                 dwoccupmap[i] = dwoccupmap[i - 1]
+ */
+        __pyx_t_6 = __Pyx_PyInt_As_int(__pyx_v_i); if (unlikely((__pyx_t_6 == (int)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 34; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        __pyx_t_11 = __Pyx_PyIndex_AsSsize_t(__pyx_v_i); if (unlikely((__pyx_t_11 == (Py_ssize_t)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 34; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        (__pyx_v_dwoccupmap[__pyx_t_11]) = __pyx_t_6;
+        goto __pyx_L11;
+      }
+      /*else*/ {
+
+        /* "stackobjs.pyx":36
+ *                 dwoccupmap[i] = i
+ *             else:
+ *                 dwoccupmap[i] = dwoccupmap[i - 1]             # <<<<<<<<<<<<<<
+ * 
+ *         # Find appropriate position to allocate object
+ */
+        __pyx_t_4 = PyNumber_Subtract(__pyx_v_i, __pyx_int_1); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 36; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        __Pyx_GOTREF(__pyx_t_4);
+        __pyx_t_11 = __Pyx_PyIndex_AsSsize_t(__pyx_t_4); if (unlikely((__pyx_t_11 == (Py_ssize_t)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 36; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+        __pyx_t_14 = __Pyx_PyIndex_AsSsize_t(__pyx_v_i); if (unlikely((__pyx_t_14 == (Py_ssize_t)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 36; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        (__pyx_v_dwoccupmap[__pyx_t_14]) = (__pyx_v_dwoccupmap[__pyx_t_11]);
+      }
+      __pyx_L11:;
+
+      /* "stackobjs.pyx":30
+ * 
+ *         # preprocess dwoccupmap
+ *         for i in range(oclen):             # <<<<<<<<<<<<<<
+ *             if dwoccupmap[i] == 0:
+ *                 dwoccupmap[i] = -1
+ */
+    }
+    __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
+
+    /* "stackobjs.pyx":39
  * 
  *         # Find appropriate position to allocate object
  *         j = 0             # <<<<<<<<<<<<<<
@@ -995,7 +1107,7 @@ static PyObject *__pyx_pf_9stackobjs_StackObjects(CYTHON_UNUSED PyObject *__pyx_
  */
     __pyx_v_j = 0;
 
-    /* "stackobjs.pyx":30
+    /* "stackobjs.pyx":40
  *         # Find appropriate position to allocate object
  *         j = 0
  *         while j < oclen:             # <<<<<<<<<<<<<<
@@ -1006,7 +1118,7 @@ static PyObject *__pyx_pf_9stackobjs_StackObjects(CYTHON_UNUSED PyObject *__pyx_
       __pyx_t_12 = ((__pyx_v_j < __pyx_v_oclen) != 0);
       if (!__pyx_t_12) break;
 
-      /* "stackobjs.pyx":32
+      /* "stackobjs.pyx":42
  *         while j < oclen:
  *             # Update on conflict map
  *             if dwoccupmap[j] != -1 and dwoccupmap_sum[lallocaddr + j] != -1:             # <<<<<<<<<<<<<<
@@ -1017,14 +1129,14 @@ static PyObject *__pyx_pf_9stackobjs_StackObjects(CYTHON_UNUSED PyObject *__pyx_
       if (__pyx_t_13) {
       } else {
         __pyx_t_12 = __pyx_t_13;
-        goto __pyx_L12_bool_binop_done;
+        goto __pyx_L17_bool_binop_done;
       }
       __pyx_t_13 = (((__pyx_v_dwoccupmap_sum[(__pyx_v_lallocaddr + __pyx_v_j)]) != -1) != 0);
       __pyx_t_12 = __pyx_t_13;
-      __pyx_L12_bool_binop_done:;
+      __pyx_L17_bool_binop_done:;
       if (__pyx_t_12) {
 
-        /* "stackobjs.pyx":33
+        /* "stackobjs.pyx":43
  *             # Update on conflict map
  *             if dwoccupmap[j] != -1 and dwoccupmap_sum[lallocaddr + j] != -1:
  *                 lallocaddr = dwoccupmap_sum[lallocaddr + j] - dwoccupmap[j]             # <<<<<<<<<<<<<<
@@ -1033,7 +1145,7 @@ static PyObject *__pyx_pf_9stackobjs_StackObjects(CYTHON_UNUSED PyObject *__pyx_
  */
         __pyx_v_lallocaddr = ((__pyx_v_dwoccupmap_sum[(__pyx_v_lallocaddr + __pyx_v_j)]) - (__pyx_v_dwoccupmap[__pyx_v_j]));
 
-        /* "stackobjs.pyx":34
+        /* "stackobjs.pyx":44
  *             if dwoccupmap[j] != -1 and dwoccupmap_sum[lallocaddr + j] != -1:
  *                 lallocaddr = dwoccupmap_sum[lallocaddr + j] - dwoccupmap[j]
  *                 j = 0             # <<<<<<<<<<<<<<
@@ -1041,11 +1153,11 @@ static PyObject *__pyx_pf_9stackobjs_StackObjects(CYTHON_UNUSED PyObject *__pyx_
  *             else:
  */
         __pyx_v_j = 0;
-        goto __pyx_L11;
+        goto __pyx_L16;
       }
       /*else*/ {
 
-        /* "stackobjs.pyx":37
+        /* "stackobjs.pyx":47
  * 
  *             else:
  *                 j += 1             # <<<<<<<<<<<<<<
@@ -1054,20 +1166,20 @@ static PyObject *__pyx_pf_9stackobjs_StackObjects(CYTHON_UNUSED PyObject *__pyx_
  */
         __pyx_v_j = (__pyx_v_j + 1);
       }
-      __pyx_L11:;
+      __pyx_L16:;
     }
 
-    /* "stackobjs.pyx":40
+    /* "stackobjs.pyx":50
  * 
  *         # Apply occupation map
  *         for j in range(oclen - 1, -1, -1):             # <<<<<<<<<<<<<<
  *             curoff = lallocaddr + j
  *             if dwoccupmap[j] != -1 or dwoccupmap_sum[curoff] != -1:
  */
-    for (__pyx_t_8 = (__pyx_v_oclen - 1); __pyx_t_8 > -1; __pyx_t_8-=1) {
-      __pyx_v_j = __pyx_t_8;
+    for (__pyx_t_6 = (__pyx_v_oclen - 1); __pyx_t_6 > -1; __pyx_t_6-=1) {
+      __pyx_v_j = __pyx_t_6;
 
-      /* "stackobjs.pyx":41
+      /* "stackobjs.pyx":51
  *         # Apply occupation map
  *         for j in range(oclen - 1, -1, -1):
  *             curoff = lallocaddr + j             # <<<<<<<<<<<<<<
@@ -1076,7 +1188,7 @@ static PyObject *__pyx_pf_9stackobjs_StackObjects(CYTHON_UNUSED PyObject *__pyx_
  */
       __pyx_v_curoff = (__pyx_v_lallocaddr + __pyx_v_j);
 
-      /* "stackobjs.pyx":42
+      /* "stackobjs.pyx":52
  *         for j in range(oclen - 1, -1, -1):
  *             curoff = lallocaddr + j
  *             if dwoccupmap[j] != -1 or dwoccupmap_sum[curoff] != -1:             # <<<<<<<<<<<<<<
@@ -1087,14 +1199,14 @@ static PyObject *__pyx_pf_9stackobjs_StackObjects(CYTHON_UNUSED PyObject *__pyx_
       if (!__pyx_t_13) {
       } else {
         __pyx_t_12 = __pyx_t_13;
-        goto __pyx_L17_bool_binop_done;
+        goto __pyx_L22_bool_binop_done;
       }
       __pyx_t_13 = (((__pyx_v_dwoccupmap_sum[__pyx_v_curoff]) != -1) != 0);
       __pyx_t_12 = __pyx_t_13;
-      __pyx_L17_bool_binop_done:;
+      __pyx_L22_bool_binop_done:;
       if (__pyx_t_12) {
 
-        /* "stackobjs.pyx":43
+        /* "stackobjs.pyx":53
  *             curoff = lallocaddr + j
  *             if dwoccupmap[j] != -1 or dwoccupmap_sum[curoff] != -1:
  *                 if dwoccupmap_sum[curoff + 1] == -1:             # <<<<<<<<<<<<<<
@@ -1104,7 +1216,7 @@ static PyObject *__pyx_pf_9stackobjs_StackObjects(CYTHON_UNUSED PyObject *__pyx_
         __pyx_t_12 = (((__pyx_v_dwoccupmap_sum[(__pyx_v_curoff + 1)]) == -1) != 0);
         if (__pyx_t_12) {
 
-          /* "stackobjs.pyx":44
+          /* "stackobjs.pyx":54
  *             if dwoccupmap[j] != -1 or dwoccupmap_sum[curoff] != -1:
  *                 if dwoccupmap_sum[curoff + 1] == -1:
  *                     dwoccupmap_sum[curoff] = curoff + 1             # <<<<<<<<<<<<<<
@@ -1112,124 +1224,81 @@ static PyObject *__pyx_pf_9stackobjs_StackObjects(CYTHON_UNUSED PyObject *__pyx_
  *                     dwoccupmap_sum[curoff] = dwoccupmap_sum[curoff + 1]
  */
           (__pyx_v_dwoccupmap_sum[__pyx_v_curoff]) = (__pyx_v_curoff + 1);
-          goto __pyx_L19;
+          goto __pyx_L24;
         }
         /*else*/ {
 
-          /* "stackobjs.pyx":46
+          /* "stackobjs.pyx":56
  *                     dwoccupmap_sum[curoff] = curoff + 1
  *                 else:
  *                     dwoccupmap_sum[curoff] = dwoccupmap_sum[curoff + 1]             # <<<<<<<<<<<<<<
  * 
- *         objsize = obj.GetDataSize()
+ *         alloctable[obj] = lallocaddr * 4
  */
           (__pyx_v_dwoccupmap_sum[__pyx_v_curoff]) = (__pyx_v_dwoccupmap_sum[(__pyx_v_curoff + 1)]);
         }
-        __pyx_L19:;
-        goto __pyx_L16;
+        __pyx_L24:;
+        goto __pyx_L21;
       }
-      __pyx_L16:;
+      __pyx_L21:;
     }
 
-    /* "stackobjs.pyx":48
+    /* "stackobjs.pyx":58
  *                     dwoccupmap_sum[curoff] = dwoccupmap_sum[curoff + 1]
  * 
- *         objsize = obj.GetDataSize()             # <<<<<<<<<<<<<<
- *         alloctable[obj] = (lallocaddr * 4, objsize)
- *         if lallocaddr * 4 + objsize > payload_size:
+ *         alloctable[obj] = lallocaddr * 4             # <<<<<<<<<<<<<<
+ *         if (lallocaddr + oclen) * 4 > payload_size:
+ *             payload_size = (lallocaddr + oclen) * 4
  */
-    __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_v_obj, __pyx_n_s_GetDataSize); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 48; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-    __Pyx_GOTREF(__pyx_t_5);
-    __pyx_t_4 = NULL;
-    if (CYTHON_COMPILING_IN_CPYTHON && likely(PyMethod_Check(__pyx_t_5))) {
-      __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_5);
-      if (likely(__pyx_t_4)) {
-        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_5);
-        __Pyx_INCREF(__pyx_t_4);
-        __Pyx_INCREF(function);
-        __Pyx_DECREF_SET(__pyx_t_5, function);
-      }
-    }
-    if (__pyx_t_4) {
-      __pyx_t_6 = __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_t_4); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 48; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-      __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    } else {
-      __pyx_t_6 = __Pyx_PyObject_CallNoArg(__pyx_t_5); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 48; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-    }
-    __Pyx_GOTREF(__pyx_t_6);
-    __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-    __pyx_t_8 = __Pyx_PyInt_As_int(__pyx_t_6); if (unlikely((__pyx_t_8 == (int)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 48; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-    __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-    __pyx_v_objsize = __pyx_t_8;
+    __pyx_t_9 = __Pyx_PyInt_From_long((__pyx_v_lallocaddr * 4)); if (unlikely(!__pyx_t_9)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 58; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __Pyx_GOTREF(__pyx_t_9);
+    if (unlikely(PyObject_SetItem(__pyx_v_alloctable, __pyx_v_obj, __pyx_t_9) < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 58; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
 
-    /* "stackobjs.pyx":49
+    /* "stackobjs.pyx":59
  * 
- *         objsize = obj.GetDataSize()
- *         alloctable[obj] = (lallocaddr * 4, objsize)             # <<<<<<<<<<<<<<
- *         if lallocaddr * 4 + objsize > payload_size:
- *             payload_size = lallocaddr * 4 + objsize
- */
-    __pyx_t_6 = __Pyx_PyInt_From_long((__pyx_v_lallocaddr * 4)); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 49; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-    __Pyx_GOTREF(__pyx_t_6);
-    __pyx_t_5 = __Pyx_PyInt_From_int(__pyx_v_objsize); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 49; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-    __Pyx_GOTREF(__pyx_t_5);
-    __pyx_t_4 = PyTuple_New(2); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 49; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-    __Pyx_GOTREF(__pyx_t_4);
-    PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_6);
-    __Pyx_GIVEREF(__pyx_t_6);
-    PyTuple_SET_ITEM(__pyx_t_4, 1, __pyx_t_5);
-    __Pyx_GIVEREF(__pyx_t_5);
-    __pyx_t_6 = 0;
-    __pyx_t_5 = 0;
-    if (unlikely(PyObject_SetItem(__pyx_v_alloctable, __pyx_v_obj, __pyx_t_4) < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 49; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-
-    /* "stackobjs.pyx":50
- *         objsize = obj.GetDataSize()
- *         alloctable[obj] = (lallocaddr * 4, objsize)
- *         if lallocaddr * 4 + objsize > payload_size:             # <<<<<<<<<<<<<<
- *             payload_size = lallocaddr * 4 + objsize
+ *         alloctable[obj] = lallocaddr * 4
+ *         if (lallocaddr + oclen) * 4 > payload_size:             # <<<<<<<<<<<<<<
+ *             payload_size = (lallocaddr + oclen) * 4
  * 
  */
-    __pyx_t_12 = ((((__pyx_v_lallocaddr * 4) + __pyx_v_objsize) > __pyx_v_payload_size) != 0);
+    __pyx_t_12 = ((((__pyx_v_lallocaddr + __pyx_v_oclen) * 4) > __pyx_v_payload_size) != 0);
     if (__pyx_t_12) {
 
-      /* "stackobjs.pyx":51
- *         alloctable[obj] = (lallocaddr * 4, objsize)
- *         if lallocaddr * 4 + objsize > payload_size:
- *             payload_size = lallocaddr * 4 + objsize             # <<<<<<<<<<<<<<
+      /* "stackobjs.pyx":60
+ *         alloctable[obj] = lallocaddr * 4
+ *         if (lallocaddr + oclen) * 4 > payload_size:
+ *             payload_size = (lallocaddr + oclen) * 4             # <<<<<<<<<<<<<<
  * 
  *     PyMem_Free(dwoccupmap)
  */
-      __pyx_v_payload_size = ((__pyx_v_lallocaddr * 4) + __pyx_v_objsize);
-      goto __pyx_L20;
+      __pyx_v_payload_size = ((__pyx_v_lallocaddr + __pyx_v_oclen) * 4);
+      goto __pyx_L25;
     }
-    __pyx_L20:;
+    __pyx_L25:;
 
     /* "stackobjs.pyx":22
  *     cdef int curoff, objsize, j, oclen
  * 
  *     for obj in found_objects:             # <<<<<<<<<<<<<<
+ *         # Convert to faster c array
  *         py_dwoccupmap = dwoccupmap_dict[obj]
- *         oclen = len(py_dwoccupmap)
  */
   }
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "stackobjs.pyx":53
- *             payload_size = lallocaddr * 4 + objsize
+  /* "stackobjs.pyx":62
+ *             payload_size = (lallocaddr + oclen) * 4
  * 
  *     PyMem_Free(dwoccupmap)             # <<<<<<<<<<<<<<
  *     PyMem_Free(dwoccupmap_sum)
- * 
  */
   PyMem_Free(__pyx_v_dwoccupmap);
 
-  /* "stackobjs.pyx":54
+  /* "stackobjs.pyx":63
  * 
  *     PyMem_Free(dwoccupmap)
  *     PyMem_Free(dwoccupmap_sum)             # <<<<<<<<<<<<<<
- * 
  */
   PyMem_Free(__pyx_v_dwoccupmap_sum);
 
@@ -1247,14 +1316,13 @@ static PyObject *__pyx_pf_9stackobjs_StackObjects(CYTHON_UNUSED PyObject *__pyx_
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_1);
   __Pyx_XDECREF(__pyx_t_4);
-  __Pyx_XDECREF(__pyx_t_5);
-  __Pyx_XDECREF(__pyx_t_6);
-  __Pyx_XDECREF(__pyx_t_7);
+  __Pyx_XDECREF(__pyx_t_9);
   __Pyx_AddTraceback("stackobjs.StackObjects", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XDECREF(__pyx_v_obj);
   __Pyx_XDECREF(__pyx_v_py_dwoccupmap);
+  __Pyx_XDECREF(__pyx_v_i);
   __Pyx_XGIVEREF(__pyx_r);
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
@@ -1284,7 +1352,6 @@ static struct PyModuleDef __pyx_moduledef = {
 
 static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_kp_s_C_Users_phu54_000_Documents_GitH, __pyx_k_C_Users_phu54_000_Documents_GitH, sizeof(__pyx_k_C_Users_phu54_000_Documents_GitH), 0, 0, 1, 0},
-  {&__pyx_n_s_GetDataSize, __pyx_k_GetDataSize, sizeof(__pyx_k_GetDataSize), 0, 0, 1, 1},
   {&__pyx_n_s_StackObjects, __pyx_k_StackObjects, sizeof(__pyx_k_StackObjects), 0, 0, 1, 1},
   {&__pyx_n_s_alloctable, __pyx_k_alloctable, sizeof(__pyx_k_alloctable), 0, 0, 1, 1},
   {&__pyx_n_s_curoff, __pyx_k_curoff, sizeof(__pyx_k_curoff), 0, 0, 1, 1},
@@ -1293,6 +1360,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_dwoccupmap_max_size, __pyx_k_dwoccupmap_max_size, sizeof(__pyx_k_dwoccupmap_max_size), 0, 0, 1, 1},
   {&__pyx_n_s_dwoccupmap_sum, __pyx_k_dwoccupmap_sum, sizeof(__pyx_k_dwoccupmap_sum), 0, 0, 1, 1},
   {&__pyx_n_s_found_objects, __pyx_k_found_objects, sizeof(__pyx_k_found_objects), 0, 0, 1, 1},
+  {&__pyx_n_s_i, __pyx_k_i, sizeof(__pyx_k_i), 0, 0, 1, 1},
   {&__pyx_n_s_j, __pyx_k_j, sizeof(__pyx_k_j), 0, 0, 1, 1},
   {&__pyx_n_s_lallocaddr, __pyx_k_lallocaddr, sizeof(__pyx_k_lallocaddr), 0, 0, 1, 1},
   {&__pyx_n_s_main, __pyx_k_main, sizeof(__pyx_k_main), 0, 0, 1, 1},
@@ -1307,7 +1375,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {0, 0, 0, 0, 0, 0, 0}
 };
 static int __Pyx_InitCachedBuiltins(void) {
-  __pyx_builtin_range = __Pyx_GetBuiltinName(__pyx_n_s_range); if (!__pyx_builtin_range) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 25; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_builtin_range = __Pyx_GetBuiltinName(__pyx_n_s_range); if (!__pyx_builtin_range) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 26; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   return 0;
   __pyx_L1_error:;
   return -1;
@@ -1324,10 +1392,10 @@ static int __Pyx_InitCachedConstants(void) {
  *     found_objects,
  *     dwoccupmap_dict,
  */
-  __pyx_tuple_ = PyTuple_Pack(14, __pyx_n_s_found_objects, __pyx_n_s_dwoccupmap_dict, __pyx_n_s_alloctable, __pyx_n_s_dwoccupmap_max_size, __pyx_n_s_obj, __pyx_n_s_dwoccupmap_sum, __pyx_n_s_dwoccupmap, __pyx_n_s_lallocaddr, __pyx_n_s_payload_size, __pyx_n_s_curoff, __pyx_n_s_objsize, __pyx_n_s_j, __pyx_n_s_oclen, __pyx_n_s_py_dwoccupmap); if (unlikely(!__pyx_tuple_)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 4; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_tuple_ = PyTuple_Pack(15, __pyx_n_s_found_objects, __pyx_n_s_dwoccupmap_dict, __pyx_n_s_alloctable, __pyx_n_s_dwoccupmap_max_size, __pyx_n_s_obj, __pyx_n_s_dwoccupmap_sum, __pyx_n_s_dwoccupmap, __pyx_n_s_lallocaddr, __pyx_n_s_payload_size, __pyx_n_s_curoff, __pyx_n_s_objsize, __pyx_n_s_j, __pyx_n_s_oclen, __pyx_n_s_py_dwoccupmap, __pyx_n_s_i); if (unlikely(!__pyx_tuple_)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 4; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_tuple_);
   __Pyx_GIVEREF(__pyx_tuple_);
-  __pyx_codeobj__2 = (PyObject*)__Pyx_PyCode_New(3, 0, 14, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple_, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_C_Users_phu54_000_Documents_GitH, __pyx_n_s_StackObjects, 4, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 4; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_codeobj__2 = (PyObject*)__Pyx_PyCode_New(3, 0, 15, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple_, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_C_Users_phu54_000_Documents_GitH, __pyx_n_s_StackObjects, 4, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 4; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_RefNannyFinishContext();
   return 0;
   __pyx_L1_error:;
@@ -1337,6 +1405,8 @@ static int __Pyx_InitCachedConstants(void) {
 
 static int __Pyx_InitGlobals(void) {
   if (__Pyx_InitStrings(__pyx_string_tab) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 1; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
+  __pyx_int_0 = PyInt_FromLong(0); if (unlikely(!__pyx_int_0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 1; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_int_1 = PyInt_FromLong(1); if (unlikely(!__pyx_int_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 1; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   return 0;
   __pyx_L1_error:;
   return -1;
@@ -1640,89 +1710,6 @@ bad:
     return -1;
 }
 
-#if CYTHON_COMPILING_IN_CPYTHON
-static CYTHON_INLINE PyObject* __Pyx_PyObject_Call(PyObject *func, PyObject *arg, PyObject *kw) {
-    PyObject *result;
-    ternaryfunc call = func->ob_type->tp_call;
-    if (unlikely(!call))
-        return PyObject_Call(func, arg, kw);
-    if (unlikely(Py_EnterRecursiveCall((char*)" while calling a Python object")))
-        return NULL;
-    result = (*call)(func, arg, kw);
-    Py_LeaveRecursiveCall();
-    if (unlikely(!result) && unlikely(!PyErr_Occurred())) {
-        PyErr_SetString(
-            PyExc_SystemError,
-            "NULL result without error in PyObject_Call");
-    }
-    return result;
-}
-#endif
-
-#if CYTHON_COMPILING_IN_CPYTHON
-static CYTHON_INLINE PyObject* __Pyx_PyObject_CallMethO(PyObject *func, PyObject *arg) {
-    PyObject *self, *result;
-    PyCFunction cfunc;
-    cfunc = PyCFunction_GET_FUNCTION(func);
-    self = PyCFunction_GET_SELF(func);
-    if (unlikely(Py_EnterRecursiveCall((char*)" while calling a Python object")))
-        return NULL;
-    result = cfunc(self, arg);
-    Py_LeaveRecursiveCall();
-    if (unlikely(!result) && unlikely(!PyErr_Occurred())) {
-        PyErr_SetString(
-            PyExc_SystemError,
-            "NULL result without error in PyObject_Call");
-    }
-    return result;
-}
-#endif
-
-#if CYTHON_COMPILING_IN_CPYTHON
-static PyObject* __Pyx__PyObject_CallOneArg(PyObject *func, PyObject *arg) {
-    PyObject *result;
-    PyObject *args = PyTuple_New(1);
-    if (unlikely(!args)) return NULL;
-    Py_INCREF(arg);
-    PyTuple_SET_ITEM(args, 0, arg);
-    result = __Pyx_PyObject_Call(func, args, NULL);
-    Py_DECREF(args);
-    return result;
-}
-static CYTHON_INLINE PyObject* __Pyx_PyObject_CallOneArg(PyObject *func, PyObject *arg) {
-#ifdef __Pyx_CyFunction_USED
-    if (likely(PyCFunction_Check(func) || PyObject_TypeCheck(func, __pyx_CyFunctionType))) {
-#else
-    if (likely(PyCFunction_Check(func))) {
-#endif
-        if (likely(PyCFunction_GET_FLAGS(func) & METH_O)) {
-            return __Pyx_PyObject_CallMethO(func, arg);
-        }
-    }
-    return __Pyx__PyObject_CallOneArg(func, arg);
-}
-#else
-static CYTHON_INLINE PyObject* __Pyx_PyObject_CallOneArg(PyObject *func, PyObject *arg) {
-    PyObject* args = PyTuple_Pack(1, arg);
-    return (likely(args)) ? __Pyx_PyObject_Call(func, args, NULL) : NULL;
-}
-#endif
-
-#if CYTHON_COMPILING_IN_CPYTHON
-static CYTHON_INLINE PyObject* __Pyx_PyObject_CallNoArg(PyObject *func) {
-#ifdef __Pyx_CyFunction_USED
-    if (likely(PyCFunction_Check(func) || PyObject_TypeCheck(func, __pyx_CyFunctionType))) {
-#else
-    if (likely(PyCFunction_Check(func))) {
-#endif
-        if (likely(PyCFunction_GET_FLAGS(func) & METH_NOARGS)) {
-            return __Pyx_PyObject_CallMethO(func, NULL);
-        }
-    }
-    return __Pyx_PyObject_Call(func, __pyx_empty_tuple, NULL);
-}
-#endif
-
 static CYTHON_INLINE PyObject *__Pyx_GetItemInt_Generic(PyObject *o, PyObject* j) {
     PyObject *r;
     if (!j) return NULL;
@@ -1800,6 +1787,25 @@ static CYTHON_INLINE PyObject *__Pyx_GetItemInt_Fast(PyObject *o, Py_ssize_t i,
 #endif
     return __Pyx_GetItemInt_Generic(o, PyInt_FromSsize_t(i));
 }
+
+#if CYTHON_COMPILING_IN_CPYTHON
+static CYTHON_INLINE PyObject* __Pyx_PyObject_Call(PyObject *func, PyObject *arg, PyObject *kw) {
+    PyObject *result;
+    ternaryfunc call = func->ob_type->tp_call;
+    if (unlikely(!call))
+        return PyObject_Call(func, arg, kw);
+    if (unlikely(Py_EnterRecursiveCall((char*)" while calling a Python object")))
+        return NULL;
+    result = (*call)(func, arg, kw);
+    Py_LeaveRecursiveCall();
+    if (unlikely(!result) && unlikely(!PyErr_Occurred())) {
+        PyErr_SetString(
+            PyExc_SystemError,
+            "NULL result without error in PyObject_Call");
+    }
+    return result;
+}
+#endif
 
 static int __pyx_bisect_code_objects(__Pyx_CodeObjectCacheEntry* entries, int count, int code_line) {
     int start = 0, mid = 0, end = count - 1;
