@@ -25,6 +25,7 @@ THE SOFTWARE.
 
 from ..allocator import Expr
 from ..allocator.payload import GetObjectAddr
+from eudplib import utils as ut
 
 
 class EUDObject(Expr):

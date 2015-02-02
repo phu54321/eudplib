@@ -27,13 +27,14 @@ THE SOFTWARE.
 #
 # unsigned long xor() {
 # static unsigned long y=2463534242;
-# yˆ=(y<<13);
+# y^=(y<<13);
 #     y=(y>>17);
-#     return (yˆ=(y<<5));
+#     return (y^=(y<<5));
 # }
 #
 
 from eudplib import core as c
+from eudplib import utils as ut
 from ..memiof import f_dwbreak, f_dwread_epd
 
 _seed = c.EUDVariable()

@@ -26,7 +26,7 @@ THE SOFTWARE.
 from . import rlocint, pbuffer
 from . import expr
 from eudplib import utils as ut
-from eudplib.utils.stackobjs import StackObjects
+from eudplib.utils import stackobjs
 
 import random
 
@@ -49,7 +49,7 @@ _payload_compress = False
 def CompressPayload(mode):
     global _payload_compress
     if mode not in [True, False]:
-        raise ut.EPError.EPError('Invalid type')
+        raise ut.EPError('Invalid type')
 
     if mode:
         _payload_compress = True
@@ -255,7 +255,8 @@ def AllocObjects():
             len(dwoccupmap) == (obj.GetDataSize() + 3) >> 2,
             'Occupation map length & Object size mismatch for object'
         )
-    StackObjects(_found_objects, dwoccupmap_dict, _alloctable)
+
+    stackobjs.StackObjects(_found_objects, dwoccupmap_dict, _alloctable)
 
     # Get payload length
     _payload_size = 0

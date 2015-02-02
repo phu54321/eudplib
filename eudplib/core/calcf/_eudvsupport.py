@@ -28,13 +28,7 @@ from .bitwise import (
     f_bitand,
     f_bitor,
     f_bitxor,
-    f_bitnand,
-    f_bitnor,
-    f_bitnxor,
     f_bitnot,
-    f_bitlshift,
-    f_bitrshift,
-    f_bitsplit,
 )
 
 

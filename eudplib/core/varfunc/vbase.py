@@ -24,6 +24,7 @@ THE SOFTWARE.
 '''
 
 from .. import rawtrigger as bt
+from eudplib import utils as ut
 
 
 class VariableBase:

@@ -27,8 +27,7 @@ THE SOFTWARE.
 scenario.chk section tokenizer. Internally used in eudplib.
 '''
 
-from ...utils import ubconv, binio
-
+from eudplib import utils as ut
 
 """
 General CHK class.
@@ -37,7 +36,7 @@ General CHK class.
 
 def sectionname_format(sn):
     if type(sn) is str:
-        sn = ubconv.u2b(sn)
+        sn = ut.u2b(sn)
 
     if len(sn) < 4:
         sn += b' ' * (4 - len(sn))
@@ -71,7 +70,7 @@ class CHK:
         while index < len(b):
             # read data
             sectionname = b[index: index + 4]
-            sectionlength = binio.b2i4(b, index + 4)
+            sectionlength = ut.b2i4(b, index + 4)
 
             if sectionlength < 0:
                 # jsp with negative section size.
@@ -89,7 +88,7 @@ class CHK:
         # calculate output size
         blist = []
         for name, binary in self.sections.items():
-            blist.append(name + binio.i2b4(len(binary)) + binary)
+            blist.append(name + ut.i2b4(len(binary)) + binary)
 
         return b''.join(blist)
 
@@ -125,8 +124,8 @@ class CHK:
 
         # Terrain optimization
         dim = self.getsection(b'DIM ')
-        mapw = binio.b2i2(dim, 0)
-        maph = binio.b2i2(dim, 2)
+        mapw = ut.b2i2(dim, 0)
+        maph = ut.b2i2(dim, 2)
         terrainsize = mapw * maph
 
         # MASK optimization : cancel 0xFFs.
