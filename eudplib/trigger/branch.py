@@ -25,7 +25,7 @@ THE SOFTWARE.
 
 from .. import core as c
 from eudplib import utils as ut
-from .tpatcher import PatchCondition, PatchAction
+from .tpatcher import PatchCondition
 
 
 def Branch(conditions, ontrue, onfalse):

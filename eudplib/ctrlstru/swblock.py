@@ -26,7 +26,7 @@ THE SOFTWARE.
 from .. import core as c
 from .. import trigger as tg
 from eudplib import utils as ut
-from .basicstru import EUDJump, EUDJumpIf
+from .basicstru import EUDJump, EUDJumpIf, EUDJumpIfNot
 
 
 def _IsSwitchBlockId(idf):
@@ -74,6 +74,13 @@ def EUDSwitchBreak():
     block = ut.EUDGetLastBlockOfName('swblock')[1]
     EUDJump(block['swend'])
 
+def EUDSwitchBreakIf(conditions):
+    block = ut.EUDGetLastBlockOfName('swblock')[1]
+    EUDJumpIf(conditions, block['swend'])
+
+def EUDSwitchBreakIfNot(conditions):
+    block = ut.EUDGetLastBlockOfName('swblock')[1]
+    EUDJumpIfNot(conditions, block['swend'])
 
 def EUDEndSwitch():
     lb = ut.EUDPopBlock('swblock')

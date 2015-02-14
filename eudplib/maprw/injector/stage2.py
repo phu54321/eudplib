@@ -29,7 +29,7 @@ from ... import ctrlstru as cs
 from ... import varfunc as vf
 from ... import trigger as trig
 from eudplib import utils as ut
-from .verifyf import verifyf
+from . import verifyf
 
 ''' Stage 2 :
 - Initialize payload (stage3+ + user code) & execute it
@@ -115,7 +115,7 @@ def CreateStage2(payload):
     # Note : this is very, very basic protection method. Intended attackers
     # should be able to penetrate through this very easily
     vchks = f_verify(ut.EPD(orig_payload), len(payload.data) // 4)
-    origchks = verifyf(bytearray(payload.data), len(payload.data))
+    origchks = verifyf.verifyf(bytearray(payload.data), len(payload.data))
 
     trig.Trigger(actions=[
         c.SetDeaths(i, c.SetTo, vchk, 1)

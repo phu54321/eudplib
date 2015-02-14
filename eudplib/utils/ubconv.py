@@ -24,6 +24,7 @@ THE SOFTWARE.
 '''
 
 import locale
+from .eperror import EPError
 
 g_encoding = locale.getpreferredencoding()
 
@@ -37,7 +38,7 @@ def u2b(s):
     if isinstance(s, str):
         return s.encode(g_encoding)
     elif isinstance(s, int):
-        raise ut.EPError('Invalid type %s' % type(s))
+        raise EPError('Invalid type %s' % type(s))
     else:
         return bytes(s)
 
@@ -46,6 +47,6 @@ def b2u(b):
     if isinstance(b, bytes):
         return b.decode(g_encoding)
     elif isinstance(b, int):
-        raise ut.EPError('Invalid type %s' % type(b))
+        raise EPError('Invalid type %s' % type(b))
     else:
         return str(b)

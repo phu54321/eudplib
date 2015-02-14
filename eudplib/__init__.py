@@ -30,8 +30,22 @@ from .ctrlstru import *
 from .eudlib import *
 from .trigtrg import *
 from .maprw import *
+import types
 
-__version__ = '0.41b5'
+__version__ = '0.41r6'
+
+
+# remove modules from __all__
+
+_alllist = []
+for k, v in dict(globals()).items():
+    if isinstance(v, types.ModuleType):
+        continue
+    if k[0] == '_':
+        continue
+    _alllist.append(k)
+
+__all__ = _alllist
 
 
 def eudtrgVersion():
