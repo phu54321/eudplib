@@ -410,4 +410,5 @@ def SetNextPtr(trg, dest):
 
 
 def SetCurrentPlayer(p):
+    p = EncodePlayer(p)
     return SetMemory(0x6509B0, 7, p)
