@@ -37,6 +37,14 @@ def Trigger(conditions=None, actions=None, preserved=True):
     conditions = ut.FlattenList(conditions)
     actions = ut.FlattenList(actions)
 
+    # Translate boolean conditions.
+    for i, cond in enumerate(conditions):
+        if isinstance(cond, bool):
+            if cond:
+                conditions[i] = c.Always()
+            else:
+                conditions[i] = c.Never()
+
     # Normal
     if len(conditions) <= 16 and len(actions) <= 64:
         for cond in conditions:
@@ -45,7 +53,11 @@ def Trigger(conditions=None, actions=None, preserved=True):
         for act in actions:
             PatchAction(act)
 
-        c.RawTrigger(conditions=conditions, actions=actions, preserved=preserved)
+        c.RawTrigger(
+            conditions=conditions,
+            actions=actions,
+            preserved=preserved
+        )
 
     else:
         # Extended trigger
