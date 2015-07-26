@@ -29,12 +29,7 @@ from eudplib import utils as ut
 class RlocInt:
 
     def __init__(self, offset, rlocmode):
-        ut.ep_assert(
-            isinstance(offset, int) and isinstance(rlocmode, int),
-            'Invalid argument for RlocInt constructor'
-        )
-        self.offset = offset
-        self.rlocmode = rlocmode
+        self.offset, self.rlocmode = offset, rlocmode
 
     def __add__(self, other):
         other = toRlocInt(other)

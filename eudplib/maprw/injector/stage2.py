@@ -117,10 +117,6 @@ def CreateStage2(payload):
     vchks = f_verify(ut.EPD(orig_payload), len(payload.data) // 4)
     origchks = verifyf.verifyf(bytearray(payload.data), len(payload.data))
 
-    trig.Trigger(actions=[
-        c.SetDeaths(i, c.SetTo, vchk, 1)
-        for i, vchk in enumerate(vchks)
-    ])
     if cs.EUDIfNot(
         [origchk == vchk for origchk, vchk in zip(origchks, vchks)]
     ):

@@ -37,6 +37,15 @@ def GetTriggerCount():  # Debugging purpose
     return _trgcount
 
 
+def _bool2Cond(x):
+    if x is True:
+        return Condition(0, 0, 0, 0, 0, 22, 0, 0)  # Always
+    elif x is False:
+        return Condition(0, 0, 0, 0, 0, 23, 0, 0)  # Never
+    else:
+        return x
+
+
 class RawTrigger(EUDObject):
 
     def __init__(
@@ -72,6 +81,7 @@ class RawTrigger(EUDObject):
         ut.ep_assert(len(conditions) <= 16, 'Too many conditions')
         ut.ep_assert(len(actions) <= 64, 'Too many actions')
 
+        conditions = list(map(_bool2Cond, conditions))
         self._prevptr = prevptr
         self._nextptr = nextptr
         self._conditions = conditions
