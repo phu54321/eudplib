@@ -256,14 +256,18 @@ def AllocObjects():
             'Occupation map length & Object size mismatch for object'
         )
 
-    stackobjs.StackObjects(_found_objects, dwoccupmap_dict, _alloctable)
+    if _payload_compress:
+        stackobjs.StackObjects(_found_objects, dwoccupmap_dict, _alloctable)
+    else:
+        _offset = 0
+        for obj in _found_objects:
+            _alloctable[obj] = _offset
+            _offset += 4 * len(dwoccupmap_dict[obj])
 
     # Get payload length
-    _payload_size = 0
-    for obj in _found_objects:
-        psize2 = _alloctable[obj] + obj.GetDataSize()
-        if _payload_size < psize2:
-            _payload_size = psize2
+    _payload_size = max(map(
+        lambda obj: _alloctable[obj] + obj.GetDataSize(), _found_objects
+    ))
 
     phase = None
 

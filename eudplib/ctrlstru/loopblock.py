@@ -83,7 +83,7 @@ def EUDLoopN(n):
 def EUDEndLoopN():
     block = ut.EUDPopBlock('loopnblock')[1]
     if not block['contpoint'].IsSet():
-        block['contpoint'] << block['loopstart']
+        block['contpoint'] << c.NextTrigger()
 
     vardb = block['vardb']
     c.RawTrigger(actions=c.SetMemory(vardb, c.Subtract, 1))
