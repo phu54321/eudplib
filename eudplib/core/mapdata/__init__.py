@@ -34,3 +34,5 @@ from .proptable import GetPropertyIndex
 from .unitprp import UnitProperty
 from .mapdata import IsMapdataInitalized
 from .tblformat import TBL
+
+from .playerinfo import GetPlayerInfo
