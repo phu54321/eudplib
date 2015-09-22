@@ -74,9 +74,20 @@ actpt = [
 
 
 def PatchCondition(cond):
-    ApplyPatchTable(ut.EPD(cond), cond, condpt)
+    if isinstance(cond, c.EUDVariable):
+        return cond >= 1
+
+    elif isinstance(cond, int) or isinstance(cond, bool):
+        if cond:
+            return c.Always()
+        else:
+            return c.Never()
+
+    else:
+        ApplyPatchTable(ut.EPD(cond), cond, condpt)
+        return cond
 
 
 def PatchAction(act):
     ApplyPatchTable(ut.EPD(act), act, actpt)
-
+    return act

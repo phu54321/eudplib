@@ -47,15 +47,17 @@ def Trigger(conditions=None, actions=None, preserved=True):
 
     # Normal
     if len(conditions) <= 16 and len(actions) <= 64:
+        patched_conds = []
         for cond in conditions:
-            PatchCondition(cond)
+            patched_conds.append(PatchCondition(cond))
 
+        patched_actions = []
         for act in actions:
-            PatchAction(act)
+            patched_actions.append(PatchAction(act))
 
         c.RawTrigger(
-            conditions=conditions,
-            actions=actions,
+            conditions=patched_conds,
+            actions=patched_actions,
             preserved=preserved
         )
 
@@ -69,13 +71,14 @@ def Trigger(conditions=None, actions=None, preserved=True):
             conds = conditions[i:i + 16]
             cts = c.Forward()
 
+            patched_conds = []
             for cond in conds:
-                PatchCondition(cond)
+                patched_conds.append(PatchCondition(cond))
 
             nextcond = c.Forward()
             cts << c.RawTrigger(
                 nextptr=cend,
-                conditions=conds,
+                conditions=patched_conds,
                 actions=c.SetNextPtr(cts, nextcond)
             )
             nextcond << c.NextTrigger()
@@ -90,10 +93,11 @@ def Trigger(conditions=None, actions=None, preserved=True):
         # Execute actions
         for i in range(0, len(actions), 64):
             acts = actions[i:i + 64]
+            patched_actions = []
             for act in acts:
-                PatchAction(act)
+                patched_actions.append(PatchAction(act))
 
-            c.RawTrigger(actions=acts)
+            c.RawTrigger(actions=patched_actions)
 
         if not preserved:
             skipt << c.NextTrigger()
@@ -101,5 +105,6 @@ def Trigger(conditions=None, actions=None, preserved=True):
         # Revert conditions
         cend << c.NextTrigger()
         for i in range(0, len(condts), 64):
-            c.RawTrigger(actions=[c.SetNextPtr(cts, cend) for cts in condts[i:i + 64]])
-
+            c.RawTrigger(
+                actions=[c.SetNextPtr(cts, cend) for cts in condts[i:i + 64]]
+            )
