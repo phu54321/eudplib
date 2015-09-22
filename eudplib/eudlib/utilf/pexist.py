@@ -24,6 +24,11 @@ THE SOFTWARE.
 '''
 
 from ..memiof import f_dwread_epd
+from .modcurpl import (
+    f_getcurpl,
+    f_setcurpl,
+)
+
 from eudplib import (
     core as c,
     ctrlstru as cs,
@@ -43,3 +48,31 @@ def f_playerexist(player):
         ret << 1
     cs.EUDEndIf()
     return ret
+
+
+# --------
+
+def EUDPlayerLoop():
+    block = {'origcp': f_getcurpl(), 'playerv': c.EUDVariable()}
+    playerv = block['playerv']
+
+    playerv << 0
+    cs.EUDWhile(playerv <= 7)
+    cs.EUDContinueIfNot(f_playerexist(playerv))
+    f_setcurpl(playerv)
+
+    ut.EUDCreateBlock('ploopblock', block)
+    return True
+
+
+def EUDEndPlayerLoop():
+    block = ut.EUDPopBlock('ploopblock')[1]
+    playerv = block['playerv']
+    origcp = block['origcp']
+
+    if not cs.EUDIsContinuePointSet():
+        cs.EUDSetContinuePoint()
+
+    playerv += 1
+    cs.EUDEndWhile()
+    f_setcurpl(origcp)

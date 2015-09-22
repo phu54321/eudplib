@@ -63,7 +63,8 @@ def f_stradd(dst, src):
 @c.EUDFunc
 def f_dwadd(dst, number):
     """
-    print dword in base 10 as string in dst. returns address to combined string's end.
+    print dword in base 10 as string in dst. returns address to combined
+    string's end.
 
     :param dst: Destination address. (Not EPD Player)
     :param number: DWORD to print

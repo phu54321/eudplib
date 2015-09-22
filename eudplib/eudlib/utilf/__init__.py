@@ -44,4 +44,8 @@ from .mempatch import (
     f_unpatchall,
 )
 
-from .pexist import f_playerexist
+from .pexist import (
+    f_playerexist,
+    EUDPlayerLoop,
+    EUDEndPlayerLoop
+)

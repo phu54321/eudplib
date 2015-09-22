@@ -25,3 +25,4 @@ THE SOFTWARE.
 
 from .triggerdef import Trigger
 from .branch import Branch
+from .ptrigger import PTrigger
