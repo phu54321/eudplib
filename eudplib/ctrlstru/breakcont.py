@@ -47,6 +47,10 @@ def EUDSetContinuePoint():
     return lb.EUDLoopSetContinuePoint()
 
 
+def EUDIsContinuePointSet():
+    return lb.EUDLoopIsContinuePointSet()
+
+
 # -------
 
 

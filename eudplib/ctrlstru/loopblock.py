@@ -34,8 +34,8 @@ from .basicstru import (
 _loopb_idset = {'infloopblock', 'loopnblock', 'whileblock'}
 
 
-def _IsLoopBlockId(idf):
-    return idf in _loopb_idset
+def _IsLoopBlock(block):
+    return 'contpoint' in block
 
 
 # -------
@@ -135,7 +135,7 @@ def EUDEndWhile():
 
 def _GetLastLoopBlock():
     for block in reversed(ut.EUDGetBlockList()):
-        if _IsLoopBlockId(block[0]):
+        if _IsLoopBlock(block[1]):
             return block
 
     raise ut.EPError('No loop block surrounding this code area')
@@ -154,6 +154,11 @@ def EUDLoopContinueIf(conditions):
 def EUDLoopContinueIfNot(conditions):
     block = _GetLastLoopBlock()[1]
     EUDJumpIfNot(conditions, block['contpoint'])
+
+
+def EUDLoopIsContinuePointSet():
+    block = _GetLastLoopBlock()[1]
+    return block['contpoint'].IsSet()
 
 
 def EUDLoopSetContinuePoint():

@@ -57,6 +57,7 @@ from .loopblock import (
     EUDLoopContinueIf,
     EUDLoopContinueIfNot,
     EUDLoopSetContinuePoint,
+    EUDLoopIsContinuePointSet,
     EUDLoopBreak,
     EUDLoopBreakIf,
     EUDLoopBreakIfNot,
@@ -75,6 +76,7 @@ from .breakcont import (
     EUDContinueIf,
     EUDContinueIfNot,
     EUDSetContinuePoint,
+    EUDIsContinuePointSet,
 
     EUDBreak,
     EUDBreakIf,
