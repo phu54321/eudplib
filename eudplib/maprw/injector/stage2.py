@@ -55,7 +55,7 @@ def CreateStage2(payload):
     # init prt
     prtn << len(payload.prttable)
     if payload.prttable:
-        if cs.EUDInfLoop():
+        if cs.EUDInfLoop()():
             cs.DoActions(prtn.SubtractNumber(1))
             sf.f_dwadd_epd(
                 ut.EPD(orig_payload) + sf.f_dwread_epd(prtn + ut.EPD(prtdb)),
@@ -67,7 +67,7 @@ def CreateStage2(payload):
     # init ort
     ortn << len(payload.orttable)
     if payload.orttable:
-        if cs.EUDInfLoop():
+        if cs.EUDInfLoop()():
             cs.DoActions(ortn.SubtractNumber(1))
             sf.f_dwadd_epd(
                 ut.EPD(orig_payload) + sf.f_dwread_epd(ortn + ut.EPD(ortdb)),

@@ -12,7 +12,7 @@ CompressPayload(True)
 
 @EUDFunc
 def main():
-    if EUDInfLoop():
+    if EUDInfLoop()():
         RunTrigTrigger()  # 기존 트리거 실행
         EUDDoEvents()
     EUDEndInfLoop()

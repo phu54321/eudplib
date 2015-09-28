@@ -56,7 +56,7 @@ def EUDIsContinuePointSet():
 
 def EUDBreak():
     for block in reversed(ut.EUDGetBlockList()):
-        if lb._IsLoopBlockId(block[0]):
+        if lb._IsLoopBlock(block[1]):
             lb.EUDLoopBreak()
             return
         elif sb._IsSwitchBlockId(block[0]):
@@ -68,7 +68,7 @@ def EUDBreak():
 
 def EUDBreakIf(conditions):
     for block in reversed(ut.EUDGetBlockList()):
-        if lb._IsLoopBlockId(block[0]):
+        if lb._IsLoopBlock(block[1]):
             lb.EUDLoopBreakIf(conditions)
             return
         elif sb._IsSwitchBlockId(block[0]):
@@ -80,7 +80,7 @@ def EUDBreakIf(conditions):
 
 def EUDBreakIfNot(conditions):
     for block in reversed(ut.EUDGetBlockList()):
-        if lb._IsLoopBlockId(block[0]):
+        if lb._IsLoopBlock(block[1]):
             lb.EUDLoopBreakIfNot(conditions)
             return
         elif sb._IsSwitchBlockId(block[0]):

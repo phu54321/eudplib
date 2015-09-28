@@ -44,7 +44,7 @@ def f_dwpatch(addrepd, value):
 @c.EUDFunc
 def f_unpatchall():
     global patchsize
-    if cs.EUDWhile(patchsize >= 2):
+    if cs.EUDWhile()(patchsize >= 2):
         patchsize -= 1
         origvalue = patcharr.get(patchsize)
         patchsize -= 1

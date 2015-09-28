@@ -12,8 +12,8 @@ CompressPayload(True)
 
 @EUDFunc
 def main():
-    if EUDInfLoop():
-        if EUDPlayerLoop():
+    if EUDInfLoop()():
+        if EUDPlayerLoop()():
             PTrigger(
                 players=[Player1],
                 actions=[

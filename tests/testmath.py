@@ -13,8 +13,8 @@ def main():
     i = EUDVariable()
 
     DoActions(SetDeaths(1, Add, 1, 0))
-    if EUDInfLoop():
-        x, y = mathf.f_lengthdir(400, i)
+    if EUDInfLoop()():
+        x, y = f_lengthdir(400, i)
 
         x << x + 1024
         y << y + 1024

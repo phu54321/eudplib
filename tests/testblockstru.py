@@ -10,7 +10,7 @@ LoadMap('outputmap/basemap/basemap.scx')
 
 @EUDFunc
 def main():
-    if EUDWhile(Always()):
+    if EUDWhile()(Always()):
         f_setcurpl(Player1)
         DoActions(DisplayText("test a"))
         DoActions(DisplayText("test b"))

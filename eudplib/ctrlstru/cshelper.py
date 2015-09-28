@@ -23,64 +23,16 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-from .cshelper import CtrlStruOpener
 
-from .basicstru import (
-    DoActions,
-    EUDJump,
-    EUDJumpIf,
-    EUDJumpIfNot,
-)
+class CtrlStruOpener:
 
-from .simpleblock import (
-    EUDIf,
-    EUDIfNot,
-    EUDElseIf,
-    EUDElseIfNot,
-    EUDElse,
-    EUDEndIf,
+    def __init__(self, f):
+        self._f = f
 
-    EUDExecuteOnce,
-    EUDEndExecuteOnce,
-)
+    def __bool__(self):
+        raise RuntimeError(
+            'Control structures must be double-parenthesised.' +
+            ' ex) EUDInfLoop()()')
 
-from .loopblock import (
-    EUDInfLoop,
-    EUDEndInfLoop,
-
-    EUDLoopN,
-    EUDEndLoopN,
-
-    EUDWhile,
-    EUDWhileNot,
-    EUDEndWhile,
-
-    EUDLoopContinue,
-    EUDLoopContinueIf,
-    EUDLoopContinueIfNot,
-    EUDLoopSetContinuePoint,
-    EUDLoopIsContinuePointSet,
-    EUDLoopBreak,
-    EUDLoopBreakIf,
-    EUDLoopBreakIfNot,
-)
-
-from .swblock import (
-    EUDSwitch,
-    EUDSwitchCase,
-    EUDSwitchDefault,
-    EUDSwitchBreak,
-    EUDEndSwitch,
-)
-
-from .breakcont import (
-    EUDContinue,
-    EUDContinueIf,
-    EUDContinueIfNot,
-    EUDSetContinuePoint,
-    EUDIsContinuePointSet,
-
-    EUDBreak,
-    EUDBreakIf,
-    EUDBreakIfNot
-)
+    def __call__(self, *args, **kwargs):
+        return self._f(*args, **kwargs)

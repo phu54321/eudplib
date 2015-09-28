@@ -69,7 +69,7 @@ def f_dwpatch_epd(addrepd, value):
 @c.EUDFunc
 def f_unpatchall():
     global _ps_top
-    if cs.EUDWhile(_ps_top >= 1):
+    if cs.EUDWhile()(_ps_top >= 1):
         dwn = _patchstack[_ps_top]
         _ps_top -= 1
         dbepd = _patchstack[_ps_top]

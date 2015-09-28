@@ -16,7 +16,7 @@ def main():
     a = EUDVariable()
     a << 200000
 
-    if EUDWhile(a >= 1):
+    if EUDWhile()(a >= 1):
         a << a - 1
     EUDEndWhile()
 
