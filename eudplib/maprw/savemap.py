@@ -50,8 +50,8 @@ def SaveMap(fname, rootf):
 
     # Update string table & etc
     # User-defined strings in eudplib program is registered after rootf is
-    # called. This happens when _MainStarter is called, so UpdateMapData function should
-    # be called after `doevents._MainStarter(rootf)` call.
+    # called. This happens when _MainStarter is called, so UpdateMapData
+    # function should be called after `doevents._MainStarter(rootf)` call.
     mapdata.UpdateMapData()
     # stage1.CreateAndApplyStage1 requires STR section to be constructed before
     # it append stage2 payload after 'original' STR section. so UpdateMapData

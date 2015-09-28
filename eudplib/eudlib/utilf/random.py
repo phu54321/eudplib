@@ -23,15 +23,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-# This code xorshift algorithm at http://www.jstatsoft.org/v08/i14/paper
-#
-# unsigned long xor() {
-# static unsigned long y=2463534242;
-# y^=(y<<13);
-#     y=(y>>17);
-#     return (y^=(y<<5));
-# }
-#
+# This code uses simple LCG algorithm.
 
 from eudplib import core as c
 from eudplib import utils as ut
@@ -52,10 +44,6 @@ def f_srand(seed):
 
 def f_randomize():
     current_rv = f_dwread_epd(ut.EPD(0x51CA14))
-    c.RawTrigger(
-        conditions=current_rv.Exactly(0),
-        actions=current_rv.SetNumber(30)
-    )
     _seed << current_rv
 
 

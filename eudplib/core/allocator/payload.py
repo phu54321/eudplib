@@ -47,6 +47,12 @@ _payload_compress = False
 
 
 def CompressPayload(mode):
+    ''' Set payload compression mode.
+
+    :param mode: If true, enable object stacking (compression). If false,
+    disable it.
+    '''
+
     global _payload_compress
     if mode not in [True, False]:
         raise ut.EPError('Invalid type')

@@ -29,8 +29,8 @@ from eudplib import utils as ut
 
 
 class EUDObject(Expr):
-    '''Class for standalone object
-    '''
+
+    """Class for standalone object on memory"""
 
     def __init__(self):
         super().__init__(self)

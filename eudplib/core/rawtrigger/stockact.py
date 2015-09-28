@@ -64,6 +64,7 @@ def PreserveTrigger():
 
 
 def Wait(Time):
+    print("[Warning] Don't use Wait action UNLESS YOU KNOW WHAT YOU'RE DOING!")
     return Action(0, 0, 0, Time, 0, 0, 0, 4, 0, 4)
 
 

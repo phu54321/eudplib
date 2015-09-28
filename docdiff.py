@@ -53,7 +53,8 @@ for name, value in module_to_doc.__dict__.items():
         continue
 
     if value.__doc__ is None:
-        documented = False
+        print('[Warning] function %s should be documented' % name)
+        documented = True
 
     else:
         documented = True
@@ -64,7 +65,7 @@ for name, value in module_to_doc.__dict__.items():
     elif type(value) is type:
         doc_needed_classes.add((name, documented))
 
-print('==================================')
+print('\n==================================\n')
 
 
 # Summary
@@ -95,7 +96,7 @@ if unused_functions or unused_classes:
         for k in sorted(list(unused_classes)):
             print('    - %s' % k[0])
 
-    print('==================================')
+    print('\n==================================\n')
 
 
 # Diff2
@@ -114,6 +115,6 @@ if used_functions or used_classes:
         for k in sorted(list(used_classes)):
             print('    - %s %s' % (k[0], "(Undocumented)" if not k[1] else ""))
 
-    print('==================================')
+    print('\n==================================\n')
 
 print('Diff done')

@@ -29,6 +29,9 @@ from eudplib import utils as ut
 
 class Expr:
 
+    ''' Class for general expression with rlocints.
+    '''
+
     def __init__(self, baseobj, offset=0, rlocmode=4):
         self.baseobj = baseobj
         self.offset = offset

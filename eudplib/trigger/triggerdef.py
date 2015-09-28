@@ -29,6 +29,13 @@ from eudplib import utils as ut
 
 
 def Trigger(conditions=None, actions=None, preserved=True):
+    """General easy-to-use trigger
+
+    :param conditions: List of conditions. There could be more than 16.
+    :param actions: List of actions. There could be more than 64.
+    :param preserved: Check if the trigger is preserved. True by default.
+    """
+
     if conditions is None:
         conditions = []
     if actions is None:
