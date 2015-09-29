@@ -54,15 +54,6 @@ from .loopblock import (
     EUDWhile,
     EUDWhileNot,
     EUDEndWhile,
-
-    EUDLoopContinue,
-    EUDLoopContinueIf,
-    EUDLoopContinueIfNot,
-    EUDLoopSetContinuePoint,
-    EUDLoopIsContinuePointSet,
-    EUDLoopBreak,
-    EUDLoopBreakIf,
-    EUDLoopBreakIfNot,
 )
 
 from .swblock import (
