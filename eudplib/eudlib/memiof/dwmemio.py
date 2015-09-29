@@ -158,6 +158,7 @@ def f_dwsubtract_epd(targetplayer, value):
 
 @c.EUDFunc
 def f_dwbreak(number):
+    """Get hiword/loword/4byte of dword"""
     word = c.EUDCreateVariables(2)
     byte = c.EUDCreateVariables(4)
 

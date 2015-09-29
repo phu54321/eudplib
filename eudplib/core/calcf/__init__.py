@@ -40,6 +40,3 @@ from .muldiv import (
     f_mul,
     f_div,
 )
-
-from . import _eudvsupport
-

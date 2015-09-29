@@ -60,7 +60,6 @@ from .swblock import (
     EUDSwitch,
     EUDSwitchCase,
     EUDSwitchDefault,
-    EUDSwitchBreak,
     EUDEndSwitch,
 )
 

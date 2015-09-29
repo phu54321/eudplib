@@ -61,7 +61,7 @@ def CreateStage2(payload):
                 ut.EPD(orig_payload) + sf.f_dwread_epd(prtn + ut.EPD(prtdb)),
                 orig_payload // 4
             )
-            cs.EUDLoopBreakIf(prtn.Exactly(0))
+            cs.EUDBreakIf(prtn.Exactly(0))
         cs.EUDEndInfLoop()
 
     # init ort
@@ -73,7 +73,7 @@ def CreateStage2(payload):
                 ut.EPD(orig_payload) + sf.f_dwread_epd(ortn + ut.EPD(ortdb)),
                 orig_payload
             )
-            cs.EUDLoopBreakIf(ortn.Exactly(0))
+            cs.EUDBreakIf(ortn.Exactly(0))
         cs.EUDEndInfLoop()
 
     # Jump

@@ -33,6 +33,7 @@ from eudplib import utils as ut
 
 
 def f_mul(a, b):
+    """Calculate a * b"""
     if isinstance(a, vf.EUDVariable) and isinstance(b, vf.EUDVariable):
         return _f_mul(a, b)
 
@@ -49,7 +50,7 @@ def f_mul(a, b):
 
 
 def f_div(a, b):
-    """ returns (a//b, a%b) """
+    """Calculate (a//b, a%b) """
     if isinstance(b, vf.EUDVariable):
         return _f_div(a, b)
 
@@ -73,6 +74,12 @@ def f_div(a, b):
 
 
 def f_constmul(number):
+    """
+    f_constnum(a)(b) calculates b * a.
+
+    :param number: Constant integer being multiplied to other numbers.
+    :return: Function taking one parameter.
+    """
     if not hasattr(f_constmul, 'mulfdict'):
         f_constmul.mulfdict = {}
 
@@ -100,6 +107,12 @@ def f_constmul(number):
 
 
 def f_constdiv(number):
+    """
+    f_constdiv(a)(b) calculates (b // a, b % a)
+
+    :param number: Constant integer to divide other numbers by.
+    :return: Function taking one parameter.
+    """
     if not hasattr(f_constdiv, 'divfdict'):
         f_constdiv.divfdict = {}
 

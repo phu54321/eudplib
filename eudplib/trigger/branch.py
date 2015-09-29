@@ -28,7 +28,7 @@ from eudplib import utils as ut
 from .tpatcher import PatchCondition
 
 
-def Branch(conditions, ontrue, onfalse):
+def EUDBranch(conditions, ontrue, onfalse):
     flag = c.EUDLightVariable()
     flag << 0
 

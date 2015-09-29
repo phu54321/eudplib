@@ -23,20 +23,20 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-from .rawtriggerdef import RawTrigger, GetTriggerCount
+from .rawtriggerdef import Disabled, RawTrigger
 from .triggerscope import PushTriggerScope, PopTriggerScope, NextTrigger
 from .condition import Condition
 from .action import Action
 from .stockcond import (
-    NoCondition, CountdownTimer, Command, Bring, Accumulate, Kills,
+    CountdownTimer, Command, Bring, Accumulate, Kills,
     CommandMost, CommandMostAt, MostKills, HighestScore, MostResources,
-    Switch, ElapsedTime, Briefing, Opponents, Deaths, CommandLeast,
+    Switch, ElapsedTime, Opponents, Deaths, CommandLeast,
     CommandLeastAt, LeastKills, LowestScore, LeastResources, Score,
     Always, Never, Memory,
 )
 
 from .stockact import (
-    NoAction, Victory, Defeat, PreserveTrigger, Wait, PauseGame,
+    Victory, Defeat, PreserveTrigger, Wait, PauseGame,
     UnpauseGame, Transmission, PlayWAV, DisplayText, CenterView,
     CreateUnitWithProperties, SetMissionObjectives, SetSwitch,
     SetCountdownTimer, RunAIScript, RunAIScriptAt, LeaderBoardControl,

@@ -26,7 +26,7 @@ THE SOFTWARE.
 from .dbstr import DBString, DisplayExtText, f_initextstr
 from .strcpy import f_strcpy
 from .eudprint import (
-    f_dwadd,
-    f_stradd,
-    f_eudprint,
+    f_dbstr_adddw,
+    f_dbstr_addstr,
+    f_dbstr_print,
 )

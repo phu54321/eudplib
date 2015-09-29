@@ -30,13 +30,6 @@ from .action import Action
 from eudplib import utils as ut
 
 
-_trgcount = 0  # Debugging purpose
-
-
-def GetTriggerCount():  # Debugging purpose
-    return _trgcount
-
-
 def _bool2Cond(x):
     if x is True:
         return Condition(0, 0, 0, 0, 0, 22, 0, 0)  # Always
@@ -44,6 +37,11 @@ def _bool2Cond(x):
         return Condition(0, 0, 0, 0, 0, 23, 0, 0)  # Never
     else:
         return x
+
+
+def Disabled(arg):
+    """Disable condition or action"""
+    arg.Disabled()
 
 
 class RawTrigger(EUDObject):
@@ -56,9 +54,6 @@ class RawTrigger(EUDObject):
             actions=None,
             preserved=True
     ):
-        global _trgcount  # Debugging purpose
-        _trgcount += 1  # Debugging purpose
-
         super().__init__()
 
         _RegisterTrigger(self)  # This should be called before (1)

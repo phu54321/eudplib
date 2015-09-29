@@ -5,7 +5,8 @@ import re
 module_to_doc = eudplib
 
 exclude_types = [dict, str, types.ModuleType]
-allowed_type = [type, types.FunctionType]
+eudftypes = [eudplib.core.varfunc.eudf.EUDFuncN]
+allowed_type = eudftypes + [type, types.FunctionType]
 exclude_names = ['__loader__', '__path__', '__spec__']
 section_header_charr = ['=', '-', '\'', '~', '^']
 
@@ -25,7 +26,7 @@ for line in rstinputs:
         funcname = func_match_result.groups(1)[0]
         if funcname in documented_functions:
             print('[Warning] Document duplication of function %s.' % funcname)
-        documented_functions.add((funcname, True))
+        documented_functions.add(funcname)
         continue
 
     class_match_result = class_regex.match(line)
@@ -33,13 +34,14 @@ for line in rstinputs:
         classname = class_match_result.groups(1)[0]
         if classname in documented_classes:
             print('[Warning] Document duplication of class %s.' % classname)
-        documented_classes.add((classname, True))
+        documented_classes.add(classname)
         continue
 
 
 print('Collecting list of documentation-needed structures')
 doc_needed_functions = set()
 doc_needed_classes = set()
+fc_documented = {}
 
 
 # Document module
@@ -53,17 +55,18 @@ for name, value in module_to_doc.__dict__.items():
         continue
 
     if value.__doc__ is None:
-        print('[Warning] function %s should be documented' % name)
-        documented = True
+        documented = False
 
     else:
         documented = True
 
-    if isinstance(value, types.FunctionType):
-        doc_needed_functions.add((name, documented))
+    if isinstance(value, types.FunctionType) or type(value) in eudftypes:
+        doc_needed_functions.add(name)
+        fc_documented[name] = documented
 
     elif type(value) is type:
-        doc_needed_classes.add((name, documented))
+        doc_needed_classes.add(name)
+        fc_documented[name] = documented
 
 print('\n==================================\n')
 
@@ -89,12 +92,12 @@ if unused_functions or unused_classes:
     if unused_functions:
         print('  Unused functions:')
         for k in sorted(list(unused_functions)):
-            print('    - %s' % k[0])
+            print('    - %s' % k)
 
     if unused_classes:
         print('  Unused classes:')
         for k in sorted(list(unused_classes)):
-            print('    - %s' % k[0])
+            print('    - %s' % k)
 
     print('\n==================================\n')
 
@@ -108,12 +111,14 @@ if used_functions or used_classes:
     if used_functions:
         print('  New functions:')
         for k in sorted(list(used_functions)):
-            print('    - %s %s' % (k[0], "(Undocumented)" if not k[1] else ""))
+            print('    - %s %s' %
+                  (k, "(Undocumented)" if not fc_documented[k] else ""))
 
     if used_classes:
         print('  New classes:')
         for k in sorted(list(used_classes)):
-            print('    - %s %s' % (k[0], "(Undocumented)" if not k[1] else ""))
+            print('    - %s %s' %
+                  (k, "(Undocumented)" if not fc_documented[k] else ""))
 
     print('\n==================================\n')
 

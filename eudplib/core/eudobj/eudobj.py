@@ -30,16 +30,42 @@ from eudplib import utils as ut
 
 class EUDObject(Expr):
 
-    """Class for standalone object on memory"""
+    """
+    Class for standalone object on memory
+
+    .. note::
+        Object collection occures in three steps:
+
+        - Collection phase : collects object used in map generation. Object
+        used in WritePayload method are being collected. Methods Evaluate
+        and WritePayload are called during this phase.
+        - Allocation phase : Object have their offset assigned. GetDataSize
+        method is called on this phase, so if GetDataSize is being called,
+        it means that every object required in map has been collected.
+        WritePayload and GetDataSize method should behave exactly the same as
+        it should on Writing phase here.
+        - Writing phase : Object is written into payload.
+    """
 
     def __init__(self):
         super().__init__(self)
 
     def Evaluate(self):
+        """
+        What this object should be evaluated to when used in eudplib program.
+
+        :return: Default) Memory address of this object.
+
+        .. note::
+            In overriding this method, you can use
+            :func:`eudplib.GetObjectAddr`.
+        """
         return GetObjectAddr(self)
 
     def GetDataSize(self):
+        """Memory size of object."""
         raise ut.EPError('Override')
 
     def WritePayload(self, pbuffer):
+        """Write object"""
         raise ut.EPError('Override')

@@ -39,7 +39,7 @@ def InitPTrigger():
         _pinfos = [c.GetPlayerInfo(player) for player in range(8)]
 
 
-def PTrigger(players, conditions=None, actions=None, preserved=False):
+def PTrigger(players, conditions=None, actions=None, preserved=True):
     InitPTrigger()
 
     players = ut.FlattenList(players)

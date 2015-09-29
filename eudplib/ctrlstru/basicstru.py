@@ -38,11 +38,11 @@ def EUDJump(nextptr):
 
 def EUDJumpIf(conditions, ontrue):
     onfalse = c.Forward()
-    tg.Branch(conditions, ontrue, onfalse)
+    tg.EUDBranch(conditions, ontrue, onfalse)
     onfalse << c.NextTrigger()
 
 
 def EUDJumpIfNot(conditions, onfalse):
     ontrue = c.Forward()
-    tg.Branch(conditions, ontrue, onfalse)
+    tg.EUDBranch(conditions, ontrue, onfalse)
     ontrue << c.NextTrigger()
