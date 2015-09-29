@@ -141,10 +141,6 @@ def ElapsedTime(Comparison, Time):
     return Condition(0, 0, Time, 0, Comparison, 12, 0, 0)
 
 
-def Briefing():
-    return Condition(0, 0, 0, 0, 0, 13, 0, 0)
-
-
 def Opponents(Player, Comparison, Number):
     Player = EncodePlayer(Player)
     Comparison = EncodeComparison(Comparison)
