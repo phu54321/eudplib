@@ -35,21 +35,6 @@ _patchstack = EUDArray(3 * 8192)
 _ps_top = c.EUDVariable()
 
 
-def f_mempatch_epd(wstartepd, rstartepd, dwn):
-    global _patchstack, _ps_top
-
-    db = c.Db(4 * dwn)
-    f_repmovsd_epd(ut.EPD(db), wstartepd, dwn)
-    f_repmovsd_epd(wstartepd, rstartepd, dwn)
-
-    _patchstack[_ps_top] = wstartepd
-    _ps_top += 1
-    _patchstack[_ps_top] = ut.EPD(db)
-    _ps_top += 1
-    _patchstack[_ps_top] = dwn
-    _ps_top += 1
-
-
 @c.EUDFunc
 def f_dwpatch_epd(addrepd, value):
     global _patchstack, _ps_top

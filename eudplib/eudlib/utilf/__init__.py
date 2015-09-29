@@ -39,7 +39,6 @@ from .random import (
 )
 
 from .mempatch import (
-    f_mempatch_epd,
     f_dwpatch_epd,
     f_unpatchall,
 )
