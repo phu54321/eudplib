@@ -42,10 +42,6 @@ from .strenc import (
 from ...utils import EPD
 
 
-def NoCondition():
-    return Condition(0, 0, 0, 0, 0, 0, 0, 0)
-
-
 def CountdownTimer(Comparison, Time):
     """Checks countdown timer.
 

@@ -47,10 +47,6 @@ from .strenc import (
 from ...utils import EPD
 
 
-def NoAction():
-    return Action(0, 0, 0, 0, 0, 0, 0, 0, 0, 4)
-
-
 def Victory():
     return Action(0, 0, 0, 0, 0, 0, 0, 1, 0, 4)
 
