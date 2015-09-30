@@ -30,8 +30,6 @@ from .expr import (
     IsValidExpr
 )
 
-from .rlocint import RlocInt, toRlocInt
-
 from .payload import (
     GetObjectAddr,
     CreatePayload,

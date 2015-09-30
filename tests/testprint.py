@@ -19,7 +19,7 @@ def main():
     b = a * a * a * a * a
 
     s = DBString(1024)
-    f_eudprint(s.GetStringMemoryAddr(), 'test ', a, ' b: ', b, ' test')
+    f_dbstr_print(s.GetStringMemoryAddr(), 'test ', a, ' b: ', b, ' test')
     DoActions(s.GetDisplayAction())
 
 

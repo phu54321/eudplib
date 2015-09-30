@@ -28,7 +28,7 @@ import itertools
 
 
 def EPD(p):
-    return (p - 0x58A364) // 4
+    return (p + (-0x58A364)) // 4
 
 
 # -------

@@ -40,3 +40,7 @@ from .muldiv import (
     f_mul,
     f_div,
 )
+
+# Just run _eudvsupport. This won't be visible in user side.
+from . import _eudvsupport
+

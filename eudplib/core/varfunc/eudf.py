@@ -31,6 +31,9 @@ from ...utils import (
     FlattenList,
     List2Assignable,
     Assignable2List,
+)
+
+from ...utils.blockstru import (
     BlockStruManager,
     SetCurrentBlockStruManager
 )

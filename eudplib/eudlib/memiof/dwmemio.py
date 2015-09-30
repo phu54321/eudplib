@@ -28,10 +28,6 @@ from ... import ctrlstru as cs
 from eudplib import utils as ut
 
 
-def f_epd(addr):
-    return c.f_div(addr + (0x100000000 - 0x58A364), 4)[0]
-
-
 @c.EUDFunc
 def f_dwepdread_epd(targetplayer):
     ret, retepd = c.EUDVariable(), c.EUDVariable()

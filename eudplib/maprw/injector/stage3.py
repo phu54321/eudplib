@@ -125,7 +125,7 @@ def CreateStage3(root, mrgndata):
             c.SeqCompute([
                 (ut.EPD(trs + 4), c.SetTo, prevtstart),
             ])
-            sf.f_dwwrite_epd(sf.f_epd(prevtend) + 1, tre)
+            sf.f_dwwrite_epd(ut.EPD(prevtend) + 1, tre)
         cs.EUDEndIf()
 
     if c.PushTriggerScope():

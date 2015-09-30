@@ -24,7 +24,6 @@ THE SOFTWARE.
 '''
 
 from .dwmemio import (
-    f_epd,
     f_dwread_epd,
     f_epdread_epd,
     f_dwepdread_epd,

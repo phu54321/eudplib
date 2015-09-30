@@ -9,21 +9,26 @@ eudplib에서 쓰이는 함수들을 간단정리한겁니다. eudplib에서 가
 
 .. contents:: 목차
 
-
-
-잡다한 함수
-===========
-
-eudplib 자체에 관한 것들은 이렇게 있습니다.
+eudplib 버젼은 이 함수로 체크하면 됩니다. 이 api.rst는 0.50버젼 기준입니다.
 
 .. autofunction:: eudplib.eudtrgVersion
 
+맵 로드/세이브
+==============
+
+eudplib 자체에 관한 것들은 이렇게 있습니다.
+
+.. autofunction:: eudplib.LoadMap
+.. autofunction:: eudplib.SaveMap
+.. autofunction:: eudplib.CompressPayload
 
 
 
 
-기초 트리거 관련
-================
+
+
+트리거
+======
 
 게임에 관련한 많은 것들을 트리거에서 처리합니다.
 
@@ -34,7 +39,7 @@ eudplib 자체에 관한 것들은 이렇게 있습니다.
 .. note:: 부록을 참고하세요.
 
 조건이나 액션 목록은 부록을 참고하시고, 여기서는 조건/액션을 Disabled시키는
-법이나 간단하게 알아봅시다. 이 함수도 쓸 일이 사실 없을거에요.
+법이나 간단하게 알아봅시다. (별로 안쓰는 함수긴 합니다만)
 
 .. autofunction:: eudplib.Disabled
 
@@ -44,10 +49,39 @@ eudplib 자체에 관한 것들은 이렇게 있습니다.
 ------
 
 트리거에는 조건/액션을 모두 갖춘 Trigger, 액션만 있는 (조건이 Always)
-DoActions가 있습니다.
+DoActions, Current Player를 인식하는 PTrigger가 있고요.
 
 .. autofunction:: eudplib.Trigger
 .. autofunction:: eudplib.DoActions
+.. autofunction:: eudplib.PTrigger
+
+
+
+
+
+변수
+====
+
+eud 변수는 EUDVariable로 만듭니다. +, -, \*, //, % 등의 연산자가 기본적으로
+지원됩니다.
+
+.. autoclass:: eudplib.EUDVariable
+    :members:
+    :show-inheritance:
+
+.. autofunction:: eudplib.EUDCreateVariables
+
+변수간 대입은 기본적으로 <<를 통해서 합니다. 여러 변수에다 값들을 동시에
+대입할때는 아래 2개 함수를 쓸 수 있습니다.
+
+.. autofunction:: eudplib.SeqCompute
+.. autofunction:: eudplib.SetVariables
+
+그 외에 값을 저장하는 기능만 있는 Light Variable도 있습니다.
+
+.. autoclass:: eudplib.EUDLightVariable
+    :members:
+    :show-inheritance:
 
 
 
@@ -55,6 +89,16 @@ DoActions가 있습니다.
 
 제어문
 ======
+
+전체 프로그램 관련
+------------------
+
+여기 있는 함수들은 흔히 제어문이라 부르는 종류는 아니지만, eudplib 트리거 전체
+관점에서 볼 때에 프로그램 흐름을 제어하기 때문에 여기 넣었습니다.
+
+.. autofunction:: eudplib.EUDDoEvents
+.. autofunction:: eudplib.RunTrigTrigger
+
 
 조건문
 ------
@@ -153,21 +197,23 @@ break류도 있습니다.
 .. autofunction:: eudplib.EUDJump
 
 그 외에, EUDJumpIf나 EUDJump같은 Jump류 제어문을 쓸 때 자주 쓸만한 것으로
-NextTrigger가 있습니다.
+Forward랑 NextTrigger가 있습니다.
 
+.. autoclass:: eudplib.Forward
 .. autofunction:: eudplib.NextTrigger
 
 
 
 
-
-함수 관련
-=========
+EUD 함수
+========
 
 함수도 eudplib에서 중요한 부분이라 할 수 있죠. EUD 함수를 만들때는 EUDFunc를
-씁니다.
+씁니다. 클래스 메서드를 EUDFunc처럼 쓰고싶을땐 EUDFuncMethod를 쓰고요.
 
 .. autofunction:: eudplib.EUDFunc
+.. autofunction:: eudplib.EUDFuncMethod
+
 
 각 분야별 함수를 정리하면 다음과 같습니다.
 
@@ -175,60 +221,46 @@ NextTrigger가 있습니다.
 메모리 관련
 -----------
 
-먼저 오프셋을 EPD 플레이어로 바꾸는 함수입니다.
-
-.. autofunction:: eudplib.f_epd
-
-그 다음엔 읽기 관련 함수
+.. autofunction:: eudplib.EPD
 
 .. autofunction:: eudplib.f_dwepdread_epd
 .. autofunction:: eudplib.f_dwread_epd
 .. autofunction:: eudplib.f_epdread_epd
-
 .. autofunction:: eudplib.f_dwbreak
-
-그 다음엔 쓰기 관련 함수
 
 .. autofunction:: eudplib.f_dwwrite_epd
 .. autofunction:: eudplib.f_dwadd_epd
 .. autofunction:: eudplib.f_dwsubtract_epd
 
-메모리 블럭 단위 읽기/쓰기 함수
-
 .. autofunction:: eudplib.f_repmovsd_epd
 .. autofunction:: eudplib.f_memcpy
 .. autofunction:: eudplib.f_strcpy
 
-메모리 패치 & 복구용 함수인데, 쓸 일은 별로 없을꺼에요.
-
 .. autofunction:: eudplib.f_dwpatch_epd
 .. autofunction:: eudplib.f_unpatchall
 
-.. note:: f_unpatchall을 수동으로 불러줘야만 f_dwpatch_epd한게 전부 복구됩니다.
+.. autoclass:: eudplib.EUDByteReader
+.. autoclass:: eudplib.EUDByteWriter
 
 
 연산 관련
 ---------
 
-곱셈/나눗셈은 그냥 \*나 //, %로 해도 되지만 이런 함수도 있긴 있어요.
+산술 연산자
+^^^^^^^^^^^
 
 .. autofunction:: eudplib.f_mul
 .. autofunction:: eudplib.f_div
-
-비트연산자들은 이렇게 있어요.
 
 .. autofunction:: eudplib.f_bitand
 .. autofunction:: eudplib.f_bitor
 .. autofunction:: eudplib.f_bitnot
 .. autofunction:: eudplib.f_bitxor
-
 .. autofunction:: eudplib.f_bitnand
 .. autofunction:: eudplib.f_bitnor
 .. autofunction:: eudplib.f_bitnxor
-
 .. autofunction:: eudplib.f_bitlshift
 .. autofunction:: eudplib.f_bitrshift
-
 .. autofunction:: eudplib.f_bitsplit
 
 
@@ -236,29 +268,16 @@ NextTrigger가 있습니다.
 DB스트링 관련
 -------------
 
-DB스트링은 스트링 테이블과는 별개 메모리에 있는 스트링을 뜻합니다.
-
 .. autoclass:: eudplib.DBString
     :members:
     :show-inheritance:
 
 
-DB스트링 초기화는 f_initextstr를 통해서 합니다.
-
 .. autofunction:: eudplib.f_initextstr
-
-.. warning:: DB스트링을 쓰기 전에 먼저 f_initextstr를 꼭 불러야 합니다.
-
-
-DB스트링과 아래 함수들을 이용해서 더 자유롭게 스트링을 출력할 수 있습니다.
 
 .. autofunction:: eudplib.f_dbstr_adddw
 .. autofunction:: eudplib.f_dbstr_print
 .. autofunction:: eudplib.f_dbstr_addstr
-
-
-DisplayExtText 을 쓰면 DB스트링을 이용해 스트링을 출력하기 때문에 스트링 제한
-(1024개, 65536byte 등) 없이 스트링 출력을 할 수 있습니다.
 
 .. autofunction:: eudplib.DisplayExtText
 
@@ -291,6 +310,15 @@ Current Player 관련
 .. autofunction:: eudplib.f_lengthdir
 
 
+
+비공유 → 공유 전환 관련
+------------------------
+
+.. autofunction:: eudplib.QueueGameCommand
+.. autofunction:: eudplib.QueueGameCommand_RightClick
+
+
+
 기타
 ----
 
@@ -299,32 +327,124 @@ Current Player 관련
 
 
 
+트리거 상수/번호 관련
+=====================
+
+트리거에서는 모든것을 번호와 수로 처리합니다. 아래 함수들은 여러 상수들
+(OreAndGas (자원 종류), Custom (스코어 종류), "Terran Marine" (유닛))를
+해당하는 수나 번호로 바꾸는 함수들입니다.
+
+.. autofunction:: eudplib.EncodeSwitchState
+.. autofunction:: eudplib.EncodeScore
+.. autofunction:: eudplib.EncodeComparison
+.. autofunction:: eudplib.EncodePropState
+.. autofunction:: eudplib.EncodeModifier
+.. autofunction:: eudplib.EncodeOrder
+.. autofunction:: eudplib.EncodeResource
+.. autofunction:: eudplib.EncodeCount
+.. autofunction:: eudplib.EncodeAllyStatus
+.. autofunction:: eudplib.EncodePlayer
+.. autofunction:: eudplib.EncodeAIScript
+.. autofunction:: eudplib.EncodeSwitchAction
+
+아래 함수에서는 basemap에 있는 유닛 이름 등의 정보를 활용합니다.
+
+.. autofunction:: eudplib.EncodeUnit
+.. autofunction:: eudplib.EncodeLocation
+.. autofunction:: eudplib.EncodeSwitch
+.. autofunction:: eudplib.EncodeString
+.. autofunction:: eudplib.EncodeProperty
+
+
+
+
 맵 정보 관련
 ============
 
-basemap에 관한 정보는 이 함수들을 통해 얻을 수 있습니다.
+플레이어 정보는 이 함수를 씁니다.
 
 .. autofunction:: eudplib.GetPlayerInfo
 
+아래 함수들은 Encode~ 함수에서 쓰는 함수들입니다. 특히 GetStringIndex와
+GetPropertyIndex에서는 해당하는 스트링이나 UPRP이 없는 경우 새로 스트링을
+만들거나 UPRP를 만들 수 있습니다.
+
 .. autofunction:: eudplib.GetUnitIndex
-.. autofunction:: eudplib.GetSwitchIndex
 .. autofunction:: eudplib.GetLocationIndex
-
-GetStringIndex와  GetPropertyIndex에서는 해당하는 스트링이나 UPRP이 없는 경우
-새로 스트링을 만들거나 UPRP를 만들 수 있습니다.
-
+.. autofunction:: eudplib.GetSwitchIndex
 .. autofunction:: eudplib.GetStringIndex
 .. autofunction:: eudplib.GetPropertyIndex
 
+.. warning::
+    Encode~ 함수와 Get~Index 함수를 혼동하면 안됩니다. 예를 들어서 Location 0의
+    GetLocationIndex 결과는 0(0번 로케이션)인 반면에, EncodeLocation 결과는 1
+    (트리거 조건/액션에서 실제로 쓰는 값)이 나옵니다. 둘은 다른 함수입니다.
 
-Expressions
+
+
+잡다한 것들
 ===========
 
-Expression is a basic calculation unit of eudplib. Expression mean 'Object that
-can be evaluated to some number'.
+유니코드str - bytes 변환
+------------------------
 
-Base classes
-------------
+.. autofunction:: eudplib.b2u
+.. autofunction:: eudplib.u2b
+
+
+
+bytes - DWORD / WORD / BYTE 변환
+--------------------------------
+
+.. autofunction:: eudplib.b2i1
+.. autofunction:: eudplib.b2i2
+.. autofunction:: eudplib.b2i4
+.. autofunction:: eudplib.i2b1
+.. autofunction:: eudplib.i2b2
+.. autofunction:: eudplib.i2b4
+
+
+기타
+----
+
+.. autofunction:: eudplib.Assignable2List
+.. autofunction:: eudplib.List2Assignable
+.. autofunction:: eudplib.FlattenList
+.. autofunction:: eudplib.SCMD2Text
+.. autoclass:: eudplib.TBL
+
+
+
+eudplib로 유틸리티를 만들 때
+============================
+
+.. autofunction:: eudplib.IsMapdataInitalized
+.. autoclass:: eudplib.EPError
+.. autofunction:: eudplib.ep_assert
+
+
+EUD 데이터 관련
+===============
+
+eudplib 코드에서 기본적으로 다룰 수 있는 데이터/리소스는 다음과 같습니다.
+
+.. autoclass:: eudplib.Db
+.. autoclass:: eudplib.EUDArray
+.. autoclass:: eudplib.EUDGrp
+
+
+
+
+
+커스텀 데이터/리소스 객체 관련
+==============================
+
+.. note::
+    커스텀 리소스를 만들기 위해서는 eudplib 내부를 이해해야 합니다. 일반적인
+    eudplib 사용자는 이 주제를 읽을 필요가 없습니다.
+
+커스텀 리소스는 EUDObject를 부모 클래스삼아서 만들면 됩니다. 예제 리소스로
+:class:`eudplib.Db` , :class:`eudplib.EUDGrp` 를 참고하세요.
 
 .. autoclass:: eudplib.Expr
     :members:
@@ -334,20 +454,28 @@ Base classes
     :members:
     :show-inheritance:
 
-Basic objects
--------------
-.. autoclass:: eudplib.Forward
-    :members:
-    :show-inheritance:
+EUDObject.Evaluate를 override할 때 쓸만한 함수들은 다음이 있습니다.
 
-.. autoclass:: eudplib.Db
-    :members:
-    :show-inheritance:
+.. autofunction:: eudplib.IsValidExpr
+.. autofunction:: eudplib.GetObjectAddr
+.. autofunction:: eudplib.Evaluate
 
+그 외에, 다음 함수들도 있습니다.
+
+.. autofunction:: eudplib.RegisterCreatePayloadCallback
+.. autofunction:: eudplib.CreatePayload
 
 
 Raw Trigger
 ===========
+
+.. note::
+    성능에 목을 매달 정도로 성능이 중요할때나 만져볼만한 주제입니다. 일반적인
+    eudplib 사용자는 이 주제를 읽을 필요가 없습니다.
+
+
+기초 클래스
+-----------
 
 .. autoclass:: eudplib.Condition
     :members:
@@ -363,150 +491,31 @@ Raw Trigger
 
 
 
-Raw Trigger scope
------------------
+Trigger Scope
+-------------
 
-Trigger scopes are used to specify scoping into triggers. Scopes groups
-triggers together. Triggers in the same scope are eligable for
-`nextptr auto linking`_.
+같은 Trigger Scope 안에 있는 RawTrigger끼리는 자동으로 nextptr이 연결됩니다.
 
 .. autofunction:: eudplib.PushTriggerScope
 .. autofunction:: eudplib.PopTriggerScope
 
 
 
-Enumeration parser
-------------------
+커스텀 제어문 관련
+==================
 
-Enumeration parsers are used to translate human-friendly identifiers to
-intergal values. Consider following condition::
+제어문을 새로 정의하고싶을 때 쓸 수 있는 함수들입니다.
 
-    Bring(Player1, AtLeast, 1, "Terran Marine", "Anywhere")
-
-Each field is parsed by enumeration parser : player field is parsed by
-:func:`eudplib.ParsePlayer` function, unit field is parsed by
-:func:`eudplib.ParseUnit` function. ::
-
-    Player1 -> ParsePlayer(Player1) = 0
-    AtLeast -> ParseComparison(AtLeast) = 0
-    1
-    "Terran Marine" -> ParseUnit("Terran Marine") = 0
-    "Anywhere" -> ParseLocation("Anywhere") = 64
-
-So, the condition is translated as::
-
-    1. Bring(Player1, AtLeast, 1, "Terran Marine", "Anywhere")
-    2. Bring(0, 0, 1, 0, 64)
-    3. Condition(64, 0, 1, 0, 0, 3, 0, 0)
-
-Enumeration parsers can also be used inside user code. For instance, consider
-following function changing unit's graphic to other sprite::
-
-    ChangeUnitGraphics(0, 123) # Set Terran Marine's graphics to Sprite #123.
-
-This code can be rewritten to::
-
-    ChangeUnitGraphics(ParseUnit("Terran Marine"), 123)
-
-Or even better, ChangeUnitGraphics function can use ParseUnit internally.
-
-.. autofunction:: eudplib.EncodeSwitchState
-.. autofunction:: eudplib.EncodeScore
-.. autofunction:: eudplib.EncodeComparison
-.. autofunction:: eudplib.EncodePropState
-.. autofunction:: eudplib.EncodeModifier
-.. autofunction:: eudplib.EncodeOrder
-.. autofunction:: eudplib.EncodeResource
-.. autofunction:: eudplib.EncodeCount
-.. autofunction:: eudplib.EncodeAllyStatus
-.. autofunction:: eudplib.EncodePlayer
-.. autofunction:: eudplib.EncodeAIScript
-.. autofunction:: eudplib.EncodeSwitchAction
-.. autofunction:: eudplib.EncodeSwitch
-
-.. autofunction:: eudplib.EncodeUnit
-.. autofunction:: eudplib.EncodeLocation
-.. autofunction:: eudplib.EncodeString
-.. autofunction:: eudplib.EncodeProperty
-
-
-
-Auxilary library
-================
-
-블럭 구조 라이브러리
---------------------
+.. autoclass:: eudplib.CtrlStruOpener
 
 .. autofunction:: eudplib.EUDCreateBlock
-.. autofunction:: eudplib.EUDGetBlockList
-.. autofunction:: eudplib.EUDGetLastBlock
-.. autofunction:: eudplib.EUDGetLastBlockOfName
 .. autofunction:: eudplib.EUDPeekBlock
 .. autofunction:: eudplib.EUDPopBlock
 
+.. autofunction:: eudplib.EUDGetLastBlock
+.. autofunction:: eudplib.EUDGetLastBlockOfName
 
-Variable Table
---------------
-
-.. autoclass:: eudplib.EUDVariable
-    :members:
-    :show-inheritance:
-.. autofunction:: eudplib.EUDCreateVariables
-.. autofunction:: eudplib.SeqCompute
-.. autofunction:: eudplib.SetVariables
-
-.. autoclass:: eudplib.EUDLightVariable
-    :members:
-    :show-inheritance:
-
-
-Common control structures
--------------------------
-
-
-
-
-
-Common objects
---------------
-
-String table
-^^^^^^^^^^^^
-
-
-
-
-Custom graphic (.GRP)
-^^^^^^^^^^^^^^^^^^^^^
-
-.. autoclass:: eudplib.EUDGrp
-    :members:
-    :show-inheritance:
-
-
-Utility functions
------------------
-
-.. autofunction:: eudplib.EPD
-
-
-
-Basic EUD Functions
-===================
-
-
-
-
-Map I/O Functions
-=================
-
-.. autofunction:: eudplib.SaveMap
-.. autofunction:: eudplib.LoadMap
-
-
-
-
-
+.. autofunction:: eudplib.EUDGetBlockList
 
 
 부록

@@ -32,9 +32,6 @@ from .blockstru import (
     EUDPeekBlock,
     EUDPopBlock,
     EUDGetBlockList,
-
-    SetCurrentBlockStruManager,
-    BlockStruManager,
 )
 from .etc import (
     EPD,

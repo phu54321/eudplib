@@ -23,8 +23,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-from .vbuf import GetCurrentVariableBuffer
-
 from .eudv import (
     EUDVariable,
     EUDCreateVariables,

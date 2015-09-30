@@ -248,7 +248,7 @@ class EUDVariable(VariableBase):
 
     def __imul__(self, a): pass
 
-    def __floordiv__(self, a): pass
+    def __floordiv__(self, a): raise NotImplementedError('')
 
     def __rfloordiv__(self, a): pass
 

@@ -5,6 +5,7 @@ sys.path.insert(0, os.path.abspath('..\\'))
 
 from eudplib import *
 
+
 '''
 Creep reading
 '''
@@ -15,7 +16,7 @@ mapwidth, mapheight, creepaddr_epd = EUDCreateVariables(3)
 @EUDFunc
 def f_creepread_init():
     # Get creepmap address
-    creepaddr_epd << f_epd(f_dwread_epd(EPD(0x6D0E84)))
+    creepaddr_epd << f_epdread_epd(EPD(0x6D0E84))
     SetVariables(
         [mapwidth, mapheight],
         f_dwbreak(f_dwread_epd(EPD(0x57F1D4)))[0:2]
@@ -70,7 +71,7 @@ def main():
         unitptr << f_dwread_epd(EPD(0x628430))
 
         if EUDWhileNot()(unitptr.Exactly(0)):
-            unitepd << f_epd(unitptr)
+            unitepd << EPD(unitptr)
 
             # check unittype
             # /*0x064*/ u16         unitType;
