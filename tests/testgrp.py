@@ -18,4 +18,3 @@ def main():
 
 
 SaveMap('outputmap/testgrp.scx', main)
-

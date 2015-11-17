@@ -71,7 +71,7 @@ class ExtendedStringIndex_FW(c.Expr):
 
     def Evaluate(self):
         _RegisterResetterAction(self._resetter)
-        return c.RlocInt(1, 0)
+        return c.toRlocInt(1)
 
 
 _resetteracts = set()

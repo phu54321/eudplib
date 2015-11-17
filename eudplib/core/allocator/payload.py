@@ -104,14 +104,12 @@ def CollectObjects(root):
     global _found_objects
     global _found_objects_set
     global _untraversed_objects
-    global _dwoccupmap_dict
 
     phase = PHASE_COLLECTING
 
     objc = ObjCollector()
     _found_objects = []
     _found_objects_set = set()
-    _dwoccupmap_dict = {}
     _untraversed_objects = []
 
     # Evaluate root to register root object.
@@ -122,7 +120,7 @@ def CollectObjects(root):
         obj = _untraversed_objects.pop()
         objc.StartWrite()
         obj.WritePayload(objc)
-        _dwoccupmap_dict[obj] = objc.EndWrite()
+        objc.EndWrite()
 
     if len(_found_objects) == 0:
         raise ut.EPError('No object collected')
@@ -212,8 +210,7 @@ class ObjAllocator:
     def WriteBytes(self, b):
         ssize = len(b)
         self._occupmap.extend([1] * (ssize >> 2))
-        ssize &= 3
-        for i in range(ssize):
+        for i in range(ssize & 3):
             self._Occup1()
 
     def WriteSpace(self, ssize):
@@ -338,4 +335,5 @@ def GetObjectAddr(obj):
         return rlocint.RlocInt(0, 4)
 
     elif phase == PHASE_WRITING:
+        assert _alloctable[obj] & 3 == 0
         return rlocint.RlocInt(_alloctable[obj], 4)
