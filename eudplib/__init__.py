@@ -32,7 +32,7 @@ from .trigtrg import *
 from .maprw import *
 import types
 
-__version__ = '0.50'
+__version__ = '0.50.1'
 
 
 # remove modules from __all__

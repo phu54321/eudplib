@@ -236,7 +236,6 @@ class EUDVariable(VariableBase):
             t = EUDVariable()
             SeqCompute((
                 (t, bt.SetTo, self),
-                (t, bt.Subtract, 1),
                 (t, bt.Subtract, other)
             ))
             return t.AtLeast(1)
