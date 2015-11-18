@@ -37,16 +37,16 @@ def UbconvSetEncoding(encoding):
 def u2b(s):
     if isinstance(s, str):
         return s.encode(g_encoding)
-    elif isinstance(s, int):
-        raise EPError('Invalid type %s' % type(s))
+    elif isinstance(s, bytes):
+        return s
     else:
-        return bytes(s)
+        raise EPError('Invalid type %s' % type(s))
 
 
 def b2u(b):
     if isinstance(b, bytes):
         return b.decode(g_encoding)
-    elif isinstance(b, int):
-        raise EPError('Invalid type %s' % type(b))
+    elif isinstance(b, str):
+        return b
     else:
-        return str(b)
+        raise EPError('Invalid type %s' % type(b))

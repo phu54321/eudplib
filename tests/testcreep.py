@@ -5,6 +5,7 @@ sys.path.insert(0, os.path.abspath('..\\'))
 
 from eudplib import *
 
+
 '''
 Creep reading
 '''
@@ -15,7 +16,7 @@ mapwidth, mapheight, creepaddr_epd = EUDCreateVariables(3)
 @EUDFunc
 def f_creepread_init():
     # Get creepmap address
-    creepaddr_epd << f_epd(f_dwread_epd(EPD(0x6D0E84)))
+    creepaddr_epd << f_epdread_epd(EPD(0x6D0E84))
     SetVariables(
         [mapwidth, mapheight],
         f_dwbreak(f_dwread_epd(EPD(0x57F1D4)))[0:2]
@@ -34,10 +35,10 @@ def f_creepread(x, y):
     creepdat_word0, creepdat_word1 = f_dwbreak(f_dwread_epd(creepdat_epd))[0:2]
 
     # select word0/word1 by evenodd
-    if EUDIf(creepevenodd == 0):
+    if EUDIf()(creepevenodd == 0):
         ret << creepdat_word0
 
-    if EUDElse():
+    if EUDElse()():
         ret << creepdat_word1
 
     EUDEndIf()
@@ -62,15 +63,15 @@ def main():
 
     # Turbo rawtrigger
 
-    if EUDWhile(Always()):
+    if EUDWhile()(Always()):
         DoActions(SetDeaths(203151, SetTo, 1, 0))
         f_setcurpl(0)
 
         # Loop for every units
         unitptr << f_dwread_epd(EPD(0x628430))
 
-        if EUDWhileNot(unitptr.Exactly(0)):
-            unitepd << f_epd(unitptr)
+        if EUDWhileNot()(unitptr.Exactly(0)):
+            unitepd << EPD(unitptr)
 
             # check unittype
             # /*0x064*/ u16         unitType;

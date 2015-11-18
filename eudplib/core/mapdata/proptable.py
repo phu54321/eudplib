@@ -39,17 +39,18 @@ def InitPropertyMap(chkt):
 
     # Backup UPRP data
     uprp = chkt.getsection('UPRP')
-    upus = chkt.getsection('UPUS')
+    upus = chkt.getsection('UPUS') or bytes([1] * 64)
 
     for i in range(64):
-        if upus[i] == 1:
-            uprpdata = uprp[20 * i, 20 * i + 20]
+        if upus[i]:
+            uprpdata = uprp[20 * i: 20 * i + 20]
             _uprpdict[uprpdata] = i
             _uprptable[i] = uprpdata
 
 
 def GetPropertyIndex(prop):
-    ut.ep_assert(isinstance(prop, UnitProperty), 'Invalid type')
+    ut.ep_assert(isinstance(prop, UnitProperty) or isinstance(prop, bytes),
+                 'Invalid property type')
 
     prop = bytes(prop)
     try:

@@ -42,10 +42,6 @@ from .strenc import (
 from ...utils import EPD
 
 
-def NoCondition():
-    return Condition(0, 0, 0, 0, 0, 0, 0, 0)
-
-
 def CountdownTimer(Comparison, Time):
     """Checks countdown timer.
 
@@ -139,10 +135,6 @@ def Switch(Switch, State):
 def ElapsedTime(Comparison, Time):
     Comparison = EncodeComparison(Comparison)
     return Condition(0, 0, Time, 0, Comparison, 12, 0, 0)
-
-
-def Briefing():
-    return Condition(0, 0, 0, 0, 0, 13, 0, 0)
 
 
 def Opponents(Player, Comparison, Number):

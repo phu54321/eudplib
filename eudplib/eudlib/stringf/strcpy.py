@@ -43,7 +43,7 @@ def f_strcpy(dst, src):
     br.seekoffset(src)
     bw.seekoffset(dst)
 
-    if cs.EUDInfLoop():
+    if cs.EUDInfLoop()():
         c.SetVariables(b, br.readbyte())
         bw.writebyte(b)
         cs.EUDBreakIf(b == 0)

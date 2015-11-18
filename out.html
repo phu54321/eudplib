@@ -66,7 +66,7 @@
 .highlight .il { color: #666666 } /* Literal.Number.Integer.Long */</style>
 </head>
 <body>
-<p><h2> eudplib\__init__.py : 39 lines </h2></p>
+<p><h2> eudplib\__init__.py : 53 lines </h2></p>
 <table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
  3
@@ -104,7 +104,21 @@
 35
 36
 37
-38</pre></div></td><td class="code"><div class="highlight"><pre><span class="c">#!/usr/bin/python</span>
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52</pre></div></td><td class="code"><div class="highlight"><pre><span class="c">#!/usr/bin/python</span>
 <span class="c"># -*- coding: utf-8 -*-</span>
 
 <span class="sd">&#39;&#39;&#39;</span>
@@ -136,8 +150,22 @@
 <span class="kn">from</span> <span class="nn">.eudlib</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">.trigtrg</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">.maprw</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">types</span>
 
-<span class="n">__version__</span> <span class="o">=</span> <span class="s">&#39;0.41b5&#39;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s">&#39;0.41.post9&#39;</span>
+
+
+<span class="c"># remove modules from __all__</span>
+
+<span class="n">_alllist</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">globals</span><span class="p">())</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">types</span><span class="o">.</span><span class="n">ModuleType</span><span class="p">):</span>
+        <span class="k">continue</span>
+    <span class="k">if</span> <span class="n">k</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;_&#39;</span><span class="p">:</span>
+        <span class="k">continue</span>
+    <span class="n">_alllist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="n">_alllist</span>
 
 
 <span class="k">def</span> <span class="nf">eudtrgVersion</span><span class="p">():</span>
@@ -4041,7 +4069,7 @@
 <span class="k">if</span> <span class="ow">not</span> <span class="n">InitMpqLibrary</span><span class="p">():</span>
     <span class="k">raise</span> <span class="n">ut</span><span class="o">.</span><span class="n">EPError</span><span class="p">(</span><span class="s">&quot;Cannot load SFmpq.dll. SFmpq not initalized&quot;</span><span class="p">)</span>
 </pre></div>
-</td></tr></table><br><br><p><h2> eudplib\core\mapdata\proptable.py : 73 lines </h2></p>
+</td></tr></table><br><br><p><h2> eudplib\core\mapdata\proptable.py : 74 lines </h2></p>
 <table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
  3
@@ -4113,7 +4141,8 @@
 69
 70
 71
-72</pre></div></td><td class="code"><div class="highlight"><pre><span class="c">#!/usr/bin/python</span>
+72
+73</pre></div></td><td class="code"><div class="highlight"><pre><span class="c">#!/usr/bin/python</span>
 <span class="c"># -*- coding: utf-8 -*-</span>
 
 <span class="sd">&#39;&#39;&#39;</span>
@@ -4154,17 +4183,18 @@
 
     <span class="c"># Backup UPRP data</span>
     <span class="n">uprp</span> <span class="o">=</span> <span class="n">chkt</span><span class="o">.</span><span class="n">getsection</span><span class="p">(</span><span class="s">&#39;UPRP&#39;</span><span class="p">)</span>
-    <span class="n">upus</span> <span class="o">=</span> <span class="n">chkt</span><span class="o">.</span><span class="n">getsection</span><span class="p">(</span><span class="s">&#39;UPUS&#39;</span><span class="p">)</span>
+    <span class="n">upus</span> <span class="o">=</span> <span class="n">chkt</span><span class="o">.</span><span class="n">getsection</span><span class="p">(</span><span class="s">&#39;UPUS&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">bytes</span><span class="p">([</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="mi">64</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">64</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">upus</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="n">uprpdata</span> <span class="o">=</span> <span class="n">uprp</span><span class="p">[</span><span class="mi">20</span> <span class="o">*</span> <span class="n">i</span><span class="p">,</span> <span class="mi">20</span> <span class="o">*</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">20</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">upus</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
+            <span class="n">uprpdata</span> <span class="o">=</span> <span class="n">uprp</span><span class="p">[</span><span class="mi">20</span> <span class="o">*</span> <span class="n">i</span><span class="p">:</span> <span class="mi">20</span> <span class="o">*</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">20</span><span class="p">]</span>
             <span class="n">_uprpdict</span><span class="p">[</span><span class="n">uprpdata</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span>
             <span class="n">_uprptable</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">uprpdata</span>
 
 
 <span class="k">def</span> <span class="nf">GetPropertyIndex</span><span class="p">(</span><span class="n">prop</span><span class="p">):</span>
-    <span class="n">ut</span><span class="o">.</span><span class="n">ep_assert</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">prop</span><span class="p">,</span> <span class="n">UnitProperty</span><span class="p">),</span> <span class="s">&#39;Invalid type&#39;</span><span class="p">)</span>
+    <span class="n">ut</span><span class="o">.</span><span class="n">ep_assert</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">prop</span><span class="p">,</span> <span class="n">UnitProperty</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">prop</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">),</span>
+                 <span class="s">&#39;Invalid property type&#39;</span><span class="p">)</span>
 
     <span class="n">prop</span> <span class="o">=</span> <span class="nb">bytes</span><span class="p">(</span><span class="n">prop</span><span class="p">)</span>
     <span class="k">try</span><span class="p">:</span>
@@ -6319,7 +6349,7 @@
 <span class="k">def</span> <span class="nf">EncodeProperty</span><span class="p">(</span><span class="n">prop</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">GetPropertyIndex</span><span class="p">(</span><span class="n">prop</span><span class="p">)</span>
 </pre></div>
-</td></tr></table><br><br><p><h2> eudplib\core\rawtrigger\rawtriggerdef.py : 137 lines </h2></p>
+</td></tr></table><br><br><p><h2> eudplib\core\rawtrigger\rawtriggerdef.py : 147 lines </h2></p>
 <table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>  1
   2
   3
@@ -6455,7 +6485,17 @@
 133
 134
 135
-136</pre></div></td><td class="code"><div class="highlight"><pre><span class="c">#!/usr/bin/python</span>
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146</pre></div></td><td class="code"><div class="highlight"><pre><span class="c">#!/usr/bin/python</span>
 <span class="c"># -*- coding: utf-8 -*-</span>
 
 <span class="sd">&#39;&#39;&#39;</span>
@@ -6494,6 +6534,15 @@
     <span class="k">return</span> <span class="n">_trgcount</span>
 
 
+<span class="k">def</span> <span class="nf">_bool2Cond</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">x</span> <span class="ow">is</span> <span class="bp">True</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">Condition</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">22</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>  <span class="c"># Always</span>
+    <span class="k">elif</span> <span class="n">x</span> <span class="ow">is</span> <span class="bp">False</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">Condition</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">23</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>  <span class="c"># Never</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">x</span>
+
+
 <span class="k">class</span> <span class="nc">RawTrigger</span><span class="p">(</span><span class="n">EUDObject</span><span class="p">):</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span>
@@ -6529,6 +6578,7 @@
         <span class="n">ut</span><span class="o">.</span><span class="n">ep_assert</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">conditions</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">16</span><span class="p">,</span> <span class="s">&#39;Too many conditions&#39;</span><span class="p">)</span>
         <span class="n">ut</span><span class="o">.</span><span class="n">ep_assert</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">actions</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">64</span><span class="p">,</span> <span class="s">&#39;Too many actions&#39;</span><span class="p">)</span>
 
+        <span class="n">conditions</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="n">_bool2Cond</span><span class="p">,</span> <span class="n">conditions</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_prevptr</span> <span class="o">=</span> <span class="n">prevptr</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_nextptr</span> <span class="o">=</span> <span class="n">nextptr</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_conditions</span> <span class="o">=</span> <span class="n">conditions</span>
@@ -6592,7 +6642,7 @@
         <span class="n">pbuffer</span><span class="o">.</span><span class="n">WriteSpace</span><span class="p">(</span><span class="mi">27</span><span class="p">)</span>
         <span class="n">pbuffer</span><span class="o">.</span><span class="n">WriteByte</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 </pre></div>
-</td></tr></table><br><br><p><h2> eudplib\core\rawtrigger\stockact.py : 414 lines </h2></p>
+</td></tr></table><br><br><p><h2> eudplib\core\rawtrigger\stockact.py : 415 lines </h2></p>
 <table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>  1
   2
   3
@@ -7005,7 +7055,8 @@
 410
 411
 412
-413</pre></div></td><td class="code"><div class="highlight"><pre><span class="c">#!/usr/bin/python</span>
+413
+414</pre></div></td><td class="code"><div class="highlight"><pre><span class="c">#!/usr/bin/python</span>
 <span class="c"># -*- coding: utf-8 -*-</span>
 
 <span class="sd">&#39;&#39;&#39;</span>
@@ -7417,6 +7468,7 @@
 
 
 <span class="k">def</span> <span class="nf">SetCurrentPlayer</span><span class="p">(</span><span class="n">p</span><span class="p">):</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">EncodePlayer</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">SetMemory</span><span class="p">(</span><span class="mh">0x6509B0</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span>
 </pre></div>
 </td></tr></table><br><br><p><h2> eudplib\core\rawtrigger\stockcond.py : 204 lines </h2></p>
@@ -9784,7 +9836,7 @@
     <span class="k">def</span> <span class="nf">GetVariableMemoryAddr</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_memaddr</span>
 </pre></div>
-</td></tr></table><br><br><p><h2> eudplib\core\varfunc\eudv.py : 307 lines </h2></p>
+</td></tr></table><br><br><p><h2> eudplib\core\varfunc\eudv.py : 339 lines </h2></p>
 <table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>  1
   2
   3
@@ -10090,7 +10142,39 @@
 303
 304
 305
-306</pre></div></td><td class="code"><div class="highlight"><pre><span class="c">#!/usr/bin/python</span>
+306
+307
+308
+309
+310
+311
+312
+313
+314
+315
+316
+317
+318
+319
+320
+321
+322
+323
+324
+325
+326
+327
+328
+329
+330
+331
+332
+333
+334
+335
+336
+337
+338</pre></div></td><td class="code"><div class="highlight"><pre><span class="c">#!/usr/bin/python</span>
 <span class="c"># -*- coding: utf-8 -*-</span>
 
 <span class="sd">&#39;&#39;&#39;</span>
@@ -10134,6 +10218,7 @@
 
 
 <span class="k">class</span> <span class="nc">VariableTriggerForward</span><span class="p">(</span><span class="n">Expr</span><span class="p">):</span>
+
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_expr</span> <span class="o">=</span> <span class="n">weakref</span><span class="o">.</span><span class="n">WeakKeyDictionary</span><span class="p">()</span>
@@ -10146,6 +10231,7 @@
 
 
 <span class="k">class</span> <span class="nc">EUDVariable</span><span class="p">(</span><span class="n">VariableBase</span><span class="p">):</span>
+
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Full variable.</span>
 <span class="sd">    &#39;&#39;&#39;</span>
@@ -10229,6 +10315,7 @@
 
     <span class="k">def</span> <span class="nf">__sub__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
         <span class="n">t</span> <span class="o">=</span> <span class="n">EUDVariable</span><span class="p">()</span>
+
         <span class="n">SeqCompute</span><span class="p">([</span>
             <span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">bt</span><span class="o">.</span><span class="n">SetTo</span><span class="p">,</span> <span class="mh">0xffffffff</span><span class="p">),</span>
             <span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">bt</span><span class="o">.</span><span class="n">Subtract</span><span class="p">,</span> <span class="n">other</span><span class="p">),</span>
@@ -10247,6 +10334,17 @@
         <span class="p">])</span>
         <span class="k">return</span> <span class="n">t</span>
 
+    <span class="k">def</span> <span class="nf">__neg__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="mi">0</span> <span class="o">-</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="nf">__invert__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="n">EUDVariable</span><span class="p">()</span>
+        <span class="n">SeqCompute</span><span class="p">([</span>
+            <span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">bt</span><span class="o">.</span><span class="n">SetTo</span><span class="p">,</span> <span class="mh">0xffffffff</span><span class="p">),</span>
+            <span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">bt</span><span class="o">.</span><span class="n">Subtract</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="p">])</span>
+        <span class="k">return</span> <span class="n">t</span>
+
     <span class="c"># -------</span>
 
     <span class="k">def</span> <span class="nf">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
@@ -10255,6 +10353,9 @@
 
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="p">(</span><span class="bp">self</span> <span class="o">-</span> <span class="n">other</span><span class="p">)</span><span class="o">.</span><span class="n">Exactly</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__ne__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span> <span class="o">-</span> <span class="n">other</span><span class="p">)</span><span class="o">.</span><span class="n">AtLeast</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">__le__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">IsValidExpr</span><span class="p">(</span><span class="n">other</span><span class="p">):</span>
@@ -10318,25 +10419,40 @@
 
     <span class="c"># operator placeholders</span>
     <span class="k">def</span> <span class="nf">__mul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">):</span> <span class="k">pass</span>
+
     <span class="k">def</span> <span class="nf">__rmul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">):</span> <span class="k">pass</span>
+
     <span class="k">def</span> <span class="nf">__imul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">):</span> <span class="k">pass</span>
+
     <span class="k">def</span> <span class="nf">__floordiv__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">):</span> <span class="k">pass</span>
+
     <span class="k">def</span> <span class="nf">__rfloordiv__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">):</span> <span class="k">pass</span>
+
     <span class="k">def</span> <span class="nf">__ifloordiv__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">):</span> <span class="k">pass</span>
+
     <span class="k">def</span> <span class="nf">__mod__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">):</span> <span class="k">pass</span>
+
     <span class="k">def</span> <span class="nf">__rmod__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">):</span> <span class="k">pass</span>
+
     <span class="k">def</span> <span class="nf">__imod__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">):</span> <span class="k">pass</span>
+
     <span class="k">def</span> <span class="nf">__and__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">):</span> <span class="k">pass</span>
+
     <span class="k">def</span> <span class="nf">__rand__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">):</span> <span class="k">pass</span>
+
     <span class="k">def</span> <span class="nf">__iand__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">):</span> <span class="k">pass</span>
+
     <span class="k">def</span> <span class="nf">__or__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">):</span> <span class="k">pass</span>
+
     <span class="k">def</span> <span class="nf">__ror__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">):</span> <span class="k">pass</span>
+
     <span class="k">def</span> <span class="nf">__ior__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">):</span> <span class="k">pass</span>
+
     <span class="k">def</span> <span class="nf">__xor__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">):</span> <span class="k">pass</span>
+
     <span class="k">def</span> <span class="nf">__rxor__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">):</span> <span class="k">pass</span>
+
     <span class="k">def</span> <span class="nf">__ixor__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">):</span> <span class="k">pass</span>
-
-
 
 
 <span class="k">def</span> <span class="nf">_VProc</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">actions</span><span class="p">):</span>
@@ -18146,99 +18262,111 @@
 <span class="k">def</span> <span class="nf">PatchAction</span><span class="p">(</span><span class="n">act</span><span class="p">):</span>
     <span class="n">ApplyPatchTable</span><span class="p">(</span><span class="n">ut</span><span class="o">.</span><span class="n">EPD</span><span class="p">(</span><span class="n">act</span><span class="p">),</span> <span class="n">act</span><span class="p">,</span> <span class="n">actpt</span><span class="p">)</span>
 </pre></div>
-</td></tr></table><br><br><p><h2> eudplib\trigger\triggerdef.py : 94 lines </h2></p>
-<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
- 2
- 3
- 4
- 5
- 6
- 7
- 8
- 9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-29
-30
-31
-32
-33
-34
-35
-36
-37
-38
-39
-40
-41
-42
-43
-44
-45
-46
-47
-48
-49
-50
-51
-52
-53
-54
-55
-56
-57
-58
-59
-60
-61
-62
-63
-64
-65
-66
-67
-68
-69
-70
-71
-72
-73
-74
-75
-76
-77
-78
-79
-80
-81
-82
-83
-84
-85
-86
-87
-88
-89
-90
-91
-92</pre></div></td><td class="code"><div class="highlight"><pre><span class="c">#!/usr/bin/python</span>
+</td></tr></table><br><br><p><h2> eudplib\trigger\triggerdef.py : 106 lines </h2></p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>  1
+  2
+  3
+  4
+  5
+  6
+  7
+  8
+  9
+ 10
+ 11
+ 12
+ 13
+ 14
+ 15
+ 16
+ 17
+ 18
+ 19
+ 20
+ 21
+ 22
+ 23
+ 24
+ 25
+ 26
+ 27
+ 28
+ 29
+ 30
+ 31
+ 32
+ 33
+ 34
+ 35
+ 36
+ 37
+ 38
+ 39
+ 40
+ 41
+ 42
+ 43
+ 44
+ 45
+ 46
+ 47
+ 48
+ 49
+ 50
+ 51
+ 52
+ 53
+ 54
+ 55
+ 56
+ 57
+ 58
+ 59
+ 60
+ 61
+ 62
+ 63
+ 64
+ 65
+ 66
+ 67
+ 68
+ 69
+ 70
+ 71
+ 72
+ 73
+ 74
+ 75
+ 76
+ 77
+ 78
+ 79
+ 80
+ 81
+ 82
+ 83
+ 84
+ 85
+ 86
+ 87
+ 88
+ 89
+ 90
+ 91
+ 92
+ 93
+ 94
+ 95
+ 96
+ 97
+ 98
+ 99
+100
+101
+102
+103
+104</pre></div></td><td class="code"><div class="highlight"><pre><span class="c">#!/usr/bin/python</span>
 <span class="c"># -*- coding: utf-8 -*-</span>
 
 <span class="sd">&#39;&#39;&#39;</span>
@@ -18277,6 +18405,14 @@
     <span class="n">conditions</span> <span class="o">=</span> <span class="n">ut</span><span class="o">.</span><span class="n">FlattenList</span><span class="p">(</span><span class="n">conditions</span><span class="p">)</span>
     <span class="n">actions</span> <span class="o">=</span> <span class="n">ut</span><span class="o">.</span><span class="n">FlattenList</span><span class="p">(</span><span class="n">actions</span><span class="p">)</span>
 
+    <span class="c"># Translate boolean conditions.</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">cond</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">conditions</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cond</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">cond</span><span class="p">:</span>
+                <span class="n">conditions</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">Always</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">conditions</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">Never</span><span class="p">()</span>
+
     <span class="c"># Normal</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">conditions</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">16</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">actions</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">64</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">cond</span> <span class="ow">in</span> <span class="n">conditions</span><span class="p">:</span>
@@ -18285,7 +18421,11 @@
         <span class="k">for</span> <span class="n">act</span> <span class="ow">in</span> <span class="n">actions</span><span class="p">:</span>
             <span class="n">PatchAction</span><span class="p">(</span><span class="n">act</span><span class="p">)</span>
 
-        <span class="n">c</span><span class="o">.</span><span class="n">RawTrigger</span><span class="p">(</span><span class="n">conditions</span><span class="o">=</span><span class="n">conditions</span><span class="p">,</span> <span class="n">actions</span><span class="o">=</span><span class="n">actions</span><span class="p">,</span> <span class="n">preserved</span><span class="o">=</span><span class="n">preserved</span><span class="p">)</span>
+        <span class="n">c</span><span class="o">.</span><span class="n">RawTrigger</span><span class="p">(</span>
+            <span class="n">conditions</span><span class="o">=</span><span class="n">conditions</span><span class="p">,</span>
+            <span class="n">actions</span><span class="o">=</span><span class="n">actions</span><span class="p">,</span>
+            <span class="n">preserved</span><span class="o">=</span><span class="n">preserved</span>
+        <span class="p">)</span>
 
     <span class="k">else</span><span class="p">:</span>
         <span class="c"># Extended trigger</span>

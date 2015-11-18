@@ -26,6 +26,7 @@ THE SOFTWARE.
 from .. import core as c
 from eudplib import utils as ut
 from .basicstru import EUDJump, EUDJumpIf, EUDJumpIfNot
+from .cshelper import CtrlStruOpener
 
 
 '''
@@ -34,87 +35,101 @@ TODO : Remove code duplication if possible.
 '''
 
 
-def EUDIf(conditions):
-    block = {
-        'ifend': c.Forward(),
-        'next_elseif': c.Forward()
-    }
-    ut.EUDCreateBlock('ifblock', block)
+def EUDIf():
+    def _footer(conditions):
+        block = {
+            'ifend': c.Forward(),
+            'next_elseif': c.Forward()
+        }
+        ut.EUDCreateBlock('ifblock', block)
 
-    EUDJumpIfNot(conditions, block['next_elseif'])
+        EUDJumpIfNot(conditions, block['next_elseif'])
+        return True
 
-    return True
+    return CtrlStruOpener(_footer)
 
 
-def EUDIfNot(conditions):
-    block = {
-        'ifend': c.Forward(),
-        'next_elseif': c.Forward()
-    }
-    ut.EUDCreateBlock('ifblock', block)
+def EUDIfNot():
+    def _footer(conditions):
+        block = {
+            'ifend': c.Forward(),
+            'next_elseif': c.Forward()
+        }
+        ut.EUDCreateBlock('ifblock', block)
 
-    EUDJumpIf(conditions, block['next_elseif'])
+        EUDJumpIf(conditions, block['next_elseif'])
+        return True
 
-    return True
+    return CtrlStruOpener(_footer)
 
 
 # -------
 
-def EUDElseIf(conditions):
-    lb = ut.EUDGetLastBlock()
-    ut.ep_assert(lb[0] == 'ifblock', 'Block start/end mismatch')
-    block = lb[1]
-    ut.ep_assert(
-        block['next_elseif'] is not None,
-        'Cannot have EUDElseIf after EUDElse'
-    )
+def EUDElseIf():
+    def _header():
+        block = ut.EUDPeekBlock('ifblock')[1]
+        ut.ep_assert(
+            block['next_elseif'] is not None,
+            'Cannot have EUDElseIf after EUDElse'
+        )
 
-    # Finish previous if/elseif block
-    EUDJump(block['ifend'])
+        # Finish previous if/elseif block
+        EUDJump(block['ifend'])
 
-    block['next_elseif'] << c.NextTrigger()
-    block['next_elseif'] = c.Forward()
-    EUDJumpIfNot(conditions, block['next_elseif'])
+        block['next_elseif'] << c.NextTrigger()
+        block['next_elseif'] = c.Forward()
 
-    return True
+    def _footer(conditions):
+        lb = ut.EUDPeekBlock('ifblock')
+        block = lb[1]
+
+        EUDJumpIfNot(conditions, block['next_elseif'])
+        return True
+
+    _header()
+    return CtrlStruOpener(_footer)
 
 
-def EUDElseIfNot(conditions):
-    lb = ut.EUDGetLastBlock()
-    ut.ep_assert(lb[0] == 'ifblock', 'Block start/end mismatch')
-    block = lb[1]
-    ut.ep_assert(
-        block['next_elseif'] is not None,
-        'Cannot have EUDElseIfNot after EUDElse'
-    )
+def EUDElseIfNot():
+    def _header():
+        block = ut.EUDPeekBlock('ifblock')[1]
+        ut.ep_assert(
+            block['next_elseif'] is not None,
+            'Cannot have EUDElseIfNot after EUDElse'
+        )
 
-    # Finish previous if/elseif block
-    EUDJump(block['ifend'])
-    block['next_elseif'] << c.NextTrigger()
-    block['next_elseif'] = c.Forward()
-    EUDJumpIf(conditions, block['next_elseif'])
+        # Finish previous if/elseif block
+        EUDJump(block['ifend'])
+        block['next_elseif'] << c.NextTrigger()
+        block['next_elseif'] = c.Forward()
 
-    return True
+    def _footer(conditions):
+        block = ut.EUDPeekBlock('ifblock')[1]
+        EUDJumpIf(conditions, block['next_elseif'])
+        return True
+
+    _header()
+    return CtrlStruOpener(_footer)
 
 
 # -------
 
 
 def EUDElse():
-    lb = ut.EUDGetLastBlock()
-    ut.ep_assert(lb[0] == 'ifblock', 'Block start/end mismatch')
-    block = lb[1]
-    ut.ep_assert(
-        block['next_elseif'] is not None,
-        'Cannot have EUDElse after EUDElse'
-    )
+    def _footer():
+        block = ut.EUDPeekBlock('ifblock')[1]
+        ut.ep_assert(
+            block['next_elseif'] is not None,
+            'Cannot have EUDElse after EUDElse'
+        )
 
-    # Finish previous if/elseif block
-    EUDJump(block['ifend'])
-    block['next_elseif'] << c.NextTrigger()
-    block['next_elseif'] = None
+        # Finish previous if/elseif block
+        EUDJump(block['ifend'])
+        block['next_elseif'] << c.NextTrigger()
+        block['next_elseif'] = None
+        return True
 
-    return True
+    return CtrlStruOpener(_footer)
 
 
 def EUDEndIf():
@@ -132,16 +147,18 @@ def EUDEndIf():
 # -------
 
 def EUDExecuteOnce():
-    block = {
-        'blockend': c.Forward()
-    }
-    ut.EUDCreateBlock('executeonceblock', block)
+    def _footer():
+        block = {
+            'blockend': c.Forward()
+        }
+        ut.EUDCreateBlock('executeonceblock', block)
 
-    tv = c.EUDLightVariable()
-    EUDJumpIf(tv == 1, block['blockend'])
-    tv << 1
+        tv = c.EUDLightVariable()
+        EUDJumpIf(tv == 1, block['blockend'])
+        tv << 1
+        return True
 
-    return True
+    return CtrlStruOpener(_footer)
 
 
 def EUDEndExecuteOnce():

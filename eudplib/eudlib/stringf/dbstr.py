@@ -71,7 +71,7 @@ class ExtendedStringIndex_FW(c.Expr):
 
     def Evaluate(self):
         _RegisterResetterAction(self._resetter)
-        return c.RlocInt(1, 0)
+        return c.toRlocInt(1)
 
 
 _resetteracts = set()
@@ -118,7 +118,7 @@ def f_initextstr():
     ptr << ut.EPD(rb)
     origstrptr = f_dwread_epd(ut.EPD(0x5993D4))
 
-    if cs.EUDInfLoop():
+    if cs.EUDInfLoop()():
         v << f_dwread_epd(ptr)
         cs.EUDBreakIf(v == 0xFFFFFFFF)
         f_dwwrite_epd(v, origstrptr)

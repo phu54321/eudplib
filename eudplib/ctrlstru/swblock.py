@@ -74,13 +74,16 @@ def EUDSwitchBreak():
     block = ut.EUDGetLastBlockOfName('swblock')[1]
     EUDJump(block['swend'])
 
+
 def EUDSwitchBreakIf(conditions):
     block = ut.EUDGetLastBlockOfName('swblock')[1]
     EUDJumpIf(conditions, block['swend'])
 
+
 def EUDSwitchBreakIfNot(conditions):
     block = ut.EUDGetLastBlockOfName('swblock')[1]
     EUDJumpIfNot(conditions, block['swend'])
+
 
 def EUDEndSwitch():
     lb = ut.EUDPopBlock('swblock')
@@ -103,7 +106,7 @@ def EUDEndSwitch():
         # Uses simple binary search
         ret = c.NextTrigger()
         if len(keys) == 1:  # Only one keys on the list
-            tg.Branch(var == keys[0], casebrlist[keys[0]], defbranch)
+            tg.EUDBranch(var == keys[0], casebrlist[keys[0]], defbranch)
 
         elif len(keys) >= 2:
             br1 = c.Forward()
@@ -111,7 +114,7 @@ def EUDEndSwitch():
             midpos = len(keys) // 2
             midval = keys[midpos]
             EUDJumpIf(var == midval, casebrlist[midval])
-            tg.Branch(var <= midval, br1, br2)
+            tg.EUDBranch(var <= midval, br1, br2)
             br1 << KeySelector(keys[:midpos])
             br2 << KeySelector(keys[midpos + 1:])
 

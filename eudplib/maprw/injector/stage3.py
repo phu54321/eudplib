@@ -40,13 +40,13 @@ from ...trigtrg import runtrigtrg as rtt
 @c.EUDFunc
 def FlipProp(initepd):
     '''Iterate through triggers and flip 'Trigger disabled' flag'''
-    if cs.EUDWhileNot([initepd >= 0x3FD56E6E, initepd <= 0x3FD56E86]):
+    if cs.EUDWhileNot()([initepd >= 0x3FD56E6E, initepd <= 0x3FD56E86]):
         prop_epd = initepd + (8 + 320 + 2048) // 4
         propv = sf.f_dwread_epd(prop_epd)
 
-        if cs.EUDIf(propv == 4):  # Preserved
+        if cs.EUDIf()(propv == 4):  # Preserved
             sf.f_dwwrite_epd(prop_epd, 8)
-        if cs.EUDElse():
+        if cs.EUDElse()():
             sf.f_dwsubtract_epd(prop_epd, 8)
         cs.EUDEndIf()
 
@@ -76,7 +76,7 @@ def CreateStage3(root, mrgndata):
 
     # Flip TRIG properties
     i = c.EUDVariable()
-    if cs.EUDWhile(i <= 7):
+    if cs.EUDWhile()(i <= 7):
         FlipProp(sf.f_epdread_epd(ut.EPD(pts + 8) + i + i + i))
         i << i + 1
     cs.EUDEndWhile()
@@ -113,7 +113,8 @@ def CreateStage3(root, mrgndata):
         prevtstart = sf.f_dwread_epd(ut.EPD(pts + player * 12 + 8))
         prevtend = sf.f_dwread_epd(ut.EPD(pts + player * 12 + 4))
 
-        if cs.EUDIfNot(prevtstart == ~(pts + player * 12 + 4)):  # If there were triggers
+        # If there were triggers
+        if cs.EUDIfNot()(prevtstart == ~(pts + player * 12 + 4)):
             # Modify pts
             c.SeqCompute([
                 (ut.EPD(pts + player * 12 + 8), c.SetTo, tstart),
@@ -124,13 +125,13 @@ def CreateStage3(root, mrgndata):
             c.SeqCompute([
                 (ut.EPD(trs + 4), c.SetTo, prevtstart),
             ])
-            sf.f_dwwrite_epd(sf.f_epd(prevtend) + 1, tre)
+            sf.f_dwwrite_epd(ut.EPD(prevtend) + 1, tre)
         cs.EUDEndIf()
 
     if c.PushTriggerScope():
         tmcheckt << c.NextTrigger()
         curtime << sf.f_dwread_epd(ut.EPD(0x57F23C))
-        if cs.EUDIf(lasttime < curtime):
+        if cs.EUDIf()(lasttime < curtime):
             lasttime << curtime
             cs.EUDJump(root)
         cs.EUDEndIf()

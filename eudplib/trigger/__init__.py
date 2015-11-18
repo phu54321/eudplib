@@ -24,4 +24,5 @@ THE SOFTWARE.
 '''
 
 from .triggerdef import Trigger
-from .branch import Branch
+from .branch import EUDBranch
+from .ptrigger import PTrigger

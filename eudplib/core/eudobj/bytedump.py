@@ -27,6 +27,9 @@ from .eudobj import EUDObject
 
 
 class Db(EUDObject):
+
+    """Class for raw data object"""
+
     def __init__(self, b):
         super().__init__()
         self.content = bytes(b)

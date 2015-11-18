@@ -53,7 +53,7 @@ class UnitProperty(LittleEndianStructure):
             energy=None,
             resource=None,
             hanger=None,
-            clocked=None,
+            cloaked=None,
             burrowed=None,
             intransit=None,
             hallucinated=None,
@@ -84,7 +84,7 @@ class UnitProperty(LittleEndianStructure):
         ut.ep_assert(resource is None or 0 <= resource)
         ut.ep_assert(hanger is None or 0 <= hanger <= 255)
 
-        ut.ep_assert(clocked in [None, True, False])
+        ut.ep_assert(cloaked in [None, True, False])
         ut.ep_assert(burrowed in [None, True, False])
         ut.ep_assert(intransit in [None, True, False])
         ut.ep_assert(hallucinated in [None, True, False])
@@ -127,7 +127,7 @@ class UnitProperty(LittleEndianStructure):
 
         # Set special properties
         self.sprpvalid = (
-            prop2valid(clocked, 1 << 0) |
+            prop2valid(cloaked, 1 << 0) |
             prop2valid(burrowed, 1 << 1) |
             prop2valid(intransit, 1 << 2) |
             prop2valid(hallucinated, 1 << 3) |
@@ -135,7 +135,7 @@ class UnitProperty(LittleEndianStructure):
         )
 
         self.sprpflag = (
-            prop2flag(clocked, 1 << 0) |
+            prop2flag(cloaked, 1 << 0) |
             prop2flag(burrowed, 1 << 1) |
             prop2flag(intransit, 1 << 2) |
             prop2flag(hallucinated, 1 << 3) |

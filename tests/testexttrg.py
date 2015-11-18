@@ -14,7 +14,7 @@ def main():
     a = EUDVariable()
 
     a << 0
-    DoActions(SetDeaths(a, SetTo, f_epd(a), 0))
+    DoActions(SetDeaths(a, SetTo, EPD(a), 0))
     a << 1
     DoActions(SetDeaths(a, SetTo, f_mul(a, 30), 0))
     a << 2

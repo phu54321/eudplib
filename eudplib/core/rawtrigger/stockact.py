@@ -47,10 +47,6 @@ from .strenc import (
 from ...utils import EPD
 
 
-def NoAction():
-    return Action(0, 0, 0, 0, 0, 0, 0, 0, 0, 4)
-
-
 def Victory():
     return Action(0, 0, 0, 0, 0, 0, 0, 1, 0, 4)
 
@@ -64,6 +60,7 @@ def PreserveTrigger():
 
 
 def Wait(Time):
+    print("[Warning] Don't use Wait action UNLESS YOU KNOW WHAT YOU'RE DOING!")
     return Action(0, 0, 0, Time, 0, 0, 0, 4, 0, 4)
 
 
@@ -410,4 +407,5 @@ def SetNextPtr(trg, dest):
 
 
 def SetCurrentPlayer(p):
+    p = EncodePlayer(p)
     return SetMemory(0x6509B0, 7, p)

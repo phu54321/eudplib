@@ -39,9 +39,12 @@ from .random import (
 )
 
 from .mempatch import (
-    f_mempatch_epd,
     f_dwpatch_epd,
     f_unpatchall,
 )
 
-from .pexist import f_playerexist
+from .pexist import (
+    f_playerexist,
+    EUDPlayerLoop,
+    EUDEndPlayerLoop
+)

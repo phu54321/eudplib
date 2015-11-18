@@ -24,7 +24,12 @@ THE SOFTWARE.
 '''
 
 from .. import core as c
-from eudplib import utils as ut
+from .. import utils as ut
+from ..utils.blockstru import (
+    BlockStruManager,
+    SetCurrentBlockStruManager,
+)
+
 from ..core.mapdata import mapdata, mpqapi
 from .injector import stage1, stage2, stage3, doevents
 
@@ -34,8 +39,8 @@ def SaveMap(fname, rootf):
     chkt = mapdata.GetChkTokenized()
 
     # Create injector triggers
-    bsm = ut.BlockStruManager()
-    prev_bsm = ut.SetCurrentBlockStruManager(bsm)
+    bsm = BlockStruManager()
+    prev_bsm = SetCurrentBlockStruManager(bsm)
 
     c.PushTriggerScope()
     root = doevents._MainStarter(rootf)
@@ -46,12 +51,12 @@ def SaveMap(fname, rootf):
     c.PushTriggerScope()
     final_payload = stage2.CreateStage2(payload)
     c.PopTriggerScope()
-    ut.SetCurrentBlockStruManager(prev_bsm)
+    SetCurrentBlockStruManager(prev_bsm)
 
     # Update string table & etc
     # User-defined strings in eudplib program is registered after rootf is
-    # called. This happens when _MainStarter is called, so UpdateMapData function should
-    # be called after `doevents._MainStarter(rootf)` call.
+    # called. This happens when _MainStarter is called, so UpdateMapData
+    # function should be called after `doevents._MainStarter(rootf)` call.
     mapdata.UpdateMapData()
     # stage1.CreateAndApplyStage1 requires STR section to be constructed before
     # it append stage2 payload after 'original' STR section. so UpdateMapData

@@ -69,6 +69,12 @@ def EUDGetLastBlockOfName(name):
     return _lastblockdict[name][-1]
 
 
+def EUDPeekBlock(name):
+    lastblock = EUDGetLastBlock()
+    ep_assert(lastblock[0] == name, 'Block starting/ending mismatch')
+    return lastblock
+
+
 def EUDPopBlock(name):
     _blockstru = _current_bsm._blockstru
     _lastblockdict = _current_bsm._lastblockdict

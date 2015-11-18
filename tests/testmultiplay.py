@@ -10,7 +10,7 @@ LoadMap('outputmap/basemap/basemap_multiplay.scx')
 
 @EUDFunc
 def main():
-    if EUDInfLoop():
+    if EUDInfLoop()():
         f_setcurpl(Player2)
         Trigger(
             ElapsedTime(AtLeast, 3),

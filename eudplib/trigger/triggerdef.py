@@ -29,6 +29,13 @@ from eudplib import utils as ut
 
 
 def Trigger(conditions=None, actions=None, preserved=True):
+    """General easy-to-use trigger
+
+    :param conditions: List of conditions. There could be more than 16.
+    :param actions: List of actions. There could be more than 64.
+    :param preserved: Check if the trigger is preserved. True by default.
+    """
+
     if conditions is None:
         conditions = []
     if actions is None:
@@ -37,15 +44,29 @@ def Trigger(conditions=None, actions=None, preserved=True):
     conditions = ut.FlattenList(conditions)
     actions = ut.FlattenList(actions)
 
+    # Translate boolean conditions.
+    for i, cond in enumerate(conditions):
+        if isinstance(cond, bool):
+            if cond:
+                conditions[i] = c.Always()
+            else:
+                conditions[i] = c.Never()
+
     # Normal
     if len(conditions) <= 16 and len(actions) <= 64:
+        patched_conds = []
         for cond in conditions:
-            PatchCondition(cond)
+            patched_conds.append(PatchCondition(cond))
 
+        patched_actions = []
         for act in actions:
-            PatchAction(act)
+            patched_actions.append(PatchAction(act))
 
-        c.RawTrigger(conditions=conditions, actions=actions, preserved=preserved)
+        c.RawTrigger(
+            conditions=patched_conds,
+            actions=patched_actions,
+            preserved=preserved
+        )
 
     else:
         # Extended trigger
@@ -57,13 +78,14 @@ def Trigger(conditions=None, actions=None, preserved=True):
             conds = conditions[i:i + 16]
             cts = c.Forward()
 
+            patched_conds = []
             for cond in conds:
-                PatchCondition(cond)
+                patched_conds.append(PatchCondition(cond))
 
             nextcond = c.Forward()
             cts << c.RawTrigger(
                 nextptr=cend,
-                conditions=conds,
+                conditions=patched_conds,
                 actions=c.SetNextPtr(cts, nextcond)
             )
             nextcond << c.NextTrigger()
@@ -78,10 +100,11 @@ def Trigger(conditions=None, actions=None, preserved=True):
         # Execute actions
         for i in range(0, len(actions), 64):
             acts = actions[i:i + 64]
+            patched_actions = []
             for act in acts:
-                PatchAction(act)
+                patched_actions.append(PatchAction(act))
 
-            c.RawTrigger(actions=acts)
+            c.RawTrigger(actions=patched_actions)
 
         if not preserved:
             skipt << c.NextTrigger()
@@ -89,5 +112,6 @@ def Trigger(conditions=None, actions=None, preserved=True):
         # Revert conditions
         cend << c.NextTrigger()
         for i in range(0, len(condts), 64):
-            c.RawTrigger(actions=[c.SetNextPtr(cts, cend) for cts in condts[i:i + 64]])
-
+            c.RawTrigger(
+                actions=[c.SetNextPtr(cts, cend) for cts in condts[i:i + 64]]
+            )

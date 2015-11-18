@@ -32,20 +32,24 @@ from .trigtrg import *
 from .maprw import *
 import types
 
-__version__ = '0.41r6'
+__version__ = '0.50.1'
 
 
 # remove modules from __all__
 
 _alllist = []
-for k, v in dict(globals()).items():
-    if isinstance(v, types.ModuleType):
+for _k, _v in dict(globals()).items():
+    if isinstance(_v, types.ModuleType):
         continue
-    if k[0] == '_':
+    if _k[0] == '_':
         continue
-    _alllist.append(k)
+    _alllist.append(_k)
 
 __all__ = _alllist
+
+
+del _k
+del _v
 
 
 def eudtrgVersion():

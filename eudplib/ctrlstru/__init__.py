@@ -23,6 +23,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
+from .cshelper import CtrlStruOpener
+
 from .basicstru import (
     DoActions,
     EUDJump,
@@ -52,21 +54,12 @@ from .loopblock import (
     EUDWhile,
     EUDWhileNot,
     EUDEndWhile,
-
-    EUDLoopContinue,
-    EUDLoopContinueIf,
-    EUDLoopContinueIfNot,
-    EUDLoopSetContinuePoint,
-    EUDLoopBreak,
-    EUDLoopBreakIf,
-    EUDLoopBreakIfNot,
 )
 
 from .swblock import (
     EUDSwitch,
     EUDSwitchCase,
     EUDSwitchDefault,
-    EUDSwitchBreak,
     EUDEndSwitch,
 )
 
@@ -75,6 +68,7 @@ from .breakcont import (
     EUDContinueIf,
     EUDContinueIfNot,
     EUDSetContinuePoint,
+    EUDIsContinuePointSet,
 
     EUDBreak,
     EUDBreakIf,

@@ -28,7 +28,7 @@ from eudplib import utils as ut
 from .tpatcher import PatchCondition
 
 
-def Branch(conditions, ontrue, onfalse):
+def EUDBranch(conditions, ontrue, onfalse):
     flag = c.EUDLightVariable()
     flag << 0
 
@@ -44,14 +44,15 @@ def Branch(conditions, ontrue, onfalse):
     # Check all conditions
     for i in range(0, len(conditions), 16):
         conds = conditions[i:i + 16]
+        patched_conds = []
         for cond in conds:
-            PatchCondition(cond)
+            patched_conds.append(PatchCondition(cond))
 
         brtrg = c.Forward()
         nxtrg = c.Forward()
         brtrg << c.RawTrigger(
             nextptr=onfalsetrg,
-            conditions=conds,
+            conditions=patched_conds,
             actions=c.SetNextPtr(brtrg, nxtrg)
         )
 
@@ -69,7 +70,9 @@ def Branch(conditions, ontrue, onfalse):
     # on false
     if len(brtriggers) >= 2:
         onfalsetrg << c.NextTrigger()
-        revertacts = [c.SetNextPtr(brtrg, onfalsetrg) for brtrg in brtriggers][:-1]  # Revert all except last brtrg
+        # Revert all except last brtrg
+        revertacts = [c.SetNextPtr(brtrg, onfalsetrg)
+                      for brtrg in brtriggers][:-1]
         for i in range(0, len(revertacts), 64):
             if i + 64 < len(revertacts):
                 c.RawTrigger(actions=revertacts[i:i + 64])
@@ -77,4 +80,3 @@ def Branch(conditions, ontrue, onfalse):
                 c.RawTrigger(nextptr=onfalsetrg, actions=revertacts[i:i + 64])
     else:
         onfalsetrg << onfalse
-

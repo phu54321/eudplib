@@ -53,7 +53,7 @@ def f_lengthdir(length, angle):
     # MAIN LOGIC
 
     cs.DoActions(c.SetDeaths(1, c.Add, 1, 0))
-    if cs.EUDIf(angle >= 360):
+    if cs.EUDIf()(angle >= 360):
         angle << c.f_div(angle, 360)[1]
     cs.EUDEndIf()
 
@@ -65,22 +65,22 @@ def f_lengthdir(length, angle):
 
     cs.DoActions(c.SetDeaths(1, c.Add, 1, 0))
     # get cos, sin from table
-    if cs.EUDIf(angle <= 89):
+    if cs.EUDIf()(angle <= 89):
         tableangle << angle
         csign << 1
         ssign << 1
 
-    if cs.EUDElseIf(angle <= 179):
+    if cs.EUDElseIf()(angle <= 179):
         tableangle << 180 - angle
         csign << -1
         ssign << 1
 
-    if cs.EUDElseIf(angle <= 269):
+    if cs.EUDElseIf()(angle <= 269):
         tableangle << angle - 180
         csign << -1
         ssign << -1
 
-    if cs.EUDElse():
+    if cs.EUDElse()():
         tableangle << 360 - angle
         csign << 1
         ssign << -1
@@ -98,11 +98,11 @@ def f_lengthdir(length, angle):
 
     cs.DoActions(c.SetDeaths(1, c.Add, 1, 0))
     # restore sign of cos, sin
-    if cs.EUDIf(csign == -1):
+    if cs.EUDIf()(csign == -1):
         ldir_x << 0xFFFFFFFF - ldir_x + 1
     cs.EUDEndIf()
 
-    if cs.EUDIf(ssign == -1):
+    if cs.EUDIf()(ssign == -1):
         ldir_y << 0xFFFFFFFF - ldir_y + 1
     cs.EUDEndIf()
 

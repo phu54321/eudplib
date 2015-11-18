@@ -7,6 +7,7 @@ from eudplib import *
 
 LoadMap('outputmap/basemap/basemap.scx')
 
+CompressPayload(True)
 
 @EUDFunc
 def main():

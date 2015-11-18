@@ -29,11 +29,9 @@ from .blockstru import (
     EUDCreateBlock,
     EUDGetLastBlock,
     EUDGetLastBlockOfName,
+    EUDPeekBlock,
     EUDPopBlock,
     EUDGetBlockList,
-
-    SetCurrentBlockStruManager,
-    BlockStruManager,
 )
 from .etc import (
     EPD,

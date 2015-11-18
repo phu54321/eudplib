@@ -32,21 +32,14 @@ from . import byterw as bm
 
 @c.EUDFunc
 def f_repmovsd_epd(dstepdp, srcepdp, copydwn):
-    repmovsd_end = c.Forward()
-
-    loopstart = c.NextTrigger()
-    cs.EUDJumpIf(copydwn.Exactly(0), repmovsd_end)
-
-    dwm.f_dwwrite_epd(dstepdp, dwm.f_dwread_epd(srcepdp))
-    c.SeqCompute([
-        (srcepdp, c.Add, 1),
-        (dstepdp, c.Add, 1),
-        (copydwn, c.Subtract, 1)
-    ])
-
-    cs.EUDJump(loopstart)
-
-    repmovsd_end << c.NextTrigger()
+    if cs.EUDWhileNot()(copydwn == 0):
+        dwm.f_dwwrite_epd(dstepdp, dwm.f_dwread_epd(srcepdp))
+        cs.DoActions([
+            srcepdp.AddNumber(1),
+            dstepdp.AddNumber(1),
+            copydwn.SubtractNumber(1)
+        ])
+    cs.EUDEndWhile()
 
 
 # -------

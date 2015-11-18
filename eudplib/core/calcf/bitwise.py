@@ -27,7 +27,8 @@ from .. import varfunc as vf
 from .. import rawtrigger as rt
 from .muldiv import f_mul, f_div
 
-def bw_gen(cond):
+
+def bw_gen(cond, docstring=None):
     @vf.EUDFunc
     def f_bitsize_template(a, b):
         tmp = vf.EUDLightVariable()
@@ -65,22 +66,26 @@ def bw_gen(cond):
 
         return ret
 
+    if docstring:
+        f_bitsize_template.__doc__ = docstring
+
     return f_bitsize_template
 
 
-f_bitand = bw_gen(lambda x: x.Exactly(2))
-f_bitor = bw_gen(lambda x: x.AtLeast(1))
-f_bitxor = bw_gen(lambda x: x.Exactly(1))
-
-f_bitnand = bw_gen(lambda x: x.Exactly(0))
-f_bitnor = bw_gen(lambda x: x.AtMost(1))
+f_bitand = bw_gen(lambda x: x.Exactly(2), "Calculate a & b")
+f_bitor = bw_gen(lambda x: x.AtLeast(1), "Calculate a | b")
+f_bitxor = bw_gen(lambda x: x.Exactly(1), "Calculate a ^ b")
+f_bitnand = bw_gen(lambda x: x.Exactly(0), "Calculate ~(a & b)")
+f_bitnor = bw_gen(lambda x: x.AtMost(1), "Calculate ~(a | b)")
 
 
 def f_bitnxor(a, b):
+    """Calculate ~(a ^ b)"""
     return f_bitnot(f_bitxor(a, b))
 
 
 def f_bitnot(a):
+    """Calculate ~a"""
     return 0xFFFFFFFF - a
 
 
@@ -89,6 +94,7 @@ def f_bitnot(a):
 
 @vf.EUDFunc
 def f_bitsplit(a):
+    """Splits bit of given number"""
     bits = [vf.EUDCreateVariables(32)]
     for i in range(31, -1, -1):
         bits[i] << 0
@@ -124,10 +130,12 @@ def _exp2(n):
 
 
 def f_bitlshift(a, b):
+    """a << b"""
     return f_mul(a, _exp2(b))
 
 
 def f_bitrshift(a, b):
+    """Calculate a >> b"""
     if isinstance(b, int) and b >= 32:
         return 0
 

@@ -36,7 +36,7 @@ from ..memiof import f_dwread_epd, f_memcpy
 def QueueGameCommand(buf, size):
     prov_maxbuffer = f_dwread_epd(ut.EPD(0x57F0D8))
     cmdqlen = f_dwread_epd(ut.EPD(0x654AA0))
-    if cs.EUDIfNot(cmdqlen + size + 1 >= prov_maxbuffer):
+    if cs.EUDIfNot()(cmdqlen + size + 1 >= prov_maxbuffer):
         f_memcpy(0x654880 + cmdqlen, buf, size)
         c.SetVariables(ut.EPD(0x654AA0), cmdqlen + size)
     cs.EUDEndIf()

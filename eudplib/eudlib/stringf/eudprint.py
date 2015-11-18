@@ -34,7 +34,7 @@ from .dbstr import DBString
 
 
 @c.EUDFunc
-def f_stradd(dst, src):
+def f_dbstr_addstr(dst, src):
     """
     add string in dst. returns address to combined string's end.
 
@@ -48,7 +48,7 @@ def f_stradd(dst, src):
     br.seekoffset(src)
     bw.seekoffset(dst)
 
-    if cs.EUDInfLoop():
+    if cs.EUDInfLoop()():
         c.SetVariables(b, br.readbyte())
         bw.writebyte(b)
         cs.EUDBreakIf(b == 0)
@@ -61,9 +61,10 @@ def f_stradd(dst, src):
 
 
 @c.EUDFunc
-def f_dwadd(dst, number):
+def f_dbstr_adddw(dst, number):
     """
-    print dword in base 10 as string in dst. returns address to combined string's end.
+    print dword in base 10 as string in dst. returns address to combined
+    string's end.
 
     :param dst: Destination address. (Not EPD Player)
     :param number: DWORD to print
@@ -132,25 +133,25 @@ def f_dwadd(dst, number):
     return dst
 
 
-def f_eudprint(dst, *args):
+def f_dbstr_print(dst, *args):
     if isinstance(dst, DBString):
         dst = dst.GetStringMemoryAddr()
 
     args = ut.FlattenList(args)
     for arg in args:
         if isinstance(arg, bytes):
-            dst = f_stradd(dst, c.Db(arg) + b'\0')
+            dst = f_dbstr_addstr(dst, c.Db(arg) + b'\0')
         elif isinstance(arg, str):
-            dst = f_stradd(dst, c.Db(ut.u2b(arg) + b'\0'))
+            dst = f_dbstr_addstr(dst, c.Db(ut.u2b(arg) + b'\0'))
         elif isinstance(arg, DBString):
-            dst = f_stradd(dst, arg.GetStringMemoryAddr())
+            dst = f_dbstr_addstr(dst, arg.GetStringMemoryAddr())
         elif isinstance(arg, int):
             # int and c.EUDVariable should act the same if possible.
             # EUDVariable has a value of 32bit unsigned integer.
             # So we adjust arg to be in the same range.
-            dst = f_stradd(dst, str(arg & 0xFFFFFFFF))
+            dst = f_dbstr_addstr(dst, str(arg & 0xFFFFFFFF))
         elif isinstance(arg, c.EUDVariable):
-            dst = f_dwadd(dst, arg)
+            dst = f_dbstr_adddw(dst, arg)
         else:
             raise ut.EPError(
                 'Object wit unknown parameter type %s given to f_eudprint.'

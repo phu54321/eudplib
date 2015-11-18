@@ -29,18 +29,16 @@ from eudplib import utils as ut
 
 class Expr:
 
+    ''' Class for general expression with rlocints.
+    '''
+
     def __init__(self, baseobj, offset=0, rlocmode=4):
         self.baseobj = baseobj
         self.offset = offset
         self.rlocmode = rlocmode
 
     def Evaluate(self):
-        ut.ep_assert(self.rlocmode in [1, 4])
-        if self.rlocmode == 1:
-            return Evaluate(self.baseobj) // 4 + self.offset
-
-        else:
-            return Evaluate(self.baseobj) + self.offset
+        return Evaluate(self.baseobj) // 4 * self.rlocmode + self.offset
 
     def __add__(self, other):
         if not isinstance(other, int):
@@ -104,7 +102,7 @@ class Expr:
 
 class Forward(Expr):
 
-    ''' Class for late definition
+    '''Class for forward definition.
     '''
 
     def __init__(self):

@@ -47,6 +47,12 @@ _payload_compress = False
 
 
 def CompressPayload(mode):
+    ''' Set payload compression mode.
+
+    :param mode: If true, enable object stacking (compression). If false,
+    disable it.
+    '''
+
     global _payload_compress
     if mode not in [True, False]:
         raise ut.EPError('Invalid type')
@@ -98,14 +104,12 @@ def CollectObjects(root):
     global _found_objects
     global _found_objects_set
     global _untraversed_objects
-    global _dwoccupmap_dict
 
     phase = PHASE_COLLECTING
 
     objc = ObjCollector()
     _found_objects = []
     _found_objects_set = set()
-    _dwoccupmap_dict = {}
     _untraversed_objects = []
 
     # Evaluate root to register root object.
@@ -116,7 +120,7 @@ def CollectObjects(root):
         obj = _untraversed_objects.pop()
         objc.StartWrite()
         obj.WritePayload(objc)
-        _dwoccupmap_dict[obj] = objc.EndWrite()
+        objc.EndWrite()
 
     if len(_found_objects) == 0:
         raise ut.EPError('No object collected')
@@ -206,8 +210,7 @@ class ObjAllocator:
     def WriteBytes(self, b):
         ssize = len(b)
         self._occupmap.extend([1] * (ssize >> 2))
-        ssize &= 3
-        for i in range(ssize):
+        for i in range(ssize & 3):
             self._Occup1()
 
     def WriteSpace(self, ssize):
@@ -256,14 +259,18 @@ def AllocObjects():
             'Occupation map length & Object size mismatch for object'
         )
 
-    stackobjs.StackObjects(_found_objects, dwoccupmap_dict, _alloctable)
+    if _payload_compress:
+        stackobjs.StackObjects(_found_objects, dwoccupmap_dict, _alloctable)
+    else:
+        _offset = 0
+        for obj in _found_objects:
+            _alloctable[obj] = _offset
+            _offset += 4 * len(dwoccupmap_dict[obj])
 
     # Get payload length
-    _payload_size = 0
-    for obj in _found_objects:
-        psize2 = _alloctable[obj] + obj.GetDataSize()
-        if _payload_size < psize2:
-            _payload_size = psize2
+    _payload_size = max(map(
+        lambda obj: _alloctable[obj] + obj.GetDataSize(), _found_objects
+    ))
 
     phase = None
 
@@ -328,4 +335,5 @@ def GetObjectAddr(obj):
         return rlocint.RlocInt(0, 4)
 
     elif phase == PHASE_WRITING:
+        assert _alloctable[obj] & 3 == 0
         return rlocint.RlocInt(_alloctable[obj], 4)
