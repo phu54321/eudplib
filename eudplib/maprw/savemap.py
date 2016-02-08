@@ -42,9 +42,9 @@ def SaveMap(fname, rootf):
     bsm = BlockStruManager()
     prev_bsm = SetCurrentBlockStruManager(bsm)
 
-    c.PushTriggerScope()
-    root = doevents._MainStarter(rootf)
-    root = stage3.CreateStage3(root, chkt.getsection('MRGN'))
+    if c.PushTriggerScope():
+        root = doevents._MainStarter(rootf)
+        root = stage3.CreateStage3(root, chkt.getsection('MRGN'))
     c.PopTriggerScope()
     payload = c.CreatePayload(root)
 
