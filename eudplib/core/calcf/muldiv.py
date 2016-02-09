@@ -89,7 +89,7 @@ def f_constmul(number):
         return mulfdict[number]
     except KeyError:
         @vf.EUDFunc
-        def mulf(a):
+        def _mulf(a):
             ret = vf.EUDVariable()
             ret << 0
             for i in range(31, -1, -1):
@@ -102,8 +102,8 @@ def f_constmul(number):
                 )
             return ret
 
-        mulfdict[number] = mulf
-        return mulf
+        mulfdict[number] = _mulf
+        return _mulf
 
 
 def f_constdiv(number):
@@ -122,7 +122,7 @@ def f_constdiv(number):
         return divfdict[number]
     except KeyError:
         @vf.EUDFunc
-        def divf(a):
+        def _divf(a):
             ret = vf.EUDVariable()
             ret << 0
             for i in range(31, -1, -1):
@@ -139,8 +139,8 @@ def f_constdiv(number):
                 )
             return ret, a
 
-        divfdict[number] = divf
-        return divf
+        divfdict[number] = _divf
+        return _divf
 
 
 # -------

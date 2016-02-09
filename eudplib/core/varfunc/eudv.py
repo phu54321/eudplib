@@ -34,8 +34,10 @@ from ..allocator import (
     IsValidExpr
 )
 from ...utils import (
+    FlattenList,
     EPD,
-    List2Assignable
+    List2Assignable,
+    ep_assert
 )
 from .vbase import VariableBase
 from .vbuf import GetCurrentVariableBuffer
@@ -335,3 +337,15 @@ def SeqCompute(assignpairs):
                 FlushActionSet()
 
     FlushActionSet()
+
+
+def SetVariables(srclist, dstlist, mdtlist=None):
+    srclist = FlattenList(srclist)
+    dstlist = FlattenList(dstlist)
+    ep_assert(len(srclist) == len(dstlist), 'Input/output size mismatch')
+
+    if mdtlist is None:
+        mdtlist = [bt.SetTo] * len(srclist)
+
+    sqa = [(src, mdt, dst) for src, dst, mdt in zip(srclist, dstlist, mdtlist)]
+    SeqCompute(sqa)

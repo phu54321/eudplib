@@ -24,7 +24,7 @@ THE SOFTWARE.
 '''
 
 from .. import core as c
-from .filler import filldw, fillwbb, fillbbbb
+from .filler import _filldw, _fillwbb, _fillbbbb
 from eudplib import utils as ut
 
 
@@ -39,15 +39,15 @@ def ApplyPatchTable(initepd, obj, patchtable):
     for i, pt in enumerate(patchtable):
         attrs = pt
         filler = {
-            1: filldw,
-            3: fillwbb,
-            4: fillbbbb,
+            1: _filldw,
+            3: _fillwbb,
+            4: _fillbbbb,
         }[len(attrs)]
         attrs = ut.Assignable2List(attrs)
 
-        vars = [getattr(obj, attr) if type(attr) is str else attr for attr in attrs]
-        if HasEUDVariable(vars):
-            filler(initepd + i, *vars)
+        vv = [getattr(obj, at) if type(at) is str else at for at in attrs]
+        if HasEUDVariable(vv):
+            filler(initepd + i, *vv)
             for attr in attrs:
                 if type(attr) is str:
                     setattr(obj, attr, 0)

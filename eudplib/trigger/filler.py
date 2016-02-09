@@ -27,7 +27,7 @@ from .. import core as c
 from .. import utils as ut
 
 
-def dww(dstepd, v):
+def _dww(dstepd, v):
     act = c.Forward()
     c.SeqCompute((
         (ut.EPD(act + 16), c.SetTo, dstepd),
@@ -38,14 +38,14 @@ def dww(dstepd, v):
     )
 
 
-def filldw(dstepd, v1):
+def _filldw(dstepd, v1):
     c.SeqCompute((
         (dstepd, c.SetTo, v1),
     ))
 
 
 @c.EUDFunc
-def fillwbb(dstepd, v1, v2, v3):
+def _fillwbb(dstepd, v1, v2, v3):
     ret = c.EUDVariable()
     ret << 0
 
@@ -76,11 +76,11 @@ def fillwbb(dstepd, v1, v2, v3):
             ]
         )
 
-    dww(dstepd, ret)
+    _dww(dstepd, ret)
 
 
 @c.EUDFunc
-def fillbbbb(dstepd, v1, v2, v3, v4):
+def _fillbbbb(dstepd, v1, v2, v3, v4):
     ret = c.EUDVariable()
     ret << 0
 
@@ -96,4 +96,4 @@ def fillbbbb(dstepd, v1, v2, v3, v4):
                 ]
             )
 
-    dww(dstepd, ret)
+    _dww(dstepd, ret)

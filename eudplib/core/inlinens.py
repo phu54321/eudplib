@@ -23,36 +23,26 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-from .utils import *
-from .core import *
-from .trigger import *
-from .ctrlstru import *
-from .eudlib import *
-from .trigtrg import *
-from .maprw import *
-import types
 
-__version__ = '0.50.1'
+_objns = {}
 
 
-# remove modules from __all__
+def EUDRegisterObjectToNamespace(funcname, obj):
+    """ Register object to inline code namespace. """
+    if funcname[0] != '_':
+        if funcname in _objns:
+            _objns[funcname] = None
+        else:
+            _objns[funcname] = obj
 
-_alllist = []
-for _k, _v in dict(globals()).items():
-    if isinstance(_v, types.ModuleType):
-        continue
-    if _k[0] == '_':
-        continue
-    _alllist.append(_k)
-
-__all__ = _alllist
+    return obj
 
 
-del _k
-del _v
+def EUDRegistered(func):
+    """ Decoreator for registering class / function. """
+    return EUDRegisterObjectToNamespace(func.__name__, func)
 
 
-def eudplibVersion():
-    return __version__
-
-_alllist.append('eudplibVersion')
+def GetInlineCodeNamespace():
+    """ Get list of functions that inline code can use. """
+    return _objns

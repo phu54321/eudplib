@@ -87,8 +87,8 @@ def CreateStage3(root, mrgndata):
     tmcheckt = c.Forward()
 
     for player in range(8):
-        trs = rtt._trigtrg_runner_start[player]
-        tre = rtt._trigtrg_runner_end[player]
+        trs = rtt._runner_start[player]
+        tre = rtt._runner_end[player]
 
         c.PushTriggerScope()
 

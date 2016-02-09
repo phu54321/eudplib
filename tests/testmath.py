@@ -14,24 +14,20 @@ def main():
 
     DoActions(SetDeaths(1, Add, 1, 0))
     if EUDInfLoop()():
-        x, y = f_lengthdir(400, i)
 
+        i = EUDVariable()
+        x, y = f_lengthdir(400, i)
         x << x + 1024
         y << y + 1024
 
-        SeqCompute([
-            (EPD(0x58DC60 + 0), SetTo, x),
-            (EPD(0x58DC60 + 4), SetTo, y),
-            (EPD(0x58DC60 + 8), SetTo, x),
-            (EPD(0x58DC60 + 12), SetTo, y)
+        DoActions([
+            SetMemory(0x58DC60 + 0x00, SetTo, x),
+            SetMemory(0x58DC60 + 0x04, SetTo, y),
+            SetMemory(0x58DC60 + 0x08, SetTo, x),
+            SetMemory(0x58DC60 + 0x0C, SetTo, y),
+            CreateUnit(1, "Zerg Zergling", 1, P1),
+            KillUnitAt(All, "Zerg Zergling", 1, P1)
         ])
-
-        RawTrigger(
-            actions=[
-                CreateUnit(1, "Zerg Zergling", 1, P1),
-                KillUnitAt(All, "Zerg Zergling", 1, P1)
-            ]
-        )
 
         i << i + 2
         RawTrigger(
