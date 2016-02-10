@@ -24,14 +24,17 @@ THE SOFTWARE.
 '''
 
 from .. import core as c
-from .. import utils as ut
 from ..utils.blockstru import (
     BlockStruManager,
     SetCurrentBlockStruManager,
 )
 
 from ..core.mapdata import mapdata, mpqapi
-from .injector import stage1, stage2, stage3, doevents
+
+from .injector.vectorReloc import CreateVectorRelocator
+from .injector.payloadReloc import CreatePayloadRelocator
+from .injector.injFinalizer import CreateInjectFinalizer
+from .injector.doevents import _MainStarter
 
 
 def SaveMap(fname, rootf):
@@ -43,13 +46,13 @@ def SaveMap(fname, rootf):
     prev_bsm = SetCurrentBlockStruManager(bsm)
 
     if c.PushTriggerScope():
-        root = doevents._MainStarter(rootf)
-        root = stage3.CreateStage3(root, chkt.getsection('MRGN'))
+        root = _MainStarter(rootf)
+        root = CreateInjectFinalizer(chkt, root)
     c.PopTriggerScope()
     payload = c.CreatePayload(root)
 
     c.PushTriggerScope()
-    final_payload = stage2.CreateStage2(payload)
+    final_payload = CreatePayloadRelocator(payload)
     c.PopTriggerScope()
     SetCurrentBlockStruManager(prev_bsm)
 
@@ -64,7 +67,7 @@ def SaveMap(fname, rootf):
 
     # Create and apply stage 1 payload.
     # Stage 1 initializes stage 2 (real payload initializer)
-    stage1.CreateAndApplyStage1(chkt, final_payload)
+    CreateVectorRelocator(chkt, final_payload)
 
     chkt.optimize()
     rawchk = chkt.savechk()

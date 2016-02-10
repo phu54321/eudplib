@@ -34,7 +34,7 @@ from eudplib import utils as ut
 '''
 
 
-def CreateStage2(payload):
+def CreatePayloadRelocator(payload):
     # We first build code injector.
     prtdb = c.Db(b''.join([ut.i2b4(x // 4) for x in payload.prttable]))
     prtn = vf.EUDVariable()

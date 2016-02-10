@@ -23,36 +23,4 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-from .utils import *
-from .core import *
-from .trigger import *
-from .ctrlstru import *
-from .eudlib import *
-from .trigtrg import *
-from .maprw import *
-import types
-
-__version__ = '0.50.2'
-
-
-# remove modules from __all__
-
-_alllist = []
-for _k, _v in dict(globals()).items():
-    if isinstance(_v, types.ModuleType):
-        continue
-    if _k[0] == '_':
-        continue
-    _alllist.append(_k)
-
-__all__ = _alllist
-
-
-del _k
-del _v
-
-
-def eudplibVersion():
-    return __version__
-
-_alllist.append('eudplibVersion')
+from .ilcprocesstrig import PreprocessTrigSection

@@ -85,7 +85,7 @@ def CopyDeaths(iplayer, oplayer, copyepd=False, initvalue=None):
         )
 
 
-def CreateAndApplyStage1(chkt, payload):
+def CreateVectorRelocator(chkt, payload):
     global trglist
 
     # Append 'Require EUD enabler' to string table
