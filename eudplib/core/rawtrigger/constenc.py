@@ -92,7 +92,10 @@ Total = _Unique()
 Units = _Unique()
 Buildings = _Unique()
 UnitsAndBuildings = _Unique()
-Kills = _KillsSpecialized()  # Condition name & Constant name conflict. See stockcond
+
+# Name 'Kills' is used for both condition type and score type.
+# To resolve conflict, we initialize Kills differently from others.
+Kills = _KillsSpecialized()
 Razings = _Unique()
 KillsAndRazings = _Unique()
 Custom = _Unique()

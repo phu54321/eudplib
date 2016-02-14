@@ -30,6 +30,17 @@ from .action import Action
 from eudplib import utils as ut
 
 
+# Trigger counter thing
+
+_trgCounter = 0
+
+
+def GetTriggerCounter():
+    return _trgCounter
+
+
+# Aux
+
 def _bool2Cond(x):
     if x is True:
         return Condition(0, 0, 0, 0, 0, 22, 0, 0)  # Always
@@ -44,6 +55,8 @@ def Disabled(arg):
     arg.Disabled()
 
 
+# RawTrigger
+
 class RawTrigger(EUDObject):
 
     def __init__(
@@ -55,6 +68,9 @@ class RawTrigger(EUDObject):
             preserved=True
     ):
         super().__init__()
+
+        global _trgCounter
+        _trgCounter += 1
 
         _RegisterTrigger(self)  # This should be called before (1)
 

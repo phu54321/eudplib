@@ -75,7 +75,7 @@ def CompileInlineCode(code):
     code = compile(code, '<string>', 'exec')
 
     if c.PushTriggerScope():
-        tStart = c.NextTrigger()
+        tStart = c.RawTrigger(actions=c.SetDeaths(0, c.SetTo, 0, 0))
         exec(code, GetInlineCodeGlobals(), {})
         tEnd = c.RawTrigger()
     c.PopTriggerScope()

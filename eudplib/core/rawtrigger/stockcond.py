@@ -193,3 +193,7 @@ def Never():
 
 def Memory(dest, cmptype, value):
     return Deaths(EPD(dest), cmptype, value, 0)
+
+
+def MemoryEPD(dest, cmptype, value):
+    return Deaths(dest, cmptype, value, 0)
