@@ -25,7 +25,6 @@ THE SOFTWARE.
 
 import inspect
 
-from ..inlinens import EUDRegistered
 from .eudfuncn import EUDFuncN
 from ... import utils as ut
 
@@ -44,4 +43,4 @@ def EUDFunc(fdecl_func):
         'No variadic keyword arguments (*kwargs) allowed for EUDFunc.'
     )
 
-    return EUDRegistered(EUDFuncN(fdecl_func, len(argspec[0])))
+    return EUDFuncN(fdecl_func, len(argspec[0]))
