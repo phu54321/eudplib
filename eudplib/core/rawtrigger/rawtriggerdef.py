@@ -91,6 +91,7 @@ class RawTrigger(EUDObject):
 
         ut.ep_assert(len(conditions) <= 16, 'Too many conditions')
         ut.ep_assert(len(actions) <= 64, 'Too many actions')
+        ut.ep_assert(isinstance(preserved, bool), 'preserved should be bool')
 
         conditions = list(map(_bool2Cond, conditions))
         self._prevptr = prevptr

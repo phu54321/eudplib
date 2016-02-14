@@ -36,6 +36,8 @@ def Trigger(conditions=None, actions=None, preserved=True):
     :param preserved: Check if the trigger is preserved. True by default.
     """
 
+    ut.ep_assert(isinstance(preserved, bool), 'preserved should be bool')
+
     if conditions is None:
         conditions = []
     if actions is None:
