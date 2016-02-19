@@ -32,4 +32,4 @@ from .eudv import (
 
 from .eudlv import EUDLightVariable
 from .eudf import EUDFunc
-from .mtdvf import EUDFuncMethod
+from .eudfmethod import EUDFuncMethod
