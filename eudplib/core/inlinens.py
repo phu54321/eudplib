@@ -43,6 +43,11 @@ def EUDRegistered(func):
     return EUDRegisterObjectToNamespace(func.__name__, func)
 
 
-def GetInlineCodeNamespace():
+def GetEUDNamespace():
     """ Get list of functions that inline code can use. """
     return _objns
+
+
+def UpdateEUDNamespace(d):
+    for k, v in _objns.items():
+        d[k] = v

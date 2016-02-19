@@ -39,7 +39,7 @@ def PreprocessTrigSection(trigSection):
     inlineCodes = []
     trigSegments = []
     for i in range(0, len(trigSection), 2400):
-        trigSegment = trigSection[i:i+2400]
+        trigSegment = trigSection[i:i + 2400]
         if len(trigSegment) != 2400:
             continue
 
@@ -48,6 +48,19 @@ def PreprocessTrigSection(trigSection):
             trigSegment = decoded
 
         trigSegments.append(trigSegment)
+
+    '''
+    This is rather hard to explain, but we need blank trigger.
+
+    If inline_eudplib trigger is at the last of the trigger, then its
+    nextptr should be modified to codeStart.
+
+    But after flipprop works, RunTrigTrigger engine will re-change its nextptr
+    to somewhere else, where everything quits.
+
+    So we need 'normal' trigger at the last of TRIG triggers for every player.
+    '''
+    trigSegments.append(tt.Trigger(players=[tt.AllPlayers]))
 
     trigSection = b''.join(trigSegments)
     return inlineCodes, trigSection
@@ -92,6 +105,13 @@ def ProcessInlineCode(inlineCodes, data):
         for player in range(27):
             if playerCode & (1 << player):
                 newTrigger[320 + 2048 + 4 + player] = 1
+
+        # Apply 4 SetDeaths
+        SetDeathsTemplate = tt.SetDeaths(0, tt.SetTo, 0, 0)
+        newTrigger[320 + 32 * 0: 320 + 32 * 1] = SetDeathsTemplate
+        newTrigger[320 + 32 * 1: 320 + 32 * 2] = SetDeathsTemplate
+        newTrigger[320 + 32 * 2: 320 + 32 * 3] = SetDeathsTemplate
+        newTrigger[320 + 32 * 3: 320 + 32 * 4] = SetDeathsTemplate
 
         # Apply flag
         newTrigger[0:4] = ut.i2b4(funcID)

@@ -46,57 +46,73 @@ _inlineCodes = []
 def _DispatchInlineCode(trigepd):
     global _inlineCodes
 
-    trigepdPlus1 = trigepd + 1
-
-    funcCode = sf.f_dwread_epd(trigepd + 2)
-    nextptr = sf.f_dwread_epd(trigepdPlus1)
+    cs0 = c.Forward()  # set cs0+20 to codeStart
+    cs1 = c.Forward()  # set cs1+20 to ut.EPD(codeEnd) + 1
+    cs2 = c.Forward()  # set cs2+20 to cs_a0_epd + 4
+    cs3 = c.Forward()  # set cs3+20 to cs_a0_epd + 5
+    resetter = c.Forward()
     end = c.Forward()
 
-    # To reduce trigger usage, we use current player trick here
-    cs.DoActions(c.SetMemory(0x6509B0, c.SetTo, trigepd))
+    nextptr = sf.f_dwread_epd(trigepd + 1)
+
+    cs.DoActions(c.SetMemory(0x6509B0, c.SetTo, trigepd + 2))
 
     for funcID, func in _inlineCodes:
-        if cs.EUDIf()(funcCode == funcID):
-            # Generate kicker
-            codeStart, codeEnd = func
+        codeStart, codeEnd = func
+        cs_a0_epd = ut.EPD(codeStart) + (8 + 320) // 4
 
-            cs_a0_epd = ut.EPD(codeStart) + (8 + 320) // 4
-
-            cs.DoActions([
-                # SetNextPtr for this trigger
-                # action #1
-                c.SetMemory(0x6509B0, c.Add, (8 + 320 + 32 * 0) // 4 + 4),
-                c.SetMemoryEPD(c.CurrentPlayer, c.SetTo, trigepdPlus1),
-                c.SetMemory(0x6509B0, c.Add, 1),
-                c.SetMemoryEPD(c.CurrentPlayer, c.SetTo, codeStart),
-
-                # SetNextPtr for codeend
-                # action #2
-                c.SetMemory(0x6509B0, c.Add, 7),
-                c.SetMemoryEPD(c.CurrentPlayer, c.SetTo, ut.EPD(codeEnd) + 1),
-                c.SetMemory(0x6509B0, c.Add, 1),
-                c.SetMemoryEPD(c.CurrentPlayer, c.SetTo, nextptr),
-
-                # This trigger sets argument for cs_a0_epd
-                # cs_a0 will be SetNextPtr(trigepd + 1, nextptr) after this
-                # action #3
-                c.SetMemory(0x6509B0, c.Add, 7),
-                c.SetMemoryEPD(c.CurrentPlayer, c.SetTo, cs_a0_epd + 4),
-                c.SetMemory(0x6509B0, c.Add, 1),
-                c.SetMemoryEPD(c.CurrentPlayer, c.SetTo, trigepdPlus1),
-
-                # action #4
-                c.SetMemory(0x6509B0, c.Add, 7),
-                c.SetMemoryEPD(c.CurrentPlayer, c.SetTo, cs_a0_epd + 5),
-                c.SetMemory(0x6509B0, c.Add, 1),
-                c.SetMemoryEPD(c.CurrentPlayer, c.SetTo, nextptr),
-            ])
-            cs.EUDJump(end)
-        cs.EUDEndIf()
-
-
+        t = c.Forward()
+        nt = c.Forward()
+        t << c.RawTrigger(
+            conditions=[
+                c.Deaths(c.CurrentPlayer, c.Exactly, funcID, 0)
+            ],
+            actions=[
+                c.SetMemory(cs0 + 20, c.SetTo, codeStart),
+                c.SetMemory(cs1 + 20, c.SetTo, ut.EPD(codeEnd + 4)),
+                c.SetMemory(cs2 + 20, c.SetTo, cs_a0_epd + 4),
+                c.SetMemory(cs3 + 20, c.SetTo, cs_a0_epd + 5),
+                c.SetMemory(resetter + 16, c.SetTo, ut.EPD(t + 4)),
+                c.SetMemory(resetter + 20, c.SetTo, nt),
+                c.SetNextPtr(t, end),
+            ]
+        )
+        nt << c.NextTrigger()
 
     end << c.NextTrigger()
+
+    cs.DoActions([
+        # Reset t's nextptr
+        resetter << c.SetNextPtr(0, 0),
+
+        # SetNextPtr for this trigger
+        # action #1
+        c.SetMemory(0x6509B0, c.Add, -2 + (8 + 320) // 4 + 4),
+        c.SetMemoryEPD(c.CurrentPlayer, c.SetTo, trigepd + 1),
+        c.SetMemory(0x6509B0, c.Add, 1),
+        cs0 << c.SetMemoryEPD(c.CurrentPlayer, c.SetTo, 0),
+
+        # SetNextPtr for codeend
+        # action #2
+        c.SetMemory(0x6509B0, c.Add, 7),
+        cs1 << c.SetMemoryEPD(c.CurrentPlayer, c.SetTo, 0),
+        c.SetMemory(0x6509B0, c.Add, 1),
+        c.SetMemoryEPD(c.CurrentPlayer, c.SetTo, nextptr),
+
+        # This trigger sets argument for cs_a0_epd
+        # cs_a0 will be SetNextPtr(trigepd + 1, nextptr) after this
+        # action #3
+        c.SetMemory(0x6509B0, c.Add, 7),
+        cs2 << c.SetMemoryEPD(c.CurrentPlayer, c.SetTo, 0),
+        c.SetMemory(0x6509B0, c.Add, 1),
+        c.SetMemoryEPD(c.CurrentPlayer, c.SetTo, trigepd + 1),
+
+        # action #4
+        c.SetMemory(0x6509B0, c.Add, 7),
+        cs3 << c.SetMemoryEPD(c.CurrentPlayer, c.SetTo, 0),
+        c.SetMemory(0x6509B0, c.Add, 1),
+        c.SetMemoryEPD(c.CurrentPlayer, c.SetTo, nextptr),
+    ])
 
 
 @c.EUDFunc

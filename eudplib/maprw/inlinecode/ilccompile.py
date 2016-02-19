@@ -65,7 +65,7 @@ def GetInlineCodeGlobals():
     G = _inlineGlobals.copy()
 
     # Add custom registered functions
-    for k, v in c.GetInlineCodeNamespace().items():
+    for k, v in c.GetEUDNamespace().items():
         G[k] = v
 
     return G

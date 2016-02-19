@@ -35,22 +35,27 @@ def HasEUDVariable(l):
     return False
 
 
-def ApplyPatchTable(initepd, obj, patchtable):
-    for i, pt in enumerate(patchtable):
-        attrs = pt
-        filler = {
+def ApplyPatchTable(initepd, obj, patchTable):
+    def fieldSelector(fieldName):
+        if type(fieldName) is str:
+            return getattr(obj, fieldName)
+        else:
+            return fieldName
+
+    for i, patchEntry in enumerate(patchTable):
+        patchFields = patchEntry
+        memoryFiller = {
             1: _filldw,
             3: _fillwbb,
             4: _fillbbbb,
-        }[len(attrs)]
-        attrs = ut.Assignable2List(attrs)
+        }[len(patchFields)]
 
-        vv = [getattr(obj, at) if type(at) is str else at for at in attrs]
-        if HasEUDVariable(vv):
-            filler(initepd + i, *vv)
-            for attr in attrs:
-                if type(attr) is str:
-                    setattr(obj, attr, 0)
+        fieldList = list(map(fieldSelector, patchFields))
+        if HasEUDVariable(fieldList):
+            memoryFiller(initepd + i, *fieldList)
+            for fieldName in patchFields:
+                if type(fieldName) is str:
+                    setattr(obj, fieldName, 0)
 
 
 condpt = [
