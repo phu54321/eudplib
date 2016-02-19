@@ -31,22 +31,3 @@ from .rawtrigger import *
 from .mapdata import *
 from .varfunc import *
 from .calcf import *
-
-# Re-define Memory, SetMemory here
-# Stock Memory/SetMemory uses // operator, which cannot be applied to EUDVariable thing
-# Somewhat hacky.
-# TODO : check whether non-SC operators should be supported in EUDVariable
-del Memory
-del SetMemory
-
-def Memory(addr, cmptype, number):
-    if isinstance(addr, EUDVariable):
-        return Deaths(f_div(addr - 0x58A364, 4), cmptype, number, 0)
-    else:
-        return Deaths((addr - 0x58A364) // 4, cmptype, number, 0)
-
-def SetMemory(addr, modtype, number):
-    if isinstance(addr, EUDVariable):
-        return SetDeaths(f_div(addr - 0x58A364, 4), modtype, number, 0)
-    else:
-        return SetDeaths((addr - 0x58A364) // 4, modtype, number, 0)

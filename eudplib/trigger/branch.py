@@ -28,55 +28,48 @@ from eudplib import utils as ut
 from .tpatcher import PatchCondition
 
 
-def EUDBranch(conditions, ontrue, onfalse):
-    flag = c.EUDLightVariable()
-    flag << 0
+def _EUDBranchSub(conditions, ontrue, onfalse):
+    """
+    Reduced version of EUDBranch:
+    - EUDVariable or sort of things should be preprocessed
+    - type(conditions) is list
+    - len(conditions) <= 16
+    """
+    assert len(conditions) <= 16
 
+    brtrg = c.Forward()
+    tjtrg = c.Forward()
+    brtrg << c.RawTrigger(
+        nextptr=onfalse,
+        conditions=conditions,
+        actions=[
+            c.SetNextPtr(brtrg, tjtrg)
+        ]
+    )
+
+    tjtrg << c.RawTrigger(
+        nextptr=ontrue,
+        actions=[
+            c.SetNextPtr(brtrg, onfalse)
+        ]
+    )
+
+
+def EUDBranch(conditions, ontrue, onfalse):
     conditions = ut.FlattenList(conditions)
+    conditions = list(map(PatchCondition, conditions))
 
     if len(conditions) == 0:
         c.RawTrigger(nextptr=ontrue)  # Just jump
         return
 
-    brtriggers = []
-    onfalsetrg = c.Forward()
-
     # Check all conditions
     for i in range(0, len(conditions), 16):
-        conds = conditions[i:i + 16]
-        patched_conds = []
-        for cond in conds:
-            patched_conds.append(PatchCondition(cond))
+        subontrue = c.Forward()
+        subonfalse = onfalse
+        _EUDBranchSub(conditions[i:i+16], subontrue, subonfalse)
 
-        brtrg = c.Forward()
-        nxtrg = c.Forward()
-        brtrg << c.RawTrigger(
-            nextptr=onfalsetrg,
-            conditions=patched_conds,
-            actions=c.SetNextPtr(brtrg, nxtrg)
-        )
-
-        nxtrg << c.NextTrigger()
-        brtriggers.append(brtrg)
-
-    # On true : revert all
-    revertacts = [c.SetNextPtr(brtrg, onfalsetrg) for brtrg in brtriggers]
-    for i in range(0, len(revertacts), 64):
-        if i + 64 < len(revertacts):
-            c.RawTrigger(actions=revertacts[i:i + 64])
+        if i + 16 < len(conditions):
+            subontrue << c.NextTrigger()
         else:
-            c.RawTrigger(nextptr=ontrue, actions=revertacts[i:i + 64])
-
-    # on false
-    if len(brtriggers) >= 2:
-        onfalsetrg << c.NextTrigger()
-        # Revert all except last brtrg
-        revertacts = [c.SetNextPtr(brtrg, onfalsetrg)
-                      for brtrg in brtriggers][:-1]
-        for i in range(0, len(revertacts), 64):
-            if i + 64 < len(revertacts):
-                c.RawTrigger(actions=revertacts[i:i + 64])
-            else:
-                c.RawTrigger(nextptr=onfalsetrg, actions=revertacts[i:i + 64])
-    else:
-        onfalsetrg << onfalse
+            subontrue << ontrue
