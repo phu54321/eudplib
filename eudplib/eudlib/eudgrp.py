@@ -28,6 +28,11 @@ import struct
 
 
 class EUDGrp(c.EUDObject):
+    """Object for GRP
+
+    Starcraft modifies GRP in certain way before it is used ingame. This object
+    emulates that modification so that SC recognizes GRP correctly.
+    """
     def __init__(self, content):
         super().__init__()
         if type(content) is str:

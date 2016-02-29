@@ -55,6 +55,7 @@ for name, value in module_to_doc.__dict__.items():
         continue
 
     if value.__doc__ is None:
+        print(' [Warning] undocumented value %s' % name)
         documented = False
 
     else:

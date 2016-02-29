@@ -32,16 +32,30 @@ from ..memiof import f_dwread_epd, f_dwwrite_epd
 
 
 class DBString(c.EUDObject):
+    """Object for storing single modifiable string.
+
+    Manipluating STR section is hard. DBString stores only one string, so that
+    modifying its structure is substantially easier than modifying entire STR
+    section. You can do anything you would do with normal string with DBString.
+
+    .. note:: You need to call `f_initextstr` before using DBString.
+    """
 
     def __init__(self, content):
+        """Constructor for DBString
+
+        :param content: Initial DBString content / capacity. Capacity of
+            DBString is determined by size of this. If content is integer, then
+            initial capacity and content of DBString will be set to
+            content(int) and empty string.
+
+        :type content: str, bytes, int
+        """
         super().__init__()
         if isinstance(content, int):
             self.content = bytes(content)
         else:
             self.content = ut.u2b(content)
-
-    def GetStringMemoryAddr(self):
-        return self + 4
 
     def GetDataSize(self):
         return len(self.content) + 5
@@ -51,7 +65,20 @@ class DBString(c.EUDObject):
         pbuf.WriteBytes(self.content)
         pbuf.WriteByte(0)
 
+    # -------
+
+    def GetStringMemoryAddr(self):
+        """Get memory address of DBString content.
+
+        :returns: Memory address of DBString content.
+        """
+        return self + 4
+
     def GetDisplayAction(self):
+        """DisplayText equivilant for DBString.
+
+        :returns: List of actions for printing DBString content.
+        """
         resetter = c.Forward()
         fw = c.Forward()
         acts = [
@@ -106,6 +133,13 @@ _extstr_dict = {}
 
 
 def DisplayExtText(text):
+    """Equivilant to DisplayText, but doesn't use string table to store text.
+
+    :param text: Text to display.
+    :type text: str or bytes
+
+    .. note:: You need to call `f_initextstr` before using DisplayExtText.
+    """
     text = ut.u2b(text)
     if text not in _extstr_dict:
         _extstr_dict[text] = DBString(text)
@@ -113,6 +147,7 @@ def DisplayExtText(text):
 
 
 def f_initextstr():
+    """Initialize DBString system."""
     rb = ResetterBuffer()
     ptr, v = c.EUDVariable(), c.EUDVariable()
     ptr << ut.EPD(rb)

@@ -29,9 +29,8 @@ from .memiof import f_dwread_epd, f_dwwrite_epd
 
 
 class EUDArray(c.EUDObject):
-
     '''
-    Full variable.
+    Structure for storing multiple values.
     '''
 
     def __init__(self, arr):
@@ -43,9 +42,8 @@ class EUDArray(c.EUDObject):
             self._arrlen = arrlen
 
         else:
-            for item in arr:
-                ut.ep_assert(c.IsValidExpr(item), 'Invalid item given to array'
-                             )
+            for i, item in enumerate(arr):
+                ut.ep_assert(c.IsValidExpr(item), 'Invalid item #%d' % i)
             self._datas = arr
             self._arrlen = len(arr)
 
@@ -58,7 +56,8 @@ class EUDArray(c.EUDObject):
 
     # --------
 
-    def GetLength(self):
+    def GetArraySize(self):
+        """ Get size of array """
         return self._arrlen
 
     @c.EUDFuncMethod

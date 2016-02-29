@@ -31,9 +31,16 @@ from eudplib import utils as ut
 def Trigger(conditions=None, actions=None, preserved=True):
     """General easy-to-use trigger
 
-    :param conditions: List of conditions. There could be more than 16.
-    :param actions: List of actions. There could be more than 64.
-    :param preserved: Check if the trigger is preserved. True by default.
+    :param conditions: List of conditions. If there are none, trigger will
+        always execute.
+    :param actions: List of actions. If there are none, trigger will have no
+        actions.
+    :param preserved: Is trigger preserved? True by default.
+
+    .. note::
+        This is 'extended' trigger. All conditions and variables can contain
+        `EUDVariable` object, and there may be more than 16 conditions and 64
+        actions. Trigger internally uses `RawTrigger`.
     """
 
     ut.ep_assert(isinstance(preserved, bool), 'preserved should be bool')

@@ -27,6 +27,10 @@ from ..core.mapdata import chktok, mpqapi, mapdata
 
 
 def LoadMap(fname):
+    """Load basemap from fname
+
+    :param fname: Path for basemap.
+    """
     print('Loading map %s' % fname)
     rawfile = open(fname, 'rb').read()
     mpqr = mpqapi.MpqRead()

@@ -30,8 +30,8 @@ from .tpatcher import PatchCondition
 
 def _EUDBranchSub(conditions, ontrue, onfalse):
     """
-    Reduced version of EUDBranch:
-    - EUDVariable or sort of things should be preprocessed
+    Reduced version of EUDBranch with following restructions.
+    - All fields of conditions/actions should be constant.
     - type(conditions) is list
     - len(conditions) <= 16
     """
@@ -56,6 +56,12 @@ def _EUDBranchSub(conditions, ontrue, onfalse):
 
 
 def EUDBranch(conditions, ontrue, onfalse):
+    """Branch by whether conditions is satisfied or not.
+
+    :param conditions: Nested list of conditions.
+    :param ontrue: When all conditions are true, this branch is taken.
+    :param onfalse: When any of the conditions are false, this branch is taken.
+    """
     conditions = ut.FlattenList(conditions)
     conditions = list(map(PatchCondition, conditions))
 
