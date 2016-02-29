@@ -29,9 +29,6 @@ from .eudfuncn import EUDFuncN
 from ... import utils as ut
 
 
-_funcDict = {}
-
-
 def EUDFunc(fdecl_func):
     argspec = inspect.getargspec(fdecl_func)
     ut.ep_assert(

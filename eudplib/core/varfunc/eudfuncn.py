@@ -24,8 +24,9 @@ THE SOFTWARE.
 '''
 
 import functools
+import inspect
 
-from .eudv import EUDVariable, SeqCompute
+from .eudv import EUDVariable, SeqCompute, SetVariables
 from ...utils import (
     List2Assignable,
     Assignable2List,
@@ -42,6 +43,9 @@ from .. import rawtrigger as bt
 from eudplib import utils as ut
 
 
+_currentCompiledFunc = None
+
+
 class EUDFuncN:
 
     def __init__(self, fdecl_func, argn):
@@ -53,40 +57,56 @@ class EUDFuncN:
         self._fargs = None
         self._frets = None
 
-    def CreateFuncBody(self):
+    def _CreateFuncBody(self):
+        global _currentCompiledFunc
+        lastCompiledFunc = _currentCompiledFunc
+        _currentCompiledFunc = self
+
+        # Prevent double compilication
         ut.ep_assert(self._fstart is None)
 
+        # Initalize new namespace
         f_bsm = BlockStruManager()
         prev_bsm = SetCurrentBlockStruManager(f_bsm)
-
         bt.PushTriggerScope()
+
         f_args = [EUDVariable() for _ in range(self._argn)]
+        self._fargs = f_args
+
         fstart = bt.NextTrigger()
-        f_rets = self._fdecl_func(*f_args)
-        if f_rets is not None:
-            f_rets = Assignable2List(f_rets)
+        final_rets = self._fdecl_func(*f_args)
+        if final_rets is not None:
+            self._AddReturn(Assignable2List(final_rets), False)
         fend = bt.RawTrigger()
         bt.PopTriggerScope()
 
+        # Finalize
         ut.ep_assert(f_bsm.empty(), 'Block start/end mismatch inside function')
         SetCurrentBlockStruManager(prev_bsm)
 
-        # ut.ep_assert(that all return values are EUDVariable.)
-        if f_rets is not None:  # Not void function
-            for i, ret in enumerate(f_rets):
-                ut.ep_assert(
-                    isinstance(ret, EUDVariable),
-                    '#%d of returned value is not instance of EUDVariable' % i
-                )
-
         self._fstart = fstart
         self._fend = fend
-        self._fargs = f_args
-        self._frets = f_rets
+
+        _currentCompiledFunc = lastCompiledFunc
+
+    def _AddReturn(self, retv, needjump):
+        if self._frets is None:
+            self._frets = [EUDVariable() for _ in range(len(retv))]
+
+        ut.ep_assert(
+            len(retv) == len(self._frets),
+            "Numbers of returned value should be constant."
+            " (From function %s)" % self._fdecl_func.__name__
+        )
+
+        SetVariables(self._frets, retv)
+
+        if needjump:
+            bt.RawTrigger(nextptr=self._fend)
 
     def __call__(self, *args):
         if self._fstart is None:
-            self.CreateFuncBody()
+            self._CreateFuncBody()
 
         ut.ep_assert(len(args) == self._argn, 'Argument number mismatch')
 
@@ -108,7 +128,15 @@ class EUDFuncN:
         if self._frets is not None:
             retn = len(self._frets)
             tmp_rets = [EUDVariable() for _ in range(retn)]
-            SeqCompute(
-                [(tr, bt.SetTo, r) for tr, r in zip(tmp_rets, self._frets)]
-            )
+            SetVariables(tmp_rets, self._frets)
             return List2Assignable(tmp_rets)
+
+
+def EUDReturn(*args):
+    callerName = inspect.stack()[1][3]
+    currentFuncName = _currentCompiledFunc.__name__
+    if callerName != currentFuncName:
+        print('[Warning] EUDReturn may have been called from a '
+              'different function (%s) than compiled function(%s)' %
+              (callerName, currentFuncName))
+    _currentCompiledFunc._AddReturn(args, True)
