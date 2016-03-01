@@ -94,7 +94,10 @@ def f_bitnot(a):
 
 @vf.EUDFunc
 def f_bitsplit(a):
-    """Splits bit of given number"""
+    """Splits bit of given number
+
+    :returns: int bits[32];  // bits[i] = (ith bit from LSB of a is set)
+    """
     bits = [vf.EUDCreateVariables(32)]
     for i in range(31, -1, -1):
         bits[i] << 0

@@ -34,9 +34,11 @@ from .bitwise import (
 
 from ..varfunc import EUDVariable
 
+
 def DefClsMethod(name, f):
     f.__name__ = 'EUDVariable.%s' % name
     setattr(EUDVariable, name, f)
+
 
 def DefOperator(name, f):
     DefClsMethod(name, f)
@@ -49,6 +51,7 @@ def DefOperator(name, f):
     def rop(self, lhs):
         return f(lhs, self)
     DefClsMethod('__r%s' % name[2:], rop)
+
 
 DefOperator('__mul__', lambda x, y: f_mul(x, y))
 DefOperator('__floordiv__', lambda x, y: f_div(x, y)[0])
