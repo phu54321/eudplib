@@ -106,6 +106,7 @@ def InitMpqLibrary():
         SFmpq.MpqDeleteFile.argtypes = [c_int, c_char_p]
         SFmpq.MpqCloseUpdatedArchive.argtypes = [c_int, c_int]
         SFmpq.MpqCompactArchive.argtypes = [c_int]
+
         return True
 
     except OSError:
@@ -150,7 +151,7 @@ class MpqRead:
         if lst is None:
             return []
 
-        return lst.replace('\n', '').split('\r\n')
+        return ut.b2u(lst).replace('\r', '').split('\n')
 
     def Extract(self, fname):
         if self.mpqh is None:
@@ -251,22 +252,21 @@ class MpqWrite:
         self.flist = None
         return True
 
-    def PutFile(self, fname, buffer):
+    def PutFile(self, fname, buffer, replace=True):
         if not self.mpqh:
             return None
 
         # Replace file if existing
-        flag = MAFA_ENCRYPT | MAFA_COMPRESS | MAFA_REPLACE_EXISTING
+        flag = MAFA_ENCRYPT | MAFA_COMPRESS
+        if replace:
+            flag |= MAFA_REPLACE_EXISTING
         cmptype = MAFA_COMPRESS_STANDARD
 
         ret = SFmpq.MpqAddFileFromBufferEx(
             self.mpqh, buffer, len(buffer), ut.u2b(fname), flag, cmptype, 0)
-        if not ret:
-            return False
+        return bool(ret)
 
-        return True
-
-    def PutWave(self, fname, buffer, complev=WAVCOMP_LOWQUALITY):
+    def PutWave(self, fname, buffer, complev=WAVCOMP_LOWQUALITY, replace=True):
         if not self.mpqh:
             return None
 
@@ -274,22 +274,27 @@ class MpqWrite:
         if cmplevel == -1:
             self.PutFile(fname, buffer)
 
-        flag = MAFA_ENCRYPT | MAFA_COMPRESS | MAFA_REPLACE_EXISTING
+        flag = MAFA_ENCRYPT | MAFA_COMPRESS
+        if replace:
+            flag |= MAFA_REPLACE_EXISTING
 
         ret = SFmpq.MpqAddWaveFromBuffer(
             self.mpqh, buffer, len(buffer), ut.u2b(fname), flag, cmplevel)
-        if not ret:
-            return False
-        return True
+        return bool(ret)
+
+    def DeleteFile(self, fname):
+        if not self.mpqh:
+            return None
+
+        ret = SFmpq.MpqDeleteFile(self.mpqh, ut.u2b(fname))
+        return bool(ret)
 
     def Compact(self):
         if not self.mpqh:
             return None
 
         ret = SFmpq.MpqCompactArchive(self.mpqh)
-        if not ret:
-            return False
-        return True
+        return bool(ret)
 
 
 if not InitMpqLibrary():

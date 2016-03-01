@@ -24,33 +24,24 @@ THE SOFTWARE.
 '''
 
 from ... import core as c
-from ... import ctrlstru as cs
+from ...utils.blockstru import (
+    BlockStruManager,
+    SetCurrentBlockStruManager,
+)
 
-jumper = None
-
-
-def _MainStarter(mf):
-    global jumper
-    jumper = c.Forward()
-
-    if c.PushTriggerScope():
-        rootstarter = c.NextTrigger()
-
-        mf()
-
-        c.RawTrigger(
-            nextptr=0x80000000,
-            actions=c.SetNextPtr(jumper, 0x80000000)
-        )
-        jumper << c.RawTrigger(nextptr=rootstarter)
-
-    c.PopTriggerScope()
-
-    return jumper
+from .vectorReloc import CreateVectorRelocator
+from .payloadReloc import CreatePayloadRelocator
+from .injFinalizer import CreateInjectFinalizer
 
 
-def EUDDoEvents():
-    _t = c.Forward()
-    cs.DoActions(c.SetNextPtr(jumper, _t))
-    cs.EUDJump(0x80000000)
-    _t << c.NextTrigger()
+def applyInjector(chkt, root):
+    # Create injector triggers
+    bsm = BlockStruManager()
+    prev_bsm = SetCurrentBlockStruManager(bsm)
+
+    root = CreateInjectFinalizer(chkt, root)
+    payload = c.CreatePayload(root)
+    final_payload = CreatePayloadRelocator(payload)
+    CreateVectorRelocator(chkt, final_payload)
+
+    SetCurrentBlockStruManager(prev_bsm)
