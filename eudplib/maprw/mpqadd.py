@@ -78,6 +78,17 @@ def MPQAddFile(fname, content, isWave=False):
     _addedFiles[fname_key] = (fname, content, isWave)
 
 
+def MPQAddWave(fname, content):
+    """Add wave to output map.
+
+    :param fname: Desired filename in mpq
+    :param content: Content to put inside.
+
+    .. note:: See `MPQAddFile` for more info
+    """
+    return MPQAddFile(fname, content, True)
+
+
 def UpdateMPQ(mpqw):
     """Really append additional mpq file to mpq file.
 
