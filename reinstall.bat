@@ -1,2 +1,2 @@
-pip -q uninstall eudplib
-python setup.py install
+pip3 -q uninstall eudplib
+python3 setup.py install

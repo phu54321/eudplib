@@ -34,12 +34,22 @@ _pdbtable = {}
 
 
 def InitPTrigger():
+    """(Internal) Enable PTrigger. Internally called by eudplib"""
     global _pinfos
     if _pinfos is None:
         _pinfos = [c.GetPlayerInfo(player) for player in range(8)]
 
 
-def PTrigger(players, conditions=None, actions=None, preserved=True):
+def PTrigger(players, conditions=None, actions=None):
+    """Execute trigger by player basis
+
+    :param players: Players the trigger should execute with. When Current
+        Player specifies any of the players, trigger will execute.
+    :param conditions: List of conditions. If all conditions are met, then
+        actions will be executed.
+    :param actions: List of actions.
+    """
+
     InitPTrigger()
 
     players = ut.FlattenList(players)
@@ -103,7 +113,7 @@ def PTrigger(players, conditions=None, actions=None, preserved=True):
 
     tc << c.NextTrigger()
 
-    Trigger(conditions, actions, preserved)
+    Trigger(conditions, actions)
 
     c.RawTrigger(
         actions=[

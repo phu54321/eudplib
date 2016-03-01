@@ -24,7 +24,7 @@ THE SOFTWARE.
 '''
 
 from .. import core as c
-from .filler import filldw, fillwbb, fillbbbb
+from .filler import _filldw, _fillwbb, _fillbbbb
 from eudplib import utils as ut
 
 
@@ -35,22 +35,27 @@ def HasEUDVariable(l):
     return False
 
 
-def ApplyPatchTable(initepd, obj, patchtable):
-    for i, pt in enumerate(patchtable):
-        attrs = pt
-        filler = {
-            1: filldw,
-            3: fillwbb,
-            4: fillbbbb,
-        }[len(attrs)]
-        attrs = ut.Assignable2List(attrs)
+def ApplyPatchTable(initepd, obj, patchTable):
+    def fieldSelector(fieldName):
+        if type(fieldName) is str:
+            return getattr(obj, fieldName)
+        else:
+            return fieldName
 
-        vars = [getattr(obj, attr) if type(attr) is str else attr for attr in attrs]
-        if HasEUDVariable(vars):
-            filler(initepd + i, *vars)
-            for attr in attrs:
-                if type(attr) is str:
-                    setattr(obj, attr, 0)
+    for i, patchEntry in enumerate(patchTable):
+        patchFields = patchEntry
+        memoryFiller = {
+            1: _filldw,
+            3: _fillwbb,
+            4: _fillbbbb,
+        }[len(patchFields)]
+
+        fieldList = list(map(fieldSelector, patchFields))
+        if HasEUDVariable(fieldList):
+            memoryFiller(initepd + i, *fieldList)
+            for fieldName in patchFields:
+                if type(fieldName) is str:
+                    setattr(obj, fieldName, 0)
 
 
 condpt = [

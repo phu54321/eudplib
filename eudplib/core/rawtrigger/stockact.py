@@ -402,6 +402,10 @@ def SetMemory(dest, modtype, value):
     return SetDeaths(EPD(dest), modtype, value, 0)
 
 
+def SetMemoryEPD(dest, modtype, value):
+    return SetDeaths(dest, modtype, value, 0)
+
+
 def SetNextPtr(trg, dest):
     return SetMemory(trg + 4, 7, dest)
 

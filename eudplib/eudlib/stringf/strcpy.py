@@ -28,15 +28,16 @@ from ... import ctrlstru as cs
 
 from .rwcommon import br, bw
 
+
 @c.EUDFunc
 def f_strcpy(dst, src):
     '''
-    strcpy equivilant in eudplib. Copy C-style string.
+    Strcpy equivilant in eudplib. Copy C-style string.
 
-    :param dst: Destination address. (Not EPD Player)
-    :param src: Source address. (Not EPD Player)
+    :param dst: Destination address (Not EPD player)
+    :param src: Source address (Not EPD player)
 
-    :return: same as dst
+    :return: dst
     '''
     b = c.EUDVariable()
 

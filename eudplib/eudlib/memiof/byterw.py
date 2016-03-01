@@ -33,6 +33,7 @@ _epd, _suboffset = c.EUDCreateVariables(2)
 
 
 class EUDByteReader:
+    """Read byte by byte."""
 
     def __init__(self):
         self._dw = c.EUDVariable()
@@ -40,12 +41,11 @@ class EUDByteReader:
         self._suboffset = c.EUDVariable()
         self._offset = c.EUDVariable()
 
-    '''
-    Seek to epd address
-    '''
+    # -------
 
     @c.EUDFuncMethod
     def seekepd(self, epdoffset):
+        """Seek EUDByteReader to specific epd player address"""
         c.SeqCompute([
             (self._offset, c.SetTo, epdoffset),
             (self._suboffset, c.SetTo, 0)
@@ -60,12 +60,9 @@ class EUDByteReader:
             self._b[3],
         ], dwm.f_dwbreak(self._dw)[2:6])
 
-    '''
-    Seek to real address
-    '''
-
     @c.EUDFuncMethod
     def seekoffset(self, offset):
+        """Seek EUDByteReader to specific address"""
         global _epd, _suboffset
 
         # convert offset to epd offset & suboffset
@@ -78,8 +75,14 @@ class EUDByteReader:
             (self._suboffset, c.SetTo, _suboffset)
         ])
 
+    # -------
+
     @c.EUDFuncMethod
     def readbyte(self):
+        """Read byte from current address. Reader will advance by 1 bytes.
+
+        :returns: Read byte
+        """
         case0, case1, case2, case3, swend = [c.Forward() for _ in range(5)]
         ret = c.EUDVariable()
 
@@ -133,6 +136,7 @@ class EUDByteReader:
 
 
 class EUDByteWriter:
+    """Write byte by byte"""
 
     def __init__(self):
         self._dw = None
@@ -149,6 +153,8 @@ class EUDByteWriter:
 
     @c.EUDFuncMethod
     def seekepd(self, epdoffset):
+        """Seek EUDByteWriter to specific epd player addresss"""
+
         c.SeqCompute([
             (self._offset, c.SetTo, epdoffset),
             (self._suboffset, c.SetTo, 0)
@@ -165,6 +171,8 @@ class EUDByteWriter:
 
     @c.EUDFuncMethod
     def seekoffset(self, offset):
+        """Seek EUDByteWriter to specific address"""
+
         global _epd, _suboffset
 
         # convert offset to epd offset & suboffset
@@ -178,6 +186,17 @@ class EUDByteWriter:
 
     @c.EUDFuncMethod
     def writebyte(self, byte):
+        """Write byte to current position.
+
+        Write a byte to current position of EUDByteWriter. Writer will advance
+        by 1 byte.
+
+        .. note::
+            Bytes could be buffered before written to memory. After you
+            finished using writebytes, you must call `flushdword` to flush the
+            buffer.
+        """
+
         case0, case1, case2, case3, swend = [c.Forward() for _ in range(5)]
 
         case0 << c.NextTrigger()
@@ -229,6 +248,7 @@ class EUDByteWriter:
 
     @c.EUDFuncMethod
     def flushdword(self):
+        """Flush buffer."""
         # mux bytes
         c.RawTrigger(actions=self._dw.SetNumber(0))
 

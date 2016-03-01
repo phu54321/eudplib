@@ -33,17 +33,19 @@ def _MainStarter(mf):
     global jumper
     jumper = c.Forward()
 
-    c.PushTriggerScope()
+    if c.PushTriggerScope():
+        rootstarter = c.NextTrigger()
 
-    rootstarter = c.NextTrigger()
-    mf()
-    c.RawTrigger(
-        nextptr=0x80000000,
-        actions=c.SetNextPtr(jumper, 0x80000000)
-    )
+        mf()
+
+        c.RawTrigger(
+            nextptr=0x80000000,
+            actions=c.SetNextPtr(jumper, 0x80000000)
+        )
+        jumper << c.RawTrigger(nextptr=rootstarter)
+
     c.PopTriggerScope()
 
-    jumper << c.RawTrigger(nextptr=rootstarter)
     return jumper
 
 

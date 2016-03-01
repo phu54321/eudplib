@@ -34,7 +34,7 @@ from eudplib import utils as ut
 '''
 
 
-def CreateStage2(payload):
+def CreatePayloadRelocator(payload):
     # We first build code injector.
     prtdb = c.Db(b''.join([ut.i2b4(x // 4) for x in payload.prttable]))
     prtn = vf.EUDVariable()
@@ -44,40 +44,42 @@ def CreateStage2(payload):
 
     orig_payload = c.Db(payload.data)
 
-    c.PushTriggerScope()
+    if c.PushTriggerScope():
+        root = c.NextTrigger()
 
-    root = c.NextTrigger()
+        # Verify payload
+        # Note : this is very, very basic protection method. Intended attackers
+        # should be able to penetrate through this very easily
 
-    # Verify payload
-    # Note : this is very, very basic protection method. Intended attackers
-    # should be able to penetrate through this very easily
+        # init prt
+        prtn << len(payload.prttable)
+        if payload.prttable:
+            if cs.EUDInfLoop()():
+                cs.DoActions(prtn.SubtractNumber(1))
+                sf.f_dwadd_epd(
+                    ut.EPD(orig_payload) +
+                    sf.f_dwread_epd(prtn + ut.EPD(prtdb)),
+                    orig_payload // 4
+                )
+                cs.EUDBreakIf(prtn.Exactly(0))
+            cs.EUDEndInfLoop()
 
-    # init prt
-    prtn << len(payload.prttable)
-    if payload.prttable:
-        if cs.EUDInfLoop()():
-            cs.DoActions(prtn.SubtractNumber(1))
-            sf.f_dwadd_epd(
-                ut.EPD(orig_payload) + sf.f_dwread_epd(prtn + ut.EPD(prtdb)),
-                orig_payload // 4
-            )
-            cs.EUDBreakIf(prtn.Exactly(0))
-        cs.EUDEndInfLoop()
+        # init ort
+        ortn << len(payload.orttable)
+        if payload.orttable:
+            if cs.EUDInfLoop()():
+                cs.DoActions(ortn.SubtractNumber(1))
+                sf.f_dwadd_epd(
+                    ut.EPD(orig_payload) +
+                    sf.f_dwread_epd(ortn + ut.EPD(ortdb)),
+                    orig_payload
+                )
+                cs.EUDBreakIf(ortn.Exactly(0))
+            cs.EUDEndInfLoop()
 
-    # init ort
-    ortn << len(payload.orttable)
-    if payload.orttable:
-        if cs.EUDInfLoop()():
-            cs.DoActions(ortn.SubtractNumber(1))
-            sf.f_dwadd_epd(
-                ut.EPD(orig_payload) + sf.f_dwread_epd(ortn + ut.EPD(ortdb)),
-                orig_payload
-            )
-            cs.EUDBreakIf(ortn.Exactly(0))
-        cs.EUDEndInfLoop()
-
-    # Jump
-    cs.EUDJump(orig_payload)
+        # Jump
+        cs.EUDJump(orig_payload)
 
     c.PopTriggerScope()
+
     return c.CreatePayload(root)

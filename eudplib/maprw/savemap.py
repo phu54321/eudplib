@@ -23,57 +23,39 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-from .. import core as c
-from .. import utils as ut
-from ..utils.blockstru import (
-    BlockStruManager,
-    SetCurrentBlockStruManager,
-)
-
 from ..core.mapdata import mapdata, mpqapi
-from .injector import stage1, stage2, stage3, doevents
+
+from .injector.applyInjector import applyInjector
+from .injector.doevents import _MainStarter
+from .mpqadd import UpdateMPQ
 
 
 def SaveMap(fname, rootf):
+    """Save output map with root function.
+
+    :param fname: Path for output map.
+    :param rootf: Main entry function.
+    """
+
     print('Saving to %s...' % fname)
     chkt = mapdata.GetChkTokenized()
 
-    # Create injector triggers
-    bsm = BlockStruManager()
-    prev_bsm = SetCurrentBlockStruManager(bsm)
-
-    c.PushTriggerScope()
-    root = doevents._MainStarter(rootf)
-    root = stage3.CreateStage3(root, chkt.getsection('MRGN'))
-    c.PopTriggerScope()
-    payload = c.CreatePayload(root)
-
-    c.PushTriggerScope()
-    final_payload = stage2.CreateStage2(payload)
-    c.PopTriggerScope()
-    SetCurrentBlockStruManager(prev_bsm)
-
-    # Update string table & etc
-    # User-defined strings in eudplib program is registered after rootf is
-    # called. This happens when _MainStarter is called, so UpdateMapData
-    # function should be called after `doevents._MainStarter(rootf)` call.
+    # Add payload
+    root = _MainStarter(rootf)
     mapdata.UpdateMapData()
-    # stage1.CreateAndApplyStage1 requires STR section to be constructed before
-    # it append stage2 payload after 'original' STR section. so UpdateMapData
-    # should be called before `stage1.CreateAndApplyStage1`.
-
-    # Create and apply stage 1 payload.
-    # Stage 1 initializes stage 2 (real payload initializer)
-    stage1.CreateAndApplyStage1(chkt, final_payload)
+    applyInjector(chkt, root)
 
     chkt.optimize()
     rawchk = chkt.savechk()
     print('Output scenario.chk : %.3fMB' % (len(rawchk) / 1000000))
 
+    # Process by modifying existing mpqfile
     open(fname, 'wb').write(mapdata.GetRawFile())
 
     mw = mpqapi.MpqWrite()
     mw.Open(fname)
-    mw.PutFile('staredit\\scenario.chk', rawchk)
+    mw.PutFile('staredit\\scenario.chk', rawchk, replace=True)
+    UpdateMPQ(mw)
+    mw.DeleteFile('(listfile)')
     mw.Compact()
     mw.Close()

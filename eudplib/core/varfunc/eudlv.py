@@ -35,3 +35,6 @@ class EUDLightVariable(VariableBase):
 
     def GetVariableMemoryAddr(self):
         return self._memaddr
+
+    def __hash__(self):
+        return id(self)

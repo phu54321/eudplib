@@ -35,13 +35,12 @@ from .dbstr import DBString
 
 @c.EUDFunc
 def f_dbstr_addstr(dst, src):
-    """
-    add string in dst. returns address to combined string's end.
+    """Print string as string to dst. Same as strcpy except of return value.
 
-    :param dst: Destination address. (Not EPD Player)
-    :param src: Source address. (Not EPD Player)
+    :param dst: Destination address (Not EPD player)
+    :param src: Source address (Not EPD player)
 
-    :return: combined string's end address
+    :returns: dst + strlen(src)
     """
     b = c.EUDVariable()
 
@@ -62,14 +61,12 @@ def f_dbstr_addstr(dst, src):
 
 @c.EUDFunc
 def f_dbstr_adddw(dst, number):
-    """
-    print dword in base 10 as string in dst. returns address to combined
-    string's end.
+    """Print number as string to dst.
 
-    :param dst: Destination address. (Not EPD Player)
+    :param dst: Destination address (Not EPD player)
     :param number: DWORD to print
 
-    :return: combined string's end address
+    :returns: dst + strlen(itoa(number))
     """
     bw.seekoffset(dst)
 
@@ -134,6 +131,12 @@ def f_dbstr_adddw(dst, number):
 
 
 def f_dbstr_print(dst, *args):
+    """Print multiple string / number to dst.
+
+    :param dst: Destination address (Not EPD player)
+    :param args: Things to print
+
+    """
     if isinstance(dst, DBString):
         dst = dst.GetStringMemoryAddr()
 

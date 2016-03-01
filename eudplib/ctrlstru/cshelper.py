@@ -28,6 +28,13 @@ class CtrlStruOpener:
 
     def __init__(self, f):
         self._f = f
+        self._called = False
+
+    def __del__(self):
+        if not self._called:
+            raise RuntimeError(
+                'Control structures must be double-parenthesised.' +
+                ' ex) EUDInfLoop()()')
 
     def __bool__(self):
         raise RuntimeError(
@@ -35,4 +42,5 @@ class CtrlStruOpener:
             ' ex) EUDInfLoop()()')
 
     def __call__(self, *args, **kwargs):
+        self._called = True
         return self._f(*args, **kwargs)

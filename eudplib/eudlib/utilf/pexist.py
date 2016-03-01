@@ -38,6 +38,10 @@ from eudplib import (
 
 @c.EUDFunc
 def f_playerexist(player):
+    """Check if player has not left the game.
+
+    :returns: 1 if player exists, 0 if not.
+    """
     pts = 0x51A280
 
     ret = c.EUDVariable()

@@ -85,7 +85,7 @@ def CopyDeaths(iplayer, oplayer, copyepd=False, initvalue=None):
         )
 
 
-def CreateAndApplyStage1(chkt, payload):
+def CreateVectorRelocator(chkt, payload):
     global trglist
 
     # Append 'Require EUD enabler' to string table
@@ -226,6 +226,16 @@ def CreateAndApplyStage1(chkt, payload):
         ]
     )
 
+    # End trigger execution if EUDA is not supported
+    #  - using condition #115 twice.
+    Trigger(
+        conditions=[
+            tt.Deaths(0, tt.Exactly, 0, 0),
+            tt.Condition(0, 0, 0, 0, 0, 115, 0, 0),
+            tt.Condition(0, 0, 0, 0, 0, 115, 0, 0),
+        ]
+    )
+
     Trigger(actions=[
         tt.SetDeaths(-12, tt.SetTo, 0, 1)
     ])
@@ -247,7 +257,8 @@ def CreateAndApplyStage1(chkt, payload):
                  for i in range(packn)],
                 tt.SetMemory(mrgn + 4, tt.Add, 2 ** e),
                 [tt.SetMemory(
-                    mrgn + 2408 + 328 + 32 * i + 16, tt.Add, 2 ** (e - 2)) for i in range(packn)],
+                    mrgn + 2408 + 328 + 32 * i + 16, tt.Add, 2 ** (e - 2))
+                 for i in range(packn)],
                 tt.SetMemory(mrgn + 2408 + 4, tt.Add, 2 ** e),
                 [tt.SetMemory(mrgn + 2408 + 328 + 32 * i + 20, tt.Add, 2 ** e)
                  for i in range(packn)],
@@ -274,7 +285,6 @@ def CreateAndApplyStage1(chkt, payload):
     pts = 0x51A280
 
     for player in range(8):
-        ptsprev = pts + 12 * player + 4  # address of pts[player].lasttrigger
         triggerend = ~(0x51A284 + player * 12)
 
         Trigger(

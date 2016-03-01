@@ -23,7 +23,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-from .rawtriggerdef import Disabled, RawTrigger
+from .rawtriggerdef import Disabled, RawTrigger, GetTriggerCounter
 from .triggerscope import PushTriggerScope, PopTriggerScope, NextTrigger
 from .condition import Condition
 from .action import Action
@@ -32,7 +32,7 @@ from .stockcond import (
     CommandMost, CommandMostAt, MostKills, HighestScore, MostResources,
     Switch, ElapsedTime, Opponents, Deaths, CommandLeast,
     CommandLeastAt, LeastKills, LowestScore, LeastResources, Score,
-    Always, Never, Memory,
+    Always, Never, Memory, MemoryEPD,
 )
 
 from .stockact import (
@@ -50,7 +50,7 @@ from .stockact import (
     CreateUnit, SetDeaths, Order, Comment, GiveUnits, ModifyUnitHitPoints,
     ModifyUnitEnergy, ModifyUnitShields, ModifyUnitResourceAmount,
     ModifyUnitHangarCount, PauseTimer, UnpauseTimer, Draw,
-    SetAllianceStatus, SetMemory, SetNextPtr, SetCurrentPlayer
+    SetAllianceStatus, SetMemory, SetNextPtr, SetCurrentPlayer, SetMemoryEPD,
 )
 
 from .constenc import (

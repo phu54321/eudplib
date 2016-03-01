@@ -27,8 +27,10 @@ from .eudv import (
     EUDVariable,
     EUDCreateVariables,
     SeqCompute,
+    SetVariables,
 )
 
 from .eudlv import EUDLightVariable
-from .eudf import EUDFunc, SetVariables
-from .mtdvf import EUDFuncMethod
+from .eudf import EUDFunc
+from .eudfmethod import EUDFuncMethod
+from .eudfuncn import EUDReturn

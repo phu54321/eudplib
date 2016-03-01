@@ -32,7 +32,7 @@ from .trigtrg import *
 from .maprw import *
 import types
 
-__version__ = '0.50.1'
+__version__ = '0.50.2'
 
 
 # remove modules from __all__
@@ -52,5 +52,7 @@ del _k
 del _v
 
 
-def eudtrgVersion():
+def eudplibVersion():
     return __version__
+
+_alllist.append('eudplibVersion')

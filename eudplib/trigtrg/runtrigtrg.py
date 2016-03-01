@@ -25,13 +25,13 @@ THE SOFTWARE.
 
 from .. import core as c
 from .. import ctrlstru as cs
-_trigtrg_runner_start = [c.Forward() for _ in range(8)]
-_trigtrg_runner_end = [c.Forward() for _ in range(8)]
+_runner_start = [c.Forward() for _ in range(8)]
+_runner_end = [c.Forward() for _ in range(8)]
 
 c.PushTriggerScope()
 for player in range(8):
-    _trigtrg_runner_start[player] << c.RawTrigger(nextptr=_trigtrg_runner_end[player])
-    _trigtrg_runner_end[player] << c.RawTrigger(nextptr=~(0x51A280 + player * 12 + 4))
+    _runner_start[player] << c.RawTrigger(nextptr=_runner_end[player])
+    _runner_end[player] << c.RawTrigger(nextptr=~(0x51A280 + player * 12 + 4))
 c.PopTriggerScope()
 
 
@@ -39,16 +39,24 @@ c.PopTriggerScope()
 def RunTrigTrigger():
     for player in range(8):
         skipt = c.Forward()
-        cs.EUDJumpIf(c.Memory(0x51A280 + 12 * player + 4, c.Exactly, 0x51A280 + 12 * player + 4), skipt)
+        cs.EUDJumpIf(
+            c.Memory(
+                0x51A280 + 12 * player + 4,
+                c.Exactly,
+                0x51A280 + 12 * player + 4
+            ), skipt)
         nt = c.Forward()
         c.RawTrigger(
-            nextptr=_trigtrg_runner_start[player],
+            nextptr=_runner_start[player],
             actions=[
                 c.SetMemory(0x6509B0, c.SetTo, player),
-                c.SetNextPtr(_trigtrg_runner_end[player], nt)
+                c.SetNextPtr(_runner_end[player], nt)
             ]
         )
         nt << c.RawTrigger(
-            actions=c.SetNextPtr(_trigtrg_runner_end[player], ~(0x51A280 + player * 12 + 4))
+            actions=c.SetNextPtr(
+                _runner_end[player],
+                ~(0x51A280 + player * 12 + 4)
+            )
         )
         skipt << c.NextTrigger()

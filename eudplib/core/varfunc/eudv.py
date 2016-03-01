@@ -34,8 +34,10 @@ from ..allocator import (
     IsValidExpr
 )
 from ...utils import (
+    FlattenList,
     EPD,
-    List2Assignable
+    List2Assignable,
+    ep_assert
 )
 from .vbase import VariableBase
 from .vbuf import GetCurrentVariableBuffer
@@ -69,6 +71,9 @@ class EUDVariable(VariableBase):
 
     def GetVariableMemoryAddr(self):
         return self._varact + 20
+
+    def __hash__(self):
+        return id(self)
 
     # -------
 
@@ -217,8 +222,8 @@ class EUDVariable(VariableBase):
         else:
             t = EUDVariable()
             SeqCompute((
-                (t, bt.SetTo, self),
-                (t, bt.Add, 1),
+                (t, bt.SetTo, 1),
+                (t, bt.Add, self),
                 (t, bt.Subtract, other)
             ))
             return t.Exactly(0)
@@ -297,41 +302,153 @@ def EUDCreateVariables(varn):
 # -------
 
 
-def SeqCompute(assignpairs):
-    actionset = []
+def _GetComputeDest(dst):
+    try:
+        return EPD(dst.GetVariableMemoryAddr())
+    except AttributeError:
+        return dst
 
-    def FlushActionSet():
-        if actionset:
-            bt.RawTrigger(actions=actionset)
-            actionset.clear()
 
-    for dst, mdt, src in assignpairs:
-        try:
-            dstepd = EPD(dst.GetVariableMemoryAddr())
-        except AttributeError:
-            dstepd = dst
+def _SeqComputeSub(assignpairs):
+    """
+    Subset of SeqCompute with following restrictions
 
+    - Assignment from variable should be after assignment from constant.
+    - Total number of actions should be leq than 64
+    """
+
+    actionlist = []
+
+    # Collect constant-assigning actions
+    const_assigning_index = len(assignpairs)
+
+    for i, assignpair in enumerate(assignpairs):
+        dst, mdt, src = assignpair
         if isinstance(src, EUDVariable):
-            FlushActionSet()
+            const_assigning_index = i
+            break
 
-            if mdt == bt.SetTo:
-                _VProc(src, [
-                    src.QueueAssignTo(dstepd)
-                ])
+    for dst, mdt, src in assignpairs[0:const_assigning_index]:
+        dst = _GetComputeDest(dst)
+        actionlist.append(bt.SetDeaths(dst, mdt, src, 0))
 
-            elif mdt == bt.Add:
-                _VProc(src, [
-                    src.QueueAddTo(dstepd)
-                ])
+    # Only constant-assigning function : skip
+    if const_assigning_index == len(assignpairs):
+        bt.RawTrigger(actions=actionlist)
+        return
 
-            elif mdt == bt.Subtract:
-                _VProc(src, [
-                    src.QueueSubtractTo(dstepd)
-                ])
+    #
+    # Rest is for non-constant assigning actions
+    #
+
+    nextptr = None  # nextptr for this rawtrigger
+    vt_nextptr = None  # what to set for nextptr of current vtable
+
+    for dst, mdt, src in assignpairs[const_assigning_index:]:
+        dst = _GetComputeDest(dst)
+
+        if nextptr is None:
+            nextptr = src.GetVTable()
+        else:
+            vt_nextptr << src.GetVTable()
+
+        vt_nextptr = Forward()
+        queuef = {
+            bt.SetTo: EUDVariable.QueueAssignTo,
+            bt.Add: EUDVariable.QueueAddTo,
+            bt.Subtract: EUDVariable.QueueSubtractTo,
+        }[mdt]
+
+        actionlist.append([
+            queuef(src, dst),
+            bt.SetNextPtr(src.GetVTable(), vt_nextptr)
+        ])
+
+    bt.RawTrigger(
+        nextptr=nextptr,
+        actions=actionlist
+    )
+
+    vt_nextptr << bt.NextTrigger()
+
+
+def SeqCompute(assignpairs):
+    # Check if argument is valid
+    for dst, mdt, src in assignpairs:
+        ep_assert(
+            (isinstance(dst, VariableBase) or IsValidExpr(dst)) and
+            (mdt in [bt.SetTo, bt.Add, bt.Subtract]) and
+            (isinstance(src, EUDVariable) or IsValidExpr(src)),
+
+            "Unsupported argument (%s, %s, %s)" % (dst, mdt, src)
+        )
+
+    # We need dependency map while writing assignment pairs
+    dstvarset = set()
+    srcvarset = set()
+
+    # Sublist of assignments to put in _SeqComputeSub
+    subassignpairs = []
+
+    # Is we collecting constant-assigning pairs?
+    constcollecting = True
+
+    # Number of expected actions.
+    actioncount = 0
+
+
+    def FlushPairs():
+        nonlocal constcollecting, actioncount
+
+        if actioncount == 0:  # Already flushed before
+            return
+
+        _SeqComputeSub(subassignpairs)
+
+        dstvarset.clear()
+        srcvarset.clear()
+        subassignpairs.clear()
+        constcollecting = True
+        actioncount = 0
+
+    for assignpair in assignpairs:
+        dst, mdt, src = assignpair
+
+        # Flush action set before preceeding
+        if isinstance(src, EUDVariable):
+            if src in dstvarset:
+                FlushPairs()
+            elif src in srcvarset:
+                FlushPairs()
+            elif actioncount >= 64 - 3:
+                FlushPairs()
+
+            srcvarset.add(src)
+            constcollecting = False
+            actioncount += 3
 
         else:
-            actionset.append(bt.SetDeaths(dstepd, mdt, src, 0))
-            if len(actionset) == 64:
-                FlushActionSet()
+            if not constcollecting:
+                FlushPairs()
+            elif actioncount >= 64 - 3:
+                FlushPairs()
 
-    FlushActionSet()
+            actioncount += 1
+
+        subassignpairs.append(assignpair)
+        if isinstance(dst, VariableBase):
+            dstvarset.add(dst)
+
+    FlushPairs()
+
+
+def SetVariables(srclist, dstlist, mdtlist=None):
+    srclist = FlattenList(srclist)
+    dstlist = FlattenList(dstlist)
+    ep_assert(len(srclist) == len(dstlist), 'Input/output size mismatch')
+
+    if mdtlist is None:
+        mdtlist = [bt.SetTo] * len(srclist)
+
+    sqa = [(src, mdt, dst) for src, dst, mdt in zip(srclist, dstlist, mdtlist)]
+    SeqCompute(sqa)
