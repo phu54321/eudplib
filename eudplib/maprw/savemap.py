@@ -56,5 +56,6 @@ def SaveMap(fname, rootf):
     mw.Open(fname)
     mw.PutFile('staredit\\scenario.chk', rawchk, replace=True)
     UpdateMPQ(mw)
+    mw.DeleteFile('(listfile)')
     mw.Compact()
     mw.Close()
