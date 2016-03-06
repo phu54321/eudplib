@@ -9,21 +9,33 @@ LoadMap('outputmap/basemap/basemap.scx')
 
 
 @EUDFunc
-def main():
-    starttm = f_dwread_epd(EPD(0x51CE8C))
-    DoActions(SetMemory(0x6509A0, SetTo, 0))
-
-    a = EUDVariable()
+def multest():
+    a, b, c = EUDCreateVariables(3)
     a << 200000
+    b << 1
+    c << 1
 
     if EUDWhile()(a >= 1):
-        a << a - 1
+        a -= 1
+        b += 1
+        c << c * b + 3
     EUDEndWhile()
 
+
+def perftest(funcname, func):
+    starttm = f_dwread_epd(EPD(0x51CE8C))
+    DoActions(SetMemory(0x6509A0, SetTo, 0))  # EUD Turbo
+    func()
+    EUDDoEvents()
+    endtm = f_dwread_epd(EPD(0x51CE8C))
+    f_simpleprint("[%s] Elapsed time : " % funcname, starttm - endtm)
+
+
+@EUDFunc
+def main():
     EUDDoEvents()
 
-    endtm = f_dwread_epd(EPD(0x51CE8C))
-    SeqCompute([(EPD(0x58a364), SetTo, starttm - endtm)])
+    perftest("multest", multest)
 
 
 SaveMap('outputmap/perfest.scx', main)
