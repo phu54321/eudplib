@@ -27,6 +27,7 @@ from .. import core as c
 from .. import trigger as tg
 from eudplib import utils as ut
 from .basicstru import EUDJump, EUDJumpIf, EUDJumpIfNot
+from .cshelper import CtrlStruOpener
 
 
 def _IsSwitchBlockId(idf):
@@ -47,27 +48,39 @@ def EUDSwitch(var):
     return True
 
 
-def EUDSwitchCase(number):
-    ut.ep_assert(
-        isinstance(number, int) or isinstance(number, c.Expr),
-        'Invalid selector start for EUDSwitch'
-    )
+def EUDSwitchCase():
+    def _footer(*numbers):
+        for number in numbers:
+            ut.ep_assert(
+                isinstance(number, int) or isinstance(number, c.Expr),
+                'Invalid selector start for EUDSwitch'
+            )
 
-    lb = ut.EUDGetLastBlock()
-    ut.ep_assert(lb[0] == 'swblock', 'Block start/end mismatch')
-    block = lb[1]
+        lb = ut.EUDGetLastBlock()
+        ut.ep_assert(lb[0] == 'swblock', 'Block start/end mismatch')
+        block = lb[1]
 
-    ut.ep_assert(number not in block['casebrlist'], 'Duplicate cases')
-    block['casebrlist'][number] = c.NextTrigger()
+        for number in numbers:
+            ut.ep_assert(number not in block['casebrlist'], 'Duplicate cases')
+            block['casebrlist'][number] = c.NextTrigger()
+
+        return True
+
+    return CtrlStruOpener(_footer)
 
 
 def EUDSwitchDefault():
-    lb = ut.EUDGetLastBlock()
-    ut.ep_assert(lb[0] == 'swblock', 'Block start/end mismatch')
-    block = lb[1]
+    def _footer():
+        lb = ut.EUDGetLastBlock()
+        ut.ep_assert(lb[0] == 'swblock', 'Block start/end mismatch')
+        block = lb[1]
 
-    ut.ep_assert(not block['defaultbr'].IsSet(), 'Duplicate default')
-    block['defaultbr'] << c.NextTrigger()
+        ut.ep_assert(not block['defaultbr'].IsSet(), 'Duplicate default')
+        block['defaultbr'] << c.NextTrigger()
+
+        return True
+
+    return CtrlStruOpener(_footer)
 
 
 def EUDSwitchBreak():
