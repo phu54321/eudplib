@@ -162,3 +162,11 @@ def f_dbstr_print(dst, *args):
             )
 
     return dst
+
+
+_printf_buffer = DBString(1024)
+
+
+def f_simpleprint(*args):
+    f_dbstr_print(_printf_buffer, *args)
+    cs.DoActions(_printf_buffer.GetDisplayAction())

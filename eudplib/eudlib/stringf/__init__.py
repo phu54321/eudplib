@@ -29,4 +29,5 @@ from .eudprint import (
     f_dbstr_adddw,
     f_dbstr_addstr,
     f_dbstr_print,
+    f_simpleprint
 )
