@@ -29,7 +29,10 @@ from eudplib import (
     utils as ut
 )
 from ..eudarray import EUDArray
-from ..memiof import f_dwread_epd, f_dwwrite_epd, f_repmovsd_epd
+from ..memiof import (
+    f_dwread_epd,
+    f_dwwrite_epd
+)
 
 _patchstack = EUDArray(3 * 8192)
 _ps_top = c.EUDVariable()
@@ -39,27 +42,23 @@ _ps_top = c.EUDVariable()
 def f_dwpatch_epd(addrepd, value):
     global _patchstack, _ps_top
 
-    db = c.Db(4)
-    f_dwwrite_epd(ut.EPD(db), f_dwread_epd(addrepd))
+    prev_value = f_dwread_epd(addrepd)
     f_dwwrite_epd(addrepd, value)
 
     _patchstack[_ps_top] = addrepd
     _ps_top += 1
-    _patchstack[_ps_top] = ut.EPD(db)
-    _ps_top += 1
-    _patchstack[_ps_top] = 1
+    _patchstack[_ps_top] = prev_value
     _ps_top += 1
 
 
 @c.EUDFunc
 def f_unpatchall():
     global _ps_top
+    prev_value, addrepd = c.EUDCreateVariables(2)
     if cs.EUDWhile()(_ps_top >= 1):
-        dwn = _patchstack[_ps_top]
         _ps_top -= 1
-        dbepd = _patchstack[_ps_top]
+        prev_value << _patchstack[_ps_top]
         _ps_top -= 1
-        wstartepd = _patchstack[_ps_top]
-        _ps_top -= 1
-        f_repmovsd_epd(wstartepd, dbepd, dwn)
+        addrepd << _patchstack[_ps_top]
+        f_dwwrite_epd(addrepd, prev_value)
     cs.EUDEndWhile()
