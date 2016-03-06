@@ -146,8 +146,8 @@ def DisplayExtText(text):
     return _extstr_dict[text].GetDisplayAction()
 
 
-def f_initextstr():
-    """Initialize DBString system."""
+def _f_initextstr():
+    """(internal)Initialize DBString system."""
     rb = ResetterBuffer()
     ptr, v = c.EUDVariable(), c.EUDVariable()
     ptr << ut.EPD(rb)
@@ -160,3 +160,12 @@ def f_initextstr():
         ptr += 1
 
     cs.EUDEndInfLoop()
+
+
+def f_initextstr():
+    """This function does nothing.
+
+    .. warning::
+        This function is deprecated.
+    """
+    pass

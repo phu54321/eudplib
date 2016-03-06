@@ -25,6 +25,7 @@ THE SOFTWARE.
 
 from ... import core as c
 from ... import ctrlstru as cs
+from ...eudlib.stringf.dbstr import _f_initextstr
 
 jumper = None
 
@@ -35,6 +36,8 @@ def _MainStarter(mf):
 
     if c.PushTriggerScope():
         rootstarter = c.NextTrigger()
+
+        _f_initextstr()
 
         mf()
 
