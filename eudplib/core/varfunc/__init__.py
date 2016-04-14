@@ -33,4 +33,4 @@ from .eudv import (
 from .eudlv import EUDLightVariable
 from .eudf import EUDFunc
 from .eudfmethod import EUDFuncMethod
-from .eudfuncn import EUDReturn
+from .eudfuncn import EUDFuncN, EUDReturn
