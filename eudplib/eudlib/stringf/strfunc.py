@@ -26,7 +26,7 @@ THE SOFTWARE.
 from ... import core as c
 from ... import ctrlstru as cs
 
-from .rwcommon import br, bw
+from .rwcommon import br1, br2, bw1
 
 
 @c.EUDFunc
@@ -41,15 +41,34 @@ def f_strcpy(dst, src):
     '''
     b = c.EUDVariable()
 
-    br.seekoffset(src)
-    bw.seekoffset(dst)
+    br1.seekoffset(src)
+    bw1.seekoffset(dst)
 
     if cs.EUDInfLoop()():
-        c.SetVariables(b, br.readbyte())
-        bw.writebyte(b)
+        c.SetVariables(b, br1.readbyte())
+        bw1.writebyte(b)
         cs.EUDBreakIf(b == 0)
     cs.EUDEndInfLoop()
 
-    bw.flushdword()
+    bw1.flushdword()
 
     return dst
+
+
+@c.EUDFunc
+def f_strcmp(s1, s2):
+    br1.seekoffset(s1)
+    br2.seekoffset(s2)
+
+    if cs.EUDInfLoop()():
+        ch1 = br1.readbyte()
+        ch2 = br2.readbyte()
+        if cs.EUDIf()(ch1 == ch2):
+            if cs.EUDIf()(ch1 == 0):
+                c.EUDReturn(0)
+            cs.EUDEndIf()
+            cs.EUDContinue()
+        if cs.EUDElse()():
+            c.EUDReturn(ch1 - ch2)
+        cs.EUDEndIf()
+    cs.EUDEndInfLoop()

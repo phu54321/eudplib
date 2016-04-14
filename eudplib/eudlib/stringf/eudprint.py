@@ -29,7 +29,7 @@ from eudplib import (
     utils as ut,
 )
 
-from .rwcommon import br, bw
+from .rwcommon import br1, bw1
 from .dbstr import DBString
 
 
@@ -44,17 +44,17 @@ def f_dbstr_addstr(dst, src):
     """
     b = c.EUDVariable()
 
-    br.seekoffset(src)
-    bw.seekoffset(dst)
+    br1.seekoffset(src)
+    bw1.seekoffset(dst)
 
     if cs.EUDInfLoop()():
-        c.SetVariables(b, br.readbyte())
-        bw.writebyte(b)
+        c.SetVariables(b, br1.readbyte())
+        bw1.writebyte(b)
         cs.EUDBreakIf(b == 0)
         dst += 1
     cs.EUDEndInfLoop()
 
-    bw.flushdword()
+    bw1.flushdword()
 
     return dst
 
@@ -68,7 +68,7 @@ def f_dbstr_adddw(dst, number):
 
     :returns: dst + strlen(itoa(number))
     """
-    bw.seekoffset(dst)
+    bw1.seekoffset(dst)
 
     skipper = [c.Forward() for _ in range(9)]
 
@@ -94,38 +94,38 @@ def f_dbstr_adddw(dst, number):
     number, ch9 = c.f_div(number, 10)
 
     # print digits
-    bw.writebyte(ch9 + b'0'[0])
+    bw1.writebyte(ch9 + b'0'[0])
     dst += 1
     skipper[8] << c.NextTrigger()
-    bw.writebyte(ch8 + b'0'[0])
+    bw1.writebyte(ch8 + b'0'[0])
     dst += 1
     skipper[7] << c.NextTrigger()
-    bw.writebyte(ch7 + b'0'[0])
+    bw1.writebyte(ch7 + b'0'[0])
     dst += 1
     skipper[6] << c.NextTrigger()
-    bw.writebyte(ch6 + b'0'[0])
+    bw1.writebyte(ch6 + b'0'[0])
     dst += 1
     skipper[5] << c.NextTrigger()
-    bw.writebyte(ch5 + b'0'[0])
+    bw1.writebyte(ch5 + b'0'[0])
     dst += 1
     skipper[4] << c.NextTrigger()
-    bw.writebyte(ch4 + b'0'[0])
+    bw1.writebyte(ch4 + b'0'[0])
     dst += 1
     skipper[3] << c.NextTrigger()
-    bw.writebyte(ch3 + b'0'[0])
+    bw1.writebyte(ch3 + b'0'[0])
     dst += 1
     skipper[2] << c.NextTrigger()
-    bw.writebyte(ch2 + b'0'[0])
+    bw1.writebyte(ch2 + b'0'[0])
     dst += 1
     skipper[1] << c.NextTrigger()
-    bw.writebyte(ch1 + b'0'[0])
+    bw1.writebyte(ch1 + b'0'[0])
     dst += 1
     skipper[0] << c.NextTrigger()
-    bw.writebyte(ch0 + b'0'[0])
+    bw1.writebyte(ch0 + b'0'[0])
     dst += 1
 
-    bw.writebyte(0)  # EOS
-    bw.flushdword()
+    bw1.writebyte(0)  # EOS
+    bw1.flushdword()
 
     return dst
 
