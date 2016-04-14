@@ -19,5 +19,5 @@ def main():
         EUDDoEvents()
     EUDEndInfLoop()
 
-
+CompressPayload(True)
 SaveMap('outputmap/testmultiplay.scx', main)

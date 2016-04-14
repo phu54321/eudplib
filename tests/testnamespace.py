@@ -4,6 +4,11 @@ import pprint as pp
 
 sys.path.insert(0, os.path.abspath('..\\'))
 
-from eudplib import *
+import eudplib
+eudftype = eudplib.core.varfunc.eudf.EUDFuncN
 
-pp.pprint(GetEUDNamespace())
+
+for name in eudplib.__all__:
+    value = eudplib.__dict__[name]
+    if isinstance(value, eudftype):
+        print(name, value.size())

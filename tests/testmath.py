@@ -42,5 +42,5 @@ def main():
         EUDDoEvents()
     EUDEndInfLoop()
 
-
+CompressPayload(True)
 SaveMap('outputmap/testtrigmet.scx', main)
