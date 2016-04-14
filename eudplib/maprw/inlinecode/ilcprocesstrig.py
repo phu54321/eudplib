@@ -32,6 +32,16 @@ from .ilccompile import (
 )
 
 
+_inlineCodes = []
+
+
+def PreprocessInlineCode(chkt):
+    global _inlineCodes
+    trigSection = chkt.getsection('TRIG')
+    _inlineCodes, trigSection = PreprocessTrigSection(trigSection)
+    chkt.setsection('TRIG', trigSection)
+
+
 def PreprocessTrigSection(trigSection):
     """ Fetch inline codes & compiles them """
     ComputeBaseInlineCodeGlobals()
@@ -64,6 +74,11 @@ def PreprocessTrigSection(trigSection):
 
     trigSection = b''.join(trigSegments)
     return inlineCodes, trigSection
+
+
+def GetInlineCodeList():
+    """ Get list of compiled inline_eudplib code """
+    return _inlineCodes
 
 
 def DecodeSpecialData(inlineCodes, trigger_bytes):

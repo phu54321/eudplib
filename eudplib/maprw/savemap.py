@@ -26,6 +26,7 @@ THE SOFTWARE.
 from ..core.mapdata import mapdata, mpqapi
 
 from .injector.applyInjector import applyInjector
+from .inlinecode.ilcprocesstrig import PreprocessInlineCode
 from .injector.doevents import _MainStarter
 from .mpqadd import UpdateMPQ
 
@@ -42,6 +43,7 @@ def SaveMap(fname, rootf):
 
     # Add payload
     root = _MainStarter(rootf)
+    PreprocessInlineCode(chkt)
     mapdata.UpdateMapData()
     applyInjector(chkt, root)
 

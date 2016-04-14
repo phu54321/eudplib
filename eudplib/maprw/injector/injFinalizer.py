@@ -28,11 +28,7 @@ from ... import ctrlstru as cs
 from ... import eudlib as sf
 from eudplib import utils as ut
 from ...trigtrg import runtrigtrg as rtt
-
-from ..inlinecode import PreprocessTrigSection
-
-
-_inlineCodes = []
+from ..inlinecode.ilcprocesstrig import GetInlineCodeList
 
 
 ''' Stage 3:
@@ -44,8 +40,6 @@ _inlineCodes = []
 
 
 def _DispatchInlineCode(trigepd):
-    global _inlineCodes
-
     cs0 = c.Forward()  # set cs0+20 to codeStart
     cs1 = c.Forward()  # set cs1+20 to ut.EPD(codeEnd) + 1
     cs2 = c.Forward()  # set cs2+20 to cs_a0_epd + 4
@@ -57,7 +51,7 @@ def _DispatchInlineCode(trigepd):
 
     cs.DoActions(c.SetMemory(0x6509B0, c.SetTo, trigepd + 2))
 
-    for funcID, func in _inlineCodes:
+    for funcID, func in GetInlineCodeList():
         codeStart, codeEnd = func
         cs_a0_epd = ut.EPD(codeStart) + (8 + 320) // 4
 
@@ -149,11 +143,6 @@ def CreateInjectFinalizer(chkt, root):
     pts = 0x51A280
 
     # Apply inline code patch
-    global _inlineCodes
-    trigSection = chkt.getsection('TRIG')
-    _inlineCodes, trigSection = PreprocessTrigSection(trigSection)
-    chkt.setsection('TRIG', trigSection)
-
     if c.PushTriggerScope():
         ret = c.NextTrigger()
 
