@@ -70,11 +70,7 @@ def main():
         f_setcurpl(0)
 
         # Loop for every units
-        unitptr << f_dwread_epd(EPD(0x628430))
-
-        if EUDWhileNot()(unitptr.Exactly(0)):
-            unitepd << EPD(unitptr)
-
+        for unitptr, unitepd in EUDUnitLoop():
             # check unittype
             # /*0x064*/ u16         unitType;
             unittype = f_dwbreak(f_dwread_epd(unitepd + (0x64 // 4)))[0]
@@ -109,10 +105,6 @@ def main():
             ])
 
             # Loop done. Get next unit pointer
-            EUDSetContinuePoint()
-            unitptr << f_dwread_epd(unitepd + (4 // 4))
-
-        EUDEndWhile()
 
         DoActions(KillUnit('Kakaru (Twilight Critter)', Player1))
 
