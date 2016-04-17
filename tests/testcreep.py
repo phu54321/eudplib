@@ -104,8 +104,6 @@ def main():
                 RemoveUnitAt(All, 'Kakaru (Twilight Critter)', 1, Player1)
             ])
 
-            # Loop done. Get next unit pointer
-
         DoActions(KillUnit('Kakaru (Twilight Critter)', Player1))
 
         EUDDoEvents()
