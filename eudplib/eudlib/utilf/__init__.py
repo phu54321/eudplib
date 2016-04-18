@@ -53,5 +53,6 @@ from .listloop import (
     EUDListLoop,
     EUDUnitLoop,
     EUDSpriteLoop,
-    EUDBulletLoop
+    EUDBulletLoop,
+    EUDTriggerLoop
 )

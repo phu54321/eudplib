@@ -28,22 +28,30 @@ from eudplib import (
     core as c,
     ctrlstru as cs,
     utils as ut,
+    trigtrg as tt
 )
 
 
-def EUDListLoop(header_offset, cc=[0]):
-    blockname = 'listloop_%08X' % header_offset
-    ut.EUDCreateBlock(blockname, None)
+def EUDListLoop(header_offset, break_offset=None):
+    blockname = 'listloop'
+    ut.EUDCreateBlock(blockname, header_offset)
 
     ptr, epd = f_dwepdread_epd(ut.EPD(header_offset))
-    if cs.EUDWhile()([ptr <= 0x7FFFFFFF, ptr >= 1]):
-        yield ptr, epd
-        cs.EUDSetContinuePoint()
-        c.SetVariables([ptr, epd], f_dwepdread_epd(epd + 1))
 
+    if break_offset:
+        cs.EUDWhileNot()(ptr == break_offset)
+    else:
+        cs.EUDWhile()([ptr >= 0, ptr <= 0x7FFFFFFF])
+
+    yield ptr, epd
+    cs.EUDSetContinuePoint()
+    c.SetVariables([ptr, epd], f_dwepdread_epd(epd + 1))
     cs.EUDEndWhile()
 
-    ut.EUDPopBlock(blockname)
+    ut.ep_assert(
+        ut.EUDPopBlock(blockname)[1] == header_offset,
+        'listloop mismatch'
+    )
 
 
 def EUDUnitLoop():
@@ -73,3 +81,13 @@ def EUDSpriteLoop():
     cs.EUDEndWhile()
 
     ut.EUDPopBlock('spriteloop')
+
+
+def EUDTriggerLoop(player):
+    player = c.EncodePlayer(player)
+
+    for ptr, epd in EUDListLoop(
+        tt.TrigTriggerBegin(player),
+        tt.TrigTriggerEnd(player)
+    ):
+        yield ptr, epd

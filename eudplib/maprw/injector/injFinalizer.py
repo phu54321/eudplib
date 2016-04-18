@@ -25,8 +25,9 @@ THE SOFTWARE.
 
 from ... import core as c
 from ... import ctrlstru as cs
+from ... import trigger as trg
 from ... import eudlib as sf
-from eudplib import utils as ut
+from ... import utils as ut
 from ...trigtrg import runtrigtrg as rtt
 from ..inlinecode.ilcprocesstrig import GetInlineCodeList
 
@@ -140,6 +141,8 @@ def _FlipProp(trigepd):
 
 
 def CreateInjectFinalizer(chkt, root):
+    rtt.AllocTrigTriggerLink()
+
     pts = 0x51A280
 
     # Apply inline code patch
@@ -200,19 +203,19 @@ def CreateInjectFinalizer(chkt, root):
             prevtend = sf.f_dwread_epd(ut.EPD(pts + player * 12 + 4))
 
             # If there were triggers
-            if cs.EUDIfNot()(prevtstart == ~(pts + player * 12 + 4)):
-                # Modify pts
-                c.SeqCompute([
-                    (ut.EPD(pts + player * 12 + 8), c.SetTo, tstart),
-                    (ut.EPD(pts + player * 12 + 4), c.SetTo, tre),
-                ])
+            trg.Trigger([prevtstart == ~(pts + player * 12 + 4)], [
+                # Link pts
+                c.SetMemory(pts + player * 12 + 8, c.SetTo, tstart),
+                c.SetMemory(pts + player * 12 + 4, c.SetTo, tre),
 
-                # link trs, tre with them
-                c.SeqCompute([
-                    (ut.EPD(trs + 4), c.SetTo, prevtstart),
-                ])
-                sf.f_dwwrite_epd(ut.EPD(prevtend) + 1, tre)
-            cs.EUDEndIf()
+                # Link trs
+                c.SetMemory(trs + 4, c.SetTo, prevtstart),
+                c.SetMemory(prevtend + 4, c.SetTo, tre),
+
+                # Cache dlist start & end
+                c.SetMemory(rtt.orig_tstart + player * 4, c.SetTo, prevtstart),
+                c.SetMemory(rtt.orig_tend + player * 4, c.SetTo, prevtend),
+            ])
 
         if c.PushTriggerScope():
             tmcheckt << c.NextTrigger()

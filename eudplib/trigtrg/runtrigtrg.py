@@ -25,6 +25,7 @@ THE SOFTWARE.
 
 from .. import core as c
 from .. import ctrlstru as cs
+
 _runner_start = [c.Forward() for _ in range(8)]
 _runner_end = [c.Forward() for _ in range(8)]
 
@@ -60,3 +61,55 @@ def RunTrigTrigger():
             )
         )
         skipt << c.NextTrigger()
+
+
+#######
+
+orig_tstart = None
+orig_tend = None
+runner_end_array = None
+
+
+def AllocTrigTriggerLink():
+    global orig_tstart, orig_tend, runner_end_array
+    if not orig_tstart:
+        from .. import eudlib as sf
+
+        orig_tstart = sf.EUDArray(8)
+        orig_tend = sf.EUDArray(8)
+
+        runner_end_array = sf.EUDArray(8)
+        for i in range(8):
+            runner_end_array
+
+
+def GetFirstTrigTrigger(player):
+    """ Get dlist start of trig-trigger for player """
+    AllocTrigTriggerLink()
+    return orig_tstart[player]
+
+
+def GetLastTrigTrigger(player):
+    """ Get dlist end of trig-trigger for player"""
+    AllocTrigTriggerLink()
+    return orig_tend[player]
+
+
+def TrigTriggerBegin(player):
+    return GetFirstTrigTrigger(player)
+
+
+@c.EUDFunc
+def _f(player):
+    cs.EUDSwitch(player)
+    for i in range(8):
+        cs.EUDSwitchCase()(i)
+        cs.EUDReturn(_runner_end[i])
+    cs.EUDEndSwitch()
+
+
+def TrigTriggerEnd(player):
+    if isinstance(player, int):
+        return _runner_end[player]
+    else:
+        return _f(player)
