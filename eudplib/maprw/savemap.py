@@ -47,7 +47,7 @@ def SaveMap(fname, rootf):
     mapdata.UpdateMapData()
     applyInjector(chkt, root)
 
-    # chkt.optimize()
+    chkt.optimize()
     rawchk = chkt.savechk()
     print('Output scenario.chk : %.3fMB' % (len(rawchk) / 1000000))
 
