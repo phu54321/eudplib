@@ -51,6 +51,8 @@ from .loopblock import (
     EUDLoopN,
     EUDEndLoopN,
 
+    EUDLoopRange,
+
     EUDWhile,
     EUDWhileNot,
     EUDEndWhile,

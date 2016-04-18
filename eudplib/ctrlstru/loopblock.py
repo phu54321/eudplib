@@ -98,6 +98,23 @@ def EUDEndLoopN():
 # -------
 
 
+def EUDLoopRange(start, end=None):
+    ut.EUDCreateBlock('looprangeblock', None)
+    if end is None:
+        start, end = 0, start
+
+    v = c.EUDVariable()
+    v << start
+    if EUDWhile()(v < end):
+        yield v
+        v += 1
+    EUDEndWhile()
+    ut.EUDPopBlock('looprangeblock')
+
+
+# -------
+
+
 def EUDWhile():
     def _header():
         block = {
