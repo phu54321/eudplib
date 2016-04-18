@@ -32,7 +32,7 @@ from eudplib import (
 )
 
 
-def EUDListLoop(header_offset, break_offset=None):
+def EUDLoopList(header_offset, break_offset=None):
     blockname = 'listloop'
     ut.EUDCreateBlock(blockname, header_offset)
 
@@ -54,17 +54,17 @@ def EUDListLoop(header_offset, break_offset=None):
     )
 
 
-def EUDUnitLoop():
-    for ptr, epd in EUDListLoop(0x628430):
+def EUDLoopUnit():
+    for ptr, epd in EUDLoopList(0x628430):
         yield ptr, epd
 
 
-def EUDBulletLoop():
-    for ptr, epd in EUDListLoop(0x64DEC4):
+def EUDLoopBullet():
+    for ptr, epd in EUDLoopList(0x64DEC4):
         yield ptr, epd
 
 
-def EUDSpriteLoop():
+def EUDLoopSprite():
     y_epd = c.EUDVariable()
     y_epd << ut.EPD(0x629688)
 
@@ -83,10 +83,10 @@ def EUDSpriteLoop():
     ut.EUDPopBlock('spriteloop')
 
 
-def EUDTriggerLoop(player):
+def EUDLoopTrigger(player):
     player = c.EncodePlayer(player)
 
-    for ptr, epd in EUDListLoop(
+    for ptr, epd in EUDLoopList(
         tt.TrigTriggerBegin(player),
         tt.TrigTriggerEnd(player)
     ):

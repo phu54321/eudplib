@@ -11,7 +11,7 @@ LoadMap('outputmap/basemap/basemap.scx')
 @EUDFunc
 def main():
     i = EUDVariable()
-    for ptr, epd in EUDTriggerLoop(Player1):
+    for ptr, epd in EUDLoopTrigger(Player1):
         i += 1
     f_setcurpl(Player2)
     a = f_getcurpl()

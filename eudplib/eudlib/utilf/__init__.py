@@ -50,9 +50,9 @@ from .pexist import (
 )
 
 from .listloop import (
-    EUDListLoop,
-    EUDUnitLoop,
-    EUDSpriteLoop,
-    EUDBulletLoop,
-    EUDTriggerLoop
+    EUDLoopList,
+    EUDLoopUnit,
+    EUDLoopSprite,
+    EUDLoopBullet,
+    EUDLoopTrigger
 )
