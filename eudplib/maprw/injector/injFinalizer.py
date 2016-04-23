@@ -203,19 +203,22 @@ def CreateInjectFinalizer(chkt, root):
             prevtend = sf.f_dwread_epd(ut.EPD(pts + player * 12 + 4))
 
             # If there were triggers
-            trg.Trigger([prevtstart == ~(pts + player * 12 + 4)], [
-                # Link pts
-                c.SetMemory(pts + player * 12 + 8, c.SetTo, tstart),
-                c.SetMemory(pts + player * 12 + 4, c.SetTo, tre),
+            if cs.EUDIfNot()(prevtstart == ~(pts + player * 12 + 4)):
+                cs.DoActions([
+                    # Link pts
+                    c.SetMemory(pts + player * 12 + 8, c.SetTo, tstart),
+                    c.SetMemory(pts + player * 12 + 4, c.SetTo, tre),
 
-                # Link trs
-                c.SetMemory(trs + 4, c.SetTo, prevtstart),
-                c.SetMemory(prevtend + 4, c.SetTo, tre),
+                    # Link trs
+                    c.SetMemory(trs + 4, c.SetTo, prevtstart),
+                    c.SetMemory(prevtend + 4, c.SetTo, tre),
 
-                # Cache dlist start & end
-                c.SetMemory(rtt.orig_tstart + player * 4, c.SetTo, prevtstart),
-                c.SetMemory(rtt.orig_tend + player * 4, c.SetTo, prevtend),
-            ])
+                    # Cache dlist start & end
+                    c.SetMemory(rtt.orig_tstart + player * 4, c.SetTo,
+                                prevtstart),
+                    c.SetMemory(rtt.orig_tend + player * 4, c.SetTo, prevtend),
+                ])
+            cs.EUDEndIf()
 
         if c.PushTriggerScope():
             tmcheckt << c.NextTrigger()
@@ -225,7 +228,7 @@ def CreateInjectFinalizer(chkt, root):
                 cs.EUDJump(root)
             cs.EUDEndIf()
 
-            # Set current trigger to 1.
+            # Set current player to 1.
             cs.DoActions(c.SetMemory(0x6509B0, c.SetTo, 0))
 
             cs.EUDJump(0x80000000)
