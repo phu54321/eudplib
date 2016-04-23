@@ -38,7 +38,7 @@ def EUDLoopList(header_offset, break_offset=None):
 
     ptr, epd = f_dwepdread_epd(ut.EPD(header_offset))
 
-    if break_offset:
+    if break_offset is not None:
         cs.EUDWhileNot()(ptr == break_offset)
     else:
         cs.EUDWhile()([ptr >= 0, ptr <= 0x7FFFFFFF])
@@ -85,6 +85,11 @@ def EUDLoopSprite():
 
 def EUDLoopTrigger(player):
     player = c.EncodePlayer(player)
+
+    cs.DoActions([
+        c.SetMemoryEPD(0, c.SetTo, tt.TrigTriggerBegin(player)),
+        c.SetMemoryEPD(1, c.SetTo, tt.GetLastTrigTrigger(player)),
+    ])
 
     for ptr, epd in EUDLoopList(
         tt.TrigTriggerBegin(player),

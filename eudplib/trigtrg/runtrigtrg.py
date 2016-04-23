@@ -77,10 +77,7 @@ def AllocTrigTriggerLink():
 
         orig_tstart = sf.EUDArray(8)
         orig_tend = sf.EUDArray(8)
-
-        runner_end_array = sf.EUDArray(8)
-        for i in range(8):
-            runner_end_array
+        runner_end_array = sf.EUDArray(_runner_end)
 
 
 def GetFirstTrigTrigger(player):
@@ -99,17 +96,8 @@ def TrigTriggerBegin(player):
     return GetFirstTrigTrigger(player)
 
 
-@c.EUDFunc
-def _f(player):
-    cs.EUDSwitch(player)
-    for i in range(8):
-        cs.EUDSwitchCase()(i)
-        cs.EUDReturn(_runner_end[i])
-    cs.EUDEndSwitch()
-
-
 def TrigTriggerEnd(player):
     if isinstance(player, int):
         return _runner_end[player]
     else:
-        return _f(player)
+        return runner_end_array[player]
