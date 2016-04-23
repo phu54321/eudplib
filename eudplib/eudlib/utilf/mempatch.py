@@ -26,38 +26,95 @@ THE SOFTWARE.
 from eudplib import (
     core as c,
     ctrlstru as cs,
+    utils as ut,
+    trigger as t,
 )
 from ..eudarray import EUDArray
 from ..memiof import (
     f_dwread_epd,
-    f_dwwrite_epd
+    f_dwwrite_epd,
+    f_repmovsd_epd,
 )
 
-_patchstack = EUDArray(3 * 8192)
-_ps_top = c.EUDVariable()
+patchMax = 8192
+
+patchstack = EUDArray(3 * patchMax)
+dws_top, ps_top = c.EUDVariable(), c.EUDVariable()
+dwstack = EUDArray(patchMax)
+
+
+def pushpatchstack(value):
+    global ps_top
+    patchstack[ps_top] = value
+    ps_top += 1
+
+
+def poppatchstack():
+    global ps_top
+    ps_top -= 1
+    return patchstack[ps_top]
 
 
 @c.EUDFunc
-def f_dwpatch_epd(addrepd, value):
-    global _patchstack, _ps_top
+def f_dwpatch_epd(dstepd, value):
+    global patchstack, ps_top, dws_top
 
-    prev_value = f_dwread_epd(addrepd)
-    f_dwwrite_epd(addrepd, value)
+    prev_value = f_dwread_epd(dstepd)
+    f_dwwrite_epd(dstepd, value)
+    cs.DoActions([
+        c.SetMemoryEPD(dstepd, c.SetTo, value),
+        c.SetMemoryEPD(ut.EPD(dwstack) + dws_top, c.SetTo, prev_value)
+    ])
 
-    _patchstack[_ps_top] = addrepd
-    _ps_top += 1
-    _patchstack[_ps_top] = prev_value
-    _ps_top += 1
+    pushpatchstack(dstepd)
+    pushpatchstack(ut.EPD(dwstack) + dws_top)
+    pushpatchstack(1)
+    dws_top += 1
+
+
+@c.EUDFunc
+def f_blockpatch_epd(dstepd, srcepd, dwn):
+    """ Patch 4*dwn bytes of memory at dstepd with memory of srcepd.
+
+    .. note::
+        After calling this function, contents at srcepd memory may change.
+        Since new contents are required for :py:`f_unpatchall` to run, you
+        shouldn't use the memory for any other means.
+    """
+
+    global dws_top
+
+    # Push to stack
+    pushpatchstack(dstepd)
+    pushpatchstack(srcepd)
+    pushpatchstack(dwn)
+    dws_top += 1
+
+    # Swap contents btw dstepd, srcepd
+    tmpbuffer = c.Db(1024)
+
+    if cs.EUDWhile()(dwn > 0):
+        copydwn = c.EUDVariable()
+        copydwn << 256
+        t.Trigger(
+            dwn <= 256,
+            copydwn.SetNumber(dwn)
+        )
+        dwn -= copydwn
+
+        f_repmovsd_epd(ut.EPD(tmpbuffer), dstepd, copydwn)
+        f_repmovsd_epd(dstepd, srcepd, copydwn)
+        f_repmovsd_epd(srcepd, ut.EPD(tmpbuffer), copydwn)
+    cs.EUDEndWhile()
 
 
 @c.EUDFunc
 def f_unpatchall():
-    global _ps_top
-    prev_value, addrepd = c.EUDCreateVariables(2)
-    if cs.EUDWhile()(_ps_top >= 1):
-        _ps_top -= 1
-        prev_value << _patchstack[_ps_top]
-        _ps_top -= 1
-        addrepd << _patchstack[_ps_top]
-        f_dwwrite_epd(addrepd, prev_value)
+    global ps_top, dws_top
+    if cs.EUDWhile()(ps_top >= 1):
+        dws_top -= 1
+        dwn = poppatchstack()
+        unpatchsrcepd = poppatchstack()
+        dstepd = poppatchstack()
+        f_repmovsd_epd(dstepd, unpatchsrcepd, dwn)
     cs.EUDEndWhile()

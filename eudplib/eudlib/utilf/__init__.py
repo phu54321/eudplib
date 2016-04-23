@@ -40,6 +40,7 @@ from .random import (
 
 from .mempatch import (
     f_dwpatch_epd,
+    f_blockpatch_epd,
     f_unpatchall,
 )
 
