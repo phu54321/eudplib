@@ -107,6 +107,7 @@ def EUDLoopRange(start, end=None):
     v << start
     if EUDWhile()(v < end):
         yield v
+        EUDLoopSetContinuePoint()
         v += 1
     EUDEndWhile()
     ut.EUDPopBlock('looprangeblock')
