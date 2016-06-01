@@ -27,6 +27,10 @@ THE SOFTWARE.
 _objns = {}
 
 
+def EUDClearNamespace():
+    _objns.clear()
+
+
 def EUDRegisterObjectToNamespace(funcname, obj):
     """ Register object to inline code namespace. """
     if funcname[0] != '_':

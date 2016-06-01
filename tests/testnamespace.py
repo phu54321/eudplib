@@ -12,3 +12,5 @@ for name in eudplib.__all__:
     value = eudplib.__dict__[name]
     if isinstance(value, eudftype):
         print(name, value.size())
+
+print(eudplib.GetEUDNamespace())
