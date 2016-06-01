@@ -70,7 +70,7 @@ def main():
         f_setcurpl(0)
 
         # Loop for every units
-        for unitptr, unitepd in EUDUnitLoop():
+        for unitptr, unitepd in EUDLoopUnit():
             # check unittype
             # /*0x064*/ u16         unitType;
             unittype = f_dwbreak(f_dwread_epd(unitepd + (0x64 // 4)))[0]

@@ -14,6 +14,8 @@ def main():
     j = EUDVariable()
 
     for ptr, epd in EUDLoopTrigger(Player1):
+        i += 1
+    for ptr, epd in EUDLoopTrigger(Player8):
         j += 1
     f_setcurpl(Player2)
     a = f_getcurpl()

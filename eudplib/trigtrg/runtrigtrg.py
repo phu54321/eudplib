@@ -93,10 +93,12 @@ def GetLastTrigTrigger(player):
 
 
 def TrigTriggerBegin(player):
+    AllocTrigTriggerLink()
     return GetFirstTrigTrigger(player)
 
 
 def TrigTriggerEnd(player):
+    AllocTrigTriggerLink()
     if isinstance(player, int):
         return _runner_end[player]
     else:
