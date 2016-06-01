@@ -41,7 +41,7 @@ def EUDLoopList(header_offset, break_offset=None):
     if break_offset is not None:
         cs.EUDWhileNot()(ptr == break_offset)
     else:
-        cs.EUDWhile()([ptr >= 0, ptr <= 0x7FFFFFFF])
+        cs.EUDWhile()([ptr > 0, ptr <= 0x7FFFFFFF])
 
     yield ptr, epd
     cs.EUDSetContinuePoint()
@@ -86,13 +86,9 @@ def EUDLoopSprite():
 def EUDLoopTrigger(player):
     player = c.EncodePlayer(player)
 
-    cs.DoActions([
-        c.SetMemoryEPD(0, c.SetTo, tt.TrigTriggerBegin(player)),
-        c.SetMemoryEPD(1, c.SetTo, tt.GetLastTrigTrigger(player)),
-    ])
-
-    for ptr, epd in EUDLoopList(
-        tt.TrigTriggerBegin(player),
-        tt.TrigTriggerEnd(player)
-    ):
-        yield ptr, epd
+    tbegin = tt.TrigTriggerBegin(player)
+    if cs.EUDIfNot()(tbegin == 0):
+        tend = tt.TrigTriggerEnd(player)
+        for ptr, epd in EUDLoopList(tbegin, tend):
+            yield ptr, epd
+    cs.EUDEndIf()

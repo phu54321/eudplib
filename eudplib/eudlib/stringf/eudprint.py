@@ -167,12 +167,14 @@ def f_dbstr_print(dst, *args):
 _printf_buffer = DBString(1024)
 
 
-def f_simpleprint(*args):
+def f_simpleprint(*args, spaced=True):
     # Add spaces between arguments
-    spaced_args = []
-    for arg in args:
-        spaced_args.extend([arg, ' '])
-    args = spaced_args[:-1]
+    if spaced:
+        spaced_args = []
+        for arg in args:
+            spaced_args.extend([arg, ' '])
+        args = spaced_args[:-1]
 
+    # Print
     f_dbstr_print(_printf_buffer, *args)
     cs.DoActions(_printf_buffer.GetDisplayAction())
