@@ -19,7 +19,7 @@ def main():
     a << 5
     b = a * a * a * a * a
 
-    f_simpleprint('test ', a, ' b: ', b, ' test')
+    f_simpleprint('test ', a, ' b: ', hptr(b), ' test')
 
 
 SaveMap('outputmap/testprint.scx', main)

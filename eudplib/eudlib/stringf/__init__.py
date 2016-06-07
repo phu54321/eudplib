@@ -31,7 +31,9 @@ from .strfunc import (
 
 from .eudprint import (
     f_dbstr_adddw,
+    f_dbstr_addptr,
     f_dbstr_addstr,
+    hptr,
     f_dbstr_print,
     f_simpleprint
 )
