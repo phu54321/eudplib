@@ -10,7 +10,7 @@ LoadMap('outputmap/basemap/basemap.scx')
 
 @EUDFunc
 def f1(a):
-    ret = EUDVariable()
+    ret = EUDVariable(0)
     if EUDIf()(a == 0):
         ret << 1234
     if EUDElse()():

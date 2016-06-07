@@ -45,15 +45,17 @@ from .vbuf import GetCurrentVariableBuffer
 
 class VariableTriggerForward(Expr):
 
-    def __init__(self):
+    def __init__(self, initval):
         super().__init__(self)
-        self._expr = weakref.WeakKeyDictionary()
+        self._vdict = weakref.WeakKeyDictionary()
+        self._initval = initval
 
     def Evaluate(self):
         evb = GetCurrentVariableBuffer()
-        if evb not in self._expr:
-            self._expr[evb] = evb.CreateVarTrigger()
-        return Evaluate(self._expr[evb])
+        if evb not in self._vdict:
+            self._vdict[evb] = evb.CreateVarTrigger(self._initval)
+
+        return Evaluate(self._vdict[evb])
 
 
 class EUDVariable(VariableBase):
@@ -62,8 +64,8 @@ class EUDVariable(VariableBase):
     Full variable.
     '''
 
-    def __init__(self):
-        self._vartrigger = VariableTriggerForward()
+    def __init__(self, initval=0):
+        self._vartrigger = VariableTriggerForward(initval)
         self._varact = self._vartrigger + (8 + 320)
 
     def GetVTable(self):

@@ -24,6 +24,7 @@ THE SOFTWARE.
 '''
 
 from ..eudobj import EUDObject
+from ... import utils as ut
 from ..allocator import RegisterCreatePayloadCallback
 
 
@@ -36,25 +37,32 @@ class EUDVarBuffer(EUDObject):
     def __init__(self):
         super().__init__()
 
-        self._varn = 0
+        self._initvals = []
 
-    def CreateVarTrigger(self):
-        ret = self + (60 * self._varn)
-        self._varn += 1
+    def CreateVarTrigger(self, initval):
+        ret = self + (60 * len(self._initvals))
+        self._initvals.append(initval)
         return ret
 
     def GetDataSize(self):
-        return 2408 + 60 * (self._varn - 1)
+        return 2408 + 60 * (len(self._initvals) - 1)
 
     def WritePayload(self, emitbuffer):
-        output = bytearray(2408 + 60 * (self._varn - 1))
+        output = bytearray(2408 + 60 * (len(self._initvals) - 1))
 
-        for i in range(self._varn):
+        for i in range(len(self._initvals)):
             # 'preserve rawtrigger'
             output[60 * i + 2376:60 * i + 2380] = b'\x04\0\0\0'
 
-        emitbuffer.WriteBytes(output)
+        for i, initval in enumerate(self._initvals):
+            heads = 60 * (i - 1) + 344 if i > 0 else 0
+            heade = 60 * i + 340
+            emitbuffer.WriteBytes(output[heads:heade])
+            emitbuffer.WriteDword(initval)
+            # output[60 * i + 320 + 20:60 * i + 320 + 24] = ut.i2b4(initval)
 
+        tails = 60 * (len(self._initvals) - 1) + 344
+        emitbuffer.WriteBytes(output[tails:])
 
 _evb = None
 
