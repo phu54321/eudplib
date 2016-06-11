@@ -28,6 +28,12 @@ from .modcurpl import (
     f_getcurpl
 )
 
+from .logic import (
+    EUDAnd,
+    EUDOr,
+    EUDNot
+)
+
 from .userpl import f_getuserplayerid
 
 from .random import (
