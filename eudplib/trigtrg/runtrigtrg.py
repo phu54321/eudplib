@@ -38,6 +38,10 @@ c.PopTriggerScope()
 
 @c.EUDFunc
 def RunTrigTrigger():
+    from .. import eudlib as sf
+
+    oldcp = sf.f_getcurpl()
+
     for player in range(8):
         skipt = c.Forward()
         cs.EUDJumpIf(
@@ -61,6 +65,8 @@ def RunTrigTrigger():
             )
         )
         skipt << c.NextTrigger()
+
+    sf.f_setcurpl(oldcp)
 
 
 #######
