@@ -70,6 +70,7 @@ class EUDFuncN:
 
     def __init__(self, fdecl_func, argn):
         self._argn = argn
+        self._retn = None
         self._fdecl_func = fdecl_func
         functools.update_wrapper(self, fdecl_func)
         self._fstart = None
@@ -116,12 +117,15 @@ class EUDFuncN:
         SetCurrentBlockStruManager(prev_bsm)
 
         self._fend << fend
-
+        # No return -> set return count to 0
+        if self._retn is None:
+            self._retn = 0
         _setCurrentCompiledFunc(lastCompiledFunc)
 
     def _AddReturn(self, retv, needjump):
         if self._frets is None:
             self._frets = [EUDVariable() for _ in range(len(retv))]
+            self._retn = len(retv)
 
         ut.ep_assert(
             len(retv) == len(self._frets),
