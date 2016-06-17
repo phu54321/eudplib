@@ -24,6 +24,7 @@ THE SOFTWARE.
 '''
 
 import inspect
+import functools
 
 from .eudfuncn import EUDFuncN
 from ... import utils as ut
@@ -40,4 +41,10 @@ def EUDFunc(fdecl_func):
         'No variadic keyword arguments (*kwargs) allowed for EUDFunc.'
     )
 
-    return EUDFuncN(fdecl_func, len(argspec[0]))
+    _f = EUDFuncN(fdecl_func, len(argspec[0]))
+
+    @functools.wraps(fdecl_func)
+    def _fcaller(*args):
+        return _f(*args)
+
+    return _f
