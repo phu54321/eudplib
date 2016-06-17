@@ -33,6 +33,8 @@ import random
 _found_objects = []
 _found_objects_set = set()
 _untraversed_objects = []
+_dynamic_objects = []
+_dynamic_objects_set = set()
 _alloctable = {}
 _payload_size = 0
 
@@ -103,6 +105,8 @@ def CollectObjects(root):
     global phase
     global _found_objects
     global _found_objects_set
+    global _dynamic_objects
+    global _dynamic_objects_set
     global _untraversed_objects
 
     phase = PHASE_COLLECTING
@@ -110,6 +114,8 @@ def CollectObjects(root):
     objc = ObjCollector()
     _found_objects = []
     _found_objects_set = set()
+    _dynamic_objects = []
+    _dynamic_objects_set = set()
     _untraversed_objects = []
 
     # Evaluate root to register root object.
@@ -117,10 +123,18 @@ def CollectObjects(root):
     expr.Evaluate(root)
 
     while _untraversed_objects:
-        obj = _untraversed_objects.pop()
-        objc.StartWrite()
-        obj.WritePayload(objc)
-        objc.EndWrite()
+        while _untraversed_objects:
+            obj = _untraversed_objects.pop()
+
+            objc.StartWrite()
+            obj.WritePayload(objc)
+            objc.EndWrite()
+
+        # Check for new objects
+        for obj in _dynamic_objects[:]:
+            objc.StartWrite()
+            obj.WritePayload(objc)
+            objc.EndWrite()
 
     if len(_found_objects) == 0:
         raise ut.EPError('No object collected')
@@ -322,10 +336,15 @@ def GetObjectAddr(obj):
     global _found_objects
     global _found_objects_set
     global _untraversed_objects
+    global _dynamic_objects
+    global _dynamic_objects_set
 
     if phase == PHASE_COLLECTING:
         if obj not in _found_objects_set:
             _untraversed_objects.append(obj)
+            if obj.DynamicConstructed():
+                _dynamic_objects.append(obj)
+                _dynamic_objects_set.add(obj)
             _found_objects.append(obj)
             _found_objects_set.add(obj)
 

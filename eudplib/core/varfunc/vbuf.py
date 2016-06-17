@@ -38,6 +38,9 @@ class EUDVarBuffer(EUDObject):
 
         self._initvals = []
 
+    def DynamicConstructed(self):
+        return True
+
     def CreateVarTrigger(self, initval):
         ret = self + (60 * len(self._initvals))
         self._initvals.append(initval)
