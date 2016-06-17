@@ -3,7 +3,6 @@ import os
 
 sys.path.insert(0, os.path.abspath('..\\'))
 
-
 from eudplib import *
 
 LoadMap('outputmap/basemap/basemap.scx')
@@ -13,10 +12,7 @@ LoadMap('outputmap/basemap/basemap.scx')
 def main():
     f_initextstr()
 
-    a = EUDVariable()
-    b = EUDVariable()
-
-    a << 5
+    a = EUDVariable(5)
     b = a * a * a * a * a
 
     f_simpleprint('test ', a, ' b: ', hptr(b), ' test')

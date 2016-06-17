@@ -24,7 +24,6 @@ THE SOFTWARE.
 '''
 
 from ..eudobj import EUDObject
-from ... import utils as ut
 from ..allocator import RegisterCreatePayloadCallback
 
 
@@ -55,13 +54,13 @@ class EUDVarBuffer(EUDObject):
             output[60 * i + 2376:60 * i + 2380] = b'\x04\0\0\0'
 
         for i, initval in enumerate(self._initvals):
-            heads = 60 * (i - 1) + 344 if i > 0 else 0
-            heade = 60 * i + 340
+            heads = 60 * (i - 1) + 352 if i > 0 else 0
+            heade = 60 * i + 348
             emitbuffer.WriteBytes(output[heads:heade])
             emitbuffer.WriteDword(initval)
             # output[60 * i + 320 + 20:60 * i + 320 + 24] = ut.i2b4(initval)
 
-        tails = 60 * (len(self._initvals) - 1) + 344
+        tails = 60 * (len(self._initvals) - 1) + 352
         emitbuffer.WriteBytes(output[tails:])
 
 _evb = None
