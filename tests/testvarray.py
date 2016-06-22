@@ -17,10 +17,6 @@ def main():
     f_simpleprint(hptr(a))
 
     for i in range(10):
-        # f_simpleprint(a[i])
-        f_simpleprint(f_dwread_epd(
-            EPD(a + 60 * i + 8 + 320 + 20)
-        ))
-
+        f_simpleprint(a[i])
 
 SaveMap('outputmap\\testvarray.scx', main)

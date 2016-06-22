@@ -30,6 +30,8 @@ from .eudv import (
     SetVariables,
 )
 
+from .vararray import EUDVArray
+
 from .eudlv import EUDLightVariable
 from .eudf import EUDFunc
 from .eudfptr import EUDFuncPtr
