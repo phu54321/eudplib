@@ -1,4 +1,5 @@
 import weakref
+import collections
 
 from .. import rawtrigger as bt
 from ..allocator import (
@@ -17,21 +18,9 @@ from .eudv import EUDVariable, SeqCompute
 from .vbuf import GetCurrentVariableBuffer
 
 
-# This file depends strictly on implementation of core/vbuf.py
-class EUDVArray(Expr):
-    def __init__(self, size, initvars=None):
+class EUDVArrayForward(Expr):
+    def __init__(self, initvars):
         super().__init__(self)
-
-        # Variable normalization
-        if size == 0:
-            size = 1
-
-        if initvars is None:
-            initvars = [0] * size
-
-        ep_assert(size >= 1, 'Invalid size %s given' % size)
-        ep_assert(len(initvars) == size, 'Invalid initializer')
-
         self._initvars = initvars
         self._vdict = weakref.WeakKeyDictionary()
 
@@ -43,11 +32,29 @@ class EUDVArray(Expr):
 
         return Evaluate(self._vdict[evb])
 
+
+class EUDVArray(Expr):
+    def __init__(self, initvars):
+        super().__init__(self)
+        if isinstance(initvars, int):
+            initvars = [0] * initvars
+
+        if isinstance(initvars, collections.Iterable):
+            baseobj = EUDVArrayForward(initvars)
+        else:
+            baseobj = initvars
+
+        self._baseobj = baseobj
+        self._baseobjepd = EPD(baseobj)
+
+    def Evaluate(self):
+        return Evaluate(self._baseobj)
+
     def getItemPtr(self, i):
-        return self + 60 * i
+        return self._baseobj + 60 * i
 
     def getItemEPD(self, i):
-        return EPD(self) + 15 * i
+        return self._baseobjepd + 15 * i
 
     def get(self, i):
         # This function is hand-optimized
@@ -97,3 +104,29 @@ class EUDVArray(Expr):
 
     def __setitem__(self, i, value):
         return self.set(i, value)
+
+
+class EUDVArrayData(Expr):
+    def __init__(self, size, initvars=None):
+        super().__init__(self)
+
+        # Variable normalization
+        if size == 0:
+            size = 1
+
+        if initvars is None:
+            initvars = [0] * size
+
+        ep_assert(size >= 1, 'Invalid size %s given' % size)
+        ep_assert(len(initvars) == size, 'Invalid initializer')
+
+        self._initvars = initvars
+        self._vdict = weakref.WeakKeyDictionary()
+
+    def Evaluate(self):
+        evb = GetCurrentVariableBuffer()
+        if evb not in self._vdict:
+            variables = [evb.CreateVarTrigger(ival) for ival in self._initvars]
+            self._vdict[evb] = variables[0]
+
+        return Evaluate(self._vdict[evb])

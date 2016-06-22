@@ -14,9 +14,10 @@ def main():
     for i in range(10):
         a[i] = 2 ** i
 
-    f_simpleprint(hptr(a))
+    b = EUDVariable(a)
+    c = EUDVArray(b)
 
     for i in range(10):
-        f_simpleprint(a[i])
+        f_simpleprint(c[i])
 
 SaveMap('outputmap\\testvarray.scx', main)
