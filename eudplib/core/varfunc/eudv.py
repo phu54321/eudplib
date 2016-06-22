@@ -43,6 +43,7 @@ from .vbase import VariableBase
 from .vbuf import GetCurrentVariableBuffer
 
 
+# Unused variable don't need to be allocated.
 class VariableTriggerForward(Expr):
 
     def __init__(self, initval):
@@ -71,7 +72,7 @@ class EUDVariable(VariableBase):
     def GetVTable(self):
         return self._vartrigger
 
-    def GetVariableMemoryAddr(self):
+    def getValueAddr(self):
         return self._varact + 20
 
     def __hash__(self):
@@ -81,7 +82,7 @@ class EUDVariable(VariableBase):
 
     def QueueAssignTo(self, dest):
         try:
-            dest = EPD(dest.GetVariableMemoryAddr())
+            dest = EPD(dest.getValueAddr())
         except AttributeError:
             pass
 
@@ -92,7 +93,7 @@ class EUDVariable(VariableBase):
 
     def QueueAddTo(self, dest):
         try:
-            dest = EPD(dest.GetVariableMemoryAddr())
+            dest = EPD(dest.getValueAddr())
         except AttributeError:
             pass
 
@@ -103,7 +104,7 @@ class EUDVariable(VariableBase):
 
     def QueueSubtractTo(self, dest):
         try:
-            dest = EPD(dest.GetVariableMemoryAddr())
+            dest = EPD(dest.getValueAddr())
         except AttributeError:
             pass
 
@@ -324,7 +325,7 @@ def EUDCreateVariables(varn):
 
 def _GetComputeDest(dst):
     try:
-        return EPD(dst.GetVariableMemoryAddr())
+        return EPD(dst.getValueAddr())
     except AttributeError:
         return dst
 
