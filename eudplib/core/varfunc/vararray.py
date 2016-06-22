@@ -6,7 +6,7 @@ from ..allocator import (
     Evaluate,
     Forward,
     Expr,
-    IsValidExpr
+    IsValidExpr,
 )
 
 from ...utils import (
@@ -41,8 +41,12 @@ class EUDVArray(Expr):
 
         if isinstance(initvars, collections.Iterable):
             baseobj = EUDVArrayForward(initvars)
-        else:
+
+        elif IsValidExpr(initvars):
             baseobj = initvars
+        else:
+            baseobj = EUDVariable()
+            baseobj << initvars
 
         self._baseobj = baseobj
         self._baseobjepd = EPD(baseobj)

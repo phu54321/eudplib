@@ -31,6 +31,7 @@ from .eudv import (
 )
 
 from .vararray import EUDVArray
+from .eudstruct import EUDStruct
 
 from .eudlv import EUDLightVariable
 from .eudf import EUDFunc
