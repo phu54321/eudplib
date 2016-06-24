@@ -24,10 +24,11 @@ THE SOFTWARE.
 '''
 
 from . import rlocint
+from .handle import Handle
 from eudplib import utils as ut
 
 
-class Expr:
+class Expr(Handle):
 
     ''' Class for general expression with rlocints.
     '''

@@ -23,23 +23,42 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-from .expr import (
-    Expr,
-    Forward,
-    Evaluate,
-    IsValidExpr
-)
+from . import rlocint
+from eudplib import utils as ut
 
-from .handle import Handle
 
-from .rlocint import (
-    RlocInt,
-    toRlocInt
-)
+class Handle:
 
-from .payload import (
-    GetObjectAddr,
-    CreatePayload,
-    CompressPayload,
-    RegisterCreatePayloadCallback,
-)
+    ''' Class for general expression with rlocints.
+    '''
+
+    def __init__(self, baseobj):
+        self._baseobj = baseobj
+
+    def addr(self):
+        return self._baseobj
+
+    def __add__(self, other):
+        return self._baseobj + other
+
+    def __radd__(self, other):
+        return other + self._baseobj
+
+    def __sub__(self, other):
+        return self._baseobj - other
+
+    def __rsub__(self, other):
+        return other - self._baseobj
+
+    def __mul__(self, k):
+        return self._baseobj * k
+
+    def __rmul__(self, k):
+        return k * self._baseobj
+
+    def __floordiv__(self, k):
+        return self._baseobj // k
+
+
+def Addr(obj):
+    return obj.getBaseObj()

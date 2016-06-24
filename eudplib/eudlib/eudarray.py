@@ -23,12 +23,14 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
+import collections
+
 from .. import core as c
 from eudplib import utils as ut
 from .memiof import f_dwread_epd, f_dwwrite_epd
 
 
-class EUDArray(c.EUDObject):
+class EUDArrayData(c.EUDObject):
     '''
     Structure for storing multiple values.
     '''
@@ -70,6 +72,30 @@ class EUDArray(c.EUDObject):
     @c.EUDFuncMethod
     def set(self, key, item):
         return f_dwwrite_epd(ut.EPD(self) + key, item)
+
+    def __setitem__(self, key, item):
+        return self.set(key, item)
+
+
+class EUDArray(c.Handle):
+    def __init__(self, initvals):
+        if (
+            isinstance(initvals, int) or
+            isinstance(initvals, collections.Iterable)
+        ):
+            initvals = EUDArrayData(initvals)
+
+        super().__init__(initvals)
+        self._epd = ut.EPD(self.addr())
+
+    def get(self, key):
+        return f_dwread_epd(self._epd + key)
+
+    def __getitem__(self, key):
+        return self.get(key)
+
+    def set(self, key, item):
+        return f_dwwrite_epd(self._epd + key, item)
 
     def __setitem__(self, key, item):
         return self.set(key, item)
