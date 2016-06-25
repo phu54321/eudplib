@@ -30,7 +30,7 @@ from .expr import (
     IsValidExpr
 )
 
-from .handle import Handle
+from .objview import EUDObjectView
 
 from .rlocint import (
     RlocInt,

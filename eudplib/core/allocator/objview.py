@@ -23,41 +23,46 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-from . import rlocint
 from eudplib import utils as ut
 
 
-class Handle:
+class EUDObjectView:
 
     ''' Class for general expression with rlocints.
     '''
 
-    def __init__(self, baseobj):
-        self._baseobj = baseobj
+    def __init__(self, objAddr):
+        self._objEPD = ut.EPD(objAddr)
+        self._objAddr = objAddr
 
     def addr(self):
-        return self._baseobj
+        return self._objAddr
+
+    def epd(self):
+        return self._objEPD
 
     def __add__(self, other):
-        return self._baseobj + other
+        return self._objAddr + other
 
     def __radd__(self, other):
-        return other + self._baseobj
+        return other + self._objAddr
 
     def __sub__(self, other):
-        return self._baseobj - other
+        return self._objAddr - other
 
     def __rsub__(self, other):
-        return other - self._baseobj
+        return other - self._objAddr
 
     def __mul__(self, k):
-        return self._baseobj * k
+        return self._objAddr * k
 
     def __rmul__(self, k):
-        return k * self._baseobj
+        return k * self._objAddr
 
     def __floordiv__(self, k):
-        return self._baseobj // k
+        if k == 4:
+            return self._objEPD + (0x58A364 // 4)
+        return self._objAddr // k
 
 
 def Addr(obj):

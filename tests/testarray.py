@@ -11,7 +11,7 @@ LoadMap('outputmap/basemap/basemap.scx')
 @EUDFunc
 def main():
     k = EUDArray(10)
-    n = EUDVariable(Addr(k))
+    n = EUDVariable(k.addr())
     b = EUDVariable()
     b << n
     a = EUDArray(b)

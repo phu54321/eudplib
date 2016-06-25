@@ -77,15 +77,17 @@ class EUDArrayData(c.EUDObject):
         return self.set(key, item)
 
 
-class EUDArray(c.Handle):
-    def __init__(self, initvals):
+class EUDArray(c.EUDObjectView):
+    def __init__(self, initval):
         if (
-            isinstance(initvals, int) or
-            isinstance(initvals, collections.Iterable)
+            isinstance(initval, int) or
+            isinstance(initval, collections.Iterable)
         ):
-            initvals = EUDArrayData(initvals)
+            dataObj = EUDArrayData(initval)
+        else:
+            dataObj = initval
 
-        super().__init__(initvals)
+        super().__init__(dataObj)
         self._epd = ut.EPD(self.addr())
 
     def get(self, key):
