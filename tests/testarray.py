@@ -10,12 +10,15 @@ LoadMap('outputmap/basemap/basemap.scx')
 
 @EUDFunc
 def main():
-    a = EUDArray(10)
+    k = EUDArray(10)
+    n = EUDVariable(k.addr())
+    b = EUDVariable()
+    b << n
+    a = EUDArray(b)
     for i in range(10):
         a.set(i, 2 ** i)
 
     for i in range(10):
-        f_dwwrite_epd(i, a.get(i) + 10)
-
+        f_simpleprint(a.get(i) + 10)
 
 SaveMap('outputmap\\testarray.scx', main)
