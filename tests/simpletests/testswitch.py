@@ -1,15 +1,7 @@
-import sys
-import os
-
-sys.path.insert(0, os.path.abspath('..\\'))
+from helper import *
 
 
-from eudplib import *
-
-LoadMap('outputmap/basemap/basemap.scx')
-
-
-@EUDFunc
+@TestInstance
 def main():
     i = EUDVariable()
     s = EUDVariable()
@@ -38,7 +30,4 @@ def main():
         EUDEndSwitch()
     EUDEndWhile()
 
-    f_simpleprint(s)  # Expected output : 34421
-
-
-SaveMap('outputmap/testswitch.scx', main)
+    test_assert("Switch test", s == 34421)

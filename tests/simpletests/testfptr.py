@@ -1,12 +1,4 @@
-import sys
-import os
-
-sys.path.insert(0, os.path.abspath('..\\'))
-
-
-from eudplib import *
-
-LoadMap('outputmap/basemap/basemap.scx')
+from helper import *
 
 
 @EUDFunc
@@ -29,14 +21,18 @@ def f_addmul(a, b):
     return a + b, a * b
 
 
+noretCheck = EUDVariable()
+
+
 @EUDFunc
 def testnoret():
-    f_simpleprint('Test function')
-    DoActions(DisplayText('Tello'))
+    f_simpleprint(' - Should execute normally')
+    DoActions(DisplayText(' - c'))
+    noretCheck << 1
 
 
-@EUDFunc
-def main():
+@TestInstance
+def test_fptr():
     p = EUDFuncPtr(2, 1)
 
     # Test - Simple pattern
@@ -61,10 +57,11 @@ def main():
     q << f_div
     c1, c2 = q(17, 3)
     f_simpleprint(a1, a2, b1, b2, c1, c2)  # 2 2 17 60 5 2
+    test_assert("Function pointer test", [
+        a1 == 2, a2 == 2, b1 == 17, b2 == 60, c1 == 5, c2 == 2,
+    ])
 
     # Test 3 - no arg no ret
     r = EUDFuncPtr(0, 0, testnoret)
     r()
-
-
-SaveMap('outputmap/testfptr.scx', main)
+    test_assert("Function pointer test (0.0 Func)", noretCheck == 1)

@@ -2,7 +2,7 @@ from helper import *
 
 
 @TestInstance
-def test_array_simple():
+def test_array():
     k = EUDArray(10)
     n = EUDVariable(k.addr())
     b = EUDVariable()
