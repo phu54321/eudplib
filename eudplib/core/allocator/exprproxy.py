@@ -25,10 +25,7 @@ class ExprProxy:
     ''' Class which can contain both constxpr and eudvariable '''
 
     def __init__(self, initval):
-        if isinstance(initval, ExprProxy):
-            self._value = initval._value
-        else:
-            self._value = initval
+        self._value = initval
 
     # Proxy operators
     def __add__(self, other):

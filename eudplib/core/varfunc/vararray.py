@@ -19,7 +19,7 @@ from .eudv import EUDVariable, SeqCompute
 from .vbuf import GetCurrentVariableBuffer
 
 
-class EUDVArrayForward(ConstExpr):
+class EUDVArrayData(ConstExpr):
     def __init__(self, initvars):
         super().__init__(self)
         self._initvars = initvars
@@ -40,7 +40,7 @@ class EUDVArray(ExprProxy):
             initvars = [0] * initvars
 
         if isinstance(initvars, collections.Iterable):
-            baseobj = EUDVArrayForward(initvars)
+            baseobj = EUDVArrayData(initvars)
 
         elif IsValidExpr(initvars):
             baseobj = initvars
@@ -105,29 +105,3 @@ class EUDVArray(ExprProxy):
 
     def __setitem__(self, i, value):
         return self.set(i, value)
-
-
-class EUDVArrayData(ConstExpr):
-    def __init__(self, size, initvars=None):
-        super().__init__(self)
-
-        # Variable normalization
-        if size == 0:
-            size = 1
-
-        if initvars is None:
-            initvars = [0] * size
-
-        ep_assert(size >= 1, 'Invalid size %s given' % size)
-        ep_assert(len(initvars) == size, 'Invalid initializer')
-
-        self._initvars = initvars
-        self._vdict = weakref.WeakKeyDictionary()
-
-    def Evaluate(self):
-        evb = GetCurrentVariableBuffer()
-        if evb not in self._vdict:
-            variables = [evb.CreateVarTrigger(ival) for ival in self._initvars]
-            self._vdict[evb] = variables[0]
-
-        return Evaluate(self._vdict[evb])
