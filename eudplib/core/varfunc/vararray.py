@@ -46,7 +46,6 @@ class EUDVArray(EUDObjectView):
             baseobj = initvars
         else:
             baseobj = EUDVariable()
-            print(initvars)
             baseobj << initvars
 
         super().__init__(baseobj)

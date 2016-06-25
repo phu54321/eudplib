@@ -1,16 +1,19 @@
 import helper
 from simpletests import (
-    testarray,
+    # testperf,
+    # testprint,
+
     testblockstru,
     testcurpl,
     testpatch,
-    # testperf,
-    testprint,
+    testarray,
     testptrigger,
     testptrjump,
     testswitch,
     testvartrg,
     testmultiret,
+    testvarray,
+    teststruct,
 )
 
 helper.CompressPayload(True)
