@@ -1,9 +1,4 @@
-import sys
-import os
-
-sys.path.insert(0, os.path.abspath('..\\'))
-
-from eudplib import *
+from helper import *
 
 LoadMap('outputmap/basemap/basemap.scx')
 
@@ -18,7 +13,6 @@ def main():
     for i in range(10):
         a.set(i, 2 ** i)
 
-    for i in range(10):
-        f_simpleprint(a.get(i) + 10)
+    test_assert("Basic array test", [a[i] == 2 ** i for i in range(10)])
 
 SaveMap('outputmap\\testarray.scx', main)
