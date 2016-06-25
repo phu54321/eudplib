@@ -30,7 +30,7 @@ from .. import rawtrigger as bt
 from ..allocator import (
     Evaluate,
     Forward,
-    Expr,
+    ConstExpr,
     IsValidExpr
 )
 from ...utils import (
@@ -44,7 +44,7 @@ from .vbuf import GetCurrentVariableBuffer
 
 
 # Unused variable don't need to be allocated.
-class VariableTriggerForward(Expr):
+class VariableTriggerForward(ConstExpr):
 
     def __init__(self, initval):
         super().__init__(self)

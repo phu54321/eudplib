@@ -27,7 +27,7 @@ from . import rlocint
 from eudplib import utils as ut
 
 
-class Expr:
+class ConstExpr:
 
     ''' Class for general expression with rlocints.
     '''
@@ -43,17 +43,17 @@ class Expr:
     def __add__(self, other):
         if not isinstance(other, int):
             return NotImplemented
-        return Expr(self.baseobj, self.offset + other, self.rlocmode)
+        return ConstExpr(self.baseobj, self.offset + other, self.rlocmode)
 
     def __radd__(self, other):
         if not isinstance(other, int):
             return NotImplemented
-        return Expr(self.baseobj, self.offset + other, self.rlocmode)
+        return ConstExpr(self.baseobj, self.offset + other, self.rlocmode)
 
     def __sub__(self, other):
         if not isinstance(other, int):
             return NotImplemented
-        if isinstance(other, Expr):
+        if isinstance(other, ConstExpr):
             ut.ep_assert(
                 self.baseobj == other.baseobj and
                 self.rlocmode == other.rlocmode,
@@ -62,10 +62,10 @@ class Expr:
             return self.offset - other.offset
 
         else:
-            return Expr(self.baseobj, self.offset - other, self.rlocmode)
+            return ConstExpr(self.baseobj, self.offset - other, self.rlocmode)
 
     def __rsub__(self, other):
-        if isinstance(other, Expr):
+        if isinstance(other, ConstExpr):
             ut.ep_assert(
                 self.baseobj == other.baseobj and
                 self.rlocmode == other.rlocmode,
@@ -77,17 +77,17 @@ class Expr:
             return NotImplemented
 
         else:
-            return Expr(self.baseobj, other - self.offset, -self.rlocmode)
+            return ConstExpr(self.baseobj, other - self.offset, -self.rlocmode)
 
     def __mul__(self, k):
         if not isinstance(k, int):
             return NotImplemented
-        return Expr(self.baseobj, self.offset * k, self.rlocmode * k)
+        return ConstExpr(self.baseobj, self.offset * k, self.rlocmode * k)
 
     def __rmul__(self, k):
         if not isinstance(k, int):
             return NotImplemented
-        return Expr(self.baseobj, self.offset * k, self.rlocmode * k)
+        return ConstExpr(self.baseobj, self.offset * k, self.rlocmode * k)
 
     def __floordiv__(self, k):
         if not isinstance(k, int):
@@ -97,10 +97,10 @@ class Expr:
             (self.rlocmode % k == 0 and self.offset % k == 0),
             'Address not divisible'
         )
-        return Expr(self.baseobj, self.offset // k, self.rlocmode // k)
+        return ConstExpr(self.baseobj, self.offset // k, self.rlocmode // k)
 
 
-class Forward(Expr):
+class Forward(ConstExpr):
 
     '''Class for forward definition.
     '''
@@ -142,4 +142,4 @@ def Evaluate(x):
 
 
 def IsValidExpr(x):
-    return isinstance(x, Expr) or isinstance(x, int)
+    return isinstance(x, ConstExpr) or isinstance(x, int)

@@ -5,7 +5,7 @@ from .. import rawtrigger as bt
 from ..allocator import (
     Evaluate,
     Forward,
-    Expr,
+    ConstExpr,
     IsValidExpr,
     EUDObjectView
 )
@@ -19,7 +19,7 @@ from .eudv import EUDVariable, SeqCompute
 from .vbuf import GetCurrentVariableBuffer
 
 
-class EUDVArrayForward(Expr):
+class EUDVArrayForward(ConstExpr):
     def __init__(self, initvars):
         super().__init__(self)
         self._initvars = initvars
@@ -106,7 +106,7 @@ class EUDVArray(EUDObjectView):
         return self.set(i, value)
 
 
-class EUDVArrayData(Expr):
+class EUDVArrayData(ConstExpr):
     def __init__(self, size, initvars=None):
         super().__init__(self)
 

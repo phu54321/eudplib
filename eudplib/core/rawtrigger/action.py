@@ -23,11 +23,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-from ..allocator import Expr, Evaluate, IsValidExpr
+from ..allocator import ConstExpr, Evaluate, IsValidExpr
 from eudplib import utils as ut
 
 
-class Action(Expr):
+class Action(ConstExpr):
 
     '''
     Action class.

@@ -90,7 +90,7 @@ class DBString(c.EUDObject):
         return acts
 
 
-class ExtendedStringIndex_FW(c.Expr):
+class ExtendedStringIndex_FW(c.ConstExpr):
 
     def __init__(self, resetter):
         super().__init__(self)
