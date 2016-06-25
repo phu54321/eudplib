@@ -1,10 +1,8 @@
 from helper import *
 
-LoadMap('outputmap/basemap/basemap.scx')
 
-
-@EUDFunc
-def main():
+@TestInstance
+def test_array():
     k = EUDArray(10)
     n = EUDVariable(k.addr())
     b = EUDVariable()
@@ -14,5 +12,3 @@ def main():
         a.set(i, 2 ** i)
 
     test_assert("Basic array test", [a[i] == 2 ** i for i in range(10)])
-
-SaveMap('outputmap\\testarray.scx', main)

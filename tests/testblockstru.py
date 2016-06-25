@@ -1,22 +1,19 @@
-import sys
-import os
-
-sys.path.insert(0, os.path.abspath('..\\'))
-
-from eudplib import *
-
-LoadMap('outputmap/basemap/basemap.scx')
+from helper import *
 
 
-@EUDFunc
-def main():
-    if EUDWhile()(Always()):
-        f_setcurpl(Player1)
-        DoActions(DisplayText("test a"))
-        DoActions(DisplayText("test b"))
-        DoActions(DisplayText("test c"))
-        EUDDoEvents()
+@TestInstance
+def test_blockstru():
+    # LoopN
+    i = EUDVariable(0)
+    if EUDLoopN()(5):
+        i += 1
+    EUDEndLoopN()
+    test_assert("EUDLoopN test", i == 5)
+
+    # While
+    i, j = EUDCreateVariables(2)
+    if EUDWhile()(i < 100):
+        i += 1
+        j += 3
     EUDEndWhile()
-
-
-SaveMap('outputmap/testblockstru.scx', main)
+    test_assert("EUDWhile test", j == 300)
