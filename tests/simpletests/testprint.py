@@ -10,4 +10,4 @@ def main():
     f_simpleprint(" \x03- \x04 Print testing")
     f_simpleprint('    \x04test ', a, ' b: ', hptr(b), ' test')
     f_simpleprint('    \x04test  5  b:  00000C35  test')
-    test_wait(36)
+    test_wait(12)

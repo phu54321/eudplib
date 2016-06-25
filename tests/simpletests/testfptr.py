@@ -57,11 +57,11 @@ def test_fptr():
     q << f_div
     c1, c2 = q(17, 3)
     f_simpleprint(a1, a2, b1, b2, c1, c2)  # 2 2 17 60 5 2
-    test_assert("test_fptr", [
-        a1 == 2, a2 == 2, b1 == 17, b2 == 60, c1 == 5, c2 == 2
+    test_assert("Function pointer test", [
+        a1 == 2, a2 == 2, b1 == 17, b2 == 60, c1 == 5, c2 == 2,
     ])
 
     # Test 3 - no arg no ret
     r = EUDFuncPtr(0, 0, testnoret)
     r()
-    test_assert("test_fptr_noretarg", noretCheck == 1)
+    test_assert("Function pointer test (0.0 Func)", noretCheck == 1)

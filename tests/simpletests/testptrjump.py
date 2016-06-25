@@ -15,4 +15,4 @@ def test_ptrjump():
     t << NextTrigger()
     testvar += 8
 
-    test_assert("test_ptrjump", testvar == 11)
+    test_assert("Pointer jump test", testvar == 11)

@@ -4,12 +4,13 @@ from simpletests import (
     testblockstru,
     testcurpl,
     testpatch,
-    testperf,
+    # testperf,
     testprint,
     testptrigger,
     testptrjump,
     testswitch,
-    testvartrg
+    testvartrg,
+    testmultiret,
 )
 
 helper.CompressPayload(True)

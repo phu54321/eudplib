@@ -21,14 +21,9 @@ def test_vmixedtrg():
         Deaths(0, Exactly, 0x3fe9d727, 0),  # EPD(0) == 0x3fe9d727
         Deaths(1, Exactly, 30, 0),
         Deaths(2, Exactly, -48, 0),
-    ])
-
-    test_assert('a', [
         Deaths(3, Exactly, 123, 2),
         Deaths(2, Exactly, 2, 2),
     ])
-
-    test_wait(10000)
 
     DoActions([
         SetDeaths(AllPlayers, SetTo, 0, 0),

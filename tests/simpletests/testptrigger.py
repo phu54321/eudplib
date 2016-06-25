@@ -29,7 +29,7 @@ def test_ptrigger():
         )
     EUDEndPlayerLoop()
 
-    test_assert("test_ptrigger", [
+    test_assert("PTrigger test", [
         Deaths(P1, Exactly, 3, "Terran Marine"),
         Deaths(P7, Exactly, 1, "Terran Marine"),
         Deaths(P8, Exactly, 0, "Terran Marine"),
