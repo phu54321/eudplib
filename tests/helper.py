@@ -20,16 +20,14 @@ def test_assert(testname, condition):
     if EUDIf()(condition):
         f_simpleprint("\x07[ OK ] \x04%s" % testname)
     if EUDElse()():
-        f_simpleprint("\x08[FAIL] \x04%s" % testname)
+        f_simpleprint("\x08[FAIL] %s" % testname)
         failedTestDb = DBString(testname)
         _failedTest[_failedNum] = failedTestDb
         _failedNum += 1
     EUDEndIf()
 
     _testNum += 1
-
-    DoActions([SetMemory(0x6509A0, SetTo, 0)])
-    EUDDoEvents()
+    test_wait(0)
 
 
 def test_complete():
@@ -56,3 +54,8 @@ def _testmain():
 def test_runall():
     LoadMap("outputmap/basemap/basemap.scx")
     SaveMap("outputmap/testall.scx", _testmain)
+
+
+def test_wait(time):
+    DoActions([SetMemory(0x6509A0, SetTo, time)])
+    EUDDoEvents()

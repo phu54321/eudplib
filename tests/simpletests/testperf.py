@@ -1,11 +1,4 @@
-import sys
-import os
-
-sys.path.insert(0, os.path.abspath('..\\'))
-
-from eudplib import *
-
-LoadMap('outputmap/basemap/basemap.scx')
+from helper import *
 
 
 @EUDFunc
@@ -28,14 +21,10 @@ def perftest(funcname, func):
     func()
     EUDDoEvents()
     endtm = f_dwread_epd(EPD(0x51CE8C))
-    f_simpleprint("[%s] Elapsed time : " % funcname, starttm - endtm)
+    elapsedtime = starttm - endtm
+    f_simpleprint("\x03 - \x04[%s] Elapsed time : " % funcname, elapsedtime)
 
 
-@EUDFunc
-def main():
-    EUDDoEvents()
-
+@TestInstance
+def test_perf():
     perftest("multest", multest)
-
-
-SaveMap('outputmap/perfest.scx', main)
