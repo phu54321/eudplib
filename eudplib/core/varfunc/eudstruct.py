@@ -1,7 +1,8 @@
 from .vararray import EUDVArray
+from ..allocator import EUDObjectView
 
 
-class EUDStruct:
+class EUDStruct(EUDObjectView):
     def __init__(self, initvar=None):
         basetype = type(self)
         fields = basetype._fields_
@@ -16,6 +17,7 @@ class EUDStruct:
         else:
             self._data = EUDVArray(initvar)
 
+        super().__init__(self._data)
         self._initialized = True
 
     def __getattr__(self, name):

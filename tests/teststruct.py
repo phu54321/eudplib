@@ -18,6 +18,12 @@ def main():
     a.x = 5
     a.y = 7
 
-    f_simpleprint(a.x, a.y)
+    b = TestStruct(a.addr())
+    c = TestStruct(b.addr())
+    d = TestStruct(c.addr())
+
+    c.x = 3
+
+    f_simpleprint(d.x, d.y)
 
 SaveMap('outputmap\\teststruct.scx', main)

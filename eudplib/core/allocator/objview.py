@@ -32,6 +32,8 @@ class EUDObjectView:
     '''
 
     def __init__(self, objAddr):
+        if isinstance(objAddr, EUDObjectView):
+            objAddr = objAddr.addr()
         self._objEPD = ut.EPD(objAddr)
         self._objAddr = objAddr
 
@@ -42,27 +44,27 @@ class EUDObjectView:
         return self._objEPD
 
     def __add__(self, other):
-        return self._objAddr + other
+        return self.addr() + other
 
     def __radd__(self, other):
-        return other + self._objAddr
+        return other + self.addr()
 
     def __sub__(self, other):
-        return self._objAddr - other
+        return self.addr() - other
 
     def __rsub__(self, other):
-        return other - self._objAddr
+        return other - self.addr()
 
     def __mul__(self, k):
-        return self._objAddr * k
+        return self.addr() * k
 
     def __rmul__(self, k):
-        return k * self._objAddr
+        return k * self.addr()
 
     def __floordiv__(self, k):
         if k == 4:
-            return self._objEPD + (0x58A364 // 4)
-        return self._objAddr // k
+            return self.epd() + (0x58A364 // 4)
+        return self.addr() // k
 
 
 def Addr(obj):
