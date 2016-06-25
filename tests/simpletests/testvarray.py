@@ -10,7 +10,7 @@ def test_varray():
     for i in EUDLoopRange(3, 6):
         a[i] = i * i * i
 
-    b = EUDVariable(a.addr())
+    b = EUDVariable(a)
     c = EUDVArray(b)
 
     v_sum = EUDVariable()

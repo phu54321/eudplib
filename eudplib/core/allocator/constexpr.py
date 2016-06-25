@@ -23,8 +23,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-from . import rlocint
-from eudplib import utils as ut
+from .rlocint import RlocInt
+from ... import utils as ut
 
 
 class ConstExpr:
@@ -134,12 +134,9 @@ def Evaluate(x):
     Evaluate expressions
     '''
     if isinstance(x, int):
-        return rlocint.RlocInt(x, 0)
+        return RlocInt(x, 0)
     try:
         return x.Evaluate()
     except AttributeError:
         return x
 
-
-def IsValidExpr(x):
-    return isinstance(x, ConstExpr) or isinstance(x, int)

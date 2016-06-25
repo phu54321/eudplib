@@ -27,10 +27,12 @@ from .constexpr import (
     ConstExpr,
     Forward,
     Evaluate,
-    IsValidExpr
 )
 
-from .objview import EUDObjectView
+from .exprproxy import (
+    ExprProxy,
+    IsValidExpr,
+)
 
 from .rlocint import (
     RlocInt,

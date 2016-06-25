@@ -1,6 +1,3 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
-
 '''
 Copyright (c) 2014 trgk
 
@@ -23,49 +20,41 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-from eudplib import utils as ut
+class ExprProxy:
 
+    ''' Class which can contain both constxpr and eudvariable '''
 
-class EUDObjectView:
+    def __init__(self, initval):
+        if isinstance(initval, ExprProxy):
+            self._value = initval._value
+        else:
+            self._value = initval
 
-    ''' Class for general expression with rlocints.
-    '''
-
-    def __init__(self, objAddr):
-        if isinstance(objAddr, EUDObjectView):
-            objAddr = objAddr.addr()
-        self._objEPD = ut.EPD(objAddr)
-        self._objAddr = objAddr
-
-    def addr(self):
-        return self._objAddr
-
-    def epd(self):
-        return self._objEPD
-
+    # Proxy operators
     def __add__(self, other):
-        return self.addr() + other
+        return self._value + other
 
     def __radd__(self, other):
-        return other + self.addr()
+        return other + self._value
 
     def __sub__(self, other):
-        return self.addr() - other
+        return self._value - other
 
     def __rsub__(self, other):
-        return other - self.addr()
+        return other - self._value
 
     def __mul__(self, k):
-        return self.addr() * k
+        return self._value * k
 
     def __rmul__(self, k):
-        return k * self.addr()
+        return k * self._value
 
     def __floordiv__(self, k):
-        if k == 4:
-            return self.epd() + (0x58A364 // 4)
-        return self.addr() // k
+        return self._value // k
 
+    # Proxy other methods
+    def __getattr__(self, name):
+        return getattr(self._value, name)
 
-def Addr(obj):
-    return obj.getBaseObj()
+def IsValidExpr(x):
+    return True

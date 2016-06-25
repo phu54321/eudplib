@@ -77,7 +77,7 @@ class EUDArrayData(c.EUDObject):
         return self.set(key, item)
 
 
-class EUDArray(c.EUDObjectView):
+class EUDArray(c.ExprProxy):
     def __init__(self, initval):
         if (
             isinstance(initval, int) or
@@ -88,7 +88,7 @@ class EUDArray(c.EUDObjectView):
             dataObj = initval
 
         super().__init__(dataObj)
-        self._epd = ut.EPD(self.addr())
+        self._epd = ut.EPD(self)
 
     def get(self, key):
         return f_dwread_epd(self._epd + key)

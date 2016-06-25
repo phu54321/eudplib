@@ -7,7 +7,7 @@ from ..allocator import (
     Forward,
     ConstExpr,
     IsValidExpr,
-    EUDObjectView
+    ExprProxy
 )
 
 from ...utils import (
@@ -34,7 +34,7 @@ class EUDVArrayForward(ConstExpr):
         return Evaluate(self._vdict[evb])
 
 
-class EUDVArray(EUDObjectView):
+class EUDVArray(ExprProxy):
     def __init__(self, initvars):
         if isinstance(initvars, int):
             initvars = [0] * initvars
@@ -49,12 +49,13 @@ class EUDVArray(EUDObjectView):
             baseobj << initvars
 
         super().__init__(baseobj)
+        self._epd = EPD(self)
 
     def getItemPtr(self, i):
-        return self.addr() + 60 * i
+        return self + 60 * i
 
     def getItemEPD(self, i):
-        return self.epd() + 15 * i
+        return self._epd + 15 * i
 
     def get(self, i):
         # This function is hand-optimized

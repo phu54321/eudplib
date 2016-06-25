@@ -4,7 +4,7 @@ from helper import *
 @TestInstance
 def test_array():
     k = EUDArray(10)
-    n = EUDVariable(k.addr())
+    n = EUDVariable(k)
     b = EUDVariable()
     b << n
     a = EUDArray(b)

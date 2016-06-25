@@ -1,8 +1,8 @@
 from .vararray import EUDVArray
-from ..allocator import EUDObjectView
+from ..allocator import ExprProxy
 
 
-class EUDStruct(EUDObjectView):
+class EUDStruct(ExprProxy):
     def __init__(self, initvar=None):
         basetype = type(self)
         fields = basetype._fields_
