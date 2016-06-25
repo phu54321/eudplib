@@ -1,5 +1,4 @@
 from .vararray import EUDVArray
-from .eudv import EUDVariable
 from ..allocator import ExprProxy
 
 class EUDStruct(ExprProxy):
@@ -18,13 +17,34 @@ class EUDStruct(ExprProxy):
 
         # With initialization
         if initvar is None:
-            fieldnum = len(fields)
-            super().__init__(EUDVArray(fieldnum))
+            initvals = []
+            for nametype in fields:
+                if isinstance(nametype, str):
+                    initvals.append(0)
+                else:
+                    _, attrtype = nametype
+                    initvals.append(attrtype())
+
+            super().__init__(EUDVArray(initvals))
 
         else:
             super().__init__(EUDVArray(initvar))
 
         self._initialized = True
+
+    def clone(self):
+        basetype = type(self)
+        fields = basetype._fields_
+
+        inst = type(self)()
+        for i, nametype in enumerate(fields):
+            if isinstance(nametype, str):
+                inst.set(i, self.get(i))
+            else:
+                _, attrtype = nametype
+                inst.set(i, attrtype(self.get(i)).clone())
+
+        return inst
 
     def __getattr__(self, name):
         try:
