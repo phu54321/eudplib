@@ -165,7 +165,7 @@ def f_dbstr_print(dst, *args):
     return dst
 
 
-_printf_buffer = DBString(1024)
+_printf_buffer = DBString(8192)
 
 
 def f_simpleprint(*args, spaced=True):

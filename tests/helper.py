@@ -14,6 +14,11 @@ _testNum = EUDVariable()
 _failedNum = EUDVariable()
 
 
+###############################################################
+# Unit testing helpers
+###############################################################
+
+
 def test_assert(testname, condition):
     global _failedNum, _testNum
 
@@ -51,6 +56,31 @@ def test_equality(testname, real, expt):
     test_wait(0)
 
 
+###############################################################
+# Performance testing helper
+###############################################################
+
+
+def test_perf(testname, func, count):
+    starttm = f_dwread_epd(EPD(0x51CE8C))
+
+    if EUDLoopN()(count):
+        func()
+    EUDEndLoopN()
+    test_wait(0)
+
+    endtm = f_dwread_epd(EPD(0x51CE8C))
+
+    elapsedTime = starttm - endtm
+    averageTime = elapsedTime // count
+    f_simpleprint(
+        '\x03' * 150 + "[PERF] \x04%s \x03* %d    \x05" % (testname, count),
+        averageTime, '/', elapsedTime, spaced=False)
+    test_wait(0)
+
+
+###############################################################
+
 def test_complete():
     f_simpleprint("\x03" + "=" * 40)
     succNum = _testNum - _failedNum
@@ -72,9 +102,9 @@ def _testmain():
     test_complete()
 
 
-def test_runall():
+def test_runall(testname):
     LoadMap("outputmap/basemap/basemap.scx")
-    SaveMap("outputmap/testall.scx", _testmain)
+    SaveMap("outputmap/test_%s.scx" % testname, _testmain)
 
 
 def test_wait(time):
