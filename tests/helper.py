@@ -30,6 +30,28 @@ def test_assert(testname, condition):
     test_wait(0)
 
 
+def test_equality(testname, real, expt):
+    global _failedNum, _testNum
+
+    real = Assignable2List(real)
+    expt = Assignable2List(expt)
+    print(real, expt)
+
+    if EUDIf()([r == e for r, e in zip(real, expt)]):
+        f_simpleprint("\x07[ OK ] \x04%s" % testname)
+    if EUDElse()():
+        f_simpleprint("\x08[FAIL] %s" % testname)
+        f_simpleprint(" \x03 - \x04 Output   : ", *real)
+        f_simpleprint(" \x03 - \x04 Expected : ", *expt)
+        failedTestDb = DBString(testname)
+        _failedTest[_failedNum] = failedTestDb
+        _failedNum += 1
+    EUDEndIf()
+
+    _testNum += 1
+    test_wait(0)
+
+
 def test_complete():
     f_simpleprint("\x03" + "=" * 40)
     succNum = _testNum - _failedNum
