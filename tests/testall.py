@@ -1,20 +1,25 @@
 import helper
-from unittests import (
-    testperf,
-    testprint,
 
+'''
+from unittests import (
     testblockstru,
     testcurpl,
     testpatch,
     testarray,
     testptrigger,
     testptrjump,
+    testprint,
     testswitch,
     testvartrg,
     testmultiret,
     testvarray,
     teststruct,
 )
+'''
+
+from perftests import (
+    testbasic,
+)
 
 helper.CompressPayload(True)
-helper.test_runall('unittest')
+helper.test_runall('everything')

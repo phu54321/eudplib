@@ -14,6 +14,11 @@ _testNum = EUDVariable()
 _failedNum = EUDVariable()
 
 
+###############################################################
+# Unit testing helpers
+###############################################################
+
+
 def test_assert(testname, condition):
     global _failedNum, _testNum
 
@@ -50,6 +55,31 @@ def test_equality(testname, real, expt):
     _testNum += 1
     test_wait(0)
 
+
+###############################################################
+# Performance testing helper
+###############################################################
+
+
+def test_perf(testname, func, count):
+    starttm = f_dwread_epd(EPD(0x51CE8C))
+
+    if EUDLoopN()(count):
+        func()
+    EUDEndLoopN()
+    test_wait(0)
+
+    endtm = f_dwread_epd(EPD(0x51CE8C))
+
+    elapsedTime = starttm - endtm
+    averageTime = elapsedTime // count
+    f_simpleprint(
+        '\x03' * 150 + "[PERF] \x04%s \x03* %d    \x05" % (testname, count),
+        averageTime, '/', elapsedTime, spaced=False)
+    test_wait(0)
+
+
+###############################################################
 
 def test_complete():
     f_simpleprint("\x03" + "=" * 40)
