@@ -1,5 +1,5 @@
 import helper
-from simpletests import (
+from unittests import (
     testperf,
     testprint,
 
@@ -17,4 +17,4 @@ from simpletests import (
 )
 
 helper.CompressPayload(True)
-helper.test_runall()
+helper.test_runall('unittest')

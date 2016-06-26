@@ -72,9 +72,9 @@ def _testmain():
     test_complete()
 
 
-def test_runall():
+def test_runall(testname):
     LoadMap("outputmap/basemap/basemap.scx")
-    SaveMap("outputmap/testall.scx", _testmain)
+    SaveMap("outputmap/test_%s.scx" % testname, _testmain)
 
 
 def test_wait(time):
