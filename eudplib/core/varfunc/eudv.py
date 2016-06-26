@@ -431,6 +431,8 @@ def SeqCompute(assignpairs):
 
     for assignpair in assignpairs:
         dst, mdt, src = assignpair
+        dst = unProxy(dst)
+        src = unProxy(src)
 
         # Flush action set before preceeding
         if IsEUDVariable(src):
