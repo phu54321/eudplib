@@ -1,7 +1,10 @@
 from .vararray import EUDVArray
-from ..allocator import ExprProxy
+from ...utils import ExprProxy
 
-class EUDStruct(ExprProxy):
+from . import structarr
+
+
+class EUDStruct(ExprProxy, metaclass=structarr._EUDStruct_Metaclass):
     def __init__(self, initvar=None):
         basetype = type(self)
         fields = basetype._fields_
@@ -33,23 +36,27 @@ class EUDStruct(ExprProxy):
         self._initialized = True
 
     def clone(self):
+        """ Create struct clone """
+        basetype = type(self)
+        inst = basetype()
+        self.deepcopy(inst)
+        return inst
+
+    def deepcopy(self, inst):
+        """ Copy struct to other instance """
         basetype = type(self)
         fields = basetype._fields_
-
-        inst = type(self)()
         for i, nametype in enumerate(fields):
             if isinstance(nametype, str):
                 inst.set(i, self.get(i))
             else:
                 _, attrtype = nametype
-                inst.set(i, attrtype(self.get(i)).clone())
-
-        return inst
+                attrtype(self.get(i)).deepcopy(attrtype(inst.get(i)))
 
     def __getattr__(self, name):
         try:
             return super().__getattr__(name)
-        except AttributeError as e:
+        except AttributeError:
             attrid, attrtype = self._fielddict[name]
             attr = self.get(attrid)
             if attrtype:

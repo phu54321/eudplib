@@ -6,13 +6,12 @@ from ..allocator import (
     Evaluate,
     Forward,
     ConstExpr,
-    IsValidExpr,
-    ExprProxy
+    IsConstExpr,
 )
 
 from ...utils import (
     EPD,
-    ep_assert
+    ExprProxy
 )
 
 from .eudv import EUDVariable, SeqCompute
@@ -35,14 +34,14 @@ class EUDVArrayData(ConstExpr):
 
 
 class EUDVArray(ExprProxy):
-    def __init__(self, initvars):
+    def __init__(self, initvars, basetype=None):
         if isinstance(initvars, int):
             initvars = [0] * initvars
 
         if isinstance(initvars, collections.Iterable):
             baseobj = EUDVArrayData(initvars)
 
-        elif IsValidExpr(initvars):
+        elif IsConstExpr(initvars):
             baseobj = initvars
         else:
             baseobj = EUDVariable()
@@ -50,6 +49,7 @@ class EUDVArray(ExprProxy):
 
         super().__init__(baseobj)
         self._epd = EPD(self)
+        self._basetype = basetype
 
     def getItemPtr(self, i):
         return self + 60 * i
@@ -85,6 +85,8 @@ class EUDVArray(ExprProxy):
         )
 
         nptr << bt.NextTrigger()
+        if self._basetype:
+            ret = self._basetype(ret)
         return ret
 
     def set(self, i, value):

@@ -25,6 +25,7 @@ THE SOFTWARE.
 
 from .eudv import (
     EUDVariable,
+    IsEUDVariable,
     EUDCreateVariables,
     SeqCompute,
     SetVariables,

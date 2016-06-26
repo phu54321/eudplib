@@ -20,12 +20,16 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
+
 class ExprProxy:
 
     ''' Class which can contain both constxpr and eudvariable '''
 
     def __init__(self, initval):
         self._value = initval
+
+    def getValue(self):
+        return self._value
 
     # Proxy operators
     def __add__(self, other):
@@ -53,5 +57,9 @@ class ExprProxy:
     def __getattr__(self, name):
         return getattr(self._value, name)
 
-def IsValidExpr(x):
-    return True
+
+def unProxy(x):
+    try:
+        return unProxy(x.getValue())
+    except AttributeError:
+        return x

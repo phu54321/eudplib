@@ -24,12 +24,13 @@ THE SOFTWARE.
 '''
 
 from .. import core as c
+from .. import utils as ut
 from .filler import _filldw, _fillwbb, _fillbbbb
-from eudplib import utils as ut
 
 
 def HasEUDVariable(l):
     for i in l:
+        i = ut.unProxy(i)
         if isinstance(i, c.EUDVariable):
             return True
     return False

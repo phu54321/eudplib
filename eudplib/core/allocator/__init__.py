@@ -27,11 +27,7 @@ from .constexpr import (
     ConstExpr,
     Forward,
     Evaluate,
-)
-
-from .exprproxy import (
-    ExprProxy,
-    IsValidExpr,
+    IsConstExpr,
 )
 
 from .rlocint import (

@@ -45,3 +45,8 @@ from .eperror import (
     EPError,
     ep_assert
 )
+
+from .exprproxy import (
+    ExprProxy,
+    unProxy,
+)

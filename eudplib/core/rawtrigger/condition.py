@@ -23,7 +23,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-from ..allocator import ConstExpr, Evaluate, IsValidExpr
+from ..allocator import ConstExpr, Evaluate, IsConstExpr
 from eudplib import utils as ut
 
 
@@ -72,35 +72,35 @@ class Condition(ConstExpr):
 
     def CheckArgs(self):
         ut.ep_assert(
-            self.locid is None or IsValidExpr(self.locid),
+            self.locid is None or IsConstExpr(self.locid),
             'Invalid arg %s' % self.locid
         )
         ut.ep_assert(
-            self.player is None or IsValidExpr(self.player),
+            self.player is None or IsConstExpr(self.player),
             'Invalid arg %s' % self.player
         )
         ut.ep_assert(
-            self.amount is None or IsValidExpr(self.amount),
+            self.amount is None or IsConstExpr(self.amount),
             'Invalid arg %s' % self.amount
         )
         ut.ep_assert(
-            self.unitid is None or IsValidExpr(self.unitid),
+            self.unitid is None or IsConstExpr(self.unitid),
             'Invalid arg %s' % self.unitid
         )
         ut.ep_assert(
-            self.comparison is None or IsValidExpr(self.comparison),
+            self.comparison is None or IsConstExpr(self.comparison),
             'Invalid arg %s' % self.comparison
         )
         ut.ep_assert(
-            self.condtype is None or IsValidExpr(self.condtype),
+            self.condtype is None or IsConstExpr(self.condtype),
             'Invalid arg %s' % self.condtype
         )
         ut.ep_assert(
-            self.restype is None or IsValidExpr(self.restype),
+            self.restype is None or IsConstExpr(self.restype),
             'Invalid arg %s' % self.restype
         )
         ut.ep_assert(
-            self.flags is None or IsValidExpr(self.flags),
+            self.flags is None or IsConstExpr(self.flags),
             'Invalid arg %s' % self.flags
         )
         return True

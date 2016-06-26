@@ -31,7 +31,7 @@ from eudplib import (
 from ..memiof import f_dwread_epd, f_dwwrite_epd
 
 
-class DBString(c.ExprProxy):
+class DBString(ut.ExprProxy):
     """Object for storing single modifiable string.
 
     Manipluating STR section is hard. DBString stores only one string, so that

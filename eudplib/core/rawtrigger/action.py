@@ -23,7 +23,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-from ..allocator import ConstExpr, Evaluate, IsValidExpr
+from ..allocator import ConstExpr, Evaluate, IsConstExpr
 from eudplib import utils as ut
 
 
@@ -79,43 +79,43 @@ class Action(ConstExpr):
 
     def CheckArgs(self):
         ut.ep_assert(
-            self.locid1 is None or IsValidExpr(self.locid1),
+            self.locid1 is None or IsConstExpr(self.locid1),
             'Invalid arg %s' % self.locid1
         )
         ut.ep_assert(
-            self.strid is None or IsValidExpr(self.strid),
+            self.strid is None or IsConstExpr(self.strid),
             'Invalid arg %s' % self.strid
         )
         ut.ep_assert(
-            self.wavid is None or IsValidExpr(self.wavid),
+            self.wavid is None or IsConstExpr(self.wavid),
             'Invalid arg %s' % self.wavid
         )
         ut.ep_assert(
-            self.time is None or IsValidExpr(self.time),
+            self.time is None or IsConstExpr(self.time),
             'Invalid arg %s' % self.time
         )
         ut.ep_assert(
-            self.player1 is None or IsValidExpr(self.player1),
+            self.player1 is None or IsConstExpr(self.player1),
             'Invalid arg %s' % self.player1
         )
         ut.ep_assert(
-            self.player2 is None or IsValidExpr(self.player2),
+            self.player2 is None or IsConstExpr(self.player2),
             'Invalid arg %s' % self.player2
         )
         ut.ep_assert(
-            self.unitid is None or IsValidExpr(self.unitid),
+            self.unitid is None or IsConstExpr(self.unitid),
             'Invalid arg %s' % self.unitid
         )
         ut.ep_assert(
-            self.acttype is None or IsValidExpr(self.acttype),
+            self.acttype is None or IsConstExpr(self.acttype),
             'Invalid arg %s' % self.acttype
         )
         ut.ep_assert(
-            self.amount is None or IsValidExpr(self.amount),
+            self.amount is None or IsConstExpr(self.amount),
             'Invalid arg %s' % self.amount
         )
         ut.ep_assert(
-            self.flags is None or IsValidExpr(self.flags),
+            self.flags is None or IsConstExpr(self.flags),
             'Invalid arg %s' % self.flags
         )
         return True

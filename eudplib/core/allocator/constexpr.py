@@ -140,3 +140,7 @@ def Evaluate(x):
     except AttributeError:
         return x
 
+
+def IsConstExpr(x):
+    x = ut.unProxy(x)
+    return isinstance(x, int) or isinstance(x, ConstExpr)

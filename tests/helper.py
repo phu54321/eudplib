@@ -35,7 +35,6 @@ def test_equality(testname, real, expt):
 
     real = Assignable2List(real)
     expt = Assignable2List(expt)
-    print(real, expt)
 
     if EUDIf()([r == e for r, e in zip(real, expt)]):
         f_simpleprint("\x07[ OK ] \x04%s" % testname)
