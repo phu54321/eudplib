@@ -1,6 +1,5 @@
 import helper
 
-
 from unittests import (
     # testblockstru,
     # testcurpl,
@@ -14,6 +13,7 @@ from unittests import (
     # testmultiret,
     # testvarray,
     # teststruct,
+    testoperator,
     testbinsearch,
 )
 
