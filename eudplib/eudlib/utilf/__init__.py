@@ -63,3 +63,8 @@ from .listloop import (
     EUDLoopBullet,
     EUDLoopTrigger
 )
+
+from .binsearch import (
+    EUDBinaryMin,
+    EUDBinaryMax,
+)
