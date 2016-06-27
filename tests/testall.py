@@ -14,7 +14,7 @@ from unittests import (
     # testvarray,
     # teststruct,
     testoperator,
-    testbinsearch,
+    # testbinsearch,
 )
 
 
