@@ -24,5 +24,5 @@ THE SOFTWARE.
 '''
 
 from .trigonometric import (
-    f_lengthdir,
+    f_lengthdir, f_atan2
 )

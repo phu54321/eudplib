@@ -12,7 +12,7 @@ def create_operator_test(name, realf, exptf=None):
         b = EUDVariable()
         expt, real = [], []
 
-        for i in range(100):
+        for i in range(20):
             r1 = random.randint(0, 0xFFFFFFFF)
             r2 = random.randint(0, 0xFFFFFFFF)
             SetVariables([a, b], [r1, r2])
