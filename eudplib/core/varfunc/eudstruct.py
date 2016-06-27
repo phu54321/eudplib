@@ -66,7 +66,10 @@ class EUDStruct(ExprProxy, metaclass=structarr._EUDStruct_Metaclass):
 
     def __setattr__(self, name, value):
         if '_initialized' in self.__dict__:
-            attrid, _ = self._fielddict[name]
-            self.set(attrid, value)
+            try:
+                attrid, _ = self._fielddict[name]
+                self.set(attrid, value)
+            except KeyError:
+                self.__dict__[name] = value
         else:
             self.__dict__[name] = value
