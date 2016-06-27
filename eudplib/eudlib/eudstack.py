@@ -23,12 +23,34 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-from .memiof import *
-from .stringf import *
-from .utilf import *
-from .qgcf import *
-from .mathf import *
-
 from .eudarray import EUDArray
-from .eudgrp import EUDGrp
-from .eudstack import EUDStack
+from .. import core as c
+
+
+class EUDStack(c.EUDStruct):
+    _fields_ = [
+        ('data', EUDArray),
+        'pos'
+    ]
+
+    def __init__(self, size, basetype=None):
+        super().__init__([
+            # data
+            EUDArray(size),
+            0
+        ])
+        self._basetype = basetype
+
+    def push(self, value):
+        self.data[self.pos] = value
+        self.pos += 1
+
+    def pop(self):
+        self.pos -= 1
+        data = self.data[self.pos]
+        if self._basetype:
+            data = self._basetype(data)
+        return data
+
+    def empty(self):
+        return self.pos == 0

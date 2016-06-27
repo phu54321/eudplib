@@ -1,21 +1,22 @@
 import helper
 
 from unittests import (
-    testblockstru,
-    testcurpl,
-    testpatch,
-    testarray,
-    testptrigger,
-    testoperator,
-    testptrjump,
-    testprint,
-    testswitch,
-    testvartrg,
-    testmultiret,
-    testvarray,
-    teststruct,
-    testmath,
-    testbinsearch,
+    # testblockstru,
+    # testcurpl,
+    # testpatch,
+    # testarray,
+    # testptrigger,
+    # testoperator,
+    # testptrjump,
+    # testprint,
+    # testswitch,
+    # testvartrg,
+    # testmultiret,
+    # testvarray,
+    # teststruct,
+    # testmath,
+    # testbinsearch,
+    teststack,
 )
 
 
