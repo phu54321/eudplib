@@ -14,3 +14,6 @@ def test_atan2():
         "atan2 test",
         [atanarray[angle] - angle + 1 <= 2 for angle in range(360)]
     )
+
+
+test_operator("Square root", f_sqrt, lambda x: int(x ** 0.5))

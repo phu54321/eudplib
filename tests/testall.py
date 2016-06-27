@@ -6,6 +6,7 @@ from unittests import (
     testpatch,
     testarray,
     testptrigger,
+    testoperator,
     testptrjump,
     testprint,
     testswitch,
@@ -13,8 +14,7 @@ from unittests import (
     testmultiret,
     testvarray,
     teststruct,
-    testoperator,  # Takes a lot of time to compile.
-    testatan2,
+    testmath,
     testbinsearch,
 )
 

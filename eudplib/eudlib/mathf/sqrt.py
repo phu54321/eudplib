@@ -23,6 +23,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-from .lengthdir import f_lengthdir
-from .atan2 import f_atan2
-from .sqrt import f_sqrt
+from eudplib import core as c
+from ..utilf import EUDBinaryMax
+
+
+@c.EUDFunc
+def f_sqrt(n):
+    return EUDBinaryMax(lambda x: x * x <= n, 0, 0xFFFF)

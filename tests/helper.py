@@ -2,6 +2,7 @@
 
 import sys as _sys
 import os as _os
+import random as _random
 
 _sys.path.insert(0, _os.path.abspath('..\\'))
 
@@ -54,6 +55,33 @@ def test_equality(testname, real, expt):
 
     _testNum += 1
     test_wait(0)
+
+
+def test_operator(testname, realf, exptf=None):
+    if exptf is None:
+        exptf = realf
+
+    if isinstance(realf, EUDFuncN):
+        f = realf._fdecl_func
+    else:
+        f = realf
+    argcount = f.__code__.co_argcount
+
+    @TestInstance
+    def test_operator():
+        inputs = [EUDVariable() for _ in range(argcount)]
+        expt, real = [], []
+
+        for i in range(20):
+            rnums = [_random.randint(0, 0xFFFFFFFF) for _ in range(argcount)]
+            SetVariables(inputs, rnums)
+            real.append(realf(*inputs))
+            expt.append(exptf(*rnums) & 0xFFFFFFFF)
+
+        test_assert(
+            "Operator test : %s" % testname,
+            [r == e for r, e in zip(real, expt)]
+        )
 
 
 ###############################################################
