@@ -25,6 +25,7 @@ THE SOFTWARE.
 
 from .. import core as c
 from .. import ctrlstru as cs
+
 _runner_start = [c.Forward() for _ in range(8)]
 _runner_end = [c.Forward() for _ in range(8)]
 
@@ -37,6 +38,10 @@ c.PopTriggerScope()
 
 @c.EUDFunc
 def RunTrigTrigger():
+    from .. import eudlib as sf
+
+    oldcp = sf.f_getcurpl()
+
     for player in range(8):
         skipt = c.Forward()
         cs.EUDJumpIf(
@@ -60,3 +65,47 @@ def RunTrigTrigger():
             )
         )
         skipt << c.NextTrigger()
+
+    sf.f_setcurpl(oldcp)
+
+
+#######
+
+orig_tstart = None
+orig_tend = None
+runner_end_array = None
+
+
+def AllocTrigTriggerLink():
+    global orig_tstart, orig_tend, runner_end_array
+    if not orig_tstart:
+        from .. import eudlib as sf
+
+        orig_tstart = sf.EUDArray(8)
+        orig_tend = sf.EUDArray(8)
+        runner_end_array = sf.EUDArray(_runner_end)
+
+
+def GetFirstTrigTrigger(player):
+    """ Get dlist start of trig-trigger for player """
+    AllocTrigTriggerLink()
+    return orig_tstart[player]
+
+
+def GetLastTrigTrigger(player):
+    """ Get dlist end of trig-trigger for player"""
+    AllocTrigTriggerLink()
+    return orig_tend[player]
+
+
+def TrigTriggerBegin(player):
+    AllocTrigTriggerLink()
+    return GetFirstTrigTrigger(player)
+
+
+def TrigTriggerEnd(player):
+    AllocTrigTriggerLink()
+    if isinstance(player, int):
+        return _runner_end[player]
+    else:
+        return runner_end_array[player]

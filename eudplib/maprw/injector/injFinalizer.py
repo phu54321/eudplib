@@ -25,14 +25,11 @@ THE SOFTWARE.
 
 from ... import core as c
 from ... import ctrlstru as cs
+from ... import trigger as trg
 from ... import eudlib as sf
-from eudplib import utils as ut
+from ... import utils as ut
 from ...trigtrg import runtrigtrg as rtt
-
-from ..inlinecode import PreprocessTrigSection
-
-
-_inlineCodes = []
+from ..inlinecode.ilcprocesstrig import GetInlineCodeList
 
 
 ''' Stage 3:
@@ -44,8 +41,6 @@ _inlineCodes = []
 
 
 def _DispatchInlineCode(trigepd):
-    global _inlineCodes
-
     cs0 = c.Forward()  # set cs0+20 to codeStart
     cs1 = c.Forward()  # set cs1+20 to ut.EPD(codeEnd) + 1
     cs2 = c.Forward()  # set cs2+20 to cs_a0_epd + 4
@@ -57,7 +52,7 @@ def _DispatchInlineCode(trigepd):
 
     cs.DoActions(c.SetMemory(0x6509B0, c.SetTo, trigepd + 2))
 
-    for funcID, func in _inlineCodes:
+    for funcID, func in GetInlineCodeList():
         codeStart, codeEnd = func
         cs_a0_epd = ut.EPD(codeStart) + (8 + 320) // 4
 
@@ -146,14 +141,11 @@ def _FlipProp(trigepd):
 
 
 def CreateInjectFinalizer(chkt, root):
+    rtt.AllocTrigTriggerLink()
+
     pts = 0x51A280
 
     # Apply inline code patch
-    global _inlineCodes
-    trigSection = chkt.getsection('TRIG')
-    _inlineCodes, trigSection = PreprocessTrigSection(trigSection)
-    chkt.setsection('TRIG', trigSection)
-
     if c.PushTriggerScope():
         ret = c.NextTrigger()
 
@@ -212,17 +204,21 @@ def CreateInjectFinalizer(chkt, root):
 
             # If there were triggers
             if cs.EUDIfNot()(prevtstart == ~(pts + player * 12 + 4)):
-                # Modify pts
-                c.SeqCompute([
-                    (ut.EPD(pts + player * 12 + 8), c.SetTo, tstart),
-                    (ut.EPD(pts + player * 12 + 4), c.SetTo, tre),
-                ])
+                cs.DoActions([
+                    # Link pts
+                    c.SetMemory(pts + player * 12 + 8, c.SetTo, tstart),
+                    c.SetMemory(pts + player * 12 + 4, c.SetTo, tre),
 
-                # link trs, tre with them
-                c.SeqCompute([
-                    (ut.EPD(trs + 4), c.SetTo, prevtstart),
+                    # Link trs
+                    c.SetMemory(trs + 4, c.SetTo, prevtstart),
+                    c.SetMemory(prevtend + 4, c.SetTo, tre),
+
+                    # Cache dlist start & end
+                    c.SetMemory(rtt.orig_tstart + player * 4, c.SetTo,
+                                prevtstart),
+                    c.SetMemory(rtt.orig_tend + player * 4, c.SetTo,
+                                prevtend),
                 ])
-                sf.f_dwwrite_epd(ut.EPD(prevtend) + 1, tre)
             cs.EUDEndIf()
 
         if c.PushTriggerScope():
@@ -233,7 +229,7 @@ def CreateInjectFinalizer(chkt, root):
                 cs.EUDJump(root)
             cs.EUDEndIf()
 
-            # Set current trigger to 1.
+            # Set current player to 1.
             cs.DoActions(c.SetMemory(0x6509B0, c.SetTo, 0))
 
             cs.EUDJump(0x80000000)

@@ -33,7 +33,12 @@ def DoActions(actions, preserved=True):
 
 
 def EUDJump(nextptr):
-    c.RawTrigger(nextptr=nextptr)
+    if isinstance(nextptr, c.EUDVariable):
+        t = c.Forward()
+        c.SeqCompute([(ut.EPD(t + 4), c.SetTo, nextptr)])
+        t << c.RawTrigger()
+    else:
+        c.RawTrigger(nextptr=nextptr)
 
 
 def EUDJumpIf(conditions, ontrue):
@@ -46,3 +51,17 @@ def EUDJumpIfNot(conditions, onfalse):
     ontrue = c.Forward()
     tg.EUDBranch(conditions, ontrue, onfalse)
     ontrue << c.NextTrigger()
+
+
+def EUDTernary(conditions, ontrue, onfalse):
+    v = c.EUDVariable()
+    t = c.Forward()
+    end = c.Forward()
+
+    EUDJumpIf(conditions, t)
+    v << onfalse
+    EUDJump(end)
+    t << c.NextTrigger()
+    v << ontrue
+    end << c.NextTrigger()
+    return v

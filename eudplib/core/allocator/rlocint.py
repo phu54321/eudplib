@@ -28,6 +28,8 @@ from eudplib import utils as ut
 
 class RlocInt:
 
+    """Relocatable int"""
+
     def __init__(self, offset, rlocmode):
         self.offset, self.rlocmode = offset, rlocmode
 
@@ -89,6 +91,8 @@ class RlocInt:
 
 
 def toRlocInt(x):
+    """Convert int/RlocInt to rlocint"""
+
     if isinstance(x, RlocInt):
         return x
 

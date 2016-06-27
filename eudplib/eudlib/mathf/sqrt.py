@@ -23,7 +23,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-from .dwpatch import (
-    f_dwpatch,
-    f_unpatchall,
-)
+from eudplib import core as c
+from ..utilf import EUDBinaryMax
+
+
+@c.EUDFunc
+def f_sqrt(n):
+    return EUDBinaryMax(lambda x: x * x <= n, 0, 0xFFFF)

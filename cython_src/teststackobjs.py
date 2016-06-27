@@ -6,8 +6,9 @@ import pickle
 obj = pickle.load(open('stackdata.bin', 'rb'))
 found_objects = obj['found_objects']
 dwoccupmap_dict = obj['dwoccupmap_dict']
-dsdict = obj['dsdict']
 alloctable = {}
+
+print(len(found_objects))
 
 import os
 
@@ -18,7 +19,7 @@ import cProfile
 import pstats
 
 cProfile.runctx(
-    'StackObjects(found_objects, dwoccupmap_dict, alloctable, dsdict)',
+    'StackObjects(found_objects, dwoccupmap_dict, alloctable)',
     globals(),
     locals(),
     "Profile.prof"

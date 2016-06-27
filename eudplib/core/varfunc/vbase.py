@@ -31,45 +31,63 @@ class VariableBase:
     def __init__(self):
         pass
 
-    def GetVariableMemoryAddr(self):
+    def getValueAddr(self):
         raise ut.EPError('override')
 
     # -------
 
     def AtLeast(self, value):
-        return bt.Memory(self.GetVariableMemoryAddr(), bt.AtLeast, value)
+        return bt.Memory(self.getValueAddr(), bt.AtLeast, value)
 
     def AtMost(self, value):
-        return bt.Memory(self.GetVariableMemoryAddr(), bt.AtMost, value)
+        return bt.Memory(self.getValueAddr(), bt.AtMost, value)
 
     def Exactly(self, value):
-        return bt.Memory(self.GetVariableMemoryAddr(), bt.Exactly, value)
+        return bt.Memory(self.getValueAddr(), bt.Exactly, value)
 
     # -------
 
     def SetNumber(self, value):
-        return bt.SetMemory(self.GetVariableMemoryAddr(), bt.SetTo, value)
+        return bt.SetMemory(self.getValueAddr(), bt.SetTo, value)
 
     def AddNumber(self, value):
-        return bt.SetMemory(self.GetVariableMemoryAddr(), bt.Add, value)
+        return bt.SetMemory(self.getValueAddr(), bt.Add, value)
 
     def SubtractNumber(self, value):
-        return bt.SetMemory(self.GetVariableMemoryAddr(), bt.Subtract, value)
+        return bt.SetMemory(self.getValueAddr(), bt.Subtract, value)
 
     # -------
 
     def Assign(self, value):
-        bt.RawTrigger(actions=bt.SetMemory(self.GetVariableMemoryAddr(), bt.SetTo, value))
+        bt.RawTrigger(actions=[
+            bt.SetMemory(
+                self.getValueAddr(),
+                bt.SetTo,
+                value
+            )
+        ])
 
     def __lshift__(self, value):
         self.Assign(value)
 
     def __iadd__(self, value):
-        bt.RawTrigger(actions=bt.SetMemory(self.GetVariableMemoryAddr(), bt.Add, value))
+        bt.RawTrigger(actions=[
+            bt.SetMemory(
+                self.getValueAddr(),
+                bt.Add,
+                value
+            )
+        ])
         return self
 
     def __isub__(self, value):
-        bt.RawTrigger(actions=bt.SetMemory(self.GetVariableMemoryAddr(), bt.Subtract, value))
+        bt.RawTrigger(actions=[
+            bt.SetMemory(
+                self.getValueAddr(),
+                bt.Subtract,
+                value
+            )
+        ])
         return self
 
     # -------

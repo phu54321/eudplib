@@ -184,3 +184,35 @@ def f_dwbreak(number):
         )
 
     return word[0], word[1], byte[0], byte[1], byte[2], byte[3]
+
+
+@c.EUDFunc
+def f_dwbreak2(number):
+    """Get hiword/loword/4byte of dword"""
+    word = c.EUDCreateVariables(2)
+    byte = c.EUDCreateVariables(4)
+
+    # Clear byte[], word[]
+    cs.DoActions([
+        word[0].SetNumber(0),
+        word[1].SetNumber(0),
+        byte[0].SetNumber(0),
+        byte[1].SetNumber(0),
+        byte[2].SetNumber(0),
+        byte[3].SetNumber(0)
+    ])
+
+    for i in range(31, -1, -1):
+        byteidx = i // 8
+        wordidx = i // 16
+
+        c.RawTrigger(
+            conditions=number.AtLeast(2 ** i),
+            actions=[
+                byte[byteidx].AddNumber(2 ** i),
+                word[wordidx].AddNumber(2 ** i),
+                number.SubtractNumber(2 ** i)
+            ]
+        )
+
+    return word[0], word[1], byte[0], byte[1], byte[2], byte[3]

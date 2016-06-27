@@ -33,7 +33,7 @@ class EUDLightVariable(VariableBase):
         super().__init__()
         self._memaddr = Db(i2b4(initvalue))
 
-    def GetVariableMemoryAddr(self):
+    def getValueAddr(self):
         return self._memaddr
 
     def __hash__(self):

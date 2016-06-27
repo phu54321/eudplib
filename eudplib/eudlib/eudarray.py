@@ -23,12 +23,14 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
+import collections
+
 from .. import core as c
-from eudplib import utils as ut
+from .. import utils as ut
 from .memiof import f_dwread_epd, f_dwwrite_epd
 
 
-class EUDArray(c.EUDObject):
+class EUDArrayData(c.EUDObject):
     '''
     Structure for storing multiple values.
     '''
@@ -43,7 +45,7 @@ class EUDArray(c.EUDObject):
 
         else:
             for i, item in enumerate(arr):
-                ut.ep_assert(c.IsValidExpr(item), 'Invalid item #%d' % i)
+                ut.ep_assert(c.IsConstExpr(item), 'Invalid item #%d' % i)
             self._datas = arr
             self._arrlen = len(arr)
 
@@ -70,6 +72,32 @@ class EUDArray(c.EUDObject):
     @c.EUDFuncMethod
     def set(self, key, item):
         return f_dwwrite_epd(ut.EPD(self) + key, item)
+
+    def __setitem__(self, key, item):
+        return self.set(key, item)
+
+
+class EUDArray(ut.ExprProxy):
+    def __init__(self, initval):
+        if (
+            isinstance(initval, int) or
+            isinstance(initval, collections.Iterable)
+        ):
+            dataObj = EUDArrayData(initval)
+        else:
+            dataObj = initval
+
+        super().__init__(dataObj)
+        self._epd = ut.EPD(self)
+
+    def get(self, key):
+        return f_dwread_epd(self._epd + key)
+
+    def __getitem__(self, key):
+        return self.get(key)
+
+    def set(self, key, item):
+        return f_dwwrite_epd(self._epd + key, item)
 
     def __setitem__(self, key, item):
         return self.set(key, item)

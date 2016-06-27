@@ -44,23 +44,53 @@ from eudplib import utils as ut
 
 
 _currentCompiledFunc = None
+_currentTriggerCount = 0
+
+
+def _updateFuncTriggerCount():
+    global _currentTriggerCount
+    currentCounter = bt.GetTriggerCounter()
+    addedTriggerCount = currentCounter - _currentTriggerCount
+
+    if _currentCompiledFunc:
+        _currentCompiledFunc._triggerCount += addedTriggerCount
+    _currentTriggerCount = currentCounter
+
+
+def _setCurrentCompiledFunc(func):
+    global _currentCompiledFunc
+
+    lastCompiledFunc = _currentCompiledFunc
+    _updateFuncTriggerCount()
+    _currentCompiledFunc = func
+    return lastCompiledFunc
 
 
 class EUDFuncN:
 
     def __init__(self, fdecl_func, argn):
         self._argn = argn
+        self._retn = None
         self._fdecl_func = fdecl_func
         functools.update_wrapper(self, fdecl_func)
         self._fstart = None
         self._fend = None
         self._fargs = None
         self._frets = None
+        self._triggerCount = None
+
+    def size(self):
+        if not self._fstart:
+            self._CreateFuncBody()
+
+        return self._triggerCount
 
     def _CreateFuncBody(self):
-        global _currentCompiledFunc
-        lastCompiledFunc = _currentCompiledFunc
-        _currentCompiledFunc = self
+        self._triggerCount = 0
+        lastCompiledFunc = _setCurrentCompiledFunc(self)
+
+        # Add return point
+        self._fend = Forward()
 
         # Prevent double compilication
         ut.ep_assert(self._fstart is None)
@@ -74,6 +104,8 @@ class EUDFuncN:
         self._fargs = f_args
 
         fstart = bt.NextTrigger()
+        self._fstart = fstart
+
         final_rets = self._fdecl_func(*f_args)
         if final_rets is not None:
             self._AddReturn(Assignable2List(final_rets), False)
@@ -84,14 +116,16 @@ class EUDFuncN:
         ut.ep_assert(f_bsm.empty(), 'Block start/end mismatch inside function')
         SetCurrentBlockStruManager(prev_bsm)
 
-        self._fstart = fstart
-        self._fend = fend
-
-        _currentCompiledFunc = lastCompiledFunc
+        self._fend << fend
+        # No return -> set return count to 0
+        if self._retn is None:
+            self._retn = 0
+        _setCurrentCompiledFunc(lastCompiledFunc)
 
     def _AddReturn(self, retv, needjump):
         if self._frets is None:
             self._frets = [EUDVariable() for _ in range(len(retv))]
+            self._retn = len(retv)
 
         ut.ep_assert(
             len(retv) == len(self._frets),

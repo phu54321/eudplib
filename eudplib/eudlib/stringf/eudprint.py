@@ -29,7 +29,7 @@ from eudplib import (
     utils as ut,
 )
 
-from .rwcommon import br, bw
+from .rwcommon import br1, bw1
 from .dbstr import DBString
 
 
@@ -44,17 +44,17 @@ def f_dbstr_addstr(dst, src):
     """
     b = c.EUDVariable()
 
-    br.seekoffset(src)
-    bw.seekoffset(dst)
+    br1.seekoffset(src)
+    bw1.seekoffset(dst)
 
     if cs.EUDInfLoop()():
-        c.SetVariables(b, br.readbyte())
-        bw.writebyte(b)
+        c.SetVariables(b, br1.readbyte())
+        bw1.writebyte(b)
         cs.EUDBreakIf(b == 0)
         dst += 1
     cs.EUDEndInfLoop()
 
-    bw.flushdword()
+    bw1.flushdword()
 
     return dst
 
@@ -68,66 +68,64 @@ def f_dbstr_adddw(dst, number):
 
     :returns: dst + strlen(itoa(number))
     """
-    bw.seekoffset(dst)
+    bw1.seekoffset(dst)
 
     skipper = [c.Forward() for _ in range(9)]
+    ch = [0] * 10
 
     # Get digits
-    number, ch0 = c.f_div(number, 10)
-    cs.EUDJumpIf(number == 0, skipper[0])
-    number, ch1 = c.f_div(number, 10)
-    cs.EUDJumpIf(number == 0, skipper[1])
-    number, ch2 = c.f_div(number, 10)
-    cs.EUDJumpIf(number == 0, skipper[2])
-    number, ch3 = c.f_div(number, 10)
-    cs.EUDJumpIf(number == 0, skipper[3])
-    number, ch4 = c.f_div(number, 10)
-    cs.EUDJumpIf(number == 0, skipper[4])
-    number, ch5 = c.f_div(number, 10)
-    cs.EUDJumpIf(number == 0, skipper[5])
-    number, ch6 = c.f_div(number, 10)
-    cs.EUDJumpIf(number == 0, skipper[6])
-    number, ch7 = c.f_div(number, 10)
-    cs.EUDJumpIf(number == 0, skipper[7])
-    number, ch8 = c.f_div(number, 10)
-    cs.EUDJumpIf(number == 0, skipper[8])
-    number, ch9 = c.f_div(number, 10)
+    for i in range(10):
+        number, ch[i] = c.f_div(number, 10)
+        if i != 9:
+            cs.EUDJumpIf(number == 0, skipper[i])
 
     # print digits
-    bw.writebyte(ch9 + b'0'[0])
-    dst += 1
-    skipper[8] << c.NextTrigger()
-    bw.writebyte(ch8 + b'0'[0])
-    dst += 1
-    skipper[7] << c.NextTrigger()
-    bw.writebyte(ch7 + b'0'[0])
-    dst += 1
-    skipper[6] << c.NextTrigger()
-    bw.writebyte(ch6 + b'0'[0])
-    dst += 1
-    skipper[5] << c.NextTrigger()
-    bw.writebyte(ch5 + b'0'[0])
-    dst += 1
-    skipper[4] << c.NextTrigger()
-    bw.writebyte(ch4 + b'0'[0])
-    dst += 1
-    skipper[3] << c.NextTrigger()
-    bw.writebyte(ch3 + b'0'[0])
-    dst += 1
-    skipper[2] << c.NextTrigger()
-    bw.writebyte(ch2 + b'0'[0])
-    dst += 1
-    skipper[1] << c.NextTrigger()
-    bw.writebyte(ch1 + b'0'[0])
-    dst += 1
-    skipper[0] << c.NextTrigger()
-    bw.writebyte(ch0 + b'0'[0])
-    dst += 1
+    for i in range(9, -1, -1):
+        if i != 9:
+            skipper[i] << c.NextTrigger()
+        bw1.writebyte(ch[i] + b'0'[0])
+        dst += 1
 
-    bw.writebyte(0)  # EOS
-    bw.flushdword()
+    bw1.writebyte(0)  # EOS
+    bw1.flushdword()
 
     return dst
+
+
+@c.EUDFunc
+def f_dbstr_addptr(dst, number):
+    """Print number as string to dst.
+
+    :param dst: Destination address (Not EPD player)
+    :param number: DWORD to print
+
+    :returns: dst + strlen(itoa(number))
+    """
+    bw1.seekoffset(dst)
+    ch = [0] * 8
+
+    # Get digits
+    for i in range(8):
+        number, ch[i] = c.f_div(number, 16)
+
+    # print digits
+    for i in range(7, -1, -1):
+        if cs.EUDIf()(ch[i] <= 9):
+            bw1.writebyte(ch[i] + b'0'[0])
+        if cs.EUDElse()():
+            bw1.writebyte(ch[i] + (b'A'[0] - 10))
+        cs.EUDEndIf()
+        dst += 1
+
+    bw1.writebyte(0)  # EOS
+    bw1.flushdword()
+
+    return dst
+
+
+class hptr:
+    def __init__(self, value):
+        self._value = value
 
 
 def f_dbstr_print(dst, *args):
@@ -143,7 +141,7 @@ def f_dbstr_print(dst, *args):
     args = ut.FlattenList(args)
     for arg in args:
         if isinstance(arg, bytes):
-            dst = f_dbstr_addstr(dst, c.Db(arg) + b'\0')
+            dst = f_dbstr_addstr(dst, c.Db(arg + b'\0'))
         elif isinstance(arg, str):
             dst = f_dbstr_addstr(dst, c.Db(ut.u2b(arg) + b'\0'))
         elif isinstance(arg, DBString):
@@ -152,9 +150,12 @@ def f_dbstr_print(dst, *args):
             # int and c.EUDVariable should act the same if possible.
             # EUDVariable has a value of 32bit unsigned integer.
             # So we adjust arg to be in the same range.
-            dst = f_dbstr_addstr(dst, str(arg & 0xFFFFFFFF))
+            dst = f_dbstr_addstr(dst, c.Db(
+                ut.u2b(str(arg & 0xFFFFFFFF)) + b'\0'))
         elif isinstance(arg, c.EUDVariable):
             dst = f_dbstr_adddw(dst, arg)
+        elif isinstance(arg, hptr):
+            dst = f_dbstr_addptr(dst, arg._value)
         else:
             raise ut.EPError(
                 'Object wit unknown parameter type %s given to f_eudprint.'
@@ -162,3 +163,19 @@ def f_dbstr_print(dst, *args):
             )
 
     return dst
+
+
+_printf_buffer = DBString(8192)
+
+
+def f_simpleprint(*args, spaced=True):
+    # Add spaces between arguments
+    if spaced:
+        spaced_args = []
+        for arg in args:
+            spaced_args.extend([arg, ' '])
+        args = spaced_args[:-1]
+
+    # Print
+    f_dbstr_print(_printf_buffer, *args)
+    cs.DoActions(_printf_buffer.GetDisplayAction())

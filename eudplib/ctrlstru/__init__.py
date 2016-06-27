@@ -30,6 +30,7 @@ from .basicstru import (
     EUDJump,
     EUDJumpIf,
     EUDJumpIfNot,
+    EUDTernary,
 )
 
 from .simpleblock import (
@@ -50,6 +51,8 @@ from .loopblock import (
 
     EUDLoopN,
     EUDEndLoopN,
+
+    EUDLoopRange,
 
     EUDWhile,
     EUDWhileNot,

@@ -1,27 +1,32 @@
+import pickle
 
-
-def StackObjects(
-    found_objects,
-    dwoccupmap_dict,
-    alloctable,
-    dsdict,
-):
+# @profile
+def StackObjects(found_objects, dwoccupmap_dict, alloctable):
     dwoccupmap_max_size = 0
     for obj in found_objects:
-        dwoccupmap_max_size += dsdict[obj]
+        dwoccupmap_max_size += len(dwoccupmap_dict[obj])
 
     # Buffer to sum all dwoccupmaps
     dwoccupmap_sum = [-1] * (dwoccupmap_max_size + 1)
-
     lallocaddr = 0
     payload_size = 0
 
     for obj in found_objects:
+        # Convert to faster c array
         dwoccupmap = dwoccupmap_dict[obj]
+        oclen = len(dwoccupmap)
+
+        # preprocess dwoccupmap
+        for i in range(oclen):
+            if dwoccupmap[i] == 0:
+                dwoccupmap[i] = -1
+            elif i == 0 or dwoccupmap[i - 1] == -1:
+                dwoccupmap[i] = i
+            else:
+                dwoccupmap[i] = dwoccupmap[i - 1]
 
         # Find appropriate position to allocate object
         j = 0
-        oclen = len(dwoccupmap)
         while j < oclen:
             # Update on conflict map
             if dwoccupmap[j] != -1 and dwoccupmap_sum[lallocaddr + j] != -1:
@@ -40,7 +45,13 @@ def StackObjects(
                 else:
                     dwoccupmap_sum[curoff] = dwoccupmap_sum[curoff + 1]
 
-        alloctable[obj] = (lallocaddr * 4, dsdict[obj])
-        objsize = dsdict[obj]
-        if lallocaddr * 4 + objsize > payload_size:
-            payload_size = lallocaddr * 4 + objsize
+        alloctable[obj] = lallocaddr * 4
+        if (lallocaddr + oclen) * 4 > payload_size:
+            payload_size = (lallocaddr + oclen) * 4
+
+if __name__ == "__main__":
+    obj = pickle.load(open('stackdata.bin', 'rb'))
+    found_objects = obj['found_objects']
+    dwoccupmap_dict = obj['dwoccupmap_dict']
+    alloctable = {}
+    StackObjects(found_objects, dwoccupmap_dict, alloctable)

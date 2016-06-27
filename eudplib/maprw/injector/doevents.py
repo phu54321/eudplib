@@ -25,6 +25,9 @@ THE SOFTWARE.
 
 from ... import core as c
 from ... import ctrlstru as cs
+from ... import eudlib as sf
+from ...eudlib.stringf.dbstr import _f_initextstr
+
 
 jumper = None
 
@@ -35,6 +38,8 @@ def _MainStarter(mf):
 
     if c.PushTriggerScope():
         rootstarter = c.NextTrigger()
+
+        _f_initextstr()
 
         mf()
 
@@ -50,7 +55,11 @@ def _MainStarter(mf):
 
 
 def EUDDoEvents():
+    oldcp = sf.f_getcurpl()
+
     _t = c.Forward()
     cs.DoActions(c.SetNextPtr(jumper, _t))
     cs.EUDJump(0x80000000)
     _t << c.NextTrigger()
+
+    sf.f_setcurpl(oldcp)

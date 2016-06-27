@@ -54,28 +54,26 @@ def CreatePayloadRelocator(payload):
         # init prt
         prtn << len(payload.prttable)
         if payload.prttable:
-            if cs.EUDInfLoop()():
+            if cs.EUDWhile()(prtn >= 1):
                 cs.DoActions(prtn.SubtractNumber(1))
                 sf.f_dwadd_epd(
                     ut.EPD(orig_payload) +
                     sf.f_dwread_epd(prtn + ut.EPD(prtdb)),
                     orig_payload // 4
                 )
-                cs.EUDBreakIf(prtn.Exactly(0))
-            cs.EUDEndInfLoop()
+            cs.EUDEndWhile()
 
         # init ort
         ortn << len(payload.orttable)
         if payload.orttable:
-            if cs.EUDInfLoop()():
+            if cs.EUDWhile()(ortn >= 1):
                 cs.DoActions(ortn.SubtractNumber(1))
                 sf.f_dwadd_epd(
                     ut.EPD(orig_payload) +
                     sf.f_dwread_epd(ortn + ut.EPD(ortdb)),
                     orig_payload
                 )
-                cs.EUDBreakIf(ortn.Exactly(0))
-            cs.EUDEndInfLoop()
+            cs.EUDEndWhile()
 
         # Jump
         cs.EUDJump(orig_payload)

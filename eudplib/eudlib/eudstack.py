@@ -23,33 +23,34 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-from ... import core as c
-from ... import ctrlstru as cs
-
-from .rwcommon import br, bw
+from .eudarray import EUDArray
+from .. import core as c
 
 
-@c.EUDFunc
-def f_strcpy(dst, src):
-    '''
-    Strcpy equivilant in eudplib. Copy C-style string.
+class EUDStack(c.EUDStruct):
+    _fields_ = [
+        ('data', EUDArray),
+        'pos'
+    ]
 
-    :param dst: Destination address (Not EPD player)
-    :param src: Source address (Not EPD player)
+    def __init__(self, size, basetype=None):
+        super().__init__([
+            # data
+            EUDArray(size),
+            0
+        ])
+        self._basetype = basetype
 
-    :return: dst
-    '''
-    b = c.EUDVariable()
+    def push(self, value):
+        self.data[self.pos] = value
+        self.pos += 1
 
-    br.seekoffset(src)
-    bw.seekoffset(dst)
+    def pop(self):
+        self.pos -= 1
+        data = self.data[self.pos]
+        if self._basetype:
+            data = self._basetype(data)
+        return data
 
-    if cs.EUDInfLoop()():
-        c.SetVariables(b, br.readbyte())
-        bw.writebyte(b)
-        cs.EUDBreakIf(b == 0)
-    cs.EUDEndInfLoop()
-
-    bw.flushdword()
-
-    return dst
+    def empty(self):
+        return self.pos == 0

@@ -1,3 +1,6 @@
+#!python
+#cython: language_level=3, boundscheck=False, wraparound=False
+
 from cpython.mem cimport PyMem_Malloc, PyMem_Realloc, PyMem_Free
 from libc.string cimport memset
 

@@ -1,12 +1,30 @@
-import os
+import helper
 
-pytests = os.listdir()
-pytests = filter(lambda x: os.path.isfile(x), pytests)
-pytests = filter(lambda x: x[:4] == 'test' and x[-3:] == '.py', pytests)
-pytests = list(pytests)
-pytests.remove('testall.py')
+from unittests import (
+    # testblockstru,
+    # testcurpl,
+    # testpatch,
+    # testarray,
+    # testptrigger,
+    # testoperator,
+    # testptrjump,
+    # testprint,
+    # testswitch,
+    # testvartrg,
+    # testmultiret,
+    # testvarray,
+    # teststruct,
+    # testmath,
+    # testbinsearch,
+    teststack,
+)
 
-for pytest in pytests:
-    print('===== Testing file %s' % pytest)
-    os.system("python3 \"%s\"" % pytest)
-    print('---------------------------------\n')
+
+'''
+from perftests import (
+    testbasic,
+)
+'''
+
+# helper.CompressPayload(True)
+helper.test_runall('everything')

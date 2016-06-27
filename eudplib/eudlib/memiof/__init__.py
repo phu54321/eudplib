@@ -31,6 +31,7 @@ from .dwmemio import (
     f_dwadd_epd,
     f_dwsubtract_epd,
     f_dwbreak,
+    f_dwbreak2,
 )
 
 from .byterw import (
@@ -38,8 +39,16 @@ from .byterw import (
     EUDByteWriter,
 )
 
+from .ptrmemio import (
+    f_dwwrite,
+    f_wwrite,
+    f_bwrite,
+    f_dwread,
+    f_wread,
+    f_bread,
+)
+
 from .mblockio import (
     f_repmovsd_epd,
     f_memcpy,
 )
-

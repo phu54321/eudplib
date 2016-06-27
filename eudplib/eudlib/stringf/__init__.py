@@ -24,9 +24,16 @@ THE SOFTWARE.
 '''
 
 from .dbstr import DBString, DisplayExtText, f_initextstr
-from .strcpy import f_strcpy
+from .strfunc import (
+    f_strcpy,
+    f_strcmp,
+)
+
 from .eudprint import (
     f_dbstr_adddw,
+    f_dbstr_addptr,
     f_dbstr_addstr,
+    hptr,
     f_dbstr_print,
+    f_simpleprint
 )

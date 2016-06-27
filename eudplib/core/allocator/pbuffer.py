@@ -23,7 +23,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-from . import expr
+from . import constexpr
 from eudplib import utils as ut
 
 
@@ -59,7 +59,7 @@ class PayloadBuffer:
         return self._datacur - self._datastart
 
     def WriteByte(self, number):
-        number = expr.Evaluate(number)
+        number = constexpr.Evaluate(number)
         ut.ep_assert(number.rlocmode == 0, 'Non-constant given.')
         number.offset &= 0xFF
         self._data[
@@ -67,7 +67,7 @@ class PayloadBuffer:
         self._datacur += 1
 
     def WriteWord(self, number):
-        number = expr.Evaluate(number)
+        number = constexpr.Evaluate(number)
         ut.ep_assert(number.rlocmode == 0, 'Non-constant given.')
         number.offset &= 0xFFFF
 
@@ -76,7 +76,7 @@ class PayloadBuffer:
         self._datacur += 2
 
     def WriteDword(self, number):
-        number = expr.Evaluate(number)
+        number = constexpr.Evaluate(number)
         number.offset &= 0xFFFFFFFF
 
         if number.rlocmode:
@@ -152,7 +152,7 @@ def _CreateStructPacker(structformat):
         orttb = buf._orttable
 
         for i, arg in enumerate(arglist):
-            ri = expr.Evaluate(arg)
+            ri = constexpr.Evaluate(arg)
 
             ut.ep_assert(
                 ri.rlocmode == 0 or (sizelist[i] == 4 and dpos % 4 == 0),

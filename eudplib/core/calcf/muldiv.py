@@ -219,10 +219,11 @@ def _f_div(a, b):
             (ut.EPD(chain_x1[i]), rt.SetTo, x),
         ])
 
+        # Skip if over 0x80000000
         p1, p2, p3 = ac.Forward(), ac.Forward(), ac.Forward()
         p1 << rt.RawTrigger(
             nextptr=p2,
-            conditions=x.AtLeast(0x8000000),
+            conditions=x.AtLeast(0x80000000),
             actions=rt.SetNextPtr(p1, p3)
         )
         p3 << rt.RawTrigger(

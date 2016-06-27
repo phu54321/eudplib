@@ -31,3 +31,4 @@ from .mathf import *
 
 from .eudarray import EUDArray
 from .eudgrp import EUDGrp
+from .eudstack import EUDStack

@@ -28,6 +28,12 @@ from .modcurpl import (
     f_getcurpl
 )
 
+from .logic import (
+    EUDAnd,
+    EUDOr,
+    EUDNot
+)
+
 from .userpl import f_getuserplayerid
 
 from .random import (
@@ -40,6 +46,7 @@ from .random import (
 
 from .mempatch import (
     f_dwpatch_epd,
+    f_blockpatch_epd,
     f_unpatchall,
 )
 
@@ -47,4 +54,17 @@ from .pexist import (
     f_playerexist,
     EUDPlayerLoop,
     EUDEndPlayerLoop
+)
+
+from .listloop import (
+    EUDLoopList,
+    EUDLoopUnit,
+    EUDLoopSprite,
+    EUDLoopBullet,
+    EUDLoopTrigger
+)
+
+from .binsearch import (
+    EUDBinaryMin,
+    EUDBinaryMax,
 )

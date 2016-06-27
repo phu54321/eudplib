@@ -24,6 +24,7 @@ THE SOFTWARE.
 '''
 
 from .inlinens import *
+from .curpl import SetCurrentPlayer
 
 from .allocator import *
 from .eudobj import *

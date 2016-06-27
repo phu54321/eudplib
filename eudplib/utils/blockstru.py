@@ -80,7 +80,11 @@ def EUDPopBlock(name):
     _lastblockdict = _current_bsm._lastblockdict
 
     lastblock = _blockstru.pop()
-    ep_assert(lastblock[0] == name, 'Block starting/ending mismatch')
+    ep_assert(lastblock[0] == name, """\
+Block starting/ending mismatch:
+    - Started with %s
+    - Ended with %s\
+""" % (lastblock[0], name))
     _lastblockdict[name].pop()
     return lastblock
 
