@@ -30,6 +30,7 @@ from .eudv import (
     EUDVariable,
     SetVariables,
 )
+from .eudstruct import EUDStruct
 from .. import rawtrigger as rt
 from ..allocator import Forward
 
@@ -101,80 +102,89 @@ def createIndirectCaller(f, _caller_dict={}):
 # ---------------------------------
 
 
-class EUDFuncPtr:
-    def __init__(self, argn, retn, f_init=None):
-        """ Constructor with function prototype
+def EUDFuncPtr(argn, retn):
+    class PtrDataClass(EUDStruct):
+        _fields_ = [
+            '_fstart',
+            '_fendnext_epd'
+        ]
 
-        :param argn: Number of arguments function can accepy
-        :param retn: Number of variables function will return.
-        :param f_init: First function
-        """
+        def __init__(self, f_init=None):
+            """ Constructor with function prototype
 
-        self._argn = argn
-        self._retn = retn
+            :param argn: Number of arguments function can accepy
+            :param retn: Number of variables function will return.
+            :param f_init: First function
+            """
 
-        if f_init:
-            self.checkValidFunction(f_init)
-            f_idcstart, f_idcend = createIndirectCaller(f_init)
-            self._fstart = EUDVariable(f_idcstart)
-            self._fendnext_epd = EUDVariable(ut.EPD(f_idcend + 4))
+            if f_init:
+                if isinstance(f_init, EUDFuncN):
+                    self.checkValidFunction(f_init)
+                    f_idcstart, f_idcend = createIndirectCaller(f_init)
+                    super().__init__([
+                        f_idcstart,  # fstart
+                        ut.EPD(f_idcend + 4)  # fendnext_epd
+                    ])
+                else:
+                    super().__init__(f_init)
 
-        else:
-            self._fstart = EUDVariable()
-            self._fendnext_epd = EUDVariable()
+            else:
+                super().__init__()
 
-    def checkValidFunction(self, f):
-        ut.ep_assert(isinstance(f, EUDFuncN))
-        if not f._fstart:
-            f._CreateFuncBody()
+        def checkValidFunction(self, f):
+            ut.ep_assert(isinstance(f, EUDFuncN))
+            if not f._fstart:
+                f._CreateFuncBody()
 
-        f_argn = f._argn
-        f_retn = f._retn
-        ut.ep_assert(self._argn == f_argn, "Function with different prototype")
-        ut.ep_assert(self._retn == f_retn, "Function with different prototype")
+            f_argn = f._argn
+            f_retn = f._retn
+            ut.ep_assert(argn == f_argn, "Function with different prototype")
+            ut.ep_assert(retn == f_retn, "Function with different prototype")
 
-    def setFunc(self, f):
-        """ Set function pointer's target to function
+        def setFunc(self, f):
+            """ Set function pointer's target to function
 
-        :param f: Target function
-        """
-        self.checkValidFunction(f)
+            :param f: Target function
+            """
+            self.checkValidFunction(f)
 
-        # Build actions
-        f_idcstart, f_idcend = createIndirectCaller(f)
-        rt.RawTrigger(
-            actions=[
-                self._fstart.SetNumber(f_idcstart),
-                self._fendnext_epd.SetNumber(ut.EPD(f_idcend + 4)),
-            ]
-        )
+            # Build actions
+            f_idcstart, f_idcend = createIndirectCaller(f)
+            self._fstart = f_idcstart
+            self._fendnext_epd = ut.EPD(f_idcend + 4)
 
-    def __lshift__(self, rhs):
-        self.setFunc(rhs)
+        def __lshift__(self, rhs):
+            self.setFunc(rhs)
 
-    def __call__(self, *args):
-        """ Call target function with given arguments """
-        if self._argn:
-            argStorage = getArgStorage(self._argn)
-            SetVariables(argStorage, args)
+        def __call__(self, *args):
+            """ Call target function with given arguments """
 
-        # Call function
-        t, a = Forward(), Forward()
-        _VProc(self._fstart, [self._fstart.QueueAssignTo(ut.EPD(t + 4))])
-        _VProc(self._fendnext_epd, [
-            self._fendnext_epd.QueueAssignTo(ut.EPD(a + 16))
-        ])
+            rt.RawTrigger(actions=rt.SetDeaths(2, rt.SetTo, 5, 0))
 
-        fcallend = Forward()
-        t << rt.RawTrigger(
-            actions=[
-                a << rt.SetNextPtr(0, fcallend)
-            ]
-        )
-        fcallend << rt.NextTrigger()
+            if argn:
+                argStorage = getArgStorage(argn)
+                SetVariables(argStorage, args)
 
-        if self._retn:
-            tmpRets = [EUDVariable() for _ in range(self._retn)]
-            retStorage = getRetStorage(self._retn)
-            SetVariables(tmpRets, retStorage)
-            return ut.List2Assignable(tmpRets)
+            # Call function
+            t, a = Forward(), Forward()
+            SetVariables(
+                [ut.EPD(t + 4), ut.EPD(a + 16)],
+                [self._fstart, self._fendnext_epd]
+            )
+
+            fcallend = Forward()
+            t << rt.RawTrigger(
+                actions=[
+                    a << rt.SetNextPtr(0, fcallend),
+                    rt.SetDeaths(2, rt.SetTo, 4, 0),
+                ]
+            )
+            fcallend << rt.NextTrigger()
+
+            if retn:
+                tmpRets = [EUDVariable() for _ in range(retn)]
+                retStorage = getRetStorage(retn)
+                SetVariables(tmpRets, retStorage)
+                return ut.List2Assignable(tmpRets)
+
+    return PtrDataClass
