@@ -78,22 +78,28 @@ class EUDStruct(ExprProxy, metaclass=structarr._EUDStruct_Metaclass):
                 _, attrtype = nametype
                 attrtype(self.get(i)).deepcopy(attrtype(inst.get(i)))
 
+    def getfield(self, name):
+        attrid, attrtype = self._fielddict[name]
+        attr = self.get(attrid)
+        if attrtype:
+            return attrtype(attr)
+        else:
+            return attr
+
+    def setfield(self, name, value):
+        attrid, _ = self._fielddict[name]
+        self.set(attrid, value)
+
     def __getattr__(self, name):
         try:
             return super().__getattr__(name)
         except AttributeError:
-            attrid, attrtype = self._fielddict[name]
-            attr = self.get(attrid)
-            if attrtype:
-                return attrtype(attr)
-            else:
-                return attr
+            return self.getfield(name)
 
     def __setattr__(self, name, value):
         if '_initialized' in self.__dict__:
             try:
-                attrid, _ = self._fielddict[name]
-                self.set(attrid, value)
+                self.setfield(name, value)
             except KeyError:
                 self.__dict__[name] = value
         else:
