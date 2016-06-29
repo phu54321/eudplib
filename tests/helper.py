@@ -25,11 +25,13 @@ def test_assert(testname, condition):
 
     if EUDIf()(condition):
         f_simpleprint("\x07[ OK ] \x04%s" % testname)
+        test_wait(0)
     if EUDElse()():
         f_simpleprint("\x08[FAIL] %s" % testname)
         failedTestDb = DBString(testname)
         _failedTest[_failedNum] = failedTestDb
         _failedNum += 1
+        test_wait(24)
     EUDEndIf()
 
     _testNum += 1
@@ -44,6 +46,7 @@ def test_equality(testname, real, expt):
 
     if EUDIf()([r == e for r, e in zip(real, expt)]):
         f_simpleprint("\x07[ OK ] \x04%s" % testname)
+        test_wait(0)
     if EUDElse()():
         f_simpleprint("\x08[FAIL] %s" % testname)
         f_simpleprint(" \x03 - \x04 Output   : ", *real)
@@ -51,10 +54,10 @@ def test_equality(testname, real, expt):
         failedTestDb = DBString(testname)
         _failedTest[_failedNum] = failedTestDb
         _failedNum += 1
+        test_wait(24)
     EUDEndIf()
 
     _testNum += 1
-    test_wait(0)
 
 
 def test_operator(testname, realf, exptf=None):
@@ -104,7 +107,7 @@ def test_perf(testname, func, count):
     f_simpleprint(
         '\x03' * 150 + "[PERF] \x04%s \x03* %d    \x05" % (testname, count),
         averageTime, '/', elapsedTime, spaced=False)
-    test_wait(0)
+    test_wait(12)
 
 
 ###############################################################
