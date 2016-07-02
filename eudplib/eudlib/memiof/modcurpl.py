@@ -33,10 +33,12 @@ def f_setcurpl(cp):
     cs.DoActions(c.SetCurrentPlayer(cp))
 
 
+# This function initializes _curpl_checkcond, so should be called at least once
 @c.EUDFunc
 def f_getcurpl():
     cpcache = c.curpl.GetCPCache()
-    if cs.EUDIfNot()(c.Memory(0x6509B0, c.Exactly, cpcache)):
+    cpcond = c.curpl.cpcacheMatchCond()
+    if cs.EUDIfNot()(cpcond):
         cpcache << 0
         for i in range(31, -1, -1):
             c.RawTrigger(

@@ -40,6 +40,7 @@ def _MainStarter(mf):
         rootstarter = c.NextTrigger()
 
         _f_initextstr()
+        sf.f_getcurpl()  # Nessecary. See comments on f_getcurpl
 
         mf()
 
