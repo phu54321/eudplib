@@ -1,5 +1,6 @@
 import helper
 
+
 from unittests import (
     testblockstru,
     testcurpl,
@@ -18,14 +19,9 @@ from unittests import (
     testmath,
     testbinsearch,
     teststack,
+    testdwmemio,
+    testcpmemio,
 )
-
-
-'''
-from perftests import (
-    testbasic,
-)
-'''
 
 # helper.CompressPayload(True)
-helper.test_runall('everything')
+helper.test_runall('unittest')

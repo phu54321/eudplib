@@ -23,7 +23,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-from . import dwmemio as dwm
+from . import safedwmemio as dwm
 from . import byterw as brw
 
 # Helper functions

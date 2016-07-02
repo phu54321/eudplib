@@ -23,11 +23,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-from .modcurpl import (
-    f_setcurpl,
-    f_getcurpl
-)
-
 from .logic import (
     EUDAnd,
     EUDOr,
