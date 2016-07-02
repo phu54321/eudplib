@@ -56,13 +56,6 @@ def f_repmovsd_epd(dstepdp, srcepdp, copydwn):
     ])
 
     if cs.EUDWhileNot()(copydwn == 0):
-        cs.DoActions([
-            c.SetDeaths(0, c.SetTo, cp.f_getcurpl(), 1),
-            c.SetDeaths(1, c.SetTo, epd_diff, 1),
-            c.SetDeaths(2, c.SetTo, srcepdp, 1),
-            c.SetDeaths(3, c.SetTo, dstepdp, 1),
-        ])
-
         cpmoda01, cpmoda02 = cpmoda0_list
 
         # *dstepdp, tempv = 0
