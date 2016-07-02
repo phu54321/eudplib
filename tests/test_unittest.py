@@ -19,6 +19,7 @@ from unittests import (
     testmath,
     testbinsearch,
     teststack,
+    testdwmemio,
 )
 
 # helper.CompressPayload(True)

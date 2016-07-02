@@ -44,51 +44,74 @@ def f_epdread_epd(targetplayer):
     return f_dwepdread_epd(targetplayer)[1]
 
 
-def f_dwwrite_epd(targetplayer, value):
-    if isinstance(value, c.EUDVariable):
-        act = c.Forward()
-        c.SeqCompute([
-            (ut.EPD(act + 16), c.SetTo, targetplayer),
-            (ut.EPD(act + 20), c.SetTo, value)
-        ])
-        cs.DoActions(act << c.SetMemory(0, c.SetTo, 0))
+# Special flag reading functions
+def f_flagread_epd(targetplayer, *flags, _readerdict={}):
+    flags = tuple(flags)    # Make flags hashable
 
+    if flags in _readerdict:
+        readerf = _readerdict[flags]
     else:
-        act = c.Forward()
-        c.SeqCompute([(ut.EPD(act + 16), c.SetTo, targetplayer)])
-        cs.DoActions(act << c.SetMemory(0, c.SetTo, value))
+        # Create reader function
+        @c.EUDFunc
+        def readerf(targetplayer):
+            origcp = f_getcurpl()
+            f_setcurpl(targetplayer)
+
+            resetteract = c.Forward()
+            flagsv = [c.EUDVariable() for _ in range(len(flags))]
+
+            # All set to 0
+            c.RawTrigger(
+                actions=[
+                    c.SetMemory(resetteract + 20, c.SetTo, 0),
+                    [flagv.SetNumber(0) for flagv in flagsv]
+                ]
+            )
+
+            # Fill flags
+            for i in range(31, -1, -1):
+                c.RawTrigger(
+                    conditions=[
+                        c.Deaths(c.CurrentPlayer, c.AtLeast, 2**i, 0)
+                    ],
+                    actions=[
+                        c.SetDeaths(c.CurrentPlayer, c.Subtract, 2**i, 0),
+                        c.SetMemory(resetteract + 20, c.Add, 2 ** i),
+                        [
+                            flagv.AddNumber(2 ** i)
+                            for j, flagv in enumerate(flagsv)
+                            if flags[j] & (2 ** i)
+                        ]
+                    ]
+                )
+
+            c.RawTrigger(actions=[
+                resetteract << c.SetDeaths(c.CurrentPlayer, c.SetTo, 0, 0)
+            ])
+            f_setcurpl(origcp)
+
+            return flagsv
+
+        _readerdict[flags] = readerf
+
+    return readerf(targetplayer)
+
+
+# Writing functions
+
+def f_dwwrite_epd(targetplayer, value):
+    cs.DoActions(c.SetDeaths(targetplayer, c.SetTo, value, 0))
 
 
 def f_dwadd_epd(targetplayer, value):
-    if isinstance(value, c.EUDVariable):
-        act = c.Forward()
-        c.SeqCompute([
-            (ut.EPD(act + 16), c.SetTo, targetplayer),
-            (ut.EPD(act + 20), c.SetTo, value)
-        ])
-        cs.DoActions(act << c.SetMemory(0, c.Add, 0))
-
-    else:
-        act = c.Forward()
-        c.SeqCompute([(ut.EPD(act + 16), c.SetTo, targetplayer)])
-        cs.DoActions(act << c.SetMemory(0, c.Add, value))
+    cs.DoActions(c.SetDeaths(targetplayer, c.Add, value, 0))
 
 
 def f_dwsubtract_epd(targetplayer, value):
-    if isinstance(value, c.EUDVariable):
-        act = c.Forward()
-        c.SeqCompute([
-            (ut.EPD(act + 16), c.SetTo, targetplayer),
-            (ut.EPD(act + 20), c.SetTo, value)
-        ])
-        cs.DoActions(act << c.SetMemory(0, c.Subtract, 0))
-
-    else:
-        act = c.Forward()
-        c.SeqCompute([(ut.EPD(act + 16), c.SetTo, targetplayer)])
-        cs.DoActions(act << c.SetMemory(0, c.Subtract, value))
+    cs.DoActions(c.SetDeaths(targetplayer, c.Subtract, value, 0))
 
 
+# Dword breaking functions
 @c.EUDFunc
 def f_dwbreak(number):
     """Get hiword/loword/4byte of dword"""

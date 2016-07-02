@@ -30,9 +30,12 @@ from .modcurpl import (
 
 
 from .dwmemio import (
+    f_dwepdread_epd,
     f_dwread_epd,
     f_epdread_epd,
-    f_dwepdread_epd,
+
+    f_flagread_epd,
+
     f_dwwrite_epd,
     f_dwadd_epd,
     f_dwsubtract_epd,
