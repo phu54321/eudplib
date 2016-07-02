@@ -46,6 +46,6 @@ def f_getcurpl():
                     cpcache.AddNumber(2**i)
                 ]
             )
-        c.SetCurrentPlayer(cpcache)
+        cs.DoActions(c.SetCurrentPlayer(cpcache))
     cs.EUDEndIf()
     return cpcache
