@@ -20,6 +20,7 @@ from unittests import (
     testbinsearch,
     teststack,
     testdwmemio,
+    testcpmemio,
 )
 
 # helper.CompressPayload(True)

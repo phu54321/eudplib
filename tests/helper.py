@@ -20,8 +20,22 @@ _failedNum = EUDVariable()
 ###############################################################
 
 
+origcp = EUDVariable()
+
+
+def setcp1():
+    origcp << f_getcurpl()
+    f_setcurpl(Player1)
+
+
+def resetcp():
+    f_setcurpl(origcp)
+
+
 def test_assert(testname, condition):
     global _failedNum, _testNum
+
+    setcp1()
 
     if EUDIf()(condition):
         f_simpleprint("\x07[ OK ] \x04%s" % testname)
@@ -34,6 +48,8 @@ def test_assert(testname, condition):
         test_wait(24)
     EUDEndIf()
 
+    resetcp()
+
     _testNum += 1
     test_wait(0)
 
@@ -43,6 +59,8 @@ def test_equality(testname, real, expt):
 
     real = Assignable2List(real)
     expt = Assignable2List(expt)
+
+    setcp1()
 
     if EUDIf()([r == e for r, e in zip(real, expt)]):
         f_simpleprint("\x07[ OK ] \x04%s" % testname)
@@ -56,6 +74,10 @@ def test_equality(testname, real, expt):
         _failedNum += 1
         test_wait(24)
     EUDEndIf()
+
+    resetcp()
+
+    f_setcurpl(origcp)
 
     _testNum += 1
 
@@ -92,6 +114,9 @@ def test_operator(testname, realf, exptf=None):
 ###############################################################
 
 
+perf_basecount = 100000
+
+
 def test_perf(testname, func, count):
     starttm = f_dwread_epd(EPD(0x51CE8C))
 
@@ -104,18 +129,22 @@ def test_perf(testname, func, count):
 
     elapsedTime = starttm - endtm
     averageTime = elapsedTime // count
+    setcp1()
     f_simpleprint(
         '\x03' * 150 + "[PERF] \x04%s \x03* %d    \x05" % (testname, count),
         averageTime, '/', elapsedTime, spaced=False)
+    resetcp()
     test_wait(12)
 
 
 ###############################################################
 
 def test_complete():
+    setcp1()
     f_simpleprint("\x03" + "=" * 40)
     succNum = _testNum - _failedNum
     f_simpleprint("\x04  Test result : ", succNum, "/", _testNum, spaced=False)
+    resetcp()
 
 _testList = []
 

@@ -43,6 +43,16 @@ from .dwmemio import (
     f_dwbreak2,
 )
 
+from .cpmemio import (
+    f_dwepdread_cp,
+    f_dwread_cp,
+    f_epdread_cp,
+
+    f_dwwrite_cp,
+    f_dwadd_cp,
+    f_dwsubtract_cp,
+)
+
 
 from .safedwmemio import (
     f_dwread_epd_safe,
