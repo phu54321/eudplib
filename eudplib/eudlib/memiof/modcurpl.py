@@ -23,11 +23,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-from ..memiof import f_dwread_epd
 from eudplib import (
     core as c,
     ctrlstru as cs,
-    utils as ut
 )
 
 
@@ -39,7 +37,15 @@ def f_setcurpl(cp):
 def f_getcurpl():
     cpcache = c.curpl.GetCPCache()
     if cs.EUDIfNot()(c.Memory(0x6509B0, c.Exactly, cpcache)):
-        cpcache << f_dwread_epd(ut.EPD(0x6509B0))
+        cpcache << 0
+        for i in range(31, -1, -1):
+            c.RawTrigger(
+                conditions=[c.Memory(0x6509B0, c.AtLeast, 2**i)],
+                actions=[
+                    c.SetMemory(0x6509B0, c.Subtract, 2**i),
+                    cpcache.AddNumber(2**i)
+                ]
+            )
         c.SetCurrentPlayer(cpcache)
     cs.EUDEndIf()
     return cpcache

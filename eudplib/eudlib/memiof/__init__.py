@@ -23,6 +23,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
+from .modcurpl import (
+    f_setcurpl,
+    f_getcurpl
+)
+
+
 from .dwmemio import (
     f_dwread_epd,
     f_epdread_epd,
@@ -33,6 +39,14 @@ from .dwmemio import (
     f_dwbreak,
     f_dwbreak2,
 )
+
+
+from .safedwmemio import (
+    f_dwread_epd_safe,
+    f_epdread_epd_safe,
+    f_dwepdread_epd_safe,
+)
+
 
 from .byterw import (
     EUDByteReader,

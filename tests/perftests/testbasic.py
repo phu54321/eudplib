@@ -24,9 +24,12 @@ def test_perfbasic():
     ptr << 0x58A364
 
     # Comparison of various functions
+    test_perf("Addition", lambda: a + b, basecount)
+    test_perf("Subtraction", lambda: a - b, basecount)
     test_perf("Multiplication", lambda: a * b, basecount)
     test_perf("Division", lambda: a // b, basecount)
-    test_perf("f_epdread_epd", lambda: f_epdread_epd(c), basecount)
+    test_perf("f_dwread_epd", lambda: f_dwread_epd(c), basecount)
+    test_perf("f_dwread_epd_safe", lambda: f_dwread_epd_safe(c), basecount)
     test_perf("f_dwbreak", lambda: f_dwbreak(a), basecount)
     test_perf("EPD", lambda: EPD(ptr), basecount)
     test_perf("f_dwread", lambda: f_dwread(ptr), basecount // 2)

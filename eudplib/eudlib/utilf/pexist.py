@@ -23,8 +23,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-from ..memiof import f_dwread_epd
-from .modcurpl import (
+from ..memiof import (
+    f_dwread_epd,
     f_getcurpl,
     f_setcurpl,
 )
