@@ -23,6 +23,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-from .trigonometric import (
-    f_lengthdir,
-)
+from .lengthdir import f_lengthdir
+from .atan2 import f_atan2
+from .sqrt import f_sqrt

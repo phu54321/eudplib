@@ -30,6 +30,7 @@ from .basicstru import (
     EUDJump,
     EUDJumpIf,
     EUDJumpIfNot,
+    EUDTernary,
 )
 
 from .simpleblock import (

@@ -8,6 +8,11 @@ sys.path.insert(0, os.path.abspath('..\\'))
 from eudplib import *
 
 
+import ctypes
+
+ctypes.c_int
+
+
 '''
 Creep reading
 '''

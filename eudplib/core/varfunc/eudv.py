@@ -30,20 +30,22 @@ from .. import rawtrigger as bt
 from ..allocator import (
     Evaluate,
     Forward,
-    Expr,
-    IsValidExpr
+    ConstExpr,
+    IsConstExpr
 )
 from ...utils import (
     FlattenList,
     EPD,
     List2Assignable,
+    unProxy,
     ep_assert
 )
 from .vbase import VariableBase
 from .vbuf import GetCurrentVariableBuffer
 
 
-class VariableTriggerForward(Expr):
+# Unused variable don't need to be allocated.
+class VariableTriggerForward(ConstExpr):
 
     def __init__(self, initval):
         super().__init__(self)
@@ -71,7 +73,7 @@ class EUDVariable(VariableBase):
     def GetVTable(self):
         return self._vartrigger
 
-    def GetVariableMemoryAddr(self):
+    def getValueAddr(self):
         return self._varact + 20
 
     def __hash__(self):
@@ -81,7 +83,7 @@ class EUDVariable(VariableBase):
 
     def QueueAssignTo(self, dest):
         try:
-            dest = EPD(dest.GetVariableMemoryAddr())
+            dest = EPD(dest.getValueAddr())
         except AttributeError:
             pass
 
@@ -92,7 +94,7 @@ class EUDVariable(VariableBase):
 
     def QueueAddTo(self, dest):
         try:
-            dest = EPD(dest.GetVariableMemoryAddr())
+            dest = EPD(dest.getValueAddr())
         except AttributeError:
             pass
 
@@ -103,7 +105,7 @@ class EUDVariable(VariableBase):
 
     def QueueSubtractTo(self, dest):
         try:
-            dest = EPD(dest.GetVariableMemoryAddr())
+            dest = EPD(dest.getValueAddr())
         except AttributeError:
             pass
 
@@ -179,7 +181,7 @@ class EUDVariable(VariableBase):
     # -------
 
     def __eq__(self, other):
-        if IsValidExpr(other):
+        if IsConstExpr(other):
             return self.Exactly(other)
 
         else:
@@ -189,7 +191,7 @@ class EUDVariable(VariableBase):
         return (self - other).AtLeast(1)
 
     def __le__(self, other):
-        if IsValidExpr(other):
+        if IsConstExpr(other):
             return self.AtMost(other)
 
         else:
@@ -201,7 +203,7 @@ class EUDVariable(VariableBase):
             return t.Exactly(0)
 
     def __ge__(self, other):
-        if IsValidExpr(other):
+        if IsConstExpr(other):
             return self.AtLeast(other)
 
         else:
@@ -218,7 +220,7 @@ class EUDVariable(VariableBase):
             traceback.print_stack()
             return [bt.Never()]  # No unsigned number is less than 0
 
-        if IsValidExpr(other):
+        if IsConstExpr(other):
             return self.AtMost(other - 1)
 
         else:
@@ -236,7 +238,7 @@ class EUDVariable(VariableBase):
             traceback.print_stack()
             return [bt.Never()]  # No unsigned number is less than 0
 
-        if IsValidExpr(other):
+        if IsConstExpr(other):
             return self.AtLeast(other + 1)
 
         else:
@@ -248,41 +250,67 @@ class EUDVariable(VariableBase):
             return t.AtLeast(1)
 
     # operator placeholders
-    def __mul__(self, a): pass
+    def __mul__(self, a):
+        pass
 
-    def __rmul__(self, a): pass
+    def __rmul__(self, a):
+        pass
 
-    def __imul__(self, a): pass
+    def __imul__(self, a):
+        pass
 
-    def __floordiv__(self, a): raise NotImplementedError('')
+    def __floordiv__(self, a):
+        raise NotImplementedError('')
 
-    def __rfloordiv__(self, a): pass
+    def __rfloordiv__(self, a):
+        pass
 
-    def __ifloordiv__(self, a): pass
+    def __ifloordiv__(self, a):
+        pass
 
-    def __mod__(self, a): pass
+    def __mod__(self, a):
+        pass
 
-    def __rmod__(self, a): pass
+    def __rmod__(self, a):
+        pass
 
-    def __imod__(self, a): pass
+    def __imod__(self, a):
+        pass
 
-    def __and__(self, a): pass
+    def __and__(self, a):
+        pass
 
-    def __rand__(self, a): pass
+    def __rand__(self, a):
+        pass
 
-    def __iand__(self, a): pass
+    def __iand__(self, a):
+        pass
 
-    def __or__(self, a): pass
+    def __or__(self, a):
+        pass
 
-    def __ror__(self, a): pass
+    def __ror__(self, a):
+        pass
 
-    def __ior__(self, a): pass
+    def __ior__(self, a):
+        pass
 
-    def __xor__(self, a): pass
+    def __xor__(self, a):
+        pass
 
-    def __rxor__(self, a): pass
+    def __rxor__(self, a):
+        pass
 
-    def __ixor__(self, a): pass
+    def __ixor__(self, a):
+        pass
+
+
+def IsEUDVariable(x):
+    x = unProxy(x)
+    return isinstance(x, EUDVariable)
+
+
+# ---------
 
 
 def _VProc(v, actions):
@@ -303,10 +331,9 @@ def EUDCreateVariables(varn):
 
 # -------
 
-
 def _GetComputeDest(dst):
     try:
-        return EPD(dst.GetVariableMemoryAddr())
+        return EPD(dst.getValueAddr())
     except AttributeError:
         return dst
 
@@ -326,7 +353,7 @@ def _SeqComputeSub(assignpairs):
 
     for i, assignpair in enumerate(assignpairs):
         dst, mdt, src = assignpair
-        if isinstance(src, EUDVariable):
+        if IsEUDVariable(src):
             const_assigning_index = i
             break
 
@@ -375,16 +402,6 @@ def _SeqComputeSub(assignpairs):
 
 
 def SeqCompute(assignpairs):
-    # Check if argument is valid
-    for dst, mdt, src in assignpairs:
-        ep_assert(
-            (isinstance(dst, VariableBase) or IsValidExpr(dst)) and
-            (mdt in [bt.SetTo, bt.Add, bt.Subtract]) and
-            (isinstance(src, EUDVariable) or IsValidExpr(src)),
-
-            "Unsupported argument (%s, %s, %s)" % (dst, mdt, src)
-        )
-
     # We need dependency map while writing assignment pairs
     dstvarset = set()
     srcvarset = set()
@@ -397,7 +414,6 @@ def SeqCompute(assignpairs):
 
     # Number of expected actions.
     actioncount = 0
-
 
     def FlushPairs():
         nonlocal constcollecting, actioncount
@@ -415,9 +431,11 @@ def SeqCompute(assignpairs):
 
     for assignpair in assignpairs:
         dst, mdt, src = assignpair
+        dst = unProxy(dst)
+        src = unProxy(src)
 
         # Flush action set before preceeding
-        if isinstance(src, EUDVariable):
+        if IsEUDVariable(src):
             if src in dstvarset:
                 FlushPairs()
             elif src in srcvarset:
@@ -438,7 +456,7 @@ def SeqCompute(assignpairs):
             actioncount += 1
 
         subassignpairs.append(assignpair)
-        if isinstance(dst, VariableBase):
+        if IsEUDVariable(dst):
             dstvarset.add(dst)
 
     FlushPairs()

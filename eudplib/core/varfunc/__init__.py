@@ -25,10 +25,14 @@ THE SOFTWARE.
 
 from .eudv import (
     EUDVariable,
+    IsEUDVariable,
     EUDCreateVariables,
     SeqCompute,
     SetVariables,
 )
+
+from .vararray import EUDVArray
+from .eudstruct import EUDStruct
 
 from .eudlv import EUDLightVariable
 from .eudf import EUDFunc
