@@ -52,7 +52,6 @@ class Vector2D(EUDStruct):
         return self
 
     def __isub__(self, rhs):
-        print(self, rhs)
         self.x -= rhs.x
         self.y -= rhs.y
         return self
@@ -103,10 +102,6 @@ class CircleObj(EUDStruct):
         self = CircleObj(self)
         rhs = CircleObj(rhs)
 
-        print(rhs.pos)
-        print(self.pos)
-        print(rhs.pos - self.pos)
-
         distsq = rhs.pos.sub(self.pos).lengthsq()
         rsum = radius + radius
         rsumsq = rsum * rsum
@@ -130,7 +125,7 @@ class CircleObj(EUDStruct):
 
             # Check if posdiff is in align with veldiff with dot
             aligning = posdiff.dot(veldiff)
-            if EUDIf()(aligning <= 0x80000000):
+            if EUDIf()(aligning >= 0x80000000):
                 # Veldiff and posdiff are in opposite direction.
                 # Meaning that they are doing collision
 
