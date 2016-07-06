@@ -52,3 +52,16 @@ def EUDJumpIfNot(conditions, onfalse):
     tg.EUDBranch(conditions, ontrue, onfalse)
     ontrue << c.NextTrigger()
 
+
+def EUDTernary(conditions, ontrue, onfalse):
+    v = c.EUDVariable()
+    t = c.Forward()
+    end = c.Forward()
+
+    EUDJumpIf(conditions, t)
+    v << onfalse
+    EUDJump(end)
+    t << c.NextTrigger()
+    v << ontrue
+    end << c.NextTrigger()
+    return v

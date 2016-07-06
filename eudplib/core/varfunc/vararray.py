@@ -1,3 +1,28 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+'''
+Copyright (c) 2014 trgk
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+'''
+
 import weakref
 import collections
 
@@ -5,21 +30,20 @@ from .. import rawtrigger as bt
 from ..allocator import (
     Evaluate,
     Forward,
-    Expr,
-    IsValidExpr,
-    EUDObjectView
+    ConstExpr,
+    IsConstExpr,
 )
 
 from ...utils import (
     EPD,
-    ep_assert
+    ExprProxy
 )
 
 from .eudv import EUDVariable, SeqCompute
 from .vbuf import GetCurrentVariableBuffer
 
 
-class EUDVArrayForward(Expr):
+class EUDVArrayData(ConstExpr):
     def __init__(self, initvars):
         super().__init__(self)
         self._initvars = initvars
@@ -34,27 +58,29 @@ class EUDVArrayForward(Expr):
         return Evaluate(self._vdict[evb])
 
 
-class EUDVArray(EUDObjectView):
-    def __init__(self, initvars):
+class EUDVArray(ExprProxy):
+    def __init__(self, initvars, basetype=None):
         if isinstance(initvars, int):
             initvars = [0] * initvars
 
         if isinstance(initvars, collections.Iterable):
-            baseobj = EUDVArrayForward(initvars)
+            baseobj = EUDVArrayData(initvars)
 
-        elif IsValidExpr(initvars):
+        elif IsConstExpr(initvars):
             baseobj = initvars
         else:
             baseobj = EUDVariable()
             baseobj << initvars
 
         super().__init__(baseobj)
+        self._epd = EPD(self)
+        self._basetype = basetype
 
     def getItemPtr(self, i):
-        return self.addr() + 60 * i
+        return self + 60 * i
 
     def getItemEPD(self, i):
-        return self.epd() + 15 * i
+        return self._epd + 15 * i
 
     def get(self, i):
         # This function is hand-optimized
@@ -84,6 +110,8 @@ class EUDVArray(EUDObjectView):
         )
 
         nptr << bt.NextTrigger()
+        if self._basetype:
+            ret = self._basetype(ret)
         return ret
 
     def set(self, i, value):
@@ -104,29 +132,3 @@ class EUDVArray(EUDObjectView):
 
     def __setitem__(self, i, value):
         return self.set(i, value)
-
-
-class EUDVArrayData(Expr):
-    def __init__(self, size, initvars=None):
-        super().__init__(self)
-
-        # Variable normalization
-        if size == 0:
-            size = 1
-
-        if initvars is None:
-            initvars = [0] * size
-
-        ep_assert(size >= 1, 'Invalid size %s given' % size)
-        ep_assert(len(initvars) == size, 'Invalid initializer')
-
-        self._initvars = initvars
-        self._vdict = weakref.WeakKeyDictionary()
-
-    def Evaluate(self):
-        evb = GetCurrentVariableBuffer()
-        if evb not in self._vdict:
-            variables = [evb.CreateVarTrigger(ival) for ival in self._initvars]
-            self._vdict[evb] = variables[0]
-
-        return Evaluate(self._vdict[evb])

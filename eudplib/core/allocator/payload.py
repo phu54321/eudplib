@@ -24,7 +24,7 @@ THE SOFTWARE.
 '''
 
 from . import rlocint, pbuffer
-from . import expr
+from . import constexpr
 from eudplib import utils as ut
 from eudplib.utils import stackobjs
 
@@ -88,11 +88,11 @@ class ObjCollector:
         pass
 
     def WriteDword(self, number):
-        expr.Evaluate(number)
+        constexpr.Evaluate(number)
 
     def WritePack(self, structformat, *arglist):
         for arg in arglist:
-            expr.Evaluate(arg)
+            constexpr.Evaluate(arg)
 
     def WriteBytes(self, b):
         pass
@@ -120,7 +120,7 @@ def CollectObjects(root):
 
     # Evaluate root to register root object.
     # root may not have WritePayload() method e.g: Forward()
-    expr.Evaluate(root)
+    constexpr.Evaluate(root)
 
     while _untraversed_objects:
         while _untraversed_objects:

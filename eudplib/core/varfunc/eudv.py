@@ -30,13 +30,14 @@ from .. import rawtrigger as bt
 from ..allocator import (
     Evaluate,
     Forward,
-    Expr,
-    IsValidExpr
+    ConstExpr,
+    IsConstExpr
 )
 from ...utils import (
     FlattenList,
     EPD,
     List2Assignable,
+    unProxy,
     ep_assert
 )
 from .vbase import VariableBase
@@ -44,7 +45,7 @@ from .vbuf import GetCurrentVariableBuffer
 
 
 # Unused variable don't need to be allocated.
-class VariableTriggerForward(Expr):
+class VariableTriggerForward(ConstExpr):
 
     def __init__(self, initval):
         super().__init__(self)
@@ -180,7 +181,7 @@ class EUDVariable(VariableBase):
     # -------
 
     def __eq__(self, other):
-        if IsValidExpr(other):
+        if IsConstExpr(other):
             return self.Exactly(other)
 
         else:
@@ -190,7 +191,7 @@ class EUDVariable(VariableBase):
         return (self - other).AtLeast(1)
 
     def __le__(self, other):
-        if IsValidExpr(other):
+        if IsConstExpr(other):
             return self.AtMost(other)
 
         else:
@@ -202,7 +203,7 @@ class EUDVariable(VariableBase):
             return t.Exactly(0)
 
     def __ge__(self, other):
-        if IsValidExpr(other):
+        if IsConstExpr(other):
             return self.AtLeast(other)
 
         else:
@@ -219,7 +220,7 @@ class EUDVariable(VariableBase):
             traceback.print_stack()
             return [bt.Never()]  # No unsigned number is less than 0
 
-        if IsValidExpr(other):
+        if IsConstExpr(other):
             return self.AtMost(other - 1)
 
         else:
@@ -237,7 +238,7 @@ class EUDVariable(VariableBase):
             traceback.print_stack()
             return [bt.Never()]  # No unsigned number is less than 0
 
-        if IsValidExpr(other):
+        if IsConstExpr(other):
             return self.AtLeast(other + 1)
 
         else:
@@ -304,6 +305,14 @@ class EUDVariable(VariableBase):
         pass
 
 
+def IsEUDVariable(x):
+    x = unProxy(x)
+    return isinstance(x, EUDVariable)
+
+
+# ---------
+
+
 def _VProc(v, actions):
     nexttrg = Forward()
 
@@ -321,7 +330,6 @@ def EUDCreateVariables(varn):
 
 
 # -------
-
 
 def _GetComputeDest(dst):
     try:
@@ -345,7 +353,7 @@ def _SeqComputeSub(assignpairs):
 
     for i, assignpair in enumerate(assignpairs):
         dst, mdt, src = assignpair
-        if isinstance(src, EUDVariable):
+        if IsEUDVariable(src):
             const_assigning_index = i
             break
 
@@ -394,16 +402,6 @@ def _SeqComputeSub(assignpairs):
 
 
 def SeqCompute(assignpairs):
-    # Check if argument is valid
-    for dst, mdt, src in assignpairs:
-        ep_assert(
-            (isinstance(dst, VariableBase) or IsValidExpr(dst)) and
-            (mdt in [bt.SetTo, bt.Add, bt.Subtract]) and
-            (isinstance(src, EUDVariable) or IsValidExpr(src)),
-
-            "Unsupported argument (%s, %s, %s)" % (dst, mdt, src)
-        )
-
     # We need dependency map while writing assignment pairs
     dstvarset = set()
     srcvarset = set()
@@ -433,9 +431,11 @@ def SeqCompute(assignpairs):
 
     for assignpair in assignpairs:
         dst, mdt, src = assignpair
+        dst = unProxy(dst)
+        src = unProxy(src)
 
         # Flush action set before preceeding
-        if isinstance(src, EUDVariable):
+        if IsEUDVariable(src):
             if src in dstvarset:
                 FlushPairs()
             elif src in srcvarset:
@@ -456,7 +456,7 @@ def SeqCompute(assignpairs):
             actioncount += 1
 
         subassignpairs.append(assignpair)
-        if isinstance(dst, VariableBase):
+        if IsEUDVariable(dst):
             dstvarset.add(dst)
 
     FlushPairs()

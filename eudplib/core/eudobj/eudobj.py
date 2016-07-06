@@ -23,12 +23,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-from ..allocator import Expr
+from ..allocator import ConstExpr
 from ..allocator.payload import GetObjectAddr
 from eudplib import utils as ut
 
 
-class EUDObject(Expr):
+class EUDObject(ConstExpr):
 
     """
     Class for standalone object on memory

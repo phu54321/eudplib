@@ -52,7 +52,7 @@ def EUDSwitchCase():
     def _footer(*numbers):
         for number in numbers:
             ut.ep_assert(
-                isinstance(number, int) or isinstance(number, c.Expr),
+                isinstance(number, int) or isinstance(number, c.ConstExpr),
                 'Invalid selector start for EUDSwitch'
             )
 

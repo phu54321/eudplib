@@ -23,57 +23,34 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-from .cshelper import CtrlStruOpener
+from .eudarray import EUDArray
+from .. import core as c
 
-from .basicstru import (
-    DoActions,
-    EUDJump,
-    EUDJumpIf,
-    EUDJumpIfNot,
-    EUDTernary,
-)
 
-from .simpleblock import (
-    EUDIf,
-    EUDIfNot,
-    EUDElseIf,
-    EUDElseIfNot,
-    EUDElse,
-    EUDEndIf,
+class EUDStack(c.EUDStruct):
+    _fields_ = [
+        ('data', EUDArray),
+        'pos'
+    ]
 
-    EUDExecuteOnce,
-    EUDEndExecuteOnce,
-)
+    def __init__(self, size, basetype=None):
+        super().__init__([
+            # data
+            EUDArray(size),
+            0
+        ])
+        self._basetype = basetype
 
-from .loopblock import (
-    EUDInfLoop,
-    EUDEndInfLoop,
+    def push(self, value):
+        self.data[self.pos] = value
+        self.pos += 1
 
-    EUDLoopN,
-    EUDEndLoopN,
+    def pop(self):
+        self.pos -= 1
+        data = self.data[self.pos]
+        if self._basetype:
+            data = self._basetype(data)
+        return data
 
-    EUDLoopRange,
-
-    EUDWhile,
-    EUDWhileNot,
-    EUDEndWhile,
-)
-
-from .swblock import (
-    EUDSwitch,
-    EUDSwitchCase,
-    EUDSwitchDefault,
-    EUDEndSwitch,
-)
-
-from .breakcont import (
-    EUDContinue,
-    EUDContinueIf,
-    EUDContinueIfNot,
-    EUDSetContinuePoint,
-    EUDIsContinuePointSet,
-
-    EUDBreak,
-    EUDBreakIf,
-    EUDBreakIfNot
-)
+    def empty(self):
+        return self.pos == 0

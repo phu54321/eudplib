@@ -214,9 +214,9 @@ def CreateInjectFinalizer(chkt, root):
                     c.SetMemory(prevtend + 4, c.SetTo, tre),
 
                     # Cache dlist start & end
-                    c.SetMemory(rtt.orig_tstart.addr() + player * 4, c.SetTo,
+                    c.SetMemory(rtt.orig_tstart + player * 4, c.SetTo,
                                 prevtstart),
-                    c.SetMemory(rtt.orig_tend.addr() + player * 4, c.SetTo,
+                    c.SetMemory(rtt.orig_tend + player * 4, c.SetTo,
                                 prevtend),
                 ])
             cs.EUDEndIf()

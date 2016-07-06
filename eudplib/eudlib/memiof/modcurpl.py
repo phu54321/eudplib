@@ -23,49 +23,31 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-from eudplib import utils as ut
+from eudplib import (
+    core as c,
+    ctrlstru as cs,
+)
 
 
-class EUDObjectView:
-
-    ''' Class for general expression with rlocints.
-    '''
-
-    def __init__(self, objAddr):
-        if isinstance(objAddr, EUDObjectView):
-            objAddr = objAddr.addr()
-        self._objEPD = ut.EPD(objAddr)
-        self._objAddr = objAddr
-
-    def addr(self):
-        return self._objAddr
-
-    def epd(self):
-        return self._objEPD
-
-    def __add__(self, other):
-        return self.addr() + other
-
-    def __radd__(self, other):
-        return other + self.addr()
-
-    def __sub__(self, other):
-        return self.addr() - other
-
-    def __rsub__(self, other):
-        return other - self.addr()
-
-    def __mul__(self, k):
-        return self.addr() * k
-
-    def __rmul__(self, k):
-        return k * self.addr()
-
-    def __floordiv__(self, k):
-        if k == 4:
-            return self.epd() + (0x58A364 // 4)
-        return self.addr() // k
+def f_setcurpl(cp):
+    cs.DoActions(c.SetCurrentPlayer(cp))
 
 
-def Addr(obj):
-    return obj.getBaseObj()
+# This function initializes _curpl_checkcond, so should be called at least once
+@c.EUDFunc
+def f_getcurpl():
+    cpcache = c.curpl.GetCPCache()
+    cpcond = c.curpl.cpcacheMatchCond()
+    if cs.EUDIfNot()(cpcond):
+        cpcache << 0
+        for i in range(31, -1, -1):
+            c.RawTrigger(
+                conditions=[c.Memory(0x6509B0, c.AtLeast, 2**i)],
+                actions=[
+                    c.SetMemory(0x6509B0, c.Subtract, 2**i),
+                    cpcache.AddNumber(2**i)
+                ]
+            )
+        cs.DoActions(c.SetCurrentPlayer(cpcache))
+    cs.EUDEndIf()
+    return cpcache

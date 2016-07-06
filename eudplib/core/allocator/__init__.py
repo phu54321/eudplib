@@ -23,14 +23,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-from .expr import (
-    Expr,
+from .constexpr import (
+    ConstExpr,
     Forward,
     Evaluate,
-    IsValidExpr
+    IsConstExpr,
 )
-
-from .objview import EUDObjectView
 
 from .rlocint import (
     RlocInt,

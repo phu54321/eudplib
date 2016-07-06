@@ -23,23 +23,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-from ..memiof import f_dwread_epd
-from eudplib import (
-    core as c,
-    ctrlstru as cs,
-    utils as ut
-)
-
-
-def f_setcurpl(cp):
-    cs.DoActions(c.SetCurrentPlayer(cp))
+from eudplib import core as c
+from ..utilf import EUDBinaryMax
 
 
 @c.EUDFunc
-def f_getcurpl():
-    cpcache = c.curpl.GetCPCache()
-    if cs.EUDIfNot()(c.Memory(0x6509B0, c.Exactly, cpcache)):
-        cpcache << f_dwread_epd(ut.EPD(0x6509B0))
-        c.SetCurrentPlayer(cpcache)
-    cs.EUDEndIf()
-    return cpcache
+def f_sqrt(n):
+    return EUDBinaryMax(lambda x: x * x <= n, 0, 0xFFFF)
