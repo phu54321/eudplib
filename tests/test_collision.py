@@ -135,9 +135,7 @@ class CircleObj(EUDStruct):
                 # Meaning that they are doing collision
 
                 # We create normal vector perpendicular with posdiff.
-                posdiff_perpend = Vector2D()
-                posdiff_perpend.x = -posdiff.y
-                posdiff_perpend.y = posdiff.x
+                posdiff_perpend = Vector2D(-posdiff.y, posdiff.x)
                 posdiff_length = posdiff.length()
 
                 # Divide velavg to perpendicular segment and parallel segment

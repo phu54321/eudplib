@@ -39,7 +39,7 @@ from ...utils import (
     ExprProxy
 )
 
-from .eudv import EUDVariable, SeqCompute
+from .eudv import EUDVariable, SeqCompute, IsEUDVariable
 from .vbuf import GetCurrentVariableBuffer
 
 
@@ -47,6 +47,20 @@ class EUDVArrayData(ConstExpr):
     def __init__(self, initvars):
         super().__init__(self)
         self._initvars = initvars
+
+        # Process initvars
+        variableItems = []
+        for i, var in enumerate(initvars):
+            if IsEUDVariable(var):
+                initvars[i] = 0
+                variableItems.append((i, var))
+
+        if variableItems:
+            SeqCompute(
+                [(EPD(self + 344 + 60 * i), bt.SetTo, var)
+                 for i, var in variableItems
+                 ])
+
         self._vdict = weakref.WeakKeyDictionary()
 
     def Evaluate(self):
