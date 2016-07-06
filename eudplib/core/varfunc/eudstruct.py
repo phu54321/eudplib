@@ -24,7 +24,7 @@ THE SOFTWARE.
 '''
 
 from .vararray import EUDVArray
-from ...utils import ExprProxy
+from ...utils import ExprProxy, ep_assert
 
 from . import structarr
 
@@ -66,6 +66,9 @@ class EUDStruct(ExprProxy, metaclass=structarr._EUDStruct_Metaclass):
         inst = basetype()
         self.deepcopy(inst)
         return inst
+
+    def setall(self, values):
+        self.fill(values, assert_expected_values_len=len(self._fielddict))
 
     def deepcopy(self, inst):
         """ Copy struct to other instance """

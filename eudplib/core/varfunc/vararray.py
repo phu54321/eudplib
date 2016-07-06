@@ -36,10 +36,11 @@ from ..allocator import (
 
 from ...utils import (
     EPD,
-    ExprProxy
+    ExprProxy,
+    ep_assert
 )
 
-from .eudv import EUDVariable, SeqCompute, IsEUDVariable
+from .eudv import EUDVariable, SeqCompute
 from .vbuf import GetCurrentVariableBuffer
 
 
@@ -47,20 +48,6 @@ class EUDVArrayData(ConstExpr):
     def __init__(self, initvars):
         super().__init__(self)
         self._initvars = initvars
-
-        # Process initvars
-        variableItems = []
-        for i, var in enumerate(initvars):
-            if IsEUDVariable(var):
-                initvars[i] = 0
-                variableItems.append((i, var))
-
-        if variableItems:
-            SeqCompute(
-                [(EPD(self + 344 + 60 * i), bt.SetTo, var)
-                 for i, var in variableItems
-                 ])
-
         self._vdict = weakref.WeakKeyDictionary()
 
     def Evaluate(self):
@@ -140,6 +127,15 @@ class EUDVArray(ExprProxy):
                 a0 << bt.SetDeaths(0, bt.SetTo, 0, 0),
             ]
         )
+
+    def fill(self, values, *, assert_expected_values_len=None):
+        if assert_expected_values_len:
+            ep_assert(len(values) == assert_expected_values_len)
+
+        SeqCompute([
+            (EPD(self + 344 + i * 60), bt.SetTo, value)
+            for i, value in enumerate(values)
+        ])
 
     def __getitem__(self, i):
         return self.get(i)
