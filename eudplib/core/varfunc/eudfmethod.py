@@ -58,7 +58,7 @@ def EUDFuncMethod(method):
         self = selftype(self)
         return method(self, *args)
 
-    genericCaller = eudf.EUDFuncN(genericCaller, argn + 1)
+    genericCaller = eudf.EUDFuncN(genericCaller, argn + 1, bodyfunc=method)
 
     # Return function
     def call(self, *args):
@@ -75,7 +75,8 @@ def EUDFuncMethod(method):
                 def caller(*args):
                     return method(self, *args)
 
-                constexpr_callmap[self] = eudf.EUDFuncN(caller, argn)
+                constexpr_callmap[self] = eudf.EUDFuncN(
+                    caller, argn, bodyfunc=method)
 
             return constexpr_callmap[self](*args)
 

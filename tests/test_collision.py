@@ -140,8 +140,6 @@ class CircleObj(EUDStruct):
 
                 # Divide velavg to perpendicular segment and parallel segment
                 para_length = aligning
-                velavg.dot(veldiff)
-                
                 perp_length = posdiff_perpend.dot(veldiff)
 
                 # Invert para_length : collision

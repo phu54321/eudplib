@@ -67,12 +67,24 @@ def _setCurrentCompiledFunc(func):
 
 
 class EUDFuncN:
+    def __init__(self, fdecl_func, argn, *, bodyfunc=None):
+        """ EUDFuncN
 
-    def __init__(self, fdecl_func, argn):
+        :param fdecl_func: Function to be wrapped.
+        :param argn: Count of arguments got by fdecl_func
+        :param bodyfunc: Function which implements real logic This
+            may be different from fdecl_func if fdecl_func is a wrapper
+            around bodyfunc. For instance, in EUDFuncMethod.
+        """
+
+        if bodyfunc is None:
+            bodyfunc = fdecl_func
+
         self._argn = argn
         self._retn = None
         self._fdecl_func = fdecl_func
-        functools.update_wrapper(self, fdecl_func)
+        self._bodyfunc = bodyfunc
+        functools.update_wrapper(self, bodyfunc)
         self._fstart = None
         self._fend = None
         self._fargs = None
