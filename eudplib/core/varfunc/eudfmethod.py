@@ -27,14 +27,14 @@ import functools
 import inspect
 
 from . import eudf
+from . import eudv
 from eudplib import utils as ut
 
-__f_increment = 0
+
+_mth_classtype = {}
 
 
 def EUDFuncMethod(method):
-    global __f_increment
-
     # Get argument number of fdecl_func
     argspec = inspect.getargspec(method)
     ut.ep_assert(
@@ -46,24 +46,38 @@ def EUDFuncMethod(method):
         'No variadic keyword arguments (*kwargs) allowed for EUDFunc.'
     )
 
+    # Get number of arguments excluding self
     argn = len(argspec[0]) - 1
-    idf = __f_increment
-    __f_increment += 1
 
+    constexpr_callmap = {}
+
+    # Generic caller
+    def genericCaller(self, *args):
+        selftype = _mth_classtype[method]
+        print(self, selftype)
+        self = selftype(self)
+        return method(self, *args)
+
+    genericCaller = eudf.EUDFuncN(genericCaller, argn + 1)
+
+    # Return function
     def call(self, *args):
-        # Create eudfuncmethod list
-        if not hasattr(self, '_efmlist'):
-            self._efmlist = {}
+        # Else use purely eudfun method
+        if eudv.IsEUDVariable(self):
+            selftype = type(self)
+            if method not in _mth_classtype:
+                _mth_classtype[method] = selftype
+            return genericCaller(self, *args)
 
-        # Create wrapper for eudfunc
-        if idf not in self._efmlist:
-            def call2(*args):
-                return method(self, *args)
-            call2 = eudf.EUDFuncN(call2, argn)
-            self._efmlist[idf] = call2
+        # Const expression. Can use optimizations
+        else:
+            if self not in constexpr_callmap:
+                def caller(*args):
+                    return method(self, *args)
 
-        # Call that wrapper with arguments
-        return self._efmlist[idf](*args)
+                constexpr_callmap[self] = eudf.EUDFuncN(caller, argn)
+
+            return constexpr_callmap[self](*args)
 
     functools.update_wrapper(call, method)
     return call
