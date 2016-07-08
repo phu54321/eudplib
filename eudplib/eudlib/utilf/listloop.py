@@ -68,7 +68,7 @@ def EUDLoopSprite():
     y_epd = c.EUDVariable()
     y_epd << ut.EPD(0x629688)
 
-    ut.EUDCreateBlock('listloop', 'sprlo')
+    ut.EUDCreateBlock('spriteloop', 'sprlo')
 
     if cs.EUDWhile()(y_epd < ut.EPD(0x629688) + 256):
         ptr, epd = f_dwepdread_epd(y_epd)

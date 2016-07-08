@@ -224,3 +224,4 @@ eudtrg.egg-info/
 .idea/tasks.xml
 tests/outputmap/*.scx
 eudplib-*\
+tests\htmlcov\*

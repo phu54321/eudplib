@@ -54,7 +54,6 @@ def EUDFuncMethod(method):
     # Generic caller
     def genericCaller(self, *args):
         selftype = _mth_classtype[method]
-        print(self, selftype)
         self = selftype(self)
         return method(self, *args)
 
