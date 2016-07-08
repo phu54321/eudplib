@@ -1,5 +1,9 @@
-import helper
+import coverage
 
+cov = coverage.Coverage()
+cov.start()
+
+import helper
 
 from unittests import (
     testblockstru,
@@ -25,3 +29,6 @@ from unittests import (
 
 # helper.CompressPayload(True)
 helper.test_runall('unittest')
+
+cov.stop()
+cov.html_report(include=["C:\\gitclones\\eudtrglib\\eudplib\\*"])
