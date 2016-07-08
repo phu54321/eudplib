@@ -24,22 +24,22 @@ THE SOFTWARE.
 '''
 
 
-def StackObjects(
-    found_objects,
-    dwoccupmap_dict,
-    alloctable,
-):
-    dwoccupmap_max_size = 0
-    for obj in found_objects:
-        dwoccupmap_max_size += len(dwoccupmap_dict[obj])
+def StackObjects(found_objects, dwoccupmap_dict, alloctable):
+    dwoccupmap_max_size = sum(
+        map(lambda x: len(dwoccupmap_dict[x]), found_objects))
+    # for obj in found_objects:
+    #     dwoccupmap_max_size += len(dwoccupmap_dict[obj])
 
     # Buffer to sum all dwoccupmaps
     dwoccupmap_sum = [-1] * (dwoccupmap_max_size + 1)
-
     lallocaddr = 0
     payload_size = 0
+    objnum = len(found_objects)
 
-    for obj in found_objects:
+    for objid, obj in enumerate(found_objects):
+        if objid % 100 == 0:
+            print('[StackObjects] Stacking object %d/%d...' % (objid, objnum),
+                  end='\r')
         # Convert to faster c array
         dwoccupmap = dwoccupmap_dict[obj]
         oclen = len(dwoccupmap)
@@ -76,3 +76,5 @@ def StackObjects(
         alloctable[obj] = lallocaddr * 4
         if (lallocaddr + oclen) * 4 > payload_size:
             payload_size = (lallocaddr + oclen) * 4
+
+    print('[StackObjects] Stacking object %d/%d...' % (objnum, objnum))
