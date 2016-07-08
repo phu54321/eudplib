@@ -16,5 +16,5 @@ def main():
         preserved=False
     )
 
-
+CompressPayload(True)
 SaveMap('outputmap/testgrp.scx', main)

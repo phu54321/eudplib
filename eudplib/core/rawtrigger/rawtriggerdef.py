@@ -143,7 +143,7 @@ class RawTrigger(EUDObject):
         for act in self._actions:
             act.WritePayload(pbuffer)
 
-        if len(self._conditions) != 64:
+        if len(self._actions) != 64:
             pbuffer.WriteBytes(bytes(32))
             pbuffer.WriteSpace(32 * (63 - len(self._actions)))
 
