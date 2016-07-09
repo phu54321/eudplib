@@ -31,50 +31,53 @@ from eudplib import utils as ut
 class EUDObject(ConstExpr):
 
     """
-    Class for standalone object on memory
+    스타크래프트 메모리에서 올라가는 독립적인 객체를 정의합니다.
 
     .. note::
-        Object collection occures in three steps:
+        EUDObject들이 스타크래프트 메모리로 올라가기 위해서는 먼저 맵에 쓰이는
+        모든 EUDObject들을 하나의 큰 메모리 덩어리로 만들 필요가 있습니다. 이
+        과정을 페이로드 생성이라고 합니다. 이 과정은 3단계로 이루어집니다.
 
-        - Collection phase : collects object used in map generation. Object
-        used in WritePayload method are being collected. Methods Evaluate
-        and WritePayload are called during this phase.
-        - Allocation phase : Object have their offset assigned. GetDataSize
-        method is called on this phase, so if GetDataSize is being called,
-        it means that every object required in map has been collected.
-        WritePayload and GetDataSize method should behave exactly the same as
-        it should on Writing phase here.
-        - Writing phase : Object is written into payload.
+        - 객체 수집 단계 : 맵에 쓰이는 모든 EUDObject를 모읍니다. 이 과정에서
+            :method:`Evaluate` , :method:`WritePayload` 가 쓰입니다.
+        - 주소 할당 단계 : 각 EUDObject에 주소를 할당합니다. 이 과정에서
+            :method:`GetDataSize` , :method:`Evaluate` , :method:`WritePayload`
+            가 쓰입니다.
+        - 페이로드 생성 단계 : 각 EUDObject의 주소에 따라서 EUDObject의 내용을
+            씁니다. :method:`GetDataSize` , :method:`WritePayload` 와
+            :method:`Evaluate` 가 쓰입니다.
     """
 
     def __init__(self):
         super().__init__(self)
 
     def DynamicConstructed(self):
-        """ Whether function is constructed dynamically.
+        """ 동적 생성 객체인지를 판단합니다. 기본값은 False입니다.
 
-        Dynamically constructed EUDObject may have their dependency list
-        generated during object construction. So their dependency list is
-        re-examined before allocation phase.
+        맵에 쓰이는 객체들의 종류에 따라 내용물이 달라지는 객체인지를 봅니다.
+        예를 들어 모든 생성된 트리거의 오프셋을 모아놓는 객체가 있다면, 이
+        객체의 크기나 데이터는 실제로 생성된 트리거의 갯수에 따라 달라집니다.
+
+        동적 생성 객체인 경우 객체 수집 단계에서 객체의 내용물과 크기가
+        확정되어야 합니다.
         """
         return False
 
     def Evaluate(self):
-        """
-        What this object should be evaluated to when used in eudplib program.
+        """ 이 객체가 ConstExpr로 쓰였을 때 의미하는 값입니다.
 
-        :return: Default) Memory address of this object.
+        :return: 기본값으로 객체의 주소가 나옵니다.
 
         .. note::
-            In overriding this method, you can use
-            :func:`eudplib.GetObjectAddr`.
+             이 메소드를 오버라이드할 때 func:`GetObjectAddr` 를 쓸 수
+             있습니다.
         """
         return GetObjectAddr(self)
 
     def GetDataSize(self):
-        """Memory size of object."""
+        """ 객체의 메모리 크기  """
         raise ut.EPError('Override')
 
     def WritePayload(self, pbuffer):
-        """Write object"""
+        """ 객체 내용물을 pbuffer에 씁니다. """
         raise ut.EPError('Override')

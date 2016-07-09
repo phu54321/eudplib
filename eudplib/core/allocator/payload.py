@@ -49,11 +49,10 @@ _payload_compress = False
 
 
 def CompressPayload(mode):
-    ''' Set payload compression mode.
+    """ eudplib 자체 압축 여부를 설정합니다.
 
-    :param mode: If true, enable object stacking (compression). If false,
-    disable it.
-    '''
+    :param mode: 압축 여부
+    """
 
     global _payload_compress
     if mode not in [True, False]:
@@ -67,10 +66,10 @@ def CompressPayload(mode):
 
 class ObjCollector:
 
-    '''
+    """
     Object having PayloadBuffer-like interfaces. Collects all objects by
     calling RegisterObject() for every related objects.
-    '''
+    """
 
     def __init__(self):
         pass
@@ -154,10 +153,10 @@ def CollectObjects(root):
 
 class ObjAllocator:
 
-    '''
+    """
     Object having PayloadBuffer-like interfaces. Collects all objects by
     calling RegisterObject() for every related objects.
-    '''
+    """
 
     def __init__(self):
         self._sizes = {}

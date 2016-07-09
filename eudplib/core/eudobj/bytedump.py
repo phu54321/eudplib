@@ -28,9 +28,15 @@ from .eudobj import EUDObject
 
 class Db(EUDObject):
 
-    """Class for raw data object"""
+    """ 바이너리 데이터를 올리는 EUD 객체입니다. """
 
     def __init__(self, b):
+        """ Db의 생성자입니다.
+
+        :param b: Db의 초기값으로 설정할 바이너리 데이터입니다. ``bytes``
+            객체와 호환되야 합니다.
+        """
+
         super().__init__()
         self.content = bytes(b)
 

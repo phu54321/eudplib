@@ -33,7 +33,7 @@ from eudplib import utils as ut
 
 
 def f_mul(a, b):
-    """Calculate a * b"""
+    """ a * b 를 계산합니다. """
     if isinstance(a, vf.EUDVariable) and isinstance(b, vf.EUDVariable):
         return _f_mul(a, b)
 
@@ -50,7 +50,7 @@ def f_mul(a, b):
 
 
 def f_div(a, b):
-    """Calculate (a//b, a%b) """
+    """ (a//b, a%b) 를 계산합니다. """
     if isinstance(b, vf.EUDVariable):
         return _f_div(a, b)
 

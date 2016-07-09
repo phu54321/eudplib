@@ -29,15 +29,38 @@ from ... import utils as ut
 
 class ConstExpr:
 
-    ''' Class for general expression with rlocints.
-    '''
+    """ 컴파일할 때 알 수 있는 값을 나타내는 클래스입니다.
+    """
 
     def __init__(self, baseobj, offset=0, rlocmode=4):
+        """ 생성자입니다.
+
+        모든 ConstExpr 객체는 기준이 되는 객체와 그 객체로부터 얼마나 떨어져
+        있는지를 이용해서 계산합니다. 예를 들어서 트리거의 주소를 값으로 하는
+        ConstExpr는 해당 트리거를 baseobj로, offset은 0이 됩니다.
+
+        rlocmode는 EUD 트리거때문에 생긴 겁니다. rlocmode가 1이면 baseobj // 4
+        의 값이 계산됩니다.
+
+        :param baseobj: ConstExpr 계산에서 기준이 되는 값입니다.
+        :param offset: ConstExpr의 값이 baseobj로부터 얼마나 떨어져있는지를
+            나타냅니다.
+        :param rlocmode: 내부적으로 쓰는 값입니다. rlocmode에 따라 ConstExpr의
+            계산법이 달라집니다. 자세한건 :method:`Evaluate` 를 참고하세요.
+        """
         self.baseobj = baseobj
         self.offset = offset
         self.rlocmode = rlocmode
 
     def Evaluate(self):
+        """ ConstExpr 값을 RlocInt로 계산하는 함수입니다.
+
+        계산식은 다음과 같습니다. :
+
+            return Evaluate(self.baseobj) // 4 * self.rlocmode + self.offset
+
+        :return: 계산 결과
+        """
         return Evaluate(self.baseobj) // 4 * self.rlocmode + self.offset
 
     def __add__(self, other):
@@ -102,14 +125,27 @@ class ConstExpr:
 
 class Forward(ConstExpr):
 
-    '''Class for forward definition.
-    '''
+    """ 전방 선언(Forward Declaration)을 위한 클래스입니다.
+
+    eudplib 코드에서 객체들이 서로를 참조하는 경우가 있습니다. 예를 들어
+    반복문에서는 반복문의 시작 트리거 A와 반복문의 끝 트리거 B가 서로를
+    가르킬 수 있겠죠. 이 때 A와 B의 생성자에서 각각 B와 A가 필요할 수
+    있습니다. 이런 식으로 순환 참조가 필요할 경우, :
+
+        A = Forward()
+        B = RawTrigger(nextptr=A)
+        A << RawTrigger(nextptr=B)
+
+    처럼 ``Forward`` 객체를 이용해 순환 참조를 깰 수 있습니다.
+    """
 
     def __init__(self):
         super().__init__(self)
         self._expr = None
 
     def __lshift__(self, expr):
+        """ Forward에 해당하는 값을 직접 대응시켜줍니다. """
+
         ut.ep_assert(
             self._expr is None,
             'Reforwarding without reset is not allowed'
@@ -119,9 +155,11 @@ class Forward(ConstExpr):
         return expr
 
     def IsSet(self):
+        """ Forward에 값이 설정되었는지를 알아봅니다. """
         return self._expr is not None
 
     def Reset(self):
+        """ Forward에 대응되는 값을 해제시킵니다. """
         self._expr = None
 
     def Evaluate(self):
@@ -130,9 +168,7 @@ class Forward(ConstExpr):
 
 
 def Evaluate(x):
-    '''
-    Evaluate expressions
-    '''
+    """ int나 ConstExpr 값을 실제로 계산합니다. """
     if isinstance(x, int):
         return RlocInt(x, 0)
     try:
@@ -142,5 +178,6 @@ def Evaluate(x):
 
 
 def IsConstExpr(x):
+    """ 객체가 ConstExpr인지 알아봅니다. """
     x = ut.unProxy(x)
     return isinstance(x, int) or isinstance(x, ConstExpr)

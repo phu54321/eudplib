@@ -23,10 +23,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-'''
-scenario.chk section tokenizer. Internally used in eudplib.
-'''
-
 from eudplib import utils as ut
 
 """

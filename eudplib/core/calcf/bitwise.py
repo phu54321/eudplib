@@ -23,6 +23,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
+from .. import allocator as ac
 from .. import varfunc as vf
 from .. import rawtrigger as rt
 from .muldiv import f_mul, f_div
@@ -72,20 +73,20 @@ def bw_gen(cond, docstring=None):
     return f_bitsize_template
 
 
-f_bitand = bw_gen(lambda x: x.Exactly(2), "Calculate a & b")
-f_bitor = bw_gen(lambda x: x.AtLeast(1), "Calculate a | b")
-f_bitxor = bw_gen(lambda x: x.Exactly(1), "Calculate a ^ b")
-f_bitnand = bw_gen(lambda x: x.Exactly(0), "Calculate ~(a & b)")
-f_bitnor = bw_gen(lambda x: x.AtMost(1), "Calculate ~(a | b)")
+f_bitand = bw_gen(lambda x: x.Exactly(2), "a & b 를 계산합니다.")
+f_bitor = bw_gen(lambda x: x.AtLeast(1), "a | b 를 계산합니다.")
+f_bitxor = bw_gen(lambda x: x.Exactly(1), "a ^ b 를 계산합니다.")
+f_bitnand = bw_gen(lambda x: x.Exactly(0), "~(a & b) 를 계산합니다.")
+f_bitnor = bw_gen(lambda x: x.AtMost(1), "~(a | b) 를 계산합니다.")
 
 
 def f_bitnxor(a, b):
-    """Calculate ~(a ^ b)"""
+    """ ~(a ^ b) 를 계산합니다. """
     return f_bitnot(f_bitxor(a, b))
 
 
 def f_bitnot(a):
-    """Calculate ~a"""
+    """ ~a 를 계산합니다. """
     return 0xFFFFFFFF - a
 
 
@@ -94,7 +95,7 @@ def f_bitnot(a):
 
 @vf.EUDFunc
 def f_bitsplit(a):
-    """Splits bit of given number
+    """ 변수를 비트 단위로 분리합니다.
 
     :returns: int bits[32];  // bits[i] = (ith bit from LSB of a is set)
     """
@@ -110,8 +111,6 @@ def f_bitsplit(a):
         )
     return bits
 
-
-# -------
 
 @vf.EUDFunc
 def _exp2_vv(n):
@@ -133,15 +132,12 @@ def _exp2(n):
 
 
 def f_bitlshift(a, b):
-    """a << b"""
+    """ a << b 를 계산합니다. """
     return f_mul(a, _exp2(b))
 
 
 def f_bitrshift(a, b):
-    """Calculate a >> b"""
-    if isinstance(b, int) and b >= 32:
-        return 0
-
+    """ a >> b 를 계산합니다. """
     ret = vf.EUDVariable()
     ret << f_div(a, _exp2(b))
     return ret
