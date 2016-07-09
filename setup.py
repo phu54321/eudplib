@@ -8,6 +8,8 @@ setup(
     package_data={
         '': ['*.dll', '*.lst', '*.pyd'],
     },
+    setup_requires=["cffi>=1.0.0"],
+    install_requires=["cffi>=1.0.0"],
 
     # metadata for upload to PyPI
     author="Trgk",
