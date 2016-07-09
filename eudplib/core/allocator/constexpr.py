@@ -57,11 +57,11 @@ class ConstExpr:
 
         계산식은 다음과 같습니다. :
 
-            return Evaluate(self.baseobj) // 4 * self.rlocmode + self.offset
+            return Evaluate(self.baseobj) * self.rlocmode // 4 + self.offset
 
         :return: 계산 결과
         """
-        return Evaluate(self.baseobj) // 4 * self.rlocmode + self.offset
+        return Evaluate(self.baseobj) * self.rlocmode // 4 + self.offset
 
     def __add__(self, other):
         if not isinstance(other, int):
@@ -180,4 +180,4 @@ def Evaluate(x):
 def IsConstExpr(x):
     """ 객체가 ConstExpr인지 알아봅니다. """
     x = ut.unProxy(x)
-    return isinstance(x, int) or isinstance(x, ConstExpr)
+    return isinstance(x, int) or hasattr(x, 'Evaluate')

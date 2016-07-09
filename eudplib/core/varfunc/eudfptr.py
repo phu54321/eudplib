@@ -26,7 +26,7 @@ THE SOFTWARE.
 from .eudfuncn import EUDFuncN
 from ... import utils as ut
 from .eudv import (
-    _VProc,
+    VProc,
     EUDVariable,
     SetVariables,
 )
@@ -58,7 +58,7 @@ def fillArguments(f):
     if f._argn:
         argStorage = getArgStorage(f._argn)
         for farg, arg in zip(f._fargs, argStorage):
-            _VProc(arg, arg.QueueAssignTo(farg))
+            VProc(arg, arg.QueueAssignTo(farg))
 
 
 def fillReturns(f):
@@ -66,7 +66,7 @@ def fillReturns(f):
     if f._retn:
         retStorage = getRetStorage(f._retn)
         for fret, ret in zip(f._frets, retStorage):
-            _VProc(fret, fret.QueueAssignTo(ret))
+            VProc(fret, fret.QueueAssignTo(ret))
 
 
 def callFuncBody(fstart, fend):

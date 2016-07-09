@@ -24,6 +24,7 @@ THE SOFTWARE.
 '''
 
 from ... import core as c
+from ...core.allocator.payload import setPayloadLoggerMode
 from ...utils.blockstru import (
     BlockStruManager,
     SetCurrentBlockStruManager,
@@ -40,7 +41,11 @@ def applyInjector(chkt, root):
     prev_bsm = SetCurrentBlockStruManager(bsm)
 
     root = CreateInjectFinalizer(chkt, root)
+
+    setPayloadLoggerMode(True)
     payload = c.CreatePayload(root)
+    setPayloadLoggerMode(False)
+
     final_payload = CreatePayloadRelocator(payload)
     CreateVectorRelocator(chkt, final_payload)
 

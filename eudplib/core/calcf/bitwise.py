@@ -115,6 +115,7 @@ def f_bitsplit(a):
 @vf.EUDFunc
 def _exp2_vv(n):
     ret = vf.EUDVariable()
+    ret << 0
     for i in range(32):
         rt.RawTrigger(
             conditions=[n == i],
@@ -126,18 +127,56 @@ def _exp2_vv(n):
 def _exp2(n):
     if isinstance(n, int):
         return 1 << n
+        if n >= 32:
+            return 0
+        else:
+            return 1 << n
 
     else:
         return _exp2_vv(n)
 
 
+@vf.EUDFunc
+def _f_bitlshift(a, b):
+    loopstart = ac.Forward()
+    loopend = ac.Forward()
+    loopcnt = ac.Forward()
+
+    rt.RawTrigger(
+        actions=[
+            rt.SetNextPtr(a.GetVTable(), loopcnt),
+            a.QueueAddTo(a),
+        ]
+    )
+
+    loopstart << rt.RawTrigger(
+        nextptr=a.GetVTable(),
+        conditions=b.Exactly(0),
+        actions=rt.SetNextPtr(loopstart, loopend)
+    )
+    loopcnt << rt.RawTrigger(
+        nextptr=loopstart,
+        actions=b.SubtractNumber(1)
+    )
+    loopend << rt.RawTrigger(
+        actions=rt.SetNextPtr(loopstart, a.GetVTable())
+    )
+
+    return a
+
+
 def f_bitlshift(a, b):
     """ a << b 를 계산합니다. """
-    return f_mul(a, _exp2(b))
+    if isinstance(b, int):
+        return f_mul(a, _exp2(b))
+    else:
+        return _f_bitlshift(a, b)
 
 
 def f_bitrshift(a, b):
     """ a >> b 를 계산합니다. """
-    ret = vf.EUDVariable()
-    ret << f_div(a, _exp2(b))
-    return ret
+    if isinstance(b, int) and b >= 32:
+        return 0
+
+    return a // _exp2(b)
+

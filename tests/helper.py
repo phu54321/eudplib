@@ -150,6 +150,7 @@ _testList = []
 
 
 def TestInstance(func):
+    print(" - Adding test instance %s" % func.__name__)
     _testList.append(func)
     return func
 

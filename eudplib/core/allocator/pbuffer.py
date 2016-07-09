@@ -61,18 +61,16 @@ class PayloadBuffer:
     def WriteByte(self, number):
         number = constexpr.Evaluate(number)
         ut.ep_assert(number.rlocmode == 0, 'Non-constant given.')
-        number.offset &= 0xFF
-        self._data[
-            self._datacur: self._datacur + 1] = ut.i2b1(number.offset)
+        self._data[self._datacur] = number.offset & 0xFF
         self._datacur += 1
 
     def WriteWord(self, number):
         number = constexpr.Evaluate(number)
         ut.ep_assert(number.rlocmode == 0, 'Non-constant given.')
-        number.offset &= 0xFFFF
 
-        self._data[
-            self._datacur: self._datacur + 2] = ut.i2b2(number.offset)
+        offset = number.offset
+        self._data[self._datacur + 0] = offset & 0xFF
+        self._data[self._datacur + 1] = (offset >> 8) & 0xFF
         self._datacur += 2
 
     def WriteDword(self, number):
@@ -91,8 +89,11 @@ class PayloadBuffer:
             else:
                 raise ut.EPError('rlocmode should be 1 or 4')
 
-        self._data[
-            self._datacur: self._datacur + 4] = ut.i2b4(number.offset)
+        offset = number.offset
+        self._data[self._datacur + 0] = offset & 0xFF
+        self._data[self._datacur + 1] = (offset >> 8) & 0xFF
+        self._data[self._datacur + 2] = (offset >> 16) & 0xFF
+        self._data[self._datacur + 3] = (offset >> 24) & 0xFF
         self._datacur += 4
 
     def WritePack(self, structformat, *arglist):
@@ -106,10 +107,11 @@ class PayloadBuffer:
         ======= =======
         '''
 
-        if structformat not in _packerlist:
+        try:
+            _packerlist[structformat](self, arglist)
+        except KeyError:
             _packerlist[structformat] = _CreateStructPacker(structformat)
-
-        _packerlist[structformat](self, *arglist)
+            _packerlist[structformat](self, arglist)
 
     def WriteBytes(self, b):
         '''
@@ -145,7 +147,7 @@ def _CreateStructPacker(structformat):
         sizelist.append(datasize)
         flist.append(fdict[s])
 
-    def packer(buf, *arglist):
+    def packer(buf, arglist):
         dpos = buf._datacur
         data = buf._data
         prttb = buf._prttable

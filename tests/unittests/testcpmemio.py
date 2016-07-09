@@ -2,7 +2,7 @@ from helper import *
 
 
 @TestInstance
-def test_dwmemio():
+def test_cpmemio():
     a = Db(i2b4(0x1234) + i2b4(0x5678) + i2b4(0x9abc))
 
     f_setcurpl(EPD(a))
