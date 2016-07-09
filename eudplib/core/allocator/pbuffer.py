@@ -133,43 +133,64 @@ class PayloadBuffer:
 
 def _CreateStructPacker(structformat):
     sizedict = {'B': 1, 'H': 2, 'I': 4}
-    fdict = {'B': ut.i2b1, 'H': ut.i2b2, 'I': ut.i2b4}
+    packersrcList = []
 
-    sizelist = []
-    flist = []
+    packersrcList.append("""\
+def packer(buf, args):
+    dpos = buf._datacur
+    data = buf._data
+    prttb = buf._prttable
+    orttb = buf._orttable
+""")
 
-    structlen = 0
+    dpos = 0
 
-    for s in structformat:
+    for i, s in enumerate(structformat):
+        packersrcList.append("\n    # Field %d (%s)\n" % (i, s))
         datasize = sizedict[s]
-        structlen += datasize
+        packersrcList.append("    ri = constexpr.Evaluate(args[%s])\n" % i)
 
-        sizelist.append(datasize)
-        flist.append(fdict[s])
+        # Check constant writing to non-aligned dword or word/byte.
+        if not (datasize == 4 and dpos % 4 == 0):
+            packersrcList.append("""\
+    ut.ep_assert(
+        ri.rlocmode == 0,
+        'Cannot write non-const in byte/word/nonalligned dword.'
+    )
+""")
+        else:
+            packersrcList.append("""\
+    if ri.rlocmode == 1:
+        prttb.append(dpos + {dpos})
+    elif ri.rlocmode == 4:
+        orttb.append(dpos + {dpos})
+""".format(**locals()))
 
-    def packer(buf, arglist):
-        dpos = buf._datacur
-        data = buf._data
-        prttb = buf._prttable
-        orttb = buf._orttable
+        if s == 'B':
+            packersrcList.append(
+                "    data[dpos + %d] = ri.offset & 0xFF\n" % dpos)
 
-        for i, arg in enumerate(arglist):
-            ri = constexpr.Evaluate(arg)
+        elif s == 'H':
+            packersrcList.append("""\
+    data[dpos + %d] = ri.offset & 0xFF
+    data[dpos + %d] = (ri.offset >> 8) & 0xFF
+""" % (dpos, dpos + 1))
 
-            ut.ep_assert(
-                ri.rlocmode == 0 or (sizelist[i] == 4 and dpos % 4 == 0),
-                'Cannot write non-const in byte/word/nonalligned dword.'
-            )
+        elif s == 'I':
+            packersrcList.append("""\
+    data[dpos + %d] = ri.offset & 0xFF
+    data[dpos + %d] = (ri.offset >> 8) & 0xFF
+    data[dpos + %d] = (ri.offset >> 16) & 0xFF
+    data[dpos + %d] = (ri.offset >> 24) & 0xFF
+""" % (dpos, dpos + 1, dpos + 2, dpos + 3))
 
-            if ri.rlocmode == 1:
-                prttb.append(dpos)
+        dpos += datasize
 
-            elif ri.rlocmode == 4:
-                orttb.append(dpos)
+    packersrcList.append("\n    # End of packer\n")
+    packersrcList.append("    buf._datacur += %d\n" % dpos)
 
-            data[dpos: dpos + sizelist[i]] = flist[i](ri.offset)
-            dpos += sizelist[i]
-
-        buf._datacur = dpos
-
-    return packer
+    # Code generated.
+    packersrc = "".join(packersrcList)
+    retdict = {}
+    exec(packersrc, globals(), retdict)
+    return retdict['packer']
