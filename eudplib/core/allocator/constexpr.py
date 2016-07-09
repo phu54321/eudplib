@@ -23,7 +23,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-from .rlocint import RlocInt
+from .rlocint import RlocInt, toRlocInt
 from ... import utils as ut
 
 
@@ -133,12 +133,10 @@ def Evaluate(x):
     '''
     Evaluate expressions
     '''
-    if isinstance(x, int):
-        return RlocInt(x, 0)
     try:
         return x.Evaluate()
     except AttributeError:
-        return x
+        return toRlocInt(x)
 
 
 def IsConstExpr(x):

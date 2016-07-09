@@ -34,18 +34,28 @@ class RlocInt:
         self.offset, self.rlocmode = offset, rlocmode
 
     def __add__(self, other):
-        other = toRlocInt(other)
-        return RlocInt(
-            self.offset + other.offset,
-            self.rlocmode + other.rlocmode
-        )
+        if isinstance(other, RlocInt):
+            return RlocInt(
+                self.offset + other.offset,
+                self.rlocmode + other.rlocmode
+            )
+        else:
+            return RlocInt(
+                self.offset + other,
+                self.rlocmode
+            )
 
     def __sub__(self, other):
-        other = toRlocInt(other)
-        return RlocInt(
-            self.offset - other.offset,
-            self.rlocmode - other.rlocmode
-        )
+        if isinstance(other, RlocInt):
+            return RlocInt(
+                self.offset - other.offset,
+                self.rlocmode - other.rlocmode
+            )
+        else:
+            return RlocInt(
+                self.offset - other,
+                self.rlocmode
+            )
 
     def __radd__(self, other):
         return self + other
@@ -54,37 +64,39 @@ class RlocInt:
         return toRlocInt(other) - self
 
     def __mul__(self, other):
-        other = toRlocInt(other)
-        ut.ep_assert(
-            self.rlocmode == 0 or other.rlocmode == 0,
-            'Cannot multiply two non-const RlocInts'
-        )
+        if isinstance(other, RlocInt):
+            ut.ep_assert(
+                other.rlocmode == 0,
+                'Cannot divide RlocInt with non-const'
+            )
+            other = other.offset
 
         return RlocInt(
-            self.offset * other.offset,
-            self.rlocmode * other.offset + self.offset * other.rlocmode
+            self.offset * other,
+            self.rlocmode * other
         )
 
     def __floordiv__(self, other):
-        other = toRlocInt(other)
-        ut.ep_assert(
-            other.rlocmode == 0,
-            'Cannot divide RlocInt with non-const'
-        )
-        ut.ep_assert(other.offset != 0, 'Divide by zero')
+        if isinstance(other, RlocInt):
+            ut.ep_assert(
+                other.rlocmode == 0,
+                'Cannot divide RlocInt with non-const'
+            )
+            other = other.offset
+        ut.ep_assert(other != 0, 'Divide by zero')
         ut.ep_assert(
             (self.rlocmode == 0) or
-            (self.rlocmode % other.offset == 0 and
-             self.offset % other.offset == 0),
-            'RlocInt not divisible by %d' % other.offset
+            (self.rlocmode % other == 0 and
+             self.offset % other == 0),
+            'RlocInt not divisible by %d' % other
         )
         return RlocInt(
-            self.offset // other.offset,
-            self.rlocmode // other.offset
+            self.offset // other,
+            self.rlocmode // other
         )
 
     def __str__(self):
-        return 'Rlocint(0x%08X, %d)' % (self.offset, self.rlocmode)
+        return 'RlocInt(0x%08X, %d)' % (self.offset, self.rlocmode)
 
     def __repr__(self):
         return str(self)

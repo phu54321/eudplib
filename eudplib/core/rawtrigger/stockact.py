@@ -399,11 +399,14 @@ def SetAllianceStatus(Player, Status):
 
 
 def SetMemory(dest, modtype, value):
-    return SetDeaths(EPD(dest), modtype, value, 0)
+    modtype = EncodeModifier(modtype)
+    return Action(0, 0, 0, 0, EPD(dest), value, 0, 45, modtype, 20)
 
 
 def SetMemoryEPD(dest, modtype, value):
-    return SetDeaths(dest, modtype, value, 0)
+    dest = EncodePlayer(dest)
+    modtype = EncodeModifier(modtype)
+    return Action(0, 0, 0, 0, dest, value, 0, 45, modtype, 20)
 
 
 def SetNextPtr(trg, dest):
