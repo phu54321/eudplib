@@ -180,7 +180,4 @@ def f_bitrshift(a, b):
     if isinstance(b, int) and b >= 32:
         return 0
 
-    ret = vf.EUDVariable()
-    ret << f_div(a, _exp2(b))
-    return ret
     return a // _exp2(b)

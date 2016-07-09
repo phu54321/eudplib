@@ -38,7 +38,7 @@ class ConstExpr:
         self.rlocmode = rlocmode
 
     def Evaluate(self):
-        return Evaluate(self.baseobj) // 4 * self.rlocmode + self.offset
+        return Evaluate(self.baseobj) * self.rlocmode // 4 + self.offset
 
     def __add__(self, other):
         if not isinstance(other, int):
@@ -143,4 +143,4 @@ def Evaluate(x):
 
 def IsConstExpr(x):
     x = ut.unProxy(x)
-    return isinstance(x, int) or isinstance(x, ConstExpr)
+    return isinstance(x, int) or hasattr(x, 'Evaluate')
