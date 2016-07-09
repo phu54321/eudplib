@@ -1,7 +1,11 @@
-import coverage
+DoCoverageTest = False
 
-cov = coverage.Coverage()
-cov.start()
+
+if DoCoverageTest:
+    import coverage
+    cov = coverage.Coverage()
+    cov.start()
+
 
 import helper
 
@@ -27,8 +31,9 @@ from unittests import (
     testcpmemio,
 )
 
-# helper.CompressPayload(True)
+helper.CompressPayload(True)
 helper.test_runall('unittest')
 
-cov.stop()
-cov.html_report(include=["C:\\gitclones\\eudtrglib\\eudplib\\*"])
+if DoCoverageTest:
+    cov.stop()
+    cov.html_report(include=["C:\\gitclones\\eudtrglib\\eudplib\\*"])

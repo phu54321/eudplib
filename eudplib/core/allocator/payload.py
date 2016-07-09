@@ -29,6 +29,7 @@ from eudplib import utils as ut
 from eudplib.utils import stackobjs
 
 import random
+import time
 
 _found_objects = []
 _found_objects_set = set()
@@ -46,6 +47,25 @@ phase = None
 _payload_compress = False
 
 # -------
+
+_lastTime = 0
+_doLog = False
+
+
+def setPayloadLoggerMode(mode):
+    global _doLog
+    _doLog = mode
+
+
+def lprint(text, flush=False, _endingdict={True: '\n', False: '\r'}):
+    global _lastTime, _doLog
+    if not _doLog:
+        return
+
+    currentTime = time.time()
+    if flush or (currentTime - _lastTime) >= 0.5:
+        _lastTime = currentTime
+        print(text, end=_endingdict[flush])
 
 
 def CompressPayload(mode):
@@ -109,6 +129,8 @@ def CollectObjects(root):
     global _dynamic_objects_set
     global _untraversed_objects
 
+    lprint('[Stage 1/3] CollectObjects', flush=True)
+
     phase = PHASE_COLLECTING
 
     objc = ObjCollector()
@@ -124,6 +146,13 @@ def CollectObjects(root):
 
     while _untraversed_objects:
         while _untraversed_objects:
+            lprint(
+                " - Collected %d / %d objects" % (
+                    len(_found_objects),
+                    len(_found_objects) + len(_untraversed_objects)
+                )
+            )
+
             obj = _untraversed_objects.pop()
 
             objc.StartWrite()
@@ -147,6 +176,15 @@ def CollectObjects(root):
     # cleanup
     _found_objects_set = None
     phase = None
+
+    # Final
+    lprint(
+        " - Collected %d / %d objects" %
+        (
+            len(_found_objects),
+            len(_found_objects)
+        ), flush=True
+    )
 
 
 # -------
@@ -244,16 +282,23 @@ def AllocObjects():
     global _payload_size
 
     phase = PHASE_ALLOCATING
+    objn = len(_found_objects)
+
+    lprint("[Stage 2/3] AllocObjects", flush=True)
 
     # Quick and less space-efficient approach
     if not _payload_compress:
         lallocaddr = 0
-        for obj in _found_objects:
+        for i, obj in enumerate(_found_objects):
             objsize = obj.GetDataSize()
             allocsize = (objsize + 3) & ~3
             _alloctable[obj] = lallocaddr
             lallocaddr += allocsize
+
+            lprint(" - Allocated %d / %d objects" % (i + 1, objn))
         _payload_size = lallocaddr
+
+        lprint(" - Allocated %d / %d objects" % (objn, objn), flush=True)
         phase = None
         return
 
@@ -263,7 +308,7 @@ def AllocObjects():
     dwoccupmap_dict = {}
 
     # Get occupation map for all objects
-    for obj in _found_objects:
+    for i, obj in enumerate(_found_objects):
         obja.StartWrite()
         obj.WritePayload(obja)
         dwoccupmap = obja.EndWrite()
@@ -272,14 +317,12 @@ def AllocObjects():
             len(dwoccupmap) == (obj.GetDataSize() + 3) >> 2,
             'Occupation map length & Object size mismatch for object'
         )
+        lprint(" - Preprocessed %d / %d objects" % (i + 1, objn))
 
-    if _payload_compress:
-        stackobjs.StackObjects(_found_objects, dwoccupmap_dict, _alloctable)
-    else:
-        _offset = 0
-        for obj in _found_objects:
-            _alloctable[obj] = _offset
-            _offset += 4 * len(dwoccupmap_dict[obj])
+    lprint(" - Preprocessed %d / %d objects" % (objn, objn), flush=True)
+
+    lprint(" - Allocating objects..", flush=True)
+    stackobjs.StackObjects(_found_objects, dwoccupmap_dict, _alloctable)
 
     # Get payload length
     _payload_size = max(map(
@@ -296,10 +339,12 @@ def ConstructPayload():
     global phase
 
     phase = PHASE_WRITING
+    lprint("[Stage 3/3] ConstructPayload", flush=True)
+    objn = len(_found_objects)
 
     pbuf = pbuffer.PayloadBuffer(_payload_size)
 
-    for obj in _found_objects:
+    for i, obj in enumerate(_found_objects):
         objaddr, objsize = _alloctable[obj], obj.GetDataSize()
 
         pbuf.StartWrite(objaddr)
@@ -311,6 +356,9 @@ def ConstructPayload():
             % (objsize, written_bytes, obj)
         )
 
+        lprint(" - Written %d / %d objects" % (i + 1, objn))
+
+    lprint(" - Written %d / %d objects" % (objn, objn), flush=True)
     phase = None
     return pbuf.CreatePayload()
 
