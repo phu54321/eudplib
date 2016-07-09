@@ -313,7 +313,7 @@ def IsEUDVariable(x):
 # ---------
 
 
-def _VProc(v, actions):
+def VProc(v, actions):
     nexttrg = Forward()
 
     bt.RawTrigger(
