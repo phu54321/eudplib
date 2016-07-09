@@ -225,3 +225,5 @@ eudtrg.egg-info/
 tests/outputmap/*.scx
 eudplib-*\
 tests/htmlcov/*
+tests/output.png
+tests/output.pstats
