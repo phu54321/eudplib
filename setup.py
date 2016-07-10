@@ -1,5 +1,8 @@
 from setuptools import setup, find_packages
-from eudplib import __version__
+from Cython.Build import cythonize
+
+__version__ = '0.53a0'
+
 
 setup(
     name="eudplib",
@@ -10,6 +13,9 @@ setup(
     },
     setup_requires=["cffi>=1.0.0"],
     install_requires=["cffi>=1.0.0"],
+    ext_modules=cythonize([
+        "eudplib/core/allocator/*.pyx",
+    ]),
 
     # metadata for upload to PyPI
     author="Trgk",

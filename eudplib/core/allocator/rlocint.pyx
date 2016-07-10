@@ -1,5 +1,3 @@
-# cython: profile=True
-
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 

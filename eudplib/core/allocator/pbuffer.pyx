@@ -27,6 +27,8 @@ from cpython.mem cimport PyMem_Malloc, PyMem_Realloc, PyMem_Free
 from cpython.bytes cimport PyBytes_AsString, PyBytes_FromStringAndSize
 from libc.string cimport memset, memcpy
 
+from .rlocint cimport RlocInt_C
+
 from cpython cimport array
 import array
 
@@ -81,9 +83,8 @@ cdef class PayloadBuffer:
         self._data[self._datacur + 1] = (number >> 8) & 0xFF
         self._datacur += 2
 
-    cpdef void WriteDword(self, number):
-        number = constexpr.Evaluate(number)
-        number.offset &= 0xFFFFFFFF
+    cpdef void WriteDword(self, number2):
+        cdef RlocInt_C number = constexpr.Evaluate(number2)
 
         if number.rlocmode:
             ut.ep_assert(

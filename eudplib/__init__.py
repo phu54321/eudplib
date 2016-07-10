@@ -30,10 +30,10 @@ from .ctrlstru import *
 from .eudlib import *
 from .trigtrg import *
 from .maprw import *
-import types
 
 __version__ = '0.53a0'
 
+import types
 
 # remove modules from __all__
 
