@@ -6,6 +6,8 @@ if DoCoverageTest:
     cov = coverage.Coverage()
     cov.start()
 
+import pyximport
+pyximport.install()
 
 import helper
 

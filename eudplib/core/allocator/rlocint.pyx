@@ -26,12 +26,13 @@ THE SOFTWARE.
 from eudplib import utils as ut
 
 
-class RlocInt:
+cdef class RlocInt:
+    cdef public unsigned int offset, rlocmode
 
     """Relocatable int"""
 
     def __init__(self, offset, rlocmode):
-        self.offset, self.rlocmode = offset, rlocmode
+        self.offset, self.rlocmode = offset & 0xFFFFFFFF, rlocmode & 0xFFFFFFFF
 
     def __add__(self, other):
         if isinstance(other, RlocInt):
