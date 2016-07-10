@@ -26,34 +26,34 @@ THE SOFTWARE.
 from eudplib import utils as ut
 
 
-cdef class RlocInt:
+cdef class RlocInt_C:
     cdef public unsigned int offset, rlocmode
 
     """Relocatable int"""
 
-    def __init__(self, offset, rlocmode):
-        self.offset, self.rlocmode = offset & 0xFFFFFFFF, rlocmode & 0xFFFFFFFF
+    def __cinit__(self, size_t offset, size_t rlocmode):
+        self.offset, self.rlocmode = offset, rlocmode
 
     def __add__(self, other):
-        if isinstance(other, RlocInt):
-            return RlocInt(
+        if isinstance(other, RlocInt_C):
+            return RlocInt_C(
                 self.offset + other.offset,
                 self.rlocmode + other.rlocmode
             )
         else:
-            return RlocInt(
+            return RlocInt_C(
                 self.offset + other,
                 self.rlocmode
             )
 
     def __sub__(self, other):
-        if isinstance(other, RlocInt):
-            return RlocInt(
+        if isinstance(other, RlocInt_C):
+            return RlocInt_C(
                 self.offset - other.offset,
                 self.rlocmode - other.rlocmode
             )
         else:
-            return RlocInt(
+            return RlocInt_C(
                 self.offset - other,
                 self.rlocmode
             )
@@ -65,20 +65,20 @@ cdef class RlocInt:
         return toRlocInt(other) - self
 
     def __mul__(self, other):
-        if isinstance(other, RlocInt):
+        if isinstance(other, RlocInt_C):
             ut.ep_assert(
                 other.rlocmode == 0,
                 'Cannot divide RlocInt with non-const'
             )
             other = other.offset
 
-        return RlocInt(
+        return RlocInt_C(
             self.offset * other,
             self.rlocmode * other
         )
 
     def __floordiv__(self, other):
-        if isinstance(other, RlocInt):
+        if isinstance(other, RlocInt_C):
             ut.ep_assert(
                 other.rlocmode == 0,
                 'Cannot divide RlocInt with non-const'
@@ -91,7 +91,7 @@ cdef class RlocInt:
              self.offset % other == 0),
             'RlocInt not divisible by %d' % other
         )
-        return RlocInt(
+        return RlocInt_C(
             self.offset // other,
             self.rlocmode // other
         )
@@ -103,11 +103,14 @@ cdef class RlocInt:
         return str(self)
 
 
+def RlocInt(offset, rlocmode):
+    return RlocInt_C(offset & 0xFFFFFFFF, rlocmode & 0xFFFFFFFF)
+
 def toRlocInt(x):
     """Convert int/RlocInt to rlocint"""
 
-    if isinstance(x, RlocInt):
+    if isinstance(x, RlocInt_C):
         return x
 
     else:
-        return RlocInt(x, 0)
+        return RlocInt_C(x & 0xFFFFFFFF, 0)

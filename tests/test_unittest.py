@@ -1,13 +1,13 @@
 DoCoverageTest = False
 
+import pyximport
+pyximport.install()
+
 
 if DoCoverageTest:
     import coverage
     cov = coverage.Coverage()
     cov.start()
-
-import pyximport
-pyximport.install()
 
 import helper
 
