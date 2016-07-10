@@ -1,3 +1,5 @@
+# cython: profile=True
+
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
@@ -27,7 +29,6 @@ from eudplib import utils as ut
 
 
 cdef class RlocInt_C:
-    cdef public unsigned int offset, rlocmode
 
     """Relocatable int"""
 
@@ -103,10 +104,10 @@ cdef class RlocInt_C:
         return str(self)
 
 
-def RlocInt(offset, rlocmode):
+cpdef RlocInt_C RlocInt(offset, rlocmode):
     return RlocInt_C(offset & 0xFFFFFFFF, rlocmode & 0xFFFFFFFF)
 
-def toRlocInt(x):
+cpdef RlocInt_C toRlocInt(x):
     """Convert int/RlocInt to rlocint"""
 
     if isinstance(x, RlocInt_C):

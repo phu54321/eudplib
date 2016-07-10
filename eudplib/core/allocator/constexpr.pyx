@@ -1,3 +1,5 @@
+# cython: profile=True
+
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
@@ -23,7 +25,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-from .rlocint import RlocInt, toRlocInt
+from .rlocint cimport RlocInt_C
+from .rlocint import RlocInt, RlocInt_C, toRlocInt
 from ... import utils as ut
 
 
@@ -40,7 +43,7 @@ cdef class ConstExpr:
         self.offset = offset & 0xFFFFFFFF
         self.rlocmode = rlocmode & 0xFFFFFFFF
 
-    def Evaluate(self):
+    cpdef RlocInt_C Evaluate(self):
         return Evaluate(self.baseobj) * self.rlocmode // 4 + self.offset
 
     # Cython version!
@@ -95,14 +98,14 @@ cdef class ConstExpr:
         return ConstExpr(self.baseobj, self.offset // k, self.rlocmode // k)
 
 cdef class ConstExprInt(ConstExpr):
-    cdef public unsigned int value
+    cdef public RlocInt_C value
 
     def __init__(self, value):
         super().__init__(None, value, 0)
-        self.value = value
+        self.value = RlocInt_C(value & 0xFFFFFFFF, 0)
 
-    def Evaluate(self):
-        return RlocInt(self.value, 0)
+    cpdef RlocInt_C Evaluate(self):
+        return self.value
 
 cdef class Forward(ConstExpr):
 
@@ -133,17 +136,15 @@ cdef class Forward(ConstExpr):
     def Reset(self):
         self._expr = None
 
-    def Evaluate(self):
+    cpdef RlocInt_C Evaluate(self):
         ut.ep_assert(self._expr is not None, 'Forward not initialized')
         return Evaluate(self._expr)
 
 
-def Evaluate(x):
+cpdef RlocInt_C Evaluate(x):
     '''
     Evaluate expressions
     '''
-    if x is None:
-        return RlocInt(0, 0)
     try:
         return x.Evaluate()
     except AttributeError:

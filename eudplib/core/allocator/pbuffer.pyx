@@ -23,6 +23,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
+from cpython.mem cimport PyMem_Malloc, PyMem_Realloc, PyMem_Free
+from cpython.bytes cimport PyBytes_AsString, PyBytes_FromStringAndSize
+from libc.string cimport memset, memcpy
+
+from cpython cimport array
+import array
+
 from . import constexpr
 from eudplib import utils as ut
 
@@ -35,45 +42,46 @@ class Payload:
         self.orttable = orttable
 
 
-_packerlist = {}
+_packerData = {}
 
 
-class PayloadBuffer:
+cdef class PayloadBuffer:
 
     '''
     Buffer where EUDObject should write to.
     '''
 
-    def __init__(self, totlen):
-        self._data = bytearray(totlen)
-        self._totlen = totlen
+    cdef size_t _totlen
+    cdef public size_t _datastart, _datacur
+    cdef public unsigned char* _data
+    cdef public list _prttable, _orttable
 
+    def __cinit__(self, size_t totlen):
+        self._data = <unsigned char*> PyMem_Malloc(totlen)
+        self._totlen = totlen
         self._prttable = []
         self._orttable = []
 
-    def StartWrite(self, writeaddr):
+    def __dealloc(self):
+        PyMem_Free(self._data)
+
+    cpdef void StartWrite(self, size_t writeaddr):
         self._datastart = writeaddr
         self._datacur = writeaddr
 
-    def EndWrite(self):
+    cpdef size_t EndWrite(self):
         return self._datacur - self._datastart
 
-    def WriteByte(self, number):
-        number = constexpr.Evaluate(number)
-        ut.ep_assert(number.rlocmode == 0, 'Non-constant given.')
-        self._data[self._datacur] = number.offset & 0xFF
+    cpdef void WriteByte(self, int number):
+        self._data[self._datacur] = number & 0xFF
         self._datacur += 1
 
-    def WriteWord(self, number):
-        number = constexpr.Evaluate(number)
-        ut.ep_assert(number.rlocmode == 0, 'Non-constant given.')
-
-        offset = number.offset
-        self._data[self._datacur + 0] = offset & 0xFF
-        self._data[self._datacur + 1] = (offset >> 8) & 0xFF
+    cpdef void WriteWord(self, int number):
+        self._data[self._datacur + 0] = number & 0xFF
+        self._data[self._datacur + 1] = (number >> 8) & 0xFF
         self._datacur += 2
 
-    def WriteDword(self, number):
+    cpdef void WriteDword(self, number):
         number = constexpr.Evaluate(number)
         number.offset &= 0xFFFFFFFF
 
@@ -108,10 +116,10 @@ class PayloadBuffer:
         '''
 
         try:
-            _packerlist[structformat](self, arglist)
+            _StructPacker(_packerData[structformat], self, arglist)
         except KeyError:
-            _packerlist[structformat] = _CreateStructPacker(structformat)
-            _packerlist[structformat](self, arglist)
+            _packerData[structformat] = CreateStructPackerData(structformat)
+            _StructPacker(_packerData[structformat], self, arglist)
 
     def WriteBytes(self, b):
         '''
@@ -119,78 +127,66 @@ class PayloadBuffer:
 
         :param b: bytes object to write.
         '''
-        b = bytes(b)
-        self._data[self._datacur: self._datacur + len(b)] = b
+        if not isinstance(b, bytes):
+            b = bytes(b)
+
+        cdef char *raw = PyBytes_AsString(b)
+        memcpy(&self._data[self._datacur], raw, len(b))
         self._datacur += len(b)
 
-    def WriteSpace(self, spacesize):
+    cpdef void WriteSpace(self, size_t spacesize):
         self._datacur += spacesize
 
     # Internally used
     def CreatePayload(self):
-        return Payload(bytes(self._data), self._prttable, self._orttable)
+        byteData = PyBytes_FromStringAndSize(<const char*>self._data, self._totlen)
+        return Payload(byteData, self._prttable, self._orttable)
 
 
-def _CreateStructPacker(structformat):
+cdef list CreateStructPackerData(str structformat):
     sizedict = {'B': 1, 'H': 2, 'I': 4}
-    packersrcList = []
+    sizelist = []
+    for s in structformat:
+        sizelist.append(sizedict[s])
 
-    packersrcList.append("""\
-def packer(buf, args):
+    return sizelist
+
+
+cdef void _StructPacker(list sizelist, PayloadBuffer buf, tuple arglist):
     dpos = buf._datacur
     data = buf._data
     prttb = buf._prttable
     orttb = buf._orttable
-""")
 
-    dpos = 0
+    for i, arg in enumerate(arglist):
+        argsize = sizelist[i]
+        ri = constexpr.Evaluate(arg)
 
-    for i, s in enumerate(structformat):
-        packersrcList.append("\n    # Field %d (%s)\n" % (i, s))
-        datasize = sizedict[s]
-        packersrcList.append("    ri = constexpr.Evaluate(args[%s])\n" % i)
+        ut.ep_assert(
+            ri.rlocmode == 0 or (sizelist[i] == 4 and dpos % 4 == 0),
+            'Cannot write non-const in byte/word/nonalligned dword.'
+        )
 
-        # Check constant writing to non-aligned dword or word/byte.
-        if not (datasize == 4 and dpos % 4 == 0):
-            packersrcList.append("""\
-    ut.ep_assert(
-        ri.rlocmode == 0,
-        'Cannot write non-const in byte/word/nonalligned dword.'
-    )
-""")
+        if ri.rlocmode == 1:
+            prttb.append(dpos)
+
+        elif ri.rlocmode == 4:
+            orttb.append(dpos)
+
+        if sizelist[i] == 1:
+            data[dpos] = ri.offset & 0xFF
+
+        elif sizelist[i] == 2:
+            data[dpos] = ri.offset & 0xFF
+            data[dpos + 1] = (ri.offset >> 8) & 0xFF
+
         else:
-            packersrcList.append("""\
-    if ri.rlocmode == 1:
-        prttb.append(dpos + {dpos})
-    elif ri.rlocmode == 4:
-        orttb.append(dpos + {dpos})
-""".format(**locals()))
+            data[dpos] = ri.offset & 0xFF
+            data[dpos + 1] = (ri.offset >> 8) & 0xFF
+            data[dpos + 2] = (ri.offset >> 16) & 0xFF
+            data[dpos + 3] = (ri.offset >> 24) & 0xFF
 
-        if s == 'B':
-            packersrcList.append(
-                "    data[dpos + %d] = ri.offset & 0xFF\n" % dpos)
+        dpos += sizelist[i]
 
-        elif s == 'H':
-            packersrcList.append("""\
-    data[dpos + %d] = ri.offset & 0xFF
-    data[dpos + %d] = (ri.offset >> 8) & 0xFF
-""" % (dpos, dpos + 1))
+    buf._datacur = dpos
 
-        elif s == 'I':
-            packersrcList.append("""\
-    data[dpos + %d] = ri.offset & 0xFF
-    data[dpos + %d] = (ri.offset >> 8) & 0xFF
-    data[dpos + %d] = (ri.offset >> 16) & 0xFF
-    data[dpos + %d] = (ri.offset >> 24) & 0xFF
-""" % (dpos, dpos + 1, dpos + 2, dpos + 3))
-
-        dpos += datasize
-
-    packersrcList.append("\n    # End of packer\n")
-    packersrcList.append("    buf._datacur += %d\n" % dpos)
-
-    # Code generated.
-    packersrc = "".join(packersrcList)
-    retdict = {}
-    exec(packersrc, globals(), retdict)
-    return retdict['packer']
