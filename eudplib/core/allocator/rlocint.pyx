@@ -41,7 +41,7 @@ cdef class RlocInt_C:
             )
         else:
             return RlocInt_C(
-                self.offset + other,
+                (self.offset + other) & 0xFFFFFFFF,
                 self.rlocmode
             )
 
@@ -53,7 +53,7 @@ cdef class RlocInt_C:
             )
         else:
             return RlocInt_C(
-                self.offset - other,
+                (self.offset - other) & 0xFFFFFFFF,
                 self.rlocmode
             )
 
@@ -72,7 +72,7 @@ cdef class RlocInt_C:
             other = other.offset
 
         return RlocInt_C(
-            self.offset * other,
+            (self.offset * other) & 0xFFFFFFFF,
             self.rlocmode * other
         )
 
@@ -91,7 +91,7 @@ cdef class RlocInt_C:
             'RlocInt not divisible by %d' % other
         )
         return RlocInt_C(
-            self.offset // other,
+            (self.offset // other) & 0xFFFFFFFF,
             self.rlocmode // other
         )
 
