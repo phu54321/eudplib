@@ -37,108 +37,131 @@ from ..allocator import (
 from ...utils import (
     EPD,
     ExprProxy,
-    ep_assert
+    ep_assert,
+    unProxy,
+    cachedfunc
 )
 
 from .eudv import EUDVariable, SeqCompute
 from .vbuf import GetCurrentVariableBuffer
 
 
-class EUDVArrayData(ConstExpr):
-    def __init__(self, initvars):
-        super().__init__(self)
-        self._initvars = initvars
-        self._vdict = weakref.WeakKeyDictionary()
+@cachedfunc
+def EUDVArrayData(size):
+    ep_assert(isinstance(size, int))
 
-    def Evaluate(self):
-        evb = GetCurrentVariableBuffer()
-        if evb not in self._vdict:
-            variables = [evb.CreateVarTrigger(ival) for ival in self._initvars]
-            self._vdict[evb] = variables[0]
+    class _EUDVArrayData(ConstExpr):
+        def __init__(self, initvars):
+            super().__init__(self)
+            ep_assert(len(initvars) == size, "%d items expected" % size)
+            self._initvars = initvars
+            self._vdict = weakref.WeakKeyDictionary()
 
-        return Evaluate(self._vdict[evb])
+        def Evaluate(self):
+            evb = GetCurrentVariableBuffer()
+            if evb not in self._vdict:
+                variables = [
+                    evb.CreateVarTrigger(ival) for ival in self._initvars]
+                self._vdict[evb] = variables[0]
+
+            return Evaluate(self._vdict[evb])
+
+    return _EUDVArrayData
 
 
-class EUDVArray(ExprProxy):
-    def __init__(self, initvars, basetype=None):
-        if isinstance(initvars, int):
-            initvars = [0] * initvars
+@cachedfunc
+def EUDVArray(size, basetype=None):
+    ep_assert(isinstance(size, int))
 
-        if isinstance(initvars, collections.Iterable):
-            baseobj = EUDVArrayData(initvars)
+    class _EUDVArray(ExprProxy):
+        def __init__(self, initvars=None):
+            # Int -> interpret as sequence of 0s
+            if isinstance(initvars, int):
+                initvars = [0] * size
 
-        elif IsConstExpr(initvars):
-            baseobj = initvars
-        else:
-            baseobj = EUDVariable()
-            baseobj << initvars
+            # For python iterables
+            if isinstance(initvars, collections.Iterable):
+                baseobj = EUDVArrayData(size)(initvars)
 
-        super().__init__(baseobj)
-        self._epd = EPD(self)
-        self._basetype = basetype
+            # Initialization by constant reference
+            elif IsConstExpr(initvars):
+                initvars = unProxy(initvars)
+                ep_assert(isinstance(initvars, EUDVArrayData(size)))
+                baseobj = initvars
 
-    def getItemPtr(self, i):
-        return self + 60 * i
+            # Initialization by variable reference
+            else:
+                baseobj = EUDVariable()
+                baseobj << initvars
 
-    def getItemEPD(self, i):
-        return self._epd + 15 * i
+            super().__init__(baseobj)
+            self._epd = EPD(self)
+            self._basetype = basetype
 
-    def get(self, i):
-        # This function is hand-optimized
+        def getItemPtr(self, i):
+            return self + 60 * i
 
-        ret = EUDVariable()
-        itemptr = self.getItemPtr(i)
-        itemepd = self.getItemEPD(i)
+        def getItemEPD(self, i):
+            return self._epd + 15 * i
 
-        vtproc = Forward()
-        nptr = Forward()
-        a0, a1, a2 = Forward(), Forward(), Forward()
+        def get(self, i):
+            # This function is hand-optimized
 
-        SeqCompute([
-            (EPD(vtproc + 4), bt.SetTo, itemptr),
-            (EPD(a0 + 16), bt.SetTo, itemepd + (8 + 320 + 16) // 4),
-            (EPD(a1 + 16), bt.SetTo, itemepd + (8 + 320 + 24) // 4),
-            (EPD(a2 + 16), bt.SetTo, itemepd + 1),
-        ])
+            r = EUDVariable()
+            itemptr = self.getItemPtr(i)
+            itemepd = self.getItemEPD(i)
 
-        vtproc << bt.RawTrigger(
-            nextptr=0,
-            actions=[
-                a0 << bt.SetDeaths(0, bt.SetTo, EPD(ret.getValueAddr()), 0),
-                a1 << bt.SetDeaths(0, bt.SetTo, 0x072D0000, 0),
-                a2 << bt.SetDeaths(0, bt.SetTo, nptr, 0),
-            ]
-        )
+            vtproc = Forward()
+            nptr = Forward()
+            a0, a1, a2 = Forward(), Forward(), Forward()
 
-        nptr << bt.NextTrigger()
-        if self._basetype:
-            ret = self._basetype(ret)
-        return ret
+            SeqCompute([
+                (EPD(vtproc + 4), bt.SetTo, itemptr),
+                (EPD(a0 + 16), bt.SetTo, itemepd + (8 + 320 + 16) // 4),
+                (EPD(a1 + 16), bt.SetTo, itemepd + (8 + 320 + 24) // 4),
+                (EPD(a2 + 16), bt.SetTo, itemepd + 1),
+            ])
 
-    def set(self, i, value):
-        itemepd = self.getItemEPD(i)
-        a0, t = Forward(), Forward()
-        SeqCompute([
-            (EPD(a0 + 16), bt.SetTo, itemepd + (8 + 320 + 20) // 4),
-            (EPD(a0 + 20), bt.SetTo, value),
-        ])
-        t << bt.RawTrigger(
-            actions=[
-                a0 << bt.SetDeaths(0, bt.SetTo, 0, 0),
-            ]
-        )
+            vtproc << bt.RawTrigger(
+                nextptr=0,
+                actions=[
+                    a0 << bt.SetDeaths(0, bt.SetTo, EPD(r.getValueAddr()), 0),
+                    a1 << bt.SetDeaths(0, bt.SetTo, 0x072D0000, 0),
+                    a2 << bt.SetDeaths(0, bt.SetTo, nptr, 0),
+                ]
+            )
 
-    def fill(self, values, *, assert_expected_values_len=None):
-        if assert_expected_values_len:
-            ep_assert(len(values) == assert_expected_values_len)
+            nptr << bt.NextTrigger()
+            if self._basetype:
+                r = self._basetype(r)
+            return r
 
-        SeqCompute([
-            (EPD(self + 344 + i * 60), bt.SetTo, value)
-            for i, value in enumerate(values)
-        ])
+        def set(self, i, value):
+            itemepd = self.getItemEPD(i)
+            a0, t = Forward(), Forward()
+            SeqCompute([
+                (EPD(a0 + 16), bt.SetTo, itemepd + (8 + 320 + 20) // 4),
+                (EPD(a0 + 20), bt.SetTo, value),
+            ])
+            t << bt.RawTrigger(
+                actions=[
+                    a0 << bt.SetDeaths(0, bt.SetTo, 0, 0),
+                ]
+            )
 
-    def __getitem__(self, i):
-        return self.get(i)
+        def fill(self, values, *, assert_expected_values_len=None):
+            if assert_expected_values_len:
+                ep_assert(len(values) == assert_expected_values_len)
 
-    def __setitem__(self, i, value):
-        return self.set(i, value)
+            SeqCompute([
+                (EPD(self + 344 + i * 60), bt.SetTo, value)
+                for i, value in enumerate(values)
+            ])
+
+        def __getitem__(self, i):
+            return self.get(i)
+
+        def __setitem__(self, i, value):
+            return self.set(i, value)
+
+    return _EUDVArray

@@ -37,9 +37,9 @@ class _EUDStruct_Metaclass(type):
             def __init__(self, initvar=None):
                 if initvar is None:
                     initvals = [basetype() for _ in range(times)]
-                    super().__init__(EUDVArray(initvals, basetype))
+                    super().__init__(EUDVArray(times, basetype)(initvals))
                 else:
-                    super().__init__(EUDVArray(initvar, basetype))
+                    super().__init__(EUDVArray(times, basetype)(initvar))
 
                 self._initialized = True
 

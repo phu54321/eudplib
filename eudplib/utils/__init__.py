@@ -38,7 +38,8 @@ from .etc import (
     FlattenList,
     List2Assignable,
     Assignable2List,
-    SCMD2Text
+    SCMD2Text,
+    cachedfunc
 )
 
 from .eperror import (

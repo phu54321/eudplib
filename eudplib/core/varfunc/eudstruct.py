@@ -23,6 +23,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
+from .eudv import EUDVariable
 from .vararray import EUDVArray
 from ...utils import ExprProxy, ep_assert
 
@@ -33,6 +34,7 @@ class EUDStruct(ExprProxy, metaclass=structarr._EUDStruct_Metaclass):
     def __init__(self, initvar=None):
         basetype = type(self)
         fields = basetype._fields_
+        fieldn = len(fields)
 
         # Fill fielddict
         fielddict = {}
@@ -53,10 +55,10 @@ class EUDStruct(ExprProxy, metaclass=structarr._EUDStruct_Metaclass):
                     _, attrtype = nametype
                     initvals.append(attrtype())
 
-            super().__init__(EUDVArray(initvals))
+            super().__init__(EUDVArray(fieldn)(initvals))
 
         else:
-            super().__init__(EUDVArray(initvar))
+            super().__init__(EUDVArray(fieldn)(initvar))
 
         self._initialized = True
 
