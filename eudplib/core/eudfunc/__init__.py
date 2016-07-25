@@ -23,19 +23,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-from .eudv import (
-    EUDVariable,
-    VProc,
-    IsEUDVariable,
-    EUDCreateVariables,
-    SeqCompute,
-    SetVariables,
-)
-
-from .vararray import EUDVArray
-from .eudstruct import EUDStruct
-
-from .eudlv import EUDLightVariable
 from .eudf import EUDFunc
 from .eudfptr import EUDFuncPtr
 from .eudfmethod import EUDFuncMethod

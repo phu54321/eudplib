@@ -32,7 +32,7 @@ from .bitwise import (
 )
 
 
-from ..varfunc import EUDVariable
+from ..variable import EUDVariable
 
 
 def DefClsMethod(name, f):

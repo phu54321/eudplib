@@ -42,8 +42,8 @@ from ...utils import (
     cachedfunc
 )
 
-from .eudv import EUDVariable, SeqCompute
-from .vbuf import GetCurrentVariableBuffer
+from ..variable import EUDVariable, SeqCompute
+from ..variable.vbuf import GetCurrentVariableBuffer
 
 
 @cachedfunc

@@ -23,36 +23,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-
-from .allocator import Forward
-from .variable import EUDVariable
-from .rawtrigger import (
-    EncodePlayer,
-    Memory,
-    SetMemory,
-    SetTo,
-    Exactly,
+from .eudv import (
+    EUDVariable,
+    VProc,
+    IsEUDVariable,
+    EUDCreateVariables,
+    SeqCompute,
+    SetVariables,
 )
 
-
-_curpl_var = EUDVariable()
-_curpl_checkcond = Forward()
-
-
-def cpcacheMatchCond():
-    cond = Memory(0x6509A0, Exactly, 0)
-    _curpl_checkcond << cond
-    return cond
-
-
-def SetCurrentPlayer(p):
-    p = EncodePlayer(p)
-    return [
-        _curpl_var.SetNumber(p),
-        SetMemory(_curpl_checkcond + 8, SetTo, p),
-        SetMemory(0x6509B0, SetTo, p),
-    ]
-
-
-def GetCPCache():
-    return _curpl_var
+from .eudlv import EUDLightVariable

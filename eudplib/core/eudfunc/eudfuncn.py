@@ -26,21 +26,16 @@ THE SOFTWARE.
 import functools
 import inspect
 
-from .eudv import EUDVariable, SeqCompute, SetVariables
-from ...utils import (
-    List2Assignable,
-    Assignable2List,
-)
+from ... import utils as ut
+
+from .. import allocator as ac
+from .. import rawtrigger as bt
+from .. import variable as ev
 
 from ...utils.blockstru import (
     BlockStruManager,
     SetCurrentBlockStruManager
 )
-
-from ..allocator import Forward
-from .. import rawtrigger as bt
-
-from eudplib import utils as ut
 
 
 _currentCompiledFunc = None
@@ -102,7 +97,7 @@ class EUDFuncN:
         lastCompiledFunc = _setCurrentCompiledFunc(self)
 
         # Add return point
-        self._fend = Forward()
+        self._fend = ac.Forward()
 
         # Prevent double compilication
         ut.ep_assert(self._fstart is None)
@@ -112,7 +107,7 @@ class EUDFuncN:
         prev_bsm = SetCurrentBlockStruManager(f_bsm)
         bt.PushTriggerScope()
 
-        f_args = [EUDVariable() for _ in range(self._argn)]
+        f_args = [ev.EUDVariable() for _ in range(self._argn)]
         self._fargs = f_args
 
         fstart = bt.NextTrigger()
@@ -120,7 +115,7 @@ class EUDFuncN:
 
         final_rets = self._fdecl_func(*f_args)
         if final_rets is not None:
-            self._AddReturn(Assignable2List(final_rets), False)
+            self._AddReturn(ut.Assignable2List(final_rets), False)
         fend = bt.RawTrigger()
         bt.PopTriggerScope()
 
@@ -136,7 +131,7 @@ class EUDFuncN:
 
     def _AddReturn(self, retv, needjump):
         if self._frets is None:
-            self._frets = [EUDVariable() for _ in range(len(retv))]
+            self._frets = [ev.EUDVariable() for _ in range(len(retv))]
             self._retn = len(retv)
 
         ut.ep_assert(
@@ -145,7 +140,7 @@ class EUDFuncN:
             " (From function %s)" % self._fdecl_func.__name__
         )
 
-        SetVariables(self._frets, retv)
+        ev.SetVariables(self._frets, retv)
 
         if needjump:
             bt.RawTrigger(nextptr=self._fend)
@@ -157,12 +152,12 @@ class EUDFuncN:
         ut.ep_assert(len(args) == self._argn, 'Argument number mismatch')
 
         # Assign arguments into argument space
-        SeqCompute(
+        ev.SeqCompute(
             [(farg, bt.SetTo, arg) for farg, arg in zip(self._fargs, args)]
         )
 
         # Call body
-        fcallend = Forward()
+        fcallend = ac.Forward()
 
         bt.RawTrigger(
             nextptr=self._fstart,
@@ -173,9 +168,9 @@ class EUDFuncN:
 
         if self._frets is not None:
             retn = len(self._frets)
-            tmp_rets = [EUDVariable() for _ in range(retn)]
-            SetVariables(tmp_rets, self._frets)
-            return List2Assignable(tmp_rets)
+            tmp_rets = [ev.EUDVariable() for _ in range(retn)]
+            ev.SetVariables(tmp_rets, self._frets)
+            return ut.List2Assignable(tmp_rets)
 
 
 def EUDReturn(*args):

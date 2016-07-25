@@ -23,16 +23,17 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-from .eudfuncn import EUDFuncN
+from .. import rawtrigger as rt
+from .. import allocator as ac
 from ... import utils as ut
-from .eudv import (
+
+from .eudfuncn import EUDFuncN
+from ..variable import (
     VProc,
     EUDVariable,
     SetVariables,
 )
-from .eudstruct import EUDStruct
-from .. import rawtrigger as rt
-from ..allocator import Forward
+from ..eudstruct import EUDStruct
 
 
 #
@@ -71,7 +72,7 @@ def fillReturns(f):
 
 def callFuncBody(fstart, fend):
     """ Call function's body triggers """
-    fcallend = Forward()
+    fcallend = ac.Forward()
 
     rt.RawTrigger(
         nextptr=fstart,
@@ -166,13 +167,13 @@ def EUDFuncPtr(argn, retn):
                 SetVariables(argStorage, args)
 
             # Call function
-            t, a = Forward(), Forward()
+            t, a = ac.Forward(), ac.Forward()
             SetVariables(
                 [ut.EPD(t + 4), ut.EPD(a + 16)],
                 [self._fstart, self._fendnext_epd]
             )
 
-            fcallend = Forward()
+            fcallend = ac.Forward()
             t << rt.RawTrigger(
                 actions=[
                     a << rt.SetNextPtr(0, fcallend),

@@ -23,12 +23,15 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-from .inlinens import *
-from .curpl import SetCurrentPlayer
 
 from .allocator import *
 from .eudobj import *
 from .rawtrigger import *
 from .mapdata import *
-from .varfunc import *
+from .variable import *
+from .eudstruct import *
+from .eudfunc import *
 from .calcf import *
+
+from .inlinens import *
+from .curpl import SetCurrentPlayer

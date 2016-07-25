@@ -24,16 +24,17 @@ THE SOFTWARE.
 '''
 
 from .. import allocator as ac
-from .. import varfunc as vf
+from .. import variable as ev
+from .. import eudfunc as ef
 from .. import rawtrigger as rt
-from .muldiv import f_mul, f_div
+from .muldiv import f_mul
 
 
 def bw_gen(cond, docstring=None):
-    @vf.EUDFunc
+    @ef.EUDFunc
     def f_bitsize_template(a, b):
-        tmp = vf.EUDLightVariable()
-        ret = vf.EUDVariable()
+        tmp = ev.EUDLightVariable()
+        ret = ev.EUDVariable()
 
         ret << 0
 
@@ -93,13 +94,13 @@ def f_bitnot(a):
 # -------
 
 
-@vf.EUDFunc
+@ef.EUDFunc
 def f_bitsplit(a):
     """Splits bit of given number
 
     :returns: int bits[32];  // bits[i] = (ith bit from LSB of a is set)
     """
-    bits = vf.EUDCreateVariables(32)
+    bits = ev.EUDCreateVariables(32)
     for i in range(31, -1, -1):
         bits[i] << 0
         rt.RawTrigger(
@@ -114,9 +115,9 @@ def f_bitsplit(a):
 
 # -------
 
-@vf.EUDFunc
+@ef.EUDFunc
 def _exp2_vv(n):
-    ret = vf.EUDVariable()
+    ret = ev.EUDVariable()
     ret << 0
     for i in range(32):
         rt.RawTrigger(
@@ -138,7 +139,7 @@ def _exp2(n):
         return _exp2_vv(n)
 
 
-@vf.EUDFunc
+@ef.EUDFunc
 def _f_bitlshift(a, b):
     loopstart = ac.Forward()
     loopend = ac.Forward()

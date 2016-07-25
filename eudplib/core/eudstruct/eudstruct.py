@@ -23,14 +23,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-from .eudv import EUDVariable
+from ... import utils as ut
+
 from .vararray import EUDVArray
-from ...utils import ExprProxy, ep_assert
+from .structarr import _EUDStruct_Metaclass
 
-from . import structarr
-
-
-class EUDStruct(ExprProxy, metaclass=structarr._EUDStruct_Metaclass):
+class EUDStruct(ut.ExprProxy, metaclass=_EUDStruct_Metaclass):
     def __init__(self, initvar=None):
         basetype = type(self)
         fields = basetype._fields_

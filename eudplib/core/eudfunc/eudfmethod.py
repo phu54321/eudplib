@@ -26,9 +26,9 @@ THE SOFTWARE.
 import functools
 import inspect
 
+from ... import utils as ut
+from .. import variable as ev
 from . import eudf
-from . import eudv
-from eudplib import utils as ut
 
 
 _mth_classtype = {}
@@ -62,7 +62,7 @@ def EUDFuncMethod(method):
     # Return function
     def call(self, *args):
         # Else use purely eudfun method
-        if eudv.IsEUDVariable(self):
+        if ev.IsEUDVariable(self):
             selftype = type(self)
             if method not in _mth_classtype:
                 _mth_classtype[method] = selftype

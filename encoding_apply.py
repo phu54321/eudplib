@@ -25,7 +25,6 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
-
 """
 
 print('Auto "license inserter')
@@ -38,7 +37,7 @@ for root, dirs, files in os.walk('eudplib'):
 
             if not code.startswith(begining_str):
                 print('%s' % finalpath)
-                code = begining_str + code
+                code = begining_str + "\n" + code
                 open(finalpath, 'w', encoding='utf-8').write(code)
 
 print('end')
