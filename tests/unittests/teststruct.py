@@ -5,6 +5,13 @@ from helper import *
 class TestStruct(EUDStruct):
     _fields_ = ['x', 'y', 'z']
 
+    @EUDTypedMethod([selftype])
+    def add(self, other):
+        self.x += other.x
+        self.y += other.y
+        self.z += other.z
+        return self
+
 
 @TestInstance
 def test_struct():
@@ -23,6 +30,14 @@ def test_struct():
         "EUDStruct indirect access test",
         [a.x, b.x, c.x, d.x, a.y, b.y, c.y, d.y, a.z, b.z, c.z, d.z],
         [3, 3, 3, 3, 7, 7, 7, 7, 8, 8, 8, 8]
+    )
+
+    d = a.clone()
+    a.add(d)
+    test_equality(
+        "EUDTypedMethod test",
+        [a.x, a.y, a.z, d.x, d.y, d.z],
+        [6, 14, 16, 3, 7, 8]
     )
 
 

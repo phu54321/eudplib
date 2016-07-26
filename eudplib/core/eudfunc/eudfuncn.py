@@ -67,9 +67,7 @@ class EUDFuncN:
 
         :param callerfunc: Function to be wrapped.
         :param argn: Count of arguments got by callerfunc
-        :param bodyfunc: Function which implements real logic This
-            may be different from callerfunc if callerfunc is a wrapper
-            around bodyfunc. For instance, in EUDFuncMethod.
+        :param bodyfunc: Where function should return to
         """
 
         if bodyfunc is None:

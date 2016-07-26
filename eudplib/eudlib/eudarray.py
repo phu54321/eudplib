@@ -62,14 +62,14 @@ class EUDArrayData(c.EUDObject):
         """ Get size of array """
         return self._arrlen
 
-    @c.EUDFuncMethod
+    @c.EUDMethod
     def get(self, key):
         return f_dwread_epd(ut.EPD(self) + key)
 
     def __getitem__(self, key):
         return self.get(key)
 
-    @c.EUDFuncMethod
+    @c.EUDMethod
     def set(self, key, item):
         return f_dwwrite_epd(ut.EPD(self) + key, item)
 

@@ -89,9 +89,9 @@ def test_operator(testname, realf, exptf=None):
     if exptf is None:
         exptf = realf
 
-    if isinstance(realf, EUDFuncN):
+    try:
         f = realf._bodyfunc
-    else:
+    except AttributeError:
         f = realf
     argcount = f.__code__.co_argcount
 

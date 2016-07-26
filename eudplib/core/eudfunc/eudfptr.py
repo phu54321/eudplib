@@ -28,6 +28,7 @@ from .. import allocator as ac
 from ... import utils as ut
 
 from .eudfuncn import EUDFuncN
+from .eudtypedfuncn import applyTypes
 from ..variable import (
     VProc,
     EUDVariable,
@@ -103,7 +104,10 @@ def createIndirectCaller(f, _caller_dict={}):
 # ---------------------------------
 
 
-def EUDFuncPtr(argn, retn):
+def EUDTypedFuncPtr(argtypes, rettypes):
+    argn = len(argtypes)
+    retn = len(rettypes)
+
     class PtrDataClass(EUDStruct):
         _fields_ = [
             '_fstart',
@@ -112,9 +116,6 @@ def EUDFuncPtr(argn, retn):
 
         def __init__(self, f_init=None):
             """ Constructor with function prototype
-
-            :param argn: Number of arguments function can accepy
-            :param retn: Number of variables function will return.
             :param f_init: First function
             """
 
@@ -139,8 +140,12 @@ def EUDFuncPtr(argn, retn):
 
             f_argn = f._argn
             f_retn = f._retn
-            ut.ep_assert(argn == f_argn, "Function with different prototype")
-            ut.ep_assert(retn == f_retn, "Function with different prototype")
+            ut.ep_assert(argn == f_argn,
+                         "Argument count mismatch (Got %d, Expected %d)" %
+                         (f_argn, argn))
+            ut.ep_assert(retn == f_retn,
+                         "Returns count mismatch (Got %d, Expected %d)" %
+                         (f_retn, retn))
 
         def setFunc(self, f):
             """ Set function pointer's target to function
@@ -159,6 +164,8 @@ def EUDFuncPtr(argn, retn):
 
         def __call__(self, *args):
             """ Call target function with given arguments """
+
+            args = applyTypes(argtypes, args)
 
             rt.RawTrigger(actions=rt.SetDeaths(2, rt.SetTo, 5, 0))
 
@@ -186,6 +193,11 @@ def EUDFuncPtr(argn, retn):
                 tmpRets = [EUDVariable() for _ in range(retn)]
                 retStorage = getRetStorage(retn)
                 SetVariables(tmpRets, retStorage)
+                tmpRets = applyTypes(rettypes, tmpRets)
                 return ut.List2Assignable(tmpRets)
 
     return PtrDataClass
+
+
+def EUDFuncPtr(argn, retn):
+    return EUDTypedFuncPtr([None] * argn, [None] * retn)

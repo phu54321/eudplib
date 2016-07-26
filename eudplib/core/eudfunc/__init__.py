@@ -23,7 +23,22 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-from .eudf import EUDFunc, EUDTypedFunc
-from .eudfptr import EUDFuncPtr
-from .eudfmethod import EUDFuncMethod
-from .eudfuncn import EUDFuncN, EUDReturn
+from .eudf import (
+    EUDFunc,
+    EUDTypedFunc
+)
+
+from .eudfptr import (
+    EUDFuncPtr,
+    EUDTypedFuncPtr
+)
+
+from .eudfmethod import (
+    EUDMethod,
+    EUDTypedMethod,
+    selftype
+)
+
+from .eudfuncn import (
+    EUDReturn
+)

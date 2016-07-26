@@ -28,55 +28,80 @@ import inspect
 
 from ... import utils as ut
 from .. import variable as ev
-from .eudfuncn import EUDFuncN
-
+from .eudtypedfuncn import EUDTypedFuncN, applyTypes
 
 _mth_classtype = {}
+_selftype = None
 
 
-def EUDFuncMethod(method):
-    # Get argument number of fdecl_func
-    argspec = inspect.getargspec(method)
-    ut.ep_assert(
-        argspec[1] is None,
-        'No variadic arguments (*args) allowed for EUDFunc.'
-    )
-    ut.ep_assert(
-        argspec[2] is None,
-        'No variadic keyword arguments (*kwargs) allowed for EUDFunc.'
-    )
+def selftype(arg):
+    """ When used in EUDFuncMethod's type declaration, This is interpreted
+    as the owning class itself
+    """
+    return _selftype(arg)
 
-    # Get number of arguments excluding self
-    argn = len(argspec[0]) - 1
 
-    constexpr_callmap = {}
+def EUDTypedMethod(argtypes, rettypes=None):
+    def _EUDTypedMethod(method):
+        # Get argument number of fdecl_func
+        argspec = inspect.getargspec(method)
+        ut.ep_assert(
+            argspec[1] is None,
+            'No variadic arguments (*args) allowed for EUDFunc.'
+        )
+        ut.ep_assert(
+            argspec[2] is None,
+            'No variadic keyword arguments (*kwargs) allowed for EUDFunc.'
+        )
 
-    # Generic caller
-    def genericCaller(self, *args):
-        selftype = _mth_classtype[method]
-        self = selftype(self)
-        return method(self, *args)
+        # Get number of arguments excluding self
+        argn = len(argspec[0]) - 1
 
-    genericCaller = EUDFuncN(argn + 1, genericCaller, method)
+        constexpr_callmap = {}
 
-    # Return function
-    def call(self, *args):
-        # Else use purely eudfun method
-        if ev.IsEUDVariable(self):
-            selftype = type(self)
-            if method not in _mth_classtype:
-                _mth_classtype[method] = selftype
-            return genericCaller(self, *args)
+        # Generic caller
+        def genericCaller(self, *args):
+            global _selftype
+            _selftype = _mth_classtype[method]
+            self = selftype(self)
+            args = applyTypes(argtypes, args)
+            _selftype = None
+            return method(self, *args)
 
-        # Const expression. Can use optimizations
-        else:
-            if self not in constexpr_callmap:
-                def caller(*args):
-                    return method(self, *args)
+        genericCaller = EUDTypedFuncN(argn + 1, genericCaller, method,
+                                      argtypes, rettypes)
 
-                constexpr_callmap[self] = EUDFuncN(argn, caller, method)
+        # Return function
+        def call(self, *args):
+            global _selftype
 
-            return constexpr_callmap[self](*args)
+            # Use purely eudfun method
+            if ev.IsEUDVariable(self):
+                selftype = type(self)
+                if method not in _mth_classtype:
+                    _mth_classtype[method] = selftype
+                return genericCaller(self, *args)
 
-    functools.update_wrapper(call, method)
-    return call
+            # Const expression. Can use optimizations
+            else:
+                if self not in constexpr_callmap:
+                    def caller(*args):
+                        args = applyTypes(argtypes, args)
+                        return method(self, *args)
+
+                    constexpr_callmap[self] = EUDTypedFuncN(
+                        argn, caller, method, argtypes, rettypes)
+
+                _selftype = type(self)
+                rets = constexpr_callmap[self](*args)
+                _selftype = None
+                return rets
+
+        functools.update_wrapper(call, method)
+        return call
+
+    return _EUDTypedMethod
+
+
+def EUDMethod(method):
+    return EUDTypedMethod(None, None)(method)
