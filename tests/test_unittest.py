@@ -27,6 +27,7 @@ from unittests import (
     teststack,
     testdwmemio,
     testcpmemio,
+    testtypedf,
 )
 
 helper.CompressPayload(True)

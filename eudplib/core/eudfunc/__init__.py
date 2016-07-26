@@ -27,3 +27,4 @@ from .eudf import EUDFunc
 from .eudfptr import EUDFuncPtr
 from .eudfmethod import EUDFuncMethod
 from .eudfuncn import EUDFuncN, EUDReturn
+from .eudtypedf import EUDTypedFunc

@@ -90,7 +90,7 @@ def test_operator(testname, realf, exptf=None):
         exptf = realf
 
     if isinstance(realf, EUDFuncN):
-        f = realf._fdecl_func
+        f = realf._callerfunc
     else:
         f = realf
     argcount = f.__code__.co_argcount

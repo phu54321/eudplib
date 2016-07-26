@@ -62,24 +62,23 @@ def _setCurrentCompiledFunc(func):
 
 
 class EUDFuncN:
-    def __init__(self, fdecl_func, argn, *, bodyfunc=None):
+    def __init__(self, argn, callerfunc, bodyfunc2):
         """ EUDFuncN
 
-        :param fdecl_func: Function to be wrapped.
-        :param argn: Count of arguments got by fdecl_func
-        :param bodyfunc: Function which implements real logic This
-            may be different from fdecl_func if fdecl_func is a wrapper
-            around bodyfunc. For instance, in EUDFuncMethod.
+        :param callerfunc: Function to be wrapped.
+        :param argn: Count of arguments got by callerfunc
+        :param bodyfunc2: Function which implements real logic This
+            may be different from callerfunc if callerfunc is a wrapper
+            around bodyfunc2. For instance, in EUDFuncMethod.
         """
 
-        if bodyfunc is None:
-            bodyfunc = fdecl_func
+        if bodyfunc2 is None:
+            bodyfunc2 = callerfunc
 
         self._argn = argn
         self._retn = None
-        self._fdecl_func = fdecl_func
-        self._bodyfunc = bodyfunc
-        functools.update_wrapper(self, bodyfunc)
+        self._callerfunc = callerfunc
+        functools.update_wrapper(self, bodyfunc2)
         self._fstart = None
         self._fend = None
         self._fargs = None
@@ -113,7 +112,7 @@ class EUDFuncN:
         fstart = bt.NextTrigger()
         self._fstart = fstart
 
-        final_rets = self._fdecl_func(*f_args)
+        final_rets = self._callerfunc(*f_args)
         if final_rets is not None:
             self._AddReturn(ut.Assignable2List(final_rets), False)
         fend = bt.RawTrigger()
@@ -137,7 +136,7 @@ class EUDFuncN:
         ut.ep_assert(
             len(retv) == len(self._frets),
             "Numbers of returned value should be constant."
-            " (From function %s)" % self._fdecl_func.__name__
+            " (From function %s)" % self._callerfunc.__name__
         )
 
         ev.SetVariables(self._frets, retv)

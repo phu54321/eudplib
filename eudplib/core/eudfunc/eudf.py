@@ -41,10 +41,5 @@ def EUDFunc(fdecl_func):
         'No variadic keyword arguments (*kwargs) allowed for EUDFunc.'
     )
 
-    _f = EUDFuncN(fdecl_func, len(argspec[0]))
-
-    @functools.wraps(fdecl_func)
-    def _fcaller(*args):
-        return _f(*args)
-
-    return _f
+    functools.update_wrapper(ret, fdecl_func)
+    return ret

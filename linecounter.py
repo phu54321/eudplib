@@ -5,6 +5,7 @@ from pygments.lexers import get_lexer_by_name
 from pygments.formatters import HtmlFormatter
 
 totlinen = 0
+totsize = 0
 totstrlist = []
 
 lexer = get_lexer_by_name("python", stripall=True)
@@ -15,6 +16,7 @@ for root, dirs, files in os.walk('eudplib'):
         if f[-3:] == '.py':
             finalpath = os.path.join(root, f)
             code = open(finalpath, 'r').read()
+            totsize += len(code)
             linen = code.count('\n') + 1
             print("%-40s : %4d" % (finalpath, linen))
             totlinen += linen
@@ -26,6 +28,7 @@ for root, dirs, files in os.walk('eudplib'):
                 '{highlighted_code}<br><br>'.format(**locals()))
 
 print('Total lines: %d' % totlinen)
+print('Total size: %d' % totsize)
 
 cssstyle = HtmlFormatter().get_style_defs('.highlight')
 
