@@ -28,7 +28,7 @@ import inspect
 
 from ... import utils as ut
 from .. import variable as ev
-from . import eudf
+from .eudfuncn import EUDFuncN
 
 
 _mth_classtype = {}
@@ -57,7 +57,7 @@ def EUDFuncMethod(method):
         self = selftype(self)
         return method(self, *args)
 
-    genericCaller = eudf.EUDFuncN(argn + 1, genericCaller, method)
+    genericCaller = EUDFuncN(argn + 1, genericCaller, method)
 
     # Return function
     def call(self, *args):
@@ -74,7 +74,7 @@ def EUDFuncMethod(method):
                 def caller(*args):
                     return method(self, *args)
 
-                constexpr_callmap[self] = eudf.EUDFuncN(argn, caller, method)
+                constexpr_callmap[self] = EUDFuncN(argn, caller, method)
 
             return constexpr_callmap[self](*args)
 

@@ -1,6 +1,3 @@
-import functools
-import inspect
-
 from ... import utils as ut
 from .. import variable as ev
 
@@ -54,28 +51,3 @@ class EUDTypedFuncN(EUDFuncN):
         # Cast returns to rettypes before caller code.
         rets = applyTypes(self._rettypes, rets)
         return rets
-
-
-def EUDTypedFunc(argtypes, rettypes=None):
-    def _EUDTypedFunc(fdecl_func):
-        argspec = inspect.getargspec(fdecl_func)
-        argn = len(argspec[0])
-        ut.ep_assert(
-            argspec[1] is None,
-            'No variadic arguments (*args) allowed for EUDFunc.'
-        )
-        ut.ep_assert(
-            argspec[2] is None,
-            'No variadic keyword arguments (*kwargs) allowed for EUDFunc.'
-        )
-
-        def caller(*args):
-            # Cast arguments to argtypes before callee code.
-            args = applyTypes(argtypes, args)
-            return fdecl_func(*args)
-
-        ret = EUDTypedFuncN(argn, caller, fdecl_func, argtypes, rettypes)
-        functools.update_wrapper(ret, fdecl_func)
-        return ret
-
-    return _EUDTypedFunc

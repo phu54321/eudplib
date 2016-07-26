@@ -62,23 +62,24 @@ def _setCurrentCompiledFunc(func):
 
 
 class EUDFuncN:
-    def __init__(self, argn, callerfunc, bodyfunc2):
+    def __init__(self, argn, callerfunc, bodyfunc):
         """ EUDFuncN
 
         :param callerfunc: Function to be wrapped.
         :param argn: Count of arguments got by callerfunc
-        :param bodyfunc2: Function which implements real logic This
+        :param bodyfunc: Function which implements real logic This
             may be different from callerfunc if callerfunc is a wrapper
-            around bodyfunc2. For instance, in EUDFuncMethod.
+            around bodyfunc. For instance, in EUDFuncMethod.
         """
 
-        if bodyfunc2 is None:
-            bodyfunc2 = callerfunc
+        if bodyfunc is None:
+            bodyfunc = callerfunc
 
         self._argn = argn
         self._retn = None
         self._callerfunc = callerfunc
-        functools.update_wrapper(self, bodyfunc2)
+        self._bodyfunc = bodyfunc
+        functools.update_wrapper(self, bodyfunc)
         self._fstart = None
         self._fend = None
         self._fargs = None
@@ -148,7 +149,11 @@ class EUDFuncN:
         if self._fstart is None:
             self._CreateFuncBody()
 
-        ut.ep_assert(len(args) == self._argn, 'Argument number mismatch')
+        ut.ep_assert(
+            len(args) == self._argn,
+            'Argument number mismatch : ' +
+            'len(%s) != %d' % (repr(args), self._argn)
+        )
 
         # Assign arguments into argument space
         ev.SeqCompute(

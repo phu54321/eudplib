@@ -26,20 +26,34 @@ THE SOFTWARE.
 import inspect
 import functools
 
-from .eudfuncn import EUDFuncN
+from .eudtypedfuncn import EUDTypedFuncN, applyTypes
 from ... import utils as ut
 
 
-def EUDFunc(fdecl_func):
-    argspec = inspect.getargspec(fdecl_func)
-    ut.ep_assert(
-        argspec[1] is None,
-        'No variadic arguments (*args) allowed for EUDFunc.'
-    )
-    ut.ep_assert(
-        argspec[2] is None,
-        'No variadic keyword arguments (*kwargs) allowed for EUDFunc.'
-    )
+def EUDTypedFunc(argtypes, rettypes=None):
+    def _EUDTypedFunc(fdecl_func):
+        argspec = inspect.getargspec(fdecl_func)
+        argn = len(argspec[0])
+        ut.ep_assert(
+            argspec[1] is None,
+            'No variadic arguments (*args) allowed for EUDFunc.'
+        )
+        ut.ep_assert(
+            argspec[2] is None,
+            'No variadic keyword arguments (*kwargs) allowed for EUDFunc.'
+        )
 
-    functools.update_wrapper(ret, fdecl_func)
-    return ret
+        def caller(*args):
+            # Cast arguments to argtypes before callee code.
+            args = applyTypes(argtypes, args)
+            return fdecl_func(*args)
+
+        ret = EUDTypedFuncN(argn, caller, fdecl_func, argtypes, rettypes)
+        functools.update_wrapper(ret, fdecl_func)
+        return ret
+
+    return _EUDTypedFunc
+
+
+def EUDFunc(fdecl_func):
+    return EUDTypedFunc(None, None)(fdecl_func)
