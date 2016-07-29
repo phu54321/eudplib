@@ -24,9 +24,11 @@ THE SOFTWARE.
 '''
 
 from ... import utils as ut
-
+from ..allocator import IsConstExpr
+from ..variable import EUDVariable
 from .vararray import EUDVArray
 from .structarr import _EUDStruct_Metaclass
+
 
 class EUDStruct(ut.ExprProxy, metaclass=_EUDStruct_Metaclass):
     def __init__(self, initvar=None):
@@ -60,6 +62,8 @@ class EUDStruct(ut.ExprProxy, metaclass=_EUDStruct_Metaclass):
 
         self._initialized = True
 
+    # Initializer
+
     def clone(self):
         """ Create struct clone """
         basetype = type(self)
@@ -80,6 +84,8 @@ class EUDStruct(ut.ExprProxy, metaclass=_EUDStruct_Metaclass):
             else:
                 _, attrtype = nametype
                 attrtype(self.get(i)).deepcopy(attrtype(inst.get(i)))
+
+    # Field setter & getter
 
     def getfield(self, name):
         attrid, attrtype = self._fielddict[name]
@@ -107,3 +113,13 @@ class EUDStruct(ut.ExprProxy, metaclass=_EUDStruct_Metaclass):
                 self.__dict__[name] = value
         else:
             self.__dict__[name] = value
+
+    # Utilities
+
+    def asVariable(self):
+        if IsConstExpr(self):
+            var = EUDVariable(self)
+        else:
+            var = EUDVariable()
+            var << self
+        return type(self)(var)

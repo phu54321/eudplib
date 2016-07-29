@@ -57,6 +57,9 @@ class ExprProxy:
         return self._value
 
     # Proxy operators
+    def __lshift__(self, other):
+        return self._value << other
+
     def __add__(self, other):
         return self._value + other
 

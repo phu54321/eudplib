@@ -28,6 +28,7 @@ from unittests import (
     testdwmemio,
     testcpmemio,
     testtypedf,
+    testpool,
 )
 
 helper.CompressPayload(True)

@@ -12,7 +12,7 @@ pyximport.install()
 from eudplib import *
 
 
-_testing = EUDVariable()
+_testFailed = EUDLightVariable()
 _failedTest = EUDArray(1024)
 _testNum = EUDVariable()
 _failedNum = EUDVariable()
@@ -41,13 +41,13 @@ def test_assert(testname, condition):
     setcp1()
 
     if EUDIf()(condition):
-        f_simpleprint("\x07[ OK ] \x04%s" % testname)
+        f_simpleprint("\x07 - [ OK ] \x04%s" % testname)
         test_wait(0)
     if EUDElse()():
-        f_simpleprint("\x08[FAIL] %s" % testname)
+        f_simpleprint("\x08 - [FAIL] %s" % testname)
         failedTestDb = DBString(testname)
         _failedTest[_failedNum] = failedTestDb
-        _failedNum += 1
+        _testFailed << 1
         test_wait(24)
     EUDEndIf()
 
@@ -66,12 +66,12 @@ def test_equality(testname, real, expt):
     setcp1()
 
     if EUDIf()([r == e for r, e in zip(real, expt)]):
-        f_simpleprint("\x07[ OK ] \x04%s" % testname)
+        f_simpleprint("\x07 - [ OK ] \x04%s" % testname)
         test_wait(0)
     if EUDElse()():
-        f_simpleprint("\x08[FAIL] %s" % testname)
-        f_simpleprint(" \x03 - \x04 Output   : ", *real)
-        f_simpleprint(" \x03 - \x04 Expected : ", *expt)
+        f_simpleprint("\x08 - [FAIL] %s" % testname)
+        f_simpleprint(" \x03   - \x04 Output   : ", *real)
+        f_simpleprint(" \x03   - \x04 Expected : ", *expt)
         failedTestDb = DBString(testname)
         _failedTest[_failedNum] = failedTestDb
         _failedNum += 1
@@ -154,14 +154,17 @@ _testList = []
 
 def TestInstance(func):
     print(" - Adding test instance %s" % func.__name__)
-    _testList.append(func)
+    _testList.append((func, func.__name__))
     return func
 
 
 @EUDFunc
 def _testmain():
-    for _test in _testList:
-        _test()
+    for testfunc, testname in _testList:
+        _testFailed << 0
+        f_simpleprint("\x03[TEST] Running test %s..." % testname)
+        testfunc()
+        Trigger(_testFailed == 1, _failedNum.AddNumber(1))
 
     test_complete()
 

@@ -121,11 +121,12 @@ cdef class Forward(ConstExpr):
             self._expr is None,
             'Reforwarding without reset is not allowed'
         )
+        expr = ut.unProxy(expr)
         ut.ep_assert(expr is not None, 'Cannot forward to None')
-        if isinstance(expr, ConstExpr):
-            self._expr = expr
-        else:
+        if isinstance(expr, int):
             self._expr = ConstExprInt(expr)
+        else:
+            self._expr = expr
         return expr
 
     def IsSet(self):
