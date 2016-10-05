@@ -3174,6 +3174,7 @@ static PyObject *__pyx_pf_7eudplib_4core_9allocator_9constexpr_7Forward_2__lshif
   PyObject *__pyx_t_7 = NULL;
   int __pyx_t_8;
   __Pyx_RefNannySetupContext("__lshift__", 0);
+  __Pyx_INCREF(__pyx_v_expr);
 
   /* "eudplib/core/allocator/constexpr.pyx":120
  * 
@@ -3233,101 +3234,141 @@ static PyObject *__pyx_pf_7eudplib_4core_9allocator_9constexpr_7Forward_2__lshif
   /* "eudplib/core/allocator/constexpr.pyx":124
  *             'Reforwarding without reset is not allowed'
  *         )
- *         ut.ep_assert(expr is not None, 'Cannot forward to None')             # <<<<<<<<<<<<<<
- *         if isinstance(expr, ConstExpr):
- *             self._expr = expr
+ *         expr = ut.unProxy(expr)             # <<<<<<<<<<<<<<
+ *         ut.ep_assert(expr is not None, 'Cannot forward to None')
+ *         if isinstance(expr, int):
  */
   __pyx_t_3 = __Pyx_GetModuleGlobalName(__pyx_n_s_ut); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 124, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_ep_assert); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 124, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_unProxy); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 124, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_4 = (__pyx_v_expr != Py_None);
-  __pyx_t_3 = __Pyx_PyBool_FromLong(__pyx_t_4); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 124, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_2 = NULL;
-  __pyx_t_6 = 0;
+  __pyx_t_3 = NULL;
   if (CYTHON_COMPILING_IN_CPYTHON && unlikely(PyMethod_Check(__pyx_t_7))) {
-    __pyx_t_2 = PyMethod_GET_SELF(__pyx_t_7);
-    if (likely(__pyx_t_2)) {
+    __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_7);
+    if (likely(__pyx_t_3)) {
       PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_7);
-      __Pyx_INCREF(__pyx_t_2);
+      __Pyx_INCREF(__pyx_t_3);
       __Pyx_INCREF(function);
       __Pyx_DECREF_SET(__pyx_t_7, function);
-      __pyx_t_6 = 1;
     }
   }
-  __pyx_t_5 = PyTuple_New(2+__pyx_t_6); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 124, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_5);
-  if (__pyx_t_2) {
-    __Pyx_GIVEREF(__pyx_t_2); PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_2); __pyx_t_2 = NULL;
+  if (!__pyx_t_3) {
+    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_7, __pyx_v_expr); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 124, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+  } else {
+    __pyx_t_2 = PyTuple_New(1+1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 124, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_2);
+    __Pyx_GIVEREF(__pyx_t_3); PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_t_3); __pyx_t_3 = NULL;
+    __Pyx_INCREF(__pyx_v_expr);
+    __Pyx_GIVEREF(__pyx_v_expr);
+    PyTuple_SET_ITEM(__pyx_t_2, 0+1, __pyx_v_expr);
+    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_7, __pyx_t_2, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 124, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   }
-  __Pyx_GIVEREF(__pyx_t_3);
-  PyTuple_SET_ITEM(__pyx_t_5, 0+__pyx_t_6, __pyx_t_3);
-  __Pyx_INCREF(__pyx_kp_s_Cannot_forward_to_None);
-  __Pyx_GIVEREF(__pyx_kp_s_Cannot_forward_to_None);
-  PyTuple_SET_ITEM(__pyx_t_5, 1+__pyx_t_6, __pyx_kp_s_Cannot_forward_to_None);
-  __pyx_t_3 = 0;
-  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_7, __pyx_t_5, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 124, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __Pyx_DECREF_SET(__pyx_v_expr, __pyx_t_1);
+  __pyx_t_1 = 0;
 
   /* "eudplib/core/allocator/constexpr.pyx":125
  *         )
+ *         expr = ut.unProxy(expr)
+ *         ut.ep_assert(expr is not None, 'Cannot forward to None')             # <<<<<<<<<<<<<<
+ *         if isinstance(expr, int):
+ *             self._expr = ConstExprInt(expr)
+ */
+  __pyx_t_7 = __Pyx_GetModuleGlobalName(__pyx_n_s_ut); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 125, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_7);
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_7, __pyx_n_s_ep_assert); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 125, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+  __pyx_t_4 = (__pyx_v_expr != Py_None);
+  __pyx_t_7 = __Pyx_PyBool_FromLong(__pyx_t_4); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 125, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_7);
+  __pyx_t_3 = NULL;
+  __pyx_t_6 = 0;
+  if (CYTHON_COMPILING_IN_CPYTHON && unlikely(PyMethod_Check(__pyx_t_2))) {
+    __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_2);
+    if (likely(__pyx_t_3)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+      __Pyx_INCREF(__pyx_t_3);
+      __Pyx_INCREF(function);
+      __Pyx_DECREF_SET(__pyx_t_2, function);
+      __pyx_t_6 = 1;
+    }
+  }
+  __pyx_t_5 = PyTuple_New(2+__pyx_t_6); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 125, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_5);
+  if (__pyx_t_3) {
+    __Pyx_GIVEREF(__pyx_t_3); PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_3); __pyx_t_3 = NULL;
+  }
+  __Pyx_GIVEREF(__pyx_t_7);
+  PyTuple_SET_ITEM(__pyx_t_5, 0+__pyx_t_6, __pyx_t_7);
+  __Pyx_INCREF(__pyx_kp_s_Cannot_forward_to_None);
+  __Pyx_GIVEREF(__pyx_kp_s_Cannot_forward_to_None);
+  PyTuple_SET_ITEM(__pyx_t_5, 1+__pyx_t_6, __pyx_kp_s_Cannot_forward_to_None);
+  __pyx_t_7 = 0;
+  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_5, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 125, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "eudplib/core/allocator/constexpr.pyx":126
+ *         expr = ut.unProxy(expr)
  *         ut.ep_assert(expr is not None, 'Cannot forward to None')
- *         if isinstance(expr, ConstExpr):             # <<<<<<<<<<<<<<
- *             self._expr = expr
+ *         if isinstance(expr, int):             # <<<<<<<<<<<<<<
+ *             self._expr = ConstExprInt(expr)
  *         else:
  */
-  __pyx_t_4 = __Pyx_TypeCheck(__pyx_v_expr, __pyx_ptype_7eudplib_4core_9allocator_9constexpr_ConstExpr); 
+  __pyx_t_4 = PyInt_Check(__pyx_v_expr); 
   __pyx_t_8 = (__pyx_t_4 != 0);
   if (__pyx_t_8) {
 
-    /* "eudplib/core/allocator/constexpr.pyx":126
+    /* "eudplib/core/allocator/constexpr.pyx":127
  *         ut.ep_assert(expr is not None, 'Cannot forward to None')
- *         if isinstance(expr, ConstExpr):
- *             self._expr = expr             # <<<<<<<<<<<<<<
+ *         if isinstance(expr, int):
+ *             self._expr = ConstExprInt(expr)             # <<<<<<<<<<<<<<
  *         else:
- *             self._expr = ConstExprInt(expr)
- */
-    if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_n_s_expr, __pyx_v_expr) < 0) __PYX_ERR(0, 126, __pyx_L1_error)
-
-    /* "eudplib/core/allocator/constexpr.pyx":125
- *         )
- *         ut.ep_assert(expr is not None, 'Cannot forward to None')
- *         if isinstance(expr, ConstExpr):             # <<<<<<<<<<<<<<
  *             self._expr = expr
+ */
+    __pyx_t_1 = PyTuple_New(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 127, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_INCREF(__pyx_v_expr);
+    __Pyx_GIVEREF(__pyx_v_expr);
+    PyTuple_SET_ITEM(__pyx_t_1, 0, __pyx_v_expr);
+    __pyx_t_2 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_7eudplib_4core_9allocator_9constexpr_ConstExprInt), __pyx_t_1, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 127, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_2);
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+    if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_n_s_expr, __pyx_t_2) < 0) __PYX_ERR(0, 127, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+
+    /* "eudplib/core/allocator/constexpr.pyx":126
+ *         expr = ut.unProxy(expr)
+ *         ut.ep_assert(expr is not None, 'Cannot forward to None')
+ *         if isinstance(expr, int):             # <<<<<<<<<<<<<<
+ *             self._expr = ConstExprInt(expr)
  *         else:
  */
     goto __pyx_L3;
   }
 
-  /* "eudplib/core/allocator/constexpr.pyx":128
- *             self._expr = expr
+  /* "eudplib/core/allocator/constexpr.pyx":129
+ *             self._expr = ConstExprInt(expr)
  *         else:
- *             self._expr = ConstExprInt(expr)             # <<<<<<<<<<<<<<
+ *             self._expr = expr             # <<<<<<<<<<<<<<
  *         return expr
  * 
  */
   /*else*/ {
-    __pyx_t_1 = PyTuple_New(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 128, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __Pyx_INCREF(__pyx_v_expr);
-    __Pyx_GIVEREF(__pyx_v_expr);
-    PyTuple_SET_ITEM(__pyx_t_1, 0, __pyx_v_expr);
-    __pyx_t_7 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_7eudplib_4core_9allocator_9constexpr_ConstExprInt), __pyx_t_1, NULL); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 128, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_7);
-    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_n_s_expr, __pyx_t_7) < 0) __PYX_ERR(0, 128, __pyx_L1_error)
-    __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+    if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_n_s_expr, __pyx_v_expr) < 0) __PYX_ERR(0, 129, __pyx_L1_error)
   }
   __pyx_L3:;
 
-  /* "eudplib/core/allocator/constexpr.pyx":129
+  /* "eudplib/core/allocator/constexpr.pyx":130
  *         else:
- *             self._expr = ConstExprInt(expr)
+ *             self._expr = expr
  *         return expr             # <<<<<<<<<<<<<<
  * 
  *     def IsSet(self):
@@ -3355,12 +3396,13 @@ static PyObject *__pyx_pf_7eudplib_4core_9allocator_9constexpr_7Forward_2__lshif
   __Pyx_AddTraceback("eudplib.core.allocator.constexpr.Forward.__lshift__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
+  __Pyx_XDECREF(__pyx_v_expr);
   __Pyx_XGIVEREF(__pyx_r);
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-/* "eudplib/core/allocator/constexpr.pyx":131
+/* "eudplib/core/allocator/constexpr.pyx":132
  *         return expr
  * 
  *     def IsSet(self):             # <<<<<<<<<<<<<<
@@ -3388,7 +3430,7 @@ static PyObject *__pyx_pf_7eudplib_4core_9allocator_9constexpr_7Forward_4IsSet(s
   PyObject *__pyx_t_2 = NULL;
   __Pyx_RefNannySetupContext("IsSet", 0);
 
-  /* "eudplib/core/allocator/constexpr.pyx":132
+  /* "eudplib/core/allocator/constexpr.pyx":133
  * 
  *     def IsSet(self):
  *         return self._expr is not None             # <<<<<<<<<<<<<<
@@ -3397,13 +3439,13 @@ static PyObject *__pyx_pf_7eudplib_4core_9allocator_9constexpr_7Forward_4IsSet(s
  */
   __Pyx_XDECREF(__pyx_r);
   __pyx_t_1 = (((PyObject *)__pyx_v_self->_expr) != Py_None);
-  __pyx_t_2 = __Pyx_PyBool_FromLong(__pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 132, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyBool_FromLong(__pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 133, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_r = __pyx_t_2;
   __pyx_t_2 = 0;
   goto __pyx_L0;
 
-  /* "eudplib/core/allocator/constexpr.pyx":131
+  /* "eudplib/core/allocator/constexpr.pyx":132
  *         return expr
  * 
  *     def IsSet(self):             # <<<<<<<<<<<<<<
@@ -3422,7 +3464,7 @@ static PyObject *__pyx_pf_7eudplib_4core_9allocator_9constexpr_7Forward_4IsSet(s
   return __pyx_r;
 }
 
-/* "eudplib/core/allocator/constexpr.pyx":134
+/* "eudplib/core/allocator/constexpr.pyx":135
  *         return self._expr is not None
  * 
  *     def Reset(self):             # <<<<<<<<<<<<<<
@@ -3448,7 +3490,7 @@ static PyObject *__pyx_pf_7eudplib_4core_9allocator_9constexpr_7Forward_6Reset(s
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("Reset", 0);
 
-  /* "eudplib/core/allocator/constexpr.pyx":135
+  /* "eudplib/core/allocator/constexpr.pyx":136
  * 
  *     def Reset(self):
  *         self._expr = None             # <<<<<<<<<<<<<<
@@ -3461,7 +3503,7 @@ static PyObject *__pyx_pf_7eudplib_4core_9allocator_9constexpr_7Forward_6Reset(s
   __Pyx_DECREF(((PyObject *)__pyx_v_self->_expr));
   __pyx_v_self->_expr = ((struct __pyx_obj_7eudplib_4core_9allocator_9constexpr_ConstExpr *)Py_None);
 
-  /* "eudplib/core/allocator/constexpr.pyx":134
+  /* "eudplib/core/allocator/constexpr.pyx":135
  *         return self._expr is not None
  * 
  *     def Reset(self):             # <<<<<<<<<<<<<<
@@ -3476,7 +3518,7 @@ static PyObject *__pyx_pf_7eudplib_4core_9allocator_9constexpr_7Forward_6Reset(s
   return __pyx_r;
 }
 
-/* "eudplib/core/allocator/constexpr.pyx":137
+/* "eudplib/core/allocator/constexpr.pyx":138
  *         self._expr = None
  * 
  *     cpdef RlocInt_C Evaluate(self):             # <<<<<<<<<<<<<<
@@ -3500,7 +3542,7 @@ static struct __pyx_obj_7eudplib_4core_9allocator_7rlocint_RlocInt_C *__pyx_f_7e
   if (unlikely(__pyx_skip_dispatch)) ;
   /* Check if overridden in Python */
   else if (unlikely(Py_TYPE(((PyObject *)__pyx_v_self))->tp_dictoffset != 0)) {
-    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_Evaluate); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 137, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_Evaluate); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 138, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     if (!PyCFunction_Check(__pyx_t_1) || (PyCFunction_GET_FUNCTION(__pyx_t_1) != (PyCFunction)__pyx_pw_7eudplib_4core_9allocator_9constexpr_7Forward_9Evaluate)) {
       __Pyx_XDECREF(((PyObject *)__pyx_r));
@@ -3516,14 +3558,14 @@ static struct __pyx_obj_7eudplib_4core_9allocator_7rlocint_RlocInt_C *__pyx_f_7e
         }
       }
       if (__pyx_t_4) {
-        __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_4); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 137, __pyx_L1_error)
+        __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_4); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 138, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
       } else {
-        __pyx_t_2 = __Pyx_PyObject_CallNoArg(__pyx_t_3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 137, __pyx_L1_error)
+        __pyx_t_2 = __Pyx_PyObject_CallNoArg(__pyx_t_3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 138, __pyx_L1_error)
       }
       __Pyx_GOTREF(__pyx_t_2);
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-      if (!(likely(((__pyx_t_2) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_2, __pyx_ptype_7eudplib_4core_9allocator_7rlocint_RlocInt_C))))) __PYX_ERR(0, 137, __pyx_L1_error)
+      if (!(likely(((__pyx_t_2) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_2, __pyx_ptype_7eudplib_4core_9allocator_7rlocint_RlocInt_C))))) __PYX_ERR(0, 138, __pyx_L1_error)
       __pyx_r = ((struct __pyx_obj_7eudplib_4core_9allocator_7rlocint_RlocInt_C *)__pyx_t_2);
       __pyx_t_2 = 0;
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -3532,20 +3574,20 @@ static struct __pyx_obj_7eudplib_4core_9allocator_7rlocint_RlocInt_C *__pyx_f_7e
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   }
 
-  /* "eudplib/core/allocator/constexpr.pyx":138
+  /* "eudplib/core/allocator/constexpr.pyx":139
  * 
  *     cpdef RlocInt_C Evaluate(self):
  *         ut.ep_assert(self._expr is not None, 'Forward not initialized')             # <<<<<<<<<<<<<<
  *         return Evaluate(self._expr)
  * 
  */
-  __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_ut); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 138, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_ut); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 139, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_ep_assert); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 138, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_ep_assert); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 139, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_t_5 = (((PyObject *)__pyx_v_self->_expr) != Py_None);
-  __pyx_t_2 = __Pyx_PyBool_FromLong(__pyx_t_5); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 138, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyBool_FromLong(__pyx_t_5); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 139, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_t_4 = NULL;
   __pyx_t_6 = 0;
@@ -3559,7 +3601,7 @@ static struct __pyx_obj_7eudplib_4core_9allocator_7rlocint_RlocInt_C *__pyx_f_7e
       __pyx_t_6 = 1;
     }
   }
-  __pyx_t_7 = PyTuple_New(2+__pyx_t_6); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 138, __pyx_L1_error)
+  __pyx_t_7 = PyTuple_New(2+__pyx_t_6); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 139, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
   if (__pyx_t_4) {
     __Pyx_GIVEREF(__pyx_t_4); PyTuple_SET_ITEM(__pyx_t_7, 0, __pyx_t_4); __pyx_t_4 = NULL;
@@ -3570,13 +3612,13 @@ static struct __pyx_obj_7eudplib_4core_9allocator_7rlocint_RlocInt_C *__pyx_f_7e
   __Pyx_GIVEREF(__pyx_kp_s_Forward_not_initialized);
   PyTuple_SET_ITEM(__pyx_t_7, 1+__pyx_t_6, __pyx_kp_s_Forward_not_initialized);
   __pyx_t_2 = 0;
-  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_7, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 138, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_7, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 139, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "eudplib/core/allocator/constexpr.pyx":139
+  /* "eudplib/core/allocator/constexpr.pyx":140
  *     cpdef RlocInt_C Evaluate(self):
  *         ut.ep_assert(self._expr is not None, 'Forward not initialized')
  *         return Evaluate(self._expr)             # <<<<<<<<<<<<<<
@@ -3586,14 +3628,14 @@ static struct __pyx_obj_7eudplib_4core_9allocator_7rlocint_RlocInt_C *__pyx_f_7e
   __Pyx_XDECREF(((PyObject *)__pyx_r));
   __pyx_t_1 = ((PyObject *)__pyx_v_self->_expr);
   __Pyx_INCREF(__pyx_t_1);
-  __pyx_t_3 = ((PyObject *)__pyx_f_7eudplib_4core_9allocator_9constexpr_Evaluate(__pyx_t_1, 0)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 139, __pyx_L1_error)
+  __pyx_t_3 = ((PyObject *)__pyx_f_7eudplib_4core_9allocator_9constexpr_Evaluate(__pyx_t_1, 0)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 140, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_r = ((struct __pyx_obj_7eudplib_4core_9allocator_7rlocint_RlocInt_C *)__pyx_t_3);
   __pyx_t_3 = 0;
   goto __pyx_L0;
 
-  /* "eudplib/core/allocator/constexpr.pyx":137
+  /* "eudplib/core/allocator/constexpr.pyx":138
  *         self._expr = None
  * 
  *     cpdef RlocInt_C Evaluate(self):             # <<<<<<<<<<<<<<
@@ -3635,7 +3677,7 @@ static PyObject *__pyx_pf_7eudplib_4core_9allocator_9constexpr_7Forward_8Evaluat
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("Evaluate", 0);
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = ((PyObject *)__pyx_f_7eudplib_4core_9allocator_9constexpr_7Forward_Evaluate(__pyx_v_self, 1)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 137, __pyx_L1_error)
+  __pyx_t_1 = ((PyObject *)__pyx_f_7eudplib_4core_9allocator_9constexpr_7Forward_Evaluate(__pyx_v_self, 1)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 138, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -3757,7 +3799,7 @@ static int __pyx_pf_7eudplib_4core_9allocator_9constexpr_7Forward_5_expr_4__del_
   return __pyx_r;
 }
 
-/* "eudplib/core/allocator/constexpr.pyx":142
+/* "eudplib/core/allocator/constexpr.pyx":143
  * 
  * 
  * cpdef RlocInt_C Evaluate(x):             # <<<<<<<<<<<<<<
@@ -3782,7 +3824,7 @@ static struct __pyx_obj_7eudplib_4core_9allocator_7rlocint_RlocInt_C *__pyx_f_7e
   PyObject *__pyx_t_11 = NULL;
   __Pyx_RefNannySetupContext("Evaluate", 0);
 
-  /* "eudplib/core/allocator/constexpr.pyx":146
+  /* "eudplib/core/allocator/constexpr.pyx":147
  *     Evaluate expressions
  *     '''
  *     try:             # <<<<<<<<<<<<<<
@@ -3798,7 +3840,7 @@ static struct __pyx_obj_7eudplib_4core_9allocator_7rlocint_RlocInt_C *__pyx_f_7e
     __Pyx_XGOTREF(__pyx_t_3);
     /*try:*/ {
 
-      /* "eudplib/core/allocator/constexpr.pyx":147
+      /* "eudplib/core/allocator/constexpr.pyx":148
  *     '''
  *     try:
  *         return x.Evaluate()             # <<<<<<<<<<<<<<
@@ -3806,7 +3848,7 @@ static struct __pyx_obj_7eudplib_4core_9allocator_7rlocint_RlocInt_C *__pyx_f_7e
  *         return toRlocInt(x)
  */
       __Pyx_XDECREF(((PyObject *)__pyx_r));
-      __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_v_x, __pyx_n_s_Evaluate); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 147, __pyx_L3_error)
+      __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_v_x, __pyx_n_s_Evaluate); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 148, __pyx_L3_error)
       __Pyx_GOTREF(__pyx_t_5);
       __pyx_t_6 = NULL;
       if (CYTHON_COMPILING_IN_CPYTHON && likely(PyMethod_Check(__pyx_t_5))) {
@@ -3819,19 +3861,19 @@ static struct __pyx_obj_7eudplib_4core_9allocator_7rlocint_RlocInt_C *__pyx_f_7e
         }
       }
       if (__pyx_t_6) {
-        __pyx_t_4 = __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_t_6); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 147, __pyx_L3_error)
+        __pyx_t_4 = __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_t_6); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 148, __pyx_L3_error)
         __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
       } else {
-        __pyx_t_4 = __Pyx_PyObject_CallNoArg(__pyx_t_5); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 147, __pyx_L3_error)
+        __pyx_t_4 = __Pyx_PyObject_CallNoArg(__pyx_t_5); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 148, __pyx_L3_error)
       }
       __Pyx_GOTREF(__pyx_t_4);
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-      if (!(likely(((__pyx_t_4) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_4, __pyx_ptype_7eudplib_4core_9allocator_7rlocint_RlocInt_C))))) __PYX_ERR(0, 147, __pyx_L3_error)
+      if (!(likely(((__pyx_t_4) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_4, __pyx_ptype_7eudplib_4core_9allocator_7rlocint_RlocInt_C))))) __PYX_ERR(0, 148, __pyx_L3_error)
       __pyx_r = ((struct __pyx_obj_7eudplib_4core_9allocator_7rlocint_RlocInt_C *)__pyx_t_4);
       __pyx_t_4 = 0;
       goto __pyx_L7_try_return;
 
-      /* "eudplib/core/allocator/constexpr.pyx":146
+      /* "eudplib/core/allocator/constexpr.pyx":147
  *     Evaluate expressions
  *     '''
  *     try:             # <<<<<<<<<<<<<<
@@ -3845,7 +3887,7 @@ static struct __pyx_obj_7eudplib_4core_9allocator_7rlocint_RlocInt_C *__pyx_f_7e
     __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
     __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-    /* "eudplib/core/allocator/constexpr.pyx":148
+    /* "eudplib/core/allocator/constexpr.pyx":149
  *     try:
  *         return x.Evaluate()
  *     except AttributeError:             # <<<<<<<<<<<<<<
@@ -3855,12 +3897,12 @@ static struct __pyx_obj_7eudplib_4core_9allocator_7rlocint_RlocInt_C *__pyx_f_7e
     __pyx_t_7 = __Pyx_PyErr_ExceptionMatches(__pyx_builtin_AttributeError);
     if (__pyx_t_7) {
       __Pyx_AddTraceback("eudplib.core.allocator.constexpr.Evaluate", __pyx_clineno, __pyx_lineno, __pyx_filename);
-      if (__Pyx_GetException(&__pyx_t_4, &__pyx_t_5, &__pyx_t_6) < 0) __PYX_ERR(0, 148, __pyx_L5_except_error)
+      if (__Pyx_GetException(&__pyx_t_4, &__pyx_t_5, &__pyx_t_6) < 0) __PYX_ERR(0, 149, __pyx_L5_except_error)
       __Pyx_GOTREF(__pyx_t_4);
       __Pyx_GOTREF(__pyx_t_5);
       __Pyx_GOTREF(__pyx_t_6);
 
-      /* "eudplib/core/allocator/constexpr.pyx":149
+      /* "eudplib/core/allocator/constexpr.pyx":150
  *         return x.Evaluate()
  *     except AttributeError:
  *         return toRlocInt(x)             # <<<<<<<<<<<<<<
@@ -3868,7 +3910,7 @@ static struct __pyx_obj_7eudplib_4core_9allocator_7rlocint_RlocInt_C *__pyx_f_7e
  * 
  */
       __Pyx_XDECREF(((PyObject *)__pyx_r));
-      __pyx_t_9 = __Pyx_GetModuleGlobalName(__pyx_n_s_toRlocInt); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 149, __pyx_L5_except_error)
+      __pyx_t_9 = __Pyx_GetModuleGlobalName(__pyx_n_s_toRlocInt); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 150, __pyx_L5_except_error)
       __Pyx_GOTREF(__pyx_t_9);
       __pyx_t_10 = NULL;
       if (CYTHON_COMPILING_IN_CPYTHON && unlikely(PyMethod_Check(__pyx_t_9))) {
@@ -3881,21 +3923,21 @@ static struct __pyx_obj_7eudplib_4core_9allocator_7rlocint_RlocInt_C *__pyx_f_7e
         }
       }
       if (!__pyx_t_10) {
-        __pyx_t_8 = __Pyx_PyObject_CallOneArg(__pyx_t_9, __pyx_v_x); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 149, __pyx_L5_except_error)
+        __pyx_t_8 = __Pyx_PyObject_CallOneArg(__pyx_t_9, __pyx_v_x); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 150, __pyx_L5_except_error)
         __Pyx_GOTREF(__pyx_t_8);
       } else {
-        __pyx_t_11 = PyTuple_New(1+1); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 149, __pyx_L5_except_error)
+        __pyx_t_11 = PyTuple_New(1+1); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 150, __pyx_L5_except_error)
         __Pyx_GOTREF(__pyx_t_11);
         __Pyx_GIVEREF(__pyx_t_10); PyTuple_SET_ITEM(__pyx_t_11, 0, __pyx_t_10); __pyx_t_10 = NULL;
         __Pyx_INCREF(__pyx_v_x);
         __Pyx_GIVEREF(__pyx_v_x);
         PyTuple_SET_ITEM(__pyx_t_11, 0+1, __pyx_v_x);
-        __pyx_t_8 = __Pyx_PyObject_Call(__pyx_t_9, __pyx_t_11, NULL); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 149, __pyx_L5_except_error)
+        __pyx_t_8 = __Pyx_PyObject_Call(__pyx_t_9, __pyx_t_11, NULL); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 150, __pyx_L5_except_error)
         __Pyx_GOTREF(__pyx_t_8);
         __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
       }
       __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
-      if (!(likely(((__pyx_t_8) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_8, __pyx_ptype_7eudplib_4core_9allocator_7rlocint_RlocInt_C))))) __PYX_ERR(0, 149, __pyx_L5_except_error)
+      if (!(likely(((__pyx_t_8) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_8, __pyx_ptype_7eudplib_4core_9allocator_7rlocint_RlocInt_C))))) __PYX_ERR(0, 150, __pyx_L5_except_error)
       __pyx_r = ((struct __pyx_obj_7eudplib_4core_9allocator_7rlocint_RlocInt_C *)__pyx_t_8);
       __pyx_t_8 = 0;
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
@@ -3906,7 +3948,7 @@ static struct __pyx_obj_7eudplib_4core_9allocator_7rlocint_RlocInt_C *__pyx_f_7e
     goto __pyx_L5_except_error;
     __pyx_L5_except_error:;
 
-    /* "eudplib/core/allocator/constexpr.pyx":146
+    /* "eudplib/core/allocator/constexpr.pyx":147
  *     Evaluate expressions
  *     '''
  *     try:             # <<<<<<<<<<<<<<
@@ -3935,7 +3977,7 @@ static struct __pyx_obj_7eudplib_4core_9allocator_7rlocint_RlocInt_C *__pyx_f_7e
     goto __pyx_L0;
   }
 
-  /* "eudplib/core/allocator/constexpr.pyx":142
+  /* "eudplib/core/allocator/constexpr.pyx":143
  * 
  * 
  * cpdef RlocInt_C Evaluate(x):             # <<<<<<<<<<<<<<
@@ -3980,7 +4022,7 @@ static PyObject *__pyx_pf_7eudplib_4core_9allocator_9constexpr_Evaluate(CYTHON_U
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("Evaluate", 0);
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = ((PyObject *)__pyx_f_7eudplib_4core_9allocator_9constexpr_Evaluate(__pyx_v_x, 0)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 142, __pyx_L1_error)
+  __pyx_t_1 = ((PyObject *)__pyx_f_7eudplib_4core_9allocator_9constexpr_Evaluate(__pyx_v_x, 0)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 143, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -3997,7 +4039,7 @@ static PyObject *__pyx_pf_7eudplib_4core_9allocator_9constexpr_Evaluate(CYTHON_U
   return __pyx_r;
 }
 
-/* "eudplib/core/allocator/constexpr.pyx":152
+/* "eudplib/core/allocator/constexpr.pyx":153
  * 
  * 
  * def IsConstExpr(x):             # <<<<<<<<<<<<<<
@@ -4030,15 +4072,15 @@ static PyObject *__pyx_pf_7eudplib_4core_9allocator_9constexpr_2IsConstExpr(CYTH
   __Pyx_RefNannySetupContext("IsConstExpr", 0);
   __Pyx_INCREF(__pyx_v_x);
 
-  /* "eudplib/core/allocator/constexpr.pyx":153
+  /* "eudplib/core/allocator/constexpr.pyx":154
  * 
  * def IsConstExpr(x):
  *     x = ut.unProxy(x)             # <<<<<<<<<<<<<<
  *     return isinstance(x, int) or hasattr(x, 'Evaluate')
  */
-  __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_ut); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 153, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_ut); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 154, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_unProxy); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 153, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_unProxy); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 154, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_t_2 = NULL;
@@ -4052,16 +4094,16 @@ static PyObject *__pyx_pf_7eudplib_4core_9allocator_9constexpr_2IsConstExpr(CYTH
     }
   }
   if (!__pyx_t_2) {
-    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_v_x); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 153, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_v_x); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 154, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
   } else {
-    __pyx_t_4 = PyTuple_New(1+1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 153, __pyx_L1_error)
+    __pyx_t_4 = PyTuple_New(1+1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 154, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_GIVEREF(__pyx_t_2); PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_2); __pyx_t_2 = NULL;
     __Pyx_INCREF(__pyx_v_x);
     __Pyx_GIVEREF(__pyx_v_x);
     PyTuple_SET_ITEM(__pyx_t_4, 0+1, __pyx_v_x);
-    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_4, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 153, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_4, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 154, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   }
@@ -4069,7 +4111,7 @@ static PyObject *__pyx_pf_7eudplib_4core_9allocator_9constexpr_2IsConstExpr(CYTH
   __Pyx_DECREF_SET(__pyx_v_x, __pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "eudplib/core/allocator/constexpr.pyx":154
+  /* "eudplib/core/allocator/constexpr.pyx":155
  * def IsConstExpr(x):
  *     x = ut.unProxy(x)
  *     return isinstance(x, int) or hasattr(x, 'Evaluate')             # <<<<<<<<<<<<<<
@@ -4078,14 +4120,14 @@ static PyObject *__pyx_pf_7eudplib_4core_9allocator_9constexpr_2IsConstExpr(CYTH
   __pyx_t_5 = PyInt_Check(__pyx_v_x); 
   if (!__pyx_t_5) {
   } else {
-    __pyx_t_3 = __Pyx_PyBool_FromLong(__pyx_t_5); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 154, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyBool_FromLong(__pyx_t_5); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 155, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __pyx_t_1 = __pyx_t_3;
     __pyx_t_3 = 0;
     goto __pyx_L3_bool_binop_done;
   }
-  __pyx_t_5 = PyObject_HasAttr(__pyx_v_x, __pyx_n_s_Evaluate); if (unlikely(__pyx_t_5 == -1)) __PYX_ERR(0, 154, __pyx_L1_error)
-  __pyx_t_3 = __Pyx_PyBool_FromLong(__pyx_t_5); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 154, __pyx_L1_error)
+  __pyx_t_5 = PyObject_HasAttr(__pyx_v_x, __pyx_n_s_Evaluate); if (unlikely(__pyx_t_5 == -1)) __PYX_ERR(0, 155, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyBool_FromLong(__pyx_t_5); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 155, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __pyx_t_1 = __pyx_t_3;
   __pyx_t_3 = 0;
@@ -4094,7 +4136,7 @@ static PyObject *__pyx_pf_7eudplib_4core_9allocator_9constexpr_2IsConstExpr(CYTH
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "eudplib/core/allocator/constexpr.pyx":152
+  /* "eudplib/core/allocator/constexpr.pyx":153
  * 
  * 
  * def IsConstExpr(x):             # <<<<<<<<<<<<<<
@@ -4731,7 +4773,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
 static int __Pyx_InitCachedBuiltins(void) {
   __pyx_builtin_NotImplemented = __Pyx_GetBuiltinName(__pyx_n_s_NotImplemented); if (!__pyx_builtin_NotImplemented) __PYX_ERR(0, 54, __pyx_L1_error)
   __pyx_builtin_super = __Pyx_GetBuiltinName(__pyx_n_s_super); if (!__pyx_builtin_super) __PYX_ERR(0, 102, __pyx_L1_error)
-  __pyx_builtin_AttributeError = __Pyx_GetBuiltinName(__pyx_n_s_AttributeError); if (!__pyx_builtin_AttributeError) __PYX_ERR(0, 148, __pyx_L1_error)
+  __pyx_builtin_AttributeError = __Pyx_GetBuiltinName(__pyx_n_s_AttributeError); if (!__pyx_builtin_AttributeError) __PYX_ERR(0, 149, __pyx_L1_error)
   return 0;
   __pyx_L1_error:;
   return -1;
@@ -4741,17 +4783,17 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__Pyx_InitCachedConstants", 0);
 
-  /* "eudplib/core/allocator/constexpr.pyx":152
+  /* "eudplib/core/allocator/constexpr.pyx":153
  * 
  * 
  * def IsConstExpr(x):             # <<<<<<<<<<<<<<
  *     x = ut.unProxy(x)
  *     return isinstance(x, int) or hasattr(x, 'Evaluate')
  */
-  __pyx_tuple__2 = PyTuple_Pack(1, __pyx_n_s_x); if (unlikely(!__pyx_tuple__2)) __PYX_ERR(0, 152, __pyx_L1_error)
+  __pyx_tuple__2 = PyTuple_Pack(1, __pyx_n_s_x); if (unlikely(!__pyx_tuple__2)) __PYX_ERR(0, 153, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__2);
   __Pyx_GIVEREF(__pyx_tuple__2);
-  __pyx_codeobj__3 = (PyObject*)__Pyx_PyCode_New(1, 0, 1, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__2, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_C_gitclones_eudtrglib_eudplib_co, __pyx_n_s_IsConstExpr, 152, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__3)) __PYX_ERR(0, 152, __pyx_L1_error)
+  __pyx_codeobj__3 = (PyObject*)__Pyx_PyCode_New(1, 0, 1, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__2, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_C_gitclones_eudtrglib_eudplib_co, __pyx_n_s_IsConstExpr, 153, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__3)) __PYX_ERR(0, 153, __pyx_L1_error)
   __Pyx_RefNannyFinishContext();
   return 0;
   __pyx_L1_error:;
@@ -4941,16 +4983,16 @@ PyMODINIT_FUNC PyInit_constexpr(void)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "eudplib/core/allocator/constexpr.pyx":152
+  /* "eudplib/core/allocator/constexpr.pyx":153
  * 
  * 
  * def IsConstExpr(x):             # <<<<<<<<<<<<<<
  *     x = ut.unProxy(x)
  *     return isinstance(x, int) or hasattr(x, 'Evaluate')
  */
-  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_7eudplib_4core_9allocator_9constexpr_3IsConstExpr, NULL, __pyx_n_s_eudplib_core_allocator_constexpr); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 152, __pyx_L1_error)
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_7eudplib_4core_9allocator_9constexpr_3IsConstExpr, NULL, __pyx_n_s_eudplib_core_allocator_constexpr); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 153, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_IsConstExpr, __pyx_t_1) < 0) __PYX_ERR(0, 152, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_IsConstExpr, __pyx_t_1) < 0) __PYX_ERR(0, 153, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "eudplib/core/allocator/constexpr.pyx":1

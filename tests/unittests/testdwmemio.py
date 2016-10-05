@@ -31,3 +31,7 @@ def test_dwmemio():
         [f1, f2, f3, f4],
         [0x1000, 0x0000, 0x1224, 0x0004]
     )
+
+    # dwwrite
+    f_dwwrite_epd(EPD(a), 1234)
+    test_assert('f_dwwrite works', Memory(a, Exactly, 1234))

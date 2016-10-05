@@ -26,7 +26,7 @@ class ObjPool(c.EUDStruct):
         return self.remaining == 0
 
     @c.EUDMethod
-    def alloc(self):
+    def _alloc(self):
         """ Allocate one object from pool """
         if cs.EUDIf()(self.empty()):
             c.EUDReturn(0)
@@ -34,6 +34,13 @@ class ObjPool(c.EUDStruct):
 
         self.remaining -= 1
         data = self.data[self.remaining]
+
+        return data
+
+    def alloc(self):
+        data = self._alloc()
+        if self._basetype:
+            data = self._basetype(data)
         return data
 
     @c.EUDMethod
