@@ -4,7 +4,7 @@ import sys as _sys
 import os as _os
 import random as _random
 
-_sys.path.insert(0, _os.path.abspath('..\\'))
+_sys.path.insert(0, _os.path.abspath('../'))
 
 import pyximport
 pyximport.install()
