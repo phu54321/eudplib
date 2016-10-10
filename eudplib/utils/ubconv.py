@@ -23,10 +23,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-import locale
 from .eperror import EPError
 
-g_encoding = locale.getpreferredencoding()
+g_encoding = 'cp949'
 
 
 def UbconvSetEncoding(encoding):

@@ -1,7 +1,7 @@
 from cffi import FFI
 import os, sys, struct, platform
 from tempfile import NamedTemporaryFile
-from eudplib.utils import u2b, b2u
+from eudplib.utils import u2b
 
 
 filename_u2b = None
@@ -110,14 +110,6 @@ class MPQ:
         self.libstorm.SFileCloseArchive(self.mpqh)
         self.mpqh = None
         return True
-
-    def EnumFiles(self):
-        # using listfile.
-        lst = self.Extract('(listfile)')
-        if lst is None:
-            return []
-
-        return b2u(lst).replace('\r', '').split('\n')
 
     # Extract
     def Extract(self, fname):
