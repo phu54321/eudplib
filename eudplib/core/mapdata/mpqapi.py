@@ -168,9 +168,9 @@ class MPQ:
         # Add to mpq
         ret = self.libstorm.SFileAddFile(
             self.mpqh,
-            u2b(tmpfname),
+            filename_u2b(tmpfname),
             u2b(fname),
-            MPQ_FILE_COMPRESS | MPQ_FILE_ENCRYPTED | MPQ_FILE_FIX_KEY,
+            MPQ_FILE_COMPRESS | MPQ_FILE_ENCRYPTED | MPQ_FILE_REPLACEEXISTING,
         )
         os.unlink(tmpfname)
         return ret
