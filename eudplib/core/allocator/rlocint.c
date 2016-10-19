@@ -481,8 +481,8 @@ static const char *__pyx_filename;
 
 
 static const char *__pyx_f[] = {
-  "eudplib\\core\\allocator\\rlocint.pyx",
-  "eudplib\\core\\allocator\\rlocint.pxd",
+  "eudplib/core/allocator/rlocint.pyx",
+  "eudplib/core/allocator/rlocint.pxd",
 };
 
 /*--- Type declarations ---*/
@@ -705,14 +705,12 @@ static PyObject *__pyx_n_s_test;
 static PyObject *__pyx_n_s_ut;
 static PyObject *__pyx_n_s_utils;
 static int __pyx_pf_7eudplib_4core_9allocator_7rlocint_9RlocInt_C___cinit__(struct __pyx_obj_7eudplib_4core_9allocator_7rlocint_RlocInt_C *__pyx_v_self, size_t __pyx_v_offset, size_t __pyx_v_rlocmode); /* proto */
-static PyObject *__pyx_pf_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_2__add__(PyObject *__pyx_v_self, PyObject *__pyx_v_other); /* proto */
-static PyObject *__pyx_pf_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_4__sub__(PyObject *__pyx_v_self, PyObject *__pyx_v_other); /* proto */
-static PyObject *__pyx_pf_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_6__radd__(struct __pyx_obj_7eudplib_4core_9allocator_7rlocint_RlocInt_C *__pyx_v_self, PyObject *__pyx_v_other); /* proto */
-static PyObject *__pyx_pf_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_8__rsub__(struct __pyx_obj_7eudplib_4core_9allocator_7rlocint_RlocInt_C *__pyx_v_self, PyObject *__pyx_v_other); /* proto */
-static PyObject *__pyx_pf_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_10__mul__(PyObject *__pyx_v_self, PyObject *__pyx_v_other); /* proto */
-static PyObject *__pyx_pf_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_12__floordiv__(PyObject *__pyx_v_self, PyObject *__pyx_v_other); /* proto */
-static PyObject *__pyx_pf_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_14__str__(struct __pyx_obj_7eudplib_4core_9allocator_7rlocint_RlocInt_C *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_16__repr__(struct __pyx_obj_7eudplib_4core_9allocator_7rlocint_RlocInt_C *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_2__add__(PyObject *__pyx_v_lhs, PyObject *__pyx_v_rhs); /* proto */
+static PyObject *__pyx_pf_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_4__sub__(PyObject *__pyx_v_lhs, PyObject *__pyx_v_rhs); /* proto */
+static PyObject *__pyx_pf_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_6__mul__(PyObject *__pyx_v_self, PyObject *__pyx_v_other); /* proto */
+static PyObject *__pyx_pf_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_8__floordiv__(PyObject *__pyx_v_self, PyObject *__pyx_v_other); /* proto */
+static PyObject *__pyx_pf_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_10__str__(struct __pyx_obj_7eudplib_4core_9allocator_7rlocint_RlocInt_C *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_12__repr__(struct __pyx_obj_7eudplib_4core_9allocator_7rlocint_RlocInt_C *__pyx_v_self); /* proto */
 static PyObject *__pyx_pf_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_6offset___get__(struct __pyx_obj_7eudplib_4core_9allocator_7rlocint_RlocInt_C *__pyx_v_self); /* proto */
 static int __pyx_pf_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_6offset_2__set__(struct __pyx_obj_7eudplib_4core_9allocator_7rlocint_RlocInt_C *__pyx_v_self, PyObject *__pyx_v_value); /* proto */
 static PyObject *__pyx_pf_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_8rlocmode___get__(struct __pyx_obj_7eudplib_4core_9allocator_7rlocint_RlocInt_C *__pyx_v_self); /* proto */
@@ -801,7 +799,7 @@ static int __pyx_pf_7eudplib_4core_9allocator_7rlocint_9RlocInt_C___cinit__(stru
  *     def __cinit__(self, size_t offset, size_t rlocmode):
  *         self.offset, self.rlocmode = offset, rlocmode             # <<<<<<<<<<<<<<
  * 
- *     def __add__(self, other):
+ *     # http://stackoverflow.com/questions/18794169/pythons-radd-doesnt-work-for-c-defined-types
  */
   __pyx_t_1 = __pyx_v_offset;
   __pyx_t_2 = __pyx_v_rlocmode;
@@ -822,28 +820,28 @@ static int __pyx_pf_7eudplib_4core_9allocator_7rlocint_9RlocInt_C___cinit__(stru
   return __pyx_r;
 }
 
-/* "eudplib/core/allocator/rlocint.pyx":36
- *         self.offset, self.rlocmode = offset, rlocmode
- * 
- *     def __add__(self, other):             # <<<<<<<<<<<<<<
- *         if isinstance(other, RlocInt_C):
- *             return RlocInt_C(
+/* "eudplib/core/allocator/rlocint.pyx":39
+ *     # Some obscure type can fludge into 'self' slot, so I called it'lhs'
+ *     # rather than self.
+ *     def __add__(lhs, rhs):             # <<<<<<<<<<<<<<
+ *         if isinstance(lhs, RlocInt_C):  # Call from radd
+ *             if isinstance(rhs, RlocInt_C):
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_3__add__(PyObject *__pyx_v_self, PyObject *__pyx_v_other); /*proto*/
-static PyObject *__pyx_pw_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_3__add__(PyObject *__pyx_v_self, PyObject *__pyx_v_other) {
+static PyObject *__pyx_pw_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_3__add__(PyObject *__pyx_v_lhs, PyObject *__pyx_v_rhs); /*proto*/
+static PyObject *__pyx_pw_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_3__add__(PyObject *__pyx_v_lhs, PyObject *__pyx_v_rhs) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__add__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_2__add__(((PyObject *)__pyx_v_self), ((PyObject *)__pyx_v_other));
+  __pyx_r = __pyx_pf_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_2__add__(((PyObject *)__pyx_v_lhs), ((PyObject *)__pyx_v_rhs));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_2__add__(PyObject *__pyx_v_self, PyObject *__pyx_v_other) {
+static PyObject *__pyx_pf_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_2__add__(PyObject *__pyx_v_lhs, PyObject *__pyx_v_rhs) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   int __pyx_t_1;
@@ -854,154 +852,233 @@ static PyObject *__pyx_pf_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_2__add__
   PyObject *__pyx_t_6 = NULL;
   __Pyx_RefNannySetupContext("__add__", 0);
 
-  /* "eudplib/core/allocator/rlocint.pyx":37
- * 
- *     def __add__(self, other):
- *         if isinstance(other, RlocInt_C):             # <<<<<<<<<<<<<<
- *             return RlocInt_C(
- *                 self.offset + other.offset,
+  /* "eudplib/core/allocator/rlocint.pyx":40
+ *     # rather than self.
+ *     def __add__(lhs, rhs):
+ *         if isinstance(lhs, RlocInt_C):  # Call from radd             # <<<<<<<<<<<<<<
+ *             if isinstance(rhs, RlocInt_C):
+ *                 return RlocInt_C(
  */
-  __pyx_t_1 = __Pyx_TypeCheck(__pyx_v_other, __pyx_ptype_7eudplib_4core_9allocator_7rlocint_RlocInt_C); 
+  __pyx_t_1 = __Pyx_TypeCheck(__pyx_v_lhs, __pyx_ptype_7eudplib_4core_9allocator_7rlocint_RlocInt_C); 
   __pyx_t_2 = (__pyx_t_1 != 0);
   if (__pyx_t_2) {
 
-    /* "eudplib/core/allocator/rlocint.pyx":38
- *     def __add__(self, other):
- *         if isinstance(other, RlocInt_C):
- *             return RlocInt_C(             # <<<<<<<<<<<<<<
- *                 self.offset + other.offset,
- *                 self.rlocmode + other.rlocmode
+    /* "eudplib/core/allocator/rlocint.pyx":41
+ *     def __add__(lhs, rhs):
+ *         if isinstance(lhs, RlocInt_C):  # Call from radd
+ *             if isinstance(rhs, RlocInt_C):             # <<<<<<<<<<<<<<
+ *                 return RlocInt_C(
+ *                     lhs.offset + rhs.offset,
  */
-    __Pyx_XDECREF(__pyx_r);
+    __pyx_t_2 = __Pyx_TypeCheck(__pyx_v_rhs, __pyx_ptype_7eudplib_4core_9allocator_7rlocint_RlocInt_C); 
+    __pyx_t_1 = (__pyx_t_2 != 0);
+    if (__pyx_t_1) {
 
-    /* "eudplib/core/allocator/rlocint.pyx":39
- *         if isinstance(other, RlocInt_C):
- *             return RlocInt_C(
- *                 self.offset + other.offset,             # <<<<<<<<<<<<<<
- *                 self.rlocmode + other.rlocmode
- *             )
+      /* "eudplib/core/allocator/rlocint.pyx":42
+ *         if isinstance(lhs, RlocInt_C):  # Call from radd
+ *             if isinstance(rhs, RlocInt_C):
+ *                 return RlocInt_C(             # <<<<<<<<<<<<<<
+ *                     lhs.offset + rhs.offset,
+ *                     lhs.rlocmode + rhs.rlocmode
  */
-    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_offset); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 39, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_other, __pyx_n_s_offset); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 39, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_5 = PyNumber_Add(__pyx_t_3, __pyx_t_4); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 39, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_5);
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+      __Pyx_XDECREF(__pyx_r);
 
-    /* "eudplib/core/allocator/rlocint.pyx":40
- *             return RlocInt_C(
- *                 self.offset + other.offset,
- *                 self.rlocmode + other.rlocmode             # <<<<<<<<<<<<<<
- *             )
+      /* "eudplib/core/allocator/rlocint.pyx":43
+ *             if isinstance(rhs, RlocInt_C):
+ *                 return RlocInt_C(
+ *                     lhs.offset + rhs.offset,             # <<<<<<<<<<<<<<
+ *                     lhs.rlocmode + rhs.rlocmode
+ *                 )
+ */
+      __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_lhs, __pyx_n_s_offset); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 43, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_3);
+      __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_rhs, __pyx_n_s_offset); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 43, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_4);
+      __pyx_t_5 = PyNumber_Add(__pyx_t_3, __pyx_t_4); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 43, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_5);
+      __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+      __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+
+      /* "eudplib/core/allocator/rlocint.pyx":44
+ *                 return RlocInt_C(
+ *                     lhs.offset + rhs.offset,
+ *                     lhs.rlocmode + rhs.rlocmode             # <<<<<<<<<<<<<<
+ *                 )
+ *             else:
+ */
+      __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_lhs, __pyx_n_s_rlocmode); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 44, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_4);
+      __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_rhs, __pyx_n_s_rlocmode); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 44, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_3);
+      __pyx_t_6 = PyNumber_Add(__pyx_t_4, __pyx_t_3); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 44, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_6);
+      __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+      __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+
+      /* "eudplib/core/allocator/rlocint.pyx":42
+ *         if isinstance(lhs, RlocInt_C):  # Call from radd
+ *             if isinstance(rhs, RlocInt_C):
+ *                 return RlocInt_C(             # <<<<<<<<<<<<<<
+ *                     lhs.offset + rhs.offset,
+ *                     lhs.rlocmode + rhs.rlocmode
+ */
+      __pyx_t_3 = PyTuple_New(2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 42, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_3);
+      __Pyx_GIVEREF(__pyx_t_5);
+      PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_t_5);
+      __Pyx_GIVEREF(__pyx_t_6);
+      PyTuple_SET_ITEM(__pyx_t_3, 1, __pyx_t_6);
+      __pyx_t_5 = 0;
+      __pyx_t_6 = 0;
+      __pyx_t_6 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_7eudplib_4core_9allocator_7rlocint_RlocInt_C), __pyx_t_3, NULL); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 42, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_6);
+      __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+      __pyx_r = __pyx_t_6;
+      __pyx_t_6 = 0;
+      goto __pyx_L0;
+
+      /* "eudplib/core/allocator/rlocint.pyx":41
+ *     def __add__(lhs, rhs):
+ *         if isinstance(lhs, RlocInt_C):  # Call from radd
+ *             if isinstance(rhs, RlocInt_C):             # <<<<<<<<<<<<<<
+ *                 return RlocInt_C(
+ *                     lhs.offset + rhs.offset,
+ */
+    }
+
+    /* "eudplib/core/allocator/rlocint.pyx":47
+ *                 )
+ *             else:
+ *                 return RlocInt_C(             # <<<<<<<<<<<<<<
+ *                     (lhs.offset + rhs) & 0xFFFFFFFF,
+ *                     lhs.rlocmode
+ */
+    /*else*/ {
+      __Pyx_XDECREF(__pyx_r);
+
+      /* "eudplib/core/allocator/rlocint.pyx":48
+ *             else:
+ *                 return RlocInt_C(
+ *                     (lhs.offset + rhs) & 0xFFFFFFFF,             # <<<<<<<<<<<<<<
+ *                     lhs.rlocmode
+ *                 )
+ */
+      __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_v_lhs, __pyx_n_s_offset); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 48, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_6);
+      __pyx_t_3 = PyNumber_Add(__pyx_t_6, __pyx_v_rhs); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 48, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_3);
+      __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+      __pyx_t_6 = PyNumber_And(__pyx_t_3, __pyx_int_4294967295); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 48, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_6);
+      __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+
+      /* "eudplib/core/allocator/rlocint.pyx":49
+ *                 return RlocInt_C(
+ *                     (lhs.offset + rhs) & 0xFFFFFFFF,
+ *                     lhs.rlocmode             # <<<<<<<<<<<<<<
+ *                 )
  *         else:
  */
-    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_rlocmode); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 40, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_other, __pyx_n_s_rlocmode); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 40, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_6 = PyNumber_Add(__pyx_t_4, __pyx_t_3); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 40, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_6);
-    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+      __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_lhs, __pyx_n_s_rlocmode); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 49, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_3);
 
-    /* "eudplib/core/allocator/rlocint.pyx":38
- *     def __add__(self, other):
- *         if isinstance(other, RlocInt_C):
- *             return RlocInt_C(             # <<<<<<<<<<<<<<
- *                 self.offset + other.offset,
- *                 self.rlocmode + other.rlocmode
+      /* "eudplib/core/allocator/rlocint.pyx":47
+ *                 )
+ *             else:
+ *                 return RlocInt_C(             # <<<<<<<<<<<<<<
+ *                     (lhs.offset + rhs) & 0xFFFFFFFF,
+ *                     lhs.rlocmode
  */
-    __pyx_t_3 = PyTuple_New(2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 38, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
-    __Pyx_GIVEREF(__pyx_t_5);
-    PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_t_5);
-    __Pyx_GIVEREF(__pyx_t_6);
-    PyTuple_SET_ITEM(__pyx_t_3, 1, __pyx_t_6);
-    __pyx_t_5 = 0;
-    __pyx_t_6 = 0;
-    __pyx_t_6 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_7eudplib_4core_9allocator_7rlocint_RlocInt_C), __pyx_t_3, NULL); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 38, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_6);
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __pyx_r = __pyx_t_6;
-    __pyx_t_6 = 0;
-    goto __pyx_L0;
+      __pyx_t_5 = PyTuple_New(2); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 47, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_5);
+      __Pyx_GIVEREF(__pyx_t_6);
+      PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_6);
+      __Pyx_GIVEREF(__pyx_t_3);
+      PyTuple_SET_ITEM(__pyx_t_5, 1, __pyx_t_3);
+      __pyx_t_6 = 0;
+      __pyx_t_3 = 0;
+      __pyx_t_3 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_7eudplib_4core_9allocator_7rlocint_RlocInt_C), __pyx_t_5, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 47, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_3);
+      __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+      __pyx_r = __pyx_t_3;
+      __pyx_t_3 = 0;
+      goto __pyx_L0;
+    }
 
-    /* "eudplib/core/allocator/rlocint.pyx":37
- * 
- *     def __add__(self, other):
- *         if isinstance(other, RlocInt_C):             # <<<<<<<<<<<<<<
- *             return RlocInt_C(
- *                 self.offset + other.offset,
+    /* "eudplib/core/allocator/rlocint.pyx":40
+ *     # rather than self.
+ *     def __add__(lhs, rhs):
+ *         if isinstance(lhs, RlocInt_C):  # Call from radd             # <<<<<<<<<<<<<<
+ *             if isinstance(rhs, RlocInt_C):
+ *                 return RlocInt_C(
  */
   }
 
-  /* "eudplib/core/allocator/rlocint.pyx":43
- *             )
+  /* "eudplib/core/allocator/rlocint.pyx":52
+ *                 )
  *         else:
  *             return RlocInt_C(             # <<<<<<<<<<<<<<
- *                 (self.offset + other) & 0xFFFFFFFF,
- *                 self.rlocmode
+ *                     (rhs.offset + lhs) & 0xFFFFFFFF,
+ *                     rhs.rlocmode
  */
   /*else*/ {
     __Pyx_XDECREF(__pyx_r);
 
-    /* "eudplib/core/allocator/rlocint.pyx":44
+    /* "eudplib/core/allocator/rlocint.pyx":53
  *         else:
  *             return RlocInt_C(
- *                 (self.offset + other) & 0xFFFFFFFF,             # <<<<<<<<<<<<<<
- *                 self.rlocmode
- *             )
+ *                     (rhs.offset + lhs) & 0xFFFFFFFF,             # <<<<<<<<<<<<<<
+ *                     rhs.rlocmode
+ *                 )
  */
-    __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_offset); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 44, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_6);
-    __pyx_t_3 = PyNumber_Add(__pyx_t_6, __pyx_v_other); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 44, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_rhs, __pyx_n_s_offset); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 53, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-    __pyx_t_6 = PyNumber_And(__pyx_t_3, __pyx_int_4294967295); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 44, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_6);
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-
-    /* "eudplib/core/allocator/rlocint.pyx":45
- *             return RlocInt_C(
- *                 (self.offset + other) & 0xFFFFFFFF,
- *                 self.rlocmode             # <<<<<<<<<<<<<<
- *             )
- * 
- */
-    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_rlocmode); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 45, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
-
-    /* "eudplib/core/allocator/rlocint.pyx":43
- *             )
- *         else:
- *             return RlocInt_C(             # <<<<<<<<<<<<<<
- *                 (self.offset + other) & 0xFFFFFFFF,
- *                 self.rlocmode
- */
-    __pyx_t_5 = PyTuple_New(2); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 43, __pyx_L1_error)
+    __pyx_t_5 = PyNumber_Add(__pyx_t_3, __pyx_v_lhs); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 53, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
-    __Pyx_GIVEREF(__pyx_t_6);
-    PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_6);
-    __Pyx_GIVEREF(__pyx_t_3);
-    PyTuple_SET_ITEM(__pyx_t_5, 1, __pyx_t_3);
-    __pyx_t_6 = 0;
-    __pyx_t_3 = 0;
-    __pyx_t_3 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_7eudplib_4core_9allocator_7rlocint_RlocInt_C), __pyx_t_5, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 43, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __pyx_t_3 = PyNumber_And(__pyx_t_5, __pyx_int_4294967295); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 53, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-    __pyx_r = __pyx_t_3;
+
+    /* "eudplib/core/allocator/rlocint.pyx":54
+ *             return RlocInt_C(
+ *                     (rhs.offset + lhs) & 0xFFFFFFFF,
+ *                     rhs.rlocmode             # <<<<<<<<<<<<<<
+ *                 )
+ * 
+ */
+    __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_v_rhs, __pyx_n_s_rlocmode); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 54, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_5);
+
+    /* "eudplib/core/allocator/rlocint.pyx":52
+ *                 )
+ *         else:
+ *             return RlocInt_C(             # <<<<<<<<<<<<<<
+ *                     (rhs.offset + lhs) & 0xFFFFFFFF,
+ *                     rhs.rlocmode
+ */
+    __pyx_t_6 = PyTuple_New(2); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 52, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_6);
+    __Pyx_GIVEREF(__pyx_t_3);
+    PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_t_3);
+    __Pyx_GIVEREF(__pyx_t_5);
+    PyTuple_SET_ITEM(__pyx_t_6, 1, __pyx_t_5);
     __pyx_t_3 = 0;
+    __pyx_t_5 = 0;
+    __pyx_t_5 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_7eudplib_4core_9allocator_7rlocint_RlocInt_C), __pyx_t_6, NULL); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 52, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_5);
+    __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+    __pyx_r = __pyx_t_5;
+    __pyx_t_5 = 0;
     goto __pyx_L0;
   }
 
-  /* "eudplib/core/allocator/rlocint.pyx":36
- *         self.offset, self.rlocmode = offset, rlocmode
- * 
- *     def __add__(self, other):             # <<<<<<<<<<<<<<
- *         if isinstance(other, RlocInt_C):
- *             return RlocInt_C(
+  /* "eudplib/core/allocator/rlocint.pyx":39
+ *     # Some obscure type can fludge into 'self' slot, so I called it'lhs'
+ *     # rather than self.
+ *     def __add__(lhs, rhs):             # <<<<<<<<<<<<<<
+ *         if isinstance(lhs, RlocInt_C):  # Call from radd
+ *             if isinstance(rhs, RlocInt_C):
  */
 
   /* function exit code */
@@ -1018,329 +1095,224 @@ static PyObject *__pyx_pf_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_2__add__
   return __pyx_r;
 }
 
-/* "eudplib/core/allocator/rlocint.pyx":48
- *             )
+/* "eudplib/core/allocator/rlocint.pyx":57
+ *                 )
  * 
- *     def __sub__(self, other):             # <<<<<<<<<<<<<<
- *         if isinstance(other, RlocInt_C):
- *             return RlocInt_C(
+ *     def __sub__(lhs, rhs):             # <<<<<<<<<<<<<<
+ *         lhs = toRlocInt(lhs)
+ *         if isinstance(rhs, RlocInt_C):
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_5__sub__(PyObject *__pyx_v_self, PyObject *__pyx_v_other); /*proto*/
-static PyObject *__pyx_pw_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_5__sub__(PyObject *__pyx_v_self, PyObject *__pyx_v_other) {
+static PyObject *__pyx_pw_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_5__sub__(PyObject *__pyx_v_lhs, PyObject *__pyx_v_rhs); /*proto*/
+static PyObject *__pyx_pw_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_5__sub__(PyObject *__pyx_v_lhs, PyObject *__pyx_v_rhs) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__sub__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_4__sub__(((PyObject *)__pyx_v_self), ((PyObject *)__pyx_v_other));
+  __pyx_r = __pyx_pf_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_4__sub__(((PyObject *)__pyx_v_lhs), ((PyObject *)__pyx_v_rhs));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_4__sub__(PyObject *__pyx_v_self, PyObject *__pyx_v_other) {
+static PyObject *__pyx_pf_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_4__sub__(PyObject *__pyx_v_lhs, PyObject *__pyx_v_rhs) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
-  int __pyx_t_1;
+  PyObject *__pyx_t_1 = NULL;
   int __pyx_t_2;
-  PyObject *__pyx_t_3 = NULL;
+  int __pyx_t_3;
   PyObject *__pyx_t_4 = NULL;
   PyObject *__pyx_t_5 = NULL;
   PyObject *__pyx_t_6 = NULL;
   __Pyx_RefNannySetupContext("__sub__", 0);
+  __Pyx_INCREF(__pyx_v_lhs);
 
-  /* "eudplib/core/allocator/rlocint.pyx":49
+  /* "eudplib/core/allocator/rlocint.pyx":58
  * 
- *     def __sub__(self, other):
- *         if isinstance(other, RlocInt_C):             # <<<<<<<<<<<<<<
+ *     def __sub__(lhs, rhs):
+ *         lhs = toRlocInt(lhs)             # <<<<<<<<<<<<<<
+ *         if isinstance(rhs, RlocInt_C):
  *             return RlocInt_C(
- *                 self.offset - other.offset,
  */
-  __pyx_t_1 = __Pyx_TypeCheck(__pyx_v_other, __pyx_ptype_7eudplib_4core_9allocator_7rlocint_RlocInt_C); 
-  __pyx_t_2 = (__pyx_t_1 != 0);
-  if (__pyx_t_2) {
+  __pyx_t_1 = ((PyObject *)__pyx_f_7eudplib_4core_9allocator_7rlocint_toRlocInt(__pyx_v_lhs, 0)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 58, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF_SET(__pyx_v_lhs, __pyx_t_1);
+  __pyx_t_1 = 0;
 
-    /* "eudplib/core/allocator/rlocint.pyx":50
- *     def __sub__(self, other):
- *         if isinstance(other, RlocInt_C):
+  /* "eudplib/core/allocator/rlocint.pyx":59
+ *     def __sub__(lhs, rhs):
+ *         lhs = toRlocInt(lhs)
+ *         if isinstance(rhs, RlocInt_C):             # <<<<<<<<<<<<<<
+ *             return RlocInt_C(
+ *                 (lhs.offset - rhs.offset) & 0xFFFFFFFF,
+ */
+  __pyx_t_2 = __Pyx_TypeCheck(__pyx_v_rhs, __pyx_ptype_7eudplib_4core_9allocator_7rlocint_RlocInt_C); 
+  __pyx_t_3 = (__pyx_t_2 != 0);
+  if (__pyx_t_3) {
+
+    /* "eudplib/core/allocator/rlocint.pyx":60
+ *         lhs = toRlocInt(lhs)
+ *         if isinstance(rhs, RlocInt_C):
  *             return RlocInt_C(             # <<<<<<<<<<<<<<
- *                 self.offset - other.offset,
- *                 self.rlocmode - other.rlocmode
+ *                 (lhs.offset - rhs.offset) & 0xFFFFFFFF,
+ *                 (lhs.rlocmode - rhs.rlocmode) & 0xFFFFFFFF
  */
     __Pyx_XDECREF(__pyx_r);
 
-    /* "eudplib/core/allocator/rlocint.pyx":51
- *         if isinstance(other, RlocInt_C):
+    /* "eudplib/core/allocator/rlocint.pyx":61
+ *         if isinstance(rhs, RlocInt_C):
  *             return RlocInt_C(
- *                 self.offset - other.offset,             # <<<<<<<<<<<<<<
- *                 self.rlocmode - other.rlocmode
+ *                 (lhs.offset - rhs.offset) & 0xFFFFFFFF,             # <<<<<<<<<<<<<<
+ *                 (lhs.rlocmode - rhs.rlocmode) & 0xFFFFFFFF
  *             )
  */
-    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_offset); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 51, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_other, __pyx_n_s_offset); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 51, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_lhs, __pyx_n_s_offset); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 61, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_rhs, __pyx_n_s_offset); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 61, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_5 = PyNumber_Subtract(__pyx_t_3, __pyx_t_4); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 51, __pyx_L1_error)
+    __pyx_t_5 = PyNumber_Subtract(__pyx_t_1, __pyx_t_4); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 61, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    __pyx_t_4 = PyNumber_And(__pyx_t_5, __pyx_int_4294967295); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 61, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-    /* "eudplib/core/allocator/rlocint.pyx":52
+    /* "eudplib/core/allocator/rlocint.pyx":62
  *             return RlocInt_C(
- *                 self.offset - other.offset,
- *                 self.rlocmode - other.rlocmode             # <<<<<<<<<<<<<<
+ *                 (lhs.offset - rhs.offset) & 0xFFFFFFFF,
+ *                 (lhs.rlocmode - rhs.rlocmode) & 0xFFFFFFFF             # <<<<<<<<<<<<<<
  *             )
  *         else:
  */
-    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_rlocmode); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 52, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_other, __pyx_n_s_rlocmode); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 52, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_6 = PyNumber_Subtract(__pyx_t_4, __pyx_t_3); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 52, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_v_lhs, __pyx_n_s_rlocmode); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 62, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_5);
+    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_rhs, __pyx_n_s_rlocmode); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 62, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __pyx_t_6 = PyNumber_Subtract(__pyx_t_5, __pyx_t_1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 62, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
-    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+    __pyx_t_1 = PyNumber_And(__pyx_t_6, __pyx_int_4294967295); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 62, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
 
-    /* "eudplib/core/allocator/rlocint.pyx":50
- *     def __sub__(self, other):
- *         if isinstance(other, RlocInt_C):
+    /* "eudplib/core/allocator/rlocint.pyx":60
+ *         lhs = toRlocInt(lhs)
+ *         if isinstance(rhs, RlocInt_C):
  *             return RlocInt_C(             # <<<<<<<<<<<<<<
- *                 self.offset - other.offset,
- *                 self.rlocmode - other.rlocmode
+ *                 (lhs.offset - rhs.offset) & 0xFFFFFFFF,
+ *                 (lhs.rlocmode - rhs.rlocmode) & 0xFFFFFFFF
  */
-    __pyx_t_3 = PyTuple_New(2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 50, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
-    __Pyx_GIVEREF(__pyx_t_5);
-    PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_t_5);
-    __Pyx_GIVEREF(__pyx_t_6);
-    PyTuple_SET_ITEM(__pyx_t_3, 1, __pyx_t_6);
-    __pyx_t_5 = 0;
-    __pyx_t_6 = 0;
-    __pyx_t_6 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_7eudplib_4core_9allocator_7rlocint_RlocInt_C), __pyx_t_3, NULL); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 50, __pyx_L1_error)
+    __pyx_t_6 = PyTuple_New(2); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 60, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __pyx_r = __pyx_t_6;
-    __pyx_t_6 = 0;
+    __Pyx_GIVEREF(__pyx_t_4);
+    PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_t_4);
+    __Pyx_GIVEREF(__pyx_t_1);
+    PyTuple_SET_ITEM(__pyx_t_6, 1, __pyx_t_1);
+    __pyx_t_4 = 0;
+    __pyx_t_1 = 0;
+    __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_7eudplib_4core_9allocator_7rlocint_RlocInt_C), __pyx_t_6, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 60, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+    __pyx_r = __pyx_t_1;
+    __pyx_t_1 = 0;
     goto __pyx_L0;
 
-    /* "eudplib/core/allocator/rlocint.pyx":49
- * 
- *     def __sub__(self, other):
- *         if isinstance(other, RlocInt_C):             # <<<<<<<<<<<<<<
+    /* "eudplib/core/allocator/rlocint.pyx":59
+ *     def __sub__(lhs, rhs):
+ *         lhs = toRlocInt(lhs)
+ *         if isinstance(rhs, RlocInt_C):             # <<<<<<<<<<<<<<
  *             return RlocInt_C(
- *                 self.offset - other.offset,
+ *                 (lhs.offset - rhs.offset) & 0xFFFFFFFF,
  */
   }
 
-  /* "eudplib/core/allocator/rlocint.pyx":55
+  /* "eudplib/core/allocator/rlocint.pyx":65
  *             )
  *         else:
  *             return RlocInt_C(             # <<<<<<<<<<<<<<
- *                 (self.offset - other) & 0xFFFFFFFF,
- *                 self.rlocmode
+ *                 (lhs.offset - rhs) & 0xFFFFFFFF,
+ *                 lhs.rlocmode
  */
   /*else*/ {
     __Pyx_XDECREF(__pyx_r);
 
-    /* "eudplib/core/allocator/rlocint.pyx":56
+    /* "eudplib/core/allocator/rlocint.pyx":66
  *         else:
  *             return RlocInt_C(
- *                 (self.offset - other) & 0xFFFFFFFF,             # <<<<<<<<<<<<<<
- *                 self.rlocmode
+ *                 (lhs.offset - rhs) & 0xFFFFFFFF,             # <<<<<<<<<<<<<<
+ *                 lhs.rlocmode
  *             )
  */
-    __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_offset); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 56, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_lhs, __pyx_n_s_offset); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 66, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __pyx_t_6 = PyNumber_Subtract(__pyx_t_1, __pyx_v_rhs); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 66, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
-    __pyx_t_3 = PyNumber_Subtract(__pyx_t_6, __pyx_v_other); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 56, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+    __pyx_t_1 = PyNumber_And(__pyx_t_6, __pyx_int_4294967295); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 66, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-    __pyx_t_6 = PyNumber_And(__pyx_t_3, __pyx_int_4294967295); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 56, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_6);
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-    /* "eudplib/core/allocator/rlocint.pyx":57
+    /* "eudplib/core/allocator/rlocint.pyx":67
  *             return RlocInt_C(
- *                 (self.offset - other) & 0xFFFFFFFF,
- *                 self.rlocmode             # <<<<<<<<<<<<<<
+ *                 (lhs.offset - rhs) & 0xFFFFFFFF,
+ *                 lhs.rlocmode             # <<<<<<<<<<<<<<
  *             )
  * 
  */
-    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_rlocmode); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 57, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
+    __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_v_lhs, __pyx_n_s_rlocmode); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 67, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_6);
 
-    /* "eudplib/core/allocator/rlocint.pyx":55
+    /* "eudplib/core/allocator/rlocint.pyx":65
  *             )
  *         else:
  *             return RlocInt_C(             # <<<<<<<<<<<<<<
- *                 (self.offset - other) & 0xFFFFFFFF,
- *                 self.rlocmode
+ *                 (lhs.offset - rhs) & 0xFFFFFFFF,
+ *                 lhs.rlocmode
  */
-    __pyx_t_5 = PyTuple_New(2); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 55, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_5);
+    __pyx_t_4 = PyTuple_New(2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 65, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    __Pyx_GIVEREF(__pyx_t_1);
+    PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_1);
     __Pyx_GIVEREF(__pyx_t_6);
-    PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_6);
-    __Pyx_GIVEREF(__pyx_t_3);
-    PyTuple_SET_ITEM(__pyx_t_5, 1, __pyx_t_3);
+    PyTuple_SET_ITEM(__pyx_t_4, 1, __pyx_t_6);
+    __pyx_t_1 = 0;
     __pyx_t_6 = 0;
-    __pyx_t_3 = 0;
-    __pyx_t_3 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_7eudplib_4core_9allocator_7rlocint_RlocInt_C), __pyx_t_5, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 55, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
-    __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-    __pyx_r = __pyx_t_3;
-    __pyx_t_3 = 0;
+    __pyx_t_6 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_7eudplib_4core_9allocator_7rlocint_RlocInt_C), __pyx_t_4, NULL); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 65, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_6);
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    __pyx_r = __pyx_t_6;
+    __pyx_t_6 = 0;
     goto __pyx_L0;
   }
 
-  /* "eudplib/core/allocator/rlocint.pyx":48
- *             )
+  /* "eudplib/core/allocator/rlocint.pyx":57
+ *                 )
  * 
- *     def __sub__(self, other):             # <<<<<<<<<<<<<<
- *         if isinstance(other, RlocInt_C):
- *             return RlocInt_C(
+ *     def __sub__(lhs, rhs):             # <<<<<<<<<<<<<<
+ *         lhs = toRlocInt(lhs)
+ *         if isinstance(rhs, RlocInt_C):
  */
 
   /* function exit code */
   __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_3);
+  __Pyx_XDECREF(__pyx_t_1);
   __Pyx_XDECREF(__pyx_t_4);
   __Pyx_XDECREF(__pyx_t_5);
   __Pyx_XDECREF(__pyx_t_6);
   __Pyx_AddTraceback("eudplib.core.allocator.rlocint.RlocInt_C.__sub__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
+  __Pyx_XDECREF(__pyx_v_lhs);
   __Pyx_XGIVEREF(__pyx_r);
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-/* "eudplib/core/allocator/rlocint.pyx":60
+/* "eudplib/core/allocator/rlocint.pyx":70
  *             )
- * 
- *     def __radd__(self, other):             # <<<<<<<<<<<<<<
- *         return self + other
- * 
- */
-
-/* Python wrapper */
-static PyObject *__pyx_pw_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_7__radd__(PyObject *__pyx_v_self, PyObject *__pyx_v_other); /*proto*/
-static PyObject *__pyx_pw_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_7__radd__(PyObject *__pyx_v_self, PyObject *__pyx_v_other) {
-  PyObject *__pyx_r = 0;
-  __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("__radd__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_6__radd__(((struct __pyx_obj_7eudplib_4core_9allocator_7rlocint_RlocInt_C *)__pyx_v_self), ((PyObject *)__pyx_v_other));
-
-  /* function exit code */
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-static PyObject *__pyx_pf_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_6__radd__(struct __pyx_obj_7eudplib_4core_9allocator_7rlocint_RlocInt_C *__pyx_v_self, PyObject *__pyx_v_other) {
-  PyObject *__pyx_r = NULL;
-  __Pyx_RefNannyDeclarations
-  PyObject *__pyx_t_1 = NULL;
-  __Pyx_RefNannySetupContext("__radd__", 0);
-
-  /* "eudplib/core/allocator/rlocint.pyx":61
- * 
- *     def __radd__(self, other):
- *         return self + other             # <<<<<<<<<<<<<<
- * 
- *     def __rsub__(self, other):
- */
-  __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = PyNumber_Add(((PyObject *)__pyx_v_self), __pyx_v_other); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 61, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_r = __pyx_t_1;
-  __pyx_t_1 = 0;
-  goto __pyx_L0;
-
-  /* "eudplib/core/allocator/rlocint.pyx":60
- *             )
- * 
- *     def __radd__(self, other):             # <<<<<<<<<<<<<<
- *         return self + other
- * 
- */
-
-  /* function exit code */
-  __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_AddTraceback("eudplib.core.allocator.rlocint.RlocInt_C.__radd__", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __pyx_r = NULL;
-  __pyx_L0:;
-  __Pyx_XGIVEREF(__pyx_r);
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-/* "eudplib/core/allocator/rlocint.pyx":63
- *         return self + other
- * 
- *     def __rsub__(self, other):             # <<<<<<<<<<<<<<
- *         return toRlocInt(other) - self
- * 
- */
-
-/* Python wrapper */
-static PyObject *__pyx_pw_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_9__rsub__(PyObject *__pyx_v_self, PyObject *__pyx_v_other); /*proto*/
-static PyObject *__pyx_pw_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_9__rsub__(PyObject *__pyx_v_self, PyObject *__pyx_v_other) {
-  PyObject *__pyx_r = 0;
-  __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("__rsub__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_8__rsub__(((struct __pyx_obj_7eudplib_4core_9allocator_7rlocint_RlocInt_C *)__pyx_v_self), ((PyObject *)__pyx_v_other));
-
-  /* function exit code */
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-static PyObject *__pyx_pf_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_8__rsub__(struct __pyx_obj_7eudplib_4core_9allocator_7rlocint_RlocInt_C *__pyx_v_self, PyObject *__pyx_v_other) {
-  PyObject *__pyx_r = NULL;
-  __Pyx_RefNannyDeclarations
-  PyObject *__pyx_t_1 = NULL;
-  PyObject *__pyx_t_2 = NULL;
-  __Pyx_RefNannySetupContext("__rsub__", 0);
-
-  /* "eudplib/core/allocator/rlocint.pyx":64
- * 
- *     def __rsub__(self, other):
- *         return toRlocInt(other) - self             # <<<<<<<<<<<<<<
- * 
- *     def __mul__(self, other):
- */
-  __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = ((PyObject *)__pyx_f_7eudplib_4core_9allocator_7rlocint_toRlocInt(__pyx_v_other, 0)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 64, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = PyNumber_Subtract(__pyx_t_1, ((PyObject *)__pyx_v_self)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 64, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_r = __pyx_t_2;
-  __pyx_t_2 = 0;
-  goto __pyx_L0;
-
-  /* "eudplib/core/allocator/rlocint.pyx":63
- *         return self + other
- * 
- *     def __rsub__(self, other):             # <<<<<<<<<<<<<<
- *         return toRlocInt(other) - self
- * 
- */
-
-  /* function exit code */
-  __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_XDECREF(__pyx_t_2);
-  __Pyx_AddTraceback("eudplib.core.allocator.rlocint.RlocInt_C.__rsub__", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __pyx_r = NULL;
-  __pyx_L0:;
-  __Pyx_XGIVEREF(__pyx_r);
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-/* "eudplib/core/allocator/rlocint.pyx":66
- *         return toRlocInt(other) - self
  * 
  *     def __mul__(self, other):             # <<<<<<<<<<<<<<
  *         if isinstance(other, RlocInt_C):
@@ -1348,19 +1320,19 @@ static PyObject *__pyx_pf_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_8__rsub_
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_11__mul__(PyObject *__pyx_v_self, PyObject *__pyx_v_other); /*proto*/
-static PyObject *__pyx_pw_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_11__mul__(PyObject *__pyx_v_self, PyObject *__pyx_v_other) {
+static PyObject *__pyx_pw_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_7__mul__(PyObject *__pyx_v_self, PyObject *__pyx_v_other); /*proto*/
+static PyObject *__pyx_pw_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_7__mul__(PyObject *__pyx_v_self, PyObject *__pyx_v_other) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__mul__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_10__mul__(((PyObject *)__pyx_v_self), ((PyObject *)__pyx_v_other));
+  __pyx_r = __pyx_pf_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_6__mul__(((PyObject *)__pyx_v_self), ((PyObject *)__pyx_v_other));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_10__mul__(PyObject *__pyx_v_self, PyObject *__pyx_v_other) {
+static PyObject *__pyx_pf_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_6__mul__(PyObject *__pyx_v_self, PyObject *__pyx_v_other) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   int __pyx_t_1;
@@ -1374,7 +1346,7 @@ static PyObject *__pyx_pf_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_10__mul_
   __Pyx_RefNannySetupContext("__mul__", 0);
   __Pyx_INCREF(__pyx_v_other);
 
-  /* "eudplib/core/allocator/rlocint.pyx":67
+  /* "eudplib/core/allocator/rlocint.pyx":71
  * 
  *     def __mul__(self, other):
  *         if isinstance(other, RlocInt_C):             # <<<<<<<<<<<<<<
@@ -1385,29 +1357,29 @@ static PyObject *__pyx_pf_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_10__mul_
   __pyx_t_2 = (__pyx_t_1 != 0);
   if (__pyx_t_2) {
 
-    /* "eudplib/core/allocator/rlocint.pyx":68
+    /* "eudplib/core/allocator/rlocint.pyx":72
  *     def __mul__(self, other):
  *         if isinstance(other, RlocInt_C):
  *             ut.ep_assert(             # <<<<<<<<<<<<<<
  *                 other.rlocmode == 0,
  *                 'Cannot divide RlocInt with non-const'
  */
-    __pyx_t_4 = __Pyx_GetModuleGlobalName(__pyx_n_s_ut); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 68, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_GetModuleGlobalName(__pyx_n_s_ut); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 72, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_ep_assert); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 68, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_ep_assert); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 72, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-    /* "eudplib/core/allocator/rlocint.pyx":69
+    /* "eudplib/core/allocator/rlocint.pyx":73
  *         if isinstance(other, RlocInt_C):
  *             ut.ep_assert(
  *                 other.rlocmode == 0,             # <<<<<<<<<<<<<<
  *                 'Cannot divide RlocInt with non-const'
  *             )
  */
-    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_other, __pyx_n_s_rlocmode); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 69, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_other, __pyx_n_s_rlocmode); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 73, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_6 = __Pyx_PyInt_EqObjC(__pyx_t_4, __pyx_int_0, 0, 0); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 69, __pyx_L1_error)
+    __pyx_t_6 = __Pyx_PyInt_EqObjC(__pyx_t_4, __pyx_int_0, 0, 0); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 73, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __pyx_t_4 = NULL;
@@ -1422,7 +1394,7 @@ static PyObject *__pyx_pf_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_10__mul_
         __pyx_t_7 = 1;
       }
     }
-    __pyx_t_8 = PyTuple_New(2+__pyx_t_7); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 68, __pyx_L1_error)
+    __pyx_t_8 = PyTuple_New(2+__pyx_t_7); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 72, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_8);
     if (__pyx_t_4) {
       __Pyx_GIVEREF(__pyx_t_4); PyTuple_SET_ITEM(__pyx_t_8, 0, __pyx_t_4); __pyx_t_4 = NULL;
@@ -1433,25 +1405,25 @@ static PyObject *__pyx_pf_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_10__mul_
     __Pyx_GIVEREF(__pyx_kp_s_Cannot_divide_RlocInt_with_non_c);
     PyTuple_SET_ITEM(__pyx_t_8, 1+__pyx_t_7, __pyx_kp_s_Cannot_divide_RlocInt_with_non_c);
     __pyx_t_6 = 0;
-    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_t_8, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 68, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_t_8, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 72, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-    /* "eudplib/core/allocator/rlocint.pyx":72
+    /* "eudplib/core/allocator/rlocint.pyx":76
  *                 'Cannot divide RlocInt with non-const'
  *             )
  *             other = other.offset             # <<<<<<<<<<<<<<
  * 
  *         return RlocInt_C(
  */
-    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_other, __pyx_n_s_offset); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 72, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_other, __pyx_n_s_offset); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 76, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF_SET(__pyx_v_other, __pyx_t_3);
     __pyx_t_3 = 0;
 
-    /* "eudplib/core/allocator/rlocint.pyx":67
+    /* "eudplib/core/allocator/rlocint.pyx":71
  * 
  *     def __mul__(self, other):
  *         if isinstance(other, RlocInt_C):             # <<<<<<<<<<<<<<
@@ -1460,7 +1432,7 @@ static PyObject *__pyx_pf_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_10__mul_
  */
   }
 
-  /* "eudplib/core/allocator/rlocint.pyx":74
+  /* "eudplib/core/allocator/rlocint.pyx":78
  *             other = other.offset
  * 
  *         return RlocInt_C(             # <<<<<<<<<<<<<<
@@ -1469,51 +1441,51 @@ static PyObject *__pyx_pf_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_10__mul_
  */
   __Pyx_XDECREF(__pyx_r);
 
-  /* "eudplib/core/allocator/rlocint.pyx":75
+  /* "eudplib/core/allocator/rlocint.pyx":79
  * 
  *         return RlocInt_C(
  *             (self.offset * other) & 0xFFFFFFFF,             # <<<<<<<<<<<<<<
  *             self.rlocmode * other
  *         )
  */
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_offset); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 75, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_offset); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 79, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_5 = PyNumber_Multiply(__pyx_t_3, __pyx_v_other); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 75, __pyx_L1_error)
+  __pyx_t_5 = PyNumber_Multiply(__pyx_t_3, __pyx_v_other); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 79, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = PyNumber_And(__pyx_t_5, __pyx_int_4294967295); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 75, __pyx_L1_error)
+  __pyx_t_3 = PyNumber_And(__pyx_t_5, __pyx_int_4294967295); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 79, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-  /* "eudplib/core/allocator/rlocint.pyx":76
+  /* "eudplib/core/allocator/rlocint.pyx":80
  *         return RlocInt_C(
  *             (self.offset * other) & 0xFFFFFFFF,
  *             self.rlocmode * other             # <<<<<<<<<<<<<<
  *         )
  * 
  */
-  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_rlocmode); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 76, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_rlocmode); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 80, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
 
-  /* "eudplib/core/allocator/rlocint.pyx":77
+  /* "eudplib/core/allocator/rlocint.pyx":81
  *             (self.offset * other) & 0xFFFFFFFF,
  *             self.rlocmode * other
  *         )             # <<<<<<<<<<<<<<
  * 
  *     def __floordiv__(self, other):
  */
-  __pyx_t_8 = PyNumber_Multiply(__pyx_t_5, __pyx_v_other); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 76, __pyx_L1_error)
+  __pyx_t_8 = PyNumber_Multiply(__pyx_t_5, __pyx_v_other); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 80, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_8);
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-  /* "eudplib/core/allocator/rlocint.pyx":74
+  /* "eudplib/core/allocator/rlocint.pyx":78
  *             other = other.offset
  * 
  *         return RlocInt_C(             # <<<<<<<<<<<<<<
  *             (self.offset * other) & 0xFFFFFFFF,
  *             self.rlocmode * other
  */
-  __pyx_t_5 = PyTuple_New(2); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 74, __pyx_L1_error)
+  __pyx_t_5 = PyTuple_New(2); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 78, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_GIVEREF(__pyx_t_3);
   PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_3);
@@ -1521,15 +1493,15 @@ static PyObject *__pyx_pf_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_10__mul_
   PyTuple_SET_ITEM(__pyx_t_5, 1, __pyx_t_8);
   __pyx_t_3 = 0;
   __pyx_t_8 = 0;
-  __pyx_t_8 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_7eudplib_4core_9allocator_7rlocint_RlocInt_C), __pyx_t_5, NULL); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 74, __pyx_L1_error)
+  __pyx_t_8 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_7eudplib_4core_9allocator_7rlocint_RlocInt_C), __pyx_t_5, NULL); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 78, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_8);
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   __pyx_r = __pyx_t_8;
   __pyx_t_8 = 0;
   goto __pyx_L0;
 
-  /* "eudplib/core/allocator/rlocint.pyx":66
- *         return toRlocInt(other) - self
+  /* "eudplib/core/allocator/rlocint.pyx":70
+ *             )
  * 
  *     def __mul__(self, other):             # <<<<<<<<<<<<<<
  *         if isinstance(other, RlocInt_C):
@@ -1552,7 +1524,7 @@ static PyObject *__pyx_pf_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_10__mul_
   return __pyx_r;
 }
 
-/* "eudplib/core/allocator/rlocint.pyx":79
+/* "eudplib/core/allocator/rlocint.pyx":83
  *         )
  * 
  *     def __floordiv__(self, other):             # <<<<<<<<<<<<<<
@@ -1561,19 +1533,19 @@ static PyObject *__pyx_pf_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_10__mul_
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_13__floordiv__(PyObject *__pyx_v_self, PyObject *__pyx_v_other); /*proto*/
-static PyObject *__pyx_pw_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_13__floordiv__(PyObject *__pyx_v_self, PyObject *__pyx_v_other) {
+static PyObject *__pyx_pw_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_9__floordiv__(PyObject *__pyx_v_self, PyObject *__pyx_v_other); /*proto*/
+static PyObject *__pyx_pw_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_9__floordiv__(PyObject *__pyx_v_self, PyObject *__pyx_v_other) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__floordiv__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_12__floordiv__(((PyObject *)__pyx_v_self), ((PyObject *)__pyx_v_other));
+  __pyx_r = __pyx_pf_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_8__floordiv__(((PyObject *)__pyx_v_self), ((PyObject *)__pyx_v_other));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_12__floordiv__(PyObject *__pyx_v_self, PyObject *__pyx_v_other) {
+static PyObject *__pyx_pf_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_8__floordiv__(PyObject *__pyx_v_self, PyObject *__pyx_v_other) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   int __pyx_t_1;
@@ -1588,7 +1560,7 @@ static PyObject *__pyx_pf_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_12__floo
   __Pyx_RefNannySetupContext("__floordiv__", 0);
   __Pyx_INCREF(__pyx_v_other);
 
-  /* "eudplib/core/allocator/rlocint.pyx":80
+  /* "eudplib/core/allocator/rlocint.pyx":84
  * 
  *     def __floordiv__(self, other):
  *         if isinstance(other, RlocInt_C):             # <<<<<<<<<<<<<<
@@ -1599,29 +1571,29 @@ static PyObject *__pyx_pf_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_12__floo
   __pyx_t_2 = (__pyx_t_1 != 0);
   if (__pyx_t_2) {
 
-    /* "eudplib/core/allocator/rlocint.pyx":81
+    /* "eudplib/core/allocator/rlocint.pyx":85
  *     def __floordiv__(self, other):
  *         if isinstance(other, RlocInt_C):
  *             ut.ep_assert(             # <<<<<<<<<<<<<<
  *                 other.rlocmode == 0,
  *                 'Cannot divide RlocInt with non-const'
  */
-    __pyx_t_4 = __Pyx_GetModuleGlobalName(__pyx_n_s_ut); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 81, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_GetModuleGlobalName(__pyx_n_s_ut); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 85, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_ep_assert); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 81, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_ep_assert); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 85, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-    /* "eudplib/core/allocator/rlocint.pyx":82
+    /* "eudplib/core/allocator/rlocint.pyx":86
  *         if isinstance(other, RlocInt_C):
  *             ut.ep_assert(
  *                 other.rlocmode == 0,             # <<<<<<<<<<<<<<
  *                 'Cannot divide RlocInt with non-const'
  *             )
  */
-    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_other, __pyx_n_s_rlocmode); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 82, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_other, __pyx_n_s_rlocmode); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 86, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_6 = __Pyx_PyInt_EqObjC(__pyx_t_4, __pyx_int_0, 0, 0); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 82, __pyx_L1_error)
+    __pyx_t_6 = __Pyx_PyInt_EqObjC(__pyx_t_4, __pyx_int_0, 0, 0); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 86, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __pyx_t_4 = NULL;
@@ -1636,7 +1608,7 @@ static PyObject *__pyx_pf_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_12__floo
         __pyx_t_7 = 1;
       }
     }
-    __pyx_t_8 = PyTuple_New(2+__pyx_t_7); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 81, __pyx_L1_error)
+    __pyx_t_8 = PyTuple_New(2+__pyx_t_7); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 85, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_8);
     if (__pyx_t_4) {
       __Pyx_GIVEREF(__pyx_t_4); PyTuple_SET_ITEM(__pyx_t_8, 0, __pyx_t_4); __pyx_t_4 = NULL;
@@ -1647,25 +1619,25 @@ static PyObject *__pyx_pf_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_12__floo
     __Pyx_GIVEREF(__pyx_kp_s_Cannot_divide_RlocInt_with_non_c);
     PyTuple_SET_ITEM(__pyx_t_8, 1+__pyx_t_7, __pyx_kp_s_Cannot_divide_RlocInt_with_non_c);
     __pyx_t_6 = 0;
-    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_t_8, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 81, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_t_8, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 85, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-    /* "eudplib/core/allocator/rlocint.pyx":85
+    /* "eudplib/core/allocator/rlocint.pyx":89
  *                 'Cannot divide RlocInt with non-const'
  *             )
  *             other = other.offset             # <<<<<<<<<<<<<<
  *         ut.ep_assert(other != 0, 'Divide by zero')
  *         ut.ep_assert(
  */
-    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_other, __pyx_n_s_offset); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 85, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_other, __pyx_n_s_offset); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 89, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF_SET(__pyx_v_other, __pyx_t_3);
     __pyx_t_3 = 0;
 
-    /* "eudplib/core/allocator/rlocint.pyx":80
+    /* "eudplib/core/allocator/rlocint.pyx":84
  * 
  *     def __floordiv__(self, other):
  *         if isinstance(other, RlocInt_C):             # <<<<<<<<<<<<<<
@@ -1674,19 +1646,19 @@ static PyObject *__pyx_pf_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_12__floo
  */
   }
 
-  /* "eudplib/core/allocator/rlocint.pyx":86
+  /* "eudplib/core/allocator/rlocint.pyx":90
  *             )
  *             other = other.offset
  *         ut.ep_assert(other != 0, 'Divide by zero')             # <<<<<<<<<<<<<<
  *         ut.ep_assert(
  *             (self.rlocmode == 0) or
  */
-  __pyx_t_5 = __Pyx_GetModuleGlobalName(__pyx_n_s_ut); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 86, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_GetModuleGlobalName(__pyx_n_s_ut); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 90, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_8 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_n_s_ep_assert); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 86, __pyx_L1_error)
+  __pyx_t_8 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_n_s_ep_assert); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 90, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_8);
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  __pyx_t_5 = PyObject_RichCompare(__pyx_v_other, __pyx_int_0, Py_NE); __Pyx_XGOTREF(__pyx_t_5); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 86, __pyx_L1_error)
+  __pyx_t_5 = PyObject_RichCompare(__pyx_v_other, __pyx_int_0, Py_NE); __Pyx_XGOTREF(__pyx_t_5); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 90, __pyx_L1_error)
   __pyx_t_6 = NULL;
   __pyx_t_7 = 0;
   if (CYTHON_COMPILING_IN_CPYTHON && unlikely(PyMethod_Check(__pyx_t_8))) {
@@ -1699,7 +1671,7 @@ static PyObject *__pyx_pf_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_12__floo
       __pyx_t_7 = 1;
     }
   }
-  __pyx_t_4 = PyTuple_New(2+__pyx_t_7); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 86, __pyx_L1_error)
+  __pyx_t_4 = PyTuple_New(2+__pyx_t_7); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 90, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   if (__pyx_t_6) {
     __Pyx_GIVEREF(__pyx_t_6); PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_6); __pyx_t_6 = NULL;
@@ -1710,38 +1682,38 @@ static PyObject *__pyx_pf_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_12__floo
   __Pyx_GIVEREF(__pyx_kp_s_Divide_by_zero);
   PyTuple_SET_ITEM(__pyx_t_4, 1+__pyx_t_7, __pyx_kp_s_Divide_by_zero);
   __pyx_t_5 = 0;
-  __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_8, __pyx_t_4, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 86, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_8, __pyx_t_4, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 90, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-  /* "eudplib/core/allocator/rlocint.pyx":87
+  /* "eudplib/core/allocator/rlocint.pyx":91
  *             other = other.offset
  *         ut.ep_assert(other != 0, 'Divide by zero')
  *         ut.ep_assert(             # <<<<<<<<<<<<<<
  *             (self.rlocmode == 0) or
  *             (self.rlocmode % other == 0 and
  */
-  __pyx_t_8 = __Pyx_GetModuleGlobalName(__pyx_n_s_ut); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 87, __pyx_L1_error)
+  __pyx_t_8 = __Pyx_GetModuleGlobalName(__pyx_n_s_ut); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 91, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_8);
-  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_8, __pyx_n_s_ep_assert); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 87, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_8, __pyx_n_s_ep_assert); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 91, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
 
-  /* "eudplib/core/allocator/rlocint.pyx":88
+  /* "eudplib/core/allocator/rlocint.pyx":92
  *         ut.ep_assert(other != 0, 'Divide by zero')
  *         ut.ep_assert(
  *             (self.rlocmode == 0) or             # <<<<<<<<<<<<<<
  *             (self.rlocmode % other == 0 and
  *              self.offset % other == 0),
  */
-  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_rlocmode); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 88, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_rlocmode); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 92, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_6 = __Pyx_PyInt_EqObjC(__pyx_t_5, __pyx_int_0, 0, 0); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 88, __pyx_L1_error)
+  __pyx_t_6 = __Pyx_PyInt_EqObjC(__pyx_t_5, __pyx_int_0, 0, 0); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 92, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_6); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 88, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_6); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 92, __pyx_L1_error)
   if (!__pyx_t_2) {
     __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
   } else {
@@ -1751,22 +1723,22 @@ static PyObject *__pyx_pf_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_12__floo
     goto __pyx_L4_bool_binop_done;
   }
 
-  /* "eudplib/core/allocator/rlocint.pyx":89
+  /* "eudplib/core/allocator/rlocint.pyx":93
  *         ut.ep_assert(
  *             (self.rlocmode == 0) or
  *             (self.rlocmode % other == 0 and             # <<<<<<<<<<<<<<
  *              self.offset % other == 0),
  *             'RlocInt not divisible by %d' % other
  */
-  __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_rlocmode); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 89, __pyx_L1_error)
+  __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_rlocmode); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 93, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
-  __pyx_t_5 = PyNumber_Remainder(__pyx_t_6, __pyx_v_other); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 89, __pyx_L1_error)
+  __pyx_t_5 = PyNumber_Remainder(__pyx_t_6, __pyx_v_other); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 93, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-  __pyx_t_6 = __Pyx_PyInt_EqObjC(__pyx_t_5, __pyx_int_0, 0, 0); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 89, __pyx_L1_error)
+  __pyx_t_6 = __Pyx_PyInt_EqObjC(__pyx_t_5, __pyx_int_0, 0, 0); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 93, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_6); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 89, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_6); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 93, __pyx_L1_error)
   if (__pyx_t_2) {
     __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
   } else {
@@ -1776,19 +1748,19 @@ static PyObject *__pyx_pf_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_12__floo
     goto __pyx_L4_bool_binop_done;
   }
 
-  /* "eudplib/core/allocator/rlocint.pyx":90
+  /* "eudplib/core/allocator/rlocint.pyx":94
  *             (self.rlocmode == 0) or
  *             (self.rlocmode % other == 0 and
  *              self.offset % other == 0),             # <<<<<<<<<<<<<<
  *             'RlocInt not divisible by %d' % other
  *         )
  */
-  __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_offset); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 90, __pyx_L1_error)
+  __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_offset); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 94, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
-  __pyx_t_5 = PyNumber_Remainder(__pyx_t_6, __pyx_v_other); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 90, __pyx_L1_error)
+  __pyx_t_5 = PyNumber_Remainder(__pyx_t_6, __pyx_v_other); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 94, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-  __pyx_t_6 = __Pyx_PyInt_EqObjC(__pyx_t_5, __pyx_int_0, 0, 0); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 90, __pyx_L1_error)
+  __pyx_t_6 = __Pyx_PyInt_EqObjC(__pyx_t_5, __pyx_int_0, 0, 0); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 94, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   __Pyx_INCREF(__pyx_t_6);
@@ -1796,14 +1768,14 @@ static PyObject *__pyx_pf_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_12__floo
   __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
   __pyx_L4_bool_binop_done:;
 
-  /* "eudplib/core/allocator/rlocint.pyx":91
+  /* "eudplib/core/allocator/rlocint.pyx":95
  *             (self.rlocmode % other == 0 and
  *              self.offset % other == 0),
  *             'RlocInt not divisible by %d' % other             # <<<<<<<<<<<<<<
  *         )
  *         return RlocInt_C(
  */
-  __pyx_t_6 = __Pyx_PyString_Format(__pyx_kp_s_RlocInt_not_divisible_by_d, __pyx_v_other); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 91, __pyx_L1_error)
+  __pyx_t_6 = __Pyx_PyString_Format(__pyx_kp_s_RlocInt_not_divisible_by_d, __pyx_v_other); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 95, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
   __pyx_t_5 = NULL;
   __pyx_t_7 = 0;
@@ -1817,7 +1789,7 @@ static PyObject *__pyx_pf_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_12__floo
       __pyx_t_7 = 1;
     }
   }
-  __pyx_t_9 = PyTuple_New(2+__pyx_t_7); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 87, __pyx_L1_error)
+  __pyx_t_9 = PyTuple_New(2+__pyx_t_7); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 91, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_9);
   if (__pyx_t_5) {
     __Pyx_GIVEREF(__pyx_t_5); PyTuple_SET_ITEM(__pyx_t_9, 0, __pyx_t_5); __pyx_t_5 = NULL;
@@ -1828,13 +1800,13 @@ static PyObject *__pyx_pf_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_12__floo
   PyTuple_SET_ITEM(__pyx_t_9, 1+__pyx_t_7, __pyx_t_6);
   __pyx_t_8 = 0;
   __pyx_t_6 = 0;
-  __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_9, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 87, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_9, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 91, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-  /* "eudplib/core/allocator/rlocint.pyx":93
+  /* "eudplib/core/allocator/rlocint.pyx":97
  *             'RlocInt not divisible by %d' % other
  *         )
  *         return RlocInt_C(             # <<<<<<<<<<<<<<
@@ -1843,51 +1815,51 @@ static PyObject *__pyx_pf_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_12__floo
  */
   __Pyx_XDECREF(__pyx_r);
 
-  /* "eudplib/core/allocator/rlocint.pyx":94
+  /* "eudplib/core/allocator/rlocint.pyx":98
  *         )
  *         return RlocInt_C(
  *             (self.offset // other) & 0xFFFFFFFF,             # <<<<<<<<<<<<<<
  *             self.rlocmode // other
  *         )
  */
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_offset); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 94, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_offset); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 98, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_4 = PyNumber_FloorDivide(__pyx_t_3, __pyx_v_other); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 94, __pyx_L1_error)
+  __pyx_t_4 = PyNumber_FloorDivide(__pyx_t_3, __pyx_v_other); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 98, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = PyNumber_And(__pyx_t_4, __pyx_int_4294967295); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 94, __pyx_L1_error)
+  __pyx_t_3 = PyNumber_And(__pyx_t_4, __pyx_int_4294967295); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 98, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-  /* "eudplib/core/allocator/rlocint.pyx":95
+  /* "eudplib/core/allocator/rlocint.pyx":99
  *         return RlocInt_C(
  *             (self.offset // other) & 0xFFFFFFFF,
  *             self.rlocmode // other             # <<<<<<<<<<<<<<
  *         )
  * 
  */
-  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_rlocmode); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 95, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_rlocmode); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 99, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
 
-  /* "eudplib/core/allocator/rlocint.pyx":96
+  /* "eudplib/core/allocator/rlocint.pyx":100
  *             (self.offset // other) & 0xFFFFFFFF,
  *             self.rlocmode // other
  *         )             # <<<<<<<<<<<<<<
  * 
  *     def __str__(self):
  */
-  __pyx_t_9 = PyNumber_FloorDivide(__pyx_t_4, __pyx_v_other); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 95, __pyx_L1_error)
+  __pyx_t_9 = PyNumber_FloorDivide(__pyx_t_4, __pyx_v_other); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 99, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_9);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-  /* "eudplib/core/allocator/rlocint.pyx":93
+  /* "eudplib/core/allocator/rlocint.pyx":97
  *             'RlocInt not divisible by %d' % other
  *         )
  *         return RlocInt_C(             # <<<<<<<<<<<<<<
  *             (self.offset // other) & 0xFFFFFFFF,
  *             self.rlocmode // other
  */
-  __pyx_t_4 = PyTuple_New(2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 93, __pyx_L1_error)
+  __pyx_t_4 = PyTuple_New(2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 97, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_GIVEREF(__pyx_t_3);
   PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_3);
@@ -1895,14 +1867,14 @@ static PyObject *__pyx_pf_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_12__floo
   PyTuple_SET_ITEM(__pyx_t_4, 1, __pyx_t_9);
   __pyx_t_3 = 0;
   __pyx_t_9 = 0;
-  __pyx_t_9 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_7eudplib_4core_9allocator_7rlocint_RlocInt_C), __pyx_t_4, NULL); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 93, __pyx_L1_error)
+  __pyx_t_9 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_7eudplib_4core_9allocator_7rlocint_RlocInt_C), __pyx_t_4, NULL); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 97, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_9);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __pyx_r = __pyx_t_9;
   __pyx_t_9 = 0;
   goto __pyx_L0;
 
-  /* "eudplib/core/allocator/rlocint.pyx":79
+  /* "eudplib/core/allocator/rlocint.pyx":83
  *         )
  * 
  *     def __floordiv__(self, other):             # <<<<<<<<<<<<<<
@@ -1927,7 +1899,7 @@ static PyObject *__pyx_pf_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_12__floo
   return __pyx_r;
 }
 
-/* "eudplib/core/allocator/rlocint.pyx":98
+/* "eudplib/core/allocator/rlocint.pyx":102
  *         )
  * 
  *     def __str__(self):             # <<<<<<<<<<<<<<
@@ -1936,19 +1908,19 @@ static PyObject *__pyx_pf_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_12__floo
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_15__str__(PyObject *__pyx_v_self); /*proto*/
-static PyObject *__pyx_pw_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_15__str__(PyObject *__pyx_v_self) {
+static PyObject *__pyx_pw_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_11__str__(PyObject *__pyx_v_self); /*proto*/
+static PyObject *__pyx_pw_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_11__str__(PyObject *__pyx_v_self) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__str__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_14__str__(((struct __pyx_obj_7eudplib_4core_9allocator_7rlocint_RlocInt_C *)__pyx_v_self));
+  __pyx_r = __pyx_pf_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_10__str__(((struct __pyx_obj_7eudplib_4core_9allocator_7rlocint_RlocInt_C *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_14__str__(struct __pyx_obj_7eudplib_4core_9allocator_7rlocint_RlocInt_C *__pyx_v_self) {
+static PyObject *__pyx_pf_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_10__str__(struct __pyx_obj_7eudplib_4core_9allocator_7rlocint_RlocInt_C *__pyx_v_self) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -1956,7 +1928,7 @@ static PyObject *__pyx_pf_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_14__str_
   PyObject *__pyx_t_3 = NULL;
   __Pyx_RefNannySetupContext("__str__", 0);
 
-  /* "eudplib/core/allocator/rlocint.pyx":99
+  /* "eudplib/core/allocator/rlocint.pyx":103
  * 
  *     def __str__(self):
  *         return 'RlocInt(0x%08X, %d)' % (self.offset, self.rlocmode)             # <<<<<<<<<<<<<<
@@ -1964,11 +1936,11 @@ static PyObject *__pyx_pf_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_14__str_
  *     def __repr__(self):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyInt_From_unsigned_int(__pyx_v_self->offset); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 99, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_From_unsigned_int(__pyx_v_self->offset); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 103, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyInt_From_unsigned_int(__pyx_v_self->rlocmode); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 99, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyInt_From_unsigned_int(__pyx_v_self->rlocmode); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 103, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = PyTuple_New(2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 99, __pyx_L1_error)
+  __pyx_t_3 = PyTuple_New(2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 103, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_GIVEREF(__pyx_t_1);
   PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_t_1);
@@ -1976,14 +1948,14 @@ static PyObject *__pyx_pf_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_14__str_
   PyTuple_SET_ITEM(__pyx_t_3, 1, __pyx_t_2);
   __pyx_t_1 = 0;
   __pyx_t_2 = 0;
-  __pyx_t_2 = __Pyx_PyString_Format(__pyx_kp_s_RlocInt_0x_08X_d, __pyx_t_3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 99, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyString_Format(__pyx_kp_s_RlocInt_0x_08X_d, __pyx_t_3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 103, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_r = __pyx_t_2;
   __pyx_t_2 = 0;
   goto __pyx_L0;
 
-  /* "eudplib/core/allocator/rlocint.pyx":98
+  /* "eudplib/core/allocator/rlocint.pyx":102
  *         )
  * 
  *     def __str__(self):             # <<<<<<<<<<<<<<
@@ -2004,7 +1976,7 @@ static PyObject *__pyx_pf_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_14__str_
   return __pyx_r;
 }
 
-/* "eudplib/core/allocator/rlocint.pyx":101
+/* "eudplib/core/allocator/rlocint.pyx":105
  *         return 'RlocInt(0x%08X, %d)' % (self.offset, self.rlocmode)
  * 
  *     def __repr__(self):             # <<<<<<<<<<<<<<
@@ -2013,26 +1985,26 @@ static PyObject *__pyx_pf_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_14__str_
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_17__repr__(PyObject *__pyx_v_self); /*proto*/
-static PyObject *__pyx_pw_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_17__repr__(PyObject *__pyx_v_self) {
+static PyObject *__pyx_pw_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_13__repr__(PyObject *__pyx_v_self); /*proto*/
+static PyObject *__pyx_pw_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_13__repr__(PyObject *__pyx_v_self) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__repr__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_16__repr__(((struct __pyx_obj_7eudplib_4core_9allocator_7rlocint_RlocInt_C *)__pyx_v_self));
+  __pyx_r = __pyx_pf_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_12__repr__(((struct __pyx_obj_7eudplib_4core_9allocator_7rlocint_RlocInt_C *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_16__repr__(struct __pyx_obj_7eudplib_4core_9allocator_7rlocint_RlocInt_C *__pyx_v_self) {
+static PyObject *__pyx_pf_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_12__repr__(struct __pyx_obj_7eudplib_4core_9allocator_7rlocint_RlocInt_C *__pyx_v_self) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
   PyObject *__pyx_t_2 = NULL;
   __Pyx_RefNannySetupContext("__repr__", 0);
 
-  /* "eudplib/core/allocator/rlocint.pyx":102
+  /* "eudplib/core/allocator/rlocint.pyx":106
  * 
  *     def __repr__(self):
  *         return str(self)             # <<<<<<<<<<<<<<
@@ -2040,19 +2012,19 @@ static PyObject *__pyx_pf_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_16__repr
  * 
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = PyTuple_New(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 102, __pyx_L1_error)
+  __pyx_t_1 = PyTuple_New(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 106, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_INCREF(((PyObject *)__pyx_v_self));
   __Pyx_GIVEREF(((PyObject *)__pyx_v_self));
   PyTuple_SET_ITEM(__pyx_t_1, 0, ((PyObject *)__pyx_v_self));
-  __pyx_t_2 = __Pyx_PyObject_Call(((PyObject *)(&PyString_Type)), __pyx_t_1, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 102, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_Call(((PyObject *)(&PyString_Type)), __pyx_t_1, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 106, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_r = __pyx_t_2;
   __pyx_t_2 = 0;
   goto __pyx_L0;
 
-  /* "eudplib/core/allocator/rlocint.pyx":101
+  /* "eudplib/core/allocator/rlocint.pyx":105
  *         return 'RlocInt(0x%08X, %d)' % (self.offset, self.rlocmode)
  * 
  *     def __repr__(self):             # <<<<<<<<<<<<<<
@@ -2215,7 +2187,7 @@ static int __pyx_pf_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_8rlocmode_2__s
   return __pyx_r;
 }
 
-/* "eudplib/core/allocator/rlocint.pyx":105
+/* "eudplib/core/allocator/rlocint.pyx":109
  * 
  * 
  * cpdef RlocInt_C RlocInt(offset, rlocmode):             # <<<<<<<<<<<<<<
@@ -2232,7 +2204,7 @@ static struct __pyx_obj_7eudplib_4core_9allocator_7rlocint_RlocInt_C *__pyx_f_7e
   PyObject *__pyx_t_3 = NULL;
   __Pyx_RefNannySetupContext("RlocInt", 0);
 
-  /* "eudplib/core/allocator/rlocint.pyx":106
+  /* "eudplib/core/allocator/rlocint.pyx":110
  * 
  * cpdef RlocInt_C RlocInt(offset, rlocmode):
  *     return RlocInt_C(offset & 0xFFFFFFFF, rlocmode & 0xFFFFFFFF)             # <<<<<<<<<<<<<<
@@ -2240,11 +2212,11 @@ static struct __pyx_obj_7eudplib_4core_9allocator_7rlocint_RlocInt_C *__pyx_f_7e
  * cpdef RlocInt_C toRlocInt(x):
  */
   __Pyx_XDECREF(((PyObject *)__pyx_r));
-  __pyx_t_1 = PyNumber_And(__pyx_v_offset, __pyx_int_4294967295); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 106, __pyx_L1_error)
+  __pyx_t_1 = PyNumber_And(__pyx_v_offset, __pyx_int_4294967295); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 110, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = PyNumber_And(__pyx_v_rlocmode, __pyx_int_4294967295); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 106, __pyx_L1_error)
+  __pyx_t_2 = PyNumber_And(__pyx_v_rlocmode, __pyx_int_4294967295); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 110, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = PyTuple_New(2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 106, __pyx_L1_error)
+  __pyx_t_3 = PyTuple_New(2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 110, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_GIVEREF(__pyx_t_1);
   PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_t_1);
@@ -2252,14 +2224,14 @@ static struct __pyx_obj_7eudplib_4core_9allocator_7rlocint_RlocInt_C *__pyx_f_7e
   PyTuple_SET_ITEM(__pyx_t_3, 1, __pyx_t_2);
   __pyx_t_1 = 0;
   __pyx_t_2 = 0;
-  __pyx_t_2 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_7eudplib_4core_9allocator_7rlocint_RlocInt_C), __pyx_t_3, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 106, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_7eudplib_4core_9allocator_7rlocint_RlocInt_C), __pyx_t_3, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 110, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_r = ((struct __pyx_obj_7eudplib_4core_9allocator_7rlocint_RlocInt_C *)__pyx_t_2);
   __pyx_t_2 = 0;
   goto __pyx_L0;
 
-  /* "eudplib/core/allocator/rlocint.pyx":105
+  /* "eudplib/core/allocator/rlocint.pyx":109
  * 
  * 
  * cpdef RlocInt_C RlocInt(offset, rlocmode):             # <<<<<<<<<<<<<<
@@ -2308,11 +2280,11 @@ static PyObject *__pyx_pw_7eudplib_4core_9allocator_7rlocint_1RlocInt(PyObject *
         case  1:
         if (likely((values[1] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_rlocmode)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("RlocInt", 1, 2, 2, 1); __PYX_ERR(0, 105, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("RlocInt", 1, 2, 2, 1); __PYX_ERR(0, 109, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "RlocInt") < 0)) __PYX_ERR(0, 105, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "RlocInt") < 0)) __PYX_ERR(0, 109, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 2) {
       goto __pyx_L5_argtuple_error;
@@ -2325,7 +2297,7 @@ static PyObject *__pyx_pw_7eudplib_4core_9allocator_7rlocint_1RlocInt(PyObject *
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("RlocInt", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 105, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("RlocInt", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 109, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("eudplib.core.allocator.rlocint.RlocInt", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -2344,7 +2316,7 @@ static PyObject *__pyx_pf_7eudplib_4core_9allocator_7rlocint_RlocInt(CYTHON_UNUS
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("RlocInt", 0);
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = ((PyObject *)__pyx_f_7eudplib_4core_9allocator_7rlocint_RlocInt(__pyx_v_offset, __pyx_v_rlocmode, 0)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 105, __pyx_L1_error)
+  __pyx_t_1 = ((PyObject *)__pyx_f_7eudplib_4core_9allocator_7rlocint_RlocInt(__pyx_v_offset, __pyx_v_rlocmode, 0)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 109, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -2361,7 +2333,7 @@ static PyObject *__pyx_pf_7eudplib_4core_9allocator_7rlocint_RlocInt(CYTHON_UNUS
   return __pyx_r;
 }
 
-/* "eudplib/core/allocator/rlocint.pyx":108
+/* "eudplib/core/allocator/rlocint.pyx":112
  *     return RlocInt_C(offset & 0xFFFFFFFF, rlocmode & 0xFFFFFFFF)
  * 
  * cpdef RlocInt_C toRlocInt(x):             # <<<<<<<<<<<<<<
@@ -2379,7 +2351,7 @@ static struct __pyx_obj_7eudplib_4core_9allocator_7rlocint_RlocInt_C *__pyx_f_7e
   PyObject *__pyx_t_4 = NULL;
   __Pyx_RefNannySetupContext("toRlocInt", 0);
 
-  /* "eudplib/core/allocator/rlocint.pyx":111
+  /* "eudplib/core/allocator/rlocint.pyx":115
  *     """Convert int/RlocInt to rlocint"""
  * 
  *     if isinstance(x, RlocInt_C):             # <<<<<<<<<<<<<<
@@ -2390,7 +2362,7 @@ static struct __pyx_obj_7eudplib_4core_9allocator_7rlocint_RlocInt_C *__pyx_f_7e
   __pyx_t_2 = (__pyx_t_1 != 0);
   if (__pyx_t_2) {
 
-    /* "eudplib/core/allocator/rlocint.pyx":112
+    /* "eudplib/core/allocator/rlocint.pyx":116
  * 
  *     if isinstance(x, RlocInt_C):
  *         return x             # <<<<<<<<<<<<<<
@@ -2398,12 +2370,12 @@ static struct __pyx_obj_7eudplib_4core_9allocator_7rlocint_RlocInt_C *__pyx_f_7e
  *     else:
  */
     __Pyx_XDECREF(((PyObject *)__pyx_r));
-    if (!(likely(((__pyx_v_x) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_x, __pyx_ptype_7eudplib_4core_9allocator_7rlocint_RlocInt_C))))) __PYX_ERR(0, 112, __pyx_L1_error)
+    if (!(likely(((__pyx_v_x) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_x, __pyx_ptype_7eudplib_4core_9allocator_7rlocint_RlocInt_C))))) __PYX_ERR(0, 116, __pyx_L1_error)
     __Pyx_INCREF(__pyx_v_x);
     __pyx_r = ((struct __pyx_obj_7eudplib_4core_9allocator_7rlocint_RlocInt_C *)__pyx_v_x);
     goto __pyx_L0;
 
-    /* "eudplib/core/allocator/rlocint.pyx":111
+    /* "eudplib/core/allocator/rlocint.pyx":115
  *     """Convert int/RlocInt to rlocint"""
  * 
  *     if isinstance(x, RlocInt_C):             # <<<<<<<<<<<<<<
@@ -2412,16 +2384,16 @@ static struct __pyx_obj_7eudplib_4core_9allocator_7rlocint_RlocInt_C *__pyx_f_7e
  */
   }
 
-  /* "eudplib/core/allocator/rlocint.pyx":115
+  /* "eudplib/core/allocator/rlocint.pyx":119
  * 
  *     else:
  *         return RlocInt_C(x & 0xFFFFFFFF, 0)             # <<<<<<<<<<<<<<
  */
   /*else*/ {
     __Pyx_XDECREF(((PyObject *)__pyx_r));
-    __pyx_t_3 = PyNumber_And(__pyx_v_x, __pyx_int_4294967295); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 115, __pyx_L1_error)
+    __pyx_t_3 = PyNumber_And(__pyx_v_x, __pyx_int_4294967295); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 119, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_4 = PyTuple_New(2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 115, __pyx_L1_error)
+    __pyx_t_4 = PyTuple_New(2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 119, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_GIVEREF(__pyx_t_3);
     PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_3);
@@ -2429,7 +2401,7 @@ static struct __pyx_obj_7eudplib_4core_9allocator_7rlocint_RlocInt_C *__pyx_f_7e
     __Pyx_GIVEREF(__pyx_int_0);
     PyTuple_SET_ITEM(__pyx_t_4, 1, __pyx_int_0);
     __pyx_t_3 = 0;
-    __pyx_t_3 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_7eudplib_4core_9allocator_7rlocint_RlocInt_C), __pyx_t_4, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 115, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_7eudplib_4core_9allocator_7rlocint_RlocInt_C), __pyx_t_4, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 119, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __pyx_r = ((struct __pyx_obj_7eudplib_4core_9allocator_7rlocint_RlocInt_C *)__pyx_t_3);
@@ -2437,7 +2409,7 @@ static struct __pyx_obj_7eudplib_4core_9allocator_7rlocint_RlocInt_C *__pyx_f_7e
     goto __pyx_L0;
   }
 
-  /* "eudplib/core/allocator/rlocint.pyx":108
+  /* "eudplib/core/allocator/rlocint.pyx":112
  *     return RlocInt_C(offset & 0xFFFFFFFF, rlocmode & 0xFFFFFFFF)
  * 
  * cpdef RlocInt_C toRlocInt(x):             # <<<<<<<<<<<<<<
@@ -2477,7 +2449,7 @@ static PyObject *__pyx_pf_7eudplib_4core_9allocator_7rlocint_2toRlocInt(CYTHON_U
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("toRlocInt", 0);
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = ((PyObject *)__pyx_f_7eudplib_4core_9allocator_7rlocint_toRlocInt(__pyx_v_x, 0)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 108, __pyx_L1_error)
+  __pyx_t_1 = ((PyObject *)__pyx_f_7eudplib_4core_9allocator_7rlocint_toRlocInt(__pyx_v_x, 0)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 112, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -2546,8 +2518,6 @@ static int __pyx_setprop_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_rlocmode(
 }
 
 static PyMethodDef __pyx_methods_7eudplib_4core_9allocator_7rlocint_RlocInt_C[] = {
-  {"__radd__", (PyCFunction)__pyx_pw_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_7__radd__, METH_O, 0},
-  {"__rsub__", (PyCFunction)__pyx_pw_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_9__rsub__, METH_O, 0},
   {0, 0, 0, 0}
 };
 
@@ -2560,7 +2530,7 @@ static struct PyGetSetDef __pyx_getsets_7eudplib_4core_9allocator_7rlocint_RlocI
 static PyNumberMethods __pyx_tp_as_number_RlocInt_C = {
   __pyx_pw_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_3__add__, /*nb_add*/
   __pyx_pw_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_5__sub__, /*nb_subtract*/
-  __pyx_pw_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_11__mul__, /*nb_multiply*/
+  __pyx_pw_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_7__mul__, /*nb_multiply*/
   #if PY_MAJOR_VERSION < 3 || CYTHON_COMPILING_IN_PYPY
   0, /*nb_divide*/
   #endif
@@ -2606,7 +2576,7 @@ static PyNumberMethods __pyx_tp_as_number_RlocInt_C = {
   0, /*nb_inplace_and*/
   0, /*nb_inplace_xor*/
   0, /*nb_inplace_or*/
-  __pyx_pw_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_13__floordiv__, /*nb_floor_divide*/
+  __pyx_pw_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_9__floordiv__, /*nb_floor_divide*/
   0, /*nb_true_divide*/
   0, /*nb_inplace_floor_divide*/
   0, /*nb_inplace_true_divide*/
@@ -2634,13 +2604,13 @@ static PyTypeObject __pyx_type_7eudplib_4core_9allocator_7rlocint_RlocInt_C = {
   #if PY_MAJOR_VERSION >= 3
   0, /*tp_as_async*/
   #endif
-  __pyx_pw_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_17__repr__, /*tp_repr*/
+  __pyx_pw_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_13__repr__, /*tp_repr*/
   &__pyx_tp_as_number_RlocInt_C, /*tp_as_number*/
   0, /*tp_as_sequence*/
   0, /*tp_as_mapping*/
   0, /*tp_hash*/
   0, /*tp_call*/
-  __pyx_pw_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_15__str__, /*tp_str*/
+  __pyx_pw_7eudplib_4core_9allocator_7rlocint_9RlocInt_C_11__str__, /*tp_str*/
   0, /*tp_getattro*/
   0, /*tp_setattro*/
   0, /*tp_as_buffer*/

@@ -33,35 +33,39 @@ cdef class RlocInt_C:
     def __cinit__(self, size_t offset, size_t rlocmode):
         self.offset, self.rlocmode = offset, rlocmode
 
-    def __add__(self, other):
-        if isinstance(other, RlocInt_C):
+    # http://stackoverflow.com/questions/18794169/pythons-radd-doesnt-work-for-c-defined-types
+    # Some obscure type can fludge into 'self' slot, so I called it'lhs'
+    # rather than self.
+    def __add__(lhs, rhs):
+        if isinstance(lhs, RlocInt_C):  # Call from radd
+            if isinstance(rhs, RlocInt_C):
+                return RlocInt_C(
+                    lhs.offset + rhs.offset,
+                    lhs.rlocmode + rhs.rlocmode
+                )
+            else:
+                return RlocInt_C(
+                    (lhs.offset + rhs) & 0xFFFFFFFF,
+                    lhs.rlocmode
+                )
+        else:
             return RlocInt_C(
-                self.offset + other.offset,
-                self.rlocmode + other.rlocmode
+                    (rhs.offset + lhs) & 0xFFFFFFFF,
+                    rhs.rlocmode
+                )
+
+    def __sub__(lhs, rhs):
+        lhs = toRlocInt(lhs)
+        if isinstance(rhs, RlocInt_C):
+            return RlocInt_C(
+                (lhs.offset - rhs.offset) & 0xFFFFFFFF,
+                (lhs.rlocmode - rhs.rlocmode) & 0xFFFFFFFF
             )
         else:
             return RlocInt_C(
-                (self.offset + other) & 0xFFFFFFFF,
-                self.rlocmode
+                (lhs.offset - rhs) & 0xFFFFFFFF,
+                lhs.rlocmode
             )
-
-    def __sub__(self, other):
-        if isinstance(other, RlocInt_C):
-            return RlocInt_C(
-                self.offset - other.offset,
-                self.rlocmode - other.rlocmode
-            )
-        else:
-            return RlocInt_C(
-                (self.offset - other) & 0xFFFFFFFF,
-                self.rlocmode
-            )
-
-    def __radd__(self, other):
-        return self + other
-
-    def __rsub__(self, other):
-        return toRlocInt(other) - self
 
     def __mul__(self, other):
         if isinstance(other, RlocInt_C):
