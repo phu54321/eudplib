@@ -15,6 +15,7 @@ setup(
     install_requires=["cffi>=1.0.0"],
     ext_modules=cythonize([
         "eudplib/core/allocator/*.pyx",
+        "eudplib/utils/*.pyx",
     ]),
 
     # metadata for upload to PyPI
