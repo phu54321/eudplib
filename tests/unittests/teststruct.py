@@ -73,3 +73,15 @@ def test_nested_struct():
         [a.p[0].x, b.p[0].x, b.p[0].y, b.p[1].y],
         [1, 5, 0, 4]
     )
+
+
+@TestInstance
+def test_invalid_struct():
+    PushTriggerScope()
+    try:
+        a = TestStruct()
+        a << 5
+        raise RuntimeError('Exception not thrown')
+    except EPError as e:
+        print(' - Error as expected : %s' % e)
+    PopTriggerScope()

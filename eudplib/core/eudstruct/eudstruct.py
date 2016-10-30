@@ -123,3 +123,6 @@ class EUDStruct(ut.ExprProxy, metaclass=_EUDStruct_Metaclass):
             var = EUDVariable()
             var << self
         return type(self)(var)
+
+    def __lshift__(self, rhs):
+        raise ut.EPError('Cannot reassign another value to eudstruct.')
