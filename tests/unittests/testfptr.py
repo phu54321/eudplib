@@ -40,10 +40,8 @@ def test_fptr():
     p << f_mul
     b = p(7, 9)
 
-    try:
+    with expect_eperror():
         p << f_div  # Should trigger error
-    except EPError as e:
-        print(' - Error as expected : %s' % e)
 
     test_equality("Simple fptr call", [a, b], [16, 63])
 

@@ -172,6 +172,8 @@ class EUDFuncN:
             retn = len(self._frets)
             tmp_rets = [ev.EUDVariable() for _ in range(retn)]
             ev.SetVariables(tmp_rets, self._frets)
+            for tv in tmp_rets:
+                tv.makeL()
             return ut.List2Assignable(tmp_rets)
 
 

@@ -38,7 +38,8 @@ from ...utils import (
     EPD,
     List2Assignable,
     unProxy,
-    ep_assert
+    ep_assert,
+    EPError
 )
 from .vbase import VariableBase
 from .vbuf import GetCurrentVariableBuffer
@@ -69,6 +70,7 @@ class EUDVariable(VariableBase):
     def __init__(self, initval=0):
         self._vartrigger = VariableTriggerForward(initval)
         self._varact = self._vartrigger + (8 + 320)
+        self._lvalue = False
 
     def GetVTable(self):
         return self._vartrigger
@@ -81,8 +83,19 @@ class EUDVariable(VariableBase):
 
     # -------
 
+    def makeL(self):
+        self._lvalue = True
+        return self
+
+    def checkNonLValue(self):
+        if self._lvalue:
+            raise EPError('Trying to modify value of l-value variable')
+
+    # -------
+
     def QueueAssignTo(self, dest):
         try:
+            dest.checkNonLValue()
             dest = EPD(dest.getValueAddr())
         except AttributeError:
             pass
@@ -94,6 +107,7 @@ class EUDVariable(VariableBase):
 
     def QueueAddTo(self, dest):
         try:
+            dest.checkNonLValue()
             dest = EPD(dest.getValueAddr())
         except AttributeError:
             pass
@@ -105,6 +119,7 @@ class EUDVariable(VariableBase):
 
     def QueueSubtractTo(self, dest):
         try:
+            dest.checkNonLValue()
             dest = EPD(dest.getValueAddr())
         except AttributeError:
             pass
@@ -117,6 +132,7 @@ class EUDVariable(VariableBase):
     # -------
 
     def Assign(self, other):
+        self.checkNonLValue()
         SeqCompute((
             (self, bt.SetTo, other),
         ))
@@ -141,7 +157,7 @@ class EUDVariable(VariableBase):
             (t, bt.SetTo, self),
             (t, bt.Add, other)
         ])
-        return t
+        return t.makeL()
 
     def __radd__(self, other):
         return self + other
@@ -155,7 +171,7 @@ class EUDVariable(VariableBase):
             (t, bt.Add, 1),
             (t, bt.Add, self),
         ])
-        return t
+        return t.makeL()
 
     def __rsub__(self, other):
         t = EUDVariable()
@@ -165,10 +181,10 @@ class EUDVariable(VariableBase):
             (t, bt.Add, 1),
             (t, bt.Add, other),
         ])
-        return t
+        return t.makeL()
 
     def __neg__(self):
-        return 0 - self
+        return (0 - self).makeL()
 
     def __invert__(self):
         t = EUDVariable()
@@ -176,7 +192,7 @@ class EUDVariable(VariableBase):
             (t, bt.SetTo, 0xffffffff),
             (t, bt.Subtract, self)
         ])
-        return t
+        return t.makeL()
 
     # -------
 

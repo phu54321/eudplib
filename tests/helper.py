@@ -112,6 +112,19 @@ def test_operator(testname, realf, exptf=None):
         )
 
 
+class expect_eperror:
+    def __enter__(self):
+        PushTriggerScope()
+
+    def __exit__(self, type, e, traceback):
+        PopTriggerScope()
+        if isinstance(e, EPError):
+            print(' - Error as expected : %s' % e)
+            return True
+        else:
+            raise RuntimeError('EPError not thrown')
+
+
 ###############################################################
 # Performance testing helper
 ###############################################################

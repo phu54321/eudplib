@@ -77,11 +77,6 @@ def test_nested_struct():
 
 @TestInstance
 def test_invalid_struct():
-    PushTriggerScope()
-    try:
+    with expect_eperror():
         a = TestStruct()
         a << 5
-        raise RuntimeError('Exception not thrown')
-    except EPError as e:
-        print(' - Error as expected : %s' % e)
-    PopTriggerScope()
