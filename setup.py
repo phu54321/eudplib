@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 from Cython.Build import cythonize
 
-__version__ = '0.53a0'
+__version__ = '0.53'
 
 
 setup(
