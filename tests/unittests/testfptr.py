@@ -74,3 +74,19 @@ def test_fptr():
     p << f_mul
     e, f = p(7, 9), s(7, 9)
     test_equality("Fptr cloning", [e, f], [63, 16])
+
+
+
+# Nested fptr call
+@EUDTypedFunc([EUDFuncPtr(1, 1)])
+def f1(f):
+    return 4 + f(4) +6
+
+@EUDFunc
+def f(x):
+    return x * x
+
+@TestInstance
+def test_nested_fptr():
+    k = EUDFuncPtr(1, 1)(f1)
+    test_equality('Nested fptr', k(EUDFuncPtr(1, 1)(f)), 26)

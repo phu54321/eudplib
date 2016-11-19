@@ -36,6 +36,8 @@ def test_pool():
         [b.x, c.y], [9, 11]
     )
 
+    f_simpleprint('remaining : ', pool.remaining)
+
     # Reallocating some
     d = pool.alloc()
     d.x = 3
