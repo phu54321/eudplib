@@ -23,70 +23,66 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-from .rlocint import RlocInt
+from .rlocint cimport RlocInt_C
+from .rlocint import RlocInt, RlocInt_C, toRlocInt
 from ... import utils as ut
 
 
-class ConstExpr:
+cdef class ConstExpr:
 
     ''' Class for general expression with rlocints.
     '''
 
+    cdef public unsigned int offset, rlocmode
+    cdef public ConstExpr baseobj
+
     def __init__(self, baseobj, offset=0, rlocmode=4):
         self.baseobj = baseobj
-        self.offset = offset
-        self.rlocmode = rlocmode
+        self.offset = offset & 0xFFFFFFFF
+        self.rlocmode = rlocmode & 0xFFFFFFFF
 
-    def Evaluate(self):
-        return Evaluate(self.baseobj) // 4 * self.rlocmode + self.offset
+    cpdef RlocInt_C Evaluate(self):
+        return Evaluate(self.baseobj) * self.rlocmode // 4 + self.offset
+
+    # Cython version!
+
+    cpdef ConstExpr adder(self, unsigned int other):
+        return ConstExpr(self.baseobj, self.offset + other, self.rlocmode)
 
     def __add__(self, other):
         if not isinstance(other, int):
             return NotImplemented
+
         return ConstExpr(self.baseobj, self.offset + other, self.rlocmode)
 
     def __radd__(self, other):
         if not isinstance(other, int):
             return NotImplemented
+        
         return ConstExpr(self.baseobj, self.offset + other, self.rlocmode)
 
     def __sub__(self, other):
         if not isinstance(other, int):
             return NotImplemented
-        if isinstance(other, ConstExpr):
-            ut.ep_assert(
-                self.baseobj == other.baseobj and
-                self.rlocmode == other.rlocmode,
-                'Cannot subtract between addresses btw two objects'
-            )
-            return self.offset - other.offset
 
-        else:
-            return ConstExpr(self.baseobj, self.offset - other, self.rlocmode)
+        return ConstExpr(self.baseobj, self.offset - other, self.rlocmode)
 
     def __rsub__(self, other):
-        if isinstance(other, ConstExpr):
-            ut.ep_assert(
-                self.baseobj == other.baseobj and
-                self.rlocmode == other.rlocmode,
-                'Cannot subtract between addresses btw two distinct objects'
-            )
-            return other.offset - self.offset
-
-        elif not isinstance(other, int):
+        if not isinstance(other, int):
             return NotImplemented
 
-        else:
-            return ConstExpr(self.baseobj, other - self.offset, -self.rlocmode)
+        return ConstExpr(self.baseobj, other - self.offset, -self.rlocmode)
 
     def __mul__(self, k):
         if not isinstance(k, int):
             return NotImplemented
+
         return ConstExpr(self.baseobj, self.offset * k, self.rlocmode * k)
 
     def __rmul__(self, k):
         if not isinstance(k, int):
             return NotImplemented
+
         return ConstExpr(self.baseobj, self.offset * k, self.rlocmode * k)
 
     def __floordiv__(self, k):
@@ -99,11 +95,22 @@ class ConstExpr:
         )
         return ConstExpr(self.baseobj, self.offset // k, self.rlocmode // k)
 
+cdef class ConstExprInt(ConstExpr):
+    cdef public RlocInt_C value
 
-class Forward(ConstExpr):
+    def __init__(self, value):
+        super().__init__(None, value, 0)
+        self.value = RlocInt_C(value & 0xFFFFFFFF, 0)
+
+    cpdef RlocInt_C Evaluate(self):
+        return self.value
+
+cdef class Forward(ConstExpr):
 
     '''Class for forward definition.
     '''
+
+    cdef public ConstExpr _expr
 
     def __init__(self):
         super().__init__(self)
@@ -114,8 +121,12 @@ class Forward(ConstExpr):
             self._expr is None,
             'Reforwarding without reset is not allowed'
         )
+        expr = ut.unProxy(expr)
         ut.ep_assert(expr is not None, 'Cannot forward to None')
-        self._expr = expr
+        if isinstance(expr, int):
+            self._expr = ConstExprInt(expr)
+        else:
+            self._expr = expr
         return expr
 
     def IsSet(self):
@@ -124,23 +135,21 @@ class Forward(ConstExpr):
     def Reset(self):
         self._expr = None
 
-    def Evaluate(self):
+    cpdef RlocInt_C Evaluate(self):
         ut.ep_assert(self._expr is not None, 'Forward not initialized')
         return Evaluate(self._expr)
 
 
-def Evaluate(x):
+cpdef RlocInt_C Evaluate(x):
     '''
     Evaluate expressions
     '''
-    if isinstance(x, int):
-        return RlocInt(x, 0)
     try:
         return x.Evaluate()
     except AttributeError:
-        return x
+        return toRlocInt(x)
 
 
 def IsConstExpr(x):
     x = ut.unProxy(x)
-    return isinstance(x, int) or isinstance(x, ConstExpr)
+    return isinstance(x, int) or hasattr(x, 'Evaluate')

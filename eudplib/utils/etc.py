@@ -23,6 +23,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
+import functools
 import collections
 import itertools
 
@@ -80,20 +81,35 @@ def Assignable2List(a):
         return [a]
 
 
+def cachedfunc(function):
+    memo = {}
+
+    @functools.wraps(function)
+    def wrapper(*args):
+        args_hashable = tuple(args)
+        if args_hashable in memo:
+            return memo[args_hashable]
+        else:
+            rv = function(*args)
+            memo[args_hashable] = rv
+            return rv
+    return wrapper
+
+
 # -------
 
 # Original code from TrigEditPlus::ConvertString_SCMD2ToRaw
 
 def SCMD2Text(s):
-    #
-    # normal -> xdigitinput1 -> xdigitinput2 -> xdigitinput3 -> normal
-    #        '<'           xdigit          xdigit            '>'
-    #                        -> normal
-    #                       '>' emit '<>'
-    #                                        -> normal
-    #                                        '>' emit x00
-    #                                                        -> normal
-    # xdigit/normal  emit '<xx'
+        #
+        # normal -> xdigitinput1 -> xdigitinput2 -> xdigitinput3 -> normal
+        #        '<'           xdigit          xdigit            '>'
+        #                        -> normal
+        #                       '>' emit '<>'
+        #                                        -> normal
+        #                                        '>' emit x00
+        #                                                        -> normal
+        # xdigit/normal  emit '<xx'
     def toxdigit(i):
         if '0' <= i <= '9':
             return ord(i) - 48

@@ -26,7 +26,6 @@ THE SOFTWARE.
 from ... import core as c
 from ... import eudlib as sf
 from ... import ctrlstru as cs
-from ... import varfunc as vf
 from eudplib import utils as ut
 
 ''' Stage 2 :
@@ -37,10 +36,10 @@ from eudplib import utils as ut
 def CreatePayloadRelocator(payload):
     # We first build code injector.
     prtdb = c.Db(b''.join([ut.i2b4(x // 4) for x in payload.prttable]))
-    prtn = vf.EUDVariable()
+    prtn = c.EUDVariable()
 
     ortdb = c.Db(b''.join([ut.i2b4(x // 4) for x in payload.orttable]))
-    ortn = vf.EUDVariable()
+    ortn = c.EUDVariable()
 
     orig_payload = c.Db(payload.data)
 

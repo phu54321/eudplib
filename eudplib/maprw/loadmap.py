@@ -35,7 +35,7 @@ def LoadMap(fname):
 
     print('Loading map %s' % fname)
     rawfile = open(fname, 'rb').read()
-    mpqr = mpqapi.MpqRead()
+    mpqr = mpqapi.MPQ()
     mpqr.Open(fname)
     chkt = chktok.CHK()
     chkt.loadchk(mpqr.Extract('staredit\\scenario.chk'))

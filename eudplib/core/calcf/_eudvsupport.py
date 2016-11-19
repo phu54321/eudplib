@@ -32,7 +32,7 @@ from .bitwise import (
 )
 
 
-from ..varfunc import EUDVariable
+from ..variable import EUDVariable
 
 
 def DefClsMethod(name, f):
@@ -61,3 +61,5 @@ DefOperator('__or__', lambda x, y: f_bitor(x, y))
 DefOperator('__xor__', lambda x, y: f_bitxor(x, y))
 DefClsMethod('__neg__', lambda x: 0 - x)
 DefClsMethod('__invert__', lambda x: f_bitnot(x))
+
+# Shift operator is reserved for assigning, so we won't overload them.

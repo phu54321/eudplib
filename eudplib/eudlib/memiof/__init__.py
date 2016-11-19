@@ -23,16 +23,43 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
+from .modcurpl import (
+    f_setcurpl,
+    f_getcurpl
+)
+
+
 from .dwmemio import (
+    f_dwepdread_epd,
     f_dwread_epd,
     f_epdread_epd,
-    f_dwepdread_epd,
+
+    f_flagread_epd,
+
     f_dwwrite_epd,
     f_dwadd_epd,
     f_dwsubtract_epd,
     f_dwbreak,
     f_dwbreak2,
 )
+
+from .cpmemio import (
+    f_dwepdread_cp,
+    f_dwread_cp,
+    f_epdread_cp,
+
+    f_dwwrite_cp,
+    f_dwadd_cp,
+    f_dwsubtract_cp,
+)
+
+
+from .safedwmemio import (
+    f_dwread_epd_safe,
+    f_epdread_epd_safe,
+    f_dwepdread_epd_safe,
+)
+
 
 from .byterw import (
     EUDByteReader,

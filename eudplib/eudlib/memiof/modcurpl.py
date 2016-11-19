@@ -23,19 +23,31 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-from .eudv import (
-    EUDVariable,
-    IsEUDVariable,
-    EUDCreateVariables,
-    SeqCompute,
-    SetVariables,
+from eudplib import (
+    core as c,
+    ctrlstru as cs,
 )
 
-from .vararray import EUDVArray
-from .eudstruct import EUDStruct
 
-from .eudlv import EUDLightVariable
-from .eudf import EUDFunc
-from .eudfptr import EUDFuncPtr
-from .eudfmethod import EUDFuncMethod
-from .eudfuncn import EUDFuncN, EUDReturn
+def f_setcurpl(cp):
+    cs.DoActions(c.SetCurrentPlayer(cp))
+
+
+# This function initializes _curpl_checkcond, so should be called at least once
+@c.EUDFunc
+def f_getcurpl():
+    cpcache = c.curpl.GetCPCache()
+    cpcond = c.curpl.cpcacheMatchCond()
+    if cs.EUDIfNot()(cpcond):
+        cpcache << 0
+        for i in range(31, -1, -1):
+            c.RawTrigger(
+                conditions=[c.Memory(0x6509B0, c.AtLeast, 2**i)],
+                actions=[
+                    c.SetMemory(0x6509B0, c.Subtract, 2**i),
+                    cpcache.AddNumber(2**i)
+                ]
+            )
+        cs.DoActions(c.SetCurrentPlayer(cpcache))
+    cs.EUDEndIf()
+    return cpcache

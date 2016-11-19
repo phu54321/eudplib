@@ -54,9 +54,9 @@ def SaveMap(fname, rootf):
     # Process by modifying existing mpqfile
     open(fname, 'wb').write(mapdata.GetRawFile())
 
-    mw = mpqapi.MpqWrite()
+    mw = mpqapi.MPQ()
     mw.Open(fname)
-    mw.PutFile('staredit\\scenario.chk', rawchk, replace=True)
+    mw.PutFile('staredit\\scenario.chk', rawchk)
     UpdateMPQ(mw)
     # mw.DeleteFile('(listfile)')
     mw.Compact()

@@ -24,9 +24,10 @@ THE SOFTWARE.
 '''
 
 from .. import (
-    varfunc as vf,
-    rawtrigger as rt,
     allocator as ac,
+    rawtrigger as rt,
+    variable as ev,
+    eudfunc as ef,
 )
 
 from eudplib import utils as ut
@@ -34,27 +35,27 @@ from eudplib import utils as ut
 
 def f_mul(a, b):
     """Calculate a * b"""
-    if isinstance(a, vf.EUDVariable) and isinstance(b, vf.EUDVariable):
+    if isinstance(a, ev.EUDVariable) and isinstance(b, ev.EUDVariable):
         return _f_mul(a, b)
 
-    elif isinstance(a, vf.EUDVariable):
+    elif isinstance(a, ev.EUDVariable):
         return f_constmul(b)(a)
 
-    elif isinstance(b, vf.EUDVariable):
+    elif isinstance(b, ev.EUDVariable):
         return f_constmul(a)(b)
 
     else:
-        ret = vf.EUDVariable()
+        ret = ev.EUDVariable()
         ret << a * b
         return ret
 
 
 def f_div(a, b):
     """Calculate (a//b, a%b) """
-    if isinstance(b, vf.EUDVariable):
+    if isinstance(b, ev.EUDVariable):
         return _f_div(a, b)
 
-    elif isinstance(a, vf.EUDVariable):
+    elif isinstance(a, ev.EUDVariable):
         return f_constdiv(b)(a)
 
     else:
@@ -62,8 +63,8 @@ def f_div(a, b):
             q, m = a // b, a % b
         else:
             q, m = 0xFFFFFFFF, a
-        vq, vm = vf.EUDCreateVariables(2)
-        vf.SeqCompute([
+        vq, vm = ev.EUDCreateVariables(2)
+        ev.SeqCompute([
             (vq, rt.SetTo, q),
             (vm, rt.SetTo, m)
         ])
@@ -88,9 +89,9 @@ def f_constmul(number):
     try:
         return mulfdict[number]
     except KeyError:
-        @vf.EUDFunc
+        @ef.EUDFunc
         def _mulf(a):
-            ret = vf.EUDVariable()
+            ret = ev.EUDVariable()
             ret << 0
             for i in range(31, -1, -1):
                 rt.RawTrigger(
@@ -121,9 +122,9 @@ def f_constdiv(number):
     try:
         return divfdict[number]
     except KeyError:
-        @vf.EUDFunc
+        @ef.EUDFunc
         def _divf(a):
-            ret = vf.EUDVariable()
+            ret = ev.EUDVariable()
             ret << 0
             for i in range(31, -1, -1):
                 # number too big
@@ -146,12 +147,12 @@ def f_constdiv(number):
 # -------
 
 
-@vf.EUDFunc
+@ef.EUDFunc
 def _f_mul(a, b):
-    ret, y0 = vf.EUDCreateVariables(2)
+    ret, y0 = ev.EUDCreateVariables(2)
 
     # Init
-    vf.SeqCompute([
+    ev.SeqCompute([
         (ret, rt.SetTo, 0),
         (y0, rt.SetTo, b)
     ])
@@ -161,7 +162,7 @@ def _f_mul(a, b):
 
     # Calculate chain_y0
     for i in range(32):
-        vf.SeqCompute((
+        ev.SeqCompute((
             (ut.EPD(chain_y0[i]), rt.SetTo, y0),
             (y0, rt.Add, y0)
         ))
@@ -197,12 +198,12 @@ def _f_mul(a, b):
     return ret
 
 
-@vf.EUDFunc
+@ef.EUDFunc
 def _f_div(a, b):
-    ret, x = vf.EUDCreateVariables(2)
+    ret, x = ev.EUDCreateVariables(2)
 
     # Init
-    vf.SeqCompute([
+    ev.SeqCompute([
         (ret, rt.SetTo, 0),
         (x, rt.SetTo, b),
     ])
@@ -214,7 +215,7 @@ def _f_div(a, b):
 
     # Fill in chain
     for i in range(32):
-        vf.SeqCompute([
+        ev.SeqCompute([
             (ut.EPD(chain_x0[i]), rt.SetTo, x),
             (ut.EPD(chain_x1[i]), rt.SetTo, x),
         ])
@@ -232,7 +233,7 @@ def _f_div(a, b):
         )
         p2 << rt.NextTrigger()
 
-        vf.SeqCompute([
+        ev.SeqCompute([
             (x, rt.Add, x),
         ])
 

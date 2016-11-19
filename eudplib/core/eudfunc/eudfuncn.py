@@ -26,21 +26,16 @@ THE SOFTWARE.
 import functools
 import inspect
 
-from .eudv import EUDVariable, SeqCompute, SetVariables
-from ...utils import (
-    List2Assignable,
-    Assignable2List,
-)
+from ... import utils as ut
+
+from .. import allocator as ac
+from .. import rawtrigger as bt
+from .. import variable as ev
 
 from ...utils.blockstru import (
     BlockStruManager,
     SetCurrentBlockStruManager
 )
-
-from ..allocator import Forward
-from .. import rawtrigger as bt
-
-from eudplib import utils as ut
 
 
 _currentCompiledFunc = None
@@ -67,12 +62,22 @@ def _setCurrentCompiledFunc(func):
 
 
 class EUDFuncN:
+    def __init__(self, argn, callerfunc, bodyfunc):
+        """ EUDFuncN
 
-    def __init__(self, fdecl_func, argn):
+        :param callerfunc: Function to be wrapped.
+        :param argn: Count of arguments got by callerfunc
+        :param bodyfunc: Where function should return to
+        """
+
+        if bodyfunc is None:
+            bodyfunc = callerfunc
+
         self._argn = argn
         self._retn = None
-        self._fdecl_func = fdecl_func
-        functools.update_wrapper(self, fdecl_func)
+        self._callerfunc = callerfunc
+        self._bodyfunc = bodyfunc
+        functools.update_wrapper(self, bodyfunc)
         self._fstart = None
         self._fend = None
         self._fargs = None
@@ -90,7 +95,7 @@ class EUDFuncN:
         lastCompiledFunc = _setCurrentCompiledFunc(self)
 
         # Add return point
-        self._fend = Forward()
+        self._fend = ac.Forward()
 
         # Prevent double compilication
         ut.ep_assert(self._fstart is None)
@@ -100,15 +105,15 @@ class EUDFuncN:
         prev_bsm = SetCurrentBlockStruManager(f_bsm)
         bt.PushTriggerScope()
 
-        f_args = [EUDVariable() for _ in range(self._argn)]
+        f_args = [ev.EUDVariable() for _ in range(self._argn)]
         self._fargs = f_args
 
         fstart = bt.NextTrigger()
         self._fstart = fstart
 
-        final_rets = self._fdecl_func(*f_args)
+        final_rets = self._callerfunc(*f_args)
         if final_rets is not None:
-            self._AddReturn(Assignable2List(final_rets), False)
+            self._AddReturn(ut.Assignable2List(final_rets), False)
         fend = bt.RawTrigger()
         bt.PopTriggerScope()
 
@@ -124,16 +129,16 @@ class EUDFuncN:
 
     def _AddReturn(self, retv, needjump):
         if self._frets is None:
-            self._frets = [EUDVariable() for _ in range(len(retv))]
+            self._frets = [ev.EUDVariable() for _ in range(len(retv))]
             self._retn = len(retv)
 
         ut.ep_assert(
             len(retv) == len(self._frets),
             "Numbers of returned value should be constant."
-            " (From function %s)" % self._fdecl_func.__name__
+            " (From function %s)" % self._callerfunc.__name__
         )
 
-        SetVariables(self._frets, retv)
+        ev.SetVariables(self._frets, retv)
 
         if needjump:
             bt.RawTrigger(nextptr=self._fend)
@@ -142,15 +147,19 @@ class EUDFuncN:
         if self._fstart is None:
             self._CreateFuncBody()
 
-        ut.ep_assert(len(args) == self._argn, 'Argument number mismatch')
+        ut.ep_assert(
+            len(args) == self._argn,
+            'Argument number mismatch : ' +
+            'len(%s) != %d' % (repr(args), self._argn)
+        )
 
         # Assign arguments into argument space
-        SeqCompute(
+        ev.SeqCompute(
             [(farg, bt.SetTo, arg) for farg, arg in zip(self._fargs, args)]
         )
 
         # Call body
-        fcallend = Forward()
+        fcallend = ac.Forward()
 
         bt.RawTrigger(
             nextptr=self._fstart,
@@ -161,9 +170,11 @@ class EUDFuncN:
 
         if self._frets is not None:
             retn = len(self._frets)
-            tmp_rets = [EUDVariable() for _ in range(retn)]
-            SetVariables(tmp_rets, self._frets)
-            return List2Assignable(tmp_rets)
+            tmp_rets = [ev.EUDVariable() for _ in range(retn)]
+            ev.SetVariables(tmp_rets, self._frets)
+            for tv in tmp_rets:
+                tv.makeL()
+            return ut.List2Assignable(tmp_rets)
 
 
 def EUDReturn(*args):

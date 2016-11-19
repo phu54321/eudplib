@@ -4,12 +4,15 @@ import sys as _sys
 import os as _os
 import random as _random
 
-_sys.path.insert(0, _os.path.abspath('..\\'))
+_sys.path.insert(0, _os.path.abspath('../'))
+
+import pyximport
+pyximport.install()
 
 from eudplib import *
 
 
-_testing = EUDVariable()
+_testFailed = EUDLightVariable()
 _failedTest = EUDArray(1024)
 _testNum = EUDVariable()
 _failedNum = EUDVariable()
@@ -20,17 +23,35 @@ _failedNum = EUDVariable()
 ###############################################################
 
 
+origcp = EUDVariable()
+
+
+def setcp1():
+    origcp << f_getcurpl()
+    f_setcurpl(Player1)
+
+
+def resetcp():
+    f_setcurpl(origcp)
+
+
 def test_assert(testname, condition):
     global _failedNum, _testNum
 
+    setcp1()
+
     if EUDIf()(condition):
-        f_simpleprint("\x07[ OK ] \x04%s" % testname)
+        f_simpleprint("\x07 - [ OK ] \x04%s" % testname)
+        test_wait(0)
     if EUDElse()():
-        f_simpleprint("\x08[FAIL] %s" % testname)
+        f_simpleprint("\x08 - [FAIL] %s" % testname)
         failedTestDb = DBString(testname)
         _failedTest[_failedNum] = failedTestDb
-        _failedNum += 1
+        _testFailed << 1
+        test_wait(24)
     EUDEndIf()
+
+    resetcp()
 
     _testNum += 1
     test_wait(0)
@@ -42,28 +63,35 @@ def test_equality(testname, real, expt):
     real = Assignable2List(real)
     expt = Assignable2List(expt)
 
+    setcp1()
+
     if EUDIf()([r == e for r, e in zip(real, expt)]):
-        f_simpleprint("\x07[ OK ] \x04%s" % testname)
+        f_simpleprint("\x07 - [ OK ] \x04%s" % testname)
+        test_wait(0)
     if EUDElse()():
-        f_simpleprint("\x08[FAIL] %s" % testname)
-        f_simpleprint(" \x03 - \x04 Output   : ", *real)
-        f_simpleprint(" \x03 - \x04 Expected : ", *expt)
+        f_simpleprint("\x08 - [FAIL] %s" % testname)
+        f_simpleprint(" \x03   - \x04 Output   : ", *real)
+        f_simpleprint(" \x03   - \x04 Expected : ", *expt)
         failedTestDb = DBString(testname)
         _failedTest[_failedNum] = failedTestDb
         _failedNum += 1
+        test_wait(24)
     EUDEndIf()
 
+    resetcp()
+
+    f_setcurpl(origcp)
+
     _testNum += 1
-    test_wait(0)
 
 
 def test_operator(testname, realf, exptf=None):
     if exptf is None:
         exptf = realf
 
-    if isinstance(realf, EUDFuncN):
-        f = realf._fdecl_func
-    else:
+    try:
+        f = realf._bodyfunc
+    except AttributeError:
         f = realf
     argcount = f.__code__.co_argcount
 
@@ -84,9 +112,25 @@ def test_operator(testname, realf, exptf=None):
         )
 
 
+class expect_eperror:
+    def __enter__(self):
+        PushTriggerScope()
+
+    def __exit__(self, type, e, traceback):
+        PopTriggerScope()
+        if isinstance(e, EPError):
+            print(' - Error as expected : %s' % e)
+            return True
+        else:
+            raise RuntimeError('EPError not thrown')
+
+
 ###############################################################
 # Performance testing helper
 ###############################################################
+
+
+perf_basecount = 100000
 
 
 def test_perf(testname, func, count):
@@ -101,31 +145,39 @@ def test_perf(testname, func, count):
 
     elapsedTime = starttm - endtm
     averageTime = elapsedTime // count
+    setcp1()
     f_simpleprint(
         '\x03' * 150 + "[PERF] \x04%s \x03* %d    \x05" % (testname, count),
         averageTime, '/', elapsedTime, spaced=False)
-    test_wait(0)
+    resetcp()
+    test_wait(12)
 
 
 ###############################################################
 
 def test_complete():
+    setcp1()
     f_simpleprint("\x03" + "=" * 40)
     succNum = _testNum - _failedNum
     f_simpleprint("\x04  Test result : ", succNum, "/", _testNum, spaced=False)
+    resetcp()
 
 _testList = []
 
 
 def TestInstance(func):
-    _testList.append(func)
+    print(" - Adding test instance %s" % func.__name__)
+    _testList.append((func, func.__name__))
     return func
 
 
 @EUDFunc
 def _testmain():
-    for _test in _testList:
-        _test()
+    for testfunc, testname in _testList:
+        _testFailed << 0
+        f_simpleprint("\x03[TEST] Running test %s..." % testname)
+        testfunc()
+        Trigger(_testFailed == 1, _failedNum.AddNumber(1))
 
     test_complete()
 

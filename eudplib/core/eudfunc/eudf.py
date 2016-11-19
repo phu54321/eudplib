@@ -23,23 +23,37 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-from ..memiof import f_dwread_epd
-from eudplib import (
-    core as c,
-    ctrlstru as cs,
-    utils as ut
-)
+import inspect
+import functools
+
+from .eudtypedfuncn import EUDTypedFuncN, applyTypes
+from ... import utils as ut
 
 
-def f_setcurpl(cp):
-    cs.DoActions(c.SetCurrentPlayer(cp))
+def EUDTypedFunc(argtypes, rettypes=None):
+    def _EUDTypedFunc(fdecl_func):
+        argspec = inspect.getargspec(fdecl_func)
+        argn = len(argspec[0])
+        ut.ep_assert(
+            argspec[1] is None,
+            'No variadic arguments (*args) allowed for EUDFunc.'
+        )
+        ut.ep_assert(
+            argspec[2] is None,
+            'No variadic keyword arguments (*kwargs) allowed for EUDFunc.'
+        )
+
+        def caller(*args):
+            # Cast arguments to argtypes before callee code.
+            args = applyTypes(argtypes, args)
+            return fdecl_func(*args)
+
+        ret = EUDTypedFuncN(argn, caller, fdecl_func, argtypes, rettypes)
+        functools.update_wrapper(ret, fdecl_func)
+        return ret
+
+    return _EUDTypedFunc
 
 
-@c.EUDFunc
-def f_getcurpl():
-    cpcache = c.curpl.GetCPCache()
-    if cs.EUDIfNot()(c.Memory(0x6509B0, c.Exactly, cpcache)):
-        cpcache << f_dwread_epd(ut.EPD(0x6509B0))
-        c.SetCurrentPlayer(cpcache)
-    cs.EUDEndIf()
-    return cpcache
+def EUDFunc(fdecl_func):
+    return EUDTypedFunc(None, None)(fdecl_func)

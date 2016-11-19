@@ -23,16 +23,18 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-from .. import varfunc as vf
+from .. import allocator as ac
+from .. import variable as ev
+from .. import eudfunc as ef
 from .. import rawtrigger as rt
-from .muldiv import f_mul, f_div
+from .muldiv import f_mul
 
 
 def bw_gen(cond, docstring=None):
-    @vf.EUDFunc
+    @ef.EUDFunc
     def f_bitsize_template(a, b):
-        tmp = vf.EUDLightVariable()
-        ret = vf.EUDVariable()
+        tmp = ev.EUDLightVariable()
+        ret = ev.EUDVariable()
 
         ret << 0
 
@@ -92,13 +94,13 @@ def f_bitnot(a):
 # -------
 
 
-@vf.EUDFunc
+@ef.EUDFunc
 def f_bitsplit(a):
     """Splits bit of given number
 
     :returns: int bits[32];  // bits[i] = (ith bit from LSB of a is set)
     """
-    bits = vf.EUDCreateVariables(32)
+    bits = ev.EUDCreateVariables(32)
     for i in range(31, -1, -1):
         bits[i] << 0
         rt.RawTrigger(
@@ -113,9 +115,10 @@ def f_bitsplit(a):
 
 # -------
 
-@vf.EUDFunc
+@ef.EUDFunc
 def _exp2_vv(n):
-    ret = vf.EUDVariable()
+    ret = ev.EUDVariable()
+    ret << 0
     for i in range(32):
         rt.RawTrigger(
             conditions=[n == i],
@@ -127,21 +130,55 @@ def _exp2_vv(n):
 def _exp2(n):
     if isinstance(n, int):
         return 1 << n
+        if n >= 32:
+            return 0
+        else:
+            return 1 << n
 
     else:
         return _exp2_vv(n)
 
 
+@ef.EUDFunc
+def _f_bitlshift(a, b):
+    loopstart = ac.Forward()
+    loopend = ac.Forward()
+    loopcnt = ac.Forward()
+
+    rt.RawTrigger(
+        actions=[
+            rt.SetNextPtr(a.GetVTable(), loopcnt),
+            a.QueueAddTo(a),
+        ]
+    )
+
+    loopstart << rt.RawTrigger(
+        nextptr=a.GetVTable(),
+        conditions=b.Exactly(0),
+        actions=rt.SetNextPtr(loopstart, loopend)
+    )
+    loopcnt << rt.RawTrigger(
+        nextptr=loopstart,
+        actions=b.SubtractNumber(1)
+    )
+    loopend << rt.RawTrigger(
+        actions=rt.SetNextPtr(loopstart, a.GetVTable())
+    )
+
+    return a
+
+
 def f_bitlshift(a, b):
-    """a << b"""
-    return f_mul(a, _exp2(b))
+    """ Calculate a << b """
+    if isinstance(b, int):
+        return f_mul(a, _exp2(b))
+    else:
+        return _f_bitlshift(a, b)
 
 
 def f_bitrshift(a, b):
-    """Calculate a >> b"""
+    """ Calculate a >> b """
     if isinstance(b, int) and b >= 32:
         return 0
 
-    ret = vf.EUDVariable()
-    ret << f_div(a, _exp2(b))
-    return ret
+    return a // _exp2(b)

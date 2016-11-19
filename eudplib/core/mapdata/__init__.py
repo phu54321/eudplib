@@ -32,7 +32,11 @@ from .stringmap import (
 
 from .proptable import GetPropertyIndex
 from .unitprp import UnitProperty
-from .mapdata import IsMapdataInitalized
+from .mapdata import (
+    IsMapdataInitalized,
+    GetChkTokenized
+)
+
 from .tblformat import TBL
 
 from .playerinfo import GetPlayerInfo

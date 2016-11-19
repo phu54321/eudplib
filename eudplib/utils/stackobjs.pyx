@@ -1,48 +1,33 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
+#!python
+#cython: language_level=3, boundscheck=False, wraparound=False
 
-'''
-Copyright (c) 2014 trgk
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-'''
-
+from cpython.mem cimport PyMem_Malloc, PyMem_Realloc, PyMem_Free
+from libc.string cimport memset
 
 def StackObjects(
     found_objects,
     dwoccupmap_dict,
     alloctable,
 ):
-    dwoccupmap_max_size = 0
+    cdef int dwoccupmap_max_size = 0
     for obj in found_objects:
         dwoccupmap_max_size += len(dwoccupmap_dict[obj])
 
     # Buffer to sum all dwoccupmaps
-    dwoccupmap_sum = [-1] * (dwoccupmap_max_size + 1)
+    cdef int* dwoccupmap_sum = <int*> PyMem_Malloc((dwoccupmap_max_size + 1) * sizeof(int))
+    cdef int* dwoccupmap = <int*> PyMem_Malloc((dwoccupmap_max_size + 1) * sizeof(int))
+    memset(dwoccupmap_sum, -1, (dwoccupmap_max_size + 1) * sizeof(int))
 
-    lallocaddr = 0
-    payload_size = 0
+    cdef int lallocaddr = 0
+    cdef int payload_size = 0
+    cdef int curoff, objsize, j, oclen
 
     for obj in found_objects:
         # Convert to faster c array
-        dwoccupmap = dwoccupmap_dict[obj]
-        oclen = len(dwoccupmap)
+        py_dwoccupmap = dwoccupmap_dict[obj]
+        oclen = len(py_dwoccupmap)
+        for j in range(oclen):
+            dwoccupmap[j] = py_dwoccupmap[j]
 
         # preprocess dwoccupmap
         for i in range(oclen):
@@ -76,3 +61,6 @@ def StackObjects(
         alloctable[obj] = lallocaddr * 4
         if (lallocaddr + oclen) * 4 > payload_size:
             payload_size = (lallocaddr + oclen) * 4
+
+    PyMem_Free(dwoccupmap)
+    PyMem_Free(dwoccupmap_sum)

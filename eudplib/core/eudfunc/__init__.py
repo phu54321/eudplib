@@ -23,28 +23,22 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-import inspect
-import functools
+from .eudf import (
+    EUDFunc,
+    EUDTypedFunc
+)
 
-from .eudfuncn import EUDFuncN
-from ... import utils as ut
+from .eudfptr import (
+    EUDFuncPtr,
+    EUDTypedFuncPtr
+)
 
+from .eudfmethod import (
+    EUDMethod,
+    EUDTypedMethod,
+    selftype
+)
 
-def EUDFunc(fdecl_func):
-    argspec = inspect.getargspec(fdecl_func)
-    ut.ep_assert(
-        argspec[1] is None,
-        'No variadic arguments (*args) allowed for EUDFunc.'
-    )
-    ut.ep_assert(
-        argspec[2] is None,
-        'No variadic keyword arguments (*kwargs) allowed for EUDFunc.'
-    )
-
-    _f = EUDFuncN(fdecl_func, len(argspec[0]))
-
-    @functools.wraps(fdecl_func)
-    def _fcaller(*args):
-        return _f(*args)
-
-    return _f
+from .eudfuncn import (
+    EUDReturn
+)

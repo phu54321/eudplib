@@ -3,7 +3,7 @@ from helper import *
 
 @TestInstance
 def test_varray():
-    a = EUDVArray([5, 5, 5, 5, 5, 5, 5, 5, 5, 5])
+    a = EUDVArray(10)([5, 5, 5, 5, 5, 5, 5, 5, 5, 5])
     for i in range(8):
         a[i] = 2 ** i
 
@@ -11,7 +11,7 @@ def test_varray():
         a[i] = i * i * i
 
     b = EUDVariable(a)
-    c = EUDVArray(b)
+    c = EUDVArray(8)(b)
 
     v_sum = EUDVariable()
 

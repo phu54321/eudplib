@@ -43,7 +43,7 @@ class EUDByteReader:
 
     # -------
 
-    @c.EUDFuncMethod
+    @c.EUDMethod
     def seekepd(self, epdoffset):
         """Seek EUDByteReader to specific epd player address"""
         c.SeqCompute([
@@ -60,7 +60,7 @@ class EUDByteReader:
             self._b[3],
         ], dwm.f_dwbreak(self._dw)[2:6])
 
-    @c.EUDFuncMethod
+    @c.EUDMethod
     def seekoffset(self, offset):
         """Seek EUDByteReader to specific address"""
         global _epd, _suboffset
@@ -77,7 +77,7 @@ class EUDByteReader:
 
     # -------
 
-    @c.EUDFuncMethod
+    @c.EUDMethod
     def readbyte(self):
         """Read byte from current address. Reader will advance by 1 bytes.
 
@@ -151,7 +151,7 @@ class EUDByteWriter:
         self.socaller = None
         self.wbcaller = None
 
-    @c.EUDFuncMethod
+    @c.EUDMethod
     def seekepd(self, epdoffset):
         """Seek EUDByteWriter to specific epd player addresss"""
 
@@ -169,7 +169,7 @@ class EUDByteWriter:
             self._b[3],
         ], dwm.f_dwbreak(self._dw)[2:6])
 
-    @c.EUDFuncMethod
+    @c.EUDMethod
     def seekoffset(self, offset):
         """Seek EUDByteWriter to specific address"""
 
@@ -184,7 +184,7 @@ class EUDByteWriter:
             (self._suboffset, c.SetTo, _suboffset)
         ])
 
-    @c.EUDFuncMethod
+    @c.EUDMethod
     def writebyte(self, byte):
         """Write byte to current position.
 
@@ -246,7 +246,7 @@ class EUDByteWriter:
 
         swend << c.NextTrigger()
 
-    @c.EUDFuncMethod
+    @c.EUDMethod
     def flushdword(self):
         """Flush buffer."""
         # mux bytes

@@ -1,7 +1,7 @@
 import pyximport
 pyximport.install()
 
-from stackobjs_py import StackObjects
+from stackobjs import StackObjects
 
 found_objects = [1, 2, 3, 4, 5]
 dwoccupmap_dict = {
