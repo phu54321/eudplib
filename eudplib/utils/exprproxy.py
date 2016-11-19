@@ -56,7 +56,10 @@ class ExprProxy:
     def getValue(self):
         return self._value
 
-    # Proxy operators
+    def __hash__(self):
+        return id(self)
+
+    # Proxy arithmetic operators
     def __lshift__(self, other):
         return self._value << other
 
@@ -80,6 +83,58 @@ class ExprProxy:
 
     def __floordiv__(self, k):
         return self._value // k
+
+    def __rfloordiv__(self, other):
+        return k // self._value
+
+    def __and__(self, other):
+        return self._value & k
+
+    def __rand__(self, other):
+        return other & self._value
+
+    def __or__(self, k):
+        return self._value | other
+
+    def __ror__(self, k):
+        return other | self._value
+
+    def __xor__(self, other):
+        return self._value ^ other
+
+    def __rxor__(self, other):
+        return other ^ self._value
+
+    def __neg__(self):
+        return -self._value
+
+    def __invert__(self):
+        return ~self._value
+
+    def __bool__(self):
+        return bool(self._value)
+
+    # Proxy comparison operator
+
+    def __eq__(self, k):
+        return self._value == k
+
+    def __ne__(self, k):
+        return self._value != k
+
+    def __le__(self, other):
+        return self._value <= other
+
+    def __lt__(self, other):
+        return self._value < other
+
+    def __ge__(self, other):
+        return self._value >= other
+
+    def __gt__(self, other):
+        return self._value > other
+
+    # TODO: add inplace operators
 
     # Proxy other methods
     def __getattr__(self, name):

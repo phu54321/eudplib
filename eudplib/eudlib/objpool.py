@@ -22,13 +22,13 @@ class ObjPool(c.EUDStruct):
         ])
         self._basetype = basetype
 
-    def empty(self):
+    def full(self):
         return self.remaining == 0
 
     @c.EUDMethod
     def _alloc(self):
         """ Allocate one object from pool """
-        if cs.EUDIf()(self.empty()):
+        if cs.EUDIf()(self.full()):
             c.EUDReturn(0)
         cs.EUDEndIf()
 
