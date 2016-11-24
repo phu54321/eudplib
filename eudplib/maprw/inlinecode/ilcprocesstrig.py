@@ -54,9 +54,11 @@ def PreprocessTrigSection(trigSection):
         if len(trigSegment) != 2400:
             continue
 
-        decoded = DecodeSpecialData(inlineCodes, trigSegment)
+        decoded = DispatchInlineCode(inlineCodes, trigSegment)
         if decoded:
             trigSegment = decoded
+        else:
+            trigSegment = InlinifyNormalTrigger(inlineCodes, trigSegment)
 
         trigSegments.append(trigSegment)
 
@@ -82,10 +84,9 @@ def GetInlineCodeList():
     return _inlineCodes
 
 
-def DecodeSpecialData(inlineCodes, trigger_bytes):
+def DispatchInlineCode(inlineCodes, trigger_bytes):
     """ Check if trigger segment has special data. """
 
-    '''
     # Check if effplayer & current_action is empty
     for player in range(28):
         if trigger_bytes[320 + 2048 + 4 + player] != 0:
@@ -97,27 +98,35 @@ def DecodeSpecialData(inlineCodes, trigger_bytes):
     # trg.act[0].acttype != 0
     if trigger_bytes[346] != 0:
         return None
-    '''
 
     data = trigger_bytes[20:320] + trigger_bytes[352:2372]
-    return ProcessInlineCode(inlineCodes, data, trigger_bytes)
 
-
-def ProcessInlineCode(inlineCodes, data, _trigger_bytes):
     """ Check if trigger segment has inline_eudplib code. """
     magicCode = ut.b2i4(data, 0)
+    if magicCode != 0x10978d4a:
+        return None
 
-    # inline_eudplib code
-    if magicCode == 0x10978d4a:
-        playerCode = ut.b2i4(data, 4)
-        codeData = ut.b2u(data[8:]).rstrip('\0')
+    playerCode = ut.b2i4(data, 4)
+    codeData = ut.b2u(data[8:]).rstrip('\0')
 
-        # Compile code
-        func = CompileInlineCode(codeData)
+    # Compile code
+    func = CompileInlineCode(codeData)
+    return CreateInlineCodeDispatcher(inlineCodes, func, playerCode)
 
-    else:
-        func = InlineCodifyBinaryTrigger(_trigger_bytes)
 
+def InlinifyNormalTrigger(inlineCodes, trigger_bytes):
+    ''' Inlinify normal binary triggers '''
+    playerCode = 0
+    for i in range(27):
+        if trigger_bytes[320 + 2048 + 4 + i]:
+            playerCode |= 1 << i
+
+    func = InlineCodifyBinaryTrigger(trigger_bytes)
+    return CreateInlineCodeDispatcher(inlineCodes, func, playerCode)
+
+
+def CreateInlineCodeDispatcher(inlineCodes, func, playerCode):
+    ''' Create link from TRIG list to STR trigger. '''
     funcID = len(inlineCodes) + 1024
     inlineCodes.append((funcID, func))
 
@@ -125,12 +134,9 @@ def ProcessInlineCode(inlineCodes, data, _trigger_bytes):
     newTrigger = bytearray(2400)
 
     # Apply effplayer
-    if magicCode == 0x10978d4a:
-        for player in range(27):
-            if playerCode & (1 << player):
-                newTrigger[320 + 2048 + 4 + player] = 1
-    else:
-        newTrigger[2372:2399] = _trigger_bytes[2372:2399]
+    for player in range(27):
+        if playerCode & (1 << player):
+            newTrigger[320 + 2048 + 4 + player] = 1
 
     # Apply 4 SetDeaths
     SetDeathsTemplate = tt.SetDeaths(0, tt.SetTo, 0, 0)
@@ -142,5 +148,5 @@ def ProcessInlineCode(inlineCodes, data, _trigger_bytes):
     # Apply flag
     newTrigger[0:4] = ut.i2b4(funcID)
     newTrigger[2368:2372] = b'\0\0\0\x10'
-    return newTrigger
 
+    return newTrigger
