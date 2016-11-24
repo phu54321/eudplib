@@ -70,38 +70,38 @@ class Condition(ConstExpr):
 
     # -------
 
-    def CheckArgs(self):
+    def CheckArgs(self, i):
         ut.ep_assert(
             self.locid is None or IsConstExpr(self.locid),
-            'Invalid arg %s' % self.locid
+            'Invalid arg %s in trigger index %d' % (self.locid, i)
         )
         ut.ep_assert(
             self.player is None or IsConstExpr(self.player),
-            'Invalid arg %s' % self.player
+            'Invalid arg %s in trigger index %d' % (self.player, i)
         )
         ut.ep_assert(
             self.amount is None or IsConstExpr(self.amount),
-            'Invalid arg %s' % self.amount
+            'Invalid arg %s in trigger index %d' % (self.amount, i)
         )
         ut.ep_assert(
             self.unitid is None or IsConstExpr(self.unitid),
-            'Invalid arg %s' % self.unitid
+            'Invalid arg %s in trigger index %d' % (self.unitid, i)
         )
         ut.ep_assert(
             self.comparison is None or IsConstExpr(self.comparison),
-            'Invalid arg %s' % self.comparison
+            'Invalid arg %s in trigger index %d' % (self.comparison, i)
         )
         ut.ep_assert(
             self.condtype is None or IsConstExpr(self.condtype),
-            'Invalid arg %s' % self.condtype
+            'Invalid arg %s in trigger index %d' % (self.condtype, i)
         )
         ut.ep_assert(
             self.restype is None or IsConstExpr(self.restype),
-            'Invalid arg %s' % self.restype
+            'Invalid arg %s in trigger index %d' % (self.restype, i)
         )
         ut.ep_assert(
             self.flags is None or IsConstExpr(self.flags),
-            'Invalid arg %s' % self.flags
+            'Invalid arg %s in trigger index %d' % (self.flags, i)
         )
         return True
 

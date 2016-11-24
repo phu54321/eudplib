@@ -65,60 +65,50 @@ class RawTrigger(EUDObject):
             nextptr=None,
             conditions=None,
             actions=None,
-            preserved=True
+            *args,
+            preserved=True,
+            trigSection=None
     ):
         super().__init__()
 
+        # Register trigger to global table
         global _trgCounter
         _trgCounter += 1
-
         _RegisterTrigger(self)  # This should be called before (1)
 
+        # Set linked list pointers
         if prevptr is None:
             prevptr = 0
-
         if nextptr is None:
             nextptr = NextTrigger()  # (1)
 
+        self._prevptr = prevptr
+        self._nextptr = nextptr
+
+        # Normalize conditions/actions
         if conditions is None:
             conditions = []
+        conditions = ut.FlattenList(conditions)
+        conditions = list(map(_bool2Cond, conditions))
 
         if actions is None:
             actions = []
-
-        conditions = ut.FlattenList(conditions)
         actions = ut.FlattenList(actions)
 
         ut.ep_assert(len(conditions) <= 16, 'Too many conditions')
         ut.ep_assert(len(actions) <= 64, 'Too many actions')
-        ut.ep_assert(isinstance(preserved, bool), 'preserved should be bool')
 
-        conditions = list(map(_bool2Cond, conditions))
-        self._prevptr = prevptr
-        self._nextptr = nextptr
-        self._conditions = conditions
-        self._actions = actions
-
-        for i, cond in enumerate(self._conditions):
-            ut.ep_assert(isinstance(cond, Condition))
-            try:
-                cond.CheckArgs()
-            except ut.EPError:
-                print('Error on condition %d' % i)
-                raise
-
+        # Register condition/actions to trigger
+        for i, cond in enumerate(conditions):
+            cond.CheckArgs(i)
             cond.SetParentTrigger(self, i)
 
-        for i, act in enumerate(self._actions):
-            ut.ep_assert(isinstance(act, Action))
-            try:
-                act.CheckArgs()
-            except ut.EPError:
-                print('Error on action %d' % i)
-                raise
-
+        for i, act in enumerate(actions):
+            act.CheckArgs(i)
             act.SetParentTrigger(self, i)
 
+        self._conditions = conditions
+        self._actions = actions
         self.preserved = preserved
 
     def GetNextPtrMemory(self):
