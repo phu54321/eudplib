@@ -30,6 +30,7 @@ from .ilccompile import (
     ComputeBaseInlineCodeGlobals,
     CompileInlineCode,
 )
+from .btInliner import InlineCodifyBinaryTrigger
 
 
 _inlineCodes = []
@@ -83,6 +84,8 @@ def GetInlineCodeList():
 
 def DecodeSpecialData(inlineCodes, trigger_bytes):
     """ Check if trigger segment has special data. """
+
+    '''
     # Check if effplayer & current_action is empty
     for player in range(28):
         if trigger_bytes[320 + 2048 + 4 + player] != 0:
@@ -94,12 +97,13 @@ def DecodeSpecialData(inlineCodes, trigger_bytes):
     # trg.act[0].acttype != 0
     if trigger_bytes[346] != 0:
         return None
+    '''
 
     data = trigger_bytes[20:320] + trigger_bytes[352:2372]
-    return ProcessInlineCode(inlineCodes, data)
+    return ProcessInlineCode(inlineCodes, data, trigger_bytes)
 
 
-def ProcessInlineCode(inlineCodes, data):
+def ProcessInlineCode(inlineCodes, data, _trigger_bytes):
     """ Check if trigger segment has inline_eudplib code. """
     magicCode = ut.b2i4(data, 0)
 
@@ -110,27 +114,33 @@ def ProcessInlineCode(inlineCodes, data):
 
         # Compile code
         func = CompileInlineCode(codeData)
-        funcID = len(inlineCodes) + 1024
-        inlineCodes.append((funcID, func))
 
-        # Return new trigger
-        newTrigger = bytearray(2400)
+    else:
+        func = InlineCodifyBinaryTrigger(_trigger_bytes)
 
-        # Apply effplayer
+    funcID = len(inlineCodes) + 1024
+    inlineCodes.append((funcID, func))
+
+    # Return new trigger
+    newTrigger = bytearray(2400)
+
+    # Apply effplayer
+    if magicCode == 0x10978d4a:
         for player in range(27):
             if playerCode & (1 << player):
                 newTrigger[320 + 2048 + 4 + player] = 1
+    else:
+        newTrigger[2372:2399] = _trigger_bytes[2372:2399]
 
-        # Apply 4 SetDeaths
-        SetDeathsTemplate = tt.SetDeaths(0, tt.SetTo, 0, 0)
-        newTrigger[320 + 32 * 0: 320 + 32 * 1] = SetDeathsTemplate
-        newTrigger[320 + 32 * 1: 320 + 32 * 2] = SetDeathsTemplate
-        newTrigger[320 + 32 * 2: 320 + 32 * 3] = SetDeathsTemplate
-        newTrigger[320 + 32 * 3: 320 + 32 * 4] = SetDeathsTemplate
+    # Apply 4 SetDeaths
+    SetDeathsTemplate = tt.SetDeaths(0, tt.SetTo, 0, 0)
+    newTrigger[320 + 32 * 0: 320 + 32 * 1] = SetDeathsTemplate
+    newTrigger[320 + 32 * 1: 320 + 32 * 2] = SetDeathsTemplate
+    newTrigger[320 + 32 * 2: 320 + 32 * 3] = SetDeathsTemplate
+    newTrigger[320 + 32 * 3: 320 + 32 * 4] = SetDeathsTemplate
 
-        # Apply flag
-        newTrigger[0:4] = ut.i2b4(funcID)
-        newTrigger[2368:2372] = b'\0\0\0\x10'
-        return newTrigger
+    # Apply flag
+    newTrigger[0:4] = ut.i2b4(funcID)
+    newTrigger[2368:2372] = b'\0\0\0\x10'
+    return newTrigger
 
-    return None

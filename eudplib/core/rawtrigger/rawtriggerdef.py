@@ -23,7 +23,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-from ..eudobj import EUDObject
+from ..eudobj import EUDObject, Db
 from .triggerscope import NextTrigger, _RegisterTrigger
 from .condition import Condition
 from .action import Action
@@ -85,31 +85,42 @@ class RawTrigger(EUDObject):
         self._prevptr = prevptr
         self._nextptr = nextptr
 
-        # Normalize conditions/actions
-        if conditions is None:
-            conditions = []
-        conditions = ut.FlattenList(conditions)
-        conditions = list(map(_bool2Cond, conditions))
+        # Uses normal condition/action initialization
+        if trigSection is None:
+            # Normalize conditions/actions
+            if conditions is None:
+                conditions = []
+            conditions = ut.FlattenList(conditions)
+            conditions = list(map(_bool2Cond, conditions))
 
-        if actions is None:
-            actions = []
-        actions = ut.FlattenList(actions)
+            if actions is None:
+                actions = []
+            actions = ut.FlattenList(actions)
 
-        ut.ep_assert(len(conditions) <= 16, 'Too many conditions')
-        ut.ep_assert(len(actions) <= 64, 'Too many actions')
+            ut.ep_assert(len(conditions) <= 16, 'Too many conditions')
+            ut.ep_assert(len(actions) <= 64, 'Too many actions')
 
-        # Register condition/actions to trigger
-        for i, cond in enumerate(conditions):
-            cond.CheckArgs(i)
-            cond.SetParentTrigger(self, i)
+            # Register condition/actions to trigger
+            for i, cond in enumerate(conditions):
+                cond.CheckArgs(i)
+                cond.SetParentTrigger(self, i)
 
-        for i, act in enumerate(actions):
-            act.CheckArgs(i)
-            act.SetParentTrigger(self, i)
+            for i, act in enumerate(actions):
+                act.CheckArgs(i)
+                act.SetParentTrigger(self, i)
 
-        self._conditions = conditions
-        self._actions = actions
-        self.preserved = preserved
+            self._conditions = conditions
+            self._actions = actions
+            self.preserved = preserved
+
+        # Uses trigger segment for initialization
+        # NOTE : player information is lost inside eudplib.
+        else:
+            self._conditions = [Db(trigSection[i * 20: i * 20 + 20])
+                                for i in range(16)]
+            self._actions = [Db(trigSection[320 + i * 32: 320 + i * 32 + 32])
+                             for i in range(64)]
+            self.preserved = bool(trigSection[320 + 2048] & 4)
 
     def GetNextPtrMemory(self):
         return self + 4
