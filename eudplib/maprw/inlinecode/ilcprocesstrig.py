@@ -25,6 +25,7 @@ THE SOFTWARE.
 
 from ... import utils as ut
 from ...trigtrg import trigtrg as tt
+from random import random
 
 from .ilccompile import (
     ComputeBaseInlineCodeGlobals,
@@ -34,6 +35,13 @@ from .btInliner import InlineCodifyBinaryTrigger
 
 
 _inlineCodes = []
+_inliningRate = 0
+
+
+def PRT_SetInliningRate(rate):
+    """ Set how much triggers will be inlined into STR section. """
+    global _inliningRate
+    _inliningRate = rate
 
 
 def PreprocessInlineCode(chkt):
@@ -57,7 +65,7 @@ def PreprocessTrigSection(trigSection):
         decoded = DispatchInlineCode(inlineCodes, trigSegment)
         if decoded:
             trigSegment = decoded
-        else:
+        elif random() < _inliningRate:
             trigSegment = InlinifyNormalTrigger(inlineCodes, trigSegment)
 
         trigSegments.append(trigSegment)

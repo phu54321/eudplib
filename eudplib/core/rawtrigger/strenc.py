@@ -58,15 +58,17 @@ def EncodeAIScript(ais):
 
 
 def _EncodeAny(f, dl, s):
-    try:
-        return f(s)
-
-    except:
+    if isinstance(s, str) or isinstance(s, bytes):
         try:
-            return dl.get(s, s)
+            return f(s)
+        except KeyError:
+            pass
 
-        except TypeError:  # unhashable
-            return s
+    try:
+        return dl.get(s, s)
+
+    except TypeError:  # unhashable
+        return s
 
 
 def EncodeLocation(loc):
