@@ -42,6 +42,7 @@ class _EUDStruct_Metaclass(type):
                     super().__init__(EUDVArray(times, basetype)(initvar))
 
                 self._initialized = True
+                self.dontFlatten = True
 
             def clone(self):
                 """ Create struct clone """

@@ -95,6 +95,7 @@ def EUDVArray(size, basetype=None):
                 baseobj << initvars
 
             super().__init__(baseobj)
+            self.dontFlatten = True
             self._epd = EPD(self)
             self._basetype = basetype
 
