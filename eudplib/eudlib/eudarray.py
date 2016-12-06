@@ -84,6 +84,7 @@ class EUDArray(ut.ExprProxy):
             isinstance(initval, collections.Iterable)
         ):
             dataObj = EUDArrayData(initval)
+            self.length = dataObj._arrlen
         else:
             dataObj = initval
 
