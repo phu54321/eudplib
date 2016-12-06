@@ -152,12 +152,15 @@ def EUDTypedFuncPtr(argtypes, rettypes):
 
             :param f: Target function
             """
-            self.checkValidFunction(f)
+            try:
+                self._fstart, self._fendnext_epd = f._fstart, f._fendnext_epd
+            except AttributeError:
+                self.checkValidFunction(f)
 
-            # Build actions
-            f_idcstart, f_idcend = createIndirectCaller(f)
-            self._fstart = f_idcstart
-            self._fendnext_epd = ut.EPD(f_idcend + 4)
+                # Build actions
+                f_idcstart, f_idcend = createIndirectCaller(f)
+                self._fstart = f_idcstart
+                self._fendnext_epd = ut.EPD(f_idcend + 4)
 
         def __lshift__(self, rhs):
             self.setFunc(rhs)
