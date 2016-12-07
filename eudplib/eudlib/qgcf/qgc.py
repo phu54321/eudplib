@@ -29,7 +29,14 @@ from eudplib import (
     utils as ut
 )
 
-from ..memiof import f_dwread_epd, f_memcpy
+from ..memiof import (
+    f_dwread_epd,
+    f_dwbreak,
+    f_bread,
+    f_memcpy,
+    EUDByteWriter
+)
+from ..eudarray import EUDArray
 
 
 @c.EUDFunc
@@ -55,6 +62,31 @@ def QueueGameCommand(data, size):
         f_memcpy(0x654880 + cmdqlen, data, size)
         c.SetVariables(ut.EPD(0x654AA0), cmdqlen + size)
     cs.EUDEndIf()
+
+
+bw = EUDByteWriter()
+
+
+@c.EUDFunc
+def QueueGameCommand_Select(n, ptrList):
+    ptrList = EUDArray(ptrList)
+    buf = c.Db(b'\x090123456789012345678901234')
+    bw.seekoffset(buf + 1)
+    bw.writebyte(n)
+    i = c.EUDVariable()
+    i << 0
+    if cs.EUDWhile()(i < n):
+        unitptr = ptrList[i]
+        unitIndex = (unitptr - 0x59CCA8) // 336 + 1
+        uniquenessIdentifier = f_bread(unitptr + 0xA5)
+        targetID = unitIndex | c.f_lshift(uniquenessIdentifier, 11)
+        b0, b1 = f_dwbreak(targetID)[2:4]
+        bw.writebyte(b0)
+        bw.writebyte(b1)
+        i += 1
+    cs.EUDEndWhile()
+    bw.flushdword()
+    QueueGameCommand(buf, 2 * (n + 1))
 
 
 @c.EUDFunc
