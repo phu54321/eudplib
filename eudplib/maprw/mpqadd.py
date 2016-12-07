@@ -98,9 +98,9 @@ def UpdateMPQ(mpqw):
     for fname, content, isWave in _addedFiles.values():
         if content is not None:
             if isWave:
-                ret = mpqw.PutWave(ut.u2b(fname), content, replace=False)
+                ret = mpqw.PutWave(ut.u2b(fname), content)
             else:
-                ret = mpqw.PutFile(ut.u2b(fname), content, replace=False)
+                ret = mpqw.PutFile(ut.u2b(fname), content)
             if not ret:
                 raise ut.EPError(
                     'Failed adding file %s to mpq: May be duplicate' % fname

@@ -228,3 +228,5 @@ eudplib-*\
 tests/htmlcov/*
 tests/output.png
 tests/output.pstats
+
+nohupo.out
