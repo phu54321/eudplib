@@ -31,7 +31,7 @@ from .eudlib import *
 from .trigtrg import *
 from .maprw import *
 
-__version__ = '0.53a0'
+__version__ = '0.54a0'
 
 import types
 
