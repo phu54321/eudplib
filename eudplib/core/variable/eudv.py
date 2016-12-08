@@ -391,36 +391,50 @@ def _SeqComputeSub(assignpairs):
     #
     # Rest is for non-constant assigning actions
     #
+    vassignlist = []
+    srcset = set()
 
-    nextptr = None  # nextptr for this rawtrigger
-    vt_nextptr = None  # what to set for nextptr of current vtable
+    def flushNonConstAssignment():
+        if not vassignlist:
+            return
+        nextptr = None  # nextptr for this rawtrigger
+        vt_nextptr = None  # what to set for nextptr of current vtable
+
+        for dst, mdt, src in vassignlist:
+            dst = _GetComputeDest(dst)
+
+            if nextptr is None:
+                nextptr = src.GetVTable()
+            else:
+                vt_nextptr << src.GetVTable()
+
+            vt_nextptr = Forward()
+            queuef = {
+                bt.SetTo: EUDVariable.QueueAssignTo,
+                bt.Add: EUDVariable.QueueAddTo,
+                bt.Subtract: EUDVariable.QueueSubtractTo,
+            }[mdt]
+
+            actionlist.append([
+                queuef(src, dst),
+                bt.SetNextPtr(src.GetVTable(), vt_nextptr)
+            ])
+
+        bt.RawTrigger(
+            nextptr=nextptr,
+            actions=actionlist
+        )
+
+        vt_nextptr << bt.NextTrigger()
+        srcset.clear()
+        vassignlist.clear()
 
     for dst, mdt, src in assignpairs[const_assigning_index:]:
-        dst = _GetComputeDest(dst)
-
-        if nextptr is None:
-            nextptr = src.GetVTable()
-        else:
-            vt_nextptr << src.GetVTable()
-
-        vt_nextptr = Forward()
-        queuef = {
-            bt.SetTo: EUDVariable.QueueAssignTo,
-            bt.Add: EUDVariable.QueueAddTo,
-            bt.Subtract: EUDVariable.QueueSubtractTo,
-        }[mdt]
-
-        actionlist.append([
-            queuef(src, dst),
-            bt.SetNextPtr(src.GetVTable(), vt_nextptr)
-        ])
-
-    bt.RawTrigger(
-        nextptr=nextptr,
-        actions=actionlist
-    )
-
-    vt_nextptr << bt.NextTrigger()
+        if src in srcset:
+            flushNonConstAssignment()
+        vassignlist.append((dst, mdt, src))
+        srcset.add(src)
+    flushNonConstAssignment()
 
 
 def SeqCompute(assignpairs):
