@@ -29,7 +29,8 @@ from unittests import (
     testcpmemio,
     testtypedf,
     testpool,
-    test_lvalue
+    test_lvalue,
+    test_sq_from_1var
 )
 
 helper.CompressPayload(True)

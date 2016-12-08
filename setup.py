@@ -9,10 +9,13 @@ setup(
     version=__version__,
     packages=find_packages(),
     package_data={
-        '': ['*.dll', '*.lst', '*.pyd'],
+        '': ['*.pyx', '*.dll', '*.lst', '*.pyd'],
     },
     setup_requires=["cffi>=1.0.0"],
-    install_requires=["cffi>=1.0.0"],
+    install_requires=[
+        "cffi>=1.0.0",
+        'cython',
+    ],
     ext_modules=cythonize([
         "eudplib/core/allocator/*.pyx",
         "eudplib/utils/*.pyx",

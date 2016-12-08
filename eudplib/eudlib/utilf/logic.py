@@ -81,9 +81,9 @@ def EUDNot(cond):
     """
 
     v = c.EUDVariable()
-    if cs.EUDIf(cond):
+    if cs.EUDIf()(cond):
         v << 0
-    if cs.EUDElse():
+    if cs.EUDElse()():
         v << 1
     cs.EUDEndIf()
     return v

@@ -37,6 +37,7 @@ class EUDArrayData(c.EUDObject):
 
     def __init__(self, arr):
         super().__init__()
+        self.dontFlatten = True
 
         if isinstance(arr, int):
             arrlen = arr
@@ -84,11 +85,13 @@ class EUDArray(ut.ExprProxy):
             isinstance(initval, collections.Iterable)
         ):
             dataObj = EUDArrayData(initval)
+            self.length = dataObj._arrlen
         else:
             dataObj = initval
 
         super().__init__(dataObj)
         self._epd = ut.EPD(self)
+        self.dontFlatten = True
 
     def get(self, key):
         return f_dwread_epd(self._epd + key)

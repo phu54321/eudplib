@@ -36,31 +36,25 @@ TODO : Remove code duplication if possible.
 
 
 def EUDIf():
-    def _footer(conditions):
+    def _footer(conditions, *, neg=False):
         block = {
             'ifend': c.Forward(),
             'next_elseif': c.Forward()
         }
         ut.EUDCreateBlock('ifblock', block)
 
-        EUDJumpIfNot(conditions, block['next_elseif'])
+        if neg:
+            EUDJumpIf(conditions, block['next_elseif'])
+        else:
+            EUDJumpIfNot(conditions, block['next_elseif'])
         return True
 
     return CtrlStruOpener(_footer)
 
 
 def EUDIfNot():
-    def _footer(conditions):
-        block = {
-            'ifend': c.Forward(),
-            'next_elseif': c.Forward()
-        }
-        ut.EUDCreateBlock('ifblock', block)
-
-        EUDJumpIf(conditions, block['next_elseif'])
-        return True
-
-    return CtrlStruOpener(_footer)
+    c = EUDIf()
+    return CtrlStruOpener(lambda conditions: c(conditions, neg=True))
 
 
 # -------
@@ -79,11 +73,12 @@ def EUDElseIf():
         block['next_elseif'] << c.NextTrigger()
         block['next_elseif'] = c.Forward()
 
-    def _footer(conditions):
-        lb = ut.EUDPeekBlock('ifblock')
-        block = lb[1]
-
-        EUDJumpIfNot(conditions, block['next_elseif'])
+    def _footer(conditions, *, neg=False):
+        block = ut.EUDPeekBlock('ifblock')[1]
+        if neg:
+            EUDJumpIf(conditions, block['next_elseif'])
+        else:
+            EUDJumpIfNot(conditions, block['next_elseif'])
         return True
 
     _header()
@@ -91,25 +86,8 @@ def EUDElseIf():
 
 
 def EUDElseIfNot():
-    def _header():
-        block = ut.EUDPeekBlock('ifblock')[1]
-        ut.ep_assert(
-            block['next_elseif'] is not None,
-            'Cannot have EUDElseIfNot after EUDElse'
-        )
-
-        # Finish previous if/elseif block
-        EUDJump(block['ifend'])
-        block['next_elseif'] << c.NextTrigger()
-        block['next_elseif'] = c.Forward()
-
-    def _footer(conditions):
-        block = ut.EUDPeekBlock('ifblock')[1]
-        EUDJumpIf(conditions, block['next_elseif'])
-        return True
-
-    _header()
-    return CtrlStruOpener(_footer)
+    c = EUDElseIf()
+    return CtrlStruOpener(lambda conditions: c(conditions, neg=True))
 
 
 # -------

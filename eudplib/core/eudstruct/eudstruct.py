@@ -103,7 +103,10 @@ class EUDStruct(ut.ExprProxy, metaclass=_EUDStruct_Metaclass):
         try:
             return super().__getattr__(name)
         except AttributeError:
-            return self.getfield(name)
+            try:
+                return self.getfield(name)
+            except KeyError as e:
+                raise AttributeError(e)
 
     def __setattr__(self, name, value):
         if '_initialized' in self.__dict__:

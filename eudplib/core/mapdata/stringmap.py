@@ -24,7 +24,7 @@ THE SOFTWARE.
 '''
 
 from . import tblformat
-from ...utils import b2i2, b2i4, u2b
+from ...utils import b2i2, b2i4, u2b, ep_assert
 
 
 class StringIdMap:
@@ -41,7 +41,9 @@ class StringIdMap:
 
     def GetStringIndex(self, string):
         string = u2b(string)
-        return self._s2id[string]
+        retid = self._s2id[string]
+        ep_assert(retid is not None, "Ambigious string %s" % string)
+        return retid
 
 
 strmap = None

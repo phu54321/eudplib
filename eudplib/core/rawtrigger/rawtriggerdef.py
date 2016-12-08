@@ -23,7 +23,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-from ..eudobj import EUDObject
+from ..eudobj import EUDObject, Db
 from .triggerscope import NextTrigger, _RegisterTrigger
 from .condition import Condition
 from .action import Action
@@ -65,61 +65,62 @@ class RawTrigger(EUDObject):
             nextptr=None,
             conditions=None,
             actions=None,
-            preserved=True
+            *args,
+            preserved=True,
+            trigSection=None
     ):
         super().__init__()
 
+        # Register trigger to global table
         global _trgCounter
         _trgCounter += 1
-
         _RegisterTrigger(self)  # This should be called before (1)
 
+        # Set linked list pointers
         if prevptr is None:
             prevptr = 0
-
         if nextptr is None:
             nextptr = NextTrigger()  # (1)
 
-        if conditions is None:
-            conditions = []
-
-        if actions is None:
-            actions = []
-
-        conditions = ut.FlattenList(conditions)
-        actions = ut.FlattenList(actions)
-
-        ut.ep_assert(len(conditions) <= 16, 'Too many conditions')
-        ut.ep_assert(len(actions) <= 64, 'Too many actions')
-        ut.ep_assert(isinstance(preserved, bool), 'preserved should be bool')
-
-        conditions = list(map(_bool2Cond, conditions))
         self._prevptr = prevptr
         self._nextptr = nextptr
-        self._conditions = conditions
-        self._actions = actions
 
-        for i, cond in enumerate(self._conditions):
-            ut.ep_assert(isinstance(cond, Condition))
-            try:
-                cond.CheckArgs()
-            except ut.EPError:
-                print('Error on condition %d' % i)
-                raise
+        # Uses normal condition/action initialization
+        if trigSection is None:
+            # Normalize conditions/actions
+            if conditions is None:
+                conditions = []
+            conditions = ut.FlattenList(conditions)
+            conditions = list(map(_bool2Cond, conditions))
 
-            cond.SetParentTrigger(self, i)
+            if actions is None:
+                actions = []
+            actions = ut.FlattenList(actions)
 
-        for i, act in enumerate(self._actions):
-            ut.ep_assert(isinstance(act, Action))
-            try:
-                act.CheckArgs()
-            except ut.EPError:
-                print('Error on action %d' % i)
-                raise
+            ut.ep_assert(len(conditions) <= 16, 'Too many conditions')
+            ut.ep_assert(len(actions) <= 64, 'Too many actions')
 
-            act.SetParentTrigger(self, i)
+            # Register condition/actions to trigger
+            for i, cond in enumerate(conditions):
+                cond.CheckArgs(i)
+                cond.SetParentTrigger(self, i)
 
-        self.preserved = preserved
+            for i, act in enumerate(actions):
+                act.CheckArgs(i)
+                act.SetParentTrigger(self, i)
+
+            self._conditions = conditions
+            self._actions = actions
+            self.preserved = preserved
+
+        # Uses trigger segment for initialization
+        # NOTE : player information is lost inside eudplib.
+        else:
+            self._conditions = [Db(trigSection[i * 20: i * 20 + 20])
+                                for i in range(16)]
+            self._actions = [Db(trigSection[320 + i * 32: 320 + i * 32 + 32])
+                             for i in range(64)]
+            self.preserved = bool(trigSection[320 + 2048] & 4)
 
     def GetNextPtrMemory(self):
         return self + 4

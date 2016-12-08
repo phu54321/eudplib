@@ -126,9 +126,12 @@ def EUDWhile():
 
         ut.EUDCreateBlock('whileblock', block)
 
-    def _footer(conditions):
+    def _footer(conditions, *, neg=False):
         block = ut.EUDPeekBlock('whileblock')[1]
-        EUDJumpIfNot(conditions, block['loopend'])
+        if neg:
+            EUDJumpIf(conditions, block['loopend'])
+        else:
+            EUDJumpIfNot(conditions, block['loopend'])
         return True
 
     _header()
@@ -136,22 +139,8 @@ def EUDWhile():
 
 
 def EUDWhileNot():
-    def _header():
-        block = {
-            'loopstart': c.NextTrigger(),
-            'loopend': c.Forward(),
-            'contpoint': c.Forward(),
-        }
-
-        ut.EUDCreateBlock('whileblock', block)
-
-    def _footer(conditions):
-        block = ut.EUDPeekBlock('whileblock')[1]
-        EUDJumpIf(conditions, block['loopend'])
-        return True
-
-    _header()
-    return CtrlStruOpener(_footer)
+    c = EUDWhile()
+    return CtrlStruOpener(lambda conditions: c(conditions, neg=True))
 
 
 def EUDEndWhile():

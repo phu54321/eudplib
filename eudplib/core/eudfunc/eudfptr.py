@@ -152,12 +152,15 @@ def EUDTypedFuncPtr(argtypes, rettypes):
 
             :param f: Target function
             """
-            self.checkValidFunction(f)
+            try:
+                self._fstart, self._fendnext_epd = f._fstart, f._fendnext_epd
+            except AttributeError:
+                self.checkValidFunction(f)
 
-            # Build actions
-            f_idcstart, f_idcend = createIndirectCaller(f)
-            self._fstart = f_idcstart
-            self._fendnext_epd = ut.EPD(f_idcend + 4)
+                # Build actions
+                f_idcstart, f_idcend = createIndirectCaller(f)
+                self._fstart = f_idcstart
+                self._fendnext_epd = ut.EPD(f_idcend + 4)
 
         def __lshift__(self, rhs):
             self.setFunc(rhs)
@@ -166,8 +169,6 @@ def EUDTypedFuncPtr(argtypes, rettypes):
             """ Call target function with given arguments """
 
             args = applyTypes(argtypes, args)
-
-            rt.RawTrigger(actions=rt.SetDeaths(2, rt.SetTo, 5, 0))
 
             if argn:
                 argStorage = getArgStorage(argn)
@@ -184,7 +185,6 @@ def EUDTypedFuncPtr(argtypes, rettypes):
             t << rt.RawTrigger(
                 actions=[
                     a << rt.SetNextPtr(0, fcallend),
-                    rt.SetDeaths(2, rt.SetTo, 4, 0),
                 ]
             )
             fcallend << rt.NextTrigger()

@@ -70,7 +70,7 @@ class EUDVariable(VariableBase):
     def __init__(self, initval=0):
         self._vartrigger = VariableTriggerForward(initval)
         self._varact = self._vartrigger + (8 + 320)
-        self._lvalue = False
+        self._rvalue = False
 
     def GetVTable(self):
         return self._vartrigger
@@ -82,13 +82,16 @@ class EUDVariable(VariableBase):
         return id(self)
 
     # -------
-
     def makeL(self):
-        self._lvalue = True
+        self._rvalue = False
+        return self
+
+    def makeR(self):
+        self._rvalue = True
         return self
 
     def checkNonLValue(self):
-        if self._lvalue:
+        if self._rvalue:
             raise EPError('Trying to modify value of l-value variable')
 
     # -------
@@ -157,7 +160,7 @@ class EUDVariable(VariableBase):
             (t, bt.SetTo, self),
             (t, bt.Add, other)
         ])
-        return t.makeL()
+        return t.makeR()
 
     def __radd__(self, other):
         return self + other
@@ -171,7 +174,7 @@ class EUDVariable(VariableBase):
             (t, bt.Add, 1),
             (t, bt.Add, self),
         ])
-        return t.makeL()
+        return t.makeR()
 
     def __rsub__(self, other):
         t = EUDVariable()
@@ -181,10 +184,10 @@ class EUDVariable(VariableBase):
             (t, bt.Add, 1),
             (t, bt.Add, other),
         ])
-        return t.makeL()
+        return t.makeR()
 
     def __neg__(self):
-        return (0 - self).makeL()
+        return (0 - self).makeR()
 
     def __invert__(self):
         t = EUDVariable()
@@ -192,7 +195,7 @@ class EUDVariable(VariableBase):
             (t, bt.SetTo, 0xffffffff),
             (t, bt.Subtract, self)
         ])
-        return t.makeL()
+        return t.makeR()
 
     # -------
 
@@ -388,7 +391,6 @@ def _SeqComputeSub(assignpairs):
     #
     # Rest is for non-constant assigning actions
     #
-
     nextptr = None  # nextptr for this rawtrigger
     vt_nextptr = None  # what to set for nextptr of current vtable
 

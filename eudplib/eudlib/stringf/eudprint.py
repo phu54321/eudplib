@@ -140,6 +140,7 @@ def f_dbstr_print(dst, *args):
 
     args = ut.FlattenList(args)
     for arg in args:
+        arg = ut.unProxy(arg)
         if isinstance(arg, bytes):
             dst = f_dbstr_addstr(dst, c.Db(arg + b'\0'))
         elif isinstance(arg, str):
@@ -153,6 +154,8 @@ def f_dbstr_print(dst, *args):
             dst = f_dbstr_addstr(dst, c.Db(
                 ut.u2b(str(arg & 0xFFFFFFFF)) + b'\0'))
         elif isinstance(arg, c.EUDVariable):
+            dst = f_dbstr_adddw(dst, arg)
+        elif c.IsConstExpr(arg):
             dst = f_dbstr_adddw(dst, arg)
         elif isinstance(arg, hptr):
             dst = f_dbstr_addptr(dst, arg._value)

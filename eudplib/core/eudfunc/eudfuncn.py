@@ -128,6 +128,7 @@ class EUDFuncN:
         _setCurrentCompiledFunc(lastCompiledFunc)
 
     def _AddReturn(self, retv, needjump):
+        retv = ut.FlattenList(retv)
         if self._frets is None:
             self._frets = [ev.EUDVariable() for _ in range(len(retv))]
             self._retn = len(retv)
@@ -173,7 +174,7 @@ class EUDFuncN:
             tmp_rets = [ev.EUDVariable() for _ in range(retn)]
             ev.SetVariables(tmp_rets, self._frets)
             for tv in tmp_rets:
-                tv.makeL()
+                tv.makeR()
             return ut.List2Assignable(tmp_rets)
 
 
