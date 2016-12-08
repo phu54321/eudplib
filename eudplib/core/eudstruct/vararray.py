@@ -100,10 +100,10 @@ def EUDVArray(size, basetype=None):
             self._basetype = basetype
 
         def getItemPtr(self, i):
-            return self + 60 * i
+            return self + 72 * i
 
         def getItemEPD(self, i):
-            return self._epd + 15 * i
+            return self._epd + 18 * i
 
         def get(self, i):
             # This function is hand-optimized
@@ -155,7 +155,7 @@ def EUDVArray(size, basetype=None):
                 ep_assert(len(values) == assert_expected_values_len)
 
             SeqCompute([
-                (EPD(self + 344 + i * 60), bt.SetTo, value)
+                (EPD(self + 344 + i * 72), bt.SetTo, value)
                 for i, value in enumerate(values)
             ])
 

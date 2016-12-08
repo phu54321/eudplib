@@ -170,8 +170,6 @@ def EUDTypedFuncPtr(argtypes, rettypes):
 
             args = applyTypes(argtypes, args)
 
-            rt.RawTrigger(actions=rt.SetDeaths(2, rt.SetTo, 5, 0))
-
             if argn:
                 argStorage = getArgStorage(argn)
                 SetVariables(argStorage, args)
@@ -187,7 +185,6 @@ def EUDTypedFuncPtr(argtypes, rettypes):
             t << rt.RawTrigger(
                 actions=[
                     a << rt.SetNextPtr(0, fcallend),
-                    rt.SetDeaths(2, rt.SetTo, 4, 0),
                 ]
             )
             fcallend << rt.NextTrigger()
