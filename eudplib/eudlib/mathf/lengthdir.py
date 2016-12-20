@@ -40,7 +40,6 @@ def f_lengthdir(length, angle):
     clist = []
     slist = []
 
-    cs.DoActions(c.SetDeaths(1, c.Add, 1, 0))
     for i in range(91):
         cosv = math.floor(math.cos(math.pi / 180 * i) * 65536 + 0.5)
         sinv = math.floor(math.sin(math.pi / 180 * i) * 65536 + 0.5)
@@ -52,18 +51,15 @@ def f_lengthdir(length, angle):
 
     # MAIN LOGIC
 
-    cs.DoActions(c.SetDeaths(1, c.Add, 1, 0))
     if cs.EUDIf()(angle >= 360):
         angle << c.f_div(angle, 360)[1]
     cs.EUDEndIf()
 
-    cs.DoActions(c.SetDeaths(1, c.Add, 1, 0))
     ldir_x, ldir_y = c.EUDVariable(), c.EUDVariable()  # cos, sin * 65536
     # sign of cos, sin
     csign, ssign = c.EUDLightVariable(), c.EUDLightVariable()
     tableangle = c.EUDVariable()
 
-    cs.DoActions(c.SetDeaths(1, c.Add, 1, 0))
     # get cos, sin from table
     if cs.EUDIf()(angle <= 89):
         tableangle << angle
@@ -87,16 +83,13 @@ def f_lengthdir(length, angle):
 
     cs.EUDEndIf()
 
-    cs.DoActions(c.SetDeaths(1, c.Add, 1, 0))
     tablecos = f_dwread_epd(ut.EPD(cdb) + tableangle)
     tablesin = f_dwread_epd(ut.EPD(sdb) + tableangle)
 
-    cs.DoActions(c.SetDeaths(1, c.Add, 1, 0))
     # calculate lengthdir
     ldir_x << c.f_div(c.f_mul(tablecos, length), 65536)[0]
     ldir_y << c.f_div(c.f_mul(tablesin, length), 65536)[0]
 
-    cs.DoActions(c.SetDeaths(1, c.Add, 1, 0))
     # restore sign of cos, sin
     if cs.EUDIf()(csign == -1):
         ldir_x << 0xFFFFFFFF - ldir_x + 1
@@ -106,5 +99,4 @@ def f_lengthdir(length, angle):
         ldir_y << 0xFFFFFFFF - ldir_y + 1
     cs.EUDEndIf()
 
-    cs.DoActions(c.SetDeaths(1, c.Add, 1, 0))
     return ldir_x, ldir_y
