@@ -62,10 +62,13 @@ def PreprocessTrigSection(trigSection):
         if len(trigSegment) != 2400:
             continue
 
+        tflag = ut.b2i4(trigSegment, 320 + 2048)
+
         decoded = DispatchInlineCode(inlineCodes, trigSegment)
         if decoded:
             trigSegment = decoded
-        elif random() < _inliningRate:
+
+        elif tflag < 0x80000000 and random() < _inliningRate:
             trigSegment = InlinifyNormalTrigger(inlineCodes, trigSegment)
 
         trigSegments.append(trigSegment)
