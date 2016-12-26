@@ -23,9 +23,15 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-from cffi import FFI
-from ctypes import *
-import os, sys, struct, platform
+from ctypes import (
+    WinDLL, CDLL,
+    c_int, c_char_p, c_void_p,
+    create_string_buffer, byref
+)
+import os
+import sys
+import struct
+import platform
 from tempfile import NamedTemporaryFile
 from eudplib.utils import u2b, b2u
 
@@ -40,27 +46,6 @@ MPQ_FILE_FIX_KEY = 0x00020000
 MPQ_FILE_REPLACEEXISTING = 0x80000000
 
 MPQ_WAVE_QUALITY_MEDIUM = 0x1
-
-# Logic
-ffi = FFI()
-
-ffi.cdef("""
-typedef void *HANDLE, *LPOVERLAPPED;
-typedef unsigned int DWORD, BOOL;
-typedef unsigned short WORD;
-typedef unsigned char BYTE;
-
-BOOL WINAPI SFileOpenArchive(const char*, DWORD, DWORD, HANDLE*);
-BOOL WINAPI SFileCompactArchive(HANDLE, const char*, BOOL);
-BOOL WINAPI SFileCloseArchive(HANDLE);
-BOOL WINAPI SFileOpenFileEx(HANDLE, const char*, DWORD, HANDLE*);
-DWORD WINAPI SFileGetFileSize(HANDLE, DWORD*);
-BOOL WINAPI SFileReadFile(HANDLE, VOID*, DWORD, DWORD*, LPOVERLAPPED);
-BOOL WINAPI SFileCloseFile(HANDLE);
-BOOL WINAPI SFileAddFile(HANDLE, const char*, const char*, DWORD);
-BOOL WINAPI SFileAddWave(HANDLE, const char*, const char*, DWORD, DWORD);
-
-""")
 
 
 libstorm = None
@@ -85,19 +70,44 @@ def InitMpqLibrary():
         platformName = platform.system()
         if platformName == 'Windows':  # windows
             if struct.calcsize("P") == 4:  # 32bit
-                libstorm = ffi.dlopen(find_data_file('StormLib32.dll'))
+                libstorm = WinDLL(find_data_file('StormLib32.dll'))
             else:  # 64bit
-                libstorm = ffi.dlopen(find_data_file('StormLib64.dll'))
+                libstorm = WinDLL(find_data_file('StormLib64.dll'))
             filename_u2b = u2b
 
         elif platformName == 'Darwin':  # mac
             try:
-                libstorm = ffi.dlopen('libstorm.dylib')
+                libstorm = CDLL('libstorm.dylib')
                 filename_u2b = (lambda x: x.encode('utf-8'))
             except OSError:
                 print('You need to install stormlib before using eudplib.')
                 print(' $ brew install homebrew/games/stormlib')
                 return False
+
+        # for MpqRead
+        libstorm.SFileOpenArchive.restype = c_int
+        libstorm.SFileCloseArchive.restype = c_int
+        libstorm.SFileOpenFileEx.restype = c_int
+        libstorm.SFileGetFileSize.restype = c_int
+        libstorm.SFileReadFile.restype = c_int
+        libstorm.SFileCloseFile.restype = c_int
+
+        libstorm.SFileOpenArchive.argtypes = [c_char_p, c_int, c_int, c_void_p]
+        libstorm.SFileCloseArchive.argtypes = [c_int]
+        libstorm.SFileOpenFileEx.argtypes = [c_int, c_char_p, c_int, c_void_p]
+        libstorm.SFileGetFileSize.argtypes = [c_int, c_void_p]
+        libstorm.SFileReadFile.argtypes = [
+            c_int, c_char_p, c_int, c_void_p, c_int]
+        libstorm.SFileCloseFile.argtypes = [c_int]
+
+        # for MpqWrite
+        libstorm.SFileCompactArchive.restype = c_int
+        libstorm.SFileAddFile.restype = c_int
+        libstorm.SFileAddWave.restype = c_int
+
+        libstorm.SFileCompactArchive.argtypes = [c_int, c_char_p, c_int]
+        libstorm.SFileAddFile.argtypes = [c_int, c_char_p, c_char_p, c_int]
+        libstorm.SFileAddWave.argtypes = [c_int, c_char_p, c_char_p, c_int, c_int]
 
         return True
 
@@ -119,13 +129,13 @@ class MPQ:
         if self.mpqh is not None:
             raise RuntimeError('Duplicate opening')
 
-        h = ffi.new("HANDLE*")
-        ret = self.libstorm.SFileOpenArchive(filename_u2b(fname), 0, 0, h)
+        h = c_int()
+        ret = self.libstorm.SFileOpenArchive(filename_u2b(fname), 0, 0, byref(h))
         if not ret:
             self.mpqh = None
             return False
 
-        self.mpqh = h[0]
+        self.mpqh = h
         return True
 
     def Close(self):
@@ -152,29 +162,28 @@ class MPQ:
             return None
 
         # Open file
-        fileh = ffi.new("HANDLE*")
+        fileh = c_int()
         ret = self.libstorm.SFileOpenFileEx(
             self.mpqh,
             u2b(fname),
             0,
-            fileh
+            byref(fileh)
         )
         if not ret:
             return None
-        fileh = fileh[0]
 
         # Get file size & allocate buffer
         # Note : this version only supports 32bit mpq file
-        fsize = self.libstorm.SFileGetFileSize(fileh, ffi.NULL)
-        fdata = ffi.new("BYTE[]", fsize)
+        fsize = self.libstorm.SFileGetFileSize(fileh, 0)
+        fdata = create_string_buffer(fsize)
 
         # Read file
-        pfread = ffi.new("DWORD*")
-        self.libstorm.SFileReadFile(fileh, fdata, fsize, pfread, ffi.NULL)
+        pfread = c_int()
+        self.libstorm.SFileReadFile(fileh, fdata, fsize, byref(pfread), 0)
         self.libstorm.SFileCloseFile(fileh)
 
-        if pfread[0] == fsize:
-            return ffi.buffer(fdata)[:]
+        if pfread.value == fsize:
+            return fdata.raw
         else:
             return None
 
@@ -222,7 +231,7 @@ class MPQ:
         return ret
 
     def Compact(self):
-        self.libstorm.SFileCompactArchive(self.mpqh, ffi.NULL, 0)
+        self.libstorm.SFileCompactArchive(self.mpqh, None, 0)
 
 
 InitMpqLibrary()
