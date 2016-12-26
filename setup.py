@@ -11,9 +11,7 @@ setup(
     package_data={
         '': ['*.pyx', '*.dll', '*.lst', '*.pyd'],
     },
-    setup_requires=["cffi>=1.0.0"],
     install_requires=[
-        "cffi>=1.0.0",
         'cython',
     ],
     ext_modules=cythonize([
