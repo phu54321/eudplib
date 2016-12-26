@@ -62,13 +62,13 @@ def PreprocessTrigSection(trigSection):
         if len(trigSegment) != 2400:
             continue
 
-        tflag = ut.b2i4(trigSegment, 320 + 2048)
+        propv = ut.b2i4(trigSegment, 320 + 2048)
 
         decoded = DispatchInlineCode(inlineCodes, trigSegment)
         if decoded:
             trigSegment = decoded
 
-        elif tflag < 0x80000000 and random() < _inliningRate:
+        elif propv < 0x80000000 and random() < _inliningRate:
             trigSegment = InlinifyNormalTrigger(inlineCodes, trigSegment)
 
         trigSegments.append(trigSegment)
@@ -95,29 +95,33 @@ def GetInlineCodeList():
     return _inlineCodes
 
 
-def DispatchInlineCode(inlineCodes, trigger_bytes):
-    """ Check if trigger segment has special data. """
-
+def GetInlineCodePlayerList(bTrigger):
     # Check if effplayer & current_action is empty
     for player in range(28):
-        if trigger_bytes[320 + 2048 + 4 + player] != 0:
+        if bTrigger[320 + 2048 + 4 + player] != 0:
             return None
 
     # trg.cond[0].condtype != 0
-    if trigger_bytes[15] != 0:
+    if bTrigger[15] != 0:
         return None
     # trg.act[0].acttype != 0
-    if trigger_bytes[346] != 0:
+    if bTrigger[346] != 0:
         return None
 
-    data = trigger_bytes[20:320] + trigger_bytes[352:2372]
+    return ut.b2i4(bTrigger, 24)
 
-    """ Check if trigger segment has inline_eudplib code. """
-    magicCode = ut.b2i4(data, 0)
+
+def DispatchInlineCode(inlineCodes, trigger_bytes):
+    """ Check if trigger segment has special data. """
+    magicCode = ut.b2i4(trigger_bytes, 20)
     if magicCode != 0x10978d4a:
         return None
 
-    playerCode = ut.b2i4(data, 4)
+    playerCode = GetInlineCodePlayerList(trigger_bytes)
+    if not playerCode:
+        return None
+
+    data = trigger_bytes[20:320] + trigger_bytes[352:2372]
     codeData = ut.b2u(data[8:]).rstrip('\0')
 
     # Compile code

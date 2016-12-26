@@ -242,3 +242,7 @@ CTestTestfile.cmake
 cmake-build-*/
 
 
+# cython thing
+eudplib/core/allocator/*.c
+eudplib/core/allocator/*.pyd
+

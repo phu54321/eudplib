@@ -24,6 +24,7 @@ THE SOFTWARE.
 '''
 
 from cffi import FFI
+from ctypes import *
 import os, sys, struct, platform
 from tempfile import NamedTemporaryFile
 from eudplib.utils import u2b, b2u
@@ -45,7 +46,6 @@ ffi = FFI()
 
 ffi.cdef("""
 typedef void *HANDLE, *LPOVERLAPPED;
-typedef void VOID;
 typedef unsigned int DWORD, BOOL;
 typedef unsigned short WORD;
 typedef unsigned char BYTE;
