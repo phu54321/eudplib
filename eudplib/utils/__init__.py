@@ -39,7 +39,10 @@ from .etc import (
     List2Assignable,
     Assignable2List,
     SCMD2Text,
-    cachedfunc
+    cachedfunc,
+
+    isStrict,
+    setStrict
 )
 
 from .eperror import (
