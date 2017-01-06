@@ -26,6 +26,7 @@ THE SOFTWARE.
 
 from ... import core as c
 from ... import ctrlstru as cs
+from ... import eudlib as sf
 
 
 def InlineCodifyBinaryTrigger(bTrigger):
@@ -67,11 +68,15 @@ def InlineCodifyBinaryTrigger(bTrigger):
     if c.PushTriggerScope():
         tStart = c.RawTrigger(actions=c.SetDeaths(0, c.SetTo, 0, 0))
 
+        cp = sf.f_getcurpl()
+        cs.EUDSwitch(cp)
         for player in range(8):
             if playerExecutesTrigger[player]:
-                if cs.EUDIf()(c.Memory(0x6509B0, c.Exactly, player)):
+                if cs.EUDSwitchCase()(player):
                     c.RawTrigger(trigSection=bTrigger)
-                cs.EUDEndIf()
+                    cs.EUDBreak()
+
+        cs. EUDEndSwitch()
 
         tEnd = c.RawTrigger()
     c.PopTriggerScope()

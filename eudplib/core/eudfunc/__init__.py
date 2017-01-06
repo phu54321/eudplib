@@ -40,5 +40,6 @@ from .eudfmethod import (
 )
 
 from .eudfuncn import (
-    EUDReturn
+    EUDReturn,
+    EUDFuncN,
 )
