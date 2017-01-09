@@ -6,6 +6,13 @@ from importlib.machinery import (
 from .epscompile import epsCompile
 from eudplib.utils import EPError
 import sys
+import re
+from bisect import bisect_right
+
+import types
+
+
+lineno_regex = re.compile(b' *# \\(Line (\\d+)\\) .+')
 
 
 class EPSLoader(SourceFileLoader):
@@ -21,6 +28,57 @@ class EPSLoader(SourceFileLoader):
         if compiled is None:
             raise EPError('epScript compiled failed for %s' % path)
         return compiled
+
+    def source_to_code(self, data, path, *, _optimize=-1):
+        codeobj = super().source_to_code(data, path, _optimize=_optimize)
+        co_lnotab = codeobj.co_lnotab
+        co_firstlineno = codeobj.co_firstlineno
+
+        # Read lines from code data
+        codeLine = [0]
+        codeMap = [0]
+        data = data.replace(b'\r\n', b'\n')
+        for lineno, line in enumerate(data.split(b'\n')):
+            match = lineno_regex.match(line)
+            if match:
+                codeLine.append(lineno + 1)
+                codeMap.append(int(match.group(1)))
+
+        # Reconstruct code data
+        new_lnotab = []
+        currentLine = co_firstlineno
+        currentMappedLine = 0
+        for i in range(0, len(co_lnotab), 2):
+            bytecodeLen, lineAdvance = co_lnotab[i: i + 2]
+            nextLine = currentLine + lineAdvance
+            nextMappedLine = codeMap[bisect_right(codeLine, nextLine) - 1]
+            newLineAdvance = nextMappedLine - currentMappedLine
+            while newLineAdvance >= 0xFF:
+                new_lnotab.append(bytes([0, 0xFF]))
+                newLineAdvance -= 0xFF
+            new_lnotab.append(bytes([bytecodeLen, newLineAdvance]))
+            currentLine = nextLine
+            currentMappedLine = nextMappedLine
+
+        codeobj = types.CodeType(
+            codeobj.co_argcount,
+            codeobj.co_kwonlyargcount,
+            codeobj.co_nlocals,
+            codeobj.co_stacksize,
+            codeobj.co_flags,
+            codeobj.co_code,
+            codeobj.co_consts,
+            codeobj.co_names,
+            codeobj.co_varnames,
+            codeobj.co_filename,
+            codeobj.co_name,
+            0,  # codeobj.co_firstlineno,
+            b''.join(new_lnotab),  # codeobj.co_lnotab,
+            codeobj.co_freevars,
+            codeobj.co_cellvars
+        )
+
+        return codeobj
 
 
 class EPSFinder:
