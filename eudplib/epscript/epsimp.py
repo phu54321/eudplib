@@ -15,6 +15,54 @@ import types
 lineno_regex = re.compile(b' *# \\(Line (\\d+)\\) .+')
 
 
+def modifyCodeLineno(codeobj, codeMap):
+    co_lnotab = codeobj.co_lnotab
+    co_firstlineno = codeobj.co_firstlineno
+
+    # Reconstruct code data
+    new_lnotab = []
+    currentLine = co_firstlineno
+    currentMappedLine = codeMap(currentLine)
+    for i in range(0, len(co_lnotab), 2):
+        bytecodeLen, lineAdvance = co_lnotab[i: i + 2]
+        nextLine = currentLine + lineAdvance
+        nextMappedLine = codeMap(nextLine)
+        newLineAdvance = nextMappedLine - currentMappedLine
+        while newLineAdvance >= 0xFF:
+            new_lnotab.append(bytes([0, 0xFF]))
+            newLineAdvance -= 0xFF
+        new_lnotab.append(bytes([bytecodeLen, newLineAdvance]))
+        currentLine = nextLine
+        currentMappedLine = nextMappedLine
+
+    # For code objects
+    new_co_consts = []
+    for c in codeobj.co_consts:
+        if isinstance(c, types.CodeType):
+            c = modifyCodeLineno(c, codeMap)
+        new_co_consts.append(c)
+
+    codeobj = types.CodeType(
+        codeobj.co_argcount,
+        codeobj.co_kwonlyargcount,
+        codeobj.co_nlocals,
+        codeobj.co_stacksize,
+        codeobj.co_flags,
+        codeobj.co_code,
+        tuple(new_co_consts),
+        codeobj.co_names,
+        codeobj.co_varnames,
+        codeobj.co_filename,
+        codeobj.co_name,
+        codeMap(co_firstlineno),  # codeobj.co_firstlineno,
+        b''.join(new_lnotab),  # codeobj.co_lnotab,
+        codeobj.co_freevars,
+        codeobj.co_cellvars
+    )
+
+    return codeobj
+
+
 class EPSLoader(SourceFileLoader):
     def __init__(self, *args):
         super().__init__(*args)
@@ -31,8 +79,6 @@ class EPSLoader(SourceFileLoader):
 
     def source_to_code(self, data, path, *, _optimize=-1):
         codeobj = super().source_to_code(data, path, _optimize=_optimize)
-        co_lnotab = codeobj.co_lnotab
-        co_firstlineno = codeobj.co_firstlineno
 
         # Read lines from code data
         codeLine = [0]
@@ -45,39 +91,9 @@ class EPSLoader(SourceFileLoader):
                 codeMap.append(int(match.group(1)))
 
         # Reconstruct code data
-        new_lnotab = []
-        currentLine = co_firstlineno
-        currentMappedLine = 0
-        for i in range(0, len(co_lnotab), 2):
-            bytecodeLen, lineAdvance = co_lnotab[i: i + 2]
-            nextLine = currentLine + lineAdvance
-            nextMappedLine = codeMap[bisect_right(codeLine, nextLine) - 1]
-            newLineAdvance = nextMappedLine - currentMappedLine
-            while newLineAdvance >= 0xFF:
-                new_lnotab.append(bytes([0, 0xFF]))
-                newLineAdvance -= 0xFF
-            new_lnotab.append(bytes([bytecodeLen, newLineAdvance]))
-            currentLine = nextLine
-            currentMappedLine = nextMappedLine
-
-        codeobj = types.CodeType(
-            codeobj.co_argcount,
-            codeobj.co_kwonlyargcount,
-            codeobj.co_nlocals,
-            codeobj.co_stacksize,
-            codeobj.co_flags,
-            codeobj.co_code,
-            codeobj.co_consts,
-            codeobj.co_names,
-            codeobj.co_varnames,
-            codeobj.co_filename,
-            codeobj.co_name,
-            0,  # codeobj.co_firstlineno,
-            b''.join(new_lnotab),  # codeobj.co_lnotab,
-            codeobj.co_freevars,
-            codeobj.co_cellvars
-        )
-
+        def lineMapper(line):
+            return codeMap[bisect_right(codeLine, line) - 1]
+        codeobj = modifyCodeLineno(codeobj, lineMapper)
         return codeobj
 
 
