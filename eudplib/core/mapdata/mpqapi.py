@@ -29,11 +29,10 @@ from ctypes import (
     create_string_buffer, byref
 )
 import os
-import sys
 import struct
 import platform
 from tempfile import NamedTemporaryFile
-from eudplib.utils import u2b, b2u
+from eudplib.utils import u2b, b2u, find_data_file
 
 
 filename_u2b = None
@@ -51,18 +50,6 @@ MPQ_WAVE_QUALITY_MEDIUM = 0x1
 libstorm = None
 
 
-def find_data_file(filename):
-    if getattr(sys, 'frozen', False):
-        # The application is frozen
-        datadir = os.path.dirname(sys.executable)
-    else:
-        # The application is not frozen
-        # Change this bit to match where you store your data files:
-        datadir = os.path.dirname(__file__)
-
-    return os.path.join(datadir, filename)
-
-
 def InitMpqLibrary():
     global libstorm, filename_u2b
 
@@ -70,9 +57,9 @@ def InitMpqLibrary():
         platformName = platform.system()
         if platformName == 'Windows':  # windows
             if struct.calcsize("P") == 4:  # 32bit
-                libstorm = WinDLL(find_data_file('StormLib32.dll'))
+                libstorm = WinDLL(find_data_file('StormLib32.dll', __file__))
             else:  # 64bit
-                libstorm = WinDLL(find_data_file('StormLib64.dll'))
+                libstorm = WinDLL(find_data_file('StormLib64.dll', __file__))
             filename_u2b = u2b
 
         elif platformName == 'Darwin':  # mac

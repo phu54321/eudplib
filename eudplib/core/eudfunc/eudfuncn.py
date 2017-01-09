@@ -179,10 +179,4 @@ class EUDFuncN:
 
 
 def EUDReturn(*args):
-    callerName = inspect.stack()[1][3]
-    currentFuncName = _currentCompiledFunc.__name__
-    if callerName != currentFuncName:
-        print('[Warning] EUDReturn may have been called from a '
-              'different function (%s) than compiled function(%s)' %
-              (callerName, currentFuncName))
     _currentCompiledFunc._AddReturn(args, True)

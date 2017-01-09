@@ -3,18 +3,24 @@ from importlib.machinery import (
     SourceFileLoader,
 )
 
+from .epscompile import epsCompile
+from eudplib.utils import EPError
 import sys
 
 
 class EPSLoader(SourceFileLoader):
     def __init__(self, *args):
-        print("Loader %s" % (args,))
         super().__init__(*args)
 
     def get_data(self, path):
         """Return the data from path as raw bytes."""
-        print('eps loading from %s' % path)
-        return open(path, 'rb').read()
+        fileData = open(path, 'rb').read()
+        if path.endswith('.pyc') or path.endswith('.pyo'):
+            return fileData
+        compiled = epsCompile(path, fileData)
+        if compiled is None:
+            raise EPError('epScript compiled failed for %s' % path)
+        return compiled
 
 
 class EPSFinder:

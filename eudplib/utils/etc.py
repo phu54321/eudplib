@@ -26,6 +26,8 @@ THE SOFTWARE.
 import functools
 import collections
 import itertools
+import sys
+import os.path
 
 
 def EPD(p):
@@ -183,3 +185,18 @@ def isStrict():
 def setStrict(mode):
     global strict
     strict = mode
+
+
+####
+
+
+def find_data_file(filename, file):
+    if getattr(sys, 'frozen', False):
+        # The application is frozen
+        datadir = os.path.dirname(sys.executable)
+    else:
+        # The application is not frozen
+        # Change this bit to match where you store your data files:
+        datadir = os.path.dirname(file)
+
+    return os.path.join(datadir, filename)

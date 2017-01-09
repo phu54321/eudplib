@@ -54,3 +54,4 @@ from .exprproxy import (
     ExprProxy,
     unProxy,
 )
+from .etc import find_data_file

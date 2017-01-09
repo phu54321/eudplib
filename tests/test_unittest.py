@@ -30,7 +30,8 @@ from unittests import (
     testtypedf,
     testpool,
     test_lvalue,
-    test_sq_from_1var
+    test_sq_from_1var,
+    test_eps
 )
 
 helper.CompressPayload(True)
