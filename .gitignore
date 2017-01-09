@@ -230,3 +230,21 @@ tests/output.png
 tests/output.pstats
 
 nohupo.out
+
+#CMAKE
+CMakeCache.txt
+CMakeFiles/
+CMakeScripts
+Makefile
+cmake_install.cmake
+install_manifest.txt
+CTestTestfile.cmake
+cmake-build-*/
+
+
+# cython thing
+eudplib/core/allocator/*.c
+eudplib/core/allocator/*.pyd
+eudplib/utils/*.c
+eudplib/utils/*.pyd
+

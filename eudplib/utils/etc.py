@@ -169,3 +169,17 @@ def SCMD2Text(s):
                 state = 0
 
     return ''.join(out)
+
+
+####
+
+strict = False
+
+
+def isStrict():
+    return strict
+
+
+def setStrict(mode):
+    global strict
+    strict = mode

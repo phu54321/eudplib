@@ -6,9 +6,6 @@ import random as _random
 
 _sys.path.insert(0, _os.path.abspath('../'))
 
-import pyximport
-pyximport.install()
-
 from eudplib import *
 
 

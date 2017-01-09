@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 from Cython.Build import cythonize
 
-__version__ = '0.54'
+__version__ = '0.55.1'
 
 
 setup(
@@ -9,12 +9,10 @@ setup(
     version=__version__,
     packages=find_packages(),
     package_data={
-        '': ['*.pyx', '*.dll', '*.lst', '*.pyd'],
+        '': ['*.c', '*.pxd', '*.pyx', '*.dll', '*.lst'],
     },
-    setup_requires=["cffi>=1.0.0"],
     install_requires=[
-        "cffi>=1.0.0",
-        'cython',
+        'Cython',
     ],
     ext_modules=cythonize([
         "eudplib/core/allocator/*.pyx",

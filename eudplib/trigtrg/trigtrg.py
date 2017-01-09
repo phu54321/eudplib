@@ -35,23 +35,7 @@ Note this when using this code outside of eudplib.
 from struct import pack
 from eudplib import utils as ut
 
-
-def i2b1(i):
-    return bytes((i & 0xFF,))
-
-
-def i2b2(i):
-    return bytes((i & 0xFF, (i >> 8) & 0xFF))
-
-
-def i2b4(i):
-    return bytes((
-        i & 0xFF,
-        (i >> 8) & 0xFF,
-        (i >> 16) & 0xFF,
-        (i >> 24) & 0xFF,
-    ))
-
+i2b1, i2b2, i2b4 = ut.i2b1, ut.i2b2, ut.i2b4
 
 # for Deaths
 AtLeast = 0
@@ -115,7 +99,7 @@ def Action(locid1, strid, wavid, time, player1,
                 unitid, acttype, amount, flags, 0, 0, 0)
 
 
-def Trigger(players=[AllPlayers], conditions=[], actions=[], prtrig=True):
+def Trigger(players=[AllPlayers], conditions=[], actions=[]):
     conditions = FlattenList(conditions)
     actions = FlattenList(actions)
 
@@ -133,7 +117,7 @@ def Trigger(players=[AllPlayers], conditions=[], actions=[], prtrig=True):
         [bytes(20 * (16 - len(conditions)))] +
         actions +
         [bytes(32 * (64 - len(actions)))] +
-        [prtrig and b'\x04\0\0\0' or b'\0\0\0\0'] +
+        [b'\x04\0\0\0'] +
         [bytes(peff)]
     )
     ut.ep_assert(len(b) == 2400)

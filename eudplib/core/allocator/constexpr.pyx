@@ -152,4 +152,4 @@ cpdef RlocInt_C Evaluate(x):
 
 def IsConstExpr(x):
     x = ut.unProxy(x)
-    return isinstance(x, int) or hasattr(x, 'Evaluate')
+    return isinstance(x, int) or isinstance(x, RlocInt_C) or hasattr(x, 'Evaluate')

@@ -35,6 +35,14 @@ from .payloadReloc import CreatePayloadRelocator
 from .injFinalizer import CreateInjectFinalizer
 
 
+skip_payload_relocator = False
+
+
+def PRT_SkipPayloadRelocator(enable):
+    global skip_payload_relocator
+    skip_payload_relocator = enable
+
+
 def applyInjector(chkt, root):
     # Create injector triggers
     bsm = BlockStruManager()
@@ -46,7 +54,8 @@ def applyInjector(chkt, root):
     payload = c.CreatePayload(root)
     setPayloadLoggerMode(False)
 
-    final_payload = CreatePayloadRelocator(payload)
-    CreateVectorRelocator(chkt, final_payload)
+    if not skip_payload_relocator:
+        payload = CreatePayloadRelocator(payload)
+    CreateVectorRelocator(chkt, payload)
 
     SetCurrentBlockStruManager(prev_bsm)
