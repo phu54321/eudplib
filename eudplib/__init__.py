@@ -23,11 +23,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
+
 from .utils import *
 from .core import *
 from .trigger import *
 from .ctrlstru import *
 from .eudlib import *
+from .epscript import *
 from .trigtrg import *
 from .maprw import *
 
