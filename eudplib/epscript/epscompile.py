@@ -1,11 +1,10 @@
 from ctypes import (
-    WinDLL, CDLL,
-    c_int, c_char_p, c_void_p,
-    create_string_buffer, byref
+    CDLL,
+    c_int, c_char_p,
 )
 
 from eudplib.utils import (
-    u2b, b2u, find_data_file
+    u2b, find_data_file
 )
 
 libeps = CDLL(find_data_file('libepScriptLib.dll', __file__))

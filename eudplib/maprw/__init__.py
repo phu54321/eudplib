@@ -25,7 +25,7 @@ THE SOFTWARE.
 
 from .loadmap import LoadMap
 from .savemap import SaveMap
-from .injector.doevents import EUDDoEvents
+from .injector.mainloop import EUDDoEvents, EUDOnStart
 from .mpqadd import MPQAddFile, MPQAddWave
 from .inlinecode.ilcprocesstrig import PRT_SetInliningRate
 from .injector.applyInjector import PRT_SkipPayloadRelocator

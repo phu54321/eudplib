@@ -30,6 +30,11 @@ from ...eudlib.stringf.dbstr import _f_initextstr
 
 
 jumper = None
+startFunctionList = [_f_initextstr]
+
+
+def EUDOnStart(func):
+    startFunctionList.append(func)
 
 
 def _MainStarter(mf):
@@ -39,7 +44,9 @@ def _MainStarter(mf):
     if c.PushTriggerScope():
         rootstarter = c.NextTrigger()
 
-        _f_initextstr()
+        for func in startFunctionList:
+            func()
+
         sf.f_getcurpl()  # Nessecary. See comments on f_getcurpl
 
         mf()

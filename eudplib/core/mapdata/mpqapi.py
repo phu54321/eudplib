@@ -117,7 +117,12 @@ class MPQ:
             raise RuntimeError('Duplicate opening')
 
         h = c_int()
-        ret = self.libstorm.SFileOpenArchive(filename_u2b(fname), 0, 0, byref(h))
+        ret = self.libstorm.SFileOpenArchive(
+            filename_u2b(fname),
+            0,
+            0,
+            byref(h)
+        )
         if not ret:
             self.mpqh = None
             return False
@@ -139,7 +144,10 @@ class MPQ:
         if lst is None:
             return []
 
-        return b2u(lst).replace('\r', '').split('\n')
+        try:
+            return b2u(lst).replace('\r', '').split('\n')
+        except UnicodeDecodeError:
+            return []
 
     # Extract
     def Extract(self, fname):

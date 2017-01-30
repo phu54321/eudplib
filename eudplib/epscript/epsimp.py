@@ -64,9 +64,6 @@ def modifyCodeLineno(codeobj, codeMap):
 
 
 class EPSLoader(SourceFileLoader):
-    def __init__(self, *args):
-        super().__init__(*args)
-
     def get_data(self, path):
         """Return the data from path as raw bytes."""
         fileData = open(path, 'rb').read()
