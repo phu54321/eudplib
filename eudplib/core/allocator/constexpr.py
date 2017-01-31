@@ -23,29 +23,25 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-from .rlocint cimport RlocInt_C
+from .rlocint import RlocInt_C
 from .rlocint import RlocInt, RlocInt_C, toRlocInt
 from ... import utils as ut
 
 
-cdef class ConstExpr:
+class ConstExpr:
 
     ''' Class for general expression with rlocints.
     '''
-
-    cdef public unsigned int offset, rlocmode
-    cdef public ConstExpr baseobj
 
     def __init__(self, baseobj, offset=0, rlocmode=4):
         self.baseobj = baseobj
         self.offset = offset & 0xFFFFFFFF
         self.rlocmode = rlocmode & 0xFFFFFFFF
 
-    cpdef RlocInt_C Evaluate(self):
+    def Evaluate(self):
         return Evaluate(self.baseobj) * self.rlocmode // 4 + self.offset
 
     # Cython version!
-
     def __add__(self, other):
         if not isinstance(other, int):
             return NotImplemented
@@ -92,22 +88,18 @@ cdef class ConstExpr:
         )
         return ConstExpr(self.baseobj, self.offset // k, self.rlocmode // k)
 
-cdef class ConstExprInt(ConstExpr):
-    cdef public RlocInt_C value
-
+class ConstExprInt(ConstExpr):
     def __init__(self, value):
         super().__init__(None, value, 0)
         self.value = RlocInt_C(value & 0xFFFFFFFF, 0)
 
-    cpdef RlocInt_C Evaluate(self):
+    def Evaluate(self):
         return self.value
 
-cdef class Forward(ConstExpr):
+class Forward(ConstExpr):
 
     '''Class for forward definition.
     '''
-
-    cdef public ConstExpr _expr
 
     def __init__(self):
         super().__init__(self)
@@ -132,12 +124,12 @@ cdef class Forward(ConstExpr):
     def Reset(self):
         self._expr = None
 
-    cpdef RlocInt_C Evaluate(self):
+    def Evaluate(self):
         ut.ep_assert(self._expr is not None, 'Forward not initialized')
         return Evaluate(self._expr)
 
 
-cpdef RlocInt_C Evaluate(x):
+def Evaluate(x):
     '''
     Evaluate expressions
     '''

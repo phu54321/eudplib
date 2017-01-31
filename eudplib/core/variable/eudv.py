@@ -90,7 +90,7 @@ class EUDVariable(VariableBase):
         self._rvalue = True
         return self
 
-    def checkNonLValue(self):
+    def checkNonRValue(self):
         if self._rvalue:
             raise EPError('Trying to modify value of l-value variable')
 
@@ -98,7 +98,7 @@ class EUDVariable(VariableBase):
 
     def QueueAssignTo(self, dest):
         try:
-            dest.checkNonLValue()
+            dest.checkNonRValue()
             dest = EPD(dest.getValueAddr())
         except AttributeError:
             pass
@@ -110,7 +110,7 @@ class EUDVariable(VariableBase):
 
     def QueueAddTo(self, dest):
         try:
-            dest.checkNonLValue()
+            dest.checkNonRValue()
             dest = EPD(dest.getValueAddr())
         except AttributeError:
             pass
@@ -122,7 +122,7 @@ class EUDVariable(VariableBase):
 
     def QueueSubtractTo(self, dest):
         try:
-            dest.checkNonLValue()
+            dest.checkNonRValue()
             dest = EPD(dest.getValueAddr())
         except AttributeError:
             pass
@@ -135,7 +135,7 @@ class EUDVariable(VariableBase):
     # -------
 
     def Assign(self, other):
-        self.checkNonLValue()
+        self.checkNonRValue()
         SeqCompute((
             (self, bt.SetTo, other),
         ))

@@ -60,20 +60,20 @@ class ExprProxy:
         return id(self)
 
     # Proxy arithmetic operators
-    def __lshift__(self, other):
-        return self._value << other
+    def __lshift__(self, k):
+        return self._value << k
 
-    def __add__(self, other):
-        return self._value + other
+    def __add__(self, k):
+        return self._value + k
 
-    def __radd__(self, other):
-        return other + self._value
+    def __radd__(self, k):
+        return k + self._value
 
-    def __sub__(self, other):
-        return self._value - other
+    def __sub__(self, k):
+        return self._value - k
 
-    def __rsub__(self, other):
-        return other - self._value
+    def __rsub__(self, k):
+        return k - self._value
 
     def __mul__(self, k):
         return self._value * k
@@ -84,26 +84,26 @@ class ExprProxy:
     def __floordiv__(self, k):
         return self._value // k
 
-    def __rfloordiv__(self, other):
+    def __rfloordiv__(self, k):
         return k // self._value
 
-    def __and__(self, other):
+    def __and__(self, k):
         return self._value & k
 
-    def __rand__(self, other):
-        return other & self._value
+    def __rand__(self, k):
+        return k & self._value
 
     def __or__(self, k):
-        return self._value | other
+        return self._value | k
 
     def __ror__(self, k):
-        return other | self._value
+        return k | self._value
 
-    def __xor__(self, other):
-        return self._value ^ other
+    def __xor__(self, k):
+        return self._value ^ k
 
-    def __rxor__(self, other):
-        return other ^ self._value
+    def __rxor__(self, k):
+        return k ^ self._value
 
     def __neg__(self):
         return -self._value
@@ -122,17 +122,17 @@ class ExprProxy:
     def __ne__(self, k):
         return self._value != k
 
-    def __le__(self, other):
-        return self._value <= other
+    def __le__(self, k):
+        return self._value <= k
 
-    def __lt__(self, other):
-        return self._value < other
+    def __lt__(self, k):
+        return self._value < k
 
-    def __ge__(self, other):
-        return self._value >= other
+    def __ge__(self, k):
+        return self._value >= k
 
-    def __gt__(self, other):
-        return self._value > other
+    def __gt__(self, k):
+        return self._value > k
 
     # TODO: add inplace operators
 
