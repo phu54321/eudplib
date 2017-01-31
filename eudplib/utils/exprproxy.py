@@ -140,6 +140,12 @@ class ExprProxy:
     def __getattr__(self, name):
         return getattr(self._value, name)
 
+    def __getitem__(self, name):
+        return self._value[name]
+
+    def __setitem__(self, name, newvalue):
+        self._value[name] = newvalue
+
 
 def unProxy(x):
     try:

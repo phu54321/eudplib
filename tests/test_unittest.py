@@ -7,6 +7,7 @@ if DoCoverageTest:
 
 import helper
 
+
 from unittests import (
     testblockstru,
     testcurpl,
