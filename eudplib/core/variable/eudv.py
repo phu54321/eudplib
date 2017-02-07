@@ -45,6 +45,13 @@ from .vbase import VariableBase
 from .vbuf import GetCurrentVariableBuffer
 
 
+isRValueStrict = False
+
+def EP_SetRValueStrictMode(mode):
+    global isRValueStrict
+    isRValueStrict = mode
+
+
 # Unused variable don't need to be allocated.
 class VariableTriggerForward(ConstExpr):
 
@@ -91,7 +98,7 @@ class EUDVariable(VariableBase):
         return self
 
     def checkNonRValue(self):
-        if self._rvalue:
+        if isRValueStrict and self._rvalue:
             raise EPError('Trying to modify value of l-value variable')
 
     # -------

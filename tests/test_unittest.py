@@ -8,6 +8,9 @@ if DoCoverageTest:
 import helper
 
 
+helper.EP_SetRValueStrictMode(True)
+
+
 from unittests import (
     testblockstru,
     testcurpl,

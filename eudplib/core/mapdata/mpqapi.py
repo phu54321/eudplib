@@ -190,7 +190,7 @@ class MPQ:
 
         # Create temporary file
         f = NamedTemporaryFile(delete=False)
-        f.write(buffer)
+        f.write(bytes(buffer))
         tmpfname = f.name
         f.close()
 
@@ -210,7 +210,7 @@ class MPQ:
 
         # Create temporary file
         f = NamedTemporaryFile(delete=False)
-        f.write(buffer)
+        f.write(bytes(buffer))
         tmpfname = f.name
         f.close()
 

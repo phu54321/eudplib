@@ -26,4 +26,5 @@ THE SOFTWARE.
 from .qgc import (
     QueueGameCommand,
     QueueGameCommand_RightClick,
+    QueueGameCommand_Select,
 )

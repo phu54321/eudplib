@@ -5,7 +5,7 @@ import re
 module_to_doc = eudplib
 
 exclude_types = [dict, str, types.ModuleType]
-eudftypes = [eudplib.core.varfunc.eudf.EUDFuncN]
+eudftypes = [eudplib.EUDFuncN]
 allowed_type = eudftypes + [type, types.FunctionType]
 exclude_names = ['__loader__', '__path__', '__spec__']
 section_header_charr = ['=', '-', '\'', '~', '^']

@@ -5,7 +5,7 @@ except ImportError:
     def cythonize(x):
         return None
 
-__version__ = '0.55.3'
+__version__ = '0.56'
 
 
 setup(

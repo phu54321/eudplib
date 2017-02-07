@@ -30,6 +30,7 @@ from .eudv import (
     EUDCreateVariables,
     SeqCompute,
     SetVariables,
+    EP_SetRValueStrictMode,
 )
 
 from .eudlv import EUDLightVariable

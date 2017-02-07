@@ -137,6 +137,17 @@ class ExprProxy:
     # TODO: add inplace operators
 
     # Proxy other methods
+    def __getattribute__(self, name):
+        if name == '_value':
+            return super().__getattribute__(name)
+        elif name == '__class__':
+            return object.__getattribute__(self._value, name)
+        else:
+            return super().__getattribute__(name)
+
+    def __call__(self, *args, **kwargs):
+        return self._value(*args, **kwargs)
+
     def __getattr__(self, name):
         return getattr(self._value, name)
 
@@ -152,3 +163,4 @@ def unProxy(x):
         return unProxy(x.getValue())
     except AttributeError:
         return x
+
