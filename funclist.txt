@@ -1,0 +1,463 @@
+트리거 관련
+===================
+
+
+조건들
+-------------------
+
+기존 조건
+^^^^^^^^
+* Always()
+* Accumulate(Player, Comparison, Number, ResourceType)
+* Bring(Player, Comparison, Number, Unit, Location)
+* Command(Player, Comparison, Number, Unit)
+* CommandLeast(Unit)
+* CommandLeastAt(Unit, Location)
+* CommandMost(Unit)
+* CommandMostAt(Unit, Location)
+* CountdownTimer(Comparison, Time)
+* Deaths(Player, Comparison, Number, Unit)
+* ElapsedTime(Comparison, Time)
+* HighestScore(ScoreType)
+* LeastKills(Unit)
+* LeastResources(ResourceType)
+* LowestScore(ScoreType)
+* MostKills(Unit)
+* MostResources(ResourceType)
+* Never()
+* Opponents(Player, Comparison, Number)
+* Score(Player, ScoreType, Comparison, Number)
+* Switch(Switch, State)
+
+특수조건
+^^^^^^^
+* Condition(locid, player, amount, unitid, comparison, condtype, restype, flags)
+    CHK 구조대로 조건을 만들어 쓰고싶을때 쓰세요. scenario.chk를 공부하지 않으신 분은
+    이걸 쓰실 일이 없을겁니다.
+
+* Memory(dest, cmptype, value)
+    오프셋의 값을 확인합니다.
+
+* MemoryEPD(dest, cmptype, value)
+    Memory랑 똑같은데 dest가 오프셋의 EPD값입니다.
+
+
+
+액션들
+-------------------
+
+기존 액션
+^^^^^^^^
+* CenterView(Where)
+* Comment(Text)
+* CreateUnit(Number, Unit, Where, ForPlayer)
+* CreateUnitWithProperties(Count, Unit, Where, Player, Properties)
+* Defeat()
+* DisplayText(Text, AlwaysDisplay)
+* Draw()
+* GiveUnits(Count, Unit, Owner, Where, NewOwner)
+* KillUnit(Unit, Player)
+* KillUnitAt(Count, Unit, Where, ForPlayer)
+* LeaderBoardComputerPlayers(State)
+* LeaderBoardControl(Unit, Label)
+* LeaderBoardControlAt(Unit, Location, Label)
+* LeaderBoardGoalControl(Goal, Unit, Label)
+* LeaderBoardGoalControlAt(Goal, Unit, Location, Label)
+* LeaderBoardGoalKills(Goal, Unit, Label)
+* LeaderBoardGoalResources(Goal, ResourceType, Label)
+* LeaderBoardGoalScore(Goal, ScoreType, Label)
+* LeaderBoardGreed(Goal)
+* LeaderBoardKills(Unit, Label)
+* LeaderBoardResources(ResourceType, Label)
+* LeaderBoardScore(ScoreType, Label)
+* MinimapPing(Where)
+* ModifyUnitEnergy(Count, Unit, Owner, Where, Percent)
+* ModifyUnitHangarCount(Add, Count, Unit, Owner, Where)
+* ModifyUnitHitPoints(Count, Unit, Owner, Where, Percent)
+* ModifyUnitResourceAmount(Count, Owner, Where, NewValue)
+* ModifyUnitShields(Count, Unit, Owner, Where, Percent)
+* MoveLocation(Location, OnUnit, Owner, DestLocation)
+* MoveUnit(Count, UnitType, Owner, StartLocation, DestLocation)
+* MuteUnitSpeech()
+* Order(Unit, Owner, StartLocation, OrderType, DestLocation)
+* PauseGame()
+* PauseTimer()
+* PlayWAV(WAVName)
+* PreserveTrigger()
+* RemoveUnit(Unit, Player)
+* RemoveUnitAt(Count, Unit, Where, ForPlayer)
+* RunAIScript(Script)
+* RunAIScriptAt(Script, Where)
+* SetAllianceStatus(Player, Status)
+* SetCountdownTimer(TimeModifier, Time)
+* SetDeaths(Player, Modifier, Number, Unit)
+* SetDoodadState(State, Unit, Owner, Where)
+* SetInvincibility(State, Unit, Owner, Where)
+* SetMissionObjectives(Text)
+* SetNextScenario(ScenarioName)
+* SetResources(Player, Modifier, Amount, ResourceType)
+* SetScore(Player, Modifier, Amount, ScoreType)
+* SetSwitch(Switch, State)
+* TalkingPortrait(Unit, Time)
+* Transmission(Unit, Where, WAVName, TimeModifier, Time, Text, AlwaysDisplay)
+* UnMuteUnitSpeech()
+* UnpauseGame()
+* UnpauseTimer()
+* Victory()
+* Wait(Time)
+
+
+특수 액션
+^^^^^^^^
+* Action(locid1, strid, wavid, time, player1, player2, unitid, acttype, amount, flags)
+    CHK 구조대로 액션을 만들어 쓰고싶을때 쓰세요. scenario.chk를 공부하지 않으신 분은
+    이걸 쓸 일이 없을겁니다.
+
+* DisplayExtText(text)
+    DisplayText인데 스트링 용량을 잡아먹지 않습니다. 정확히 말하자면 스트링 테이블을
+    새로 만들어 써가지고 기존 스트링 65536 byte를 쓰지 않는 방식입니다. 어쨌든
+    스트링 용량을 줄이는덴 좋을겁니다.
+
+* SetMemory(dest, modtype, value)
+    메모리 값을 수정합니다.
+
+* SetMemoryEPD(dest, modtype, value)
+    메모리 값을 수정하는데 EPD를 씁니다.
+
+* SetCurrentPlayer(p)
+    Current Player값을 수정합니다. 여러 최적화가 들어가있으니까 6509B0을 직접 수정하기보단
+    이 액션을 애용해주세요.
+
+* SetNextPtr(trg, dest)
+    트리거의 nextptr값을 수정합니다. 자세한건 뻘강좌를 참고하세요.
+    http://blog.naver.com/whyask37
+
+
+
+기타
+^^^^
+
+* Trigger(conditions, actions, preserved)
+    조건과 액션이 있는 트리거입니다. 기본적으로 preserved 상태입니다.
+    조건/액션 갯수 제한은 없습니다.
+
+* DoActions(actions, preserved)
+    conditions가 Always인 트리거입니다. 기본적으로 preserved 되있고요.
+
+* EPD(p)
+    오프셋을 EPD 플레이어값으로 바꿉니다.
+
+* Disabled(arg)
+    조건/액션을 disable시킵니다.
+
+* PTrigger(players, conditions, actions)
+    Current Player가 players중 하나일때만 실행되는 트리거입니다. EUDPlayerLoop랑
+    궁합이 잘 맞습니다. 무조건 preserved됩니다.
+
+
+트리거 실행 순서
+^^^^^^^^^^^^^^^
+
+* PushTriggerScope()
+* PopTriggerScope()
+    트리거 실행 구역을 Trigger Scope라고 합니다. 같은 Scope에 있는 트리거끼리는
+    자동으로 nextptr가 다음에 정의되는 트리거로 설정됩니다. 몰라도 됩니다.
+
+* NextTrigger()
+    '바로 다음 트리거'를 나타냅니다.
+
+* RawTrigger(prevptr, nextptr, conditions, actions)
+    조건/액션 갯수 제한이 있는 트리거입니다. Trigger는 RawTrigger 여러개를
+    조합해서 만든 것입니다. RawTrigger는 주소값을 가지고 있어서 이런 식으로
+    주소값을 얻을 수 있습니다. ::
+
+        a = RawTrigger(~)
+        # SetNextPtr(a, ~) 로 nextptr 수정 등을 할 수 있습니다.
+
+        b = Trigger(~)  # Trigger는 주소값이 없기 때문에 이런 활용은 불가능합니다
+
+
+
+
+
+
+
+
+제어문
+===================
+
+
+기초 제어문
+^^^^^^^^^^
+
+* EUDIf()(cond)
+* EUDIfNot()(cond)
+* EUDElse()()
+* EUDElseIf()(cond)
+* EUDElseIfNot()(cond)
+* EUDEndIf()
+    If~ElseIf~Else 관련입니다.
+
+
+* EUDWhile()(cond)
+* EUDWhileNot()(cond)
+* EUDEndWhile()
+    While 관련입니다.
+
+* EUDLoopN()(count)
+* EUDEndLoopN()
+    count번 반복
+
+* EUDInfLoop()()
+* EUDEndInfLoop()
+    무한반복
+
+* EUDPlayerLoop()()
+* EUDEndPlayerLoop()
+    현재 게임에 참여중인 모든 플레이어를 한번씩 Current Player로 하면서 반복
+
+* EUDSwitch(var)
+* EUDSwitchCase()(case)
+* EUDSwitchDefault()()
+* EUDEndSwitch()
+    C언어에서의 switch문과 같습니다. EUDBreak를 하지 않으면 C언어처럼 각 case에서
+    다음 case로 자동으로 넘어갑니다.
+
+* EUDBreak()
+* EUDBreakIf(conditions)
+* EUDBreakIfNot(conditions)
+* EUDContinue()
+* EUDContinueIf(conditions)
+* EUDContinueIfNot(conditions)
+    반복문/switch에서의 break/continue
+
+* EUDSetContinuePoint()
+    반복문에서 continue를 했을 때 갈 곳을 설정하는데 씁니다. EUDWhile를 for문처럼
+    쓰면서 continue 이후 무조건 실행되야하는 코드를 만들 때 이걸 쓸 수 있습니다.
+
+
+
+기타 제어문
+^^^^^^^^^^
+
+* EUDExecuteOnce()
+* EUDEndExecuteOnce()
+    한번만 실행되야하는 코드를 짤 때 씁니다. 단순히 Trigger에서 preserved=False를
+    하는것만으로는 안 될 경우 유용하게 쓸 수 있을겁니다.
+
+* EUDBranch(conditions, ontrue, onfalse)
+    조건이 만족되는지에 따라 ontrue/onfalse로 점프합니다. ontrue/onfalse는 절대로
+    EUDVariable이 될 수 없습니다.
+
+* EUDJump(nextptr)
+    nextptr로 점프합니다. nextptr는 RawTrigger가 될 수 있고 RawTrigger를 가르키는
+    Forward나 EUDVariable이 될 수 있습니다.
+
+* EUDJumpIf(conditions, ontrue)
+* EUDJumpIfNot(conditions, onfalse)
+    조건이 만족하면 EUDJump합니다. EUDJump처럼 ontrue/onfalse가 변수여도 됩니다.
+
+
+조건 조합
+^^^^^^^^
+
+* EUDAnd(cond1)
+* EUDOr(cond1)
+* EUDNot(cond)
+    두개 조건의 논리곱, 논리합이나 반대조건을 뜻합니다.
+
+
+
+
+
+
+누가 대신 설명해주세요 ㅠㅠ 설명하기 너무 양이 많음
+======================================================
+
+* Assignable2List(a)
+* CompressPayload(mode)
+* CreatePayload(root)
+* EP_SetRValueStrictMode(mode)
+* EUDBinaryMax(cond, minv, maxv)
+* EUDBinaryMin(cond, minv, maxv)
+* EUDClearNamespace()
+* EUDCreateBlock(name, userdata)
+* EUDCreateVariables(varn)
+* EUDDoEvents()
+* EUDFunc(fdecl_func)
+* EUDFuncPtr(argn, retn)
+* EUDGetBlockList()
+* EUDGetLastBlock()
+* EUDGetLastBlockOfName(name)
+* EUDIsContinuePointSet()
+* EUDLoopBullet()
+* EUDLoopList(header_offset, break_offset)
+* EUDLoopRange(start, end)
+* EUDLoopSprite()
+* EUDLoopTrigger(player)
+* EUDLoopUnit()
+* EUDMethod(method)
+* EUDOnStart(func)
+* EUDPeekBlock(name)
+* EUDPopBlock(name)
+* EUDRegisterObjectToNamespace(funcname, obj)
+* EUDRegistered(func)
+* EUDReturn()
+* EUDTernary(conditions, ontrue, onfalse)
+* EUDTypedFunc(argtypes, rettypes)
+* EUDTypedFuncPtr(argtypes, rettypes)
+* EUDTypedMethod(argtypes, rettypes)
+* EUDVArray()
+* EncodeAIScript(ais)
+* EncodeAllyStatus(s)
+* EncodeComparison(s)
+* EncodeCount(s)
+* EncodeLocation(loc)
+* EncodeModifier(s)
+* EncodeOrder(s)
+* EncodePlayer(s)
+* EncodePropState(s)
+* EncodeProperty(prop)
+* EncodeResource(s)
+* EncodeScore(s)
+* EncodeString(s)
+* EncodeSwitch(sw)
+* EncodeSwitchAction(s)
+* EncodeSwitchState(s)
+* EncodeUnit(u)
+* Evaluate(x)
+* FlattenList(l)
+* GetChkTokenized()
+* GetEUDNamespace()
+* GetFirstTrigTrigger(player)
+* GetLastTrigTrigger(player)
+* GetLocationIndex(l)
+* GetObjectAddr(obj)
+* GetPlayerInfo(player)
+* GetPropertyIndex(prop)
+* GetStringIndex(s)
+* GetSwitchIndex(s)
+* GetTriggerCounter()
+* GetUnitIndex(u)
+* IsConstExpr(x)
+* IsEUDVariable(x)
+* IsMapdataInitalized()
+* List2Assignable(l)
+* LoadMap(fname)
+* MPQAddFile(fname, content, isWave)
+* MPQAddWave(fname, content)
+* PRT_SetInliningRate(rate)
+* PRT_SkipPayloadRelocator(enable)
+* QueueGameCommand(data, size)
+* QueueGameCommand_RightClick(xy)
+* QueueGameCommand_Select(n, ptrList)
+* RegisterCreatePayloadCallback(f)
+* RlocInt(offset, rlocmode)
+* RunTrigTrigger()
+* SCMD2Text(s)
+* SaveMap(fname, rootf)
+* SeqCompute(assignpairs)
+* SetVariables(srclist, dstlist, mdtlist)
+* TrigTriggerBegin(player)
+* TrigTriggerEnd(player)
+* VProc(v, actions)
+* b2i1(b, index)
+* b2i2(b, index)
+* b2i4(b, index)
+* b2u(b)
+* cachedfunc(function)
+* ep_assert(statement, message)
+* epsCompile(modname, bCode)
+* eudplibVersion()
+* f_atan2(y, x)
+* f_bitand(a, b)
+* f_bitlshift(a, b)
+* f_bitnand(a, b)
+* f_bitnor(a, b)
+* f_bitnot(a)
+* f_bitnxor(a, b)
+* f_bitor(a, b)
+* f_bitrshift(a, b)
+* f_bitsplit(a)
+* f_bitxor(a, b)
+* f_blockpatch_epd(dstepd, srcepd, dwn)
+* f_bread(ptr)
+* f_bwrite(ptr, b)
+* f_dbstr_adddw(dst, number)
+* f_dbstr_addptr(dst, number)
+* f_dbstr_addstr(dst, src)
+* f_dbstr_print(dst)
+* f_div(a, b)
+* f_dwadd_cp(cpo, value)
+* f_dwadd_epd(targetplayer, value)
+* f_dwbreak(number)
+* f_dwbreak2(number)
+* f_dwepdread_cp(cpo)
+* f_dwepdread_epd(targetplayer)
+* f_dwepdread_epd_safe(targetplayer)
+* f_dwpatch_epd(dstepd, value)
+* f_dwrand()
+* f_dwread(ptr)
+* f_dwread_cp(cpo)
+* f_dwread_epd(targetplayer)
+* f_dwread_epd_safe(targetplayer)
+* f_dwsubtract_cp(cpo, value)
+* f_dwsubtract_epd(targetplayer, value)
+* f_dwwrite(ptr, dw)
+* f_dwwrite_cp(cpo, value)
+* f_dwwrite_epd(targetplayer, value)
+* f_epdread_cp(cpo)
+* f_epdread_epd(targetplayer)
+* f_epdread_epd_safe(targetplayer)
+* f_flagread_epd(targetplayer)
+* f_getcurpl()
+* f_getseed()
+* f_getuserplayerid()
+* f_initextstr()
+* f_lengthdir(length, angle)
+* f_memcpy(dst, src, copylen)
+* f_mul(a, b)
+* f_playerexist(player)
+* f_rand()
+* f_randomize()
+* f_repmovsd_epd(dstepdp, srcepdp, copydwn)
+* f_setcurpl(cp)
+* f_simpleprint()
+* f_sqrt(n)
+* f_srand(seed)
+* f_strcmp(s1, s2)
+* f_strcpy(dst, src)
+* f_unpatchall()
+* f_wread(ptr)
+* f_wwrite(ptr, w)
+* find_data_file(filename, file)
+* i2b1(i)
+* i2b2(i)
+* i2b4(i)
+* isStrict()
+* selftype(arg)
+* setStrict(mode)
+* toRlocInt(x)
+* u2b(s)
+* unProxy(x)
+
+
+* ConstExpr(baseobj, offset, rlocmode)
+* CtrlStruOpener(f)
+* DBString(content)
+* Db(b)
+* EPError(msg)
+* EPSFinder()
+* EPSLoader(fullname, path)
+* EUDArray(initval)
+* EUDByteReader()
+* EUDByteWriter()
+* EUDFuncN(argn, callerfunc, bodyfunc)
+* EUDGrp(content)
+* EUDLightVariable(initvalue)
+* EUDObject()
+* EUDVariable(initval)
+* ExprProxy(initval)
+* Forward()
+* TBL(content)
+* hptr(value)
