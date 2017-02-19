@@ -1,4 +1,4 @@
-import eudplib
+reimport eudplib
 import types
 
 module_to_doc = eudplib
@@ -36,7 +36,7 @@ for name, value in module_to_doc.__dict__.items():
         name = ('%s(%s)' % (name, ', '.join(args)))
         doc_needed_functions.add(name)
 
-    elif type(value) is type:
+    elif isinstance(value, type):
         if name != 'EPError':
             args = value.__init__.__code__.co_varnames[1:value.__init__.__code__.co_argcount]
             name = ('%s(%s)' % (name, ', '.join(args)))

@@ -80,43 +80,43 @@ class Action(ConstExpr):
     def CheckArgs(self, i):
         ut.ep_assert(
             self.locid1 is None or IsConstExpr(self.locid1),
-            'Invalid arg %s in trigger index %d' % (self.locid1, i)
+            'Invalid locid1 %s in trigger index %d' % (self.locid1, i)
         )
         ut.ep_assert(
             self.strid is None or IsConstExpr(self.strid),
-            'Invalid arg %s in trigger index %d' % (self.strid, i)
+            'Invalid strid %s in trigger index %d' % (self.strid, i)
         )
         ut.ep_assert(
             self.wavid is None or IsConstExpr(self.wavid),
-            'Invalid arg %s in trigger index %d' % (self.wavid, i)
+            'Invalid wavid %s in trigger index %d' % (self.wavid, i)
         )
         ut.ep_assert(
             self.time is None or IsConstExpr(self.time),
-            'Invalid arg %s in trigger index %d' % (self.time, i)
+            'Invalid time %s in trigger index %d' % (self.time, i)
         )
         ut.ep_assert(
             self.player1 is None or IsConstExpr(self.player1),
-            'Invalid arg %s in trigger index %d' % (self.player1, i)
+            'Invalid player1 %s in trigger index %d' % (self.player1, i)
         )
         ut.ep_assert(
             self.player2 is None or IsConstExpr(self.player2),
-            'Invalid arg %s in trigger index %d' % (self.player2, i)
+            'Invalid player2 %s in trigger index %d' % (self.player2, i)
         )
         ut.ep_assert(
             self.unitid is None or IsConstExpr(self.unitid),
-            'Invalid arg %s in trigger index %d' % (self.unitid, i)
+            'Invalid unitid %s in trigger index %d' % (self.unitid, i)
         )
         ut.ep_assert(
             self.acttype is None or IsConstExpr(self.acttype),
-            'Invalid arg %s in trigger index %d' % (self.acttype, i)
+            'Invalid acttype %s in trigger index %d' % (self.acttype, i)
         )
         ut.ep_assert(
             self.amount is None or IsConstExpr(self.amount),
-            'Invalid arg %s in trigger index %d' % (self.amount, i)
+            'Invalid amount %s in trigger index %d' % (self.amount, i)
         )
         ut.ep_assert(
             self.flags is None or IsConstExpr(self.flags),
-            'Invalid arg %s in trigger index %d' % (self.flags, i)
+            'Invalid flags %s in trigger index %d' % (self.flags, i)
         )
         return True
 

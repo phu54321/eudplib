@@ -24,6 +24,7 @@ THE SOFTWARE.
 '''
 
 from ..mapdata import GetPropertyIndex
+from ... import utils as ut
 
 
 class _Unique:
@@ -202,6 +203,7 @@ SwitchStateDict = {
 
 
 def _EncodeConst(d, s):
+    s = ut.unProxy(s)
     try:
         return d.get(s, s)
     except TypeError:  # unhashable type
@@ -336,6 +338,7 @@ def EncodeCount(s):
     '''
     Convert [All, (other numbers)] to number [0, (as-is)].
     '''
+    s = ut.unProxy(s)
     if s is All:
         return 0
     else:

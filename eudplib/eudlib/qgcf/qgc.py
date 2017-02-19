@@ -79,7 +79,7 @@ def QueueGameCommand_Select(n, ptrList):
         unitptr = ptrList[i]
         unitIndex = (unitptr - 0x59CCA8) // 336 + 1
         uniquenessIdentifier = f_bread(unitptr + 0xA5)
-        targetID = unitIndex | c.f_lshift(uniquenessIdentifier, 11)
+        targetID = unitIndex | c.f_bitlshift(uniquenessIdentifier, 11)
         b0, b1 = f_dwbreak(targetID)[2:4]
         bw.writebyte(b0)
         bw.writebyte(b1)

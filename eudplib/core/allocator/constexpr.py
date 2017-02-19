@@ -51,7 +51,7 @@ class ConstExpr:
     def __radd__(self, other):
         if not isinstance(other, int):
             return NotImplemented
-        
+
         return ConstExpr(self.baseobj, self.offset + other, self.rlocmode)
 
     def __sub__(self, other):
@@ -141,4 +141,8 @@ def Evaluate(x):
 
 def IsConstExpr(x):
     x = ut.unProxy(x)
-    return isinstance(x, int) or isinstance(x, RlocInt_C) or hasattr(x, 'Evaluate')
+    return (
+        isinstance(x, int) or
+        isinstance(x, RlocInt_C) or
+        hasattr(x, 'Evaluate')
+    )

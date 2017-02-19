@@ -41,6 +41,8 @@ from .strdict import (
 
 
 def EncodeAIScript(ais):
+    ais = ut.unProxy(ais)
+
     if type(ais) is str:
         ais = ut.u2b(ais)
 
@@ -58,6 +60,8 @@ def EncodeAIScript(ais):
 
 
 def _EncodeAny(f, dl, s):
+    s = ut.unProxy(s)
+
     if isinstance(s, str) or isinstance(s, bytes):
         try:
             return f(s)

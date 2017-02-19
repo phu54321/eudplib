@@ -24,7 +24,7 @@ THE SOFTWARE.
 '''
 
 from . import tblformat
-from ...utils import b2i2, b2i4, u2b, ep_assert
+from ...utils import b2i2, b2i4, u2b, ep_assert, unProxy
 
 
 class StringIdMap:
@@ -32,7 +32,7 @@ class StringIdMap:
         self._s2id = {}
 
     def AddItem(self, string, id):
-        string = u2b(string)
+        string = u2b(unProxy(string))
         if string in self._s2id:  # ambigious string
             self._s2id[string] = None
 
@@ -40,7 +40,7 @@ class StringIdMap:
             self._s2id[string] = id
 
     def GetStringIndex(self, string):
-        string = u2b(string)
+        string = u2b(unProxy(string))
         retid = self._s2id[string]
         ep_assert(retid is not None, "Ambigious string %s" % string)
         return retid
