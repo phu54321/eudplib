@@ -61,6 +61,11 @@ def _setCurrentCompiledFunc(func):
     return lastCompiledFunc
 
 
+def GetCurrentCompiledFunc():
+    """Get current eudfunc being compiled"""
+    return _currentCompiledFunc
+
+
 class EUDFuncN:
     def __init__(self, argn, callerfunc, bodyfunc):
         """ EUDFuncN

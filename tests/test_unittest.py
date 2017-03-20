@@ -1,3 +1,4 @@
+
 DoCoverageTest = False
 
 if DoCoverageTest:
@@ -6,6 +7,7 @@ if DoCoverageTest:
     cov.start()
 
 import helper
+import eptrace
 
 
 helper.EP_SetRValueStrictMode(True)

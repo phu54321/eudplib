@@ -42,4 +42,5 @@ from .eudfmethod import (
 from .eudfuncn import (
     EUDReturn,
     EUDFuncN,
+    GetCurrentCompiledFunc,
 )
