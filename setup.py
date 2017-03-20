@@ -13,7 +13,7 @@ setup(
     version=__version__,
     packages=find_packages(),
     package_data={
-        '': ['*.c', '*.pyx', '*.dll', '*.lst'],
+        '': ['*.c', '*.pyx', '*.dll', '*.dylib', '*.lst'],
     },
     ext_modules=cythonize([
         "eudplib/core/allocator/*.pyx",
