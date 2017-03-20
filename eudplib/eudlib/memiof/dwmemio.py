@@ -38,11 +38,13 @@ from .modcurpl import (
 @c.EUDFunc
 def f_dwepdread_epd(targetplayer):
     origcp = f_getcurpl()
-    f_setcurpl(targetplayer)
-
     ptr, epd = c.EUDVariable(), c.EUDVariable()
-    ptr << 0
-    epd << ut.EPD(0)
+    c.DoActions([
+        ptr.SetNumber(0),
+        epd.SetNumber(ut.EPD(0)),
+        c.SetCurrentPlayer(targetplayer)
+    ])
+
     for i in range(31, -1, -1):
         c.RawTrigger(
             conditions=[
@@ -61,8 +63,29 @@ def f_dwepdread_epd(targetplayer):
     return ptr, epd
 
 
+@c.EUDFunc
 def f_dwread_epd(targetplayer):
-    return f_dwepdread_epd(targetplayer)[0]
+    origcp = f_getcurpl()
+    ptr = c.EUDVariable()
+    c.DoActions([
+        ptr.SetNumber(0),
+        c.SetCurrentPlayer(targetplayer)
+    ])
+    for i in range(31, -1, -1):
+        c.RawTrigger(
+            conditions=[
+                c.Deaths(c.CurrentPlayer, c.AtLeast, 2**i, 0)
+            ],
+            actions=[
+                c.SetDeaths(c.CurrentPlayer, c.Subtract, 2**i, 0),
+                ptr.AddNumber(2 ** i),
+            ]
+        )
+
+    cs.DoActions(c.SetDeaths(c.CurrentPlayer, c.SetTo, ptr, 0))
+    f_setcurpl(origcp)
+
+    return ptr
 
 
 def f_epdread_epd(targetplayer):

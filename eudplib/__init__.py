@@ -33,7 +33,7 @@ from .epscript import *
 from .trigtrg import *
 from .maprw import *
 
-__version__ = '0.56.1'
+__version__ = '0.56.2'
 
 import types
 

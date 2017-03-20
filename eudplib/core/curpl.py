@@ -40,7 +40,7 @@ _curpl_checkcond = Forward()
 
 
 def cpcacheMatchCond():
-    cond = Memory(0x6509A0, Exactly, 0)
+    cond = Memory(0x6509B0, Exactly, 0)
     _curpl_checkcond << cond
     return cond
 
