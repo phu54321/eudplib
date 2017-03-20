@@ -1,15 +1,25 @@
 from ctypes import (
     CDLL,
-    c_int, c_char_p,
+    c_int, c_char_p, c_void_p
 )
 
 from eudplib.utils import (
     u2b, find_data_file
 )
 
-libeps = CDLL(find_data_file('libepScriptLib.dll', __file__))
+import platform
+
+libFile = {
+    'windows': 'libepScriptLib.dll',  # Windows
+    'darwin': 'libepScriptLib.dylib',  # Mac
+}[platform.system().lower()]
+
+
+libeps = CDLL(find_data_file(libFile, __file__))
 libeps.compileString.argtypes = [c_char_p, c_char_p]
-libeps.freeCompiledResult.argtypes = [c_int]
+libeps.compileString.restype = c_void_p
+libeps.freeCompiledResult.argtypes = [c_void_p]
+
 
 
 def epsCompile(modname, bCode):

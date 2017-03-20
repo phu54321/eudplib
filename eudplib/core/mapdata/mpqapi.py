@@ -24,7 +24,6 @@ THE SOFTWARE.
 '''
 
 from ctypes import (
-    WinDLL, CDLL,
     c_int, c_char_p, c_void_p,
     create_string_buffer, byref
 )
@@ -56,6 +55,7 @@ def InitMpqLibrary():
     try:
         platformName = platform.system()
         if platformName == 'Windows':  # windows
+            from ctypes import WinDLL
             if struct.calcsize("P") == 4:  # 32bit
                 libstorm = WinDLL(find_data_file('StormLib32.dll', __file__))
             else:  # 64bit
@@ -63,6 +63,7 @@ def InitMpqLibrary():
             filename_u2b = u2b
 
         elif platformName == 'Darwin':  # mac
+            from ctypes import CDLL
             try:
                 libstorm = CDLL('libstorm.dylib')
                 filename_u2b = (lambda x: x.encode('utf-8'))
@@ -80,21 +81,23 @@ def InitMpqLibrary():
         libstorm.SFileCloseFile.restype = c_int
 
         libstorm.SFileOpenArchive.argtypes = [c_char_p, c_int, c_int, c_void_p]
-        libstorm.SFileCloseArchive.argtypes = [c_int]
-        libstorm.SFileOpenFileEx.argtypes = [c_int, c_char_p, c_int, c_void_p]
-        libstorm.SFileGetFileSize.argtypes = [c_int, c_void_p]
+        libstorm.SFileCloseArchive.argtypes = [c_void_p]
+        libstorm.SFileOpenFileEx.argtypes = [
+            c_void_p, c_char_p, c_int, c_void_p]
+        libstorm.SFileGetFileSize.argtypes = [c_void_p, c_void_p]
         libstorm.SFileReadFile.argtypes = [
-            c_int, c_char_p, c_int, c_void_p, c_int]
-        libstorm.SFileCloseFile.argtypes = [c_int]
+            c_void_p, c_char_p, c_int, c_void_p, c_int]
+        libstorm.SFileCloseFile.argtypes = [c_void_p]
 
         # for MpqWrite
         libstorm.SFileCompactArchive.restype = c_int
         libstorm.SFileAddFile.restype = c_int
         libstorm.SFileAddWave.restype = c_int
 
-        libstorm.SFileCompactArchive.argtypes = [c_int, c_char_p, c_int]
-        libstorm.SFileAddFile.argtypes = [c_int, c_char_p, c_char_p, c_int]
-        libstorm.SFileAddWave.argtypes = [c_int, c_char_p, c_char_p, c_int, c_int]
+        libstorm.SFileCompactArchive.argtypes = [c_void_p, c_char_p, c_int]
+        libstorm.SFileAddFile.argtypes = [c_void_p, c_char_p, c_char_p, c_int]
+        libstorm.SFileAddWave.argtypes = [
+            c_void_p, c_char_p, c_char_p, c_int, c_int]
 
         return True
 
@@ -116,7 +119,7 @@ class MPQ:
         if self.mpqh is not None:
             raise RuntimeError('Duplicate opening')
 
-        h = c_int()
+        h = c_void_p()
         ret = self.libstorm.SFileOpenArchive(
             filename_u2b(fname),
             0,
@@ -157,7 +160,7 @@ class MPQ:
             return None
 
         # Open file
-        fileh = c_int()
+        fileh = c_void_p()
         ret = self.libstorm.SFileOpenFileEx(
             self.mpqh,
             u2b(fname),

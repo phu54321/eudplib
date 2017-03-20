@@ -634,7 +634,7 @@ static const char *__pyx_filename;
 
 
 static const char *__pyx_f[] = {
-  "eudplib\\utils\\stackobjs.pyx",
+  "eudplib/utils/stackobjs.pyx",
 };
 
 /*--- Type declarations ---*/
@@ -847,9 +847,9 @@ static const char __pyx_k_dwoccupmap_sum[] = "dwoccupmap_sum";
 static const char __pyx_k_dwoccupmap_dict[] = "dwoccupmap_dict";
 static const char __pyx_k_dwoccupmap_max_size[] = "dwoccupmap_max_size";
 static const char __pyx_k_eudplib_utils_stackobjs[] = "eudplib.utils.stackobjs";
-static const char __pyx_k_C_gitclones_eudtrglib_eudplib_ut[] = "C:\\gitclones\\eudtrglib\\eudplib\\utils\\stackobjs.pyx";
-static PyObject *__pyx_kp_s_C_gitclones_eudtrglib_eudplib_ut;
+static const char __pyx_k_Users_whyask37_Documents_gitclo[] = "/Users/whyask37/Documents/gitclones/eudtrglib/eudplib/utils/stackobjs.pyx";
 static PyObject *__pyx_n_s_StackObjects;
+static PyObject *__pyx_kp_s_Users_whyask37_Documents_gitclo;
 static PyObject *__pyx_n_s_alloctable;
 static PyObject *__pyx_n_s_curoff;
 static PyObject *__pyx_n_s_dwoccupmap;
@@ -1648,8 +1648,8 @@ static struct PyModuleDef __pyx_moduledef = {
 #endif
 
 static __Pyx_StringTabEntry __pyx_string_tab[] = {
-  {&__pyx_kp_s_C_gitclones_eudtrglib_eudplib_ut, __pyx_k_C_gitclones_eudtrglib_eudplib_ut, sizeof(__pyx_k_C_gitclones_eudtrglib_eudplib_ut), 0, 0, 1, 0},
   {&__pyx_n_s_StackObjects, __pyx_k_StackObjects, sizeof(__pyx_k_StackObjects), 0, 0, 1, 1},
+  {&__pyx_kp_s_Users_whyask37_Documents_gitclo, __pyx_k_Users_whyask37_Documents_gitclo, sizeof(__pyx_k_Users_whyask37_Documents_gitclo), 0, 0, 1, 0},
   {&__pyx_n_s_alloctable, __pyx_k_alloctable, sizeof(__pyx_k_alloctable), 0, 0, 1, 1},
   {&__pyx_n_s_curoff, __pyx_k_curoff, sizeof(__pyx_k_curoff), 0, 0, 1, 1},
   {&__pyx_n_s_dwoccupmap, __pyx_k_dwoccupmap, sizeof(__pyx_k_dwoccupmap), 0, 0, 1, 1},
@@ -1692,7 +1692,7 @@ static int __Pyx_InitCachedConstants(void) {
   __pyx_tuple_ = PyTuple_Pack(15, __pyx_n_s_found_objects, __pyx_n_s_dwoccupmap_dict, __pyx_n_s_alloctable, __pyx_n_s_dwoccupmap_max_size, __pyx_n_s_obj, __pyx_n_s_dwoccupmap_sum, __pyx_n_s_dwoccupmap, __pyx_n_s_lallocaddr, __pyx_n_s_payload_size, __pyx_n_s_curoff, __pyx_n_s_objsize, __pyx_n_s_j, __pyx_n_s_oclen, __pyx_n_s_py_dwoccupmap, __pyx_n_s_i); if (unlikely(!__pyx_tuple_)) __PYX_ERR(0, 7, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple_);
   __Pyx_GIVEREF(__pyx_tuple_);
-  __pyx_codeobj__2 = (PyObject*)__Pyx_PyCode_New(3, 0, 15, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple_, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_C_gitclones_eudtrglib_eudplib_ut, __pyx_n_s_StackObjects, 7, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__2)) __PYX_ERR(0, 7, __pyx_L1_error)
+  __pyx_codeobj__2 = (PyObject*)__Pyx_PyCode_New(3, 0, 15, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple_, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_whyask37_Documents_gitclo, __pyx_n_s_StackObjects, 7, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__2)) __PYX_ERR(0, 7, __pyx_L1_error)
   __Pyx_RefNannyFinishContext();
   return 0;
   __pyx_L1_error:;

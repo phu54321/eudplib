@@ -4,8 +4,11 @@ import sys as _sys
 import os as _os
 import random as _random
 
-from eudplib import *
+_sys.path.insert(1,
+    _os.path.abspath(
+        _os.path.join(_os.path.dirname(__file__), "..")))
 
+from eudplib import *
 
 _testFailed = EUDLightVariable()
 _failedTest = EUDArray(1024)
