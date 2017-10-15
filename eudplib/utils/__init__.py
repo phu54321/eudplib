@@ -53,5 +53,6 @@ from .eperror import (
 from .exprproxy import (
     ExprProxy,
     unProxy,
+    isUnproxyInstance,
 )
 from .etc import find_data_file

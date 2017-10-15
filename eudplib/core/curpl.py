@@ -40,9 +40,9 @@ _curpl_checkcond = Forward()
 
 
 def cpcacheMatchCond():
-    cond = Memory(0x6509B0, Exactly, 0)
-    _curpl_checkcond << cond
-    return cond
+    if not _curpl_checkcond.IsSet():
+        _curpl_checkcond << Memory(0x6509B0, Exactly, 0)
+    return _curpl_checkcond
 
 
 def SetCurrentPlayer(p):

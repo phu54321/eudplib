@@ -39,7 +39,11 @@ def HasEUDVariable(l):
 def ApplyPatchTable(initepd, obj, patchTable):
     def fieldSelector(fieldName):
         if type(fieldName) is str:
-            return getattr(obj, fieldName)
+            try:
+                return getattr(obj, fieldName)
+            except AttributeError:
+                print(obj._expr.locid)
+                raise
         else:
             return fieldName
 

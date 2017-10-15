@@ -49,6 +49,7 @@ def _f_updatecpcache():
     cs.DoActions(c.SetCurrentPlayer(cpcache))
 
 
+@c.EUDFunc
 def f_getcurpl():
     cpcond = c.curpl.cpcacheMatchCond()
     cpcache = c.curpl.GetCPCache()

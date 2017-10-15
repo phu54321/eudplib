@@ -164,3 +164,10 @@ def unProxy(x):
     except AttributeError:
         return x
 
+def isUnproxyInstance(x, cls):
+    if isinstance(x, cls):
+        return True
+    try:
+        return isUnproxyInstance(x.getValue(), cls)
+    except AttributeError:
+        return False

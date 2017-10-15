@@ -96,6 +96,7 @@ class ConstExprInt(ConstExpr):
     def Evaluate(self):
         return self.value
 
+
 class Forward(ConstExpr):
 
     '''Class for forward definition.
@@ -110,9 +111,8 @@ class Forward(ConstExpr):
             self._expr is None,
             'Reforwarding without reset is not allowed'
         )
-        expr = ut.unProxy(expr)
         ut.ep_assert(expr is not None, 'Cannot forward to None')
-        if isinstance(expr, int):
+        if ut.isUnproxyInstance(expr, int):
             self._expr = ConstExprInt(expr)
         else:
             self._expr = expr
@@ -127,6 +127,18 @@ class Forward(ConstExpr):
     def Evaluate(self):
         ut.ep_assert(self._expr is not None, 'Forward not initialized')
         return Evaluate(self._expr)
+
+    def __call__(self, *args, **kwargs):
+        return self._expr(*args, **kwargs)
+
+    def __getattr__(self, name):
+        return getattr(self._expr, name)
+
+    def __getitem__(self, name):
+        return self._expr[name]
+
+    def __setitem__(self, name, newvalue):
+        self._expr[name] = newvalue
 
 
 def Evaluate(x):

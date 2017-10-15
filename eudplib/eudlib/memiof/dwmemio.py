@@ -39,7 +39,7 @@ from .modcurpl import (
 def f_dwepdread_epd(targetplayer):
     origcp = f_getcurpl()
     ptr, epd = c.EUDVariable(), c.EUDVariable()
-    c.DoActions([
+    cs.DoActions([
         ptr.SetNumber(0),
         epd.SetNumber(ut.EPD(0)),
         c.SetCurrentPlayer(targetplayer)
@@ -67,7 +67,7 @@ def f_dwepdread_epd(targetplayer):
 def f_dwread_epd(targetplayer):
     origcp = f_getcurpl()
     ptr = c.EUDVariable()
-    c.DoActions([
+    cs.DoActions([
         ptr.SetNumber(0),
         c.SetCurrentPlayer(targetplayer)
     ])
