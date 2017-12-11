@@ -70,7 +70,7 @@ def test_fptr():
     test_equality("Indirect fptr call", [a, b, c, d], [63, 63, 16, 16])
 
     # Test 5 - fptr cloning
-    s = p.clone()
+    s = p.copy()
     p << f_mul
     e, f = p(7, 9), s(7, 9)
     test_equality("Fptr cloning", [e, f], [63, 16])

@@ -47,15 +47,7 @@ class EUDStruct(ut.ExprProxy, metaclass=_EUDStruct_Metaclass):
 
         # With initialization
         if initvar is None:
-            initvals = []
-            for nametype in fields:
-                if isinstance(nametype, str):
-                    initvals.append(0)
-                else:
-                    _, attrtype = nametype
-                    initvals.append(attrtype())
-
-            super().__init__(EUDVArray(fieldn)(initvals))
+            super().__init__(EUDVArray(fieldn)([0] * len(fields)))
 
         else:
             super().__init__(EUDVArray(fieldn)(initvar))
@@ -64,26 +56,22 @@ class EUDStruct(ut.ExprProxy, metaclass=_EUDStruct_Metaclass):
 
     # Initializer
 
-    def clone(self):
+    def copy(self):
         """ Create struct clone """
         basetype = type(self)
         inst = basetype()
-        self.deepcopy(inst)
+        self.copyto(inst)
         return inst
 
     def setall(self, values):
         self.fill(values, assert_expected_values_len=len(self._fielddict))
 
-    def deepcopy(self, inst):
+    def copyto(self, inst):
         """ Copy struct to other instance """
         basetype = type(self)
         fields = basetype._fields_
         for i, nametype in enumerate(fields):
-            if isinstance(nametype, str):
-                inst.set(i, self.get(i))
-            else:
-                _, attrtype = nametype
-                attrtype(self.get(i)).deepcopy(attrtype(inst.get(i)))
+            inst.set(i, self.get(i))
 
     # Field setter & getter
 

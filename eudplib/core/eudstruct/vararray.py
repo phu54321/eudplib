@@ -39,6 +39,7 @@ from ...utils import (
     ExprProxy,
     ep_assert,
     unProxy,
+    isUnproxyInstance,
     cachedfunc
 )
 
@@ -76,7 +77,7 @@ def EUDVArray(size, basetype=None):
     class _EUDVArray(ExprProxy):
         def __init__(self, initvars=None):
             # Int -> interpret as sequence of 0s
-            if isinstance(initvars, int):
+            if initvars is None:
                 initvars = [0] * size
 
             # For python iterables
@@ -86,7 +87,7 @@ def EUDVArray(size, basetype=None):
             # Initialization by constant reference
             elif IsConstExpr(initvars):
                 initvars = unProxy(initvars)
-                ep_assert(isinstance(initvars, EUDVArrayData(size)))
+                ep_assert(isUnproxyInstance(initvars, EUDVArrayData(size)))
                 baseobj = initvars
 
             # Initialization by variable reference

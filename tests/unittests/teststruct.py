@@ -32,7 +32,7 @@ def test_struct():
         [3, 3, 3, 3, 7, 7, 7, 7, 8, 8, 8, 8]
     )
 
-    d = a.clone()
+    d = a.copy()
     a.add(d)
     test_equality(
         "EUDTypedMethod test",
@@ -50,28 +50,36 @@ class Coord(EUDStruct):
 class Triangle(EUDStruct):
     _fields_ = [
         ('p', Coord * 5),
+        'q'
     ]
 
 
 @TestInstance
 def test_nested_struct():
     a = Triangle()
+    a.p = (Coord * 5)()
+    for i in range(5):
+        a.p[i] = Coord()
+
     a.p[0].x = 1
     a.p[1].y = 2
     a.p[1].y += 2
+    a.q = 3
 
     test_assert("Nested EUDStruct test", [
         a.p[0].x == 1,
         a.p[0].y == 0,
         a.p[1].y == 4,
+        a.q == 3,
     ])
 
-    b = a.clone()
+    b = a.copy()
     b.p[0].x = 5
+    b.q = 2
     test_equality(
-        "Nested EUDStruct clone test",
-        [a.p[0].x, b.p[0].x, b.p[0].y, b.p[1].y],
-        [1, 5, 0, 4]
+        "Shallow EUDStruct copy test",
+        [a.p[0].x, b.p[0].x, b.p[0].y, b.p[1].y, a.q, b.q],
+        [5, 5, 0, 4, 3, 2]
     )
 
 

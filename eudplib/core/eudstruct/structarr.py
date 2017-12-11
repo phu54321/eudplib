@@ -36,7 +36,7 @@ class _EUDStruct_Metaclass(type):
 
             def __init__(self, initvar=None):
                 if initvar is None:
-                    initvals = [basetype() for _ in range(times)]
+                    initvals = [0 for _ in range(times)]
                     super().__init__(EUDVArray(times, basetype)(initvals))
                 else:
                     super().__init__(EUDVArray(times, basetype)(initvar))
@@ -44,17 +44,17 @@ class _EUDStruct_Metaclass(type):
                 self._initialized = True
                 self.dontFlatten = True
 
-            def clone(self):
-                """ Create struct clone """
+            def copy(self):
+                """ Create a shallow copy """
                 arraytype = type(self)
                 inst = arraytype()
-                self.deepcopy(inst)
+                self.copyTo(inst)
                 return inst
 
-            def deepcopy(self, inst):
+            def copyTo(self, inst):
                 """ Copy struct to other instance """
                 for i in range(times):
-                    self[i].deepcopy(inst[i])
+                    inst[i] = self[i]
 
             def __getitem__(self, index):
                 return self.getValue()[index]
