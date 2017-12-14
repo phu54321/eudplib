@@ -1,7 +1,8 @@
 from . import epsimp
 
 from .epscompile import (
-    epsCompile
+    epsCompile,
+    EPS_SetDebug
 )
 
 from .epsimp import (

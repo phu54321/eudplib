@@ -136,6 +136,18 @@ cdef class Forward(ConstExpr):
         ut.ep_assert(self._expr is not None, 'Forward not initialized')
         return Evaluate(self._expr)
 
+    def __call__(self, *args, **kwargs):
+        return self._expr(*args, **kwargs)
+
+    def __getattr__(self, name):
+        return getattr(self._expr, name)
+
+    def __getitem__(self, name):
+        return self._expr[name]
+
+    def __setitem__(self, name, newvalue):
+        self._expr[name] = newvalue
+
 
 cpdef RlocInt_C Evaluate(x):
     '''
