@@ -23,8 +23,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-import collections
-
 from .. import core as c
 from .. import utils as ut
 from .memiof import f_dwread_epd, f_dwwrite_epd

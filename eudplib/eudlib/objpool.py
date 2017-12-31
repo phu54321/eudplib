@@ -31,7 +31,10 @@ from .. import (
 from .eudarray import EUDArray
 
 
-def ObjPool(basetype=None):
+def ObjPool(basetype):
+    fields = basetype._fields_
+    fieldn = len(fields)
+
     class _ObjPool(c.EUDStruct):
         _fields_ = [
             ('data', EUDArray),
@@ -40,7 +43,7 @@ def ObjPool(basetype=None):
         ]
 
         def constructor(self, size):
-            objects = [basetype() for _ in range(size)]
+            objects = [c.EUDVArray(fieldn)([0] * fieldn) for _ in range(size)]
             self.data = EUDArray(objects)
             self.remaining = size
             self.size = size
@@ -57,13 +60,12 @@ def ObjPool(basetype=None):
 
             self.remaining -= 1
             data = self.data[self.remaining]
-
             return data
 
-        def alloc(self):
+        def alloc(self, *args, **kwargs):
             data = self._alloc()
-            if self._basetype:
-                data = self._basetype(data)
+            data = basetype.cast(data)
+            data.constructor(*args, **kwargs)
             return data
 
         @c.EUDMethod
