@@ -51,7 +51,7 @@ def applyTypes(typesdecl, varlist):
         if vartype == ev.EUDVariable or vartype is None:
             rets.append(var)
         else:
-            rets.append(vartype(var))
+            rets.append(vartype.cast(var))
 
     return rets
 

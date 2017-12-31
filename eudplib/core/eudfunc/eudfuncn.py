@@ -24,7 +24,6 @@ THE SOFTWARE.
 '''
 
 import functools
-import inspect
 
 from ... import utils as ut
 

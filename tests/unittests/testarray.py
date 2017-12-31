@@ -7,7 +7,7 @@ def test_array():
     n = EUDVariable(k)
     b = EUDVariable()
     b << n
-    a = EUDArray(b)
+    a = EUDArray.cast(b)
     for i in range(10):
         a.set(i, 2 ** i)
 

@@ -114,27 +114,23 @@ def EUDTypedFuncPtr(argtypes, rettypes):
             '_fendnext_epd'
         ]
 
-        def __init__(self, f_init=None):
-            """ Constructor with function prototype
-            :param f_init: First function
-            """
-
+        def constructor(self, f_init=None):
             if f_init:
-                if isinstance(f_init, EUDFuncN):
-                    self.checkValidFunction(f_init)
-                    f_idcstart, f_idcend = createIndirectCaller(f_init)
-                    super().__init__([
-                        f_idcstart,  # fstart
-                        ut.EPD(f_idcend + 4)  # fendnext_epd
-                    ])
-                else:
-                    super().__init__(f_init)
+                self.checkValidFunction(f_init)
+                f_idcstart, f_idcend = createIndirectCaller(f_init)
+                self._fstart = f_idcstart
+                self._fendnext_epd = ut.EPD(f_idcend + 4)
 
+        @classmethod
+        def cast(cls, _from):
+            # Special casting rule: EUDFuncN → EUDFuncPtr
+            if isinstance(_from, EUDFuncN):
+                return cls(_from)
             else:
-                super().__init__()
+                return cls(_from=_from)
 
         def checkValidFunction(self, f):
-            ut.ep_assert(isinstance(f, EUDFuncN))
+            ut.ep_assert(isinstance(f, EUDFuncN), "%s is not an EUDFuncN" % f)
             if not f._fstart:
                 f._CreateFuncBody()
 
@@ -154,6 +150,7 @@ def EUDTypedFuncPtr(argtypes, rettypes):
             """
             try:
                 self._fstart, self._fendnext_epd = f._fstart, f._fendnext_epd
+
             except AttributeError:
                 self.checkValidFunction(f)
 

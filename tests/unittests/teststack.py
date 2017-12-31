@@ -3,7 +3,7 @@ from helper import *
 
 @TestInstance
 def test_stack():
-    k = EUDStack(1024)
+    k = EUDStack()(1024)
     k.push(123)
     k.push(456)
     t1 = k.pop()  # 456

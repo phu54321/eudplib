@@ -31,7 +31,7 @@ from .structarr import _EUDStruct_Metaclass
 
 
 class EUDStruct(ut.ExprProxy, metaclass=_EUDStruct_Metaclass):
-    def __init__(self, initvar=None):
+    def __init__(self, *args, _from=None):
         basetype = type(self)
         fields = basetype._fields_
         fieldn = len(fields)
@@ -45,14 +45,24 @@ class EUDStruct(ut.ExprProxy, metaclass=_EUDStruct_Metaclass):
                 fielddict[nametype[0]] = (index, nametype[1])
         self._fielddict = fielddict
 
-        # With initialization
-        if initvar is None:
-            super().__init__(EUDVArray(fieldn)([0] * len(fields)))
-
+        if _from:
+            super().__init__(EUDVArray(fieldn).cast(_from))
+            self._initialized = True
         else:
-            super().__init__(EUDVArray(fieldn)(initvar))
+            super().__init__(EUDVArray(fieldn)([0] * len(fields)))
+            self._initialized = True
+            self.constructor(*args)
 
-        self._initialized = True
+    def constructor(self):
+        pass
+
+    @classmethod
+    def cast(cls, _from):
+        try:
+            return cls(_from=_from)
+        except TypeError:
+            obj = cls.__new__(cls)
+            EUDStruct.__init__(obj, _from=_from)
 
     # Initializer
 
@@ -79,7 +89,7 @@ class EUDStruct(ut.ExprProxy, metaclass=_EUDStruct_Metaclass):
         attrid, attrtype = self._fielddict[name]
         attr = self.get(attrid)
         if attrtype:
-            return attrtype(attr)
+            return attrtype.cast(attr)
         else:
             return attr
 

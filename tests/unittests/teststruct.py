@@ -19,9 +19,9 @@ def test_struct():
     a.x = 5
     a.y = 7
 
-    b = TestStruct(a)
-    c = TestStruct(b)
-    d = TestStruct(c)
+    b = TestStruct.cast(a)
+    c = TestStruct.cast(b)
+    d = TestStruct.cast(c)
 
     b.z = 8
     c.x = 3

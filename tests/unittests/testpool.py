@@ -8,7 +8,7 @@ class Coord(EUDStruct):
 
 @TestInstance
 def test_pool():
-    pool = ObjPool(5, Coord)
+    pool = ObjPool(Coord)(5)
 
     # Basic allocation
     a = pool.alloc()

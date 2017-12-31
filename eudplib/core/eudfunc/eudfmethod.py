@@ -34,11 +34,13 @@ _mth_classtype = {}
 _selftype = None
 
 
-def selftype(arg):
+class selftype:
     """ When used in EUDFuncMethod's type declaration, This is interpreted
     as the owning class itself
     """
-    return _selftype(arg)
+    @staticmethod
+    def cast(_from):
+        return _selftype.cast(_from)
 
 
 def EUDTypedMethod(argtypes, rettypes=None):

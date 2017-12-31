@@ -79,15 +79,13 @@ class EUDArrayData(c.EUDObject):
 
 
 class EUDArray(ut.ExprProxy):
-    def __init__(self, initval):
-        if (
-            isinstance(initval, int) or
-            isinstance(initval, collections.Iterable)
-        ):
+    def __init__(self, initval=None, *, _from=None):
+        if _from is not None:
+            dataObj = _from
+
+        else:
             dataObj = EUDArrayData(initval)
             self.length = dataObj._arrlen
-        else:
-            dataObj = initval
 
         super().__init__(dataObj)
         self._epd = ut.EPD(self)

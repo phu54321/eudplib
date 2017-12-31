@@ -11,7 +11,7 @@ def test_varray():
         a[i] = i * i * i
 
     b = EUDVariable(a)
-    c = EUDVArray(8)(b)
+    c = EUDVArray(8).cast(b)
 
     v_sum = EUDVariable()
 

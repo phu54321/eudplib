@@ -75,25 +75,25 @@ def EUDVArray(size, basetype=None):
     ep_assert(isinstance(size, int))
 
     class _EUDVArray(ExprProxy):
-        def __init__(self, initvars=None):
-            # Int -> interpret as sequence of 0s
-            if initvars is None:
-                initvars = [0] * size
+        def __init__(self, initvars=None, *, _from=None):
+            # Initialization from value
+            if _from is not None:
+                if IsConstExpr(_from):
+                    baseobj = _from
 
-            # For python iterables
-            if isinstance(initvars, collections.Iterable):
-                baseobj = EUDVArrayData(size)(initvars)
+                # Initialization by variable reference
+                else:
+                    baseobj = EUDVariable()
+                    baseobj << _from
 
-            # Initialization by constant reference
-            elif IsConstExpr(initvars):
-                initvars = unProxy(initvars)
-                ep_assert(isUnproxyInstance(initvars, EUDVArrayData(size)))
-                baseobj = initvars
-
-            # Initialization by variable reference
             else:
-                baseobj = EUDVariable()
-                baseobj << initvars
+                # Int -> interpret as sequence of 0s
+                if initvars is None:
+                    initvars = [0] * size
+
+                # For python iterables
+                else:
+                    baseobj = EUDVArrayData(size)(initvars)
 
             super().__init__(baseobj)
             self.dontFlatten = True
@@ -135,7 +135,7 @@ def EUDVArray(size, basetype=None):
 
             nptr << bt.NextTrigger()
             if self._basetype:
-                r = self._basetype(r)
+                r = self._basetype.cast(r)
             return r
 
         def set(self, i, value):

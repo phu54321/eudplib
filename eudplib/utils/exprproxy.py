@@ -53,6 +53,13 @@ class ExprProxy:
     def __init__(self, initval):
         self._value = initval
 
+    @classmethod
+    def cast(cls, _from):
+        try:
+            return cls(_from=_from)
+        except TypeError:
+            raise TypeError("Type %s is not castable" % cls.__name__)
+
     def getValue(self):
         return self._value
 

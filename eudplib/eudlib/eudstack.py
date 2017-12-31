@@ -27,30 +27,29 @@ from .eudarray import EUDArray
 from .. import core as c
 
 
-class EUDStack(c.EUDStruct):
-    _fields_ = [
-        ('data', EUDArray),
-        'pos'
-    ]
+def EUDStack(basetype=None):
+    class _EUDStack(c.EUDStruct):
+        _fields_ = [
+            ('data', EUDArray),
+            'pos'
+        ]
 
-    def __init__(self, size, basetype=None):
-        super().__init__([
-            # data
-            EUDArray(size),
-            0
-        ])
-        self._basetype = basetype
+        def constructor(self, size):
+            self.data = EUDArray(size)
+            self.pos = 0
 
-    def push(self, value):
-        self.data[self.pos] = value
-        self.pos += 1
+        def push(self, value):
+            self.data[self.pos] = value
+            self.pos += 1
 
-    def pop(self):
-        self.pos -= 1
-        data = self.data[self.pos]
-        if self._basetype:
-            data = self._basetype(data)
-        return data
+        def pop(self):
+            self.pos -= 1
+            data = self.data[self.pos]
+            if basetype:
+                data = basetype.cast(data)
+            return data
 
-    def empty(self):
-        return self.pos == 0
+        def empty(self):
+            return self.pos == 0
+
+    return _EUDStack

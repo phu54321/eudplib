@@ -52,9 +52,11 @@ def test_fptr():
     b1, b2 = q(12, 5)
     q << f_div
     c1, c2 = q(17, 3)
-    test_assert("Function pointer test", [
-        a1 == 2, a2 == 2, b1 == 17, b2 == 60, c1 == 5, c2 == 2,
-    ])
+    test_equality(
+        "Function pointer test",
+        [a1, a2, b1, b2, c1, c2],
+        [2, 2, 17, 60, 5, 2]
+    )
 
     # Test 3 - no arg no ret
     r = EUDFuncPtr(0, 0)(testnoret)
@@ -62,7 +64,7 @@ def test_fptr():
     test_assert("Function pointer test (0.0 Func)", noretCheck == 1)
 
     # Test 4 - transfer fptr to fptr
-    r = EUDFuncPtr(2, 1)(p)
+    r = EUDFuncPtr(2, 1).cast(p)
     p << f_mul
     a, b = p(7, 9), r(7, 9)
     r << f_add
@@ -76,15 +78,16 @@ def test_fptr():
     test_equality("Fptr cloning", [e, f], [63, 16])
 
 
-
 # Nested fptr call
 @EUDTypedFunc([EUDFuncPtr(1, 1)])
 def f1(f):
-    return 4 + f(4) +6
+    return 4 + f(4) + 6
+
 
 @EUDFunc
 def f(x):
     return x * x
+
 
 @TestInstance
 def test_nested_fptr():

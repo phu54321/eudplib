@@ -34,12 +34,15 @@ class _EUDStruct_Metaclass(type):
         class EUDStructArray(ExprProxy):
             __metaclass__ = _EUDStruct_Metaclass
 
-            def __init__(self, initvar=None):
-                if initvar is None:
-                    initvals = [0 for _ in range(times)]
-                    super().__init__(EUDVArray(times, basetype)(initvals))
+            def __init__(self, initvar=None, *, _from=None):
+                if _from is None:
+                    if initvar is None:
+                        initvals = [0 for _ in range(times)]
+                        super().__init__(EUDVArray(times, basetype)(initvals))
+                    else:
+                        super().__init__(EUDVArray(times, basetype)(initvar))
                 else:
-                    super().__init__(EUDVArray(times, basetype)(initvar))
+                    super().__init__(EUDVArray(times, basetype).cast(_from))
 
                 self._initialized = True
                 self.dontFlatten = True
