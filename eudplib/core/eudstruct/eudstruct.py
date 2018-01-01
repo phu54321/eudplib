@@ -31,7 +31,7 @@ from .structarr import _EUDStruct_Metaclass
 
 
 class EUDStruct(ut.ExprProxy, metaclass=_EUDStruct_Metaclass):
-    def __init__(self, *args, _from=None):
+    def __init__(self, *args, _from=None, **kwargs):
         basetype = type(self)
         fields = basetype._fields_
         fieldn = len(fields)
@@ -52,7 +52,7 @@ class EUDStruct(ut.ExprProxy, metaclass=_EUDStruct_Metaclass):
             super().__init__(EUDVArray(fieldn)([0] * len(fields)))
             self.isPooled = False
             self._initialized = True
-            self.constructor(*args)
+            self.constructor_static(*args, **kwargs)
 
     # Helper function for alloc & free
     # Due to cyclic dependency we import objpool inside methods
@@ -65,7 +65,6 @@ class EUDStruct(ut.ExprProxy, metaclass=_EUDStruct_Metaclass):
     def free(cls, data):
         from ...eudlib import objpool as pool
         return pool.Pool(cls).free(data)
-
 
     # Constructor & Destructor of classes
     def constructor(self):
@@ -82,6 +81,13 @@ class EUDStruct(ut.ExprProxy, metaclass=_EUDStruct_Metaclass):
         members statically via self.isPooled.
         """
         pass
+
+    def constructor_static(self, *args, **kwargs):
+        """Specialized constructor for static variables.
+
+        Static variable may not require allocation for member variables.
+        Function may specialize their behavior by overriding this function"""
+        self.constructor(*args, **kwargs)
 
     def destructor(self):
         """Destructor for individual structures.
