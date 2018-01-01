@@ -56,22 +56,10 @@ class ObjPool:
         data = self.data[self.remaining]
         return data
 
-    def alloc(self, *args, parentPooled=True, **kwargs):
-        """Allocate object
-
-        :param parentPooled: If this is false, object is statically
-            allocated rather than being popped from pool. This makes
-            writing EUDStruct constructor easier, as constructor
-            shouldn't care about its self.isPooled and can just
-            hand it down to alloc() function.
-        """
-
-        if parentPooled:
-            data = self._alloc()
-            data = self.basetype.cast(data)
-            data.constructor(*args, **kwargs)
-        else:
-            data = basetype(*args, **kwargs)
+    def alloc(self, *args, **kwargs):
+        data = self._alloc()
+        data = self.basetype.cast(data)
+        data.constructor(*args, **kwargs)
         return data
 
     @c.EUDMethod
