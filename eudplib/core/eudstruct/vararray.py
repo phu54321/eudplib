@@ -24,11 +24,9 @@ THE SOFTWARE.
 '''
 
 import weakref
-import collections
 
 from .. import rawtrigger as bt
 from ..allocator import (
-    Evaluate,
     Forward,
     ConstExpr,
     IsConstExpr,
@@ -38,8 +36,6 @@ from ...utils import (
     EPD,
     ExprProxy,
     ep_assert,
-    unProxy,
-    isUnproxyInstance,
     cachedfunc
 )
 
@@ -64,7 +60,7 @@ def EUDVArrayData(size):
                 self._vdict[evb] = evb.CreateMultipleVarTriggers(
                     self._initvars)
 
-            return Evaluate(self._vdict[evb])
+            return self._vdict[evb].Evaluate()
 
     return _EUDVArrayData
 

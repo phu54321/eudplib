@@ -52,7 +52,7 @@ class _ObjPoolData(c.ConstExpr):
                 [0] * (max_fieldn * self.size)
             )
 
-        return c.Evaluate(self._vdict[evb])
+        return self._vdict[evb].Evaluate()
 
 
 class ObjPool:

@@ -23,7 +23,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-from ..allocator import ConstExpr, Evaluate, IsConstExpr
+from ..allocator import ConstExpr, IsConstExpr
 from eudplib import utils as ut
 
 
@@ -119,7 +119,7 @@ class Condition(ConstExpr):
 
     def Evaluate(self):
         ut.ep_assert(self.parenttrg is not None, 'Orphan condition')
-        return Evaluate(self.parenttrg) + 8 + self.condindex * 20
+        return self.parenttrg.Evaluate() + 8 + self.condindex * 20
 
     def WritePayload(self, pbuffer):
         pbuffer.WritePack(

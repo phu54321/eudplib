@@ -23,7 +23,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-from .rlocint cimport RlocInt_C
+from .rlocint cimport RlocInt_C, toRlocInt
 from .rlocint import RlocInt, RlocInt_C, toRlocInt
 from ... import utils as ut
 

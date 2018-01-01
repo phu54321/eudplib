@@ -23,7 +23,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-from ..allocator import ConstExpr, Evaluate, IsConstExpr
+from ..allocator import ConstExpr, IsConstExpr
 from eudplib import utils as ut
 
 
@@ -133,7 +133,7 @@ class Action(ConstExpr):
         self.actindex = index
 
     def Evaluate(self):
-        return Evaluate(self.parenttrg) + 8 + 320 + 32 * self.actindex
+        return self.parenttrg.Evaluate() + 8 + 320 + 32 * self.actindex
 
     def WritePayload(self, pbuffer):
         pbuffer.WritePack(

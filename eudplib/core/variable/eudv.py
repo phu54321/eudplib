@@ -28,7 +28,6 @@ import traceback
 
 from .. import rawtrigger as bt
 from ..allocator import (
-    Evaluate,
     Forward,
     ConstExpr,
     IsConstExpr
@@ -65,7 +64,7 @@ class VariableTriggerForward(ConstExpr):
         if evb not in self._vdict:
             self._vdict[evb] = evb.CreateVarTrigger(self._initval)
 
-        return Evaluate(self._vdict[evb])
+        return self._vdict[evb].Evaluate()
 
 
 class EUDVariable(VariableBase):
