@@ -41,6 +41,7 @@ from unittests import (
 helper.CompressPayload(True)
 helper.test_runall('unittest')
 
+
 if DoCoverageTest:
     cov.stop()
     cov.html_report(include=["C:\\gitclones\\eudtrglib\\eudplib\\*"])

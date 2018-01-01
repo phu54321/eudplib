@@ -37,9 +37,9 @@ from ...trigtrg import trigtrg as tt
 trglist = []
 
 
-def Trigger(*args, **kwargs):
+def Trigger(players=[tt.AllPlayers], *args, **kwargs):
     global trglist
-    trglist.append(tt.Trigger(*args, **kwargs))
+    trglist.append(tt.Trigger(players=players, *args, **kwargs))
 
 
 def CopyDeaths(iplayer, oplayer, copyepd=False, initvalue=None):
@@ -131,6 +131,7 @@ def CreateVectorRelocator(chkt, payload):
         prts = prts + [-1] * (packn - len(prts))  # -1 : dummy space
         pch = [prts[j] - prevoffset[j] for j in range(packn)]
         str_sled.append(sledheader_prt + tt.Trigger(
+            players=[tt.AllPlayers],
             actions=[
                 [tt.SetMemory(mrgn + 328 + 32 * j + 16, tt.Add, pch[j])
                  for j in range(packn)],
@@ -148,6 +149,7 @@ def CreateVectorRelocator(chkt, payload):
         orts = orts + [-1] * (packn - len(orts))  # -1 : dummy space
         pch = [orts[j] - prevoffset[j] for j in range(packn)]
         str_sled.append(sledheader_ort + tt.Trigger(
+            players=[tt.AllPlayers],
             actions=[
                 [tt.SetMemory(mrgn + 2408 + 328 + 32 * j + 16, tt.Add, pch[j])
                  for j in range(packn)],
@@ -158,6 +160,7 @@ def CreateVectorRelocator(chkt, payload):
 
     # jump to ort
     str_sled.append(sledheader_ort + tt.Trigger(
+        players=[tt.AllPlayers],
         actions=[
             [tt.SetMemory(mrgn + 2408 + 328 + 32 * j + 16, tt.Add,
                           0xFFFFFFFF - prevoffset[j]) for j in range(packn)],
@@ -182,6 +185,7 @@ def CreateVectorRelocator(chkt, payload):
     mrgn_trigger.append(
         bytes(4) + ut.i2b4(prttrg_start + strsled_offset) +
         tt.Trigger(
+            players=[tt.AllPlayers],
             actions=[
                 # SetDeaths actions in MRGN initially points to EPD(payload -
                 # 4)
@@ -195,6 +199,7 @@ def CreateVectorRelocator(chkt, payload):
     mrgn_trigger.append(
         bytes(4) + ut.i2b4(orttrg_start + strsled_offset) +
         tt.Trigger(
+            players=[tt.AllPlayers],
             actions=[
                 [tt.SetMemory(payload_offset - 4, tt.Add, payload_offset)
                  for _ in range(packn)],
@@ -212,7 +217,8 @@ def CreateVectorRelocator(chkt, payload):
     trglist.clear()
 
     # Check if epd is supported
-    Trigger(actions=[
+    Trigger(
+        actions=[
         tt.SetDeaths(-12, tt.SetTo, 1, 1)
     ])
 
@@ -221,7 +227,7 @@ def CreateVectorRelocator(chkt, payload):
             tt.Deaths(0, tt.Exactly, 0, 0)
         ],
         actions=[
-            tt.DisplayTextMessage(eude_needed),
+            tt.DisplayText(eude_needed),
             tt.Draw()
         ]
     )

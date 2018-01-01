@@ -30,10 +30,19 @@ from .trigger import *
 from .ctrlstru import *
 from .eudlib import *
 from .epscript import *
-from .trigtrg import *
+from .trigtrg.runtrigtrg import (
+    RunTrigTrigger,
+
+    GetFirstTrigTrigger,
+    GetLastTrigTrigger,
+
+    TrigTriggerBegin,
+    TrigTriggerEnd,
+)
+
 from .maprw import *
 
-__version__ = '0.56.3'
+__version__ = '0.57'
 
 import types
 
@@ -41,7 +50,7 @@ import types
 
 _alllist = []
 for _k, _v in dict(globals()).items():
-    if isinstance(_v, types.ModuleType):
+    if _k != 'stocktrg' and isinstance(_v, types.ModuleType):
         continue
     if _k[0] == '_':
         continue

@@ -23,55 +23,25 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-'''
-WARNING! This code is speciallized for use on eudplib
-- Default player of rawtrigger is 'All Player'.
-- Only conditions/actions used in eudplib are declared
-- Condition/Action input filtering (& 0xFFFFFFFF thing) are only applied to
-  player & number section of Deaths/SetDeaths
-Note this when using this code outside of eudplib.
-'''
-
 from struct import pack
 from eudplib import utils as ut
+from ..utils import EPD
+from ..core.rawtrigger.constenc import *
+from ..core.rawtrigger.strenc import *
 
-i2b1, i2b2, i2b4 = ut.i2b1, ut.i2b2, ut.i2b4
+'''
+Defines stock conditions & actions. You are most likely to use only conditions
+declared in this file. This file also serves as a basic reference for trigger
+condition / actions.
 
-# for Deaths
-AtLeast = 0
-AtMost = 1
-Exactly = 10
+ ex) You want to create 'Create Unit' action:
+   1. Remove spaces. 'CreateUnit'
+   2. Find 'CreateUnit' in this file. You'll see the following function def.
+     def CreateUnit(Number, Unit, Where, ForPlayer):
+   3. Make your action as mentioned here.
+     ex) CreateUnit(30, 'Terran Marine', 'Anywhere', Player1)
 
-# for Set Death
-SetTo = 7
-Add = 8
-Subtract = 9
-
-# player enum
-CurrentPlayer = 13
-AllPlayers = 17
-
-# constructor
-_bc_dict = {
-    1: i2b1,
-    2: i2b2,
-    4: i2b4,
-    None: (lambda x: x)
-}
-
-
-def FlattenList(l):
-    if type(l) is bytes or type(l) is str:
-        return [l]
-
-    try:
-        ret = []
-        for item in l:
-            ret.extend(FlattenList(item))
-        return ret
-
-    except TypeError:  # l is not iterable
-        return [l]
+'''
 
 
 def Condition(locid, player, amount, unitid,
@@ -99,9 +69,9 @@ def Action(locid1, strid, wavid, time, player1,
                 unitid, acttype, amount, flags, 0, 0, 0)
 
 
-def Trigger(players=[AllPlayers], conditions=[], actions=[]):
-    conditions = FlattenList(conditions)
-    actions = FlattenList(actions)
+def Trigger(players, conditions=[], actions=[]):
+    conditions = ut.FlattenList(conditions)
+    actions = ut.FlattenList(actions)
 
     ut.ep_assert(type(players) is list)
     ut.ep_assert(type(conditions) is list)
@@ -110,7 +80,7 @@ def Trigger(players=[AllPlayers], conditions=[], actions=[]):
     ut.ep_assert(len(actions) <= 64)
     peff = bytearray(28)
     for p in players:
-        peff[p] = 1
+        peff[EncodePlayer(p)] = 1
 
     b = b''.join(
         conditions +
@@ -124,54 +94,499 @@ def Trigger(players=[AllPlayers], conditions=[], actions=[]):
     return b
 
 
-# conditions
-def Deaths(player, comparison, number, unit):
-    return Condition(
-        0x00000000, player, number, unit,
-        comparison, 0x0F, 0x00, 0x10)
+# predefined conditions
+def NoCondition():
+    return Condition(0, 0, 0, 0, 0, 0, 0, 0)
 
 
-def Memory(offset, comparison, number):
-    ut.ep_assert(offset % 4 == 0)  # only this kind of comparison is possible
-    player = EPD(offset)
-
-    if 0 <= player < 12 * 228:  # eud possible
-        unit = player // 12
-        player = player % 12
-        return Deaths(player, comparison, number, unit)
-
-    else:  # use epd
-        return Deaths(player, comparison, number, 0)
+def CountdownTimer(Comparison, Time):
+    Comparison = EncodeComparison(Comparison)
+    return Condition(0, 0, Time, 0, Comparison, 1, 0, 0)
 
 
-# actions
-def SetDeaths(player, settype, number, unit):
-    return Action(
-        0x00000000, 0x00000000, 0x00000000, 0x00000000,
-        player, number, unit, 0x2D, settype, 0x14)
+def Command(Player, Comparison, Number, Unit):
+    Player = EncodePlayer(Player)
+    Comparison = EncodeComparison(Comparison)
+    Unit = EncodeUnit(Unit)
+    return Condition(0, Player, Number, Unit, Comparison, 2, 0, 0)
 
 
-def SetMemory(offset, settype, number):
-    ut.ep_assert(offset % 4 == 0)
-    player = EPD(offset)
-
-    if 0 <= player < 12 * 228:  # eud possible
-        unit = player // 12
-        player = player % 12
-        return SetDeaths(player, settype, number, unit)
-
-    else:  # use epd
-        return SetDeaths(player, settype, number, 0)
+def Bring(Player, Comparison, Number, Unit, Location):
+    Player = EncodePlayer(Player)
+    Comparison = EncodeComparison(Comparison)
+    Unit = EncodeUnit(Unit)
+    Location = EncodeLocation(Location)
+    return Condition(Location, Player, Number, Unit, Comparison, 3, 0, 0)
 
 
-def DisplayTextMessage(Text):
-    return Action(0, Text, 0, 0, 0, 0, 0, 9, 0, 4)
+def Accumulate(Player, Comparison, Number, ResourceType):
+    Player = EncodePlayer(Player)
+    Comparison = EncodeComparison(Comparison)
+    ResourceType = EncodeResource(ResourceType)
+    return Condition(0, Player, Number, 0, Comparison, 4, ResourceType, 0)
+
+
+def Kills(Player, Comparison, Number, Unit):
+    Player = EncodePlayer(Player)
+    Comparison = EncodeComparison(Comparison)
+    Unit = EncodeUnit(Unit)
+    return Condition(0, Player, Number, Unit, Comparison, 5, 0, 0)
+
+
+def CommandMost(Unit):
+    Unit = EncodeUnit(Unit)
+    return Condition(0, 0, 0, Unit, 0, 6, 0, 0)
+
+
+def CommandMostAt(Unit, Location):
+    Unit = EncodeUnit(Unit)
+    Location = EncodeLocation(Location)
+    return Condition(Location, 0, 0, Unit, 0, 7, 0, 0)
+
+
+def MostKills(Unit):
+    Unit = EncodeUnit(Unit)
+    return Condition(0, 0, 0, Unit, 0, 8, 0, 0)
+
+
+def HighestScore(ScoreType):
+    ScoreType = EncodeScore(ScoreType)
+    return Condition(0, 0, 0, 0, 0, 9, ScoreType, 0)
+
+
+def MostResources(ResourceType):
+    ResourceType = EncodeResource(ResourceType)
+    return Condition(0, 0, 0, 0, 0, 10, ResourceType, 0)
+
+
+def Switch(Switch, State):
+    Switch = EncodeSwitch(Switch)
+    State = EncodeSwitchState(State)
+    return Condition(0, 0, 0, 0, State, 11, Switch, 0)
+
+
+def ElapsedTime(Comparison, Time):
+    Comparison = EncodeComparison(Comparison)
+    return Condition(0, 0, Time, 0, Comparison, 12, 0, 0)
+
+
+def Briefing():
+    return Condition(0, 0, 0, 0, 0, 13, 0, 0)
+
+
+def Opponents(Player, Comparison, Number):
+    Player = EncodePlayer(Player)
+    Comparison = EncodeComparison(Comparison)
+    return Condition(0, Player, Number, 0, Comparison, 14, 0, 0)
+
+
+def Deaths(Player, Comparison, Number, Unit):
+    Player = EncodePlayer(Player)
+    Comparison = EncodeComparison(Comparison)
+    Unit = EncodeUnit(Unit)
+    return Condition(0, Player, Number, Unit, Comparison, 15, 0, 0)
+
+
+def CommandLeast(Unit):
+    Unit = EncodeUnit(Unit)
+    return Condition(0, 0, 0, Unit, 0, 16, 0, 0)
+
+
+def CommandLeastAt(Unit, Location):
+    Unit = EncodeUnit(Unit)
+    Location = EncodeLocation(Location)
+    return Condition(Location, 0, 0, Unit, 0, 17, 0, 0)
+
+
+def LeastKills(Unit):
+    Unit = EncodeUnit(Unit)
+    return Condition(0, 0, 0, Unit, 0, 18, 0, 0)
+
+
+def LowestScore(ScoreType):
+    ScoreType = EncodeScore(ScoreType)
+    return Condition(0, 0, 0, 0, 0, 19, ScoreType, 0)
+
+
+def LeastResources(ResourceType):
+    ResourceType = EncodeResource(ResourceType)
+    return Condition(0, 0, 0, 0, 0, 20, ResourceType, 0)
+
+
+def Score(Player, ScoreType, Comparison, Number):
+    Player = EncodePlayer(Player)
+    ScoreType = EncodeScore(ScoreType)
+    Comparison = EncodeComparison(Comparison)
+    return Condition(0, Player, Number, 0, Comparison, 21, ScoreType, 0)
+
+
+def Always():
+    return Condition(0, 0, 0, 0, 0, 22, 0, 0)
+
+
+def Never():
+    return Condition(0, 0, 0, 0, 0, 23, 0, 0)
+
+
+# predefined Action
+def NoAction():
+    return Action(0, 0, 0, 0, 0, 0, 0, 0, 0, 4)
+
+
+def Victory():
+    return Action(0, 0, 0, 0, 0, 0, 0, 1, 0, 4)
+
+
+def Defeat():
+    return Action(0, 0, 0, 0, 0, 0, 0, 2, 0, 4)
+
+
+def PreserveTrigger():
+    return Action(0, 0, 0, 0, 0, 0, 0, 3, 0, 4)
+
+
+def Wait(Time):
+    return Action(0, 0, 0, Time, 0, 0, 0, 4, 0, 4)
+
+
+def PauseGame():
+    return Action(0, 0, 0, 0, 0, 0, 0, 5, 0, 4)
+
+
+def UnpauseGame():
+    return Action(0, 0, 0, 0, 0, 0, 0, 6, 0, 4)
+
+
+def Transmission(Unit, Where, WAVName, TimeModifier,
+                 Time, Text, AlwaysDisplay=4):
+    Unit = EncodeUnit(Unit)
+    Where = EncodeLocation(Where)
+    WAVName = EncodeString(WAVName)
+    TimeModifier = EncodeModifier(TimeModifier)
+    Text = EncodeString(Text)
+    return Action(Where, Text, WAVName, Time, 0, 0,
+                  Unit, 7, TimeModifier, AlwaysDisplay)
+
+
+def PlayWAV(WAVName):
+    WAVName = EncodeString(WAVName)
+    return Action(0, 0, WAVName, 0, 0, 0, 0, 8, 0, 4)
+
+
+def DisplayText(Text, AlwaysDisplay=4):
+    Text = EncodeString(Text)
+    return Action(0, Text, 0, 0, 0, 0, 0, 9, 0, AlwaysDisplay)
+
+
+def CenterView(Where):
+    Where = EncodeLocation(Where)
+    return Action(Where, 0, 0, 0, 0, 0, 0, 10, 0, 4)
+
+
+def CreateUnitWithProperties(Count, Unit, Where, Player, Properties):
+    Unit = EncodeUnit(Unit)
+    Where = EncodeLocation(Where)
+    Player = EncodePlayer(Player)
+    Properties = EncodeProperty(Properties)
+    return Action(Where, 0, 0, 0, Player, Properties, Unit, 11, Count, 28)
+
+
+def SetMissionObjectives(Text):
+    Text = EncodeString(Text)
+    return Action(0, Text, 0, 0, 0, 0, 0, 12, 0, 4)
+
+
+def SetSwitch(Switch, State):
+    Switch = EncodeSwitch(Switch)
+    State = EncodeSwitchAction(State)
+    return Action(0, 0, 0, 0, 0, Switch, 0, 13, State, 4)
+
+
+def SetCountdownTimer(TimeModifier, Time):
+    TimeModifier = EncodeModifier(TimeModifier)
+    return Action(0, 0, 0, Time, 0, 0, 0, 14, TimeModifier, 4)
+
+
+def RunAIScript(Script):
+    Script = EncodeAIScript(Script)
+    return Action(0, 0, 0, 0, 0, Script, 0, 15, 0, 4)
+
+
+def RunAIScriptAt(Script, Where):
+    Script = EncodeAIScript(Script)
+    Where = EncodeLocation(Where)
+    return Action(Where, 0, 0, 0, 0, Script, 0, 16, 0, 4)
+
+
+def LeaderBoardControl(Unit, Label):
+    Unit = EncodeUnit(Unit)
+    Label = EncodeString(Label)
+    return Action(0, Label, 0, 0, 0, 0, Unit, 17, 0, 20)
+
+
+def LeaderBoardControlAt(Unit, Location, Label):
+    Unit = EncodeUnit(Unit)
+    Location = EncodeLocation(Location)
+    Label = EncodeString(Label)
+    return Action(Location, Label, 0, 0, 0, 0, Unit, 18, 0, 20)
+
+
+def LeaderBoardResources(ResourceType, Label):
+    ResourceType = EncodeResource(ResourceType)
+    Label = EncodeString(Label)
+    return Action(0, Label, 0, 0, 0, 0, ResourceType, 19, 0, 4)
+
+
+def LeaderBoardKills(Unit, Label):
+    Unit = EncodeUnit(Unit)
+    Label = EncodeString(Label)
+    return Action(0, Label, 0, 0, 0, 0, Unit, 20, 0, 20)
+
+
+def LeaderBoardScore(ScoreType, Label):
+    ScoreType = EncodeScore(ScoreType)
+    Label = EncodeString(Label)
+    return Action(0, Label, 0, 0, 0, 0, Score, 21, 0, 4)
+
+
+def KillUnit(Unit, Player):
+    Unit = EncodeUnit(Unit)
+    Player = EncodePlayer(Player)
+    return Action(0, 0, 0, 0, Player, 0, Unit, 22, 0, 20)
+
+
+def KillUnitAt(Count, Unit, Where, ForPlayer):
+    Count = EncodeCount(Count)
+    Unit = EncodeUnit(Unit)
+    Where = EncodeLocation(Where)
+    ForPlayer = EncodePlayer(ForPlayer)
+    return Action(Where, 0, 0, 0, ForPlayer, 0, Unit, 23, Count, 20)
+
+
+def RemoveUnit(Unit, Player):
+    Unit = EncodeUnit(Unit)
+    Player = EncodePlayer(Player)
+    return Action(0, 0, 0, 0, Player, 0, Unit, 24, 0, 20)
+
+
+def RemoveUnitAt(Count, Unit, Where, ForPlayer):
+    Count = EncodeCount(Count)
+    Unit = EncodeUnit(Unit)
+    Where = EncodeLocation(Where)
+    ForPlayer = EncodePlayer(ForPlayer)
+    return Action(Where, 0, 0, 0, ForPlayer, 0, Unit, 25, Count, 20)
+
+
+def SetResources(Player, Modifier, Amount, ResourceType):
+    Player = EncodePlayer(Player)
+    Modifier = EncodeModifier(Modifier)
+    ResourceType = EncodeResource(ResourceType)
+    return Action(0, 0, 0, 0, Player, Amount, ResourceType, 26, Modifier, 4)
+
+
+def SetScore(Player, Modifier, Amount, ScoreType):
+    Player = EncodePlayer(Player)
+    Modifier = EncodeModifier(Modifier)
+    ScoreType = EncodeScore(ScoreType)
+    return Action(0, 0, 0, 0, Player, Amount, ScoreType, 27, Modifier, 4)
+
+
+def MinimapPing(Where):
+    Where = EncodeLocation(Where)
+    return Action(Where, 0, 0, 0, 0, 0, 0, 28, 0, 4)
+
+
+def TalkingPortrait(Unit, Time):
+    Unit = EncodeUnit(Unit)
+    return Action(0, 0, 0, Time, 0, 0, Unit, 29, 0, 20)
+
+
+def MuteUnitSpeech():
+    return Action(0, 0, 0, 0, 0, 0, 0, 30, 0, 4)
+
+
+def UnMuteUnitSpeech():
+    return Action(0, 0, 0, 0, 0, 0, 0, 31, 0, 4)
+
+
+def LeaderBoardComputerPlayers(State):
+    State = EncodePropState(State)
+    return Action(0, 0, 0, 0, 0, 0, 0, 32, State, 4)
+
+
+def LeaderBoardGoalControl(Goal, Unit, Label):
+    Unit = EncodeUnit(Unit)
+    Label = EncodeString(Label)
+    return Action(0, Label, 0, 0, 0, Goal, Unit, 33, 0, 20)
+
+
+def LeaderBoardGoalControlAt(Goal, Unit, Location, Label):
+    Unit = EncodeUnit(Unit)
+    Location = EncodeLocation(Location)
+    Label = EncodeString(Label)
+    return Action(Location, Label, 0, 0, 0, Goal, Unit, 34, 0, 20)
+
+
+def LeaderBoardGoalResources(Goal, ResourceType, Label):
+    ResourceType = EncodeResource(ResourceType)
+    Label = EncodeString(Label)
+    return Action(0, Label, 0, 0, 0, Goal, ResourceType, 35, 0, 4)
+
+
+def LeaderBoardGoalKills(Goal, Unit, Label):
+    Unit = EncodeUnit(Unit)
+    Label = EncodeString(Label)
+    return Action(0, Label, 0, 0, 0, Goal, Unit, 36, 0, 20)
+
+
+def LeaderBoardGoalScore(Goal, ScoreType, Label):
+    ScoreType = EncodeScore(ScoreType)
+    Label = EncodeString(Label)
+    return Action(0, Label, 0, 0, 0, Goal, ScoreType, 37, 0, 4)
+
+
+def MoveLocation(Location, OnUnit, Owner, DestLocation):
+    Location = EncodeLocation(Location)
+    OnUnit = EncodeUnit(OnUnit)
+    Owner = EncodePlayer(Owner)
+    DestLocation = EncodeLocation(DestLocation)
+    return Action(DestLocation, 0, 0, 0, Owner, Location, OnUnit, 38, 0, 20)
+
+
+def MoveUnit(Count, UnitType, Owner, StartLocation, DestLocation):
+    Count = EncodeCount(Count)
+    UnitType = EncodeUnit(UnitType)
+    Owner = EncodePlayer(Owner)
+    StartLocation = EncodeLocation(StartLocation)
+    DestLocation = EncodeLocation(DestLocation)
+    return Action(StartLocation, 0, 0, 0, Owner,
+                  DestLocation, UnitType, 39, Count, 20)
+
+
+def LeaderBoardGreed(Goal):
+    return Action(0, 0, 0, 0, 0, Goal, 0, 40, 0, 4)
+
+
+def SetNextScenario(ScenarioName):
+    ScenarioName = EncodeString(ScenarioName)
+    return Action(0, ScenarioName, 0, 0, 0, 0, 0, 41, 0, 4)
+
+
+def SetDoodadState(State, Unit, Owner, Where):
+    State = EncodePropState(State)
+    Unit = EncodeUnit(Unit)
+    Owner = EncodePlayer(Owner)
+    Where = EncodeLocation(Where)
+    return Action(Where, 0, 0, 0, Owner, 0, Unit, 42, State, 20)
+
+
+def SetInvincibility(State, Unit, Owner, Where):
+    State = EncodePropState(State)
+    Unit = EncodeUnit(Unit)
+    Owner = EncodePlayer(Owner)
+    Where = EncodeLocation(Where)
+    return Action(Where, 0, 0, 0, Owner, 0, Unit, 43, State, 20)
+
+
+def CreateUnit(Number, Unit, Where, ForPlayer):
+    Unit = EncodeUnit(Unit)
+    Where = EncodeLocation(Where)
+    ForPlayer = EncodePlayer(ForPlayer)
+    return Action(Where, 0, 0, 0, ForPlayer, 0, Unit, 44, Number, 20)
+
+
+def SetDeaths(Player, Modifier, Number, Unit):
+    Player = EncodePlayer(Player)
+    Modifier = EncodeModifier(Modifier)
+    Unit = EncodeUnit(Unit)
+    return Action(0, 0, 0, 0, Player, Number, Unit, 45, Modifier, 20)
+
+
+def Order(Unit, Owner, StartLocation, OrderType, DestLocation):
+    Unit = EncodeUnit(Unit)
+    Owner = EncodePlayer(Owner)
+    StartLocation = EncodeLocation(StartLocation)
+    OrderType = EncodeOrder(OrderType)
+    DestLocation = EncodeLocation(DestLocation)
+    return Action(StartLocation, 0, 0, 0, Owner,
+                  DestLocation, Unit, 46, OrderType, 20)
+
+
+def Comment(Text):
+    Text = EncodeString(Text)
+    return Action(0, Text, 0, 0, 0, 0, 0, 47, 0, 4)
+
+
+def GiveUnits(Count, Unit, Owner, Where, NewOwner):
+    Count = EncodeCount(Count)
+    Unit = EncodeUnit(Unit)
+    Owner = EncodePlayer(Owner)
+    Where = EncodeLocation(Where)
+    NewOwner = EncodePlayer(NewOwner)
+    return Action(Where, 0, 0, 0, Owner, NewOwner, Unit, 48, Count, 20)
+
+
+def ModifyUnitHitPoints(Count, Unit, Owner, Where, Percent):
+    Count = EncodeCount(Count)
+    Unit = EncodeUnit(Unit)
+    Owner = EncodePlayer(Owner)
+    Where = EncodeLocation(Where)
+    return Action(Where, 0, 0, 0, Owner, Percent, Unit, 49, Count, 20)
+
+
+def ModifyUnitEnergy(Count, Unit, Owner, Where, Percent):
+    Count = EncodeCount(Count)
+    Unit = EncodeUnit(Unit)
+    Owner = EncodePlayer(Owner)
+    Where = EncodeLocation(Where)
+    return Action(Where, 0, 0, 0, Owner, Percent, Unit, 50, Count, 20)
+
+
+def ModifyUnitShields(Count, Unit, Owner, Where, Percent):
+    Count = EncodeCount(Count)
+    Unit = EncodeUnit(Unit)
+    Owner = EncodePlayer(Owner)
+    Where = EncodeLocation(Where)
+    return Action(Where, 0, 0, 0, Owner, Percent, Unit, 51, Count, 20)
+
+
+def ModifyUnitResourceAmount(Count, Owner, Where, NewValue):
+    Count = EncodeCount(Count)
+    Owner = EncodePlayer(Owner)
+    Where = EncodeLocation(Where)
+    return Action(Where, 0, 0, 0, Owner, NewValue, 0, 52, Count, 4)
+
+
+def ModifyUnitHangarCount(Add, Count, Unit, Owner, Where):
+    Count = EncodeCount(Count)
+    Unit = EncodeUnit(Unit)
+    Owner = EncodePlayer(Owner)
+    Where = EncodeLocation(Where)
+    return Action(Where, 0, 0, 0, Owner, Add, Unit, 53, Count, 20)
+
+
+def PauseTimer():
+    return Action(0, 0, 0, 0, 0, 0, 0, 54, 0, 4)
+
+
+def UnpauseTimer():
+    return Action(0, 0, 0, 0, 0, 0, 0, 55, 0, 4)
 
 
 def Draw():
     return Action(0, 0, 0, 0, 0, 0, 0, 56, 0, 4)
 
 
-def EPD(offset):
-    ut.ep_assert(offset % 4 == 0)
-    return (offset - 0x0058A364) // 4
+def SetAllianceStatus(Player, Status):
+    Player = EncodePlayer(Player)
+    Status = EncodeAllyStatus(Status)
+    return Action(0, 0, 0, 0, Player, 0, Status, 57, 0, 4)
+
+
+# compound triggers
+def Memory(dest, cmptype, value):
+    return Deaths(EPD(dest), cmptype, value, 0)
+
+
+def SetMemory(dest, modtype, value):
+    return SetDeaths(EPD(dest), modtype, value, 0)
