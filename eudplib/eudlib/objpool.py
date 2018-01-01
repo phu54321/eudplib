@@ -26,57 +26,72 @@ THE SOFTWARE.
 from .. import (
     core as c,
     ctrlstru as cs,
+    utils as ut
 )
 
 from .eudarray import EUDArray
 
 
-def ObjPool(basetype):
-    fields = basetype._fields_
-    fieldn = len(fields)
+class ObjPool:
+    def __init__(self, basetype, size):
+        self.basetype = basetype
+        self.size = size
+        self.remaining = c.EUDVariable(size)
 
-    class _ObjPool(c.EUDStruct):
-        _fields_ = [
-            ('data', EUDArray),
-            'remaining',
-            'size'
-        ]
+        fieldn = len(basetype._fields_)
+        objects = [c.EUDVArray(fieldn)([0] * fieldn) for _ in range(size)]
+        self.data = EUDArray(objects)
 
-        def constructor(self, size):
-            objects = [c.EUDVArray(fieldn)([0] * fieldn) for _ in range(size)]
-            self.data = EUDArray(objects)
-            self.remaining = size
-            self.size = size
+    def full(self):
+        return self.remaining == 0
 
-        def full(self):
-            return self.remaining == 0
+    @c.EUDMethod
+    def _alloc(self):
+        """ Allocate one object from pool """
+        if cs.EUDIf()(self.full()):
+            c.EUDReturn(0)
+        cs.EUDEndIf()
 
-        @c.EUDMethod
-        def _alloc(self):
-            """ Allocate one object from pool """
-            if cs.EUDIf()(self.full()):
-                c.EUDReturn(0)
-            cs.EUDEndIf()
+        self.remaining -= 1
+        data = self.data[self.remaining]
+        return data
 
-            self.remaining -= 1
-            data = self.data[self.remaining]
-            return data
+    def alloc(self, *args, parentPooled=True, **kwargs):
+        """Allocate object
 
-        def alloc(self, *args, **kwargs):
+        :param parentPooled: If this is false, object is statically
+            allocated rather than being popped from pool. This makes
+            writing EUDStruct constructor easier, as constructor
+            shouldn't care about its self.isPooled and can just
+            hand it down to alloc() function.
+        """
+
+        if parentPooled:
             data = self._alloc()
-            data = basetype.cast(data)
+            data = self.basetype.cast(data)
             data.constructor(*args, **kwargs)
-            return data
+        else:
+            data = basetype(*args, **kwargs)
+        return data
 
-        @c.EUDMethod
-        def free(self, data):
-            self.data[self.remaining] = data
-            self.remaining += 1
+    @c.EUDMethod
+    def free(self, data):
+        data = self.basetype.cast(data)
+        data.destructor()
+        self.data[self.remaining] = data
+        self.remaining += 1
 
-        def clone(self):
-            raise RuntimeError('Pool is not clonable')
 
-        def deepcopy(self):
-            raise RuntimeError('Pool is not copyable')
+poolList = {}
 
-    return _ObjPool
+
+def SetPoolSize(t, size):
+    try:
+        ut.ep_assert(poolList[t].size == size,
+                     "Cannot change size of the global pool")
+    except KeyError:
+        poolList[t] = ObjPool(t, size)
+
+
+def Pool(t):
+    return poolList[t]

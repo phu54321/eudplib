@@ -6,9 +6,11 @@ class Coord(EUDStruct):
     _fields_ = ['x', 'y']
 
 
+SetPoolSize(Coord, 5)
+
 @TestInstance
 def test_pool():
-    pool = ObjPool(Coord)(5)
+    pool = Pool(Coord)
 
     # Basic allocation
     a = pool.alloc()

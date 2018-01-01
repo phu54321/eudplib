@@ -50,10 +50,32 @@ class EUDStruct(ut.ExprProxy, metaclass=_EUDStruct_Metaclass):
             self._initialized = True
         else:
             super().__init__(EUDVArray(fieldn)([0] * len(fields)))
+            self.isPooled = False
             self._initialized = True
             self.constructor(*args)
 
     def constructor(self):
+        """Constructor for individual structures.
+
+        Default constructor accepts no arguments, but derived classes may
+        accept additional arguments.
+
+        This function is called when
+            - Argument is allocated from pool   (self.isPooled = True)
+            - Argument is generated             (self.isPooled = False)
+
+        You may choose to either allocate member from pool or just allocate
+        members statically via self.isPooled.
+        """
+        pass
+
+    def destructor(self):
+        """Destructor for individual structures.
+
+        Destructor accepts no arguments. Destructor is called when
+            - Manually called. (Ex: stack variable)
+            - free() is called for object
+        """
         pass
 
     @classmethod

@@ -29,7 +29,7 @@ from .utilf import *
 from .qgcf import *
 from .mathf import *
 
-from .objpool import ObjPool
+from .objpool import Pool, SetPoolSize
 from .eudarray import EUDArray
 from .eudgrp import EUDGrp
 from .eudstack import EUDStack
