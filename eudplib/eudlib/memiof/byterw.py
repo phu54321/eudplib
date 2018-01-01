@@ -26,7 +26,7 @@ THE SOFTWARE.
 from ... import core as c
 from ... import ctrlstru as cs
 
-from . import dwmemio as dwm
+from . import dwepdio as dwm
 
 
 _epd, _suboffset = c.EUDCreateVariables(2)
@@ -139,17 +139,10 @@ class EUDByteWriter:
     """Write byte by byte"""
 
     def __init__(self):
-        self._dw = None
-        self._suboffset = None
-        self._offset = None
-
-        self._dw, self._suboffset, self._offset = c.EUDCreateVariables(3)
-
+        self._dw = c.EUDVariable()
+        self._suboffset = c.EUDVariable()
+        self._offset = c.EUDVariable()
         self._b = [c.EUDLightVariable() for _ in range(4)]
-
-        self.secaller = None
-        self.socaller = None
-        self.wbcaller = None
 
     @c.EUDMethod
     def seekepd(self, epdoffset):
@@ -162,12 +155,7 @@ class EUDByteWriter:
 
         c.SetVariables(self._dw, dwm.f_dwread_epd(epdoffset))
 
-        c.SetVariables([
-            self._b[0],
-            self._b[1],
-            self._b[2],
-            self._b[3],
-        ], dwm.f_dwbreak(self._dw)[2:6])
+        c.SetVariables(self._b, dwm.f_dwbreak(self._dw)[2:6])
 
     @c.EUDMethod
     def seekoffset(self, offset):
@@ -196,55 +184,27 @@ class EUDByteWriter:
             finished using writebytes, you must call `flushdword` to flush the
             buffer.
         """
+        cs.EUDSwitch(self._suboffset)
+        for i in range(3):
+            if cs.EUDSwitchCase()(i):
+                cs.DoActions([
+                    self._b[i].SetNumber(byte),
+                    self._suboffset.AddNumber(1)
+                ])
+                cs.EUDBreak()
 
-        case0, case1, case2, case3, swend = [c.Forward() for _ in range(5)]
+        if cs.EUDSwitchCase()(3):
+            cs.DoActions(self._b[3].SetNumber(byte))
+            self.flushdword()
+            cs.DoActions([
+                self._offset.AddNumber(1),
+                self._suboffset.SetNumber(0),
+            ])
 
-        case0 << c.NextTrigger()
-        cs.EUDJumpIfNot(self._suboffset.Exactly(0), case1)
-        c.SeqCompute([
-            (self._b[0], c.SetTo, byte),
-            (self._suboffset, c.Add, 1)
-        ])
-        cs.EUDJump(swend)
+            c.SetVariables(self._dw, dwm.f_dwread_epd(self._offset))
+            c.SetVariables(self._b, dwm.f_dwbreak(self._dw)[2:6])
 
-        case1 << c.NextTrigger()
-        cs.EUDJumpIfNot(self._suboffset.Exactly(1), case2)
-        c.SeqCompute([
-            (self._b[1], c.SetTo, byte),
-            (self._suboffset, c.Add, 1)
-        ])
-        cs.EUDJump(swend)
-
-        case2 << c.NextTrigger()
-        cs.EUDJumpIfNot(self._suboffset.Exactly(2), case3)
-        c.SeqCompute([
-            (self._b[2], c.SetTo, byte),
-            (self._suboffset, c.Add, 1)
-        ])
-        cs.EUDJump(swend)
-
-        case3 << c.NextTrigger()
-
-        c.SeqCompute([
-            (self._b[3], c.SetTo, byte)
-        ])
-
-        self.flushdword()
-
-        c.SeqCompute([
-            (self._offset, c.Add, 1),
-            (self._suboffset, c.SetTo, 0)
-        ])
-
-        c.SetVariables(self._dw, dwm.f_dwread_epd(self._offset))
-        c.SetVariables([
-            self._b[0],
-            self._b[1],
-            self._b[2],
-            self._b[3],
-        ], dwm.f_dwbreak(self._dw)[2:6])
-
-        swend << c.NextTrigger()
+        cs.EUDEndSwitch()
 
     @c.EUDMethod
     def flushdword(self):

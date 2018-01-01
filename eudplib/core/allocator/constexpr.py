@@ -83,10 +83,17 @@ class ConstExpr:
             return NotImplemented
         ut.ep_assert(
             (self.rlocmode == 0) or
-            (self.rlocmode % k == 0 and self.offset % k == 0),
+            (self.rlocmode % k == 0),
             'Address not divisible'
         )
         return ConstExpr(self.baseobj, self.offset // k, self.rlocmode // k)
+
+    def __mod__(self, k):
+        if not isinstance(k, int):
+            return NotImplemented
+        ut.ep_assert(4 % k == 0 and self.rlocmode == 4)
+        return self.offset % k
+
 
 class ConstExprInt(ConstExpr):
     def __init__(self, value):

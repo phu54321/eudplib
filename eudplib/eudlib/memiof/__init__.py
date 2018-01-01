@@ -29,7 +29,7 @@ from .modcurpl import (
 )
 
 
-from .dwmemio import (
+from .dwepdio import (
     f_dwepdread_epd,
     f_dwread_epd,
     f_epdread_epd,
