@@ -1,3 +1,5 @@
+
+
 def StackObjects(
     found_objects,
     dwoccupmap_dict,

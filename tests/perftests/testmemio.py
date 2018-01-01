@@ -11,4 +11,5 @@ def test_perfmemio():
     test_perf("f_dwbreak", lambda: f_dwbreak(ptr), perf_basecount)
     test_perf("EPD", lambda: EPD(ptr), perf_basecount)
     test_perf("f_dwread", lambda: f_dwread(ptr), perf_basecount // 2)
+    test_perf("f_wread", lambda: f_wread(ptr), perf_basecount // 2)
     test_perf("f_bread", lambda: f_bread(ptr), perf_basecount // 2)

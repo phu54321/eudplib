@@ -31,6 +31,7 @@ from unittests import (
     teststack,
     testdwmemio,
     testcpmemio,
+    testptrmemio,
     testtypedf,
     testpool,
     test_lvalue,

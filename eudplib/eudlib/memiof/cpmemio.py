@@ -31,7 +31,7 @@ from ... import (
 
 
 @c.EUDFunc
-def _reader(cpo):
+def _reader():
     ptr, epd = c.EUDVariable(), c.EUDVariable()
     ptr << 0
     epd << ut.EPD(0)
@@ -46,7 +46,7 @@ def _reader(cpo):
                 epd.AddNumber(2 ** (i - 2)) if i >= 2 else []
             ]
         )
-    cs.DoActions(c.SetDeaths(c.CurrentPlayer, c.SetTo, ptr, 0))
+    c.SeqCompute([(c.EncodePlayer(c.CurrentPlayer), c.SetTo, ptr)])
 
     return ptr, epd
 
@@ -54,7 +54,7 @@ def _reader(cpo):
 def f_dwepdread_cp(cpo):
     if cpo != 0:
         cs.DoActions(c.SetMemory(0x6509B0, c.Add, cpo))
-    ptr, epd = _reader(cpo)
+    ptr, epd = _reader()
     if cpo != 0:
         cs.DoActions(c.SetMemory(0x6509B0, c.Add, -cpo))
     return ptr, epd

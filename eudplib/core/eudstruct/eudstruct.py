@@ -57,9 +57,9 @@ class EUDStruct(ut.ExprProxy, metaclass=_EUDStruct_Metaclass):
     # Helper function for alloc & free
     # Due to cyclic dependency we import objpool inside methods
     @classmethod
-    def alloc(cls, *args, parentPooled=True, **kwargs):
+    def alloc(cls, *args, **kwargs):
         from ...eudlib import objpool as pool
-        return pool.Pool(cls).alloc(*args, parentPooled=parentPooled, **kwargs)
+        return pool.Pool(cls).alloc(*args, **kwargs)
 
     @classmethod
     def free(cls, data):

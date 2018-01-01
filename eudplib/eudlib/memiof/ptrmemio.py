@@ -23,8 +23,17 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-from . import dwmemio as dwm
-from . import byterw as brw
+from . import (
+    dwmemio as dwm,
+    cpmemio as cpm,
+    byterw as brw,
+    modcurpl as cp,
+)
+from ... import (
+    core as c,
+    ctrlstru as cs,
+    utils as ut,
+)
 
 # Helper functions
 
@@ -59,30 +68,179 @@ def f_bwrite(ptr, b):
 # -----------------------------
 
 
+@c.EUDFunc
 def f_dwread(ptr):
-    _br.seekoffset(ptr)
-    chars0 = _br.readbyte()
-    chars1 = _br.readbyte()
-    chars2 = _br.readbyte()
-    chars3 = _br.readbyte()
-    return (
-        chars0 +
-        chars1 * 0x100 +
-        chars2 * 0x10000 +
-        chars3 * 0x1000000
-    )
+    epd, subp = c.f_div(ptr - 0x58A364, 4)
+    oldcp = cp.f_getcurpl()
+    dw = c.EUDVariable()
+    k = c.EUDVariable()
+    cs.DoActions([
+        c.SetCurrentPlayer(epd),
+        dw.SetNumber(0),
+        k.SetNumber(0),
+    ])
+    cs.EUDSwitch(subp)
+
+    # Case 0
+    if cs.EUDSwitchCase()(0):
+        dw << cpm.f_dwread_cp(0)
+        cs.EUDBreak()
+
+    # Else → Complex
+    for i in range(1, 4):
+        cs.EUDSwitchCase()(i)
+
+        for j in range(31, -1, -1):
+            if 8 * i <= j:
+                c.RawTrigger(
+                    conditions=c.Deaths(c.CurrentPlayer, c.AtLeast, 2**j, 0),
+                    actions=[
+                        c.SetDeaths(c.CurrentPlayer, c.Subtract, 2**j, 0),
+                        k.AddNumber(2**j),
+                        dw.AddNumber(2**(j - 8 * i))
+                    ]
+                )
+
+            else:
+                c.RawTrigger(
+                    conditions=c.Deaths(c.CurrentPlayer, c.AtLeast, 2**j, 0),
+                    actions=[
+                        c.SetDeaths(c.CurrentPlayer, c.Subtract, 2**j, 0),
+                        k.AddNumber(2**j),
+                    ]
+                )
+
+            if j == 8 * i:
+                break
+
+        c.SeqCompute([
+            (c.EncodePlayer(c.CurrentPlayer), c.Add, k),
+            (ut.EPD(0x6509B0), c.Add, 1),
+            (k, c.SetTo, 0)
+        ])
+
+        for j in range(31, -1, -1):
+            if j < 8 * i:
+                c.RawTrigger(
+                    conditions=c.Deaths(c.CurrentPlayer, c.AtLeast, 2**j, 0),
+                    actions=[
+                        c.SetDeaths(c.CurrentPlayer, c.Subtract, 2**j, 0),
+                        k.AddNumber(2**j),
+                        dw.AddNumber(2**(j + 32 - 8 * i))
+                    ]
+                )
+
+            else:
+                c.RawTrigger(
+                    conditions=c.Deaths(c.CurrentPlayer, c.AtLeast, 2**j, 0),
+                    actions=[
+                        c.SetDeaths(c.CurrentPlayer, c.Subtract, 2**j, 0),
+                        k.AddNumber(2**j),
+                    ]
+                )
+
+        c.SeqCompute([
+            (c.EncodePlayer(c.CurrentPlayer), c.Add, k),
+        ])
+
+        cs.EUDBreak()
+
+    cs.EUDEndSwitch()
+    cp.f_setcurpl(oldcp)
+    return dw
 
 
+@c.EUDFunc
 def f_wread(ptr):
-    _br.seekoffset(ptr)
-    chars0 = _br.readbyte()
-    chars1 = _br.readbyte()
-    return (
-        chars0 +
-        chars1 * 0x100
-    )
+    epd, subp = c.f_div(ptr - 0x58A364, 4)
+    oldcp = cp.f_getcurpl()
+    w = c.EUDVariable()
+    k = c.EUDVariable()
+    cs.DoActions([
+        c.SetCurrentPlayer(epd),
+        w.SetNumber(0),
+        k.SetNumber(0),
+    ])
+    cs.EUDSwitch(subp)
+    for i in range(3):
+        cs.EUDSwitchCase()(i)
+        for j in range(31, -1, -1):
+            if 8 * i <= j < 8 * (i + 2):
+                c.RawTrigger(
+                    conditions=c.Deaths(c.CurrentPlayer, c.AtLeast, 2**j, 0),
+                    actions=[
+                        c.SetDeaths(c.CurrentPlayer, c.Subtract, 2**j, 0),
+                        k.AddNumber(2**j),
+                        w.AddNumber(2**(j - 8 * i))
+                    ]
+                )
+
+            else:
+                c.RawTrigger(
+                    conditions=c.Deaths(c.CurrentPlayer, c.AtLeast, 2**j, 0),
+                    actions=[
+                        c.SetDeaths(c.CurrentPlayer, c.Subtract, 2**j, 0),
+                        k.AddNumber(2**j),
+                    ]
+                )
+
+            if j == 8 * i:
+                break
+
+        c.SeqCompute([(c.EncodePlayer(c.CurrentPlayer), c.Add, k)])
+        cs.EUDBreak()
+
+    # Things gets complicated on this case.
+    # We won't hand-optimize this case. This is a very, very rare case
+    if cs.EUDSwitchCase()(3):
+        dw0 = cpm.f_dwread_cp(0)
+        dw1 = cpm.f_dwread_cp(1)
+        w << dwm.f_dwbreak(dw0)[5] + dwm.f_dwbreak(dw1)[2] * 256
+
+    cs.EUDEndSwitch()
+    cp.f_setcurpl(oldcp)
+    return w
 
 
+@c.EUDFunc
 def f_bread(ptr):
-    _br.seekoffset(ptr)
-    return _br.readbyte()
+    epd, subp = c.f_div(ptr - 0x58A364, 4)
+    oldcp = cp.f_getcurpl()
+    b = c.EUDVariable()
+    k = c.EUDVariable()
+    cs.DoActions([
+        c.SetCurrentPlayer(epd),
+        b.SetNumber(0),
+        k.SetNumber(0),
+    ])
+    cs.EUDSwitch(subp)
+    for i in range(4):
+        cs.EUDSwitchCase()(i)
+        for j in range(31, -1, -1):
+            if 8 * i <= j < 8 * (i + 1):
+                c.RawTrigger(
+                    conditions=c.Deaths(c.CurrentPlayer, c.AtLeast, 2**j, 0),
+                    actions=[
+                        c.SetDeaths(c.CurrentPlayer, c.Subtract, 2**j, 0),
+                        k.AddNumber(2**j),
+                        b.AddNumber(2**(j - 8 * i))
+                    ]
+                )
+
+            else:
+                c.RawTrigger(
+                    conditions=c.Deaths(c.CurrentPlayer, c.AtLeast, 2**j, 0),
+                    actions=[
+                        c.SetDeaths(c.CurrentPlayer, c.Subtract, 2**j, 0),
+                        k.AddNumber(2**j),
+                    ]
+                )
+
+            if j == 8 * i:
+                break
+
+        c.SeqCompute([(c.EncodePlayer(c.CurrentPlayer), c.Add, k)])
+        cs.EUDBreak()
+    cs.EUDEndSwitch()
+    cp.f_setcurpl(oldcp)
+    return b
