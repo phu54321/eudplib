@@ -76,6 +76,10 @@ class DBString(ut.ExprProxy):
         fw << ExtendedStringIndex_FW(resetter)
         return acts
 
+    def Display(self):
+        cs.DoActions(self.GetDisplayAction())
+
+
 class DBStringData(c.EUDObject):
     """Object containing DBString data
     """

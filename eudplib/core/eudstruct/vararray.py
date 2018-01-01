@@ -24,11 +24,9 @@ THE SOFTWARE.
 '''
 
 import weakref
-import collections
 
 from .. import rawtrigger as bt
 from ..allocator import (
-    Evaluate,
     Forward,
     ConstExpr,
     IsConstExpr,
@@ -38,8 +36,6 @@ from ...utils import (
     EPD,
     ExprProxy,
     ep_assert,
-    unProxy,
-    isUnproxyInstance,
     cachedfunc
 )
 
@@ -61,11 +57,10 @@ def EUDVArrayData(size):
         def Evaluate(self):
             evb = GetCurrentVariableBuffer()
             if evb not in self._vdict:
-                variables = [
-                    evb.CreateVarTrigger(ival) for ival in self._initvars]
-                self._vdict[evb] = variables[0]
+                self._vdict[evb] = evb.CreateMultipleVarTriggers(
+                    self._initvars)
 
-            return Evaluate(self._vdict[evb])
+            return self._vdict[evb].Evaluate()
 
     return _EUDVArrayData
 

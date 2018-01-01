@@ -59,12 +59,12 @@ class EUDStruct(ut.ExprProxy, metaclass=_EUDStruct_Metaclass):
     @classmethod
     def alloc(cls, *args, **kwargs):
         from ...eudlib import objpool as pool
-        return pool.Pool(cls).alloc(*args, **kwargs)
+        return pool.globalPool.alloc(cls, *args, **kwargs)
 
     @classmethod
     def free(cls, data):
         from ...eudlib import objpool as pool
-        return pool.Pool(cls).free(data)
+        return pool.globalPool.free(cls, data)
 
     # Constructor & Destructor of classes
     def constructor(self):

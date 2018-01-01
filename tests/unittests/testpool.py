@@ -6,8 +6,6 @@ class Coord(EUDStruct):
     _fields_ = ['x', 'y']
 
 
-SetPoolSize(Coord, 5)
-
 @TestInstance
 def test_pool():
     # Basic allocation
@@ -45,12 +43,3 @@ def test_pool():
         [d.x, d.y, b.x, c.y],
         [3, 6, 9, 11]
     )
-
-    # Filling
-    x = Coord.alloc()
-    y = Coord.alloc()
-    z = Coord.alloc()
-    w = Coord.alloc()
-    test_assert('Full pool', [
-        x != 0, y != 0, z == 0, w == 0
-    ])

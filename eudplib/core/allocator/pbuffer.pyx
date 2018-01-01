@@ -25,6 +25,7 @@ THE SOFTWARE.
 
 from cpython.mem cimport PyMem_Malloc, PyMem_Realloc, PyMem_Free
 from cpython.bytes cimport PyBytes_AsString, PyBytes_FromStringAndSize
+from cpython.pycapsule cimport PyCapsule_New, PyCapsule_GetPointer
 from libc.string cimport memset, memcpy
 
 from .rlocint cimport RlocInt_C
@@ -98,7 +99,7 @@ cdef class PayloadBuffer:
             else:
                 raise ut.EPError('rlocmode should be 1 or 4')
 
-        offset = number.offset
+        cdef unsigned int offset = number.offset & 0xFFFFFFFF
         self._data[self._datacur + 0] = offset & 0xFF
         self._data[self._datacur + 1] = (offset >> 8) & 0xFF
         self._data[self._datacur + 2] = (offset >> 16) & 0xFF
@@ -116,11 +117,13 @@ cdef class PayloadBuffer:
         ======= =======
         '''
 
+        cdef int* pdata
         try:
-            _StructPacker(_packerData[structformat], self, arglist)
+            pdata = <int*>PyCapsule_GetPointer(_packerData[structformat], "int*")  
         except KeyError:
-            _packerData[structformat] = CreateStructPackerData(structformat)
-            _StructPacker(_packerData[structformat], self, arglist)
+            pdata = CreateStructPackerData(structformat)
+            _packerData[structformat] = PyCapsule_New(<void*>pdata, "int*", NULL)
+        _StructPacker(pdata, self, arglist)
 
     def WriteBytes(self, b):
         '''
@@ -144,29 +147,30 @@ cdef class PayloadBuffer:
         return Payload(byteData, self._prttable, self._orttable)
 
 
-cdef list CreateStructPackerData(str structformat):
+cdef int* CreateStructPackerData(str structformat):
     sizedict = {'B': 1, 'H': 2, 'I': 4}
-    sizelist = []
-    for s in structformat:
-        sizelist.append(sizedict[s])
+    cdef int* sizelist = <int*>PyMem_Malloc(sizeof(int) * len(structformat))
+    for i, s in enumerate(structformat):
+        sizelist[i] = sizedict[s]
 
     return sizelist
 
 
-cdef void _StructPacker(list sizelist, PayloadBuffer buf, tuple arglist):
-    dpos = buf._datacur
-    data = buf._data
-    prttb = buf._prttable
-    orttb = buf._orttable
+cdef void _StructPacker(int* sizelist, PayloadBuffer buf, tuple arglist):
+    cdef int dpos = buf._datacur
+    cdef unsigned char* data = buf._data
+    cdef list prttb = buf._prttable
+    cdef list orttb = buf._orttable
+    cdef RlocInt_C ri
 
     for i, arg in enumerate(arglist):
         argsize = sizelist[i]
         ri = constexpr.Evaluate(arg)
 
-        ut.ep_assert(
-            ri.rlocmode == 0 or (sizelist[i] == 4 and dpos % 4 == 0),
-            'Cannot write non-const in byte/word/nonalligned dword.'
-        )
+        if not (ri.rlocmode == 0 or (sizelist[i] == 4 and dpos % 4 == 0)):
+            raise ut.EPError(
+                'Cannot write non-const in byte/word/nonalligned dword.'
+            )
 
         if ri.rlocmode == 1:
             prttb.append(dpos)
