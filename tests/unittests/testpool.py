@@ -10,17 +10,15 @@ SetPoolSize(Coord, 5)
 
 @TestInstance
 def test_pool():
-    pool = Pool(Coord)
-
     # Basic allocation
-    a = pool.alloc()
+    a = Coord.alloc()
     a.x = 5
     a.y = 7
 
-    b = pool.alloc()
+    b = Coord.alloc()
     b.x = 9
 
-    c = pool.alloc()
+    c = Coord.alloc()
     c.y = 11
 
     test_equality(
@@ -30,7 +28,7 @@ def test_pool():
     )
 
     # freeing
-    pool.free(a)
+    Coord.free(a)
     a = None
 
     test_equality(
@@ -39,7 +37,7 @@ def test_pool():
     )
 
     # Reallocating some
-    d = pool.alloc()
+    d = Coord.alloc()
     d.x = 3
     d.y = 6
     test_equality(
@@ -49,10 +47,10 @@ def test_pool():
     )
 
     # Filling
-    x = pool.alloc()
-    y = pool.alloc()
-    z = pool.alloc()
-    w = pool.alloc()
+    x = Coord.alloc()
+    y = Coord.alloc()
+    z = Coord.alloc()
+    w = Coord.alloc()
     test_assert('Full pool', [
         x != 0, y != 0, z == 0, w == 0
     ])

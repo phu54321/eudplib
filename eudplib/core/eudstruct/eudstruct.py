@@ -54,6 +54,20 @@ class EUDStruct(ut.ExprProxy, metaclass=_EUDStruct_Metaclass):
             self._initialized = True
             self.constructor(*args)
 
+    # Helper function for alloc & free
+    # Due to cyclic dependency we import objpool inside methods
+    @classmethod
+    def alloc(cls, *args, parentPooled=True, **kwargs):
+        from ...eudlib import objpool as pool
+        return pool.Pool(cls).alloc(*args, parentPooled=parentPooled, **kwargs)
+
+    @classmethod
+    def free(cls, data):
+        from ...eudlib import objpool as pool
+        return pool.Pool(cls).free(data)
+
+
+    # Constructor & Destructor of classes
     def constructor(self):
         """Constructor for individual structures.
 

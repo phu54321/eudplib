@@ -24,6 +24,11 @@ _failedNum = EUDVariable()
 origcp = EUDVariable()
 
 
+def staticPrint(s):
+    # SC:R Still don't support f_simpleprint.
+    # So for alternatives :)
+    DoActions(DisplayText(s))
+
 def setcp1():
     origcp << f_getcurpl()
     f_setcurpl(Player1)
@@ -39,10 +44,10 @@ def test_assert(testname, condition):
     setcp1()
 
     if EUDIf()(condition):
-        f_simpleprint("\x07 - [ OK ] \x04%s" % testname)
+        staticPrint("\x07 - [ OK ] \x04%s" % testname)
         test_wait(0)
     if EUDElse()():
-        f_simpleprint("\x08 - [FAIL] %s" % testname)
+        staticPrint("\x08 - [FAIL] %s" % testname)
         failedTestDb = DBString(testname)
         _failedTest[_failedNum] = failedTestDb
         _testFailed << 1
@@ -64,10 +69,10 @@ def test_equality(testname, real, expt):
     setcp1()
 
     if EUDIf()([r == e for r, e in zip(real, expt)]):
-        f_simpleprint("\x07 - [ OK ] \x04%s" % testname)
+        staticPrint("\x07 - [ OK ] \x04%s" % testname)
         test_wait(0)
     if EUDElse()():
-        f_simpleprint("\x08 - [FAIL] %s" % testname)
+        staticPrint("\x08 - [FAIL] %s" % testname)
         f_simpleprint(" \x03   - \x04 Output   : ", *real)
         f_simpleprint(" \x03   - \x04 Expected : ", *expt)
         failedTestDb = DBString(testname)
@@ -173,7 +178,7 @@ def TestInstance(func):
 def _testmain():
     for testfunc, testname in _testList:
         _testFailed << 0
-        f_simpleprint("\x03[TEST] Running test %s..." % testname)
+        staticPrint("\x03[TEST] Running test %s..." % testname)
         testfunc()
         Trigger(_testFailed == 1, _failedNum.AddNumber(1))
 
