@@ -98,7 +98,7 @@ cdef class PayloadBuffer:
             else:
                 raise ut.EPError('rlocmode should be 1 or 4')
 
-        offset = number.offset
+        cdef unsigned int offset = number.offset & 0xFFFFFFFF
         self._data[self._datacur + 0] = offset & 0xFF
         self._data[self._datacur + 1] = (offset >> 8) & 0xFF
         self._data[self._datacur + 2] = (offset >> 16) & 0xFF

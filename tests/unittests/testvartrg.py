@@ -2,6 +2,12 @@ from helper import *
 
 
 @TestInstance
+def test_vdefval():
+    a = EUDVariable(5)
+    test_equality("Variable with default value", a, 5)
+
+
+@TestInstance
 def test_vmixedtrg():
     # VMixed actions
     a = EUDVariable()

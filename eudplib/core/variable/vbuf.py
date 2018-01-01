@@ -24,6 +24,7 @@ THE SOFTWARE.
 '''
 
 from ..eudobj import EUDObject
+from ... import utils as ut
 from ..allocator import RegisterCreatePayloadCallback
 
 
@@ -46,6 +47,11 @@ class EUDVarBuffer(EUDObject):
         self._initvals.append(initval)
         return ret
 
+    def CreateMultipleVarTriggers(self, initvals):
+        ret = self + (72 * len(self._initvals))
+        self._initvals.extend(initvals)
+        return ret
+
     def GetDataSize(self):
         return 2408 + 72 * (len(self._initvals) - 1)
 
@@ -56,12 +62,20 @@ class EUDVarBuffer(EUDObject):
             # 'preserve rawtrigger'
             output[72 * i + 2376:72 * i + 2380] = b'\x04\0\0\0'
 
+        heads = 0
         for i, initval in enumerate(self._initvals):
-            heads = 72 * (i - 1) + 352 if i > 0 else 0
             heade = 72 * i + 348
+            if initval == 0:
+                continue
+            elif isinstance(initval, int):
+                output[72 * i + 348:72 * i + 352] = ut.i2b4(initval)
+                continue
             emitbuffer.WriteBytes(output[heads:heade])
             emitbuffer.WriteDword(initval)
-            # output[72 * i + 320 + 20:72 * i + 320 + 24] = ut.i2b4(initval)
+            heads = 72 * i + 352
+
+        if heade > heads:
+            emitbuffer.WriteBytes(output[heads:heade + 4])
 
         tails = 72 * (len(self._initvals) - 1) + 352
         emitbuffer.WriteBytes(output[tails:])
