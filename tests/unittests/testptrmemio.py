@@ -2,7 +2,7 @@ from helper import *
 
 
 @TestInstance
-def test_ptrmemio():
+def test_ptr_read():
     a = Db(b'\x01\x02\x03\x04\x05\x06\x07\x08')
 
     # bread
@@ -46,4 +46,35 @@ def test_ptrmemio():
         'f_dwread',
         [cp0, dwr0, cp1, dwr1, cp2, dwr2, cp3],
         [0, 0x04030201, 0, 0x05040302, 0, 0x07060504, 0]
+    )
+
+
+@TestInstance
+def test_ptr_write():
+    # bwrite
+    f_setcurpl(Player1)
+    a = Db(b'\x01\x02\x03\x04\x05\x06\x07\x08')
+    cp0 = f_getcurpl()
+    f_bwrite(a + 0, 5)
+    cp1 = f_getcurpl()
+    f_bwrite(a + 3, 7)
+    cp2 = f_getcurpl()
+    test_equality(
+        'f_bwrite',
+        [f_dwread_epd(EPD(a)), f_dwread_epd(EPD(a) + 1), cp0, cp1, cp2],
+        [0x07030205, 0x08070605, 0, 0, 0]
+    )
+
+    # wwrite
+    f_setcurpl(Player1)
+    a = Db(b'\x01\x02\x03\x04\x05\x06\x07\x08')
+    cp0 = f_getcurpl()
+    f_wwrite(a + 0, 0xAABB)
+    cp1 = f_getcurpl()
+    f_wwrite(a + 3, 0xCCDD)
+    cp2 = f_getcurpl()
+    test_equality(
+        'f_wwrite',
+        [f_dwread_epd(EPD(a)), f_dwread_epd(EPD(a) + 1), cp0, cp1, cp2],
+        [0xDD03AABB, 0x080706CC, 0, 0, 0]
     )

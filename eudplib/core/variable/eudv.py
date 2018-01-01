@@ -459,7 +459,7 @@ def SeqCompute(assignpairs):
 
     for assignpair in assignpairs:
         dst, mdt, src = assignpair
-        dst = unProxy(dst)
+        dst = bt.EncodePlayer(unProxy(dst))
         src = unProxy(src)
 
         # Flush action set before preceeding
@@ -483,7 +483,7 @@ def SeqCompute(assignpairs):
 
             actioncount += 1
 
-        subassignpairs.append(assignpair)
+        subassignpairs.append((dst, mdt, src))
         if IsEUDVariable(dst):
             dstvarset.add(dst)
 
