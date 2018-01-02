@@ -46,6 +46,7 @@ from .vbuf import GetCurrentVariableBuffer
 
 isRValueStrict = False
 
+
 def EP_SetRValueStrictMode(mode):
     global isRValueStrict
     isRValueStrict = mode
@@ -61,10 +62,12 @@ class VariableTriggerForward(ConstExpr):
 
     def Evaluate(self):
         evb = GetCurrentVariableBuffer()
-        if evb not in self._vdict:
-            self._vdict[evb] = evb.CreateVarTrigger(self._initval)
-
-        return self._vdict[evb].Evaluate()
+        try:
+            return self._vdict[evb].Evaluate()
+        except KeyError:
+            vt = evb.CreateVarTrigger(self._initval)
+            self._vdict[evb] = vt
+            return vt.Evaluate()
 
 
 class EUDVariable(VariableBase):

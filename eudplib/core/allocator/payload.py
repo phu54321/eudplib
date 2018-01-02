@@ -32,9 +32,9 @@ import random
 import time
 
 _found_objects = []
+_rootobj = None
 _found_objects_set = set()
 _untraversed_objects = []
-_dynamic_objects = []
 _dynamic_objects_set = set()
 _alloctable = {}
 _payload_size = 0
@@ -124,9 +124,9 @@ class ObjCollector:
 
 def CollectObjects(root):
     global phase
+    global _rootobj
     global _found_objects
     global _found_objects_set
-    global _dynamic_objects
     global _dynamic_objects_set
     global _untraversed_objects
 
@@ -135,9 +135,8 @@ def CollectObjects(root):
     phase = PHASE_COLLECTING
 
     objc = ObjCollector()
-    _found_objects = []
+    _rootobj = None
     _found_objects_set = set()
-    _dynamic_objects = []
     _dynamic_objects_set = set()
     _untraversed_objects = []
 
@@ -149,8 +148,8 @@ def CollectObjects(root):
         while _untraversed_objects:
             lprint(
                 " - Collected %d / %d objects" % (
-                    len(_found_objects),
-                    len(_found_objects) + len(_untraversed_objects)
+                    len(_found_objects_set),
+                    len(_found_objects_set) + len(_untraversed_objects)
                 )
             )
 
@@ -161,18 +160,19 @@ def CollectObjects(root):
             objc.EndWrite()
 
         # Check for new objects
-        for obj in _dynamic_objects[:]:
+        for obj in list(_dynamic_objects_set):
             objc.StartWrite()
             obj.WritePayload(objc)
             objc.EndWrite()
 
-    if len(_found_objects) == 0:
+    if len(_found_objects_set) == 0:
         raise ut.EPError('No object collected')
 
     # Shuffle objects -> Randomize(?) addresses
-    fo2 = _found_objects[1:]
+    _found_objects_set.remove(_rootobj)
+    fo2 = list(_found_objects_set)
     random.shuffle(fo2)
-    _found_objects = [_found_objects[0]] + fo2
+    _found_objects = [_rootobj] + fo2
 
     # cleanup
     _found_objects_set = None
@@ -380,28 +380,31 @@ def CreatePayload(root):
     return ConstructPayload()
 
 
+defri = rlocint.RlocInt(0, 4)
+
+
 def GetObjectAddr(obj):
     global _alloctable
     global _found_objects
     global _found_objects_set
     global _untraversed_objects
-    global _dynamic_objects
     global _dynamic_objects_set
+    global _rootobj
 
     if phase == PHASE_COLLECTING:
         if obj not in _found_objects_set:
             _untraversed_objects.append(obj)
-            if obj.DynamicConstructed():
-                _dynamic_objects.append(obj)
-                _dynamic_objects_set.add(obj)
-            _found_objects.append(obj)
             _found_objects_set.add(obj)
+            if obj.DynamicConstructed():
+                _dynamic_objects_set.add(obj)
+            if not _rootobj:
+                _rootobj = obj
 
-        return rlocint.RlocInt(0, 4)
+        return defri
 
     elif phase == PHASE_ALLOCATING:
-        return rlocint.RlocInt(0, 4)
+        return defri
 
     elif phase == PHASE_WRITING:
-        assert _alloctable[obj] & 3 == 0
+        # assert _alloctable[obj] & 3 == 0
         return rlocint.RlocInt(_alloctable[obj], 4)
