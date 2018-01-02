@@ -59,7 +59,7 @@ class Action(ConstExpr):
         super().__init__(self)
 
         self.fields = [locid1, strid, wavid, time, player1,
-                       player2, unitid, acttype, amount, flags]
+                       player2, unitid, acttype, amount, flags, 0, 0]
         self.parenttrg = None
         self.actindex = None
 
@@ -129,7 +129,5 @@ class Action(ConstExpr):
     def WritePayload(self, pbuffer):
         pbuffer.WritePack(
             'IIIIIIHBBBBH',
-            *self.fields,
-            0,
-            0
+            self.fields,
         )

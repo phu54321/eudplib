@@ -107,7 +107,7 @@ cdef class PayloadBuffer:
         self._data[self._datacur + 3] = (offset >> 24) & 0xFF
         self._datacur += 4
 
-    def WritePack(self, structformat, *arglist):
+    def WritePack(self, structformat, arglist):
         '''
         ======= =======
           Char   Type
@@ -157,7 +157,7 @@ cdef int* CreateStructPackerData(str structformat):
     return sizelist
 
 
-cdef void _StructPacker(int* sizelist, PayloadBuffer buf, tuple arglist):
+cdef void _StructPacker(int* sizelist, PayloadBuffer buf, list arglist):
     cdef int dpos = buf._datacur
     cdef unsigned char* data = buf._data
     cdef list prttb = buf._prttable

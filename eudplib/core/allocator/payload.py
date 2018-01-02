@@ -110,7 +110,7 @@ class ObjCollector:
     def WriteDword(self, number):
         constexpr.Evaluate(number)
 
-    def WritePack(self, structformat, *arglist):
+    def WritePack(self, structformat, arglist):
         for arg in arglist:
             if type(arg) is not int:
                 constexpr.Evaluate(arg)
@@ -244,7 +244,7 @@ class ObjAllocator:
     def WriteDword(self, number):
         self._occupmap.append(1)
 
-    def WritePack(self, structformat, *arglist):
+    def WritePack(self, structformat, arglist):
         if structformat not in self._sizes:
             ssize = 0
             sizedict = {'B': 1, 'H': 2, 'I': 4}

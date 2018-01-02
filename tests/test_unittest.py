@@ -47,8 +47,8 @@ def f():
     helper.test_runall('unittest')
 
 
-r = profile_tool.profile(f, 'profile.json')
-
+profile_tool.profile(f, 'profile.json')
+# f()
 
 if DoCoverageTest:
     cov.stop()

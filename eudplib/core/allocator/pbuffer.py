@@ -92,7 +92,7 @@ class PayloadBuffer:
         self._data[self._datacur + 3] = (offset >> 24) & 0xFF
         self._datacur += 4
 
-    def WritePack(self, structformat, *arglist):
+    def WritePack(self, structformat, arglist):
         '''
         ======= =======
           Char   Type

@@ -54,7 +54,7 @@ class Condition(ConstExpr):
         super().__init__(self)
 
         self.fields = [locid, player, amount, unitid,
-                       comparison, condtype, restype, flags]
+                       comparison, condtype, restype, flags, 0]
 
         self.parenttrg = None
         self.condindex = None
@@ -118,6 +118,5 @@ class Condition(ConstExpr):
     def WritePayload(self, pbuffer):
         pbuffer.WritePack(
             'IIIHBBBBH',
-            *self.fields,
-            0
+            self.fields,
         )
