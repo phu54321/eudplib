@@ -248,3 +248,4 @@ eudplib/core/allocator/*.pyd
 eudplib/utils/*.c
 eudplib/utils/*.pyd
 
+profile.json
