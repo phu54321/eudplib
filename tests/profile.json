@@ -1,0 +1,1468 @@
+"f@test_unittest.py:46(1 / 38.984375,0.000000)": {
+  "test_runall@helper.py:188(1 / 38.984375,0.000000)": {
+    "SaveMap@savemap.py:34(1 / 38.906250,0.000000)": {
+      "applyInjector@applyInjector.py:46(1 / 20.968750,0.000000)": {
+        "CreatePayload@payload.py:374(1 / 19.031250,0.062500)": {
+          "CollectObjects@payload.py:125(1 / 7.390625,0.343750)": {
+            "WritePayload@rawtriggerdef.py:131(14818 / 4.046875,0.484375)": {
+              "WritePayload@action.py:138(33739 / 2.390625,0.109375)": {
+                "WritePack@payload.py:113(33739 / 2.281250,0.859375)": {
+                  "Evaluate@eudv.py:62(32721 / 1.078125,0.625000)": {
+                    "Evaluate@eudobj.py:62(32721 / 0.187500,0.031250)": {
+                      "GetObjectAddr@payload.py:383(32721 / 0.156250,0.156250)": {
+                        "DynamicConstructed@vbuf.py:42(1 / 0.000000,0.000000)": {
+                        },
+                      },
+                    },
+                    "GetCurrentVariableBuffer@vbuf.py:92(32721 / 0.046875,0.046875)": {
+                    },
+                    "CreateVarTrigger@vbuf.py:45(3745 / 0.046875,0.046875)": {
+                    },
+                    "ep_assert@eperror.py:31(65442 / 0.031250,0.031250)": {
+                    },
+                  },
+                  "Evaluate@eudobj.py:62(13215 / 0.203125,0.046875)": {
+                    "GetObjectAddr@payload.py:383(13215 / 0.156250,0.156250)": {
+                      "DynamicConstructed@eudobj.py:53(8378 / 0.000000,0.000000)": {
+                      },
+                    },
+                  },
+                  "ep_assert@eperror.py:31(99704 / 0.109375,0.109375)": {
+                  },
+                  "Evaluate@action.py:135(1859 / 0.015625,0.015625)": {
+                    "Evaluate@eudobj.py:62(1859 / 0.000000,0.000000)": {
+                      "GetObjectAddr@payload.py:383(1859 / 0.000000,0.000000)": {
+                        "DynamicConstructed@eudobj.py:53(488 / 0.000000,0.000000)": {
+                        },
+                      },
+                    },
+                  },
+                  "Evaluate@condition.py:120(440 / 0.015625,0.015625)": {
+                    "ep_assert@eperror.py:31(440 / 0.000000,0.000000)": {
+                    },
+                    "Evaluate@eudobj.py:62(440 / 0.000000,0.000000)": {
+                      "GetObjectAddr@payload.py:383(440 / 0.000000,0.000000)": {
+                        "DynamicConstructed@eudobj.py:53(35 / 0.000000,0.000000)": {
+                        },
+                      },
+                    },
+                  },
+                  "Evaluate@vararray.py:57(483 / 0.000000,0.000000)": {
+                    "GetCurrentVariableBuffer@vbuf.py:92(483 / 0.000000,0.000000)": {
+                    },
+                    "CreateMultipleVarTriggers@vbuf.py:50(21 / 0.000000,0.000000)": {
+                    },
+                    "Evaluate@eudobj.py:62(483 / 0.000000,0.000000)": {
+                      "GetObjectAddr@payload.py:383(483 / 0.000000,0.000000)": {
+                      },
+                    },
+                    "ep_assert@eperror.py:31(966 / 0.000000,0.000000)": {
+                    },
+                  },
+                  "Evaluate@dbstr.py:118(64 / 0.000000,0.000000)": {
+                  },
+                },
+              },
+              "WriteDword@payload.py:110(44454 / 0.843750,0.453125)": {
+                "Evaluate@eudobj.py:62(8729 / 0.187500,0.046875)": {
+                  "GetObjectAddr@payload.py:383(8729 / 0.140625,0.140625)": {
+                    "DynamicConstructed@eudobj.py:53(6419 / 0.000000,0.000000)": {
+                    },
+                  },
+                },
+                "Evaluate@eudv.py:62(5704 / 0.171875,0.093750)": {
+                  "Evaluate@eudobj.py:62(5704 / 0.046875,0.015625)": {
+                    "GetObjectAddr@payload.py:383(5704 / 0.031250,0.031250)": {
+                    },
+                  },
+                  "GetCurrentVariableBuffer@vbuf.py:92(5704 / 0.015625,0.015625)": {
+                  },
+                  "CreateVarTrigger@vbuf.py:45(84 / 0.000000,0.000000)": {
+                  },
+                  "ep_assert@eperror.py:31(11408 / 0.000000,0.000000)": {
+                  },
+                },
+                "ep_assert@eperror.py:31(10013 / 0.031250,0.031250)": {
+                },
+              },
+              "WritePayload@condition.py:124(3247 / 0.187500,0.031250)": {
+                "WritePack@payload.py:113(3247 / 0.156250,0.031250)": {
+                  "Evaluate@eudv.py:62(1945 / 0.125000,0.078125)": {
+                    "Evaluate@eudobj.py:62(1945 / 0.031250,0.015625)": {
+                      "GetObjectAddr@payload.py:383(1945 / 0.015625,0.015625)": {
+                      },
+                    },
+                    "GetCurrentVariableBuffer@vbuf.py:92(1945 / 0.000000,0.000000)": {
+                    },
+                    "CreateVarTrigger@vbuf.py:45(9 / 0.000000,0.000000)": {
+                    },
+                    "ep_assert@eperror.py:31(3890 / 0.000000,0.000000)": {
+                    },
+                  },
+                  "ep_assert@eperror.py:31(4234 / 0.000000,0.000000)": {
+                  },
+                  "Evaluate@eudobj.py:62(172 / 0.000000,0.000000)": {
+                    "GetObjectAddr@payload.py:383(172 / 0.000000,0.000000)": {
+                      "DynamicConstructed@eudobj.py:53(4 / 0.000000,0.000000)": {
+                      },
+                    },
+                  },
+                },
+              },
+              "WriteSpace@payload.py:121(44422 / 0.078125,0.078125)": {
+              },
+              "WriteBytes@payload.py:118(29604 / 0.046875,0.046875)": {
+              },
+              "WriteByte@payload.py:104(14818 / 0.015625,0.015625)": {
+              },
+            },
+            "WritePayload@eudarray.py:54(10 / 1.765625,0.109375)": {
+              "WriteDword@payload.py:110(67975 / 1.656250,0.703125)": {
+                "Evaluate@objpool.py:48(32768 / 0.890625,0.453125)": {
+                  "Evaluate@eudobj.py:62(32768 / 0.234375,0.078125)": {
+                    "GetObjectAddr@payload.py:383(32768 / 0.156250,0.156250)": {
+                    },
+                  },
+                  "ep_assert@eperror.py:31(65536 / 0.109375,0.109375)": {
+                  },
+                  "GetCurrentVariableBuffer@vbuf.py:92(32768 / 0.046875,0.046875)": {
+                  },
+                  "CreateMultipleVarTriggers@vbuf.py:50(1 / 0.015625,0.015625)": {
+                  },
+                },
+                "ep_assert@eperror.py:31(65536 / 0.062500,0.062500)": {
+                },
+              },
+            },
+            "WritePayload@vbuf.py:58(3 / 0.718750,0.718750)": {
+              "WriteBytes@payload.py:118(10 / 0.000000,0.000000)": {
+              },
+              "WriteDword@payload.py:110(4 / 0.000000,0.000000)": {
+                "Evaluate@eudobj.py:62(2 / 0.000000,0.000000)": {
+                  "GetObjectAddr@payload.py:383(2 / 0.000000,0.000000)": {
+                    "DynamicConstructed@eudobj.py:53(1 / 0.000000,0.000000)": {
+                    },
+                  },
+                },
+                "Evaluate@vararray.py:57(2 / 0.000000,0.000000)": {
+                  "GetCurrentVariableBuffer@vbuf.py:92(2 / 0.000000,0.000000)": {
+                  },
+                  "Evaluate@eudobj.py:62(2 / 0.000000,0.000000)": {
+                    "GetObjectAddr@payload.py:383(2 / 0.000000,0.000000)": {
+                    },
+                  },
+                  "ep_assert@eperror.py:31(4 / 0.000000,0.000000)": {
+                  },
+                },
+              },
+              "i2b4@binio.py:53(26 / 0.000000,0.000000)": {
+              },
+            },
+            "shuffle@random.py:260(1 / 0.328125,0.062500)": {
+            },
+            "lprint@payload.py:60(15329 / 0.125000,0.125000)": {
+            },
+            "StartWrite@payload.py:98(15329 / 0.031250,0.031250)": {
+            },
+            "EndWrite@payload.py:101(15329 / 0.031250,0.031250)": {
+            },
+            "ep_assert@eperror.py:31(1 / 0.000000,0.000000)": {
+            },
+            "Evaluate@eudobj.py:62(1 / 0.000000,0.000000)": {
+              "GetObjectAddr@payload.py:383(1 / 0.000000,0.000000)": {
+                "DynamicConstructed@eudobj.py:53(1 / 0.000000,0.000000)": {
+                },
+              },
+            },
+            "WritePayload@bytedump.py:40(433 / 0.000000,0.000000)": {
+              "WriteBytes@payload.py:118(433 / 0.000000,0.000000)": {
+              },
+            },
+            "WritePayload@dbstr.py:145(1 / 0.000000,0.000000)": {
+              "WriteDword@payload.py:110(1 / 0.000000,0.000000)": {
+              },
+            },
+            "WritePayload@dbstr.py:106(64 / 0.000000,0.000000)": {
+              "WriteBytes@payload.py:118(128 / 0.000000,0.000000)": {
+              },
+              "WriteByte@payload.py:104(64 / 0.000000,0.000000)": {
+              },
+            },
+          },
+          "ConstructPayload@payload.py:339(1 / 6.687500,0.390625)": {
+            "WritePayload@rawtriggerdef.py:131(14818 / 3.921875,0.859375)": {
+              "WritePayload@action.py:138(33739 / 2.468750,1.125000)": {
+                "Evaluate@eudv.py:62(32721 / 1.109375,0.578125)": {
+                  "Evaluate@eudobj.py:62(32721 / 0.343750,0.093750)": {
+                    "GetObjectAddr@payload.py:383(32721 / 0.250000,0.250000)": {
+                    },
+                  },
+                  "GetCurrentVariableBuffer@vbuf.py:92(32721 / 0.031250,0.031250)": {
+                  },
+                  "ep_assert@eperror.py:31(65442 / 0.031250,0.031250)": {
+                  },
+                },
+                "Evaluate@eudobj.py:62(13215 / 0.109375,0.015625)": {
+                  "GetObjectAddr@payload.py:383(13215 / 0.093750,0.093750)": {
+                  },
+                },
+                "ep_assert@eperror.py:31(99704 / 0.093750,0.093750)": {
+                },
+                "Evaluate@action.py:135(1859 / 0.015625,0.015625)": {
+                  "Evaluate@eudobj.py:62(1859 / 0.000000,0.000000)": {
+                    "GetObjectAddr@payload.py:383(1859 / 0.000000,0.000000)": {
+                    },
+                  },
+                },
+                "Evaluate@condition.py:120(440 / 0.000000,0.000000)": {
+                  "ep_assert@eperror.py:31(440 / 0.000000,0.000000)": {
+                  },
+                  "Evaluate@eudobj.py:62(440 / 0.000000,0.000000)": {
+                    "GetObjectAddr@payload.py:383(440 / 0.000000,0.000000)": {
+                    },
+                  },
+                },
+                "Evaluate@vararray.py:57(483 / 0.000000,0.000000)": {
+                  "GetCurrentVariableBuffer@vbuf.py:92(483 / 0.000000,0.000000)": {
+                  },
+                  "Evaluate@eudobj.py:62(483 / 0.000000,0.000000)": {
+                    "GetObjectAddr@payload.py:383(483 / 0.000000,0.000000)": {
+                    },
+                  },
+                  "ep_assert@eperror.py:31(966 / 0.000000,0.000000)": {
+                  },
+                },
+                "Evaluate@dbstr.py:118(64 / 0.000000,0.000000)": {
+                },
+              },
+              "Evaluate@eudv.py:62(5704 / 0.281250,0.187500)": {
+                "Evaluate@eudobj.py:62(5704 / 0.062500,0.031250)": {
+                  "GetObjectAddr@payload.py:383(5704 / 0.031250,0.031250)": {
+                  },
+                },
+                "ep_assert@eperror.py:31(11408 / 0.015625,0.015625)": {
+                },
+                "GetCurrentVariableBuffer@vbuf.py:92(5704 / 0.000000,0.000000)": {
+                },
+              },
+              "WritePayload@condition.py:124(3247 / 0.250000,0.125000)": {
+                "Evaluate@eudv.py:62(1945 / 0.109375,0.031250)": {
+                  "GetCurrentVariableBuffer@vbuf.py:92(1945 / 0.015625,0.015625)": {
+                  },
+                  "Evaluate@eudobj.py:62(1945 / 0.015625,0.000000)": {
+                    "GetObjectAddr@payload.py:383(1945 / 0.015625,0.015625)": {
+                    },
+                  },
+                  "ep_assert@eperror.py:31(3890 / 0.000000,0.000000)": {
+                  },
+                },
+                "Evaluate@eudobj.py:62(172 / 0.015625,0.000000)": {
+                  "GetObjectAddr@payload.py:383(172 / 0.015625,0.015625)": {
+                  },
+                },
+                "ep_assert@eperror.py:31(4234 / 0.000000,0.000000)": {
+                },
+              },
+              "ep_assert@eperror.py:31(24446 / 0.031250,0.031250)": {
+              },
+              "Evaluate@eudobj.py:62(8729 / 0.031250,0.015625)": {
+                "GetObjectAddr@payload.py:383(8729 / 0.015625,0.015625)": {
+                },
+              },
+            },
+            "WritePayload@eudarray.py:54(10 / 1.890625,0.546875)": {
+              "Evaluate@objpool.py:48(32768 / 1.234375,0.718750)": {
+                "Evaluate@eudobj.py:62(32768 / 0.296875,0.125000)": {
+                  "GetObjectAddr@payload.py:383(32768 / 0.171875,0.171875)": {
+                  },
+                },
+                "ep_assert@eperror.py:31(65536 / 0.062500,0.062500)": {
+                },
+                "GetCurrentVariableBuffer@vbuf.py:92(32768 / 0.031250,0.031250)": {
+                },
+              },
+              "ep_assert@eperror.py:31(98304 / 0.109375,0.109375)": {
+              },
+            },
+            "WritePayload@vbuf.py:58(1 / 0.359375,0.359375)": {
+              "Evaluate@eudobj.py:62(1 / 0.000000,0.000000)": {
+                "GetObjectAddr@payload.py:383(1 / 0.000000,0.000000)": {
+                },
+              },
+              "ep_assert@eperror.py:31(2 / 0.000000,0.000000)": {
+              },
+              "i2b4@binio.py:53(13 / 0.000000,0.000000)": {
+              },
+              "Evaluate@vararray.py:57(1 / 0.000000,0.000000)": {
+                "GetCurrentVariableBuffer@vbuf.py:92(1 / 0.000000,0.000000)": {
+                },
+                "Evaluate@eudobj.py:62(1 / 0.000000,0.000000)": {
+                  "GetObjectAddr@payload.py:383(1 / 0.000000,0.000000)": {
+                  },
+                },
+                "ep_assert@eperror.py:31(2 / 0.000000,0.000000)": {
+                },
+              },
+            },
+            "lprint@payload.py:60(15329 / 0.109375,0.109375)": {
+            },
+            "WritePayload@dbstr.py:145(1 / 0.015625,0.015625)": {
+              "EPD@etc.py:33(64 / 0.000000,0.000000)": {
+                "ep_assert@eperror.py:31(64 / 0.000000,0.000000)": {
+                },
+              },
+              "ep_assert@eperror.py:31(256 / 0.000000,0.000000)": {
+              },
+              "Evaluate@action.py:135(64 / 0.000000,0.000000)": {
+                "Evaluate@eudobj.py:62(64 / 0.000000,0.000000)": {
+                  "GetObjectAddr@payload.py:383(64 / 0.000000,0.000000)": {
+                  },
+                },
+              },
+            },
+            "GetDataSize@rawtriggerdef.py:128(14818 / 0.000000,0.000000)": {
+            },
+            "ep_assert@eperror.py:31(15327 / 0.000000,0.000000)": {
+            },
+            "GetDataSize@bytedump.py:37(433 / 0.000000,0.000000)": {
+            },
+            "WritePayload@bytedump.py:40(433 / 0.000000,0.000000)": {
+            },
+            "GetDataSize@eudarray.py:51(10 / 0.000000,0.000000)": {
+            },
+            "GetDataSize@dbstr.py:103(64 / 0.000000,0.000000)": {
+            },
+            "WritePayload@dbstr.py:106(64 / 0.000000,0.000000)": {
+            },
+            "GetDataSize@vbuf.py:55(1 / 0.000000,0.000000)": {
+            },
+            "GetDataSize@dbstr.py:142(1 / 0.000000,0.000000)": {
+            },
+          },
+          "AllocObjects@payload.py:280(1 / 4.890625,1.390625)": {
+            "WritePayload@rawtriggerdef.py:131(14818 / 2.593750,1.015625)": {
+              "WriteSpace@payload.py:269(44422 / 0.500000,0.453125)": {
+              },
+              "WritePayload@action.py:138(33739 / 0.359375,0.140625)": {
+                "WritePack@payload.py:247(33739 / 0.218750,0.218750)": {
+                },
+              },
+              "WriteBytes@payload.py:263(29604 / 0.312500,0.312500)": {
+              },
+              "WriteDword@payload.py:244(44454 / 0.234375,0.234375)": {
+              },
+              "WriteByte@payload.py:230(14818 / 0.093750,0.015625)": {
+              },
+              "WritePayload@condition.py:124(3247 / 0.078125,0.000000)": {
+                "WritePack@payload.py:247(3247 / 0.078125,0.078125)": {
+                },
+              },
+            },
+            "WritePayload@vbuf.py:58(1 / 0.453125,0.406250)": {
+              "WriteBytes@payload.py:263(4 / 0.046875,0.046875)": {
+              },
+              "WriteDword@payload.py:244(2 / 0.000000,0.000000)": {
+              },
+              "i2b4@binio.py:53(13 / 0.000000,0.000000)": {
+              },
+            },
+            "WritePayload@eudarray.py:54(10 / 0.250000,0.031250)": {
+              "WriteDword@payload.py:244(67975 / 0.218750,0.218750)": {
+              },
+            },
+            "lprint@payload.py:60(15330 / 0.093750,0.093750)": {
+            },
+            "<lambda>@payload.py:330(15327 / 0.046875,0.031250)": {
+              "GetDataSize@rawtriggerdef.py:128(14818 / 0.015625,0.015625)": {
+              },
+              "GetDataSize@bytedump.py:37(433 / 0.000000,0.000000)": {
+              },
+              "GetDataSize@eudarray.py:51(10 / 0.000000,0.000000)": {
+              },
+              "GetDataSize@dbstr.py:103(64 / 0.000000,0.000000)": {
+              },
+              "GetDataSize@vbuf.py:55(1 / 0.000000,0.000000)": {
+              },
+              "GetDataSize@dbstr.py:142(1 / 0.000000,0.000000)": {
+              },
+            },
+            "StartWrite@payload.py:204(15327 / 0.015625,0.015625)": {
+            },
+            "GetDataSize@rawtriggerdef.py:128(14818 / 0.015625,0.015625)": {
+            },
+            "ep_assert@eperror.py:31(15327 / 0.015625,0.015625)": {
+            },
+            "WritePayload@bytedump.py:40(433 / 0.015625,0.000000)": {
+              "WriteBytes@payload.py:263(433 / 0.015625,0.015625)": {
+              },
+            },
+            "EndWrite@payload.py:224(15327 / 0.000000,0.000000)": {
+            },
+            "GetDataSize@bytedump.py:37(433 / 0.000000,0.000000)": {
+            },
+            "GetDataSize@eudarray.py:51(10 / 0.000000,0.000000)": {
+            },
+            "WritePayload@dbstr.py:106(64 / 0.000000,0.000000)": {
+              "WriteBytes@payload.py:263(128 / 0.000000,0.000000)": {
+              },
+              "WriteByte@payload.py:230(64 / 0.000000,0.000000)": {
+              },
+            },
+            "GetDataSize@dbstr.py:103(64 / 0.000000,0.000000)": {
+            },
+            "GetDataSize@vbuf.py:55(1 / 0.000000,0.000000)": {
+            },
+            "WritePayload@dbstr.py:145(1 / 0.000000,0.000000)": {
+              "EPD@etc.py:33(64 / 0.000000,0.000000)": {
+                "ep_assert@eperror.py:31(64 / 0.000000,0.000000)": {
+                },
+              },
+              "WriteDword@payload.py:244(65 / 0.000000,0.000000)": {
+              },
+            },
+            "GetDataSize@dbstr.py:142(1 / 0.000000,0.000000)": {
+            },
+          },
+          "RegisterNewVariableBuffer@vbuf.py:87(1 / 0.000000,0.000000)": {
+          },
+          "RCPC_ResetActionSet@dbstr.py:126(1 / 0.000000,0.000000)": {
+          },
+        },
+        "CreatePayloadRelocator@payloadReloc.py:36(1 / 1.390625,0.000000)": {
+          "CreatePayload@payload.py:374(1 / 0.984375,0.015625)": {
+            "AllocObjects@payload.py:280(1 / 0.859375,0.781250)": {
+              "WritePayload@bytedump.py:40(3 / 0.062500,0.000000)": {
+                "WriteBytes@payload.py:263(3 / 0.062500,0.062500)": {
+                },
+              },
+              "StartWrite@payload.py:204(123 / 0.015625,0.015625)": {
+              },
+              "lprint@payload.py:60(126 / 0.000000,0.000000)": {
+              },
+              "WritePayload@rawtriggerdef.py:131(119 / 0.000000,0.000000)": {
+                "WriteDword@payload.py:244(357 / 0.000000,0.000000)": {
+                },
+                "WriteBytes@payload.py:263(238 / 0.000000,0.000000)": {
+                },
+                "WriteSpace@payload.py:269(357 / 0.000000,0.000000)": {
+                },
+                "WritePayload@action.py:138(232 / 0.000000,0.000000)": {
+                  "WritePack@payload.py:247(232 / 0.000000,0.000000)": {
+                  },
+                },
+                "WriteByte@payload.py:230(119 / 0.000000,0.000000)": {
+                },
+                "WritePayload@condition.py:124(67 / 0.000000,0.000000)": {
+                  "WritePack@payload.py:247(67 / 0.000000,0.000000)": {
+                  },
+                },
+              },
+              "EndWrite@payload.py:224(123 / 0.000000,0.000000)": {
+              },
+              "GetDataSize@rawtriggerdef.py:128(119 / 0.000000,0.000000)": {
+              },
+              "ep_assert@eperror.py:31(123 / 0.000000,0.000000)": {
+              },
+              "WritePayload@vbuf.py:58(1 / 0.000000,0.000000)": {
+                "WriteBytes@payload.py:263(2 / 0.000000,0.000000)": {
+                },
+              },
+              "GetDataSize@vbuf.py:55(1 / 0.000000,0.000000)": {
+              },
+              "GetDataSize@bytedump.py:37(3 / 0.000000,0.000000)": {
+              },
+              "<lambda>@payload.py:330(123 / 0.000000,0.000000)": {
+                "GetDataSize@rawtriggerdef.py:128(119 / 0.000000,0.000000)": {
+                },
+                "GetDataSize@vbuf.py:55(1 / 0.000000,0.000000)": {
+                },
+                "GetDataSize@bytedump.py:37(3 / 0.000000,0.000000)": {
+                },
+              },
+            },
+            "ConstructPayload@payload.py:339(1 / 0.078125,0.015625)": {
+              "WritePayload@rawtriggerdef.py:131(119 / 0.046875,0.000000)": {
+                "WritePayload@action.py:138(232 / 0.046875,0.031250)": {
+                  "ep_assert@eperror.py:31(460 / 0.015625,0.015625)": {
+                  },
+                  "Evaluate@eudv.py:62(161 / 0.000000,0.000000)": {
+                    "GetCurrentVariableBuffer@vbuf.py:92(161 / 0.000000,0.000000)": {
+                    },
+                    "Evaluate@eudobj.py:62(161 / 0.000000,0.000000)": {
+                      "GetObjectAddr@payload.py:383(161 / 0.000000,0.000000)": {
+                      },
+                    },
+                    "ep_assert@eperror.py:31(322 / 0.000000,0.000000)": {
+                    },
+                  },
+                  "Evaluate@condition.py:120(3 / 0.000000,0.000000)": {
+                    "ep_assert@eperror.py:31(3 / 0.000000,0.000000)": {
+                    },
+                    "Evaluate@eudobj.py:62(3 / 0.000000,0.000000)": {
+                      "GetObjectAddr@payload.py:383(3 / 0.000000,0.000000)": {
+                      },
+                    },
+                  },
+                  "Evaluate@eudobj.py:62(50 / 0.000000,0.000000)": {
+                    "GetObjectAddr@payload.py:383(50 / 0.000000,0.000000)": {
+                    },
+                  },
+                  "Evaluate@action.py:135(12 / 0.000000,0.000000)": {
+                    "Evaluate@eudobj.py:62(12 / 0.000000,0.000000)": {
+                      "GetObjectAddr@payload.py:383(12 / 0.000000,0.000000)": {
+                      },
+                    },
+                  },
+                },
+                "ep_assert@eperror.py:31(219 / 0.000000,0.000000)": {
+                },
+                "Evaluate@eudobj.py:62(92 / 0.000000,0.000000)": {
+                  "GetObjectAddr@payload.py:383(92 / 0.000000,0.000000)": {
+                  },
+                },
+                "WritePayload@condition.py:124(67 / 0.000000,0.000000)": {
+                  "Evaluate@eudv.py:62(2 / 0.000000,0.000000)": {
+                    "GetCurrentVariableBuffer@vbuf.py:92(2 / 0.000000,0.000000)": {
+                    },
+                    "Evaluate@eudobj.py:62(2 / 0.000000,0.000000)": {
+                      "GetObjectAddr@payload.py:383(2 / 0.000000,0.000000)": {
+                      },
+                    },
+                    "ep_assert@eperror.py:31(4 / 0.000000,0.000000)": {
+                    },
+                  },
+                  "ep_assert@eperror.py:31(4 / 0.000000,0.000000)": {
+                  },
+                },
+                "Evaluate@eudv.py:62(24 / 0.000000,0.000000)": {
+                  "GetCurrentVariableBuffer@vbuf.py:92(24 / 0.000000,0.000000)": {
+                  },
+                  "Evaluate@eudobj.py:62(24 / 0.000000,0.000000)": {
+                    "GetObjectAddr@payload.py:383(24 / 0.000000,0.000000)": {
+                    },
+                  },
+                  "ep_assert@eperror.py:31(48 / 0.000000,0.000000)": {
+                  },
+                },
+              },
+              "WritePayload@bytedump.py:40(3 / 0.015625,0.015625)": {
+              },
+              "lprint@payload.py:60(125 / 0.000000,0.000000)": {
+              },
+              "GetDataSize@rawtriggerdef.py:128(119 / 0.000000,0.000000)": {
+              },
+              "ep_assert@eperror.py:31(123 / 0.000000,0.000000)": {
+              },
+              "GetDataSize@vbuf.py:55(1 / 0.000000,0.000000)": {
+              },
+              "WritePayload@vbuf.py:58(1 / 0.000000,0.000000)": {
+              },
+              "GetDataSize@bytedump.py:37(3 / 0.000000,0.000000)": {
+              },
+            },
+            "CollectObjects@payload.py:125(1 / 0.031250,0.000000)": {
+              "WritePayload@rawtriggerdef.py:131(119 / 0.031250,0.015625)": {
+                "WritePayload@action.py:138(232 / 0.015625,0.000000)": {
+                  "WritePack@payload.py:113(232 / 0.015625,0.015625)": {
+                    "Evaluate@eudv.py:62(161 / 0.000000,0.000000)": {
+                      "GetCurrentVariableBuffer@vbuf.py:92(161 / 0.000000,0.000000)": {
+                      },
+                      "CreateVarTrigger@vbuf.py:45(13 / 0.000000,0.000000)": {
+                      },
+                      "Evaluate@eudobj.py:62(161 / 0.000000,0.000000)": {
+                        "GetObjectAddr@payload.py:383(161 / 0.000000,0.000000)": {
+                          "DynamicConstructed@vbuf.py:42(1 / 0.000000,0.000000)": {
+                          },
+                        },
+                      },
+                      "ep_assert@eperror.py:31(322 / 0.000000,0.000000)": {
+                      },
+                    },
+                    "ep_assert@eperror.py:31(460 / 0.000000,0.000000)": {
+                    },
+                    "Evaluate@eudobj.py:62(50 / 0.000000,0.000000)": {
+                      "GetObjectAddr@payload.py:383(50 / 0.000000,0.000000)": {
+                        "DynamicConstructed@eudobj.py:53(28 / 0.000000,0.000000)": {
+                        },
+                      },
+                    },
+                    "Evaluate@action.py:135(12 / 0.000000,0.000000)": {
+                      "Evaluate@eudobj.py:62(12 / 0.000000,0.000000)": {
+                        "GetObjectAddr@payload.py:383(12 / 0.000000,0.000000)": {
+                          "DynamicConstructed@eudobj.py:53(6 / 0.000000,0.000000)": {
+                          },
+                        },
+                      },
+                    },
+                    "Evaluate@condition.py:120(3 / 0.000000,0.000000)": {
+                      "ep_assert@eperror.py:31(3 / 0.000000,0.000000)": {
+                      },
+                      "Evaluate@eudobj.py:62(3 / 0.000000,0.000000)": {
+                        "GetObjectAddr@payload.py:383(3 / 0.000000,0.000000)": {
+                        },
+                      },
+                    },
+                  },
+                },
+                "WriteDword@payload.py:110(357 / 0.000000,0.000000)": {
+                  "ep_assert@eperror.py:31(103 / 0.000000,0.000000)": {
+                  },
+                  "Evaluate@eudobj.py:62(92 / 0.000000,0.000000)": {
+                    "GetObjectAddr@payload.py:383(92 / 0.000000,0.000000)": {
+                      "DynamicConstructed@eudobj.py:53(87 / 0.000000,0.000000)": {
+                      },
+                    },
+                  },
+                  "Evaluate@eudv.py:62(24 / 0.000000,0.000000)": {
+                    "GetCurrentVariableBuffer@vbuf.py:92(24 / 0.000000,0.000000)": {
+                    },
+                    "Evaluate@eudobj.py:62(24 / 0.000000,0.000000)": {
+                      "GetObjectAddr@payload.py:383(24 / 0.000000,0.000000)": {
+                      },
+                    },
+                    "ep_assert@eperror.py:31(48 / 0.000000,0.000000)": {
+                    },
+                    "CreateVarTrigger@vbuf.py:45(2 / 0.000000,0.000000)": {
+                    },
+                  },
+                },
+                "WriteBytes@payload.py:118(238 / 0.000000,0.000000)": {
+                },
+                "WriteSpace@payload.py:121(357 / 0.000000,0.000000)": {
+                },
+                "WriteByte@payload.py:104(119 / 0.000000,0.000000)": {
+                },
+                "WritePayload@condition.py:124(67 / 0.000000,0.000000)": {
+                  "WritePack@payload.py:113(67 / 0.000000,0.000000)": {
+                    "Evaluate@eudv.py:62(2 / 0.000000,0.000000)": {
+                      "GetCurrentVariableBuffer@vbuf.py:92(2 / 0.000000,0.000000)": {
+                      },
+                      "Evaluate@eudobj.py:62(2 / 0.000000,0.000000)": {
+                        "GetObjectAddr@payload.py:383(2 / 0.000000,0.000000)": {
+                        },
+                      },
+                      "ep_assert@eperror.py:31(4 / 0.000000,0.000000)": {
+                      },
+                    },
+                    "ep_assert@eperror.py:31(4 / 0.000000,0.000000)": {
+                    },
+                  },
+                },
+              },
+              "lprint@payload.py:60(125 / 0.000000,0.000000)": {
+              },
+              "ep_assert@eperror.py:31(1 / 0.000000,0.000000)": {
+              },
+              "Evaluate@eudobj.py:62(1 / 0.000000,0.000000)": {
+                "GetObjectAddr@payload.py:383(1 / 0.000000,0.000000)": {
+                  "DynamicConstructed@eudobj.py:53(1 / 0.000000,0.000000)": {
+                  },
+                },
+              },
+              "StartWrite@payload.py:98(124 / 0.000000,0.000000)": {
+              },
+              "EndWrite@payload.py:101(124 / 0.000000,0.000000)": {
+              },
+              "WritePayload@vbuf.py:58(2 / 0.000000,0.000000)": {
+                "WriteBytes@payload.py:118(4 / 0.000000,0.000000)": {
+                },
+              },
+              "WritePayload@bytedump.py:40(3 / 0.000000,0.000000)": {
+                "WriteBytes@payload.py:118(3 / 0.000000,0.000000)": {
+                },
+              },
+              "shuffle@random.py:260(1 / 0.000000,0.000000)": {
+              },
+            },
+            "RegisterNewVariableBuffer@vbuf.py:87(1 / 0.000000,0.000000)": {
+            },
+            "RCPC_ResetActionSet@dbstr.py:126(1 / 0.000000,0.000000)": {
+            },
+          },
+          "<listcomp>@payloadReloc.py:41(1 / 0.234375,0.078125)": {
+            "i2b4@binio.py:53(57472 / 0.156250,0.156250)": {
+            },
+          },
+          "<listcomp>@payloadReloc.py:38(1 / 0.140625,0.062500)": {
+            "i2b4@binio.py:53(40630 / 0.078125,0.078125)": {
+            },
+          },
+          "PushTriggerScope@triggerscope.py:30(1 / 0.000000,0.000000)": {
+            "EUDCreateBlock@blockstru.py:49(1 / 0.000000,0.000000)": {
+            },
+          },
+          "NextTrigger@triggerscope.py:37(1 / 0.000000,0.000000)": {
+            "EUDGetLastBlockOfName@blockstru.py:66(1 / 0.000000,0.000000)": {
+            },
+          },
+          "EUDWhile@loopblock.py:119(2 / 0.000000,0.000000)": {
+          },
+          "SubtractNumber@vbase.py:56(2 / 0.000000,0.000000)": {
+            "getValueAddr@eudv.py:84(2 / 0.000000,0.000000)": {
+            },
+            "SetMemory@stockact.py:401(2 / 0.000000,0.000000)": {
+              "EncodeModifier@constenc.py:227(2 / 0.000000,0.000000)": {
+              },
+              "EPD@etc.py:33(2 / 0.000000,0.000000)": {
+                "ep_assert@eperror.py:31(2 / 0.000000,0.000000)": {
+                },
+              },
+            },
+          },
+          "DoActions@basicstru.py:31(2 / 0.000000,0.000000)": {
+            "FlattenList@etc.py:40(2 / 0.000000,0.000000)": {
+            },
+            "Trigger@triggerdef.py:31(2 / 0.000000,0.000000)": {
+              "ep_assert@eperror.py:31(2 / 0.000000,0.000000)": {
+              },
+              "FlattenList@etc.py:40(4 / 0.000000,0.000000)": {
+                "FlattenList@etc.py:40(2 / 0.000000,0.000000)": {
+                },
+              },
+              "PatchAction@tpatcher.py:97(2 / 0.000000,0.000000)": {
+                "EPD@etc.py:33(2 / 0.000000,0.000000)": {
+                  "ep_assert@eperror.py:31(2 / 0.000000,0.000000)": {
+                  },
+                },
+                "ApplyPatchTable@tpatcher.py:39(2 / 0.000000,0.000000)": {
+                  "fieldSelector@tpatcher.py:40(26 / 0.000000,0.000000)": {
+                  },
+                  "HasEUDVariable@tpatcher.py:31(16 / 0.000000,0.000000)": {
+                    "unProxy@exprproxy.py:168(26 / 0.000000,0.000000)": {
+                    },
+                  },
+                },
+              },
+            },
+          },
+          "EPD@etc.py:33(4 / 0.000000,0.000000)": {
+            "ep_assert@eperror.py:31(4 / 0.000000,0.000000)": {
+            },
+          },
+          "ep_assert@eperror.py:31(1 / 0.000000,0.000000)": {
+          },
+          "f_dwadd_epd@dwepdio.py:154(2 / 0.000000,0.000000)": {
+            "SetDeaths@stockact.py:313(2 / 0.000000,0.000000)": {
+              "EncodePlayer@constenc.py:241(2 / 0.000000,0.000000)": {
+              },
+              "EncodeModifier@constenc.py:227(2 / 0.000000,0.000000)": {
+              },
+              "EncodeUnit@strenc.py:90(2 / 0.000000,0.000000)": {
+              },
+            },
+            "DoActions@basicstru.py:31(2 / 0.000000,0.000000)": {
+              "FlattenList@etc.py:40(2 / 0.000000,0.000000)": {
+              },
+              "Trigger@triggerdef.py:31(2 / 0.000000,0.000000)": {
+                "ep_assert@eperror.py:31(2 / 0.000000,0.000000)": {
+                },
+                "FlattenList@etc.py:40(4 / 0.000000,0.000000)": {
+                  "FlattenList@etc.py:40(2 / 0.000000,0.000000)": {
+                  },
+                },
+                "PatchAction@tpatcher.py:97(2 / 0.000000,0.000000)": {
+                  "EPD@etc.py:33(2 / 0.000000,0.000000)": {
+                    "ep_assert@eperror.py:31(2 / 0.000000,0.000000)": {
+                    },
+                  },
+                  "ApplyPatchTable@tpatcher.py:39(2 / 0.000000,0.000000)": {
+                    "fieldSelector@tpatcher.py:40(26 / 0.000000,0.000000)": {
+                    },
+                    "HasEUDVariable@tpatcher.py:31(16 / 0.000000,0.000000)": {
+                      "unProxy@exprproxy.py:168(26 / 0.000000,0.000000)": {
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+          "EUDEndWhile@loopblock.py:146(2 / 0.000000,0.000000)": {
+            "EUDPopBlock@blockstru.py:78(2 / 0.000000,0.000000)": {
+              "ep_assert@eperror.py:31(2 / 0.000000,0.000000)": {
+              },
+            },
+            "ep_assert@eperror.py:31(8 / 0.000000,0.000000)": {
+            },
+            "unProxy@exprproxy.py:168(4 / 0.000000,0.000000)": {
+            },
+            "EUDJump@basicstru.py:35(2 / 0.000000,0.000000)": {
+            },
+            "NextTrigger@triggerscope.py:37(2 / 0.000000,0.000000)": {
+              "EUDGetLastBlockOfName@blockstru.py:66(2 / 0.000000,0.000000)": {
+              },
+            },
+          },
+          "EUDJump@basicstru.py:35(1 / 0.000000,0.000000)": {
+          },
+          "PopTriggerScope@triggerscope.py:51(1 / 0.000000,0.000000)": {
+            "EUDPopBlock@blockstru.py:78(1 / 0.000000,0.000000)": {
+              "ep_assert@eperror.py:31(1 / 0.000000,0.000000)": {
+              },
+            },
+          },
+        },
+        "CreateVectorRelocator@vectorReloc.py:88(1 / 0.296875,0.031250)": {
+          "<listcomp>@vectorReloc.py:259(30 / 0.046875,0.000000)": {
+            "SetMemory@trigtrg.py:591(450 / 0.046875,0.000000)": {
+              "SetDeaths@trigtrg.py:498(450 / 0.046875,0.015625)": {
+                "EncodePlayer@constenc.py:241(450 / 0.015625,0.000000)": {
+                },
+                "EncodeUnit@strenc.py:90(450 / 0.015625,0.000000)": {
+                },
+                "EncodeModifier@constenc.py:227(450 / 0.000000,0.000000)": {
+                },
+                "Action@trigtrg.py:59(450 / 0.000000,0.000000)": {
+                },
+              },
+              "EPD@etc.py:33(450 / 0.000000,0.000000)": {
+              },
+            },
+          },
+          "Trigger@vectorReloc.py:40(163 / 0.031250,0.000000)": {
+            "Trigger@trigtrg.py:72(163 / 0.031250,0.015625)": {
+              "FlattenList@etc.py:40(326 / 0.015625,0.000000)": {
+                "FlattenList@etc.py:40(566 / 0.015625,0.000000)": {
+                  "FlattenList@etc.py:40(1800 / 0.015625,0.015625)": {
+                  },
+                },
+              },
+              "ep_assert@eperror.py:31(978 / 0.000000,0.000000)": {
+              },
+              "EncodePlayer@constenc.py:241(163 / 0.000000,0.000000)": {
+              },
+            },
+          },
+          "<listcomp>@vectorReloc.py:265(30 / 0.031250,0.000000)": {
+            "SetMemory@trigtrg.py:591(450 / 0.031250,0.000000)": {
+              "SetDeaths@trigtrg.py:498(450 / 0.031250,0.000000)": {
+                "EncodeModifier@constenc.py:227(450 / 0.031250,0.000000)": {
+                },
+                "EncodePlayer@constenc.py:241(450 / 0.000000,0.000000)": {
+                },
+                "EncodeUnit@strenc.py:90(450 / 0.000000,0.000000)": {
+                },
+                "Action@trigtrg.py:59(450 / 0.000000,0.000000)": {
+                },
+              },
+              "EPD@etc.py:33(450 / 0.000000,0.000000)": {
+              },
+            },
+          },
+          "CopyDeaths@vectorReloc.py:45(1 / 0.031250,0.000000)": {
+            "SetDeaths@trigtrg.py:498(152 / 0.015625,0.000000)": {
+              "EncodeUnit@strenc.py:90(152 / 0.015625,0.000000)": {
+              },
+              "EncodePlayer@constenc.py:241(152 / 0.000000,0.000000)": {
+              },
+              "EncodeModifier@constenc.py:227(152 / 0.000000,0.000000)": {
+              },
+              "Action@trigtrg.py:59(152 / 0.000000,0.000000)": {
+              },
+            },
+            "Trigger@vectorReloc.py:40(61 / 0.015625,0.000000)": {
+              "Trigger@trigtrg.py:72(61 / 0.015625,0.000000)": {
+                "FlattenList@etc.py:40(122 / 0.015625,0.015625)": {
+                  "FlattenList@etc.py:40(212 / 0.000000,0.000000)": {
+                  },
+                },
+                "ep_assert@eperror.py:31(366 / 0.000000,0.000000)": {
+                },
+                "EncodePlayer@constenc.py:241(61 / 0.000000,0.000000)": {
+                },
+              },
+            },
+            "Deaths@trigtrg.py:183(60 / 0.000000,0.000000)": {
+              "EncodePlayer@constenc.py:241(60 / 0.000000,0.000000)": {
+              },
+              "EncodeComparison@constenc.py:220(60 / 0.000000,0.000000)": {
+              },
+              "EncodeUnit@strenc.py:90(60 / 0.000000,0.000000)": {
+              },
+              "Condition@trigtrg.py:47(60 / 0.000000,0.000000)": {
+              },
+            },
+          },
+          "SaveTBL@tblformat.py:113(1 / 0.015625,0.015625)": {
+            "i2b2@binio.py:48(1172 / 0.000000,0.000000)": {
+            },
+          },
+          "<listcomp>@vectorReloc.py:136(13 / 0.015625,0.000000)": {
+            "SetMemory@trigtrg.py:591(195 / 0.015625,0.000000)": {
+              "SetDeaths@trigtrg.py:498(195 / 0.015625,0.015625)": {
+                "EncodePlayer@constenc.py:241(195 / 0.000000,0.000000)": {
+                },
+                "EncodeModifier@constenc.py:227(195 / 0.000000,0.000000)": {
+                },
+                "EncodeUnit@strenc.py:90(195 / 0.000000,0.000000)": {
+                },
+                "Action@trigtrg.py:59(195 / 0.000000,0.000000)": {
+                },
+              },
+              "EPD@etc.py:33(195 / 0.000000,0.000000)": {
+              },
+            },
+          },
+          "SetDeaths@trigtrg.py:498(281 / 0.015625,0.000000)": {
+            "EncodeUnit@strenc.py:90(281 / 0.015625,0.000000)": {
+            },
+            "EncodePlayer@constenc.py:241(281 / 0.000000,0.000000)": {
+            },
+            "EncodeModifier@constenc.py:227(281 / 0.000000,0.000000)": {
+            },
+            "Action@trigtrg.py:59(281 / 0.000000,0.000000)": {
+            },
+          },
+          "Deaths@trigtrg.py:183(122 / 0.015625,0.015625)": {
+            "EncodePlayer@constenc.py:241(122 / 0.000000,0.000000)": {
+            },
+            "EncodeComparison@constenc.py:220(122 / 0.000000,0.000000)": {
+            },
+            "EncodeUnit@strenc.py:90(122 / 0.000000,0.000000)": {
+            },
+            "Condition@trigtrg.py:47(122 / 0.000000,0.000000)": {
+            },
+          },
+          "<listcomp>@vectorReloc.py:269(30 / 0.015625,0.000000)": {
+            "SetMemory@trigtrg.py:591(450 / 0.015625,0.000000)": {
+              "SetDeaths@trigtrg.py:498(450 / 0.015625,0.000000)": {
+                "EncodeUnit@strenc.py:90(450 / 0.015625,0.000000)": {
+                },
+                "EncodePlayer@constenc.py:241(450 / 0.000000,0.000000)": {
+                },
+                "EncodeModifier@constenc.py:227(450 / 0.000000,0.000000)": {
+                },
+                "Action@trigtrg.py:59(450 / 0.000000,0.000000)": {
+                },
+              },
+              "EPD@etc.py:33(450 / 0.000000,0.000000)": {
+              },
+            },
+          },
+          "getsection@chktok.py:98(2 / 0.000000,0.000000)": {
+            "sectionname_format@chktok.py:37(2 / 0.000000,0.000000)": {
+              "u2b@ubconv.py:36(2 / 0.000000,0.000000)": {
+              },
+            },
+          },
+          "GetStringIndex@tblformat.py:102(1 / 0.000000,0.000000)": {
+            "u2b@ubconv.py:36(1 / 0.000000,0.000000)": {
+            },
+            "AddString@tblformat.py:65(1 / 0.000000,0.000000)": {
+              "u2b@ubconv.py:36(1 / 0.000000,0.000000)": {
+              },
+              "ep_assert@eperror.py:31(1 / 0.000000,0.000000)": {
+              },
+            },
+          },
+          "i2b4@binio.py:53(6 / 0.000000,0.000000)": {
+          },
+          "<lambda>@vectorReloc.py:130(193 / 0.000000,0.000000)": {
+          },
+          "<listcomp>@vectorReloc.py:132(13 / 0.000000,0.000000)": {
+          },
+          "Trigger@trigtrg.py:72(27 / 0.000000,0.000000)": {
+            "FlattenList@etc.py:40(54 / 0.000000,0.000000)": {
+              "FlattenList@etc.py:40(30 / 0.000000,0.000000)": {
+                "FlattenList@etc.py:40(405 / 0.000000,0.000000)": {
+                },
+              },
+            },
+            "ep_assert@eperror.py:31(162 / 0.000000,0.000000)": {
+            },
+            "EncodePlayer@constenc.py:241(27 / 0.000000,0.000000)": {
+            },
+          },
+          "<lambda>@vectorReloc.py:148(151 / 0.000000,0.000000)": {
+          },
+          "<listcomp>@vectorReloc.py:150(11 / 0.000000,0.000000)": {
+          },
+          "<listcomp>@vectorReloc.py:154(11 / 0.000000,0.000000)": {
+            "SetMemory@trigtrg.py:591(165 / 0.000000,0.000000)": {
+              "EPD@etc.py:33(165 / 0.000000,0.000000)": {
+              },
+              "SetDeaths@trigtrg.py:498(165 / 0.000000,0.000000)": {
+                "EncodePlayer@constenc.py:241(165 / 0.000000,0.000000)": {
+                },
+                "EncodeModifier@constenc.py:227(165 / 0.000000,0.000000)": {
+                },
+                "EncodeUnit@strenc.py:90(165 / 0.000000,0.000000)": {
+                },
+                "Action@trigtrg.py:59(165 / 0.000000,0.000000)": {
+                },
+              },
+            },
+          },
+          "<listcomp>@vectorReloc.py:165(1 / 0.000000,0.000000)": {
+            "SetMemory@trigtrg.py:591(15 / 0.000000,0.000000)": {
+              "EPD@etc.py:33(15 / 0.000000,0.000000)": {
+              },
+              "SetDeaths@trigtrg.py:498(15 / 0.000000,0.000000)": {
+                "EncodePlayer@constenc.py:241(15 / 0.000000,0.000000)": {
+                },
+                "EncodeModifier@constenc.py:227(15 / 0.000000,0.000000)": {
+                },
+                "EncodeUnit@strenc.py:90(15 / 0.000000,0.000000)": {
+                },
+                "Action@trigtrg.py:59(15 / 0.000000,0.000000)": {
+                },
+              },
+            },
+          },
+          "SetMemory@trigtrg.py:591(162 / 0.000000,0.000000)": {
+            "EPD@etc.py:33(162 / 0.000000,0.000000)": {
+            },
+            "SetDeaths@trigtrg.py:498(162 / 0.000000,0.000000)": {
+              "EncodePlayer@constenc.py:241(162 / 0.000000,0.000000)": {
+              },
+              "EncodeModifier@constenc.py:227(162 / 0.000000,0.000000)": {
+              },
+              "EncodeUnit@strenc.py:90(162 / 0.000000,0.000000)": {
+              },
+              "Action@trigtrg.py:59(162 / 0.000000,0.000000)": {
+              },
+            },
+          },
+          "setsection@chktok.py:102(3 / 0.000000,0.000000)": {
+            "sectionname_format@chktok.py:37(3 / 0.000000,0.000000)": {
+              "u2b@ubconv.py:36(3 / 0.000000,0.000000)": {
+              },
+            },
+          },
+          "<listcomp>@vectorReloc.py:192(1 / 0.000000,0.000000)": {
+            "SetMemory@trigtrg.py:591(15 / 0.000000,0.000000)": {
+              "EPD@etc.py:33(15 / 0.000000,0.000000)": {
+              },
+              "SetDeaths@trigtrg.py:498(15 / 0.000000,0.000000)": {
+                "EncodePlayer@constenc.py:241(15 / 0.000000,0.000000)": {
+                },
+                "EncodeModifier@constenc.py:227(15 / 0.000000,0.000000)": {
+                },
+                "EncodeUnit@strenc.py:90(15 / 0.000000,0.000000)": {
+                },
+                "Action@trigtrg.py:59(15 / 0.000000,0.000000)": {
+                },
+              },
+            },
+          },
+          "<listcomp>@vectorReloc.py:204(1 / 0.000000,0.000000)": {
+            "SetMemory@trigtrg.py:591(15 / 0.000000,0.000000)": {
+              "EPD@etc.py:33(15 / 0.000000,0.000000)": {
+              },
+              "SetDeaths@trigtrg.py:498(15 / 0.000000,0.000000)": {
+                "EncodePlayer@constenc.py:241(15 / 0.000000,0.000000)": {
+                },
+                "EncodeModifier@constenc.py:227(15 / 0.000000,0.000000)": {
+                },
+                "EncodeUnit@strenc.py:90(15 / 0.000000,0.000000)": {
+                },
+                "Action@trigtrg.py:59(15 / 0.000000,0.000000)": {
+                },
+              },
+            },
+          },
+          "DisplayText@trigtrg.py:276(1 / 0.000000,0.000000)": {
+            "EncodeString@strenc.py:82(1 / 0.000000,0.000000)": {
+            },
+            "Action@trigtrg.py:59(1 / 0.000000,0.000000)": {
+            },
+          },
+          "Draw@trigtrg.py:576(1 / 0.000000,0.000000)": {
+            "Action@trigtrg.py:59(1 / 0.000000,0.000000)": {
+            },
+          },
+          "Condition@trigtrg.py:47(2 / 0.000000,0.000000)": {
+          },
+          "Memory@trigtrg.py:587(30 / 0.000000,0.000000)": {
+            "EPD@etc.py:33(30 / 0.000000,0.000000)": {
+            },
+            "Deaths@trigtrg.py:183(30 / 0.000000,0.000000)": {
+              "EncodePlayer@constenc.py:241(30 / 0.000000,0.000000)": {
+              },
+              "EncodeComparison@constenc.py:220(30 / 0.000000,0.000000)": {
+              },
+              "EncodeUnit@strenc.py:90(30 / 0.000000,0.000000)": {
+              },
+              "Condition@trigtrg.py:47(30 / 0.000000,0.000000)": {
+              },
+            },
+          },
+          "<listcomp>@vectorReloc.py:262(30 / 0.000000,0.000000)": {
+            "SetMemory@trigtrg.py:591(450 / 0.000000,0.000000)": {
+              "EPD@etc.py:33(450 / 0.000000,0.000000)": {
+              },
+              "SetDeaths@trigtrg.py:498(450 / 0.000000,0.000000)": {
+                "EncodePlayer@constenc.py:241(450 / 0.000000,0.000000)": {
+                },
+                "EncodeModifier@constenc.py:227(450 / 0.000000,0.000000)": {
+                },
+                "EncodeUnit@strenc.py:90(450 / 0.000000,0.000000)": {
+                },
+                "Action@trigtrg.py:59(450 / 0.000000,0.000000)": {
+                },
+              },
+            },
+          },
+          "EPD@etc.py:33(11 / 0.000000,0.000000)": {
+          },
+          "<listcomp>@vectorReloc.py:354(1 / 0.000000,0.000000)": {
+          },
+          "b2i4@binio.py:35(2 / 0.000000,0.000000)": {
+          },
+        },
+        "CreateInjectFinalizer@injFinalizer.py:143(1 / 0.250000,0.000000)": {
+          "DoActions@basicstru.py:31(11 / 0.062500,0.000000)": {
+            "Trigger@triggerdef.py:31(11 / 0.062500,0.000000)": {
+              "PatchAction@tpatcher.py:97(52 / 0.015625,0.000000)": {
+                "ApplyPatchTable@tpatcher.py:39(52 / 0.015625,0.015625)": {
+                  "fieldSelector@tpatcher.py:40(676 / 0.000000,0.000000)": {
+                  },
+                  "HasEUDVariable@tpatcher.py:31(416 / 0.000000,0.000000)": {
+                    "unProxy@exprproxy.py:168(676 / 0.000000,0.000000)": {
+                    },
+                  },
+                },
+                "EPD@etc.py:33(52 / 0.000000,0.000000)": {
+                  "ep_assert@eperror.py:31(52 / 0.000000,0.000000)": {
+                  },
+                },
+              },
+              "ep_assert@eperror.py:31(11 / 0.000000,0.000000)": {
+              },
+              "FlattenList@etc.py:40(22 / 0.000000,0.000000)": {
+                "FlattenList@etc.py:40(52 / 0.000000,0.000000)": {
+                },
+              },
+            },
+            "FlattenList@etc.py:40(11 / 0.000000,0.000000)": {
+              "FlattenList@etc.py:40(50 / 0.000000,0.000000)": {
+              },
+            },
+          },
+          "SetMemory@stockact.py:401(50 / 0.031250,0.000000)": {
+            "EPD@etc.py:33(50 / 0.031250,0.000000)": {
+              "<lambda>@_eudvsupport.py:57(8 / 0.015625,0.000000)": {
+                "f_div@muldiv.py:53(8 / 0.015625,0.000000)": {
+                  "f_constdiv@muldiv.py:110(8 / 0.000000,0.000000)": {
+                  },
+                },
+              },
+              "ep_assert@eperror.py:31(24 / 0.000000,0.000000)": {
+              },
+            },
+            "EncodeModifier@constenc.py:227(50 / 0.000000,0.000000)": {
+            },
+          },
+          "SetDeaths@stockact.py:313(2 / 0.015625,0.000000)": {
+            "EncodePlayer@constenc.py:241(2 / 0.000000,0.000000)": {
+            },
+            "EncodeModifier@constenc.py:227(2 / 0.000000,0.000000)": {
+            },
+            "EncodeUnit@strenc.py:90(2 / 0.000000,0.000000)": {
+            },
+          },
+          "f_epdread_epd@dwepdio.py:91(1 / 0.015625,0.000000)": {
+          },
+          "AllocTrigTriggerLink@runtrigtrg.py:79(1 / 0.000000,0.000000)": {
+            "parent@<frozen importlib._bootstrap>:402(1 / 0.000000,0.000000)": {
+            },
+          },
+          "PushTriggerScope@triggerscope.py:30(10 / 0.000000,0.000000)": {
+            "EUDCreateBlock@blockstru.py:49(10 / 0.000000,0.000000)": {
+            },
+          },
+          "NextTrigger@triggerscope.py:37(2 / 0.000000,0.000000)": {
+            "EUDGetLastBlockOfName@blockstru.py:66(2 / 0.000000,0.000000)": {
+            },
+          },
+          "f_dwwrite_epd@dwepdio.py:150(1 / 0.000000,0.000000)": {
+            "SetDeaths@stockact.py:313(1 / 0.000000,0.000000)": {
+              "EncodePlayer@constenc.py:241(1 / 0.000000,0.000000)": {
+              },
+              "EncodeModifier@constenc.py:227(1 / 0.000000,0.000000)": {
+              },
+              "EncodeUnit@strenc.py:90(1 / 0.000000,0.000000)": {
+              },
+            },
+            "DoActions@basicstru.py:31(1 / 0.000000,0.000000)": {
+              "FlattenList@etc.py:40(1 / 0.000000,0.000000)": {
+              },
+              "Trigger@triggerdef.py:31(1 / 0.000000,0.000000)": {
+                "ep_assert@eperror.py:31(1 / 0.000000,0.000000)": {
+                },
+                "FlattenList@etc.py:40(2 / 0.000000,0.000000)": {
+                  "FlattenList@etc.py:40(1 / 0.000000,0.000000)": {
+                  },
+                },
+                "PatchAction@tpatcher.py:97(1 / 0.000000,0.000000)": {
+                  "EPD@etc.py:33(1 / 0.000000,0.000000)": {
+                    "ep_assert@eperror.py:31(1 / 0.000000,0.000000)": {
+                    },
+                  },
+                  "ApplyPatchTable@tpatcher.py:39(1 / 0.000000,0.000000)": {
+                    "fieldSelector@tpatcher.py:40(13 / 0.000000,0.000000)": {
+                    },
+                    "HasEUDVariable@tpatcher.py:31(8 / 0.000000,0.000000)": {
+                      "unProxy@exprproxy.py:168(13 / 0.000000,0.000000)": {
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+          "getsection@chktok.py:98(1 / 0.000000,0.000000)": {
+            "sectionname_format@chktok.py:37(1 / 0.000000,0.000000)": {
+              "u2b@ubconv.py:36(1 / 0.000000,0.000000)": {
+              },
+            },
+          },
+          "EPD@etc.py:33(21 / 0.000000,0.000000)": {
+            "ep_assert@eperror.py:31(1 / 0.000000,0.000000)": {
+            },
+          },
+          "EUDWhile@loopblock.py:119(1 / 0.000000,0.000000)": {
+          },
+          "EUDEndWhile@loopblock.py:146(1 / 0.000000,0.000000)": {
+            "EUDPopBlock@blockstru.py:78(1 / 0.000000,0.000000)": {
+              "ep_assert@eperror.py:31(1 / 0.000000,0.000000)": {
+              },
+            },
+            "ep_assert@eperror.py:31(4 / 0.000000,0.000000)": {
+            },
+            "unProxy@exprproxy.py:168(2 / 0.000000,0.000000)": {
+            },
+            "EUDJump@basicstru.py:35(1 / 0.000000,0.000000)": {
+            },
+            "NextTrigger@triggerscope.py:37(1 / 0.000000,0.000000)": {
+              "EUDGetLastBlockOfName@blockstru.py:66(1 / 0.000000,0.000000)": {
+              },
+            },
+          },
+          "SetNextPtr@stockact.py:412(16 / 0.000000,0.000000)": {
+            "SetMemory@stockact.py:401(16 / 0.000000,0.000000)": {
+              "EncodeModifier@constenc.py:227(16 / 0.000000,0.000000)": {
+              },
+              "EPD@etc.py:33(16 / 0.000000,0.000000)": {
+                "ep_assert@eperror.py:31(16 / 0.000000,0.000000)": {
+                },
+              },
+            },
+          },
+          "ep_assert@eperror.py:31(34 / 0.000000,0.000000)": {
+          },
+          "unProxy@exprproxy.py:168(17 / 0.000000,0.000000)": {
+          },
+          "PopTriggerScope@triggerscope.py:51(10 / 0.000000,0.000000)": {
+            "EUDPopBlock@blockstru.py:78(10 / 0.000000,0.000000)": {
+              "ep_assert@eperror.py:31(10 / 0.000000,0.000000)": {
+              },
+            },
+          },
+          "EUDIfNot@simpleblock.py:55(8 / 0.000000,0.000000)": {
+            "EUDIf@simpleblock.py:38(8 / 0.000000,0.000000)": {
+            },
+          },
+          "EUDEndIf@simpleblock.py:113(9 / 0.000000,0.000000)": {
+            "EUDPopBlock@blockstru.py:78(9 / 0.000000,0.000000)": {
+              "ep_assert@eperror.py:31(9 / 0.000000,0.000000)": {
+              },
+            },
+            "NextTrigger@triggerscope.py:37(18 / 0.000000,0.000000)": {
+              "EUDGetLastBlockOfName@blockstru.py:66(18 / 0.000000,0.000000)": {
+              },
+            },
+            "ep_assert@eperror.py:31(36 / 0.000000,0.000000)": {
+            },
+            "unProxy@exprproxy.py:168(18 / 0.000000,0.000000)": {
+            },
+          },
+          "EUDIf@simpleblock.py:38(1 / 0.000000,0.000000)": {
+          },
+          "EUDJump@basicstru.py:35(3 / 0.000000,0.000000)": {
+          },
+        },
+        "SetCurrentBlockStruManager@blockstru.py:42(2 / 0.000000,0.000000)": {
+        },
+        "setPayloadLoggerMode@payload.py:55(2 / 0.000000,0.000000)": {
+        },
+      },
+      "PutFile@mpqapi.py:190(1 / 1.656250,1.656250)": {
+        "NamedTemporaryFile@tempfile.py:522(1 / 0.000000,0.000000)": {
+        },
+        "func_wrapper@tempfile.py:481(1 / 0.000000,0.000000)": {
+        },
+        "close@tempfile.py:505(1 / 0.000000,0.000000)": {
+          "close@tempfile.py:453(1 / 0.000000,0.000000)": {
+          },
+        },
+        "u2b@ubconv.py:36(2 / 0.000000,0.000000)": {
+        },
+      },
+      "Compact@mpqapi.py:231(1 / 0.093750,0.093750)": {
+      },
+      "UpdateMapData@mapdata.py:46(1 / 0.031250,0.000000)": {
+        "ApplyStringMap@stringmap.py:115(1 / 0.031250,0.000000)": {
+          "SaveTBL@tblformat.py:113(1 / 0.031250,0.031250)": {
+            "i2b2@binio.py:48(1171 / 0.000000,0.000000)": {
+            },
+          },
+          "setsection@chktok.py:102(1 / 0.000000,0.000000)": {
+            "sectionname_format@chktok.py:37(1 / 0.000000,0.000000)": {
+              "u2b@ubconv.py:36(1 / 0.000000,0.000000)": {
+              },
+            },
+          },
+        },
+        "ApplyPropertyMap@proptable.py:71(1 / 0.000000,0.000000)": {
+          "<listcomp>@proptable.py:72(1 / 0.000000,0.000000)": {
+          },
+          "setsection@chktok.py:102(1 / 0.000000,0.000000)": {
+            "sectionname_format@chktok.py:37(1 / 0.000000,0.000000)": {
+              "u2b@ubconv.py:36(1 / 0.000000,0.000000)": {
+              },
+            },
+          },
+        },
+      },
+      "savechk@chktok.py:87(1 / 0.031250,0.031250)": {
+        "i2b4@binio.py:53(24 / 0.000000,0.000000)": {
+        },
+      },
+      "GetChkTokenized@mapdata.py:55(1 / 0.000000,0.000000)": {
+      },
+      "PreprocessInlineCode@ilcprocesstrig.py:47(1 / 0.000000,0.000000)": {
+        "getsection@chktok.py:98(1 / 0.000000,0.000000)": {
+          "sectionname_format@chktok.py:37(1 / 0.000000,0.000000)": {
+            "u2b@ubconv.py:36(1 / 0.000000,0.000000)": {
+            },
+          },
+        },
+        "PreprocessTrigSection@ilcprocesstrig.py:54(1 / 0.000000,0.000000)": {
+          "ComputeBaseInlineCodeGlobals@ilccompile.py:38(1 / 0.000000,0.000000)": {
+          },
+          "b2i4@binio.py:35(1 / 0.000000,0.000000)": {
+          },
+          "DispatchInlineCode@ilcprocesstrig.py:114(1 / 0.000000,0.000000)": {
+            "b2i4@binio.py:35(1 / 0.000000,0.000000)": {
+            },
+          },
+          "Trigger@trigtrg.py:72(1 / 0.000000,0.000000)": {
+            "FlattenList@etc.py:40(2 / 0.000000,0.000000)": {
+            },
+            "ep_assert@eperror.py:31(6 / 0.000000,0.000000)": {
+            },
+            "EncodePlayer@constenc.py:241(1 / 0.000000,0.000000)": {
+            },
+          },
+        },
+        "setsection@chktok.py:102(1 / 0.000000,0.000000)": {
+          "sectionname_format@chktok.py:37(1 / 0.000000,0.000000)": {
+            "u2b@ubconv.py:36(1 / 0.000000,0.000000)": {
+            },
+          },
+        },
+      },
+      "optimize@chktok.py:110(1 / 0.000000,0.000000)": {
+        "<listcomp>@chktok.py:121(1 / 0.000000,0.000000)": {
+        },
+        "getsection@chktok.py:98(3 / 0.000000,0.000000)": {
+          "sectionname_format@chktok.py:37(3 / 0.000000,0.000000)": {
+          },
+        },
+        "b2i2@binio.py:31(2 / 0.000000,0.000000)": {
+        },
+        "setsection@chktok.py:102(2 / 0.000000,0.000000)": {
+          "sectionname_format@chktok.py:37(2 / 0.000000,0.000000)": {
+          },
+        },
+      },
+      "GetRawFile@mapdata.py:59(1 / 0.000000,0.000000)": {
+      },
+      "Open@mpqapi.py:118(1 / 0.000000,0.000000)": {
+        "u2b@ubconv.py:36(1 / 0.000000,0.000000)": {
+        },
+      },
+      "UpdateMPQ@mpqadd.py:92(1 / 0.000000,0.000000)": {
+      },
+      "Close@mpqapi.py:136(1 / 0.000000,0.000000)": {
+      },
+    },
+    "LoadMap@loadmap.py:30(1 / 0.078125,0.000000)": {
+      "InitMapData@mapdata.py:35(1 / 0.078125,0.000000)": {
+        "InitStringMap@stringmap.py:59(1 / 0.078125,0.000000)": {
+          "b2i4@binio.py:35(256 / 0.015625,0.015625)": {
+          },
+          "getsection@chktok.py:98(4 / 0.000000,0.000000)": {
+            "sectionname_format@chktok.py:37(4 / 0.000000,0.000000)": {
+              "u2b@ubconv.py:36(4 / 0.000000,0.000000)": {
+              },
+            },
+          },
+          "b2i2@binio.py:31(483 / 0.000000,0.000000)": {
+          },
+          "GetString@tblformat.py:92(739 / 0.000000,0.000000)": {
+          },
+          "AddItem@stringmap.py:34(1 / 0.000000,0.000000)": {
+            "unProxy@exprproxy.py:168(1 / 0.000000,0.000000)": {
+            },
+            "u2b@ubconv.py:36(1 / 0.000000,0.000000)": {
+            },
+          },
+        },
+        "InitPropertyMap@proptable.py:34(1 / 0.000000,0.000000)": {
+          "getsection@chktok.py:98(2 / 0.000000,0.000000)": {
+            "sectionname_format@chktok.py:37(2 / 0.000000,0.000000)": {
+              "u2b@ubconv.py:36(2 / 0.000000,0.000000)": {
+              },
+            },
+          },
+        },
+        "InitPlayerInfo@playerinfo.py:35(1 / 0.000000,0.000000)": {
+          "getsection@chktok.py:98(3 / 0.000000,0.000000)": {
+            "sectionname_format@chktok.py:37(3 / 0.000000,0.000000)": {
+              "u2b@ubconv.py:36(3 / 0.000000,0.000000)": {
+              },
+            },
+          },
+          "<listcomp>@playerinfo.py:42(1 / 0.000000,0.000000)": {
+          },
+        },
+      },
+      "Open@mpqapi.py:118(1 / 0.000000,0.000000)": {
+        "u2b@ubconv.py:36(1 / 0.000000,0.000000)": {
+        },
+      },
+      "Extract@mpqapi.py:156(1 / 0.000000,0.000000)": {
+        "u2b@ubconv.py:36(1 / 0.000000,0.000000)": {
+        },
+        "create_string_buffer@__init__.py:47(1 / 0.000000,0.000000)": {
+        },
+      },
+      "loadchk@chktok.py:57(1 / 0.000000,0.000000)": {
+        "b2i4@binio.py:35(38 / 0.000000,0.000000)": {
+        },
+      },
+      "UpdateFileListByListfile@mpqadd.py:31(1 / 0.000000,0.000000)": {
+        "EnumFiles@mpqapi.py:144(1 / 0.000000,0.000000)": {
+          "Extract@mpqapi.py:156(1 / 0.000000,0.000000)": {
+            "u2b@ubconv.py:36(1 / 0.000000,0.000000)": {
+            },
+            "create_string_buffer@__init__.py:47(1 / 0.000000,0.000000)": {
+            },
+          },
+          "b2u@ubconv.py:45(1 / 0.000000,0.000000)": {
+          },
+        },
+        "MPQAddFile@mpqadd.py:49(2 / 0.000000,0.000000)": {
+          "u2b@ubconv.py:36(2 / 0.000000,0.000000)": {
+          },
+          "ep_assert@eperror.py:31(4 / 0.000000,0.000000)": {
+          },
+        },
+      },
+      "Close@mpqapi.py:136(1 / 0.000000,0.000000)": {
+      },
+    },
+  },
+},

@@ -27,6 +27,7 @@ from cpython.mem cimport PyMem_Malloc, PyMem_Realloc, PyMem_Free
 from cpython.bytes cimport PyBytes_AsString, PyBytes_FromStringAndSize
 from cpython.pycapsule cimport PyCapsule_New, PyCapsule_GetPointer
 from libc.string cimport memset, memcpy
+from libc.stdint cimport uint32_t, uint16_t
 
 from .rlocint cimport RlocInt_C
 
@@ -180,18 +181,16 @@ cdef void _StructPacker(int* sizelist, PayloadBuffer buf, tuple arglist):
 
         if sizelist[i] == 1:
             data[dpos] = ri.offset & 0xFF
+            dpos += 1
 
         elif sizelist[i] == 2:
-            data[dpos] = ri.offset & 0xFF
-            data[dpos + 1] = (ri.offset >> 8) & 0xFF
+            (<uint32_t*>(data + dpos))[0] = ri.offset
+            dpos += 2
 
         else:
-            data[dpos] = ri.offset & 0xFF
-            data[dpos + 1] = (ri.offset >> 8) & 0xFF
-            data[dpos + 2] = (ri.offset >> 16) & 0xFF
-            data[dpos + 3] = (ri.offset >> 24) & 0xFF
+            (<uint32_t*>(data + dpos))[0] = ri.offset
+            dpos += 4
 
-        dpos += sizelist[i]
 
     buf._datacur = dpos
 

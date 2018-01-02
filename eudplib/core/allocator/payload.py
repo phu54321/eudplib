@@ -112,7 +112,8 @@ class ObjCollector:
 
     def WritePack(self, structformat, *arglist):
         for arg in arglist:
-            constexpr.Evaluate(arg)
+            if type(arg) is not int:
+                constexpr.Evaluate(arg)
 
     def WriteBytes(self, b):
         pass

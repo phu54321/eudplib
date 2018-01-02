@@ -1,11 +1,12 @@
+import profile_tool
+import helper
+
 DoCoverageTest = False
 
 if DoCoverageTest:
     import coverage
     cov = coverage.Coverage()
     cov.start()
-
-import helper
 
 
 helper.EP_SetRValueStrictMode(True)
@@ -40,7 +41,13 @@ from unittests import (
 )
 
 helper.CompressPayload(True)
-helper.test_runall('unittest')
+
+
+def f():
+    helper.test_runall('unittest')
+
+
+r = profile_tool.profile(f, 'profile.json')
 
 
 if DoCoverageTest:
