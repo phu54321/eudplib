@@ -58,65 +58,56 @@ class Action(ConstExpr):
         '''
         super().__init__(self)
 
-        self.locid1 = locid1
-        self.strid = strid
-        self.wavid = wavid
-        self.time = time
-        self.player1 = player1
-        self.player2 = player2
-        self.unitid = unitid
-        self.acttype = acttype
-        self.amount = amount
-        self.flags = flags
-
+        self.fields = [locid1, strid, wavid, time, player1,
+                       player2, unitid, acttype, amount, flags]
         self.parenttrg = None
         self.actindex = None
 
     def Disable(self):
-        self.flags |= 2
+        self.fields[9] |= 2
 
     # -------
 
     def CheckArgs(self, i):
         ut.ep_assert(
-            self.locid1 is None or IsConstExpr(self.locid1),
-            'Invalid locid1 %s in trigger index %d' % (self.locid1, i)
+            self.fields[0] is None or IsConstExpr(self.fields[0]),
+            'Invalid locid1 %s in trigger index %d' % (self.fields[0], i)
         )
         ut.ep_assert(
-            self.strid is None or IsConstExpr(self.strid),
-            'Invalid strid %s in trigger index %d' % (self.strid, i)
+            self.fields[1] is None or IsConstExpr(self.fields[1]),
+            'Invalid strid %s in trigger index %d' % (self.fields[1], i)
         )
         ut.ep_assert(
-            self.wavid is None or IsConstExpr(self.wavid),
-            'Invalid wavid %s in trigger index %d' % (self.wavid, i)
+            self.fields[2] is None or IsConstExpr(self.fields[2]),
+            'Invalid wavid %s in trigger index %d' % (self.fields[2], i)
         )
         ut.ep_assert(
-            self.time is None or IsConstExpr(self.time),
-            'Invalid time %s in trigger index %d' % (self.time, i)
+            self.fields[3] is None or IsConstExpr(self.fields[3]),
+            'Invalid time %s in trigger index %d' % (self.fields[3], i)
         )
         ut.ep_assert(
-            self.player1 is None or IsConstExpr(self.player1),
-            'Invalid player1 %s in trigger index %d' % (self.player1, i)
+            self.fields[4] is None or IsConstExpr(self.fields[4]),
+            'Invalid player1 %s in trigger index %d' % (self.fields[4], i)
         )
         ut.ep_assert(
-            self.player2 is None or IsConstExpr(self.player2),
-            'Invalid player2 %s in trigger index %d' % (self.player2, i)
+            self.fields[5] is None or IsConstExpr(self.fields[5]),
+            'Invalid player2 %s in trigger index %d' % (self.fields[5], i)
         )
         ut.ep_assert(
-            self.unitid is None or IsConstExpr(self.unitid),
-            'Invalid unitid %s in trigger index %d' % (self.unitid, i)
+            self.fields[6] is None or IsConstExpr(self.fields[6]),
+            'Invalid unitid %s in trigger index %d' % (self.fields[6], i)
         )
         ut.ep_assert(
-            self.acttype is None or IsConstExpr(self.acttype),
-            'Invalid acttype %s in trigger index %d' % (self.acttype, i)
+            self.fields[7] is None or IsConstExpr(self.fields[7]),
+            'Invalid acttype %s in trigger index %d' % (self.fields[7], i)
         )
         ut.ep_assert(
-            self.amount is None or IsConstExpr(self.amount),
-            'Invalid amount %s in trigger index %d' % (self.amount, i)
+            self.fields[8] is None or IsConstExpr(self.fields[8]),
+            'Invalid amount %s in trigger index %d' % (self.fields[8], i)
         )
         ut.ep_assert(
-            self.flags is None or IsConstExpr(self.flags),
-            'Invalid flags %s in trigger index %d' % (self.flags, i)
+            self.fields[9] is None or IsConstExpr(self.fields[9]),
+            'Invalid flags %s in trigger index %d' % (self.fields[9], i)
         )
         return True
 
@@ -138,16 +129,7 @@ class Action(ConstExpr):
     def WritePayload(self, pbuffer):
         pbuffer.WritePack(
             'IIIIIIHBBBBH',
-            self.locid1,
-            self.strid,
-            self.wavid,
-            self.time,
-            self.player1,
-            self.player2,
-            self.unitid,
-            self.acttype,
-            self.amount,
-            self.flags,
+            *self.fields,
             0,
             0
         )

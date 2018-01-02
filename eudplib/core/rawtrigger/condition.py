@@ -53,55 +53,49 @@ class Condition(ConstExpr):
                  comparison, condtype, restype, flags):
         super().__init__(self)
 
-        self.locid = locid
-        self.player = player
-        self.amount = amount
-        self.unitid = unitid
-        self.comparison = comparison
-        self.condtype = condtype
-        self.restype = restype
-        self.flags = flags
+        self.fields = [locid, player, amount, unitid,
+                       comparison, condtype, restype, flags]
 
         self.parenttrg = None
         self.condindex = None
 
     def Disable(self):
-        self.flags |= 2
+        self.fields[7] |= 2
 
     # -------
 
     def CheckArgs(self, i):
         ut.ep_assert(
-            self.locid is None or IsConstExpr(self.locid),
-            'Invalid locid %s in trigger index %d' % (self.locid, i)
+            self.fields[0] is None or IsConstExpr(self.fields[0]),
+            'Invalid locid %s in trigger index %d' % (self.fields[0], i)
         )
         ut.ep_assert(
-            self.player is None or IsConstExpr(self.player),
-            'Invalid player %s in trigger index %d' % (self.player, i)
+            self.fields[1] is None or IsConstExpr(self.fields[1]),
+            'Invalid player %s in trigger index %d' % (self.fields[1], i)
         )
         ut.ep_assert(
-            self.amount is None or IsConstExpr(self.amount),
-            'Invalid amount %s in trigger index %d' % (self.amount, i)
+            self.fields[2] is None or IsConstExpr(self.fields[2]),
+            'Invalid amount %s in trigger index %d' % (self.fields[2], i)
         )
         ut.ep_assert(
-            self.unitid is None or IsConstExpr(self.unitid),
-            'Invalid unitid %s in trigger index %d' % (self.unitid, i)
+            self.fields[3] is None or IsConstExpr(self.fields[3]),
+            'Invalid unitid %s in trigger index %d' % (self.fields[3], i)
         )
         ut.ep_assert(
-            self.comparison is None or IsConstExpr(self.comparison),
-            'Invalid comparison %s in trigger index %d' % (self.comparison, i)
+            self.fields[4] is None or IsConstExpr(self.fields[4]),
+            'Invalid comparison %s in trigger index %d' % (self.fields[4], i)
         )
         ut.ep_assert(
-            self.condtype is None or IsConstExpr(self.condtype),
-            'Invalid condtype %s in trigger index %d' % (self.condtype, i)
+            self.fields[5] is None or IsConstExpr(self.fields[5]),
+            'Invalid condtype %s in trigger index %d' % (self.fields[5], i)
         )
         ut.ep_assert(
-            self.restype is None or IsConstExpr(self.restype),
-            'Invalid restype %s in trigger index %d' % (self.restype, i)
+            self.fields[6] is None or IsConstExpr(self.fields[6]),
+            'Invalid restype %s in trigger index %d' % (self.fields[6], i)
         )
         ut.ep_assert(
-            self.flags is None or IsConstExpr(self.flags),
-            'Invalid flags %s in trigger index %d' % (self.flags, i)
+            self.fields[7] is None or IsConstExpr(self.fields[7]),
+            'Invalid flags %s in trigger index %d' % (self.fields[7], i)
         )
         return True
 
@@ -124,13 +118,6 @@ class Condition(ConstExpr):
     def WritePayload(self, pbuffer):
         pbuffer.WritePack(
             'IIIHBBBBH',
-            self.locid,
-            self.player,
-            self.amount,
-            self.unitid,
-            self.comparison,
-            self.condtype,
-            self.restype,
-            self.flags,
+            *self.fields,
             0
         )

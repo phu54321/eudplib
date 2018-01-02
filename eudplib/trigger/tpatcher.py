@@ -38,10 +38,10 @@ def HasEUDVariable(l):
 
 def ApplyPatchTable(initepd, obj, patchTable):
     def fieldSelector(fieldName):
-        if type(fieldName) is str:
-            return getattr(obj, fieldName)
+        if type(fieldName) is int:
+            return obj.fields[fieldName]
         else:
-            return fieldName
+            return 0
 
     for i, patchEntry in enumerate(patchTable):
         patchFields = patchEntry
@@ -55,27 +55,16 @@ def ApplyPatchTable(initepd, obj, patchTable):
         if HasEUDVariable(fieldList):
             memoryFiller(initepd + i, *fieldList)
             for fieldName in patchFields:
-                if type(fieldName) is str:
-                    setattr(obj, fieldName, 0)
+                if type(fieldName) is int:
+                    obj.fields[fieldName] = 0
 
 
 condpt = [
-    ['locid'],
-    ['player'],
-    ['amount'],
-    ['unitid', 'comparison', 'condtype'],
-    ['restype', 'flags', 0, 0],
+    [0], [1], [2], [3, 4, 5], [6, 7, None, None]
 ]
 
 actpt = [
-    ['locid1'],
-    ['strid'],
-    ['wavid'],
-    ['time'],
-    ['player1'],
-    ['player2'],
-    ['unitid', 'acttype', 'amount'],
-    ['flags', 0, 0, 0]
+    [0], [1], [2], [3], [4], [5], [6, 7, 8], [9, None, None, None]
 ]
 
 
