@@ -30,6 +30,7 @@ from importlib.machinery import (
 
 from .epscompile import epsCompile
 from eudplib.utils import EPError
+import os
 import sys
 import re
 from bisect import bisect_right
@@ -97,6 +98,17 @@ class EPSLoader(SourceFileLoader):
         compiled = epsCompile(path, fileData)
         if compiled is None:
             raise EPError('epScript compiled failed for %s' % path)
+        dirname, filename = os.path.split(path)
+        epsdir = os.path.join(dirname, "__epspy__")
+        try:
+            if not os.path.isdir(epsdir):
+                os.mkdir(epsdir)
+            ofname = os.path.splitext(filename)[0] + '.py'
+            with open(os.path.join(epsdir, ofname), 'wb') as file:
+                file.write(compiled)
+        except OSError:
+            pass
+
         return compiled
 
     def source_to_code(self, data, path, *, _optimize=-1):
