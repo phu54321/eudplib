@@ -216,7 +216,7 @@ class EUDVariable(VariableBase):
             return (self - other).Exactly(0)
 
     def __ne__(self, other):
-        if other == 0:
+        if isinstance(other, int) and other == 0:
             return self.AtLeast(1)
         else:
             return (self - other).AtLeast(1)

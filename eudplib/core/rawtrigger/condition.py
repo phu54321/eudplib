@@ -120,3 +120,6 @@ class Condition(ConstExpr):
             'IIIHBBBBH',
             self.fields,
         )
+
+    def __bool__(self):
+        raise RuntimeError("To prevent error, Condition can't be put into if.")
