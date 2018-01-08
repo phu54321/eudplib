@@ -77,3 +77,8 @@ from .breakcont import (
     EUDBreakIf,
     EUDBreakIfNot
 )
+
+from .shortcircuit import (
+    EUDSCOr,
+    EUDSCAnd,
+)
