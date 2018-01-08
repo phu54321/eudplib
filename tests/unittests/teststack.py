@@ -10,10 +10,10 @@ def test_stack():
     k.push(789)
     k.push(234)
     t2 = k.pop()  # 234
-    t3 = EUDTernary(k.empty(), 1, 0)  # 0
+    t3 = EUDTernary(k.empty())(1)(0)  # 0
     t4 = k.pop()  # 789
     t5 = k.pop()  # 123
-    t6 = EUDTernary(k.empty(), 1, 0)  # 1
+    t6 = EUDTernary(k.empty())(1)(0)  # 1
 
     test_equality(
         "Stack test",
