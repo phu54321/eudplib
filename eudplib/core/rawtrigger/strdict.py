@@ -28,7 +28,7 @@ DefLocationDict = dict(
     [('Anywhere', 63)]
 )
 
-DefSwitchDict = {"Switch %d" % i: i for i in range(1, 256)}
+DefSwitchDict = {"Switch %d" % (i + 1): i for i in range(1, 256)}
 
 # ======================================
 
