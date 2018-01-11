@@ -59,33 +59,40 @@ def EncodeAIScript(ais):
         return ais
 
 
-def _EncodeAny(f, dl, s):
+def _EncodeAny(t, f, dl, s):
     s = ut.unProxy(s)
 
     if isinstance(s, str) or isinstance(s, bytes):
         try:
             return f(s)
         except KeyError:
-            pass
+            try:
+                return dl[s]
+            except KeyError:
+                raise ut.EPError('[Warning] "%s" is not a %s' % (s, t))
+                return s
 
-    try:
-        return dl.get(s, s)
+    else:
+        try:
+            return dl.get(s, s)
 
-    except TypeError:  # unhashable
-        return s
+        except TypeError:  # unhashable
+            return s
 
 
 def EncodeLocation(loc):
-    return _EncodeAny(lambda s: GetLocationIndex(s) + 1, DefLocationDict, loc)
+    return _EncodeAny(
+        "location",
+        lambda s: GetLocationIndex(s) + 1, DefLocationDict, loc)
 
 
 def EncodeString(s):
-    return _EncodeAny(GetStringIndex, {}, s)
+    return _EncodeAny("CHKString", GetStringIndex, {}, s)
 
 
 def EncodeSwitch(sw):
-    return _EncodeAny(GetSwitchIndex, DefSwitchDict, sw)
+    return _EncodeAny("Switch", GetSwitchIndex, DefSwitchDict, sw)
 
 
 def EncodeUnit(u):
-    return _EncodeAny(GetUnitIndex, DefUnitDict, u)
+    return _EncodeAny("Unit", GetUnitIndex, DefUnitDict, u)

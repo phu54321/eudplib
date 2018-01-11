@@ -209,11 +209,13 @@ SwitchStateDict = {
 }
 
 
-def _EncodeConst(d, s):
+def _EncodeConst(t, d, s):
     s = ut.unProxy(s)
     try:
         return d.get(s, s)
     except TypeError:  # unhashable type
+        if isinstance(s, _Unique):
+            raise ut.EPError('[Warning] "%s" is not %s' % (s, t))
         return s
 
 
@@ -221,28 +223,28 @@ def EncodeAllyStatus(s):
     '''
     Convert [Enemy, Ally, AlliedVictory] to number [0, 1, 2].
     '''
-    return _EncodeConst(AllyStatusDict, s)
+    return _EncodeConst("AllyStatus", AllyStatusDict, s)
 
 
 def EncodeComparison(s):
     '''
     Convert [AtLeast, AtMost, Exactly] to number [0, 1, 10].
     '''
-    return _EncodeConst(ComparisonDict, s)
+    return _EncodeConst("Comparison", ComparisonDict, s)
 
 
 def EncodeModifier(s):
     '''
     Convert [SetTo, Add, Subtract] to number [7, 8, 9].
     '''
-    return _EncodeConst(ModifierDict, s)
+    return _EncodeConst("Modifier", ModifierDict, s)
 
 
 def EncodeOrder(s):
     '''
     Convert [Move, Patrol, Attack] to number [0, 1, 2].
     '''
-    return _EncodeConst(OrderDict, s)
+    return _EncodeConst("Order", OrderDict, s)
 
 
 def EncodePlayer(s):
@@ -289,21 +291,21 @@ def EncodePlayer(s):
     ======================= ========
 
     '''
-    return _EncodeConst(PlayerDict, s)
+    return _EncodeConst("Player", PlayerDict, s)
 
 
 def EncodePropState(s):
     '''
     Convert [Enable, Disable, Toogle] to number [4, 5, 6]
     '''
-    return _EncodeConst(PropStateDict, s)
+    return _EncodeConst("PropState", PropStateDict, s)
 
 
 def EncodeResource(s):
     '''
     Convert [Ore, Gas, OreAndGas] to [0, 1, 2]
     '''
-    return _EncodeConst(ResourceDict, s)
+    return _EncodeConst("Resource", ResourceDict, s)
 
 
 def EncodeScore(s):
@@ -324,21 +326,21 @@ def EncodeScore(s):
     ================= ========
 
     '''
-    return _EncodeConst(ScoreDict, s)
+    return _EncodeConst("Score", ScoreDict, s)
 
 
 def EncodeSwitchAction(s):
     '''
     Convert [Set, Clear, Toogle, Random] to [4, 5, 6, 11].
     '''
-    return _EncodeConst(SwitchActionDict, s)
+    return _EncodeConst("SwitchAction", SwitchActionDict, s)
 
 
 def EncodeSwitchState(s):
     '''
     Convert [Set, Cleared] to [2, 3].
     '''
-    return _EncodeConst(SwitchStateDict, s)
+    return _EncodeConst("SwitchState", SwitchStateDict, s)
 
 
 def EncodeCount(s):
