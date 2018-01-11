@@ -67,35 +67,35 @@ class Condition(ConstExpr):
     def CheckArgs(self, i):
         ut.ep_assert(
             self.fields[0] is None or IsConstExpr(self.fields[0]),
-            'Invalid locid %s in trigger index %d' % (self.fields[0], i)
+            'Invalid locid "%s" in trigger index %d' % (self.fields[0], i)
         )
         ut.ep_assert(
             self.fields[1] is None or IsConstExpr(self.fields[1]),
-            'Invalid player %s in trigger index %d' % (self.fields[1], i)
+            'Invalid player "%s" in trigger index %d' % (self.fields[1], i)
         )
         ut.ep_assert(
             self.fields[2] is None or IsConstExpr(self.fields[2]),
-            'Invalid amount %s in trigger index %d' % (self.fields[2], i)
+            'Invalid amount "%s" in trigger index %d' % (self.fields[2], i)
         )
         ut.ep_assert(
             self.fields[3] is None or IsConstExpr(self.fields[3]),
-            'Invalid unitid %s in trigger index %d' % (self.fields[3], i)
+            'Invalid unitid "%s" in trigger index %d' % (self.fields[3], i)
         )
         ut.ep_assert(
             self.fields[4] is None or IsConstExpr(self.fields[4]),
-            'Invalid comparison %s in trigger index %d' % (self.fields[4], i)
+            'Invalid comparison "%s" in trigger index %d' % (self.fields[4], i)
         )
         ut.ep_assert(
             self.fields[5] is None or IsConstExpr(self.fields[5]),
-            'Invalid condtype %s in trigger index %d' % (self.fields[5], i)
+            'Invalid condtype "%s" in trigger index %d' % (self.fields[5], i)
         )
         ut.ep_assert(
             self.fields[6] is None or IsConstExpr(self.fields[6]),
-            'Invalid restype %s in trigger index %d' % (self.fields[6], i)
+            'Invalid restype "%s" in trigger index %d' % (self.fields[6], i)
         )
         ut.ep_assert(
             self.fields[7] is None or IsConstExpr(self.fields[7]),
-            'Invalid flags %s in trigger index %d' % (self.fields[7], i)
+            'Invalid flags "%s" in trigger index %d' % (self.fields[7], i)
         )
         return True
 
