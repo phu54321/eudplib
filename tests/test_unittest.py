@@ -37,7 +37,8 @@ from unittests import (
     testpool,
     test_lvalue,
     test_sq_from_1var,
-    test_eps
+    test_eps,
+    testshortcircuit,
 )
 
 helper.CompressPayload(True)

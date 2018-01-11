@@ -24,11 +24,11 @@ THE SOFTWARE.
 '''
 
 DefLocationDict = dict(
-    list({"Location %d" % i: i for i in range(255)}.items()) +
+    list({"Location %d" % (i + 1): i for i in range(255)}.items()) +
     [('Anywhere', 63)]
 )
 
-DefSwitchDict = {"Switch %d" % i: i for i in range(1, 256)}
+DefSwitchDict = {"Switch %d" % (i + 1): i for i in range(1, 256)}
 
 # ======================================
 

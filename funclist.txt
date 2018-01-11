@@ -417,7 +417,7 @@ EUDBreak도 문제 없이 사용할 수 있습니다. ::
     두개 조건의 논리곱, 논리합이나 반대조건을 뜻합니다.
 
 
-* EUDTernary(conditions, ontrue, onfalse)
+* EUDTernary(conditions)(ontrue)(onfalse)
     C언어에서의 삼항 연산자에 해당합니다. conditions에 따라 ontrue와 onfalse의
     값을 선택합니다. conditions에 관계 없이 ontrue랑 onfalse의 값이 계산되므로
     주의하세요.

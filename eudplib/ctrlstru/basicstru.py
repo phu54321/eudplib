@@ -53,15 +53,24 @@ def EUDJumpIfNot(conditions, onfalse):
     ontrue << c.NextTrigger()
 
 
-def EUDTernary(conditions, ontrue, onfalse):
+def EUDTernary(conditions, *, neg=False):
     v = c.EUDVariable()
     t = c.Forward()
     end = c.Forward()
 
-    EUDJumpIf(conditions, t)
-    v << onfalse
-    EUDJump(end)
-    t << c.NextTrigger()
-    v << ontrue
-    end << c.NextTrigger()
-    return v
+    if neg:
+        EUDJumpIf(conditions, t)
+    else:
+        EUDJumpIfNot(conditions, t)
+
+    def _1(ontrue):
+        v << ontrue
+        EUDJump(end)
+        t << c.NextTrigger()
+
+        def _2(onfalse):
+            v << onfalse
+            end << c.NextTrigger()
+            return v
+        return _2
+    return _1
