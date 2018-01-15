@@ -16,7 +16,7 @@ def f_addmul(a, b):
     return a + b, a * b
 
 
-@EUDTypedFunc([EUDFuncPtr(2, 1), None, None])
+@EUDTypedFunc([EUDFuncPtr(2, 1), None, None], [None])
 def indirectcaller(f, a, b):
     return f(a, b)
 

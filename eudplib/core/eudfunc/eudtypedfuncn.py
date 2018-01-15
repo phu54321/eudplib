@@ -75,5 +75,6 @@ class EUDTypedFuncN(EUDFuncN):
         rets = super().__call__(*args)
 
         # Cast returns to rettypes before caller code.
+        rets = ut.Assignable2List(rets)
         rets = applyTypes(self._rettypes, rets)
-        return rets
+        return ut.List2Assignable(rets)
