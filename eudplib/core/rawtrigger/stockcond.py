@@ -55,7 +55,7 @@ def CountdownTimer(Comparison, Time):
 
         T : Time, CP : Comparison.
     """
-    Comparison = EncodeComparison(Comparison)
+    Comparison = EncodeComparison(Comparison, issueError=True)
     return Condition(0, 0, Time, 0, Comparison, 1, 0, 0)
 
 
@@ -67,33 +67,33 @@ def Command(Player, Comparison, Number, Unit):
 
 
     """
-    Player = EncodePlayer(Player)
-    Comparison = EncodeComparison(Comparison)
-    Unit = EncodeUnit(Unit)
+    Player = EncodePlayer(Player, issueError=True)
+    Comparison = EncodeComparison(Comparison, issueError=True)
+    Unit = EncodeUnit(Unit, issueError=True)
     return Condition(0, Player, Number, Unit, Comparison, 2, 0, 0)
 
 
 def Bring(Player, Comparison, Number, Unit, Location):
-    Player = EncodePlayer(Player)
-    Comparison = EncodeComparison(Comparison)
-    Unit = EncodeUnit(Unit)
-    Location = EncodeLocation(Location)
+    Player = EncodePlayer(Player, issueError=True)
+    Comparison = EncodeComparison(Comparison, issueError=True)
+    Unit = EncodeUnit(Unit, issueError=True)
+    Location = EncodeLocation(Location, issueError=True)
     return Condition(Location, Player, Number, Unit, Comparison, 3, 0, 0)
 
 
 def Accumulate(Player, Comparison, Number, ResourceType):
-    Player = EncodePlayer(Player)
-    Comparison = EncodeComparison(Comparison)
-    ResourceType = EncodeResource(ResourceType)
+    Player = EncodePlayer(Player, issueError=True)
+    Comparison = EncodeComparison(Comparison, issueError=True)
+    ResourceType = EncodeResource(ResourceType, issueError=True)
     return Condition(0, Player, Number, 0, Comparison, 4, ResourceType, 0)
 
 
 # 'Kills' is already defined inside constenc, so we just add __call__ method
 # to there instead of creating new function
 def __Kills__internal(Player, Comparison, Number, Unit):
-    Player = EncodePlayer(Player)
-    Comparison = EncodeComparison(Comparison)
-    Unit = EncodeUnit(Unit)
+    Player = EncodePlayer(Player, issueError=True)
+    Comparison = EncodeComparison(Comparison, issueError=True)
+    Unit = EncodeUnit(Unit, issueError=True)
     return Condition(0, Player, Number, Unit, Comparison, 5, 0, 0)
 
 
@@ -101,85 +101,85 @@ Kills._internalf = __Kills__internal
 
 
 def CommandMost(Unit):
-    Unit = EncodeUnit(Unit)
+    Unit = EncodeUnit(Unit, issueError=True)
     return Condition(0, 0, 0, Unit, 0, 6, 0, 0)
 
 
 def CommandMostAt(Unit, Location):
-    Unit = EncodeUnit(Unit)
-    Location = EncodeLocation(Location)
+    Unit = EncodeUnit(Unit, issueError=True)
+    Location = EncodeLocation(Location, issueError=True)
     return Condition(Location, 0, 0, Unit, 0, 7, 0, 0)
 
 
 def MostKills(Unit):
-    Unit = EncodeUnit(Unit)
+    Unit = EncodeUnit(Unit, issueError=True)
     return Condition(0, 0, 0, Unit, 0, 8, 0, 0)
 
 
 def HighestScore(ScoreType):
-    ScoreType = EncodeScore(ScoreType)
+    ScoreType = EncodeScore(ScoreType, issueError=True)
     return Condition(0, 0, 0, 0, 0, 9, ScoreType, 0)
 
 
 def MostResources(ResourceType):
-    ResourceType = EncodeResource(ResourceType)
+    ResourceType = EncodeResource(ResourceType, issueError=True)
     return Condition(0, 0, 0, 0, 0, 10, ResourceType, 0)
 
 
 def Switch(Switch, State):
-    Switch = EncodeSwitch(Switch)
-    State = EncodeSwitchState(State)
+    Switch = EncodeSwitch(Switch, issueError=True)
+    State = EncodeSwitchState(State, issueError=True)
     return Condition(0, 0, 0, 0, State, 11, Switch, 0)
 
 
 def ElapsedTime(Comparison, Time):
-    Comparison = EncodeComparison(Comparison)
+    Comparison = EncodeComparison(Comparison, issueError=True)
     return Condition(0, 0, Time, 0, Comparison, 12, 0, 0)
 
 
 def Opponents(Player, Comparison, Number):
-    Player = EncodePlayer(Player)
-    Comparison = EncodeComparison(Comparison)
+    Player = EncodePlayer(Player, issueError=True)
+    Comparison = EncodeComparison(Comparison, issueError=True)
     return Condition(0, Player, Number, 0, Comparison, 14, 0, 0)
 
 
 def Deaths(Player, Comparison, Number, Unit):
-    Player = EncodePlayer(Player)
-    Comparison = EncodeComparison(Comparison)
-    Unit = EncodeUnit(Unit)
+    Player = EncodePlayer(Player, issueError=True)
+    Comparison = EncodeComparison(Comparison, issueError=True)
+    Unit = EncodeUnit(Unit, issueError=True)
     return Condition(0, Player, Number, Unit, Comparison, 15, 0, 0)
 
 
 def CommandLeast(Unit):
-    Unit = EncodeUnit(Unit)
+    Unit = EncodeUnit(Unit, issueError=True)
     return Condition(0, 0, 0, Unit, 0, 16, 0, 0)
 
 
 def CommandLeastAt(Unit, Location):
-    Unit = EncodeUnit(Unit)
-    Location = EncodeLocation(Location)
+    Unit = EncodeUnit(Unit, issueError=True)
+    Location = EncodeLocation(Location, issueError=True)
     return Condition(Location, 0, 0, Unit, 0, 17, 0, 0)
 
 
 def LeastKills(Unit):
-    Unit = EncodeUnit(Unit)
+    Unit = EncodeUnit(Unit, issueError=True)
     return Condition(0, 0, 0, Unit, 0, 18, 0, 0)
 
 
 def LowestScore(ScoreType):
-    ScoreType = EncodeScore(ScoreType)
+    ScoreType = EncodeScore(ScoreType, issueError=True)
     return Condition(0, 0, 0, 0, 0, 19, ScoreType, 0)
 
 
 def LeastResources(ResourceType):
-    ResourceType = EncodeResource(ResourceType)
+    ResourceType = EncodeResource(ResourceType, issueError=True)
     return Condition(0, 0, 0, 0, 0, 20, ResourceType, 0)
 
 
 def Score(Player, ScoreType, Comparison, Number):
-    Player = EncodePlayer(Player)
-    ScoreType = EncodeScore(ScoreType)
-    Comparison = EncodeComparison(Comparison)
+    Player = EncodePlayer(Player, issueError=True)
+    ScoreType = EncodeScore(ScoreType, issueError=True)
+    Comparison = EncodeComparison(Comparison, issueError=True)
     return Condition(0, Player, Number, 0, Comparison, 21, ScoreType, 0)
 
 

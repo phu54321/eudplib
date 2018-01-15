@@ -209,45 +209,45 @@ SwitchStateDict = {
 }
 
 
-def _EncodeConst(t, d, s):
+def _EncodeConst(t, d, s, issueError):
     s = ut.unProxy(s)
     try:
         return d.get(s, s)
     except TypeError:  # unhashable type
-        if isinstance(s, _Unique):
+        if issueError and isinstance(s, _Unique):
             raise ut.EPError('[Warning] "%s" is not %s' % (s, t))
         return s
 
 
-def EncodeAllyStatus(s):
+def EncodeAllyStatus(s, issueError=False):
     '''
     Convert [Enemy, Ally, AlliedVictory] to number [0, 1, 2].
     '''
-    return _EncodeConst("AllyStatus", AllyStatusDict, s)
+    return _EncodeConst("AllyStatus", AllyStatusDict, s, issueError)
 
 
-def EncodeComparison(s):
+def EncodeComparison(s, issueError=False):
     '''
     Convert [AtLeast, AtMost, Exactly] to number [0, 1, 10].
     '''
-    return _EncodeConst("Comparison", ComparisonDict, s)
+    return _EncodeConst("Comparison", ComparisonDict, s, issueError)
 
 
-def EncodeModifier(s):
+def EncodeModifier(s, issueError=False):
     '''
     Convert [SetTo, Add, Subtract] to number [7, 8, 9].
     '''
-    return _EncodeConst("Modifier", ModifierDict, s)
+    return _EncodeConst("Modifier", ModifierDict, s, issueError)
 
 
-def EncodeOrder(s):
+def EncodeOrder(s, issueError=False):
     '''
     Convert [Move, Patrol, Attack] to number [0, 1, 2].
     '''
-    return _EncodeConst("Order", OrderDict, s)
+    return _EncodeConst("Order", OrderDict, s, issueError)
 
 
-def EncodePlayer(s):
+def EncodePlayer(s, issueError=False):
     '''
     Convert player identifier to corresponding number.
 
@@ -291,24 +291,24 @@ def EncodePlayer(s):
     ======================= ========
 
     '''
-    return _EncodeConst("Player", PlayerDict, s)
+    return _EncodeConst("Player", PlayerDict, s, issueError)
 
 
-def EncodePropState(s):
+def EncodePropState(s, issueError=False):
     '''
     Convert [Enable, Disable, Toogle] to number [4, 5, 6]
     '''
-    return _EncodeConst("PropState", PropStateDict, s)
+    return _EncodeConst("PropState", PropStateDict, s, issueError)
 
 
-def EncodeResource(s):
+def EncodeResource(s, issueError=False):
     '''
     Convert [Ore, Gas, OreAndGas] to [0, 1, 2]
     '''
-    return _EncodeConst("Resource", ResourceDict, s)
+    return _EncodeConst("Resource", ResourceDict, s, issueError)
 
 
-def EncodeScore(s):
+def EncodeScore(s, issueError=False):
     '''
     Convert score type identifier to number.
 
@@ -326,24 +326,24 @@ def EncodeScore(s):
     ================= ========
 
     '''
-    return _EncodeConst("Score", ScoreDict, s)
+    return _EncodeConst("Score", ScoreDict, s, issueError)
 
 
-def EncodeSwitchAction(s):
+def EncodeSwitchAction(s, issueError=False):
     '''
     Convert [Set, Clear, Toogle, Random] to [4, 5, 6, 11].
     '''
-    return _EncodeConst("SwitchAction", SwitchActionDict, s)
+    return _EncodeConst("SwitchAction", SwitchActionDict, s, issueError)
 
 
-def EncodeSwitchState(s):
+def EncodeSwitchState(s, issueError=False):
     '''
     Convert [Set, Cleared] to [2, 3].
     '''
-    return _EncodeConst("SwitchState", SwitchStateDict, s)
+    return _EncodeConst("SwitchState", SwitchStateDict, s, issueError)
 
 
-def EncodeCount(s):
+def EncodeCount(s, issueError=False):
     '''
     Convert [All, (other numbers)] to number [0, (as-is)].
     '''
@@ -357,5 +357,5 @@ def EncodeCount(s):
 # ========================
 
 
-def EncodeProperty(prop):
+def EncodeProperty(prop, issueError=False):
     return GetPropertyIndex(prop)

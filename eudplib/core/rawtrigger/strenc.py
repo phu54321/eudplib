@@ -40,7 +40,7 @@ from .strdict import (
 )
 
 
-def EncodeAIScript(ais):
+def EncodeAIScript(ais, issueError=False):
     ais = ut.unProxy(ais)
 
     if type(ais) is str:
@@ -59,7 +59,7 @@ def EncodeAIScript(ais):
         return ais
 
 
-def _EncodeAny(t, f, dl, s):
+def _EncodeAny(t, f, dl, s, issueError):
     s = ut.unProxy(s)
 
     if isinstance(s, str) or isinstance(s, bytes):
@@ -69,7 +69,8 @@ def _EncodeAny(t, f, dl, s):
             try:
                 return dl[s]
             except KeyError:
-                raise ut.EPError('[Warning] "%s" is not a %s' % (s, t))
+                if issueError:
+                    raise ut.EPError('[Warning] "%s" is not a %s' % (s, t))
                 return s
 
     else:
@@ -80,19 +81,19 @@ def _EncodeAny(t, f, dl, s):
             return s
 
 
-def EncodeLocation(loc):
+def EncodeLocation(loc, issueError=False):
     return _EncodeAny(
         "location",
-        lambda s: GetLocationIndex(s) + 1, DefLocationDict, loc)
+        lambda s: GetLocationIndex(s) + 1, DefLocationDict, loc, issueError)
 
 
-def EncodeString(s):
-    return _EncodeAny("CHKString", GetStringIndex, {}, s)
+def EncodeString(s, issueError=False):
+    return _EncodeAny("CHKString", GetStringIndex, {}, s, issueError)
 
 
-def EncodeSwitch(sw):
-    return _EncodeAny("Switch", GetSwitchIndex, DefSwitchDict, sw)
+def EncodeSwitch(sw, issueError=False):
+    return _EncodeAny("Switch", GetSwitchIndex, DefSwitchDict, sw, issueError)
 
 
-def EncodeUnit(u):
-    return _EncodeAny("Unit", GetUnitIndex, DefUnitDict, u)
+def EncodeUnit(u, issueError=False):
+    return _EncodeAny("Unit", GetUnitIndex, DefUnitDict, u, issueError)
