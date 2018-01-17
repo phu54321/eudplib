@@ -19,5 +19,5 @@ profile_result = subprocess.check_output(
 print(profile_result)
 
 with open('lprof_log.txt', 'a') as lprof_fp:
-    lprof_fp.write("[%s]: %.4f\n%s\n\n\n" %
+    lprof_fp.write("[%s]: Total execution time %.4fs\n%s\n\n\n" %
                    (curTime, execTime, profile_result))

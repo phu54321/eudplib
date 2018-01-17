@@ -108,9 +108,9 @@ class ObjCollector:
         pass
 
     def WriteDword(self, number):
-        constexpr.Evaluate(number)
+        if type(number) is not int:
+            constexpr.Evaluate(number)
 
-    @profile
     def WritePack(self, structformat, arglist):
         for arg in arglist:
             if type(arg) is not int:
@@ -157,13 +157,13 @@ def CollectObjects(root):
             obj = _untraversed_objects.pop()
 
             objc.StartWrite()
-            obj.WritePayload(objc)
+            obj.CollectDependency(objc)
             objc.EndWrite()
 
         # Check for new objects
         for obj in list(_dynamic_objects_set):
             objc.StartWrite()
-            obj.WritePayload(objc)
+            obj.CollectDependency(objc)
             objc.EndWrite()
 
     if len(_found_objects_set) == 0:
@@ -372,6 +372,7 @@ def RegisterCreatePayloadCallback(f):
     _on_create_payload_callbacks.append(f)
 
 
+@profile
 def CreatePayload(root):
     # Call callbacks
     for f in _on_create_payload_callbacks:

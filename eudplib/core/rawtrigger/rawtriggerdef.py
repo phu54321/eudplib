@@ -128,6 +128,15 @@ class RawTrigger(EUDObject):
     def GetDataSize(self):
         return 2408
 
+    def CollectDependency(self, pbuffer):
+        pbuffer.WriteDword(self._prevptr)
+        pbuffer.WriteDword(self._nextptr)
+
+        for cond in self._conditions:
+            cond.CollectDependency(pbuffer)
+        for act in self._actions:
+            act.CollectDependency(pbuffer)
+
     def WritePayload(self, pbuffer):
         pbuffer.WriteDword(self._prevptr)
         pbuffer.WriteDword(self._nextptr)

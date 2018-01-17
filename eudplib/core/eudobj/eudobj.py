@@ -75,6 +75,9 @@ class EUDObject(ConstExpr):
         """Memory size of object."""
         raise ut.EPError('Override')
 
+    def CollectDependency(self, pbuffer):
+        return self.WritePayload(pbuffer)
+
     def WritePayload(self, pbuffer):
         """Write object"""
         raise ut.EPError('Override')

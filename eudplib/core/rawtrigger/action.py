@@ -126,6 +126,16 @@ class Action(ConstExpr):
     def Evaluate(self):
         return self.parenttrg.Evaluate() + 8 + 320 + 32 * self.actindex
 
+    def CollectDependency(self, pbuffer):
+        wdw = pbuffer.WriteDword
+        fld = self.fields
+        wdw(fld[0])
+        wdw(fld[1])
+        wdw(fld[2])
+        wdw(fld[3])
+        wdw(fld[4])
+        wdw(fld[5])
+
     def WritePayload(self, pbuffer):
         pbuffer.WritePack(
             'IIIIIIHBBBBH',

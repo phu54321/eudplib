@@ -55,6 +55,11 @@ class EUDVarBuffer(EUDObject):
     def GetDataSize(self):
         return 2408 + 72 * (len(self._initvals) - 1)
 
+    def CollectDependency(self, emitbuffer):
+        for initval in self._initvals:
+            if type(initval) is not int:
+                emitbuffer.WriteDword(initval)
+
     def WritePayload(self, emitbuffer):
         output = bytearray(2408 + 72 * (len(self._initvals) - 1))
 

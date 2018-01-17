@@ -70,3 +70,625 @@ Line #      Hits         Time  Per Hit   % Time  Line Contents
 
 
 
+[January 17, 2018 - I:22PM]: 13.2728
+Timer unit: 3.7926e-07 s
+
+Total time: 3.0685 s
+File: C:\gitclones\eudtrglib\eudplib\core\allocator\payload.py
+Function: CollectObjects at line 125
+
+Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+   125                                           @profile
+   126                                           def CollectObjects(root):
+   127                                               global phase
+   128                                               global _rootobj
+   129                                               global _found_objects
+   130                                               global _found_objects_set
+   131                                               global _dynamic_objects_set
+   132                                               global _untraversed_objects
+   133                                           
+   134         2         61.0     30.5      0.0      lprint('[Stage 1/3] CollectObjects', flush=True)
+   135                                           
+   136         2          4.0      2.0      0.0      phase = PHASE_COLLECTING
+   137                                           
+   138         2         12.0      6.0      0.0      objc = ObjCollector()
+   139         2          4.0      2.0      0.0      _rootobj = None
+   140         2          6.0      3.0      0.0      _found_objects_set = set()
+   141         2          5.0      2.5      0.0      _dynamic_objects_set = set()
+   142         2          8.0      4.0      0.0      _untraversed_objects = []
+   143                                           
+   144                                               # Evaluate root to register root object.
+   145                                               # root may not have WritePayload() method e.g: Forward()
+   146         2         63.0     31.5      0.0      constexpr.Evaluate(root)
+   147                                           
+   148         5         13.0      2.6      0.0      while _untraversed_objects:
+   149     16812      44713.0      2.7      0.6          while _untraversed_objects:
+   150     16809      30365.0      1.8      0.4              lprint(
+   151     16809      29968.0      1.8      0.4                  " - Collected %d / %d objects" % (
+   152     16809      38576.0      2.3      0.5                      len(_found_objects_set),
+   153     16809     155740.0      9.3      1.9                      len(_found_objects_set) + len(_untraversed_objects)
+   154                                                           )
+   155                                                       )
+   156                                           
+   157     16809      47089.0      2.8      0.6              obj = _untraversed_objects.pop()
+   158                                           
+   159     16809      52135.0      3.1      0.6              objc.StartWrite()
+   160     16809    4114885.0    244.8     50.9              obj.WritePayload(objc)
+   161     16809      55930.0      3.3      0.7              objc.EndWrite()
+   162                                           
+   163                                                   # Check for new objects
+   164         6         28.0      4.7      0.0          for obj in list(_dynamic_objects_set):
+   165         3          9.0      3.0      0.0              objc.StartWrite()
+   166         3    3368725.0 1122908.3     41.6              obj.WritePayload(objc)
+   167         3         30.0     10.0      0.0              objc.EndWrite()
+   168                                           
+   169         2          7.0      3.5      0.0      if len(_found_objects_set) == 0:
+   170                                                   raise ut.EPError('No object collected')
+   171                                           
+   172                                               # Shuffle objects -> Randomize(?) addresses
+   173         2         10.0      5.0      0.0      _found_objects_set.remove(_rootobj)
+   174         2       1701.0    850.5      0.0      fo2 = list(_found_objects_set)
+   175         2     148609.0  74304.5      1.8      random.shuffle(fo2)
+   176         2       1282.0    641.0      0.0      _found_objects = [_rootobj] + fo2
+   177                                           
+   178                                               # cleanup
+   179         2        671.0    335.5      0.0      _found_objects_set = None
+   180         2          6.0      3.0      0.0      phase = None
+   181                                           
+   182                                               # Final
+   183         2          3.0      1.5      0.0      lprint(
+   184         2          3.0      1.5      0.0          " - Collected %d / %d objects" %
+   185                                                   (
+   186         2          9.0      4.5      0.0              len(_found_objects),
+   187         2         20.0     10.0      0.0              len(_found_objects)
+   188         2         61.0     30.5      0.0          ), flush=True
+   189                                               )
+
+
+
+
+[January 17, 2018 - I:24PM]: 12.3363
+Timer unit: 3.7926e-07 s
+
+Total time: 2.47011 s
+File: C:\gitclones\eudtrglib\eudplib\core\allocator\payload.py
+Function: CollectObjects at line 125
+
+Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+   125                                           @profile
+   126                                           def CollectObjects(root):
+   127                                               global phase
+   128                                               global _rootobj
+   129                                               global _found_objects
+   130                                               global _found_objects_set
+   131                                               global _dynamic_objects_set
+   132                                               global _untraversed_objects
+   133                                           
+   134         2         60.0     30.0      0.0      lprint('[Stage 1/3] CollectObjects', flush=True)
+   135                                           
+   136         2          5.0      2.5      0.0      phase = PHASE_COLLECTING
+   137                                           
+   138         2         11.0      5.5      0.0      objc = ObjCollector()
+   139         2          4.0      2.0      0.0      _rootobj = None
+   140         2          5.0      2.5      0.0      _found_objects_set = set()
+   141         2          5.0      2.5      0.0      _dynamic_objects_set = set()
+   142         2          6.0      3.0      0.0      _untraversed_objects = []
+   143                                           
+   144                                               # Evaluate root to register root object.
+   145                                               # root may not have WritePayload() method e.g: Forward()
+   146         2         61.0     30.5      0.0      constexpr.Evaluate(root)
+   147                                           
+   148         5         11.0      2.2      0.0      while _untraversed_objects:
+   149     16812      31018.0      1.8      0.5          while _untraversed_objects:
+   150     16809      28115.0      1.7      0.4              lprint(
+   151     16809      28019.0      1.7      0.4                  " - Collected %d / %d objects" % (
+   152     16809      35263.0      2.1      0.5                      len(_found_objects_set),
+   153     16809     135564.0      8.1      2.1                      len(_found_objects_set) + len(_untraversed_objects)
+   154                                                           )
+   155                                                       )
+   156                                           
+   157     16809      41136.0      2.4      0.6              obj = _untraversed_objects.pop()
+   158                                           
+   159     16809      46143.0      2.7      0.7              objc.StartWrite()
+   160     16809    3694961.0    219.8     56.7              obj.WritePayload(objc)
+   161     16809      49542.0      2.9      0.8              objc.EndWrite()
+   162                                           
+   163                                                   # Check for new objects
+   164         6         29.0      4.8      0.0          for obj in list(_dynamic_objects_set):
+   165         3          8.0      2.7      0.0              objc.StartWrite()
+   166         3    2267295.0 755765.0     34.8              obj.GetDependency(objc)
+   167         3         21.0      7.0      0.0              objc.EndWrite()
+   168                                           
+   169         2          9.0      4.5      0.0      if len(_found_objects_set) == 0:
+   170                                                   raise ut.EPError('No object collected')
+   171                                           
+   172                                               # Shuffle objects -> Randomize(?) addresses
+   173         2         15.0      7.5      0.0      _found_objects_set.remove(_rootobj)
+   174         2       2917.0   1458.5      0.0      fo2 = list(_found_objects_set)
+   175         2     150546.0  75273.0      2.3      random.shuffle(fo2)
+   176         2       1450.0    725.0      0.0      _found_objects = [_rootobj] + fo2
+   177                                           
+   178                                               # cleanup
+   179         2        653.0    326.5      0.0      _found_objects_set = None
+   180         2          6.0      3.0      0.0      phase = None
+   181                                           
+   182                                               # Final
+   183         2          4.0      2.0      0.0      lprint(
+   184         2          4.0      2.0      0.0          " - Collected %d / %d objects" %
+   185                                                   (
+   186         2          8.0      4.0      0.0              len(_found_objects),
+   187         2         19.0      9.5      0.0              len(_found_objects)
+   188         2         64.0     32.0      0.0          ), flush=True
+   189                                               )
+
+
+
+
+[January 17, 2018 - I:27PM]: Total execution time 11.9822s
+Timer unit: 3.7926e-07 s
+
+Total time: 1.90513 s
+File: C:\gitclones\eudtrglib\eudplib\core\allocator\payload.py
+Function: CollectObjects at line 125
+
+Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+   125                                           @profile
+   126                                           def CollectObjects(root):
+   127                                               global phase
+   128                                               global _rootobj
+   129                                               global _found_objects
+   130                                               global _found_objects_set
+   131                                               global _dynamic_objects_set
+   132                                               global _untraversed_objects
+   133                                           
+   134         2         64.0     32.0      0.0      lprint('[Stage 1/3] CollectObjects', flush=True)
+   135                                           
+   136         2          4.0      2.0      0.0      phase = PHASE_COLLECTING
+   137                                           
+   138         2         11.0      5.5      0.0      objc = ObjCollector()
+   139         2          4.0      2.0      0.0      _rootobj = None
+   140         2          7.0      3.5      0.0      _found_objects_set = set()
+   141         2          4.0      2.0      0.0      _dynamic_objects_set = set()
+   142         2          7.0      3.5      0.0      _untraversed_objects = []
+   143                                           
+   144                                               # Evaluate root to register root object.
+   145                                               # root may not have WritePayload() method e.g: Forward()
+   146         2         57.0     28.5      0.0      constexpr.Evaluate(root)
+   147                                           
+   148         5         13.0      2.6      0.0      while _untraversed_objects:
+   149     16812      31082.0      1.8      0.6          while _untraversed_objects:
+   150     16809      28457.0      1.7      0.6              lprint(
+   151     16809      27625.0      1.6      0.5                  " - Collected %d / %d objects" % (
+   152     16809      36069.0      2.1      0.7                      len(_found_objects_set),
+   153     16809     139754.0      8.3      2.8                      len(_found_objects_set) + len(_untraversed_objects)
+   154                                                           )
+   155                                                       )
+   156                                           
+   157     16809      41711.0      2.5      0.8              obj = _untraversed_objects.pop()
+   158                                           
+   159     16809      46309.0      2.8      0.9              objc.StartWrite()
+   160     16809    3857363.0    229.5     76.8              obj.CollectDependency(objc)
+   161     16809      51282.0      3.1      1.0              objc.EndWrite()
+   162                                           
+   163                                                   # Check for new objects
+   164         6         31.0      5.2      0.0          for obj in list(_dynamic_objects_set):
+   165         3          9.0      3.0      0.0              objc.StartWrite()
+   166         3     587849.0 195949.7     11.7              obj.CollectDependency(objc)
+   167         3         34.0     11.3      0.0              objc.EndWrite()
+   168                                           
+   169         2          9.0      4.5      0.0      if len(_found_objects_set) == 0:
+   170                                                   raise ut.EPError('No object collected')
+   171                                           
+   172                                               # Shuffle objects -> Randomize(?) addresses
+   173         2         10.0      5.0      0.0      _found_objects_set.remove(_rootobj)
+   174         2       1508.0    754.0      0.0      fo2 = list(_found_objects_set)
+   175         2     171888.0  85944.0      3.4      random.shuffle(fo2)
+   176         2       1301.0    650.5      0.0      _found_objects = [_rootobj] + fo2
+   177                                           
+   178                                               # cleanup
+   179         2        706.0    353.0      0.0      _found_objects_set = None
+   180         2          5.0      2.5      0.0      phase = None
+   181                                           
+   182                                               # Final
+   183         2          4.0      2.0      0.0      lprint(
+   184         2          4.0      2.0      0.0          " - Collected %d / %d objects" %
+   185                                                   (
+   186         2          9.0      4.5      0.0              len(_found_objects),
+   187         2         19.0      9.5      0.0              len(_found_objects)
+   188         2         71.0     35.5      0.0          ), flush=True
+   189                                               )
+
+
+[January 17, 2018 - I:28PM]: Total execution time 13.2802s
+Timer unit: 3.7926e-07 s
+
+Total time: 1.92048 s
+File: C:\gitclones\eudtrglib\eudplib\core\allocator\payload.py
+Function: CollectObjects at line 125
+
+Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+   125                                           @profile
+   126                                           def CollectObjects(root):
+   127                                               global phase
+   128                                               global _rootobj
+   129                                               global _found_objects
+   130                                               global _found_objects_set
+   131                                               global _dynamic_objects_set
+   132                                               global _untraversed_objects
+   133                                           
+   134         2         62.0     31.0      0.0      lprint('[Stage 1/3] CollectObjects', flush=True)
+   135                                           
+   136         2          6.0      3.0      0.0      phase = PHASE_COLLECTING
+   137                                           
+   138         2         12.0      6.0      0.0      objc = ObjCollector()
+   139         2          4.0      2.0      0.0      _rootobj = None
+   140         2          7.0      3.5      0.0      _found_objects_set = set()
+   141         2          6.0      3.0      0.0      _dynamic_objects_set = set()
+   142         2          8.0      4.0      0.0      _untraversed_objects = []
+   143                                           
+   144                                               # Evaluate root to register root object.
+   145                                               # root may not have WritePayload() method e.g: Forward()
+   146         2         65.0     32.5      0.0      constexpr.Evaluate(root)
+   147                                           
+   148         5         12.0      2.4      0.0      while _untraversed_objects:
+   149     16812      32749.0      1.9      0.6          while _untraversed_objects:
+   150     16809      29442.0      1.8      0.6              lprint(
+   151     16809      28396.0      1.7      0.6                  " - Collected %d / %d objects" % (
+   152     16809      35457.0      2.1      0.7                      len(_found_objects_set),
+   153     16809     143052.0      8.5      2.8                      len(_found_objects_set) + len(_untraversed_objects)
+   154                                                           )
+   155                                                       )
+   156                                           
+   157     16809      43338.0      2.6      0.9              obj = _untraversed_objects.pop()
+   158                                           
+   159     16809      47580.0      2.8      0.9              objc.StartWrite()
+   160     16809    3835334.0    228.2     75.7              obj.WritePayload(objc)
+   161     16809      51491.0      3.1      1.0              objc.EndWrite()
+   162                                           
+   163                                                   # Check for new objects
+   164         6         41.0      6.8      0.0          for obj in list(_dynamic_objects_set):
+   165         3          8.0      2.7      0.0              objc.StartWrite()
+   166         3     631475.0 210491.7     12.5              obj.CollectDependency(objc)
+   167         3         35.0     11.7      0.0              objc.EndWrite()
+   168                                           
+   169         2         10.0      5.0      0.0      if len(_found_objects_set) == 0:
+   170                                                   raise ut.EPError('No object collected')
+   171                                           
+   172                                               # Shuffle objects -> Randomize(?) addresses
+   173         2          9.0      4.5      0.0      _found_objects_set.remove(_rootobj)
+   174         2       1655.0    827.5      0.0      fo2 = list(_found_objects_set)
+   175         2     180874.0  90437.0      3.6      random.shuffle(fo2)
+   176         2       1502.0    751.0      0.0      _found_objects = [_rootobj] + fo2
+   177                                           
+   178                                               # cleanup
+   179         2        993.0    496.5      0.0      _found_objects_set = None
+   180         2          8.0      4.0      0.0      phase = None
+   181                                           
+   182                                               # Final
+   183         2          4.0      2.0      0.0      lprint(
+   184         2          2.0      1.0      0.0          " - Collected %d / %d objects" %
+   185                                                   (
+   186         2          9.0      4.5      0.0              len(_found_objects),
+   187         2         22.0     11.0      0.0              len(_found_objects)
+   188         2         78.0     39.0      0.0          ), flush=True
+   189                                               )
+
+
+[January 17, 2018 - I:33PM]: Total execution time 12.2048s
+Timer unit: 3.7926e-07 s
+
+Total time: 1.86849 s
+File: C:\gitclones\eudtrglib\eudplib\core\allocator\payload.py
+Function: CollectObjects at line 126
+
+Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+   126                                           @profile
+   127                                           def CollectObjects(root):
+   128                                               global phase
+   129                                               global _rootobj
+   130                                               global _found_objects
+   131                                               global _found_objects_set
+   132                                               global _dynamic_objects_set
+   133                                               global _untraversed_objects
+   134                                           
+   135         2         59.0     29.5      0.0      lprint('[Stage 1/3] CollectObjects', flush=True)
+   136                                           
+   137         2          6.0      3.0      0.0      phase = PHASE_COLLECTING
+   138                                           
+   139         2         12.0      6.0      0.0      objc = ObjCollector()
+   140         2          4.0      2.0      0.0      _rootobj = None
+   141         2          5.0      2.5      0.0      _found_objects_set = set()
+   142         2          4.0      2.0      0.0      _dynamic_objects_set = set()
+   143         2          7.0      3.5      0.0      _untraversed_objects = []
+   144                                           
+   145                                               # Evaluate root to register root object.
+   146                                               # root may not have WritePayload() method e.g: Forward()
+   147         2         63.0     31.5      0.0      constexpr.Evaluate(root)
+   148                                           
+   149         5         14.0      2.8      0.0      while _untraversed_objects:
+   150     16812      30856.0      1.8      0.6          while _untraversed_objects:
+   151     16809      28618.0      1.7      0.6              lprint(
+   152     16809      27648.0      1.6      0.6                  " - Collected %d / %d objects" % (
+   153     16809      35073.0      2.1      0.7                      len(_found_objects_set),
+   154     16809     139318.0      8.3      2.8                      len(_found_objects_set) + len(_untraversed_objects)
+   155                                                           )
+   156                                                       )
+   157                                           
+   158     16809      43175.0      2.6      0.9              obj = _untraversed_objects.pop()
+   159                                           
+   160     16809      46040.0      2.7      0.9              objc.StartWrite()
+   161     16809    3723200.0    221.5     75.6              obj.CollectDependency(objc)
+   162     16809      56201.0      3.3      1.1              objc.EndWrite()
+   163                                           
+   164                                                   # Check for new objects
+   165         6         34.0      5.7      0.0          for obj in list(_dynamic_objects_set):
+   166         3          8.0      2.7      0.0              objc.StartWrite()
+   167         3     634108.0 211369.3     12.9              obj.CollectDependency(objc)
+   168         3         39.0     13.0      0.0              objc.EndWrite()
+   169                                           
+   170         2         11.0      5.5      0.0      if len(_found_objects_set) == 0:
+   171                                                   raise ut.EPError('No object collected')
+   172                                           
+   173                                               # Shuffle objects -> Randomize(?) addresses
+   174         2         13.0      6.5      0.0      _found_objects_set.remove(_rootobj)
+   175         2       1583.0    791.5      0.0      fo2 = list(_found_objects_set)
+   176         2     157802.0  78901.0      3.2      random.shuffle(fo2)
+   177         2       1511.0    755.5      0.0      _found_objects = [_rootobj] + fo2
+   178                                           
+   179                                               # cleanup
+   180         2       1141.0    570.5      0.0      _found_objects_set = None
+   181         2          8.0      4.0      0.0      phase = None
+   182                                           
+   183                                               # Final
+   184         2          4.0      2.0      0.0      lprint(
+   185         2          3.0      1.5      0.0          " - Collected %d / %d objects" %
+   186                                                   (
+   187         2          9.0      4.5      0.0              len(_found_objects),
+   188         2         20.0     10.0      0.0              len(_found_objects)
+   189         2         69.0     34.5      0.0          ), flush=True
+   190                                               )
+
+
+
+[January 17, 2018 - I:42PM]: Total execution time 12.8862s
+Timer unit: 3.7926e-07 s
+
+Total time: 1.97617 s
+File: C:\gitclones\eudtrglib\eudplib\core\allocator\payload.py
+Function: CollectObjects at line 125
+
+Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+   125                                           @profile
+   126                                           def CollectObjects(root):
+   127                                               global phase
+   128                                               global _rootobj
+   129                                               global _found_objects
+   130                                               global _found_objects_set
+   131                                               global _dynamic_objects_set
+   132                                               global _untraversed_objects
+   133                                           
+   134         2         60.0     30.0      0.0      lprint('[Stage 1/3] CollectObjects', flush=True)
+   135                                           
+   136         2          5.0      2.5      0.0      phase = PHASE_COLLECTING
+   137                                           
+   138         2         12.0      6.0      0.0      objc = ObjCollector()
+   139         2          4.0      2.0      0.0      _rootobj = None
+   140         2          5.0      2.5      0.0      _found_objects_set = set()
+   141         2          4.0      2.0      0.0      _dynamic_objects_set = set()
+   142         2          8.0      4.0      0.0      _untraversed_objects = []
+   143                                           
+   144                                               # Evaluate root to register root object.
+   145                                               # root may not have WritePayload() method e.g: Forward()
+   146         2         62.0     31.0      0.0      constexpr.Evaluate(root)
+   147                                           
+   148         5         11.0      2.2      0.0      while _untraversed_objects:
+   149     16812      38926.0      2.3      0.7          while _untraversed_objects:
+   150     16809      29166.0      1.7      0.6              lprint(
+   151     16809      28739.0      1.7      0.6                  " - Collected %d / %d objects" % (
+   152     16809      38670.0      2.3      0.7                      len(_found_objects_set),
+   153     16809     165044.0      9.8      3.2                      len(_found_objects_set) + len(_untraversed_objects)
+   154                                                           )
+   155                                                       )
+   156                                           
+   157     16809      44256.0      2.6      0.8              obj = _untraversed_objects.pop()
+   158                                           
+   159     16809      48237.0      2.9      0.9              objc.StartWrite()
+   160     16809    3959992.0    235.6     76.0              obj.CollectDependency(objc)
+   161     16809      56324.0      3.4      1.1              objc.EndWrite()
+   162                                           
+   163                                                   # Check for new objects
+   164         6         39.0      6.5      0.0          for obj in list(_dynamic_objects_set):
+   165         3          7.0      2.3      0.0              objc.StartWrite()
+   166         3     629898.0 209966.0     12.1              obj.CollectDependency(objc)
+   167         3         34.0     11.3      0.0              objc.EndWrite()
+   168                                           
+   169         2          9.0      4.5      0.0      if len(_found_objects_set) == 0:
+   170                                                   raise ut.EPError('No object collected')
+   171                                           
+   172                                               # Shuffle objects -> Randomize(?) addresses
+   173         2         12.0      6.0      0.0      _found_objects_set.remove(_rootobj)
+   174         2       4046.0   2023.0      0.1      fo2 = list(_found_objects_set)
+   175         2     164875.0  82437.5      3.2      random.shuffle(fo2)
+   176         2       1254.0    627.0      0.0      _found_objects = [_rootobj] + fo2
+   177                                           
+   178                                               # cleanup
+   179         2        756.0    378.0      0.0      _found_objects_set = None
+   180         2          8.0      4.0      0.0      phase = None
+   181                                           
+   182                                               # Final
+   183         2          5.0      2.5      0.0      lprint(
+   184         2          4.0      2.0      0.0          " - Collected %d / %d objects" %
+   185                                                   (
+   186         2         11.0      5.5      0.0              len(_found_objects),
+   187         2         28.0     14.0      0.0              len(_found_objects)
+   188         2         90.0     45.0      0.0          ), flush=True
+   189                                               )
+
+
+
+
+
+[January 17, 2018 - I:44PM]: Total execution time 11.8119s
+Timer unit: 3.7926e-07 s
+
+Total time: 1.64946 s
+File: C:\gitclones\eudtrglib\eudplib\core\allocator\payload.py
+Function: CollectObjects at line 126
+
+Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+   126                                           @profile
+   127                                           def CollectObjects(root):
+   128                                               global phase
+   129                                               global _rootobj
+   130                                               global _found_objects
+   131                                               global _found_objects_set
+   132                                               global _dynamic_objects_set
+   133                                               global _untraversed_objects
+   134                                           
+   135         2         63.0     31.5      0.0      lprint('[Stage 1/3] CollectObjects', flush=True)
+   136                                           
+   137         2          6.0      3.0      0.0      phase = PHASE_COLLECTING
+   138                                           
+   139         2         11.0      5.5      0.0      objc = ObjCollector()
+   140         2          4.0      2.0      0.0      _rootobj = None
+   141         2          7.0      3.5      0.0      _found_objects_set = set()
+   142         2          5.0      2.5      0.0      _dynamic_objects_set = set()
+   143         2          8.0      4.0      0.0      _untraversed_objects = []
+   144                                           
+   145                                               # Evaluate root to register root object.
+   146                                               # root may not have WritePayload() method e.g: Forward()
+   147         2         62.0     31.0      0.0      constexpr.Evaluate(root)
+   148                                           
+   149         5         13.0      2.6      0.0      while _untraversed_objects:
+   150     16812      30862.0      1.8      0.7          while _untraversed_objects:
+   151     16809      28577.0      1.7      0.7              lprint(
+   152     16809      27907.0      1.7      0.6                  " - Collected %d / %d objects" % (
+   153     16809      34901.0      2.1      0.8                      len(_found_objects_set),
+   154     16809     131074.0      7.8      3.0                      len(_found_objects_set) + len(_untraversed_objects)
+   155                                                           )
+   156                                                       )
+   157                                           
+   158     16809      39473.0      2.3      0.9              obj = _untraversed_objects.pop()
+   159                                           
+   160     16809      46007.0      2.7      1.1              objc.StartWrite()
+   161     16809    3215187.0    191.3     73.9              obj.CollectDependency(objc)
+   162     16809      49209.0      2.9      1.1              objc.EndWrite()
+   163                                           
+   164                                                   # Check for new objects
+   165         6         36.0      6.0      0.0          for obj in list(_dynamic_objects_set):
+   166         3         10.0      3.3      0.0              objc.StartWrite()
+   167         3     590570.0 196856.7     13.6              obj.CollectDependency(objc)
+   168         3         38.0     12.7      0.0              objc.EndWrite()
+   169                                           
+   170         2          8.0      4.0      0.0      if len(_found_objects_set) == 0:
+   171                                                   raise ut.EPError('No object collected')
+   172                                           
+   173                                               # Shuffle objects -> Randomize(?) addresses
+   174         2         11.0      5.5      0.0      _found_objects_set.remove(_rootobj)
+   175         2       1552.0    776.0      0.0      fo2 = list(_found_objects_set)
+   176         2     151598.0  75799.0      3.5      random.shuffle(fo2)
+   177         2       1180.0    590.0      0.0      _found_objects = [_rootobj] + fo2
+   178                                           
+   179                                               # cleanup
+   180         2        674.0    337.0      0.0      _found_objects_set = None
+   181         2          6.0      3.0      0.0      phase = None
+   182                                           
+   183                                               # Final
+   184         2          3.0      1.5      0.0      lprint(
+   185         2          3.0      1.5      0.0          " - Collected %d / %d objects" %
+   186                                                   (
+   187         2          8.0      4.0      0.0              len(_found_objects),
+   188         2         17.0      8.5      0.0              len(_found_objects)
+   189         2         59.0     29.5      0.0          ), flush=True
+   190                                               )
+
+
+
+
+[January 17, 2018 - I:45PM]: Total execution time 13.2532s
+Timer unit: 3.7926e-07 s
+
+Total time: 0.95637 s
+File: C:\gitclones\eudtrglib\eudplib\core\rawtrigger\rawtriggerdef.py
+Function: CollectDependency at line 131
+
+Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+   131                                               @profile
+   132                                               def CollectDependency(self, pbuffer):
+   133     16243      61486.0      3.8      2.4          pbuffer.WriteDword(self._prevptr)
+   134     16243     293121.0     18.0     11.6          pbuffer.WriteDword(self._nextptr)
+   135                                           
+   136     19626      37580.0      1.9      1.5          for cond in self._conditions:
+   137      3383      90769.0     26.8      3.6              cond.CollectDependency(pbuffer)
+   138     52735      84970.0      1.6      3.4          for act in self._actions:
+   139     36492    1953747.0     53.5     77.5              act.CollectDependency(pbuffer)
+
+Total time: 2.21384 s
+File: C:\gitclones\eudtrglib\eudplib\core\rawtrigger\rawtriggerdef.py
+Function: WritePayload at line 141
+
+Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+   141                                               @profile
+   142                                               def WritePayload(self, pbuffer):
+   143     32486     153546.0      4.7      2.6          pbuffer.WriteDword(self._prevptr)
+   144     32486     348260.0     10.7      6.0          pbuffer.WriteDword(self._nextptr)
+   145                                           
+   146                                                   # Conditions
+   147     39252      83877.0      2.1      1.4          for cond in self._conditions:
+   148      6766     381289.0     56.4      6.5              cond.WritePayload(pbuffer)
+   149                                           
+   150     32486      68935.0      2.1      1.2          if len(self._conditions) != 16:
+   151     32424     184352.0      5.7      3.2              pbuffer.WriteBytes(bytes(20))
+   152     32424     197989.0      6.1      3.4              pbuffer.WriteSpace(20 * (15 - len(self._conditions)))
+   153                                           
+   154                                                   # Actions
+   155    105470     449608.0      4.3      7.7          for act in self._actions:
+   156     72984    2635743.0     36.1     45.2              act.WritePayload(pbuffer)
+   157                                           
+   158     32486      72779.0      2.2      1.2          if len(self._actions) != 64:
+   159     32484     176415.0      5.4      3.0              pbuffer.WriteBytes(bytes(32))
+   160     32484     389324.0     12.0      6.7              pbuffer.WriteSpace(32 * (63 - len(self._actions)))
+   161                                           
+   162                                                   # Preserved flag
+   163                                           
+   164     32486      54789.0      1.7      0.9          if self.preserved:
+   165     32486     142574.0      4.4      2.4              pbuffer.WriteDword(4)
+   166                                                   else:
+   167                                                       pbuffer.WriteDword(0)
+   168                                           
+   169     32486     321970.0      9.9      5.5          pbuffer.WriteSpace(27)
+   170     32486     175805.0      5.4      3.0          pbuffer.WriteByte(0)
+
+
+
+
+[January 17, 2018 - I:47PM]: Total execution time 13.7394s
+Timer unit: 3.7926e-07 s
+
+Total time: 7.051 s
+File: C:\gitclones\eudtrglib\eudplib\core\allocator\payload.py
+Function: CreatePayload at line 375
+
+Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+   375                                           @profile
+   376                                           def CreatePayload(root):
+   377                                               # Call callbacks
+   378         6         20.0      3.3      0.0      for f in _on_create_payload_callbacks:
+   379         4         47.0     11.8      0.0          f()
+   380         2    4200992.0 2100496.0     22.6      CollectObjects(root)
+   381         2    8019745.0 4009872.5     43.1      AllocObjects()
+   382         2    6370671.0 3185335.5     34.3      return ConstructPayload()
+
+
+
+

@@ -1,6 +1,6 @@
 import pickle
 
-# @profile
+
 def StackObjects(found_objects, dwoccupmap_dict, alloctable):
     dwoccupmap_max_size = sum(
         map(lambda x: len(dwoccupmap_dict[x]), found_objects))

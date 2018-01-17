@@ -118,6 +118,13 @@ class Condition(ConstExpr):
             'arithmetics with conditions.')
         return self.parenttrg.Evaluate() + 8 + self.condindex * 20
 
+    def CollectDependency(self, pbuffer):
+        wdw = pbuffer.WriteDword
+        fld = self.fields
+        wdw(fld[0])
+        wdw(fld[1])
+        wdw(fld[2])
+
     def WritePayload(self, pbuffer):
         pbuffer.WritePack(
             'IIIHBBBBH',
