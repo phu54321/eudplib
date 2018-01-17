@@ -110,6 +110,7 @@ class ObjCollector:
     def WriteDword(self, number):
         constexpr.Evaluate(number)
 
+    @profile
     def WritePack(self, structformat, arglist):
         for arg in arglist:
             if type(arg) is not int:

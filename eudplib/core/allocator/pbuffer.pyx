@@ -31,9 +31,6 @@ from libc.stdint cimport uint32_t, uint16_t
 
 from .rlocint cimport RlocInt_C
 
-from cpython cimport array
-import array
-
 from . import constexpr
 from eudplib import utils as ut
 
