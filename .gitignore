@@ -245,6 +245,7 @@ cmake-build-*/
 # cython thing
 eudplib/core/allocator/*.c
 eudplib/core/allocator/*.pyd
+eudplib/core/allocator/*.so
 eudplib/utils/*.c
 eudplib/utils/*.pyd
 
