@@ -32,6 +32,7 @@ from .constexpr import (
 
 from .rlocint import (
     RlocInt,
+    RlocInt_C,
     toRlocInt
 )
 

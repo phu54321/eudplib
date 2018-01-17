@@ -372,7 +372,6 @@ def RegisterCreatePayloadCallback(f):
     _on_create_payload_callbacks.append(f)
 
 
-@profile
 def CreatePayload(root):
     # Call callbacks
     for f in _on_create_payload_callbacks:
@@ -393,7 +392,7 @@ def GetObjectAddr(obj):
     global _dynamic_objects_set
     global _rootobj
 
-    if phase == PHASE_COLLECTING:
+    if phase is PHASE_COLLECTING:
         if obj not in _found_objects_set:
             _untraversed_objects.append(obj)
             _found_objects_set.add(obj)
@@ -404,9 +403,9 @@ def GetObjectAddr(obj):
 
         return defri
 
-    elif phase == PHASE_ALLOCATING:
+    elif phase is PHASE_ALLOCATING:
         return defri
 
-    elif phase == PHASE_WRITING:
+    elif phase is PHASE_WRITING:
         # assert _alloctable[obj] & 3 == 0
-        return rlocint.RlocInt(_alloctable[obj], 4)
+        return rlocint.RlocInt_C(_alloctable[obj], 4)
