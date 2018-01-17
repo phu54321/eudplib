@@ -114,7 +114,7 @@ class Condition(ConstExpr):
     def Evaluate(self):
         ut.ep_assert(
             self.parenttrg is not None,
-            'Orphan condition. This often happens when you try to do '
+            'Orphan condition. This often happens when you try to do ' +
             'arithmetics with conditions.')
         return self.parenttrg.Evaluate() + 8 + self.condindex * 20
 
