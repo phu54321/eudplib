@@ -48,7 +48,7 @@ THE SOFTWARE.
 
 class ExprProxy:
 
-    ''' Class which can contain both constxpr and eudvariable '''
+    ''' Class which can contain both ConstExpr and EUDVariable '''
 
     def __init__(self, initval):
         self._value = initval
@@ -170,6 +170,7 @@ def unProxy(x):
         return unProxy(x.getValue())
     except AttributeError:
         return x
+
 
 def isUnproxyInstance(x, cls):
     if isinstance(x, cls):

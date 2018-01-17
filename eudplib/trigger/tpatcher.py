@@ -78,13 +78,7 @@ def PatchCondition(cond):
             return cond
         except AttributeError as e:
             if c.IsConstExpr(cond):
-                ret = (cond != 0)
-                if isinstance(ret, bool):
-                    if ret:
-                        ret = c.Always()
-                    else:
-                        ret = c.Never()
-                return ret
+                return (cond != 0)
             raise
 
 
