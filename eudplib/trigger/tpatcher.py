@@ -69,18 +69,26 @@ actpt = [
 
 
 def PatchCondition(cond):
-    if isinstance(cond, c.EUDVariable):
+    if ut.isUnproxyInstance(cond, c.EUDVariable):
         return cond >= 1
 
-    elif isinstance(cond, int) or isinstance(cond, bool):
-        if cond:
-            return c.Always()
-        else:
-            return c.Never()
-
     else:
-        ApplyPatchTable(ut.EPD(cond), cond, condpt)
-        return cond
+        try:
+            ApplyPatchTable(ut.EPD(cond), cond, condpt)
+            return cond
+        except AttributeError as e:
+            if c.IsConstExpr(cond):
+                ret = (cond != 0)
+                if isinstance(ret, bool):
+                    if ret:
+                        ret = c.Always()
+                    else:
+                        ret = c.Never()
+                return ret
+            raise
+
+
+
 
 
 def PatchAction(act):

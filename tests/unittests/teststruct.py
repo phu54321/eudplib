@@ -26,6 +26,8 @@ def test_struct():
     b.z = 8
     c.x = 3
 
+    test_assert("EUDStruct can be converted to a condition", a)
+
     test_equality(
         "EUDStruct indirect access test",
         [a.x, b.x, c.x, d.x, a.y, b.y, c.y, d.y, a.z, b.z, c.z, d.z],
