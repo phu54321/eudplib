@@ -23,8 +23,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-from .rlocint import RlocInt_C
-from .rlocint import RlocInt, RlocInt_C, toRlocInt
+from .rlocint import RlocInt_C, toRlocInt
 from ... import utils as ut
 
 
@@ -39,7 +38,7 @@ class ConstExpr:
         self.rlocmode = rlocmode & 0xFFFFFFFF
 
     def Evaluate(self):
-        return Evaluate(self.baseobj) * self.rlocmode // 4 + self.offset
+        return self.baseobj.Evaluate() * self.rlocmode // 4 + self.offset
 
     # Cython version!
     def __add__(self, other):
@@ -161,7 +160,6 @@ def Evaluate(x):
 def IsConstExpr(x):
     x = ut.unProxy(x)
     return (
-        isinstance(x, int) or
-        isinstance(x, RlocInt_C) or
+        type(x) in (int, RlocInt_C) or
         hasattr(x, 'Evaluate')
     )

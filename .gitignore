@@ -249,3 +249,5 @@ eudplib/utils/*.c
 eudplib/utils/*.pyd
 
 profile.json
+lprof_log.txt
+*.lprof

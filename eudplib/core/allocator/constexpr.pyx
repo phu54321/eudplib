@@ -42,7 +42,7 @@ cdef class ConstExpr:
         self.rlocmode = rlocmode & 0xFFFFFFFF
 
     cpdef RlocInt_C Evaluate(self):
-        return Evaluate(self.baseobj) * self.rlocmode // 4 + self.offset
+        return self.baseobj.Evaluate() * self.rlocmode // 4 + self.offset
 
     # Cython version!
 

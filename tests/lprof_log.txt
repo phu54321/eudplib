@@ -1,0 +1,72 @@
+[07:13PM on January 17, 2018]
+Timer unit: 3.7926e-07 s
+
+Total time: 2.82659 s
+File: C:\gitclones\eudtrglib\eudplib\core\allocator\payload.py
+Function: WritePack at line 113
+
+Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+   113                                               @profile
+   114                                               def WritePack(self, structformat, arglist):
+   115    508226    1549335.0      3.0     20.8          for arg in arglist:
+   116    468351    1973897.0      4.2     26.5              if type(arg) is not int:
+   117     54888    3929682.0     71.6     52.7                  constexpr.Evaluate(arg)
+
+
+
+
+[January 17, 2018 - I:15PM]
+Timer unit: 3.7926e-07 s
+
+Total time: 1.0194 s
+File: C:\gitclones\eudtrglib\eudplib\core\allocator\payload.py
+Function: WritePack at line 113
+
+Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+   113                                               @profile
+   114                                               def WritePack(self, structformat, arglist):
+   115    508226     592189.0      1.2     22.0          for arg in arglist:
+   116    468351     751566.0      1.6     28.0              if type(arg) is not int:
+   117     54888    1344123.0     24.5     50.0                  constexpr.Evaluate(arg)
+
+
+
+
+[January 17, 2018 - I:20PM]: 13.0994
+Timer unit: 3.7926e-07 s
+
+Total time: 1.01439 s
+File: C:\gitclones\eudtrglib\eudplib\core\allocator\payload.py
+Function: WritePack at line 113
+
+Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+   113                                               @profile
+   114                                               def WritePack(self, structformat, arglist):
+   115    508226     601874.0      1.2     22.5          for arg in arglist:
+   116    468351     741094.0      1.6     27.7              if type(arg) is not int:
+   117     54888    1331698.0     24.3     49.8                  constexpr.Evaluate(arg)
+
+
+
+
+[January 17, 2018 - I:21PM]: 12.0912
+Timer unit: 3.7926e-07 s
+
+Total time: 0.966176 s
+File: C:\gitclones\eudtrglib\eudplib\core\allocator\payload.py
+Function: WritePack at line 113
+
+Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+   113                                               @profile
+   114                                               def WritePack(self, structformat, arglist):
+   115    508226     578702.0      1.1     22.7          for arg in arglist:
+   116    468351     703765.0      1.5     27.6              if type(arg) is not int:
+   117     54888    1265061.0     23.0     49.7                  constexpr.Evaluate(arg)
+
+
+
+

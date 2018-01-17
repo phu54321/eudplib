@@ -50,9 +50,9 @@ class RlocInt_C:
                 )
         else:
             return RlocInt_C(
-                    (rhs.offset + lhs) & 0xFFFFFFFF,
-                    rhs.rlocmode
-                )
+                (rhs.offset + lhs) & 0xFFFFFFFF,
+                rhs.rlocmode
+            )
 
     def __sub__(lhs, rhs):
         lhs = toRlocInt(lhs)
@@ -108,6 +108,7 @@ class RlocInt_C:
 
 def RlocInt(offset, rlocmode):
     return RlocInt_C(offset & 0xFFFFFFFF, rlocmode & 0xFFFFFFFF)
+
 
 def toRlocInt(x):
     """Convert int/RlocInt to rlocint"""

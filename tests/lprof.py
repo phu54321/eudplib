@@ -4,12 +4,13 @@ import datetime
 import time
 
 
-curTime = datetime.datetime.now().strftime("%I:%M%p on %B %d, %Y")
+curTime = datetime.datetime.now().strftime("%B %d, %Y - I:%M%p")
 
 print("Running script")
 st = time.time()
 os.system("kernprof -l test_unittest.py")
-print("Execute time = %fs" % (time.time() - st))
+execTime = time.time() - st
+print("Execute time = %fs" % execTime)
 
 profile_result = subprocess.check_output(
     "python -m line_profiler test_unittest.py.lprof",
@@ -18,4 +19,5 @@ profile_result = subprocess.check_output(
 print(profile_result)
 
 with open('lprof_log.txt', 'a') as lprof_fp:
-    lprof_fp.write("[%s]\n%s\n\n\n" % (curTime, profile_result))
+    lprof_fp.write("[%s]: %.4f\n%s\n\n\n" %
+                   (curTime, execTime, profile_result))
