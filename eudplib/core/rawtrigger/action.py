@@ -71,43 +71,43 @@ class Action(ConstExpr):
     def CheckArgs(self, i):
         ut.ep_assert(
             self.fields[0] is None or IsConstExpr(self.fields[0]),
-            'Invalid locid1 %s in trigger index %d' % (self.fields[0], i)
+            'Invalid locid1 "%s" in trigger index %d' % (self.fields[0], i)
         )
         ut.ep_assert(
             self.fields[1] is None or IsConstExpr(self.fields[1]),
-            'Invalid strid %s in trigger index %d' % (self.fields[1], i)
+            'Invalid strid "%s" in trigger index %d' % (self.fields[1], i)
         )
         ut.ep_assert(
             self.fields[2] is None or IsConstExpr(self.fields[2]),
-            'Invalid wavid %s in trigger index %d' % (self.fields[2], i)
+            'Invalid wavid "%s" in trigger index %d' % (self.fields[2], i)
         )
         ut.ep_assert(
             self.fields[3] is None or IsConstExpr(self.fields[3]),
-            'Invalid time %s in trigger index %d' % (self.fields[3], i)
+            'Invalid time "%s" in trigger index %d' % (self.fields[3], i)
         )
         ut.ep_assert(
             self.fields[4] is None or IsConstExpr(self.fields[4]),
-            'Invalid player1 %s in trigger index %d' % (self.fields[4], i)
+            'Invalid player1 "%s" in trigger index %d' % (self.fields[4], i)
         )
         ut.ep_assert(
             self.fields[5] is None or IsConstExpr(self.fields[5]),
-            'Invalid player2 %s in trigger index %d' % (self.fields[5], i)
+            'Invalid player2 "%s" in trigger index %d' % (self.fields[5], i)
         )
         ut.ep_assert(
             self.fields[6] is None or IsConstExpr(self.fields[6]),
-            'Invalid unitid %s in trigger index %d' % (self.fields[6], i)
+            'Invalid unitid "%s" in trigger index %d' % (self.fields[6], i)
         )
         ut.ep_assert(
             self.fields[7] is None or IsConstExpr(self.fields[7]),
-            'Invalid acttype %s in trigger index %d' % (self.fields[7], i)
+            'Invalid acttype "%s" in trigger index %d' % (self.fields[7], i)
         )
         ut.ep_assert(
             self.fields[8] is None or IsConstExpr(self.fields[8]),
-            'Invalid amount %s in trigger index %d' % (self.fields[8], i)
+            'Invalid amount "%s" in trigger index %d' % (self.fields[8], i)
         )
         ut.ep_assert(
             self.fields[9] is None or IsConstExpr(self.fields[9]),
-            'Invalid flags %s in trigger index %d' % (self.fields[9], i)
+            'Invalid flags "%s" in trigger index %d' % (self.fields[9], i)
         )
         return True
 

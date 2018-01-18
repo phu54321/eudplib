@@ -39,6 +39,7 @@ from unittests import (
     test_sq_from_1var,
     test_eps,
     testshortcircuit,
+    testlistloopcompiles,
 )
 
 helper.CompressPayload(True)

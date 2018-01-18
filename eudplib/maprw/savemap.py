@@ -28,8 +28,8 @@ from ..core.mapdata import mapdata, mpqapi
 from .injector.applyInjector import applyInjector
 from .inlinecode.ilcprocesstrig import PreprocessInlineCode
 from .injector.mainloop import _MainStarter
-from .mpqadd import UpdateMPQ
-
+from .mpqadd import UpdateMPQ, GetAddedFiles
+from .. import utils as ut
 
 def SaveMap(fname, rootf):
     """Save output map with root function.
@@ -58,6 +58,6 @@ def SaveMap(fname, rootf):
     mw.Open(fname)
     mw.PutFile('staredit\\scenario.chk', rawchk)
     UpdateMPQ(mw)
-    # mw.DeleteFile('(listfile)')
+    # mw.PutFile('(listfile)', ut.u2b('\n'.join(GetAddedFiles())))
     mw.Compact()
     mw.Close()

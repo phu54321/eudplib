@@ -105,3 +105,10 @@ def UpdateMPQ(mpqw):
                 raise ut.EPError(
                     'Failed adding file %s to mpq: May be duplicate' % fname
                 )
+
+
+def GetAddedFiles():
+    ret = set(fname for fname, content, isWave in _addedFiles.values())
+    ret.add('staredit\scenario.chk')
+    ret.add('(listfile)')
+    return ret

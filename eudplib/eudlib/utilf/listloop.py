@@ -49,7 +49,7 @@ def EUDLoopList(header_offset, break_offset=None):
     cs.EUDEndWhile()
 
     ut.ep_assert(
-        ut.EUDPopBlock(blockname)[1] == header_offset,
+        ut.EUDPopBlock(blockname)[1] is header_offset,
         'listloop mismatch'
     )
 
