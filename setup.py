@@ -19,6 +19,7 @@ setup(
         "eudplib/core/allocator/*.pyx",
         "eudplib/utils/*.pyx",
     ]),
+    python_requires='>=3',
 
     # metadata for upload to PyPI
     author="Trgk",
