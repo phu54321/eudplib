@@ -23,7 +23,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-import weakref
 import traceback
 
 from .. import rawtrigger as bt
@@ -57,16 +56,14 @@ class VariableTriggerForward(ConstExpr):
 
     def __init__(self, initval):
         super().__init__(self)
-        self._vdict = weakref.WeakKeyDictionary()
         self._initval = initval
 
     def Evaluate(self):
         evb = GetCurrentVariableBuffer()
         try:
-            return self._vdict[evb].Evaluate()
+            return evb._vdict[self].Evaluate()
         except KeyError:
-            vt = evb.CreateVarTrigger(self._initval)
-            self._vdict[evb] = vt
+            vt = evb.CreateVarTrigger(self, self._initval)
             return vt.Evaluate()
 
 

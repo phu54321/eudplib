@@ -47,12 +47,14 @@ class _ObjPoolData(c.ConstExpr):
 
     def Evaluate(self):
         evb = ev.GetCurrentVariableBuffer()
-        if evb not in self._vdict:
-            self._vdict[evb] = evb.CreateMultipleVarTriggers(
+        try:
+            return evb._vdict[self].Evaluate()
+        except KeyError:
+            ret = evb.CreateMultipleVarTriggers(
+                self,
                 [0] * (max_fieldn * self.size)
             )
-
-        return self._vdict[evb].Evaluate()
+            return ret.Evaluate()
 
 
 class ObjPool:

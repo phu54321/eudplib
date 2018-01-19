@@ -23,8 +23,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-import weakref
-
 from .. import rawtrigger as bt
 from ..allocator import (
     Forward,
@@ -52,15 +50,13 @@ def EUDVArrayData(size):
             super().__init__(self)
             ep_assert(len(initvars) == size, "%d items expected" % size)
             self._initvars = initvars
-            self._vdict = weakref.WeakKeyDictionary()
 
         def Evaluate(self):
             evb = GetCurrentVariableBuffer()
-            if evb not in self._vdict:
-                self._vdict[evb] = evb.CreateMultipleVarTriggers(
-                    self._initvars)
+            if self not in evb._vdict:
+                evb.CreateMultipleVarTriggers(self, self._initvars)
 
-            return self._vdict[evb].Evaluate()
+            return evb._vdict[self].Evaluate()
 
     return _EUDVArrayData
 

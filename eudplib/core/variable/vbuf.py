@@ -37,19 +37,22 @@ class EUDVarBuffer(EUDObject):
     def __init__(self):
         super().__init__()
 
+        self._vdict = {}
         self._initvals = []
 
     def DynamicConstructed(self):
         return True
 
-    def CreateVarTrigger(self, initval):
+    def CreateVarTrigger(self, v, initval):
         ret = self + (72 * len(self._initvals))
         self._initvals.append(initval)
+        self._vdict[v] = ret
         return ret
 
-    def CreateMultipleVarTriggers(self, initvals):
+    def CreateMultipleVarTriggers(self, v, initvals):
         ret = self + (72 * len(self._initvals))
         self._initvals.extend(initvals)
+        self._vdict[v] = ret
         return ret
 
     def GetDataSize(self):
