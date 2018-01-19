@@ -26,7 +26,6 @@ THE SOFTWARE.
 from ..eudobj import EUDObject, Db
 from .triggerscope import NextTrigger, _RegisterTrigger
 from .condition import Condition
-from .action import Action
 from eudplib import utils as ut
 
 

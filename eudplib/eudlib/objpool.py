@@ -62,9 +62,9 @@ class ObjPool:
         self.size = size
         self.remaining = c.EUDVariable(size)
 
-        baseobj = _ObjPoolData(size)
+        self.baseobj = _ObjPoolData(size)
         self.data = EUDArray(
-            [baseobj + 72 * max_fieldn * i for i in range(size)])
+            [72 * max_fieldn * i for i in range(size)])
 
     def full(self):
         return self.remaining == 0
@@ -78,7 +78,7 @@ class ObjPool:
 
         self.remaining -= 1
         data = self.data[self.remaining]
-        return data
+        return data + self.baseobj
 
     def alloc(self, basetype, *args, **kwargs):
         ut.ep_assert(
@@ -98,7 +98,7 @@ class ObjPool:
 
         data = basetype.cast(data)
         data.destructor()
-        self.data[self.remaining] = data
+        self.data[self.remaining] = data - self.baseobj
         self.remaining += 1
 
 
