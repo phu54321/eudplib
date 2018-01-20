@@ -43,3 +43,5 @@ from .eudfuncn import (
     EUDReturn,
     EUDFuncN,
 )
+
+from .consttype import *

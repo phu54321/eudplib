@@ -1,7 +1,7 @@
 from helper import *
 
 
-@EUDTypedFunc([MapLocation, MapString])
+@EUDTypedFunc([TrgLocation, TrgString])
 def x(a, b):
     test_equality(
         "Location and strings can be used as a parameter",
@@ -12,8 +12,8 @@ def x(a, b):
 
 @TestInstance
 def test_mdhelper():
-    assert MapLocation.cast("Anywhere") == 64
-    assert MapString.cast("Hello world!") == EncodeString("Hello world!")
-    assert MapSwitch.cast("Switch 1") == 0
-    assert MapUnit.cast("Terran Marine") == 0
+    assert TrgLocation.cast("Anywhere") == 64
+    assert TrgString.cast("Hello world!") == EncodeString("Hello world!")
+    assert TrgSwitch.cast("Switch 1") == 0
+    assert TrgUnit.cast("Terran Marine") == 0
     x("Anywhere", "Hello world!")
