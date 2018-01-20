@@ -25,7 +25,7 @@ THE SOFTWARE.
 
 from ctypes import (
     CDLL,
-    c_int, c_char_p, c_void_p, c_int
+    c_int, c_char_p, c_void_p
 )
 
 from eudplib.utils import (
@@ -45,12 +45,14 @@ libeps.compileString.argtypes = [c_char_p, c_char_p]
 libeps.compileString.restype = c_void_p
 libeps.freeCompiledResult.argtypes = [c_void_p]
 libeps.setDebugMode.argtypes = [c_int]
+libeps.getErrorCount.argtypes = []
+libeps.getErrorCount.resType = c_int
 
 
 def epsCompile(modname, bCode):
     modname = u2b(modname)
     output = libeps.compileString(modname, bCode)
-    if not output:
+    if not output or libeps.getErrorCount():
         return None
     outputStr = c_char_p(output).value
     libeps.freeCompiledResult(output)
