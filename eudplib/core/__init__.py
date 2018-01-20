@@ -35,3 +35,5 @@ from .calcf import *
 
 from .inlinens import *
 from .curpl import SetCurrentPlayer
+
+from .mapdatahelper import *

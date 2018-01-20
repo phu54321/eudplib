@@ -16,8 +16,7 @@ setup(
         '': ['*.c', '*.pyx', '*.dll', '*.dylib', '*.lst'],
     },
     ext_modules=cythonize([
-        "eudplib/core/allocator/*.pyx",
-        "eudplib/utils/*.pyx",
+        "eudplib/**/*.pyx",
     ]),
     python_requires='>=3',
 

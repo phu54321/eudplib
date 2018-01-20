@@ -23,6 +23,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
+from cpython.mem cimport PyMem_Malloc, PyMem_Realloc, PyMem_Free
+from libc.stdint cimport uint32_t, uint8_t
+from libc.string cimport memset
+
 from ..eudobj import EUDObject
 from ... import utils as ut
 from ..allocator import RegisterCreatePayloadCallback
@@ -64,11 +68,15 @@ class EUDVarBuffer(EUDObject):
                 emitbuffer.WriteDword(initval)
 
     def WritePayload(self, emitbuffer):
-        output = bytearray(2408 + 72 * (len(self._initvals) - 1))
-
+        cdef size_t i, heads, heade
+        cdef size_t olen = 2408 + 72 * (len(self._initvals) - 1)
+        cdef uint8_t* output = <uint8_t*> PyMem_Malloc(olen)
+        memset(output, 0, olen)
+        cdef uint32_t iv2
+        
         for i in range(len(self._initvals)):
             # 'preserve rawtrigger'
-            output[72 * i + 2376:72 * i + 2380] = b'\x04\0\0\0'
+            (<uint32_t*>(output + 72 * i + 2376))[0] = 4
 
         heads = 0
         for i, initval in enumerate(self._initvals):
@@ -76,13 +84,15 @@ class EUDVarBuffer(EUDObject):
             if initval == 0:
                 continue
             elif isinstance(initval, int):
-                output[heade:heade + 4] = ut.i2b4(initval)
+                iv2 = initval & 0xFFFFFFFF
+                (<uint32_t*>(output + heade))[0] = iv2
                 continue
             emitbuffer.WriteBytes(output[heads:heade])
             emitbuffer.WriteDword(initval)
-            heads = 72 * i + 352
+            heads = heade + 4
 
-        emitbuffer.WriteBytes(output[heads:])
+        emitbuffer.WriteBytes(output[heads:olen])
+        PyMem_Free(output)
 
 
 _evb = None

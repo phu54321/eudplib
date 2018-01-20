@@ -268,14 +268,14 @@ class ObjAllocator:
             self._Occup1()
 
     def WriteSpace(self, ssize):
-        while ssize and self._suboccupidx:
-            self._Occup0()
-            ssize -= 1
-
-        self._occupmap.extend([0] * (ssize >> 2))
-        ssize &= 3
-        for i in range(ssize):
-            self._Occup0()
+        self._suboccupidx += ssize
+        if self._suboccupidx >= 4:
+            self._occupmap.append(self._suboccupmap)
+            self._suboccupidx -= 4
+            remaining0 = self._suboccupidx // 4
+            self._occupmap.extend([0] * remaining0)
+            self._suboccupidx %= 4
+            self._suboccupmap = 0
 
 
 def AllocObjects():
@@ -315,10 +315,12 @@ def AllocObjects():
         obj.WritePayload(obja)
         dwoccupmap = obja.EndWrite()
         dwoccupmap_dict[obj] = dwoccupmap
-        ut.ep_assert(
-            len(dwoccupmap) == (obj.GetDataSize() + 3) >> 2,
-            'Occupation map length & Object size mismatch for object'
-        )
+        if len(dwoccupmap) != (obj.GetDataSize() + 3) >> 2:
+
+            raise ut.EPError(
+                'Occupation map length (%d) & Object size mismatch for object (%d)'
+                % (len(dwoccupmap), (obj.GetDataSize() + 3) >> 2)
+            )
         lprint(" - Preprocessed %d / %d objects" % (i + 1, objn))
 
     lprint(" - Preprocessed %d / %d objects" % (objn, objn), flush=True)

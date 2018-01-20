@@ -40,6 +40,7 @@ from unittests import (
     test_eps,
     testshortcircuit,
     testlistloopcompiles,
+    testmapdatahelper,
 )
 
 helper.CompressPayload(True)
