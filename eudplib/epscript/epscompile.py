@@ -47,6 +47,12 @@ libeps.freeCompiledResult.argtypes = [c_void_p]
 libeps.setDebugMode.argtypes = [c_int]
 libeps.getErrorCount.argtypes = []
 libeps.getErrorCount.resType = c_int
+libeps.registerPlibConstants.argtypes = [c_char_p]
+
+
+def setEpsGlobals(globalList):
+    globalList_C = b'\0'.join(u2b(g) for g in globalList) + b'\0'
+    libeps.registerPlibConstants(globalList_C)
 
 
 def epsCompile(modname, bCode):

@@ -74,6 +74,8 @@ a = _CGFW(lambda: [_ARR(FlattenList([f_square(1), f_square(2), f_square(3), f_sq
 # (Line 11) function square(x) {
 @EUDFunc
 def f_square(x):
+    # (Line 12) const z = EUDVArray(5)();
+    z = EUDVArray(5)()
     # (Line 13) return x * x; // + z.k;
     EUDReturn(x * x)
     # (Line 14) }

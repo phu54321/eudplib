@@ -83,8 +83,7 @@ def EUDVArray(size, basetype=None):
                     initvars = [0] * size
 
                 # For python iterables
-                else:
-                    baseobj = EUDVArrayData(size)(initvars)
+                baseobj = EUDVArrayData(size)(initvars)
 
             super().__init__(baseobj)
             self.dontFlatten = True

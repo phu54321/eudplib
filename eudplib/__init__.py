@@ -24,6 +24,8 @@ THE SOFTWARE.
 '''
 
 
+oldGlobals = set(globals().keys())
+
 from .utils import *
 from .core import *
 from .trigger import *
@@ -50,9 +52,11 @@ import types
 
 _alllist = []
 for _k, _v in dict(globals()).items():
-    if _k != 'stocktrg' and isinstance(_v, types.ModuleType):
+    if _k in oldGlobals:
         continue
-    if _k[0] == '_':
+    elif _k != 'stocktrg' and isinstance(_v, types.ModuleType):
+        continue
+    elif _k[0] == '_':
         continue
     _alllist.append(_k)
 
@@ -67,3 +71,7 @@ def eudplibVersion():
     return __version__
 
 _alllist.append('eudplibVersion')
+
+
+from .epscript.epscompile import setEpsGlobals
+setEpsGlobals(_alllist)
