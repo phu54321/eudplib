@@ -49,3 +49,12 @@ def b2u(b):
         return b
     else:
         raise EPError('Invalid type %s' % type(b))
+
+
+def u2utf8(s):
+    if isinstance(s, str):
+        return s.encode('utf-8')
+    elif isinstance(s, bytes):
+        return s
+    else:
+        raise EPError('Invalid type %s' % type(s))

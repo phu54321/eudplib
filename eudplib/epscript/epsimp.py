@@ -104,7 +104,7 @@ class EPSLoader(SourceFileLoader):
             if not os.path.isdir(epsdir):
                 os.mkdir(epsdir)
             ofname = os.path.splitext(filename)[0] + '.py'
-            with open(os.path.join(epsdir, ofname), 'w') as file:
+            with open(os.path.join(epsdir, ofname), 'w', encoding='utf-8') as file:
                 file.write(compiled.decode('utf-8'))
         except OSError:
             pass

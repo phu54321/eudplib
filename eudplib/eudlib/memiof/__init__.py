@@ -29,6 +29,13 @@ from .modcurpl import (
 )
 
 
+from .bwepdio import (
+    f_wwrite_epd,
+    f_bwrite_epd,
+    f_wread_epd,
+    f_bread_epd,
+)
+
 from .dwepdio import (
     f_dwepdread_epd,
     f_dwread_epd,

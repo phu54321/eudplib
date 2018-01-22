@@ -23,7 +23,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-from .ubconv import u2b, b2u
+from .ubconv import u2b, b2u, u2utf8
 from .binio import b2i1, b2i2, b2i4, i2b1, i2b2, i2b4
 from .blockstru import (
     EUDCreateBlock,

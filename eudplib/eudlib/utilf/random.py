@@ -25,9 +25,11 @@ THE SOFTWARE.
 
 # This code uses simple LCG algorithm.
 
-from eudplib import core as c
-from eudplib import utils as ut
-from ..memiof import f_dwbreak, f_dwread_epd
+from eudplib import (
+    core as c,
+    ctrlstru as cs,
+)
+from ..memiof import f_dwbreak
 
 _seed = c.EUDVariable()
 
@@ -43,8 +45,29 @@ def f_srand(seed):
 
 
 def f_randomize():
-    current_rv = f_dwread_epd(ut.EPD(0x51CA14))
-    _seed << current_rv
+    global _seed
+
+    # Store switch 1
+    sw1 = c.EUDVariable()
+    if cs.EUDIf()(c.Switch("Switch 1", c.Set)):
+        sw1 << c.EncodeSwitchAction(c.Set)
+    if cs.EUDElse()():
+        sw1 << c.EncodeSwitchAction(c.Clear)
+    cs.EUDEndIf()
+
+    _seed << 0
+    dseed = c.EUDVariable()
+    dseed << 1
+
+    if cs.EUDLoopN()(32):
+        cs.DoActions(c.SetSwitch("Switch 1", c.Random))
+        if cs.EUDIf()(c.Switch("Switch 1", c.Set)):
+            _seed += dseed
+        cs.EUDEndIf()
+        dseed += dseed
+    cs.EUDEndLoopN()
+
+    cs.DoActions(c.SetSwitch("Switch 1", sw1))
 
 
 @c.EUDFunc

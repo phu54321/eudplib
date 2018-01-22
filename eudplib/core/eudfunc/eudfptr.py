@@ -137,10 +137,10 @@ def EUDTypedFuncPtr(argtypes, rettypes):
             f_argn = f._argn
             f_retn = f._retn
             ut.ep_assert(argn == f_argn,
-                         "Argument count mismatch (Got %d, Expected %d)" %
+                         "Function requires %d arguments (Expected %d)" %
                          (f_argn, argn))
             ut.ep_assert(retn == f_retn,
-                         "Returns count mismatch (Got %d, Expected %d)" %
+                         "Function returns %d values (Expected %d)" %
                          (f_retn, retn))
 
         def setFunc(self, f):

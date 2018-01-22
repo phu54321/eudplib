@@ -44,7 +44,11 @@ def applyTypes(typesdecl, varlist):
     if typesdecl is None:
         return varlist
 
-    ut.ep_assert(len(varlist) == len(typesdecl))
+    ut.ep_assert(
+        len(varlist) == len(typesdecl),
+        'Different number of variables(%d) from type declarations(%d)'
+        % (len(varlist), len(typesdecl))
+    )
 
     rets = []
     for vartype, var in zip(typesdecl, varlist):
