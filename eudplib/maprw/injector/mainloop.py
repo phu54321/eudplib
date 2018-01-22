@@ -26,11 +26,12 @@ THE SOFTWARE.
 from ... import core as c
 from ... import ctrlstru as cs
 from ... import eudlib as sf
+from ...trace.tracetool import _f_initstacktrace
 from ...eudlib.stringf.dbstr import _f_initextstr
 
 
 jumper = None
-startFunctionList = [_f_initextstr]
+startFunctionList = []
 
 
 def EUDOnStart(func):
@@ -44,10 +45,14 @@ def _MainStarter(mf):
     if c.PushTriggerScope():
         rootstarter = c.NextTrigger()
 
+        # Various initializes
+        _f_initextstr()
+        sf.f_getcurpl()
+        _f_initstacktrace()
+
         for func in startFunctionList:
             func()
 
-        sf.f_getcurpl()  # Nessecary. See comments on f_getcurpl
 
         mf()
 

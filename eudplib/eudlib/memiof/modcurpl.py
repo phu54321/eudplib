@@ -51,6 +51,12 @@ def _f_updatecpcache():
 
 @c.EUDFunc
 def f_getcurpl():
+    """Get current player value.
+
+    eudplib internally caches the current player value, so this function uses
+    that value if the value is valid. Otherwise, update the current player
+    cache and return it.
+    """
     cpcond = c.curpl.cpcacheMatchCond()
     cpcache = c.curpl.GetCPCache()
     if cs.EUDIfNot()(cpcond):

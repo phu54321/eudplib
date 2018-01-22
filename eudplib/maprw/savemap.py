@@ -30,15 +30,18 @@ from .inlinecode.ilcprocesstrig import PreprocessInlineCode
 from .injector.mainloop import _MainStarter
 from .mpqadd import UpdateMPQ
 from ..trace.tracetool import _GetTraceMap, _ResetTraceMap
+import binascii
 
 
+traceHeader = None
 traceMap = []
 
 
 def getTraceMap():
-    global traceMap
-    newTraceMap = _GetTraceMap()
+    global traceMap, traceHeader
+    newTraceHeader, newTraceMap = _GetTraceMap()
     if newTraceMap:
+        traceHeader = newTraceHeader
         traceMap = list(newTraceMap)
     _ResetTraceMap()
 
@@ -83,5 +86,7 @@ def SaveMap(fname, rootf):
         traceFname = fname + '.map'
         print("Writing trace file to %s" % traceFname)
         with open(traceFname, 'w') as wf:
+            wf.write('H: %s\n\n' %
+                     binascii.hexlify(traceHeader).decode('ascii'))
             for k, v in traceMap:
                 wf.write("%08X : %s\n" % (k, v))
