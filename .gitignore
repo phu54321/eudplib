@@ -249,6 +249,8 @@ eudplib/core/allocator/*.so
 eudplib/utils/*.c
 eudplib/utils/*.pyd
 
+# plib thing
 profile.json
 lprof_log.txt
 *.lprof
+*.map

@@ -53,7 +53,6 @@ def _MainStarter(mf):
         for func in startFunctionList:
             func()
 
-
         mf()
 
         c.RawTrigger(

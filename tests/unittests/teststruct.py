@@ -5,6 +5,10 @@ from helper import *
 class TestStruct(EUDStruct):
     _fields_ = ['x', 'y', 'z']
 
+    @EUDMethod
+    def setX(self, x):
+        self.x = x
+
     @EUDTypedMethod([selftype])
     def add(self, other):
         self.x += other.x
@@ -40,6 +44,14 @@ def test_struct():
         "EUDTypedMethod test",
         [a.x, a.y, a.z, d.x, d.y, d.z],
         [6, 14, 16, 3, 7, 8]
+    )
+
+    e = EUDVariable()
+    e << a
+    TestStruct.cast(e).setX(1)
+    test_equality(
+        "EUDStruct method via EUDVariable",
+        a.x, 1
     )
 
 

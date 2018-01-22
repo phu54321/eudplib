@@ -65,7 +65,7 @@ def EUDTypedMethod(argtypes, rettypes=None):
         def genericCaller(self, *args):
             global _selftype
             _selftype = _mth_classtype[method]
-            self = selftype(self)
+            self = selftype.cast(self)
             args = applyTypes(argtypes, args)
             _selftype = None
             return method(self, *args)
