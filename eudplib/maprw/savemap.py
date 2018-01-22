@@ -24,12 +24,27 @@ THE SOFTWARE.
 '''
 
 from ..core.mapdata import mapdata, mpqapi
-
+from ..core import RegisterCreatePayloadCallback
 from .injector.applyInjector import applyInjector
 from .inlinecode.ilcprocesstrig import PreprocessInlineCode
 from .injector.mainloop import _MainStarter
-from .mpqadd import UpdateMPQ, GetAddedFiles
-from .. import utils as ut
+from .mpqadd import UpdateMPQ
+from ..trace.tracetool import _GetTraceMap, _ResetTraceMap
+
+
+traceMap = []
+
+
+def getTraceMap():
+    global traceMap
+    newTraceMap = _GetTraceMap()
+    if newTraceMap:
+        traceMap = list(newTraceMap)
+    _ResetTraceMap()
+
+
+RegisterCreatePayloadCallback(getTraceMap)
+
 
 def SaveMap(fname, rootf):
     """Save output map with root function.
@@ -41,10 +56,13 @@ def SaveMap(fname, rootf):
     print('Saving to %s...' % fname)
     chkt = mapdata.GetChkTokenized()
 
+    _ResetTraceMap()
+
     # Add payload
     root = _MainStarter(rootf)
     PreprocessInlineCode(chkt)
     mapdata.UpdateMapData()
+
     applyInjector(chkt, root)
 
     chkt.optimize()
@@ -58,6 +76,12 @@ def SaveMap(fname, rootf):
     mw.Open(fname)
     mw.PutFile('staredit\\scenario.chk', rawchk)
     UpdateMPQ(mw)
-    # mw.PutFile('(listfile)', ut.u2b('\n'.join(GetAddedFiles())))
     mw.Compact()
     mw.Close()
+
+    if traceMap:
+        traceFname = fname + '.map'
+        print("Writing trace file to %s" % traceFname)
+        with open(traceFname, 'w') as wf:
+            for k, v in traceMap:
+                wf.write("%08X : %s\n" % (k, v))

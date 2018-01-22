@@ -163,7 +163,10 @@ cpdef RlocInt_C Evaluate(x):
     try:
         return x.Evaluate()
     except AttributeError:
-        return toRlocInt(x)
+        try:
+            return toRlocInt(x)
+        except TypeError:
+            raise ut.EPError("Cannot evaluate value '%s'" % x)
 
 
 def IsConstExpr(x):

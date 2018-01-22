@@ -55,9 +55,9 @@ def setEpsGlobals(globalList):
     libeps.registerPlibConstants(globalList_C)
 
 
-def epsCompile(modname, bCode):
-    modname = u2b(modname)
-    output = libeps.compileString(modname, bCode)
+def epsCompile(filename, bCode):
+    filename = u2b(filename)
+    output = libeps.compileString(filename, bCode)
     if not output or libeps.getErrorCount():
         return None
     outputStr = c_char_p(output).value

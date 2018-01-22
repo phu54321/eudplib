@@ -14,7 +14,6 @@ def test_varray():
     c = EUDVArray(8).cast(b)
 
     v_sum = EUDVariable()
-
     for i in EUDLoopRange(0, 9):
         v_sum += c[i] * i
 

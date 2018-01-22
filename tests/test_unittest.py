@@ -41,6 +41,7 @@ from unittests import (
     testshortcircuit,
     testlistloopcompiles,
     testmapdatahelper,
+    test_trace,
 )
 
 helper.CompressPayload(True)
