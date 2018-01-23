@@ -32,7 +32,8 @@ import os
 from . import tracecrypt
 
 
-traceToolDataEPD = ut.EPD(c.Db(bytes(16 + 4 * 2048)))
+iHeader = os.urandom(16)
+traceToolDataEPD = ut.EPD(c.Db(iHeader + bytes(4 * 2048)))
 recordTraceAct = c.Forward()
 c.PushTriggerScope()
 recordTraceTrigger = c.RawTrigger(
@@ -44,7 +45,7 @@ c.PopTriggerScope()
 
 
 def _f_initstacktrace():
-    # Fill the header of trace stack with string "EUDPLIBTRACETOOL" on runtime.
+    # Fill the header of trace stack with random string on runtime.
     # SC:R creates a copy of STR section during EUD emulation and writes to
     # only one of the copy during emulation stage. We should read the copy
     # that is really written in-game.
@@ -118,4 +119,4 @@ def EUDTraceLogRaw(v):
 
 
 def _GetTraceMap():
-    return traceHeader, traceMap
+    return (iHeader, traceHeader), traceMap

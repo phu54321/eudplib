@@ -86,7 +86,9 @@ def SaveMap(fname, rootf):
         traceFname = fname + '.epmap'
         print("Writing trace file to %s" % traceFname)
         with open(traceFname, 'w') as wf:
-            wf.write('H: %s\n\n' %
-                     binascii.hexlify(traceHeader).decode('ascii'))
+            wf.write('H0: %s\n' %
+                     binascii.hexlify(traceHeader[0]).decode('ascii'))
+            wf.write('H1: %s\n' %
+                     binascii.hexlify(traceHeader[1]).decode('ascii'))
             for k, v in traceMap:
-                wf.write("%08X : %s\n" % (k, v))
+                wf.write(" - %08X : %s\n" % (k, v))
