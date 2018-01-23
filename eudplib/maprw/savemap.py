@@ -83,7 +83,7 @@ def SaveMap(fname, rootf):
     mw.Close()
 
     if traceMap:
-        traceFname = fname + '.map'
+        traceFname = fname + '.epmap'
         print("Writing trace file to %s" % traceFname)
         with open(traceFname, 'w') as wf:
             wf.write('H: %s\n\n' %

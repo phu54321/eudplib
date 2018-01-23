@@ -253,4 +253,4 @@ eudplib/utils/*.pyd
 profile.json
 lprof_log.txt
 *.lprof
-*.map
+*.epmap
