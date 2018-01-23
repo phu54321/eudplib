@@ -97,6 +97,9 @@ def EUDTraceLog(msg):
     global nextTraceId
     v = tracecrypt.mix(traceKey, nextTraceId)
     nextTraceId += 1
+    if v == 0:  # We don't allow logging 0.
+        v = tracecrypt.mix(traceKey, nextTraceId)
+        nextTraceId += 1
     traceMap.append((v, str(msg)))
 
     EUDTraceLogRaw(v)
