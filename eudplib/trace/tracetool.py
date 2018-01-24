@@ -28,7 +28,7 @@ from .. import (
     utils as ut
 )
 
-import inspect
+import sys
 import os
 from . import tracecrypt
 
@@ -89,18 +89,27 @@ def _ResetTraceMap():
     traceHeader = os.urandom(16)
 
 
-def EUDTraceLog(msg=None):
-    """Log trace.
-
-    Arguments:
-        msg {str} -- Any message that you want to associate with the message.
-    """
-
-    if msg is None:
-        _, filename, line_number, function_name, _, _ = inspect.stack()[1]
-        msg = "%s|%s|%s" % (filename, function_name, line_number)
-
+def EUDTraceLog():
+    """Log trace."""
     global nextTraceId
+
+    # Construct trace message from cpython stack
+    # Note: we need to get the caller's filename, function name, and line no.
+    # Using inspect module for this purpose is insanely slow, so we use
+    # plain sys object with plain frame attributes.
+
+    frame = sys._getframe(1)
+    try:
+        msg = "%s|%s|%s" % (
+            frame.f_code.co_filename,
+            frame.f_code.co_name,
+            frame.f_lineno
+        )
+    finally:
+        # frame object should be dereferenced as quickly as possible.
+        # https://docs.python.org/3/library/inspect.html#the-interpreter-stack
+        del frame
+
     v = tracecrypt.mix(traceKey, nextTraceId)
     nextTraceId += 1
     if v == 0:  # We don't allow logging 0.
