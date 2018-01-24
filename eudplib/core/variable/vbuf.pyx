@@ -77,6 +77,7 @@ class EUDVarBuffer(EUDObject):
         for i in range(len(self._initvals)):
             # 'preserve rawtrigger'
             (<uint32_t*>(output + 72 * i + 2376))[0] = 4
+            (<uint32_t*>(output + 72 * i + 352))[0] = 0x072D0000
 
         heads = 0
         for i, initval in enumerate(self._initvals):

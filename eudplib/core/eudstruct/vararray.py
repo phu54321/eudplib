@@ -90,35 +90,24 @@ def EUDVArray(size, basetype=None):
             self._epd = EPD(self)
             self._basetype = basetype
 
-        def getItemPtr(self, i):
-            return self + 72 * i
-
-        def getItemEPD(self, i):
-            return self._epd + 18 * i
-
         def get(self, i):
             # This function is hand-optimized
 
             r = EUDVariable()
-            itemptr = self.getItemPtr(i)
-            itemepd = self.getItemEPD(i)
-
             vtproc = Forward()
             nptr = Forward()
-            a0, a1, a2 = Forward(), Forward(), Forward()
+            a0, a2 = Forward(), Forward()
 
             SeqCompute([
-                (EPD(vtproc + 4), bt.SetTo, itemptr),
-                (EPD(a0 + 16), bt.SetTo, itemepd + (8 + 320 + 16) // 4),
-                (EPD(a1 + 16), bt.SetTo, itemepd + (8 + 320 + 24) // 4),
-                (EPD(a2 + 16), bt.SetTo, itemepd + 1),
+                (EPD(vtproc + 4), bt.SetTo, self + 72 * i),
+                (EPD(a0 + 16), bt.SetTo, self._epd + (18 * i + 344 // 4)),
+                (EPD(a2 + 16), bt.SetTo, self._epd + (18 * i + 1)),
             ])
 
             vtproc << bt.RawTrigger(
                 nextptr=0,
                 actions=[
                     a0 << bt.SetDeaths(0, bt.SetTo, EPD(r.getValueAddr()), 0),
-                    a1 << bt.SetDeaths(0, bt.SetTo, 0x072D0000, 0),
                     a2 << bt.SetDeaths(0, bt.SetTo, nptr, 0),
                 ]
             )
@@ -129,10 +118,11 @@ def EUDVArray(size, basetype=None):
             return r
 
         def set(self, i, value):
-            itemepd = self.getItemEPD(i)
+            # This function is hand-optimized
+
             a0, t = Forward(), Forward()
             SeqCompute([
-                (EPD(a0 + 16), bt.SetTo, itemepd + (8 + 320 + 20) // 4),
+                (EPD(a0 + 16), bt.SetTo, self._epd + (18 * i + 348 // 4)),
                 (EPD(a0 + 20), bt.SetTo, value),
             ])
             t << bt.RawTrigger(

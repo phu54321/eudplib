@@ -69,6 +69,7 @@ class EUDVarBuffer(EUDObject):
         for i in range(len(self._initvals)):
             # 'preserve rawtrigger'
             output[72 * i + 2376:72 * i + 2380] = b'\x04\0\0\0'
+            output[72 * i + 352:72 * i + 356] = b'\0\0\x2D\x07'
 
         heads = 0
         for i, initval in enumerate(self._initvals):
