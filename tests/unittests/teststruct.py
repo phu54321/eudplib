@@ -102,3 +102,12 @@ def test_invalid_struct():
     with expect_eperror():
         a = TestStruct()
         a << 5
+
+
+@TestInstance
+def test_cast_0_to_struft():
+    a = TestStruct.cast(0)
+    test_equality(
+        "nullptr casting",
+        a, 0
+    )
