@@ -28,6 +28,7 @@ from .. import (
     utils as ut
 )
 
+import inspect
 import os
 from . import tracecrypt
 
@@ -88,12 +89,16 @@ def _ResetTraceMap():
     traceHeader = os.urandom(16)
 
 
-def EUDTraceLog(msg):
+def EUDTraceLog(msg=None):
     """Log trace.
 
     Arguments:
         msg {str} -- Any message that you want to associate with the message.
     """
+
+    if msg is None:
+        _, filename, line_number, function_name, _, _ = inspect.stack()[1]
+        msg = "%s|%s|%s" % (filename, function_name, line_number)
 
     global nextTraceId
     v = tracecrypt.mix(traceKey, nextTraceId)
