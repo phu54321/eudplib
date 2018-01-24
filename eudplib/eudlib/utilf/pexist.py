@@ -44,14 +44,20 @@ def f_playerexist(player):
     """
     pts = 0x51A280
 
-    ret = c.EUDVariable()
-    prevtstart = f_dwread_epd(ut.EPD(pts + player * 12 + 8))
-    if cs.EUDIf()(prevtstart == ~(pts + player * 12 + 4)):
-        ret << 0
-    if cs.EUDElse()():
-        ret << 1
-    cs.EUDEndIf()
-    return ret
+    cs.EUDSwitch(player)
+    for p in range(8):
+        if cs.EUDSwitchCase()(p):
+            if cs.EUDIf()(
+                c.Memory(pts + p * 12 + 8, c.Exactly, ~(pts + p * 12 + 4))
+            ):
+                c.EUDReturn(0)
+            if cs.EUDElse()():
+                c.EUDReturn(1)
+            cs.EUDEndIf()
+
+    if cs.EUDSwitchDefault()():
+        c.EUDReturn(0)
+    cs.EUDEndSwitch()
 
 
 # --------
