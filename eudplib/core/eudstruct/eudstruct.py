@@ -45,7 +45,7 @@ class EUDStruct(ut.ExprProxy, metaclass=_EUDStruct_Metaclass):
                 fielddict[nametype[0]] = (index, nametype[1])
         self._fielddict = fielddict
 
-        if _from:
+        if _from is not None:
             super().__init__(EUDVArray(fieldn).cast(_from))
             self._initialized = True
         else:

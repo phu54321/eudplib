@@ -78,7 +78,7 @@ class EUDArrayData(c.EUDObject):
 
 class EUDArray(ut.ExprProxy):
     def __init__(self, initval=None, *, _from=None):
-        if _from:
+        if _from is not None:
             dataObj = _from
 
         else:
