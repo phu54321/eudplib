@@ -2,8 +2,9 @@ import helper
 
 
 from perftests import (
-    testbasic,
-    testmemio,
+    # testbasic,
+    # testmemio,
+    testbubblesort,
 )
 
 # helper.CompressPayload(True)

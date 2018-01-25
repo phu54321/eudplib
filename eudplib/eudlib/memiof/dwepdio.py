@@ -82,8 +82,10 @@ def f_dwread_epd(targetplayer):
             ]
         )
 
-    cs.DoActions(c.SetDeaths(c.CurrentPlayer, c.SetTo, ptr, 0))
-    f_setcurpl(origcp)
+    cs.DoActions([
+        c.SetDeaths(c.CurrentPlayer, c.SetTo, ptr, 0),
+        c.SetCurrentPlayer(origcp),
+    ])
 
     return ptr
 

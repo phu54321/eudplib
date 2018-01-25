@@ -63,6 +63,4 @@ def f_getcurpl():
         _f_updatecpcache()
     cs.EUDEndIf()
 
-    x = c.EUDVariable()
-    x << cpcache
-    return x
+    return cpcache
