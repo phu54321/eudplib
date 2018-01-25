@@ -26,8 +26,8 @@ def test_perfbasic():
         arr[i] = f_dwrand()
 
     test_perf(
-        "Basic function call",
+        "Bubble sort (%s)" % N,
         f_bubblesort,
         1
     )
-    test_perf("Basic looping", lambda: None, 100000)
+    test_perf("Basic looping (comparison)", lambda: None, 1000000)
