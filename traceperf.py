@@ -19,6 +19,7 @@ def f():
 def g():
     print(f())
 
+
 g()
 
 print(timeit.timeit("f()", setup="from __main__ import f", number=1000))

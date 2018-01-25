@@ -36,6 +36,7 @@ from ...utils import (
     EPD,
     List2Assignable,
     unProxy,
+    isUnproxyInstance,
     ep_assert,
     EPError
 )
@@ -334,8 +335,7 @@ class EUDVariable(VariableBase):
 
 
 def IsEUDVariable(x):
-    x = unProxy(x)
-    return isinstance(x, EUDVariable)
+    return isUnproxyInstance(x, EUDVariable)
 
 
 # ---------

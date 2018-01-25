@@ -34,6 +34,14 @@ def PushTriggerScope():
     return True  # Allow `if PushTriggerScope()` syntax for indent
 
 
+def SetNextTrigger(trg):
+    """ For optimization purpose, one may call this function directly """
+    nt_list = EUDGetLastBlockOfName('triggerscope')[1]['nexttrigger_list']
+    for fw in nt_list:
+        fw << trg
+    nt_list.clear()
+
+
 def NextTrigger():
     fw = Forward()
     nt_list = EUDGetLastBlockOfName('triggerscope')[1]['nexttrigger_list']
@@ -42,10 +50,7 @@ def NextTrigger():
 
 
 def _RegisterTrigger(trg):
-    nt_list = EUDGetLastBlockOfName('triggerscope')[1]['nexttrigger_list']
-    for fw in nt_list:
-        fw << trg
-    nt_list.clear()
+    SetNextTrigger(trg)
 
 
 def PopTriggerScope():

@@ -24,7 +24,13 @@ THE SOFTWARE.
 '''
 
 from .rawtriggerdef import Disabled, RawTrigger, GetTriggerCounter
-from .triggerscope import PushTriggerScope, PopTriggerScope, NextTrigger
+from .triggerscope import (
+    PushTriggerScope,
+    PopTriggerScope,
+    NextTrigger,
+    SetNextTrigger,
+)
+
 from .condition import Condition
 from .action import Action
 from .stockcond import (

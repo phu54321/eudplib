@@ -153,18 +153,17 @@ class EUDFuncN:
             'len(%s) != %d' % (repr(args), self._argn)
         )
 
-        # Assign arguments into argument space
-        ev.SeqCompute(
-            [(farg, bt.SetTo, arg) for farg, arg in zip(self._fargs, args)]
-        )
-
-        # Call body
         fcallend = ac.Forward()
 
-        bt.RawTrigger(
-            nextptr=self._fstart,
-            actions=[bt.SetNextPtr(self._fend, fcallend)]
-        )
+        # SeqCompute gets faster when const-assignments are in front of
+        # variable assignments.
+        nextPtrAssignment = [(ut.EPD(self._fend + 4), bt.SetTo, fcallend)]
+        constAssigns = [(farg, bt.SetTo, arg) for farg, arg in
+                        zip(self._fargs, args) if not ev.IsEUDVariable(arg)]
+        varAssigns = [(farg, bt.SetTo, arg) for farg, arg in
+                      zip(self._fargs, args) if ev.IsEUDVariable(arg)]
+        ev.SeqCompute(nextPtrAssignment + constAssigns + varAssigns)
+        bt.SetNextTrigger(self._fstart)
 
         fcallend << bt.NextTrigger()
 
