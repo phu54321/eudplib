@@ -141,7 +141,7 @@ class EUDFuncN:
         ev.SetVariables(self._frets, retv)
 
         if needjump:
-            bt.RawTrigger(nextptr=self._fend)
+            bt.SetNextTrigger(self._fend)
 
     def __call__(self, *args):
         if self._fstart is None:
