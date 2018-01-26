@@ -95,16 +95,18 @@ class EPSLoader(SourceFileLoader):
         fileData = open(path, 'rb').read()
         if path.endswith('.pyc') or path.endswith('.pyo'):
             return fileData
+        print("[epScript] Compiling \"%s\"..." % os.path.relpath(path))
         compiled = epsCompile(path, fileData)
         if compiled is None:
-            raise EPError('epScript compiled failed for %s' % path)
+            raise EPError(' - Compiled failed for %s' % path)
         dirname, filename = os.path.split(path)
         epsdir = os.path.join(dirname, "__epspy__")
         try:
             if not os.path.isdir(epsdir):
                 os.mkdir(epsdir)
             ofname = os.path.splitext(filename)[0] + '.py'
-            with open(os.path.join(epsdir, ofname), 'w', encoding='utf-8') as file:
+            ofname = os.path.join(epsdir, ofname)
+            with open(ofname, 'w', encoding='utf-8') as file:
                 file.write(compiled.decode('utf-8'))
         except OSError:
             pass

@@ -27,6 +27,7 @@ from .eudf import (
     EUDFunc,
     EUDTracedFunc,
     EUDTypedFunc,
+    EUDTracedTypedFunc,
 )
 
 from .eudfptr import (

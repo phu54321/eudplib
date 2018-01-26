@@ -59,6 +59,10 @@ def EUDTypedFunc(argtypes, rettypes=None, *, traced=False):
     return _EUDTypedFunc
 
 
+def EUDTracedTypedFunc(argtypes, rettypes=None):
+    return EUDTypedFunc(argtypes, rettypes, traced=True)
+
+
 def EUDFunc(fdecl_func):
     return EUDTypedFunc(None, None, traced=False)(fdecl_func)
 
