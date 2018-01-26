@@ -107,5 +107,8 @@ def EUDTypedMethod(argtypes, rettypes=None, *, traced=False):
     return _EUDTypedMethod
 
 
-def EUDMethod(method, *, traced=False):
-    return EUDTypedMethod(None, None, traced=traced)(method)
+def EUDMethod(method):
+    return EUDTypedMethod(None, None, traced=False)(method)
+
+def EUDTracedMethod(method):
+    return EUDTypedMethod(None, None, traced=True)(method)

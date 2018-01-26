@@ -36,6 +36,7 @@ from .eudfptr import (
 
 from .eudfmethod import (
     EUDMethod,
+    EUDTracedMethod,
     EUDTypedMethod,
     selftype
 )
