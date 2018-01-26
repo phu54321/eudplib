@@ -25,4 +25,5 @@ THE SOFTWARE.
 
 from .tracetool import (
     EUDTraceLog,
+    GetTraceStackDepth,
 )

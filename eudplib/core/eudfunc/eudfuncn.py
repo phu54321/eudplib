@@ -117,14 +117,18 @@ class EUDFuncN:
         final_rets = self._callerfunc(*f_args)
         if final_rets is not None:
             self._AddReturn(ut.Assignable2List(final_rets), False)
-        fend = bt.RawTrigger()
+
+        self._fend << bt.NextTrigger()
+        if self._traced:
+            _EUDTracePop()
+        self._fend = bt.RawTrigger()
+
         bt.PopTriggerScope()
 
         # Finalize
         ut.ep_assert(f_bsm.empty(), 'Block start/end mismatch inside function')
         SetCurrentBlockStruManager(prev_bsm)
 
-        self._fend << fend
         # No return -> set return count to 0
         if self._retn is None:
             self._retn = 0
@@ -143,9 +147,6 @@ class EUDFuncN:
         )
 
         ev.SetVariables(self._frets, retv)
-
-        if self._traced:
-            _EUDTracePop()
 
         if needjump:
             bt.SetNextTrigger(self._fend)

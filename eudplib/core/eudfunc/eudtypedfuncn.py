@@ -27,7 +27,6 @@ from ... import utils as ut
 from .. import variable as ev
 
 from .eudfuncn import EUDFuncN
-import functools
 
 
 def applyTypes(typesdecl, varlist):

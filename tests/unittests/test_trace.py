@@ -15,24 +15,28 @@ def _t1(x):
     return 13
 
 
+@EUDTracedFunc
+def _t2():
+    pass
+
+
 @TestInstance
 def test_trace():
     a = _t1(0)
+    t1 = GetTraceStackDepth()
     b = _t1(1)
+    t2 = GetTraceStackDepth()
     c = _t1(2)
+    t3 = GetTraceStackDepth()
     test_equality(
         "EUDTracedFunc works well",
-        [a, b, c],
-        [11, 12, 13]
+        [a, b, c, t1, t2, t3],
+        [11, 12, 13, 0, 0, 0]
     )
 
-    for i in EUDLoopRange(10000):
-        _t1(0)
-        _t1(1)
-        _t1(2)
-
+    _t2()
     test_equality(
-        "EUDTracedFunc doesn't occur stack error",
-        [a, b, c],
-        [11, 12, 13]
+        "EUDTraceFunc for function with no returns",
+        GetTraceStackDepth(),
+        0
     )

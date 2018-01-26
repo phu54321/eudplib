@@ -27,17 +27,16 @@ from .... import utils as ut
 from ...rawtrigger import (
     RawTrigger,
 
+    Memory, AtLeast,
+
     SetNextPtr, SetMemory, SetMemoryEPD,
     SetTo, Add, Subtract,
 
     PushTriggerScope, PopTriggerScope, NextTrigger,
 )
-from ...allocator import (
-    Forward,
-)
-from ...eudobj import (
-    Db,
-)
+from ...allocator import Forward
+from ...eudobj import Db
+from ...variable import EUDVariable, SeqCompute
 
 import sys
 import os
@@ -89,6 +88,24 @@ nextTraceId = 0
 traceMap = []
 traceKey = 0
 traceHeader = None
+
+
+def GetTraceStackDepth():
+    v = EUDVariable()
+    v << 0
+    for i in range(31, -1, -1):
+        RawTrigger(
+            conditions=Memory(recordTraceAct + 16, AtLeast, 2**i),
+            actions=[
+                SetMemory(recordTraceAct + 16, Subtract, 2**i),
+                v.AddNumber(2**i)
+            ]
+        )
+    SeqCompute([
+        (ut.EPD(recordTraceAct + 16), SetTo, v),
+        (v, Subtract, traceToolDataEPD + 4)
+    ])
+    return v
 
 
 def _ResetTraceMap():
