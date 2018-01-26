@@ -24,7 +24,5 @@ THE SOFTWARE.
 '''
 
 from .tracetool import (
-    EUDTracePush,
-    EUDTracePop,
     EUDTraceLog,
 )

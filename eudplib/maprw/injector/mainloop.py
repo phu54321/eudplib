@@ -26,7 +26,7 @@ THE SOFTWARE.
 from ... import core as c
 from ... import ctrlstru as cs
 from ... import eudlib as sf
-from ...trace.tracetool import _f_initstacktrace
+from ...core.eudfunc.trace.tracetool import _f_initstacktrace
 from ...eudlib.stringf.dbstr import _f_initextstr
 
 

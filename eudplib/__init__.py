@@ -43,7 +43,6 @@ from .trigtrg.runtrigtrg import (
 )
 
 from .maprw import *
-from .trace import *
 
 
 __version__ = '0.57.2'

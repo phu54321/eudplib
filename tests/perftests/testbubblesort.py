@@ -10,9 +10,7 @@ def f_bubblesort():
     for i in EUDLoopRange(N):
         for j in EUDLoopRange(N - 1 - i):
             if EUDIf()(arr[i] >= arr[i + 1]):
-                t = arr[i]
-                arr[i] = arr[i + 1]
-                arr[i + 1] = t
+                arr[i], arr[i + 1] = arr[i + 1], arr[i]
             EUDEndIf()
 
     SetCurrentPlayer(P1)
@@ -30,4 +28,4 @@ def test_perfbasic():
         f_bubblesort,
         1
     )
-    test_perf("Basic looping (comparison)", lambda: None, 1000000)
+    test_perf("Basic looping (comparison)", lambda: None, 10000000)

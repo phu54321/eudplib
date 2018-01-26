@@ -43,7 +43,7 @@ class selftype:
         return _selftype.cast(_from)
 
 
-def EUDTypedMethod(argtypes, rettypes=None):
+def EUDTypedMethod(argtypes, rettypes=None, *, traced=False):
     def _EUDTypedMethod(method):
         # Get argument number of fdecl_func
         argspec = inspect.getargspec(method)
@@ -70,8 +70,9 @@ def EUDTypedMethod(argtypes, rettypes=None):
             _selftype = None
             return method(self, *args)
 
-        genericCaller = EUDTypedFuncN(argn + 1, genericCaller, method,
-                                      argtypes, rettypes)
+        genericCaller = EUDTypedFuncN(
+            argn + 1, genericCaller, method,
+            argtypes, rettypes, traced=traced)
 
         # Return function
         def call(self, *args):
@@ -92,7 +93,8 @@ def EUDTypedMethod(argtypes, rettypes=None):
                         return method(self, *args)
 
                     constexpr_callmap[self] = EUDTypedFuncN(
-                        argn, caller, method, argtypes, rettypes)
+                        argn, caller, method, argtypes, rettypes,
+                        traced=traced)
 
                 _selftype = type(self)
                 rets = constexpr_callmap[self](*args)
@@ -105,5 +107,5 @@ def EUDTypedMethod(argtypes, rettypes=None):
     return _EUDTypedMethod
 
 
-def EUDMethod(method):
-    return EUDTypedMethod(None, None)(method)
+def EUDMethod(method, *, traced=False):
+    return EUDTypedMethod(None, None, traced=traced)(method)

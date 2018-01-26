@@ -25,7 +25,8 @@ THE SOFTWARE.
 
 from .eudf import (
     EUDFunc,
-    EUDTypedFunc
+    EUDTracedFunc,
+    EUDTypedFunc,
 )
 
 from .eudfptr import (
@@ -43,5 +44,7 @@ from .eudfuncn import (
     EUDReturn,
     EUDFuncN,
 )
+
+from .trace import *
 
 from .consttype import *

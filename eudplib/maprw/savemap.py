@@ -29,7 +29,7 @@ from .injector.applyInjector import applyInjector
 from .inlinecode.ilcprocesstrig import PreprocessInlineCode
 from .injector.mainloop import _MainStarter
 from .mpqadd import UpdateMPQ
-from ..trace.tracetool import _GetTraceMap, _ResetTraceMap
+from ..core.eudfunc.trace.tracetool import _GetTraceMap, _ResetTraceMap
 import binascii
 
 

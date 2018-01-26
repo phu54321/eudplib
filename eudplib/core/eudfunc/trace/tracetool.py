@@ -23,9 +23,20 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-from .. import (
-    core as c,
-    utils as ut
+from .... import utils as ut
+from ...rawtrigger import (
+    RawTrigger,
+
+    SetNextPtr, SetMemory, SetMemoryEPD,
+    SetTo, Add, Subtract,
+
+    PushTriggerScope, PopTriggerScope, NextTrigger,
+)
+from ...allocator import (
+    Forward,
+)
+from ...eudobj import (
+    Db,
 )
 
 import sys
@@ -34,15 +45,15 @@ from . import tracecrypt
 
 
 iHeader = os.urandom(16)
-traceToolDataEPD = ut.EPD(c.Db(iHeader + bytes(4 * 2048)))
-recordTraceAct = c.Forward()
-c.PushTriggerScope()
-recordTraceTrigger = c.RawTrigger(
+traceToolDataEPD = ut.EPD(Db(iHeader + bytes(4 * 2048)))
+recordTraceAct = Forward()
+PushTriggerScope()
+recordTraceTrigger = RawTrigger(
     actions=[
-        recordTraceAct << c.SetMemoryEPD(traceToolDataEPD + 4, c.SetTo, 0)
+        recordTraceAct << SetMemoryEPD(traceToolDataEPD + 4, SetTo, 0)
     ]
 )
-c.PopTriggerScope()
+PopTriggerScope()
 
 
 def _f_initstacktrace():
@@ -53,25 +64,25 @@ def _f_initstacktrace():
     # We will fill the trace stack 'magic code' on runtime, and later find the
     # magic code to locate the stack trace table.
 
-    c.RawTrigger(actions=[
-        c.SetMemoryEPD(traceToolDataEPD + 0, c.SetTo,
-                       ut.b2i4(traceHeader, 0x0)),
-        c.SetMemoryEPD(traceToolDataEPD + 1, c.SetTo,
-                       ut.b2i4(traceHeader, 0x4)),
-        c.SetMemoryEPD(traceToolDataEPD + 2, c.SetTo,
-                       ut.b2i4(traceHeader, 0x8)),
-        c.SetMemoryEPD(traceToolDataEPD + 3, c.SetTo,
-                       ut.b2i4(traceHeader, 0xC)),
+    RawTrigger(actions=[
+        SetMemoryEPD(traceToolDataEPD + 0, SetTo,
+                     ut.b2i4(traceHeader, 0x0)),
+        SetMemoryEPD(traceToolDataEPD + 1, SetTo,
+                     ut.b2i4(traceHeader, 0x4)),
+        SetMemoryEPD(traceToolDataEPD + 2, SetTo,
+                     ut.b2i4(traceHeader, 0x8)),
+        SetMemoryEPD(traceToolDataEPD + 3, SetTo,
+                     ut.b2i4(traceHeader, 0xC)),
     ])
 
 
-def EUDTracePush():
-    c.RawTrigger(actions=c.SetMemory(recordTraceAct + 16, c.Add, 1))
+def _EUDTracePush():
+    RawTrigger(actions=SetMemory(recordTraceAct + 16, Add, 1))
 
 
-def EUDTracePop():
+def _EUDTracePop():
     EUDTraceLogRaw(0)
-    c.RawTrigger(actions=c.SetMemory(recordTraceAct + 16, c.Subtract, 1))
+    RawTrigger(actions=SetMemory(recordTraceAct + 16, Subtract, 1))
 
 
 nextTraceId = 0
@@ -89,7 +100,7 @@ def _ResetTraceMap():
     traceHeader = os.urandom(16)
 
 
-def EUDTraceLog():
+def EUDTraceLog(lineno=None):
     """Log trace."""
     global nextTraceId
 
@@ -100,10 +111,12 @@ def EUDTraceLog():
 
     frame = sys._getframe(1)
     try:
+        if lineno is None:
+            lineno = frame.f_lineno
         msg = "%s|%s|%s" % (
             frame.f_code.co_filename,
             frame.f_code.co_name,
-            frame.f_lineno
+            lineno
         )
     finally:
         # frame object should be dereferenced as quickly as possible.
@@ -121,15 +134,15 @@ def EUDTraceLog():
 
 
 def EUDTraceLogRaw(v):
-    nt = c.Forward()
-    c.RawTrigger(
+    nt = Forward()
+    RawTrigger(
         nextptr=recordTraceTrigger,
         actions=[
-            c.SetNextPtr(recordTraceTrigger, nt),
-            c.SetMemory(recordTraceAct + 20, c.SetTo, v)
+            SetNextPtr(recordTraceTrigger, nt),
+            SetMemory(recordTraceAct + 20, SetTo, v)
         ]
     )
-    nt << c.NextTrigger()
+    nt << NextTrigger()
 
 
 def _GetTraceMap():

@@ -30,7 +30,7 @@ from .eudtypedfuncn import EUDTypedFuncN, applyTypes
 from ... import utils as ut
 
 
-def EUDTypedFunc(argtypes, rettypes=None):
+def EUDTypedFunc(argtypes, rettypes=None, *, traced=False):
     def _EUDTypedFunc(fdecl_func):
         argspec = inspect.getargspec(fdecl_func)
         argn = len(argspec[0])
@@ -48,7 +48,11 @@ def EUDTypedFunc(argtypes, rettypes=None):
             args = applyTypes(argtypes, args)
             return fdecl_func(*args)
 
-        ret = EUDTypedFuncN(argn, caller, fdecl_func, argtypes, rettypes)
+        ret = EUDTypedFuncN(
+            argn, caller, fdecl_func,
+            argtypes, rettypes,
+            traced=traced
+        )
         functools.update_wrapper(ret, fdecl_func)
         return ret
 
@@ -56,4 +60,8 @@ def EUDTypedFunc(argtypes, rettypes=None):
 
 
 def EUDFunc(fdecl_func):
-    return EUDTypedFunc(None, None)(fdecl_func)
+    return EUDTypedFunc(None, None, traced=False)(fdecl_func)
+
+
+def EUDTracedFunc(fdecl_func):
+    return EUDTypedFunc(None, None, traced=True)(fdecl_func)

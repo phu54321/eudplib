@@ -30,7 +30,7 @@ from ... import utils as ut
 from .. import allocator as ac
 from .. import rawtrigger as bt
 from .. import variable as ev
-
+from .trace.tracetool import _EUDTracePush, _EUDTracePop
 from ...utils.blockstru import (
     BlockStruManager,
     SetCurrentBlockStruManager
@@ -61,7 +61,7 @@ def _setCurrentCompiledFunc(func):
 
 
 class EUDFuncN:
-    def __init__(self, argn, callerfunc, bodyfunc):
+    def __init__(self, argn, callerfunc, bodyfunc, *, traced):
         """ EUDFuncN
 
         :param callerfunc: Function to be wrapped.
@@ -82,6 +82,7 @@ class EUDFuncN:
         self._fargs = None
         self._frets = None
         self._triggerCount = None
+        self._traced = traced
 
     def size(self):
         if not self._fstart:
@@ -109,6 +110,9 @@ class EUDFuncN:
 
         fstart = bt.NextTrigger()
         self._fstart = fstart
+
+        if self._traced:
+            _EUDTracePush()
 
         final_rets = self._callerfunc(*f_args)
         if final_rets is not None:
@@ -139,6 +143,9 @@ class EUDFuncN:
         )
 
         ev.SetVariables(self._frets, retv)
+
+        if self._traced:
+            _EUDTracePop()
 
         if needjump:
             bt.SetNextTrigger(self._fend)

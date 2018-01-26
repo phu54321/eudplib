@@ -67,8 +67,9 @@ class EUDTypedFuncN(EUDFuncN):
     arguments to types prior to function call.
     """
 
-    def __init__(self, argn, callerfunc, bodyfunc, argtypes, rettypes):
-        super().__init__(argn, callerfunc, bodyfunc)
+    def __init__(self, argn, callerfunc, bodyfunc,
+                 argtypes, rettypes, *, traced):
+        super().__init__(argn, callerfunc, bodyfunc, traced=traced)
         self._argtypes = argtypes
         self._rettypes = rettypes
 
