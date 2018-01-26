@@ -3,11 +3,15 @@ from helper import *
 
 @EUDTracedFunc
 def _t1(x):
+    EUDTraceLog()
     if EUDIf()(x == 0):
+        EUDTraceLog()
         EUDReturn(11)
     if EUDElseIf()(x == 1):
+        EUDTraceLog()
         EUDReturn(12)
     EUDEndIf()
+    EUDTraceLog()
     return 13
 
 
