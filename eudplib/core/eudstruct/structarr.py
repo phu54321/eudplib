@@ -25,9 +25,28 @@ THE SOFTWARE.
 
 from .vararray import EUDVArray
 from ...utils import ExprProxy
+from .selftype import selftype
 
 
 class _EUDStruct_Metaclass(type):
+    def __init__(cls, name, bases, dct):
+        # For field declaration, modify selftype to cls
+        try:
+            fields = dct['_fields_']
+            for i in range(len(fields)):
+                member = fields[i]
+
+                if isinstance(member, str):
+                    continue
+                mName, mType = member
+                if mType is selftype:
+                    fields[i] = (mName, dct)
+        except KeyError as e:
+            print(cls, e)
+            pass
+
+        super().__init__(name, bases, dct)
+
     def __mul__(self, times):
         basetype = self
 

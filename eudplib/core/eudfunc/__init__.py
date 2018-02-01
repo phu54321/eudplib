@@ -39,7 +39,6 @@ from .eudfmethod import (
     EUDMethod,
     EUDTracedMethod,
     EUDTypedMethod,
-    selftype
 )
 
 from .eudfuncn import (

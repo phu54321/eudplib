@@ -29,18 +29,12 @@ import inspect
 from ... import utils as ut
 from .. import variable as ev
 from .eudtypedfuncn import EUDTypedFuncN, applyTypes
+from ..eudstruct.selftype import (
+    selftype,
+    SetSelfType
+)
 
 _mth_classtype = {}
-_selftype = None
-
-
-class selftype:
-    """ When used in EUDFuncMethod's type declaration, This is interpreted
-    as the owning class itself
-    """
-    @staticmethod
-    def cast(_from):
-        return _selftype.cast(_from)
 
 
 def EUDTypedMethod(argtypes, rettypes=None, *, traced=False):
@@ -63,11 +57,10 @@ def EUDTypedMethod(argtypes, rettypes=None, *, traced=False):
 
         # Generic caller
         def genericCaller(self, *args):
-            global _selftype
-            _selftype = _mth_classtype[method]
+            SetSelfType(_mth_classtype[method])
             self = selftype.cast(self)
             args = applyTypes(argtypes, args)
-            _selftype = None
+            SetSelfType(None)
             return method(self, *args)
 
         genericCaller = EUDTypedFuncN(
@@ -76,8 +69,6 @@ def EUDTypedMethod(argtypes, rettypes=None, *, traced=False):
 
         # Return function
         def call(self, *args):
-            global _selftype
-
             # Use purely eudfun method
             if ev.IsEUDVariable(self):
                 selftype = type(self)
@@ -96,9 +87,9 @@ def EUDTypedMethod(argtypes, rettypes=None, *, traced=False):
                         argn, caller, method, argtypes, rettypes,
                         traced=traced)
 
-                _selftype = type(self)
+                SetSelfType(type(self))
                 rets = constexpr_callmap[self](*args)
-                _selftype = None
+                SetSelfType(None)
                 return rets
 
         functools.update_wrapper(call, method)

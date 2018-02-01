@@ -23,6 +23,18 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-from .vararray import EUDVArray
-from .eudstruct import EUDStruct
-from .selftype import selftype
+_selftype = None
+
+
+class selftype:
+    """ When used in EUDFuncMethod's type declaration, This is interpreted
+    as the owning class itself
+    """
+    @staticmethod
+    def cast(_from):
+        return _selftype.cast(_from)
+
+
+def SetSelfType(t):
+    global _selftype
+    _selftype = t

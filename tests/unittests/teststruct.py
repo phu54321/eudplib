@@ -111,3 +111,19 @@ def test_cast_0_to_struft():
         "nullptr casting",
         a, 0
     )
+
+
+# Test referencing itself on member decl
+class ListClass(EUDStruct):
+    _fields_ = [
+        ('prev', selftype),
+        ('next', selftype),
+    ]
+
+
+@TestInstance
+def test_selftype_member():
+    a = ListClass()
+    b = ListClass()
+    a.prev = a.next = b
+    a.prev = b.next = a
