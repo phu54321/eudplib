@@ -57,8 +57,8 @@ class ExprProxy:
     def cast(cls, _from):
         try:
             return cls(_from=_from)
-        except TypeError:
-            raise TypeError("Type %s is not castable" % cls.__name__)
+        except TypeError as e:
+            raise TypeError("Type %s is not castable" % cls.__name__, e)
 
     def getValue(self):
         return self._value

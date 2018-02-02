@@ -28,7 +28,8 @@ from eudplib import (
     ctrlstru as cs,
     utils as ut,
 )
-from ..memiof import f_dwread_epd, f_dwwrite_epd
+from ..memiof import f_dwread_epd, f_dwwrite_epd, f_wread
+from .cputf8 import f_cp949_to_utf8_cpy
 
 
 class DBString(ut.ExprProxy):
@@ -39,7 +40,7 @@ class DBString(ut.ExprProxy):
     section. You can do anything you would do with normal string with DBString.
     """
 
-    def __init__(self, content):
+    def __init__(self, content=None, *, _from=None):
         """Constructor for DBString
 
         :param content: Initial DBString content / capacity. Capacity of
@@ -49,10 +50,10 @@ class DBString(ut.ExprProxy):
 
         :type content: str, bytes, int
         """
-        if isinstance(content, (int, str, bytes)):
+        if _from is None:
             super().__init__(DBStringData(content))
         else:
-            super().__init__(content)
+            super().__init__(_from)
 
     def GetStringMemoryAddr(self):
         """Get memory address of DBString content.
@@ -61,23 +62,29 @@ class DBString(ut.ExprProxy):
         """
         return self + 4
 
-    def GetDisplayAction(self):
-        """DisplayText equivilant for DBString.
-
-        :returns: List of actions for printing DBString content.
-        """
-        resetter = c.Forward()
-        fw = c.Forward()
-        acts = [
-            c.SetMemory(0x5993D4, c.SetTo, self),
-            c.DisplayText(fw),
-            resetter << c.SetMemory(0x5993D4, c.SetTo, 0)
-        ]
-        fw << ExtendedStringIndex_FW(resetter)
-        return acts
-
+    @c.EUDMethod
     def Display(self):
-        cs.DoActions(self.GetDisplayAction())
+        sp = c.EUDVariable(0)
+        strId = c.EncodeString("_" * 1024)
+        if cs.EUDExecuteOnce()():
+            strp = f_dwread_epd(ut.EPD(0x5993D4))
+            sp << strp + f_wread(strp + strId * 2)
+        cs.EUDEndExecuteOnce()
+
+        f_cp949_to_utf8_cpy(sp, self.GetStringMemoryAddr())
+        cs.DoActions(c.DisplayText(strId))
+
+    @c.EUDMethod
+    def PlayWAV(dbs):
+        sp = c.EUDVariable(0)
+        strId = c.EncodeString("_" * 1024)
+        if cs.EUDExecuteOnce()():
+            strp = f_dwread_epd(ut.EPD(0x5993D4))
+            sp << strp + f_wread(strp + strId * 2)
+        cs.EUDEndExecuteOnce()
+
+        f_cp949_to_utf8_cpy(sp, dbs.GetStringMemoryAddr())
+        cs.DoActions(c.DisplayText(strId))
 
 
 class DBStringData(c.EUDObject):
@@ -151,20 +158,6 @@ class ResetterBuffer(c.EUDObject):
 _extstr_dict = {}
 
 
-def DisplayExtText(text):
-    """Equivilant to DisplayText, but doesn't use string table to store text.
-
-    :param text: Text to display.
-    :type text: str or bytes
-
-    .. note:: You need to call `f_initextstr` before using DisplayExtText.
-    """
-    text = ut.u2b(text)
-    if text not in _extstr_dict:
-        _extstr_dict[text] = DBString(text)
-    return _extstr_dict[text].GetDisplayAction()
-
-
 def _f_initextstr():
     """(internal)Initialize DBString system."""
     rb = ResetterBuffer()
@@ -179,12 +172,3 @@ def _f_initextstr():
         ptr += 1
 
     cs.EUDEndInfLoop()
-
-
-def f_initextstr():
-    """This function does nothing.
-
-    .. warning::
-        This function is deprecated.
-    """
-    pass

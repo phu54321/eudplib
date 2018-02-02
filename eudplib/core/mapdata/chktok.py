@@ -23,10 +23,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-'''
-scenario.chk section tokenizer. Internally used in eudplib.
-'''
-
 from eudplib import utils as ut
 
 """
@@ -36,7 +32,7 @@ General CHK class.
 
 def sectionname_format(sn):
     if type(sn) is str:
-        sn = ut.u2b(sn)
+        sn = sn.encode('ascii')
 
     if len(sn) < 4:
         sn += b' ' * (4 - len(sn))

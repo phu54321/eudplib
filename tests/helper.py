@@ -4,9 +4,11 @@ import sys as _sys
 import os as _os
 import random as _random
 
-_sys.path.insert(1,
+_sys.path.insert(
+    1,
     _os.path.abspath(
         _os.path.join(_os.path.dirname(__file__), "..")))
+
 
 from eudplib import *
 
@@ -24,11 +26,6 @@ _failedNum = EUDVariable()
 origcp = EUDVariable()
 
 
-def staticPrint(s):
-    # SC:R Still don't support f_simpleprint.
-    # So for alternatives :)
-    DoActions(DisplayText(s))
-
 def setcp1():
     origcp << f_getcurpl()
     f_setcurpl(Player1)
@@ -44,10 +41,10 @@ def test_assert(testname, condition):
     setcp1()
 
     if EUDIf()(condition):
-        staticPrint("\x07 - [ OK ] \x04%s" % testname)
+        f_simpleprint("\x07 - [ OK ]\x04", testname)
         test_wait(0)
     if EUDElse()():
-        staticPrint("\x08 - [FAIL] %s" % testname)
+        f_simpleprint("\x08 - [FAIL]", testname)
         failedTestDb = DBString(testname)
         _failedTest[_failedNum] = failedTestDb
         _testFailed << 1
@@ -69,10 +66,10 @@ def test_equality(testname, real, expt):
     setcp1()
 
     if EUDIf()([r == e for r, e in zip(real, expt)]):
-        staticPrint("\x07 - [ OK ] \x04%s" % testname)
+        f_simpleprint("\x07 - [ OK ]\x04", testname)
         test_wait(0)
     if EUDElse()():
-        staticPrint("\x08 - [FAIL] %s" % testname)
+        f_simpleprint("\x08 - [FAIL]", testname)
         f_simpleprint(" \x03   - \x04 Output   : ", *real)
         f_simpleprint(" \x03   - \x04 Expected : ", *expt)
         failedTestDb = DBString(testname)
@@ -165,6 +162,7 @@ def test_complete():
     f_simpleprint("\x04  Test result : ", succNum, "/", _testNum, spaced=False)
     resetcp()
 
+
 _testList = []
 
 
@@ -178,7 +176,7 @@ def TestInstance(func):
 def _testmain():
     for testfunc, testname in _testList:
         _testFailed << 0
-        staticPrint("\x03[TEST] Running test %s..." % testname)
+        f_simpleprint("\x03[TEST] Running test", testname)
         testfunc()
         Trigger(_testFailed == 1, _failedNum.AddNumber(1))
 

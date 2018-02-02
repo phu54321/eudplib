@@ -23,7 +23,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-from .dbstr import DBString, DisplayExtText, f_initextstr
+from .dbstr import DBString
+
 from .strfunc import (
     f_strcpy,
     f_strcmp,

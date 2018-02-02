@@ -180,4 +180,4 @@ def f_simpleprint(*args, spaced=True):
 
     # Print
     f_dbstr_print(_printf_buffer, *args)
-    cs.DoActions(_printf_buffer.GetDisplayAction())
+    _printf_buffer.Display()

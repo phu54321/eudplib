@@ -120,6 +120,7 @@ def PopDeck():
             DoActions([
                 (
                     SetCurrentPlayer(player),
+                    ## TODO : DisplayTextText is removed
                     DisplayExtText(SCMD2Text('''\
 <0F>Rule 5-1-1 2) <04>덱, 덱2가 비었습니다.
 <17>카드 한장씩을 버려주십시오.'''))
@@ -145,6 +146,7 @@ def PopDeck():
             DoActions([
                 (
                     SetCurrentPlayer(player),
+                    ## TODO : DisplayTextText is removed
                     DisplayExtText(SCMD2Text('''\
 <0F>Rule 5-1-1 1) <04>덱이 비워졌으므로 덱2에서 보충합니다.'''))
                 ) for player in range(8)
