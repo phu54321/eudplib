@@ -1,3 +1,6 @@
+from ... import core as c
+from ..eudarray import EUDArray
+
 from ...ctrlstru import (
     EUDInfLoop,
     EUDEndInfLoop,
@@ -25,6 +28,13 @@ index (n-33)*94+m-33.
 """
 
 
+# Create conversion table
+cvtb = [0] * 65536
+for (ch1, ch2), tab in cp949_table:
+    cvtb[ch1 + ch2 * 256] = tab
+cvtb = EUDArray(cvtb)
+
+
 def f_cp949_to_utf8_cpy(dst, src):
     br1.seekoffset(src)
     bw1.seekoffset(dst)
@@ -37,34 +47,17 @@ def f_cp949_to_utf8_cpy(dst, src):
         if EUDElse()():
             b2 = br1.readbyte()
             EUDBreakIf(b2 == 0)
-
-            # Apply conversion table
-            cvtb = {}
-            for (ch1, ch2), tab in cp949_table:
-                try:
-                    cvtb[ch1].append((ch2, tab))
-                except KeyError:
-                    cvtb[ch1] = [(ch2, tab)]
-
-            EUDSwitch(b1)
-            for ch1, tb in cvtb.items():
-                EUDSwitchCase()(ch1)
-                EUDSwitch(b2)
-                for ch2, code in tb:
-                    EUDSwitchCase()(ch2)
-                    if 0x0080 <= code <= 0x07FF:
-                        # Encode as 2-byte
-                        bw1.writebyte(0b11000000 | (code >> 6) & 0b11111)
-                        bw1.writebyte(0b10000000 | (code >> 0) & 0b111111)
-                    elif 0x0800 <= code <= 0xFFFF:
-                        # Encode as 3-byte
-                        bw1.writebyte(0b11100000 | (code >> 12) & 0b1111)
-                        bw1.writebyte(0b10000000 | (code >> 6) & 0b111111)
-                        bw1.writebyte(0b10000000 | (code >> 0) & 0b111111)
-                    EUDBreak()
-                EUDEndSwitch()
-                EUDBreak()
-            EUDEndSwitch()
+            code = cvtb[b2 * 256 + b1]
+            if EUDIf()(code <= 0x07FF):
+                # Encode as 2-byte
+                bw1.writebyte(0b11000000 | (code // (1 << 6)) & 0b11111)
+                bw1.writebyte(0b10000000 | (code // (1 << 0)) & 0b111111)
+            if EUDElse()():
+                # Encode as 3-byte
+                bw1.writebyte(0b11100000 | (code // (1 << 12)) & 0b1111)
+                bw1.writebyte(0b10000000 | (code // (1 << 6)) & 0b111111)
+                bw1.writebyte(0b10000000 | (code // (1 << 0)) & 0b111111)
+            EUDEndIf()
         EUDEndIf()
     EUDEndInfLoop()
     bw1.writebyte(0)
