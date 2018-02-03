@@ -1,4 +1,3 @@
-from ... import core as c
 from ..eudarray import EUDArray
 
 from ...ctrlstru import (
@@ -8,10 +7,6 @@ from ...ctrlstru import (
     EUDElse,
     EUDEndIf,
     EUDBreakIf,
-    EUDBreak,
-    EUDSwitch,
-    EUDSwitchCase,
-    EUDEndSwitch,
 )
 from .rwcommon import br1, bw1
 from .cp949_table import cp949_table

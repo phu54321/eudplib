@@ -42,7 +42,6 @@ class _EUDStruct_Metaclass(type):
                 if mType is selftype:
                     fields[i] = (mName, dct)
         except KeyError as e:
-            print(cls, e)
             pass
 
         super().__init__(name, bases, dct)
