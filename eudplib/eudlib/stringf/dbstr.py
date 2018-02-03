@@ -65,7 +65,7 @@ class DBString(ut.ExprProxy):
     @c.EUDMethod
     def Display(self):
         sp = c.EUDVariable(0)
-        strId = c.EncodeString("_" * 1024)
+        strId = c.EncodeString("_" * 2048)
         if cs.EUDExecuteOnce()():
             strp = f_dwread_epd(ut.EPD(0x5993D4))
             sp << strp + f_wread(strp + strId * 2)
@@ -77,7 +77,7 @@ class DBString(ut.ExprProxy):
     @c.EUDMethod
     def PlayWAV(dbs):
         sp = c.EUDVariable(0)
-        strId = c.EncodeString("_" * 1024)
+        strId = c.EncodeString("_" * 2048)
         if cs.EUDExecuteOnce()():
             strp = f_dwread_epd(ut.EPD(0x5993D4))
             sp << strp + f_wread(strp + strId * 2)
