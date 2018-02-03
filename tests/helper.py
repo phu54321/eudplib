@@ -176,7 +176,7 @@ def TestInstance(func):
 def _testmain():
     for testfunc, testname in _testList:
         _testFailed << 0
-        f_simpleprint("\x03[TEST] Running test", testname)
+        f_simpleprint("\x03[TEST] 테스트를 진행합니다:", testname)
         testfunc()
         Trigger(_testFailed == 1, _failedNum.AddNumber(1))
 
