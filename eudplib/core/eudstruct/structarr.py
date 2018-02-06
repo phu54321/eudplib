@@ -40,7 +40,7 @@ class _EUDStruct_Metaclass(type):
                     continue
                 mName, mType = member
                 if mType is selftype:
-                    fields[i] = (mName, dct)
+                    fields[i] = (mName, cls)
         except KeyError as e:
             pass
 
