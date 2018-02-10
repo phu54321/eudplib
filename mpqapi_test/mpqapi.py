@@ -41,18 +41,6 @@ BOOL WINAPI SFileAddWave(HANDLE, const char*, const char*, DWORD, DWORD);
 libstorm = None
 
 
-def find_data_file(filename):
-    if getattr(sys, 'frozen', False):
-        # The application is frozen
-        datadir = os.path.dirname(sys.executable)
-    else:
-        # The application is not frozen
-        # Change this bit to match where you store your data files:
-        datadir = os.path.dirname(__file__)
-
-    return os.path.join(datadir, filename)
-
-
 def InitMpqLibrary():
     global libstorm, filename_u2b
 
@@ -60,9 +48,9 @@ def InitMpqLibrary():
         platformName = platform.system()
         if platformName == 'Windows':  # windows
             if struct.calcsize("P") == 4:  # 32bit
-                libstorm = ffi.dlopen(find_data_file('StormLib32.dll'))
+                libstorm = ffi.dlopen('dlls/StormLib32.dll')
             else:  # 64bit
-                libstorm = ffi.dlopen(find_data_file('StormLib64.dll'))
+                libstorm = ffi.dlopen('dlls/StormLib64.dll')
             filename_u2b = u2b
 
         elif platformName == 'Darwin':  # mac
