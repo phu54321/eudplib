@@ -9,10 +9,14 @@ from .memiof import (
     f_wwrite_epd,
     f_bwrite_epd,
 )
-from ..utils import EPError, ep_assert
+
+from .. import (
+    core as c,
+    utils as ut
+)
 
 import functools
-
+import traceback
 
 rwdict = {
     2: (f_wread_epd, f_wwrite_epd),
@@ -20,18 +24,27 @@ rwdict = {
 }
 
 
+def _checkEPDAddr(epd):
+    if ut.isUnproxyInstance(epd, c.ConstExpr):
+        if epd.rlocmode == 4:
+            print("[Warning] EPD check warning. Don't use raw pointer address")
+            traceback.print_stack()
+
+
 @functools.lru_cache(None)
 def EPDOffsetMap(ct):
     addrTable = {}
     for name, offset, size in ct:
         if size not in [4, 2, 1]:
-            raise EPError('EPDOffsetMap member size should be one of 4, 2, 1')
+            raise ut.EPError('EPDOffsetMap member size should be in 4, 2, 1')
         if offset % size != 0:
-            raise EPError('EPDOffsetMap member should be aligned')
+            raise ut.EPError('EPDOffsetMap members should be aligned')
         addrTable[name] = offset, size
 
     class _:
         def __init__(self, epd):
+            _checkEPDAddr(epd)
+
             self._epd = epd
 
         def __getattr__(self, name):
@@ -45,7 +58,7 @@ def EPDOffsetMap(ct):
 
         def getepd(self, name):
             offset, size = addrTable[name]
-            ep_assert(size == 4, 'only dword can be read as epd')
+            ut.ep_assert(size == 4, 'Only dword can be read as epd')
             return f_epdread_epd(self._epd + offset // 4)
 
         def __setattr__(self, name, value):

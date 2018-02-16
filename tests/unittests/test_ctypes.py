@@ -12,6 +12,7 @@ def test_ctypes():
     ))
 
     a = Db(b'\x00\x01\x02\x03\x04\x05\x06\x07')
+    a_ = t(a)
     a_ = t(EPD(a))
     test_equality(
         "Reading from EPDOffsetMap",
