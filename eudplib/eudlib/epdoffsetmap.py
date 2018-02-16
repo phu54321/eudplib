@@ -21,13 +21,13 @@ rwdict = {
 
 
 @functools.lru_cache(None)
-def EPDCtype(ct):
+def EPDOffsetMap(ct):
     addrTable = {}
     for name, offset, size in ct:
         if size not in [4, 2, 1]:
-            raise EPError('EPDCtype member size should be one of 4, 2, 1')
+            raise EPError('EPDOffsetMap member size should be one of 4, 2, 1')
         if offset % size != 0:
-            raise EPError('EPDCtype member should be aligned')
+            raise EPError('EPDOffsetMap member should be aligned')
         addrTable[name] = offset, size
 
     class _:

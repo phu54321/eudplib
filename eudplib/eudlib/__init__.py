@@ -32,4 +32,4 @@ from .mathf import *
 from .eudarray import EUDArray
 from .eudgrp import EUDGrp
 from .eudstack import EUDStack
-from .eudctypes import EPDCtype
+from .epdoffsetmap import EPDOffsetMap
