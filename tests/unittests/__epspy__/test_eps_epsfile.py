@@ -32,8 +32,37 @@ class _ATTW:
     def __init__(self, obj, attrName):
         self.obj = obj
         self.attrName = attrName
+
     def __lshift__(self, r):
         setattr(self.obj, self.attrName, r)
+
+    def __iadd__(self, v):
+        ov = getattr(self.obj, self.attrName)
+        setattr(self.obj, self.attrName, ov + v)
+
+    def __isub__(self, v):
+        ov = getattr(self.obj, self.attrName)
+        setattr(self.obj, self.attrName, ov - v)
+
+    def __imul__(self, v):
+        ov = getattr(self.obj, self.attrName)
+        setattr(self.obj, self.attrName, ov * v)
+
+    def __idiv__(self, v):
+        ov = getattr(self.obj, self.attrName)
+        setattr(self.obj, self.attrName, ov / v)
+
+    def __iand__(self, v):
+        ov = getattr(self.obj, self.attrName)
+        setattr(self.obj, self.attrName, ov & v)
+
+    def __ior__(self, v):
+        ov = getattr(self.obj, self.attrName)
+        setattr(self.obj, self.attrName, ov | v)
+
+    def __ixor__(self, v):
+        ov = getattr(self.obj, self.attrName)
+        setattr(self.obj, self.attrName, ov ^ v)
 
 class _ARRW:
      def __init__(self, obj, index):
