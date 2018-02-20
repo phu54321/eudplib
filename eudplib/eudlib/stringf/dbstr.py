@@ -32,6 +32,12 @@ from ..memiof import f_dwread_epd, f_dwwrite_epd, f_wread
 from .cputf8 import f_cp949_to_utf8_cpy
 
 
+@c.EUDFunc
+def GetMapStringAddr(strId):
+    strp = f_dwread_epd(ut.EPD(0x5993D4))
+    return strp + f_wread(strp + strId * 2)
+
+
 class DBString(ut.ExprProxy):
     """Object for storing single modifiable string.
 
@@ -69,8 +75,7 @@ class DBString(ut.ExprProxy):
         sp = c.EUDVariable(0)
         strId = c.EncodeString("_" * 2048)
         if cs.EUDExecuteOnce()():
-            strp = f_dwread_epd(ut.EPD(0x5993D4))
-            sp << strp + f_wread(strp + strId * 2)
+            sp << GetMapStringAddr(strId)
         cs.EUDEndExecuteOnce()
 
         f_cp949_to_utf8_cpy(sp, self.GetStringMemoryAddr())
