@@ -44,6 +44,7 @@ from unittests import (
     test_trace,
     test_pexists,
     test_dbstring,
+    test_ctypes,
 )
 
 helper.CompressPayload(True)
