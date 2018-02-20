@@ -38,3 +38,5 @@ from .eudprint import (
     f_dbstr_print,
     f_simpleprint
 )
+
+from .cputf8 import f_cp949_to_utf8_cpy
