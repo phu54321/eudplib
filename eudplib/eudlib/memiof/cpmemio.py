@@ -87,6 +87,6 @@ def f_dwadd_cp(cpo, value):
 def f_dwsubtract_cp(cpo, value):
     cs.DoActions([
         c.SetMemory(0x6509B0, c.Add, cpo),
-        c.SetDeaths(c.CurrentPlayer, c.subtract, value, 0),
+        c.SetDeaths(c.CurrentPlayer, c.Subtract, value, 0),
         c.SetMemory(0x6509B0, c.Add, -cpo),
     ])

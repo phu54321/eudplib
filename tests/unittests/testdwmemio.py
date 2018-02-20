@@ -35,3 +35,9 @@ def test_dwmemio():
     # dwwrite
     f_dwwrite_epd(EPD(a), 1234)
     test_assert('f_dwwrite works', Memory(a, Exactly, 1234))
+
+    # Fixes euddraft/issues#4
+    f_setcurpl(EPD(a))
+    f_dwsubtract_cp(0, 12)
+    f_setcurpl(Player1)
+    test_assert('f_dwwrite works', Memory(a, Exactly, 1222))
