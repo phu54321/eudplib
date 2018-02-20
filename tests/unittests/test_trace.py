@@ -40,3 +40,7 @@ def test_trace():
         GetTraceStackDepth(),
         0
     )
+
+
+# phu54321/euddraft#3
+EUDTracedTypedMethod
