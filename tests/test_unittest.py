@@ -43,6 +43,7 @@ from unittests import (
     testmapdatahelper,
     test_trace,
     test_pexists,
+    test_dbstring,
 )
 
 helper.CompressPayload(True)

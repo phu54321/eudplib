@@ -52,6 +52,8 @@ class DBString(ut.ExprProxy):
         """
         if _from is None:
             super().__init__(DBStringData(content))
+        elif type(_from) in (str, bytes):
+            super().__init__(DBStringData(_from))
         else:
             super().__init__(_from)
 
