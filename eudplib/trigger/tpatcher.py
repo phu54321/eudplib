@@ -72,6 +72,13 @@ def PatchCondition(cond):
     if ut.isUnproxyInstance(cond, c.EUDVariable):
         return cond >= 1
 
+    # translate boolean condition
+    elif isinstance(cond, bool):
+        if cond:
+            return c.Always()
+        else:
+            return c.Never()
+
     else:
         try:
             ApplyPatchTable(ut.EPD(cond), cond, condpt)

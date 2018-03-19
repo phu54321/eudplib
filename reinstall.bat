@@ -1,3 +1,4 @@
-pip3.4 uninstall eudplib
+@echo off
+pip uninstall -y eudplib
 del C:\Python34\Lib\site-packages\eudplib\
-python34 setup.py install
+python setup.py install

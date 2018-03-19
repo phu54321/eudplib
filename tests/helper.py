@@ -64,7 +64,6 @@ def test_equality(testname, real, expt):
     expt = Assignable2List(expt)
 
     setcp1()
-
     if EUDIf()([r == e for r, e in zip(real, expt)]):
         f_simpleprint("\x07 - [ OK ]\x04", testname)
         test_wait(0)

@@ -24,7 +24,7 @@ THE SOFTWARE.
 '''
 
 from .dbstr import (
-    GetStringAddr,
+    GetMapStringAddr,
     DBString,
 )
 
