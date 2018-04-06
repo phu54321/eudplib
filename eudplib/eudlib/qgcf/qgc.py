@@ -69,7 +69,7 @@ bw = EUDByteWriter()
 
 @c.EUDFunc
 def QueueGameCommand_Select(n, ptrList):
-    ptrList = EUDArray(ptrList)
+    ptrList = EUDArray.cast(ptrList)
     buf = c.Db(b'\x090123456789012345678901234')
     bw.seekoffset(buf + 1)
     bw.writebyte(n)
