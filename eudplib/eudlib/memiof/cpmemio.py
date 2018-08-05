@@ -52,10 +52,10 @@ def _reader():
 
 
 def f_dwepdread_cp(cpo):
-    if cpo != 0:
+    if not isinstance(cpo, int) or cpo != 0:
         cs.DoActions(c.SetMemory(0x6509B0, c.Add, cpo))
     ptr, epd = _reader()
-    if cpo != 0:
+    if not isinstance(cpo, int) or cpo != 0:
         cs.DoActions(c.SetMemory(0x6509B0, c.Add, -cpo))
     return ptr, epd
 
