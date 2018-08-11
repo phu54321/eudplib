@@ -79,7 +79,7 @@ def _EncodeAny(t, f, dl, s, issueError):
 
             if issueError:
                 raise ut.EPError('[Warning] "%s" is not a %s' % (s, t))
-                return s
+            return s
 
     else:
         try:
