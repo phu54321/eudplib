@@ -50,7 +50,7 @@ class Condition(ConstExpr):
     '''
 
     def __init__(self, locid, player, amount, unitid,
-                 comparison, condtype, restype, flags, eudx=False):
+                 comparison, condtype, restype, flags, eudx=0):
         super().__init__(self)
 
         if eudx:
