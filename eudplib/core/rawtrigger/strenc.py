@@ -39,6 +39,8 @@ from .strdict import (
     DefUnitDict
 )
 
+import difflib
+
 
 def EncodeAIScript(ais, issueError=False):
     ais = ut.unProxy(ais)
@@ -66,12 +68,18 @@ def _EncodeAny(t, f, dl, s, issueError):
         try:
             return f(s)
         except KeyError:
-            try:
-                return dl[s]
-            except KeyError:
-                if issueError:
-                    raise ut.EPError('[Warning] "%s" is not a %s' % (s, t))
-                return s
+            if isinstance(s, str):
+                try:
+                    return dl[s]
+                except KeyError:
+                    sl = ["Cannot encode string %s as %s." % (s, t)]
+                    for match in difflib.get_close_matches(s, dl.keys()):
+                        sl.append(' - Suggestion: %s' % match)
+                    raise ut.EPError('\n'.join(sl))
+
+            if issueError:
+                raise ut.EPError('[Warning] "%s" is not a %s' % (s, t))
+            return s
 
     else:
         try:
@@ -92,8 +100,8 @@ def EncodeString(s, issueError=False):
 
 
 def EncodeSwitch(sw, issueError=False):
-    return _EncodeAny("Switch", GetSwitchIndex, DefSwitchDict, sw, issueError)
+    return _EncodeAny("switch", GetSwitchIndex, DefSwitchDict, sw, issueError)
 
 
 def EncodeUnit(u, issueError=False):
-    return _EncodeAny("Unit", GetUnitIndex, DefUnitDict, u, issueError)
+    return _EncodeAny("unit", GetUnitIndex, DefUnitDict, u, issueError)

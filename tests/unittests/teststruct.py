@@ -54,6 +54,11 @@ def test_struct():
         a.x, 1
     )
 
+    # https://github.com/phu54321/euddraft/issues/8
+    # Accessing to unknown fields should trigger an error.
+    with expect_eperror():
+        a.q = 1
+
 
 # Nested struct test
 
