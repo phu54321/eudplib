@@ -25,6 +25,7 @@ THE SOFTWARE.
 
 from .modcurpl import (
     f_setcurpl,
+    f_addcurpl,
     f_getcurpl
 )
 
@@ -54,17 +55,14 @@ from .cpmemio import (
     f_dwepdread_cp,
     f_dwread_cp,
     f_epdread_cp,
+    f_wread_cp,
+    f_bread_cp,
 
     f_dwwrite_cp,
     f_dwadd_cp,
     f_dwsubtract_cp,
-)
-
-
-from .safedwmemio import (
-    f_dwread_epd_safe,
-    f_epdread_epd_safe,
-    f_dwepdread_epd_safe,
+    f_wwrite_cp,
+    f_bwrite_cp,
 )
 
 

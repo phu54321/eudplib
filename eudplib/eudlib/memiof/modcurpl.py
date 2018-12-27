@@ -64,3 +64,12 @@ def f_getcurpl():
     cs.EUDEndIf()
 
     return cpcache
+
+
+def f_addcurpl(cp):
+    """Add current player value.
+
+    eudplib internally caches the current player value,
+    so this function add to that value.
+    """
+    cs.DoActions(c.AddCurrentPlayer(cp))

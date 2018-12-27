@@ -54,5 +54,14 @@ def SetCurrentPlayer(p):
     ]
 
 
+def AddCurrentPlayer(p):
+    p = EncodePlayer(p)
+    return [
+        _curpl_var.AddNumber(p),
+        SetMemory(_curpl_checkcond + 8, Add, p),
+        SetMemory(0x6509B0, Add, p),
+    ]
+
+
 def GetCPCache():
     return _curpl_var
