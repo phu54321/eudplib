@@ -26,6 +26,10 @@ def test_cpmemio():
         [a, b, c], [0x1234, 0x5678, 0x9abc]
     )
 
+    # Issue #4: This should at least compile.
+    v = EUDVariable(0)
+    f_dwepdread_cp(v)
+
     # Writing
     f_dwwrite_cp(1, 0x1111)
     a, b, c = (
