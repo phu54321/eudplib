@@ -84,4 +84,5 @@ from .ptrmemio import (
 from .mblockio import (
     f_repmovsd_epd,
     f_memcpy,
+    f_memcmp,
 )

@@ -127,3 +127,19 @@ def f_memcpy(dst, src, copylen):
     cs.EUDJump(loopstart)
 
     loopend << c.NextTrigger()
+
+
+@EUDFunc
+def f_memcmp(buf1, buf2, count):
+    _br.seekoffset(buf1)
+    _bw.seekoffset(buf2)
+
+    if cs.EUDWhile()(count >= 1):
+        count -= 1
+        ch1 = _br.readbyte()
+        ch2 = _bw.readbyte()
+        cs.EUDContinueIf(ch1 == ch2)
+        c.EUDReturn(ch1 - ch2)
+    cs.EUDEndWhile()
+
+    c.EUDReturn(0)
