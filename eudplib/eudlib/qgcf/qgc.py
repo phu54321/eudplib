@@ -85,7 +85,6 @@ def QueueGameCommand_Select(n, ptrList):
         bw.writebyte(b1)
         i += 1
     cs.EUDEndWhile()
-    bw.flushdword()
     QueueGameCommand(buf, 2 * (n + 1))
 
 

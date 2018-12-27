@@ -127,4 +127,3 @@ def f_memcpy(dst, src, copylen):
     cs.EUDJump(loopstart)
 
     loopend << c.NextTrigger()
-    _bw.flushdword()

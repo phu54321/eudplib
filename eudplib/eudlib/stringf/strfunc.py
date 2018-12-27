@@ -50,8 +50,6 @@ def f_strcpy(dst, src):
         cs.EUDBreakIf(b == 0)
     cs.EUDEndInfLoop()
 
-    bw1.flushdword()
-
     return dst
 
 

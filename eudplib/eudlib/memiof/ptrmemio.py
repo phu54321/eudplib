@@ -49,7 +49,6 @@ def f_dwwrite(ptr, dw):
     _bw.writebyte(chars[1])
     _bw.writebyte(chars[2])
     _bw.writebyte(chars[3])
-    _bw.flushdword()
 
 
 def f_wwrite(ptr, w):

@@ -67,6 +67,7 @@ from .cpmemio import (
 
 
 from .byterw import (
+    EUDByteStream,
     EUDByteReader,
     EUDByteWriter,
 )

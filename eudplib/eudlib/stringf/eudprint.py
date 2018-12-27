@@ -54,8 +54,6 @@ def f_dbstr_addstr(dst, src):
         dst += 1
     cs.EUDEndInfLoop()
 
-    bw1.flushdword()
-
     return dst
 
 
@@ -87,7 +85,6 @@ def f_dbstr_adddw(dst, number):
         dst += 1
 
     bw1.writebyte(0)  # EOS
-    bw1.flushdword()
 
     return dst
 
@@ -118,7 +115,6 @@ def f_dbstr_addptr(dst, number):
         dst += 1
 
     bw1.writebyte(0)  # EOS
-    bw1.flushdword()
 
     return dst
 

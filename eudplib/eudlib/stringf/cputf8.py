@@ -56,4 +56,3 @@ def f_cp949_to_utf8_cpy(dst, src):
         EUDEndIf()
     EUDEndInfLoop()
     bw1.writebyte(0)
-    bw1.flushdword()
