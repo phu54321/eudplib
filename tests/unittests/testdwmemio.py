@@ -18,11 +18,13 @@ def test_dwmemio():
 
     # epd reading for non-writable memory
     # Value at 004887C0 (code section) is EA 06 85 C0
+    '''Deleted Function
     q = f_dwread_epd_safe(EPD(0x4887C0))
     test_equality(
         'f_dwread_epd_safe',
         q, 0xc08506ea
     )
+    '''
 
     # Flag reading!
     f1, f2, f3, f4 = f_flagread_epd(EPD(a), 0x1000, 0x0100, ~0x0010, 0x0004)

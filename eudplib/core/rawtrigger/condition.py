@@ -54,7 +54,7 @@ class Condition(ConstExpr):
         super().__init__(self)
 
         if eudx:
-            eudx = b2i2(b'SC')
+            eudx = ut.b2i2(b'SC')
         self.fields = [locid, player, amount, unitid,
                        comparison, condtype, restype, flags, eudx]
 

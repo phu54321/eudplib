@@ -142,7 +142,7 @@ class EUDByteWriter:
         self._dw = c.EUDVariable()
         self._suboffset = c.EUDVariable()
         self._offset = c.EUDVariable()
-        self._b = [c.EUDLightVariable() for _ in range(4)]
+        self._b = [c.EUDVariable()] + [c.EUDLightVariable() for _ in range(3)]
 
     @c.EUDMethod
     def seekepd(self, epdoffset):
@@ -210,10 +210,10 @@ class EUDByteWriter:
     def flushdword(self):
         """Flush buffer."""
         # mux bytes
-        c.RawTrigger(actions=self._dw.SetNumber(0))
+        c.VProc(self._b[0], [self._dw.SetNumber(0), self._b[0].QueueAddTo(self._dw)])
 
         for i in range(7, -1, -1):
-            for j in range(4):
+            for j in range(1, 4):
                 c.RawTrigger(
                     conditions=[
                         self._b[j].AtLeast(2 ** i)

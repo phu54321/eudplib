@@ -54,93 +54,12 @@ def f_dwwrite(ptr, dw):
 
 def f_wwrite(ptr, w):
     epd, subp = c.f_div(ptr - 0x58A364, 4)
-    oldcp = cp.f_getcurpl()
-    k = c.EUDVariable()
-    cs.DoActions([
-        c.SetCurrentPlayer(epd),
-        k.SetNumber(0),
-    ])
-    cs.EUDSwitch(subp)
-    for i in range(3):
-        cs.EUDSwitchCase()(i)
-        for j in range(31, -1, -1):
-            if 8 * (i + 2) <= j:
-                c.RawTrigger(
-                    conditions=c.Deaths(c.CurrentPlayer, c.AtLeast, 2**j, 0),
-                    actions=[
-                        c.SetDeaths(c.CurrentPlayer, c.Subtract, 2**j, 0),
-                        k.AddNumber(2**j),
-                    ]
-                )
-
-            else:
-                c.RawTrigger(
-                    conditions=c.Deaths(c.CurrentPlayer, c.AtLeast, 2**j, 0),
-                    actions=[
-                        c.SetDeaths(c.CurrentPlayer, c.Subtract, 2**j, 0),
-                    ]
-                )
-
-            if j == 8 * i:
-                break
-
-        c.SeqCompute([
-            (c.CurrentPlayer, c.Add, k),
-            (c.CurrentPlayer, c.Add, w * (256 ** i)),
-        ])
-        cs.EUDBreak()
-
-    # Things gets complicated on this case.
-    # We won't hand-optimize this case. This is a very, very rare case
-    if cs.EUDSwitchCase()(3):
-        b0, b1 = dwm.f_dwbreak(w)[2:4]
-        f_bwrite(ptr, b0)
-        f_bwrite(ptr + 1, b1)
-
-    cs.EUDEndSwitch()
-    cp.f_setcurpl(oldcp)
+    bwm.f_wwrite_epd(epd, subp, w)
 
 
 def f_bwrite(ptr, b):
     epd, subp = c.f_div(ptr - 0x58A364, 4)
-    oldcp = cp.f_getcurpl()
-    k = c.EUDVariable()
-    cs.DoActions([
-        c.SetCurrentPlayer(epd),
-        k.SetNumber(0),
-    ])
-    cs.EUDSwitch(subp)
-    for i in range(4):
-        cs.EUDSwitchCase()(i)
-        for j in range(31, -1, -1):
-            if 8 * (i + 1) <= j:
-                c.RawTrigger(
-                    conditions=c.Deaths(c.CurrentPlayer, c.AtLeast, 2**j, 0),
-                    actions=[
-                        c.SetDeaths(c.CurrentPlayer, c.Subtract, 2**j, 0),
-                        k.AddNumber(2**j),
-                    ]
-                )
-
-            else:
-                c.RawTrigger(
-                    conditions=c.Deaths(c.CurrentPlayer, c.AtLeast, 2**j, 0),
-                    actions=[
-                        c.SetDeaths(c.CurrentPlayer, c.Subtract, 2**j, 0),
-                    ]
-                )
-
-            if j == 8 * i:
-                break
-
-        c.SeqCompute([
-            (c.EncodePlayer(c.CurrentPlayer), c.Add, k),
-            (c.CurrentPlayer, c.Add, b * (256 ** i))
-        ])
-        cs.EUDBreak()
-    cs.EUDEndSwitch()
-    cp.f_setcurpl(oldcp)
-    return b
+    bwm.f_bwrite_epd(epd, subp, b)
 
 
 # -----------------------------
@@ -151,11 +70,9 @@ def f_dwread(ptr):
     epd, subp = c.f_div(ptr - 0x58A364, 4)
     oldcp = cp.f_getcurpl()
     dw = c.EUDVariable()
-    k = c.EUDVariable()
     cs.DoActions([
         c.SetCurrentPlayer(epd),
         dw.SetNumber(0),
-        k.SetNumber(0),
     ])
     cs.EUDSwitch(subp)
 
@@ -168,58 +85,21 @@ def f_dwread(ptr):
     for i in range(1, 4):
         cs.EUDSwitchCase()(i)
 
-        for j in range(31, -1, -1):
-            if 8 * i <= j:
-                c.RawTrigger(
-                    conditions=c.Deaths(c.CurrentPlayer, c.AtLeast, 2**j, 0),
-                    actions=[
-                        c.SetDeaths(c.CurrentPlayer, c.Subtract, 2**j, 0),
-                        k.AddNumber(2**j),
-                        dw.AddNumber(2**(j - 8 * i))
-                    ]
-                )
-
-            else:
-                c.RawTrigger(
-                    conditions=c.Deaths(c.CurrentPlayer, c.AtLeast, 2**j, 0),
-                    actions=[
-                        c.SetDeaths(c.CurrentPlayer, c.Subtract, 2**j, 0),
-                        k.AddNumber(2**j),
-                    ]
-                )
-
-            if j == 8 * i:
-                break
+        for j in range(31, 8 * i - 1, -1):
+            c.RawTrigger(
+                conditions=c.DeathsX(c.CurrentPlayer, c.AtLeast, 1, 0, 2**j),
+                actions=dw.AddNumber(2**(j - 8 * i))
+            )
 
         c.SeqCompute([
-            (c.EncodePlayer(c.CurrentPlayer), c.Add, k),
             (ut.EPD(0x6509B0), c.Add, 1),
-            (k, c.SetTo, 0)
         ])
 
-        for j in range(31, -1, -1):
-            if j < 8 * i:
-                c.RawTrigger(
-                    conditions=c.Deaths(c.CurrentPlayer, c.AtLeast, 2**j, 0),
-                    actions=[
-                        c.SetDeaths(c.CurrentPlayer, c.Subtract, 2**j, 0),
-                        k.AddNumber(2**j),
-                        dw.AddNumber(2**(j + 32 - 8 * i))
-                    ]
-                )
-
-            else:
-                c.RawTrigger(
-                    conditions=c.Deaths(c.CurrentPlayer, c.AtLeast, 2**j, 0),
-                    actions=[
-                        c.SetDeaths(c.CurrentPlayer, c.Subtract, 2**j, 0),
-                        k.AddNumber(2**j),
-                    ]
-                )
-
-        c.SeqCompute([
-            (c.EncodePlayer(c.CurrentPlayer), c.Add, k),
-        ])
+        for j in range(8 * i - 1, -1, -1):
+            c.RawTrigger(
+                conditions=c.DeathsX(c.CurrentPlayer, c.AtLeast, 1, 0, 2**j),
+                actions=dw.AddNumber(2**(j + 32 - 8 * i))
+            )
 
         cs.EUDBreak()
 

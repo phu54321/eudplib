@@ -59,7 +59,7 @@ class Action(ConstExpr):
         super().__init__(self)
 
         if eudx:
-            eudx = b2i2(b'SC')
+            eudx = ut.b2i2(b'SC')
         self.fields = [locid1, strid, wavid, time, player1,
                        player2, unitid, acttype, amount, flags, 0, eudx]
         self.parenttrg = None

@@ -48,16 +48,14 @@ def f_dwepdread_epd(targetplayer):
     for i in range(31, -1, -1):
         c.RawTrigger(
             conditions=[
-                c.Deaths(c.CurrentPlayer, c.AtLeast, 2**i, 0)
+                c.DeathsX(c.CurrentPlayer, c.AtLeast, 1, 0, 2**i)
             ],
             actions=[
-                c.SetDeaths(c.CurrentPlayer, c.Subtract, 2**i, 0),
                 ptr.AddNumber(2 ** i),
                 epd.AddNumber(2 ** (i - 2)) if i >= 2 else []
             ]
         )
 
-    cs.DoActions(c.SetDeaths(c.CurrentPlayer, c.SetTo, ptr, 0))
     f_setcurpl(origcp)
 
     return ptr, epd
@@ -74,18 +72,12 @@ def f_dwread_epd(targetplayer):
     for i in range(31, -1, -1):
         c.RawTrigger(
             conditions=[
-                c.Deaths(c.CurrentPlayer, c.AtLeast, 2**i, 0)
+                c.DeathsX(c.CurrentPlayer, c.AtLeast, 1, 0, 2**i)
             ],
-            actions=[
-                c.SetDeaths(c.CurrentPlayer, c.Subtract, 2**i, 0),
-                ptr.AddNumber(2 ** i),
-            ]
+            actions=ptr.AddNumber(2 ** i)
         )
 
-    cs.DoActions([
-        c.SetDeaths(c.CurrentPlayer, c.SetTo, ptr, 0),
-        c.SetCurrentPlayer(origcp),
-    ])
+    f_setcurpl(origcp)
 
     return ptr
 
@@ -107,37 +99,27 @@ def f_flagread_epd(targetplayer, *flags, _readerdict={}):
             origcp = f_getcurpl()
             f_setcurpl(targetplayer)
 
-            resetteract = c.Forward()
-            flagsv = [c.EUDVariable() for _ in range(len(flags))]
+            flagsv = [c.EUDVariable() for _ in flags]
 
             # All set to 0
-            c.RawTrigger(
-                actions=[
-                    c.SetMemory(resetteract + 20, c.SetTo, 0),
-                    [flagv.SetNumber(0) for flagv in flagsv]
-                ]
-            )
+            c.RawTrigger(actions=[flagv.SetNumber(0) for flagv in flagsv])
 
             # Fill flags
             for i in range(31, -1, -1):
+                bitandflags = [flag & (2 ** i) for flag in flags]
+                if sum(bitandflags) == 0:
+                    continue
                 c.RawTrigger(
                     conditions=[
-                        c.Deaths(c.CurrentPlayer, c.AtLeast, 2**i, 0)
+                        c.DeathsX(c.CurrentPlayer, c.AtLeast, 1, 0, 2**i)
                     ],
                     actions=[
-                        c.SetDeaths(c.CurrentPlayer, c.Subtract, 2**i, 0),
-                        c.SetMemory(resetteract + 20, c.Add, 2 ** i),
-                        [
-                            flagv.AddNumber(2 ** i)
-                            for j, flagv in enumerate(flagsv)
-                            if flags[j] & (2 ** i)
-                        ]
+                        flagv.AddNumber(2 ** i)
+                        for j, flagv in enumerate(flagsv)
+                        if flags[j] & (2 ** i)
                     ]
                 )
 
-            c.RawTrigger(actions=[
-                resetteract << c.SetDeaths(c.CurrentPlayer, c.SetTo, 0, 0)
-            ])
             f_setcurpl(origcp)
 
             return flagsv
