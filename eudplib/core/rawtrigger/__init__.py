@@ -39,6 +39,7 @@ from .stockcond import (
     Switch, ElapsedTime, Opponents, Deaths, CommandLeast,
     CommandLeastAt, LeastKills, LowestScore, LeastResources, Score,
     Always, Never, Memory, MemoryEPD,
+    DeathsX, MemoryX, MemoryXEPD,
 )
 
 from .stockact import (
@@ -57,6 +58,7 @@ from .stockact import (
     ModifyUnitEnergy, ModifyUnitShields, ModifyUnitResourceAmount,
     ModifyUnitHangarCount, PauseTimer, UnpauseTimer, Draw,
     SetAllianceStatus, SetMemory, SetNextPtr, SetMemoryEPD,
+    SetDeathsX, SetMemoryX, SetMemoryXEPD,
 )
 
 from .constenc import (
