@@ -58,6 +58,28 @@ class VariableBase:
 
     # -------
 
+    def AtLeastX(self, value, mask):
+        return bt.MemoryX(self.getValueAddr(), bt.AtLeast, value, mask)
+
+    def AtMostX(self, value, mask):
+        return bt.MemoryX(self.getValueAddr(), bt.AtMost, value, mask)
+
+    def ExactlyX(self, value, mask):
+        return bt.MemoryX(self.getValueAddr(), bt.Exactly, value, mask)
+
+    # -------
+
+    def SetNumberX(self, value, mask):
+        return bt.SetMemoryX(self.getValueAddr(), bt.SetTo, value, mask)
+
+    def AddNumberX(self, value, mask):
+        return bt.SetMemoryX(self.getValueAddr(), bt.Add, value, mask)
+
+    def SubtractNumberX(self, value, mask):
+        return bt.SetMemoryX(self.getValueAddr(), bt.Subtract, value, mask)
+
+    # -------
+
     def Assign(self, value):
         bt.RawTrigger(actions=[
             bt.SetMemory(
