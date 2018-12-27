@@ -52,14 +52,16 @@ class Action(ConstExpr):
     '''
 
     def __init__(self, locid1, strid, wavid, time, player1, player2,
-                 unitid, acttype, amount, flags):
+                 unitid, acttype, amount, flags, eudx=False):
         '''
         See :mod:`eudplib.base.stocktrg` for stock actions list.
         '''
         super().__init__(self)
 
+        if eudx:
+            eudx = b2i2(b'SC')
         self.fields = [locid1, strid, wavid, time, player1,
-                       player2, unitid, acttype, amount, flags, 0, 0]
+                       player2, unitid, acttype, amount, flags, 0, eudx]
         self.parenttrg = None
         self.actindex = None
 

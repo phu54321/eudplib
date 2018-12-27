@@ -50,11 +50,13 @@ class Condition(ConstExpr):
     '''
 
     def __init__(self, locid, player, amount, unitid,
-                 comparison, condtype, restype, flags):
+                 comparison, condtype, restype, flags, eudx=False):
         super().__init__(self)
 
+        if eudx:
+            eudx = b2i2(b'SC')
         self.fields = [locid, player, amount, unitid,
-                       comparison, condtype, restype, flags, 0]
+                       comparison, condtype, restype, flags, eudx]
 
         self.parenttrg = None
         self.condindex = None

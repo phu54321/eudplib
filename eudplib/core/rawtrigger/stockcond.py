@@ -197,3 +197,18 @@ def Memory(dest, cmptype, value):
 
 def MemoryEPD(dest, cmptype, value):
     return Deaths(dest, cmptype, value, 0)
+
+
+def DeathsX(Player, Comparison, Number, Unit, Mask):
+    Player = EncodePlayer(Player, issueError=True)
+    Comparison = EncodeComparison(Comparison, issueError=True)
+    Unit = EncodeUnit(Unit, issueError=True)
+    return Condition(Mask, Player, Number, Unit, Comparison, 15, 0, 0, eudx=True)
+
+
+def MemoryX(dest, cmptype, value, mask):
+    return DeathsX(EPD(dest), cmptype, value, 0, mask)
+
+
+def MemoryXEPD(dest, cmptype, value, mask):
+    return DeathsX(dest, cmptype, value, 0, mask)
