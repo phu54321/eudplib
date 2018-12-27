@@ -95,6 +95,12 @@ def EncodeLocation(loc, issueError=False):
         lambda s: GetLocationIndex(s) + 1, DefLocationDict, loc, issueError)
 
 
+def EncodeLocationIndex(loc, issueError=False):
+    return _EncodeAny(
+        "location",
+        lambda s: GetLocationIndex(s), DefLocationDict, loc, issueError)
+
+
 def EncodeString(s, issueError=False):
     return _EncodeAny("CHKString", GetStringIndex, {}, s, issueError)
 

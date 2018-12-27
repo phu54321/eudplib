@@ -90,6 +90,7 @@ from .constenc import (
 from .strenc import (
     EncodeAIScript,
     EncodeLocation,
+    EncodeLocationIndex,
     EncodeString,
     EncodeSwitch,
     EncodeUnit,
