@@ -31,6 +31,9 @@ from .dbstr import (
 from .strfunc import (
     f_strcpy,
     f_strcmp,
+    f_strlen,
+    f_strlen_epd,
+    f_strnstr,
 )
 
 from .eudprint import (

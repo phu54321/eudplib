@@ -32,9 +32,6 @@ from . import (
 )
 
 
-_epd, _suboffset = c.EUDCreateVariables(2)
-
-
 class EUDByteStream:
     """Read and Write byte by byte."""
 
@@ -55,23 +52,15 @@ class EUDByteStream:
     @c.EUDMethod
     def seekoffset(self, offset):
         """Seek EUDByteStream to specific address"""
-        global _epd, _suboffset
-
         # convert offset to epd offset & suboffset
-        c.SetVariables([_epd, _suboffset], c.f_div(offset, 4))
-        c.SeqCompute([(_epd, c.Add, -0x58A364 // 4)])
-
-        # seek to epd & set suboffset
-        c.SeqCompute([
-            (self._offset, c.SetTo, _epd),
-            (self._suboffset, c.SetTo, _suboffset)
-        ])
+        c.SetVariables([self._offset, self._suboffset], c.f_div(offset, 4))
+        c.SeqCompute([(self._offset, c.Add, -0x58A364 // 4)])
 
     # -------
 
     @c.EUDMethod
     def readbyte(self):
-        """Read byte from current address. Reader will advance by 1 bytes.
+        """Read byte from current address. ByteStream will advance by 1 bytes.
 
         :returns: Read byte
         """
@@ -122,8 +111,8 @@ class EUDByteStream:
     def writebyte(self, byte):
         """Write byte to current position.
 
-        Write a byte to current position of EUDByteWriter. Writer will advance
-        by 1 byte.
+        Write a byte to current position of EUDByteStream.
+        ByteStream will advance by 1 byte.
         """
         _dw = c.Forward()
 
