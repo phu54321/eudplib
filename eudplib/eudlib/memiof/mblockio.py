@@ -129,7 +129,7 @@ def f_memcpy(dst, src, copylen):
     loopend << c.NextTrigger()
 
 
-@EUDFunc
+@c.EUDFunc
 def f_memcmp(buf1, buf2, count):
     _br.seekoffset(buf1)
     _bw.seekoffset(buf2)
