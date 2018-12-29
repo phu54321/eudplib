@@ -6,6 +6,7 @@ const char* conditionList[] = {
         "Switch", "ElapsedTime", "Opponents", "Deaths", "CommandLeast",
         "CommandLeastAt", "LeastKills", "LowestScore", "LeastResources", "Score",
         "Always", "Never", "Memory", "MemoryEPD",
+        "DeathsX", "MemoryX", "MemoryXEPD",
 };
 
 const char* actionList[] = {
@@ -24,6 +25,7 @@ const char* actionList[] = {
         "ModifyUnitEnergy", "ModifyUnitShields", "ModifyUnitResourceAmount",
         "ModifyUnitHangarCount", "PauseTimer", "UnpauseTimer", "Draw",
         "SetAllianceStatus", "SetMemory", "SetNextPtr", "SetMemoryEPD", "SetCurrentPlayer",
+        "SetDeathsX", "SetMemoryX", "SetMemoryXEPD",
 };
 
 bool isConditionName(const std::string& name) {
