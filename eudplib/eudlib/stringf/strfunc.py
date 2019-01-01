@@ -110,6 +110,7 @@ def f_strlen(src):
             cs.EUDEndIf()
             cs.DoActions([mod.AddNumber(1), ret.AddNumber(1)])
         cs.EUDEndIf()
+    epd += 1
     ret += f_strlen_epd(epd)
     c.EUDReturn(ret)
 
