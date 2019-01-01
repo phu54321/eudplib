@@ -160,6 +160,7 @@ def Evaluate(x):
 def IsConstExpr(x):
     x = ut.unProxy(x)
     return (
-        type(x) in (int, RlocInt_C) or
+        isinstance(x, int) or
+        isinstance(x, RlocInt_C) or
         hasattr(x, 'Evaluate')
     )
