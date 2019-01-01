@@ -30,55 +30,97 @@ from .. import rawtrigger as rt
 from .muldiv import f_mul
 
 
-def bw_gen(cond, docstring=None):
-    @ef.EUDFunc
-    def f_bitsize_template(a, b):
-        tmp = ev.EUDLightVariable()
-        ret = ev.EUDVariable()
+@ef.EUDFunc
+def f_bitand(a, b):
+    """Calculate a & b"""
+    act = ac.Forward()
 
-        ret << 0
+    ev.VProc(b, [
+        rt.SetMemory(act, rt.SetTo, ~0),
+        b.QueueSubtractTo(EPD(act))
+    ])
+    rt.RawTrigger(
+        actions=[
+            act << a.SetNumberX(0, 0)
+        ]
+    )
 
-        for i in range(31, -1, -1):
-            rt.RawTrigger(
-                conditions=[
-                    a.AtLeast(2 ** i)
-                ],
-                actions=[
-                    tmp.AddNumber(1),
-                    a.SubtractNumber(2 ** i)
-                ]
-            )
-
-            rt.RawTrigger(
-                conditions=[
-                    b.AtLeast(2 ** i)
-                ],
-                actions=[
-                    tmp.AddNumber(1),
-                    b.SubtractNumber(2 ** i)
-                ]
-            )
-
-            rt.RawTrigger(
-                conditions=cond(tmp),
-                actions=ret.AddNumber(2 ** i)
-            )
-
-            tmp << 0
-
-        return ret
-
-    if docstring:
-        f_bitsize_template.__doc__ = docstring
-
-    return f_bitsize_template
+    return a
 
 
-f_bitand = bw_gen(lambda x: x.Exactly(2), "Calculate a & b")
-f_bitor = bw_gen(lambda x: x.AtLeast(1), "Calculate a | b")
-f_bitxor = bw_gen(lambda x: x.Exactly(1), "Calculate a ^ b")
-f_bitnand = bw_gen(lambda x: x.Exactly(0), "Calculate ~(a & b)")
-f_bitnor = bw_gen(lambda x: x.AtMost(1), "Calculate ~(a | b)")
+@ef.EUDFunc
+def f_bitor(a, b):
+    """Calculate a | b"""
+    act = ac.Forward()
+
+    ev.VProc(b, b.QueueAssignTo(EPD(act)))
+    rt.RawTrigger(
+        actions=[
+            act << a.SetNumberX(~0, 0)
+        ]
+    )
+
+    return a
+
+
+@ef.EUDFunc
+def f_bitxor(a, b):
+    """Calculate a ^ b"""
+    act = ac.Forward()
+
+    ev.VProc(a, a.QueueAssignTo(EPD(act) + 5 + 16))
+    ev.VProc(b, b.QueueAssignTo(EPD(act)))
+    ev.VProc(b, [
+        rt.SetMemory(act + 32, rt.SetTo, ~0),
+        b.QueueSubtractTo(EPD(act) + 8)
+    ])
+    rt.RawTrigger(
+        actions=[
+            act << a.SetNumberX(~0, 0),  # a | b
+            rt.SetMemoryX(act + 20 + 64, rt.SetTo, 0, ~0),  # a & b
+            a.SubtractNumber(0)
+        ]
+    )
+
+    return a
+
+
+
+@ef.EUDFunc
+def f_bitnand(a, b):
+    """Calculate ~(a & b)"""
+    ret = ev.EUDVariable()
+    act = ac.Forward()
+
+    ev.VProc(b, [
+        ret.SetNumber(~0),
+        rt.SetMemory(act, rt.SetTo, ~0),
+        b.QueueSubtractTo(EPD(act))
+    ])
+    ev.VProc(a, [
+        act << a.SetNumberX(0, 0),
+        a.QueueSubtractTo(ret)
+    ])
+
+    return ret
+
+
+@ef.EUDFunc
+def f_bitnor(a, b):
+    """Calculate ~(a | b)"""
+    ret = ev.EUDVariable()
+    act = ac.Forward()
+
+    ev.VProc(b, [
+        ret.SetNumber(~0),
+        b.QueueAssignTo(EPD(act))
+    ])
+    ev.VProc(a, [
+        act << a.SetNumberX(~0, 0)
+        a.QueueSubtractTo(ret)
+    ])
+
+    return ret
 
 
 def f_bitnxor(a, b):
