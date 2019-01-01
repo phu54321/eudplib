@@ -35,8 +35,7 @@ def bits(n):
     n = n & 0xFFFFFFFF
     while n:
         b = n & (~n + 1)
-        if not all(f(b) == 0 for f in funcs):
-            yield b
+        yield b
         n ^= b
 
 
@@ -52,9 +51,9 @@ def f_readgen_epd(mask, *args, docstring=None):
         ])
 
         for i in bits(mask):
-            RawTrigger(
+            c.RawTrigger(
                 conditions=[
-                    c.DeathsX(CurrentPlayer, c.AtLeast, 1, 0, i)
+                    c.DeathsX(c.CurrentPlayer, c.AtLeast, 1, 0, i)
                 ],
                 actions=[
                     retv.AddNumber(arg[1](i)) if arg[1](i) != 0 else []
@@ -82,9 +81,9 @@ def f_readgen_cp(mask, *args, docstring=None):
         ])
 
         for i in bits(mask):
-            RawTrigger(
+            c.RawTrigger(
                 conditions=[
-                    c.DeathsX(CurrentPlayer, c.AtLeast, 1, 0, i)
+                    c.DeathsX(c.CurrentPlayer, c.AtLeast, 1, 0, i)
                 ],
                 actions=[
                     retv.AddNumber(arg[1](i)) if arg[1](i) != 0 else []
@@ -110,8 +109,8 @@ def f_readgen_cp(mask, *args, docstring=None):
 
 f_cunitread_epd = f_readgen_epd(0x7FFFF8, (0, lambda x: x))
 f_cunitread_cp = f_readgen_cp(0x7FFFF8, (0, lambda x: x))
-f_cunitepdread_epd = f_readgen_epd(0x7FFFF8, (0, lambda x: x), (EPD(0), lambda y: y // 4))
-f_cunitepdread_cp = f_readgen_cp(0x7FFFF8, (0, lambda x: x), (EPD(0), lambda y: y // 4))
+f_cunitepdread_epd = f_readgen_epd(0x7FFFF8, (0, lambda x: x), (-0x58A364 // 4, lambda y: y // 4))
+f_cunitepdread_cp = f_readgen_cp(0x7FFFF8, (0, lambda x: x), (-0x58A364 // 4, lambda y: y // 4))
 
 
 def f_maskread_epd(targetplayer, mask, _fdict={}):
