@@ -116,7 +116,7 @@ def f_bitnor(a, b):
         b.QueueAssignTo(EPD(act))
     ])
     ev.VProc(a, [
-        act << a.SetNumberX(~0, 0)
+        act << a.SetNumberX(~0, 0),
         a.QueueSubtractTo(ret)
     ])
 

@@ -110,8 +110,8 @@ def f_readgen_cp(mask, *args, docstring=None):
 
 f_cunitread_epd = f_readgen_epd(0x7FFFF8, (0, lambda x: x))
 f_cunitread_cp = f_readgen_cp(0x7FFFF8, (0, lambda x: x))
-f_cunitepdread_epd = f_readgen_epd(0x7FFFF8, (0, lambda x: x), (EPD(0), lambda y: y // 4))
-f_cunitepdread_cp = f_readgen_cp(0x7FFFF8, (0, lambda x: x), (EPD(0), lambda y: y // 4))
+f_cunitepdread_epd = f_readgen_epd(0x7FFFF8, (0, lambda x: x), (-0x58A364 // 4, lambda y: y // 4))
+f_cunitepdread_cp = f_readgen_cp(0x7FFFF8, (0, lambda x: x), (-0x58A364 // 4, lambda y: y // 4))
 
 
 def f_maskread_epd(targetplayer, mask, _fdict={}):
