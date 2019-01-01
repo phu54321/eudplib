@@ -86,3 +86,14 @@ from .mblockio import (
     f_memcpy,
     f_memcmp,
 )
+
+from .memifgen import (
+    f_readgen_epd,
+    f_readgen_cp,
+    f_cunitread_epd,
+    f_cunitread_cp,
+    f_cunitepdread_epd,
+    f_cunitepdread_cp,
+    f_maskread_epd,
+    f_maskread_cp,
+)
