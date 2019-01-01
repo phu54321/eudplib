@@ -28,6 +28,7 @@ from .. import variable as ev
 from .. import eudfunc as ef
 from .. import rawtrigger as rt
 from .muldiv import f_mul
+from ...utils import EPD
 
 
 @ef.EUDFunc

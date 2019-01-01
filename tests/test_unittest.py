@@ -28,6 +28,7 @@ from unittests import (
     teststruct,
     testmath,
     testbinsearch,
+    testbitwise,
     teststack,
     testdwmemio,
     testcpmemio,
