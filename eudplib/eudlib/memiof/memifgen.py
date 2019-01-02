@@ -96,7 +96,7 @@ def f_readgen_cp(mask, *args, docstring=None):
     def f_read_cp_template(cpo):
         if not isinstance(cpo, int) or cpo != 0:
             cs.DoActions(c.SetMemory(0x6509B0, c.Add, cpo))
-        ret = list(readerf())
+        ret = [readerf()]
         if not isinstance(cpo, int) or cpo != 0:
             cs.DoActions(c.SetMemory(0x6509B0, c.Add, -cpo))
         return ut.List2Assignable(ret)
