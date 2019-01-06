@@ -208,3 +208,9 @@ def f_dwbreak2(number):
         )
 
     return word[0], word[1], byte[0], byte[1], byte[2], byte[3]
+
+
+# backward compatibility functions
+f_dwepdread_epd_safe = f_dwepdread_epd
+f_dwread_epd_safe = f_dwread_epd
+f_epdread_epd_safe = f_epdread_epd

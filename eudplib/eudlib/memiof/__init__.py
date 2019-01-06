@@ -49,6 +49,10 @@ from .dwepdio import (
     f_dwsubtract_epd,
     f_dwbreak,
     f_dwbreak2,
+
+    f_dwepdread_epd_safe,
+    f_dwread_epd_safe,
+    f_epdread_epd_safe,
 )
 
 from .cpmemio import (

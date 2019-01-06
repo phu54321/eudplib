@@ -150,5 +150,9 @@ class EUDByteStream:
             actions=self._offset.AddNumber(1)
         )
 
+    @classmethod
+    def flushdword(cls):
+        pass
+
 
 EUDByteReader, EUDByteWriter = EUDByteStream, EUDByteStream
