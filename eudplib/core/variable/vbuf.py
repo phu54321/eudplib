@@ -39,19 +39,24 @@ class EUDVarBuffer(EUDObject):
 
         self._vdict = {}
         self._initvals = []
+        self._flags = []
 
     def DynamicConstructed(self):
         return True
 
-    def CreateVarTrigger(self, v, initval):
+    def CreateVarTrigger(self, v, initval, flag=None):
         ret = self + (72 * len(self._initvals))
         self._initvals.append(initval)
+        self._flags.append(flag)
         self._vdict[v] = ret
         return ret
 
-    def CreateMultipleVarTriggers(self, v, initvals):
+    def CreateMultipleVarTriggers(self, v, initvals, flags=None):
         ret = self + (72 * len(self._initvals))
         self._initvals.extend(initvals)
+        if flags is None:
+            flags = [None] * len(initvals)
+        self._flags.extend(flags)
         self._vdict[v] = ret
         return ret
 
@@ -70,6 +75,12 @@ class EUDVarBuffer(EUDObject):
             # 'preserve rawtrigger'
             output[72 * i + 2376:72 * i + 2380] = b'\x04\0\0\0'
             output[72 * i + 352:72 * i + 356] = b'\0\0\x2D\x07'
+
+        for i, flag in enumerate(self._flags):
+            if flag is None:
+                continue
+            output[72 * i + 328:72 * i + 332] = ut.i2b4(flag)
+            output[72 * i + 356:72 * i + 360] = b'\0\0SC'
 
         heads = 0
         for i, initval in enumerate(self._initvals):

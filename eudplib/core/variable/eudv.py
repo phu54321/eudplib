@@ -55,16 +55,17 @@ def EP_SetRValueStrictMode(mode):
 # Unused variable don't need to be allocated.
 class VariableTriggerForward(ConstExpr):
 
-    def __init__(self, initval):
+    def __init__(self, initval, mask=None):
         super().__init__(self)
         self._initval = initval
+        self._mask = mask
 
     def Evaluate(self):
         evb = GetCurrentVariableBuffer()
         try:
             return evb._vdict[self].Evaluate()
         except KeyError:
-            vt = evb.CreateVarTrigger(self, self._initval)
+            vt = evb.CreateVarTrigger(self, self._initval, self._mask)
             return vt.Evaluate()
 
 

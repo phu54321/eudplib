@@ -23,6 +23,7 @@ from unittests import (
     testprint,
     testswitch,
     testvartrg,
+    testxvartrg,
     testmultiret,
     testvarray,
     teststruct,

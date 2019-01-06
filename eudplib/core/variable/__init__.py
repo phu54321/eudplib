@@ -34,3 +34,4 @@ from .eudv import (
 )
 
 from .eudlv import EUDLightVariable
+from .eudxv import EUDXVariable
