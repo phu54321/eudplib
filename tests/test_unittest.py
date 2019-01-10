@@ -36,6 +36,7 @@ from unittests import (
     testptrmemio,
     testtypedf,
     testpool,
+    testpoolfptr,
     test_lvalue,
     test_sq_from_1var,
     test_eps,
