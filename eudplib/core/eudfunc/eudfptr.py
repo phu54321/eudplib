@@ -34,7 +34,7 @@ from ..variable import (
     EUDVariable,
     SetVariables,
 )
-from ..eudstruct import EUDStruct
+from ..eudstruct import EUDStruct, EUDVArray
 
 
 #
@@ -113,21 +113,19 @@ def EUDTypedFuncPtr(argtypes, rettypes):
             '_fstart',
             '_fendnext_epd'
         ]
-
-        def constructor(self, f_init=None):
-            if f_init:
-                self.checkValidFunction(f_init)
-                f_idcstart, f_idcend = createIndirectCaller(f_init)
-                self._fstart = f_idcstart
-                self._fendnext_epd = ut.EPD(f_idcend + 4)
+        def __init__(self, _from = None):
+            if _from is not None and isinstance(_from, EUDFuncN):
+                # Statically generate with EUDFuncN
+                self.checkValidFunction(_from)
+                f_idcstart, f_idcend = createIndirectCaller(_from)
+                super().__init__(_from = EUDVArray(2)([f_idcstart, ut.EPD(f_idcend + 4)]))
+            else:
+                # Cast from EUDVariable or ConstExpr
+                super().__init__(_from = _from)
 
         @classmethod
         def cast(cls, _from):
-            # Special casting rule: EUDFuncN → EUDFuncPtr
-            if isinstance(_from, EUDFuncN):
-                return cls(_from)
-            else:
-                return cls(_from=_from)
+            return cls(_from = _from)
 
         def checkValidFunction(self, f):
             ut.ep_assert(isinstance(f, EUDFuncN), "%s is not an EUDFuncN" % f)
