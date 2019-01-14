@@ -58,7 +58,7 @@ from .stockact import (
     ModifyUnitEnergy, ModifyUnitShields, ModifyUnitResourceAmount,
     ModifyUnitHangarCount, PauseTimer, UnpauseTimer, Draw,
     SetAllianceStatus, SetMemory, SetNextPtr, SetMemoryEPD,
-    SetDeathsX, SetMemoryX, SetMemoryXEPD,
+    SetDeathsX, SetMemoryX, SetMemoryXEPD, SetKills,
 )
 
 from .constenc import (

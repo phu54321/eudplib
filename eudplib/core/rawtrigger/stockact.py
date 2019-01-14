@@ -429,3 +429,14 @@ def SetMemoryXEPD(dest, modtype, value, mask):
     dest = EncodePlayer(dest, issueError=True)
     modtype = EncodeModifier(modtype, issueError=True)
     return Action(mask, 0, 0, 0, dest, value, 0, 45, modtype, 20, eudx=True)
+
+
+def SetKills(Player, Modifier, Number, Unit):
+    Player = EncodePlayer(Player, issueError=True)
+    Unit = EncodeUnit(Unit, issueError=True)
+    if isinstance(Unit, int) and Unit < 228:
+        return SetDeaths(Player, Modifier, Number, Unit - 228)
+    elif isinstance(Player, int) and Player < 12:
+        return SetDeaths(Player - 228 * 12, Modifier, Number, Unit)
+    else:
+        raise NotImplementedError
