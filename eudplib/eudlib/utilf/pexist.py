@@ -71,6 +71,7 @@ def EUDPlayerLoop():
         cs.EUDWhile()(playerv <= 7)
         cs.EUDContinueIfNot(f_playerexist(playerv))
         f_setcurpl(playerv)
+        yield playerv
 
         ut.EUDCreateBlock('ploopblock', block)
         return True
