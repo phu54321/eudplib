@@ -54,6 +54,8 @@ from .pexist import (
 from .listloop import (
     EUDLoopList,
     EUDLoopUnit,
+    EUDLoopUnit2,
+    EUDLoopPlayerUnit,
     EUDLoopSprite,
     EUDLoopBullet,
     EUDLoopTrigger

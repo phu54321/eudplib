@@ -23,7 +23,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-from ..memiof import f_dwepdread_epd
+from ..memiof import f_dwepdread_epd, f_cunitepdread_epd
 from eudplib import (
     core as c,
     ctrlstru as cs,
@@ -55,8 +55,51 @@ def EUDLoopList(header_offset, break_offset=None):
 
 
 def EUDLoopUnit():
-    for ptr, epd in EUDLoopList(0x628430):
+    ut.EUDCreateBlock('unitloop', 0x628430)
+
+    ptr, epd = f_cunitepdread_epd(ut.EPD(0x628430))
+
+    if cs.EUDWhile()(ptr >= 1):
         yield ptr, epd
+        cs.EUDSetContinuePoint()
+        c.SetVariables([ptr, epd], f_cunitepdread_epd(epd + 1))
+    cs.EUDEndWhile()
+
+    ut.EUDPopBlock('unitloop')
+
+
+def EUDLoopUnit2():
+    """EUDLoopUnit보다 약간? 빠릅니다. 유닛 리스트를 따라가지 않고
+    1700개 유닛을 도는 방식으로 작동합니다.
+    """
+    ptr, epd = c.EUDCreateVariables(2)
+    cs.DoActions([
+        ptr.SetNumber(0x59CCA8),
+        epd.SetNumber(ut.EPD(0x59CCA8)),
+    ])
+    if cs.EUDLoopN()(1700):
+        # orderID가 0(Die)이면 없는 유닛으로 판단.
+        cs.EUDContinueIf(c.MemoryXEPD(epd + (0x4C // 4), Exactly, 0, 0xFF00))
+        yield ptr, epd
+        cs.EUDSetContinuePoint()
+        cs.DoActions([ptr.AddNumber(336), epd.AddNumber(336 // 4)])
+    cs.EUDEndLoopN()
+
+
+def EUDLoopPlayerUnit(player):
+    player = c.EncodePlayer(player)
+    first_player_unit = 0x6283F8
+    ut.EUDCreateBlock('playerunitloop', first_player_unit)
+    ptr, epd = f_cunitepdread_epd(ut.EPD(first_player_unit) + player)
+
+    if cs.EUDWhile()(ptr >= 1):
+        yield ptr, epd
+        cs.EUDSetContinuePoint()
+        # /*0x06C*/ BW::CUnit*  nextPlayerUnit;
+        c.SetVariables([ptr, epd], f_cunitepdread_epd(epd + 0x6C // 4))
+    cs.EUDEndWhile()
+
+    ut.EUDPopBlock('playerunitloop')
 
 
 def EUDLoopBullet():
