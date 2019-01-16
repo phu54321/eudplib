@@ -72,17 +72,30 @@ def f_epdread_cp(cpo):
 def _wreader(subp):
     w = c.EUDVariable()
     w << 0
-    for i in range(31, -1, -1):
-        c.RawTrigger(
-            conditions=[
-                c.DeathsX(c.CurrentPlayer, c.AtLeast, 1, 0, 2**i)
-            ],
-            actions=[
-                ptr.AddNumber(2 ** i),
-                epd.AddNumber(2 ** (i - 2)) if i >= 2 else []
-            ]
-        )
-
+    cs.EUDSwitch(subp)
+    for i in range(3):
+        cs.EUDSwitchCase()(i)
+        for j in range(8 * (i + 2) - 1, 8 * i - 1, -1):
+            c.RawTrigger(
+                conditions=c.DeathsX(c.CurrentPlayer, c.AtLeast, 1, 0, 2**j),
+                actions=w.AddNumber(2**(j - 8 * i))
+            )
+        cs.EUDBreak()
+    if cs.EUDSwitchCase()(3):
+        for i in range(31, 23, -1):
+            c.RawTrigger(
+                conditions=c.DeathsX(c.CurrentPlayer, c.AtLeast, 1, 0, 2**i),
+                actions=w.AddNumber(2**(i - 24))
+            )
+        c.RawTrigger(actions=SetMemory(0x6509B0, Add, 1))
+        for i in range(7, -1, -1):
+            c.RawTrigger(
+                conditions=c.DeathsX(c.CurrentPlayer, c.AtLeast, 1, 0, 2**i),
+                actions=w.AddNumber(2**(i + 8))
+            )
+        c.RawTrigger(actions=SetMemory(0x6509B0, Add, -1))
+        cs.EUDBreak()
+    cs.EUDEndSwitch()
     return w
 
 
