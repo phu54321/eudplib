@@ -43,4 +43,30 @@ def test_cpmemio():
         [a, b, c], [0x1234, 0x1111, 0x9abc]
     )
 
+    # byte/word reading
+    f_dwadd_cp(0, 0xABCD0000)
+    a, b, c = (
+        f_wread_cp(0, 3),
+        f_wread_cp(1, 1),
+        f_bread_cp(2, 1)
+    )
+    test_equality(
+        'f_wread_cp & f_bread_cp',
+        [a, b, c], [0x11AB, 0x11, 0x9a]
+    )
+
+    # byte/word writing
+    f_wwrite_cp(0, 1, 0x4567)
+    f_wwrite_cp(1, 2, 0x8765)
+    f_bwrite_cp(2, 1, 0x46)
+    a, b, c = (
+        f_wread_cp(0, 2),
+        f_bread_cp(1, 3),
+        f_bread_cp(2, 1)
+    )
+    test_equality(
+        'f_bwrite_cp & f_wwrite_cp',
+        [a, b, c], [0xAB45, 0x87, 0x46]
+    )
+
     f_setcurpl(P1)

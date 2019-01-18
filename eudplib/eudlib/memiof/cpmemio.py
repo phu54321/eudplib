@@ -28,6 +28,7 @@ from ... import (
     ctrlstru as cs,
     utils as ut,
 )
+from . import dwepdio as dwm
 
 
 @c.EUDFunc
@@ -88,13 +89,13 @@ def _wreader(subp):
                 conditions=c.DeathsX(c.CurrentPlayer, c.AtLeast, 1, 0, 2**power),
                 actions=w.AddNumber(2**(power - 24))
             )
-        c.RawTrigger(actions=c.SetMemory(0x6509B0, Add, 1))
+        c.RawTrigger(actions=c.SetMemory(0x6509B0, c.Add, 1))
         for power in range(7, -1, -1):
             c.RawTrigger(
                 conditions=c.DeathsX(c.CurrentPlayer, c.AtLeast, 1, 0, 2**power),
                 actions=w.AddNumber(2**(power + 8))
             )
-        c.RawTrigger(actions=c.SetMemory(0x6509B0, Add, -1))
+        c.RawTrigger(actions=c.SetMemory(0x6509B0, c.Add, -1))
         cs.EUDBreak()
     cs.EUDEndSwitch()
     return w
@@ -193,7 +194,7 @@ def f_wwrite_cp(cpo, subp, w):
     except (TypeError):
         if not isinstance(cpo, int) or cpo != 0:
             cs.DoActions(c.SetMemory(0x6509B0, c.Add, cpo))
-        _wwriter(subp, b)
+        _wwriter(subp, w)
         if not isinstance(cpo, int) or cpo != 0:
             cs.DoActions(c.SetMemory(0x6509B0, c.Add, -cpo))
 
