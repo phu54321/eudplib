@@ -979,7 +979,7 @@ case_clause ::= case_start(A) exprList_nonEmpty(B) COLON. {
 }
 
 case_chunk ::= case_clause. {
-    ps->gen << "pass";
+    ps->gen << "pass" << std::endl;
     ps->gen.unindent(false);
 }
 
@@ -1000,7 +1000,7 @@ default_clause ::= DEFAULT(X) COLON. {
 }
 
 default_chunk ::= default_clause. {
-    ps->gen << "pass";
+    ps->gen << "pass" << std::endl;
     ps->gen.unindent(false);
 }
 
