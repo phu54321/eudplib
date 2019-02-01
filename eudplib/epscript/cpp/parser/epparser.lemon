@@ -971,11 +971,16 @@ case_start(A) ::= CASE(B). {
     delete B;
 }
 
-case_clause ::= case_start(A) expr(B) COLON. {
+case_clause ::= case_start(A) exprList_nonEmpty(B) COLON. {
     writeTraceInfo(ps->gen, B);
     writeCsOpener(*pGen, A, B);
     ps->gen.indent();
     delete A; delete B;
+}
+
+case_chunk ::= case_clause. {
+    ps->gen << "pass";
+    ps->gen.unindent(false);
 }
 
 case_chunk ::= case_clause bodyStmtList. {
@@ -992,6 +997,11 @@ default_clause ::= DEFAULT(X) COLON. {
 
     ps->gen << "if EUDSwitchDefault()():" << std::endl;
     ps->gen.indent();
+}
+
+default_chunk ::= default_clause. {
+    ps->gen << "pass";
+    ps->gen.unindent(false);
 }
 
 default_chunk ::= default_clause bodyStmtList. {
