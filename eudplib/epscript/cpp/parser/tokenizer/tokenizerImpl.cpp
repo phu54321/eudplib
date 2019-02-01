@@ -164,6 +164,9 @@ Token* TokenizerImpl::getToken() {
         if(identifier == "break") return TK(TOKEN_BREAK);
         if(identifier == "continue") return TK(TOKEN_CONTINUE);
         if(identifier == "return") return TK(TOKEN_RETURN);
+        if(identifier == "switch") return TK(TOKEN_SWITCHCASE);
+        if(identifier == "case") return TK(TOKEN_CASE);
+        if(identifier == "default") return TK(TOKEN_DEFAULT);
 
         if(identifier == "Kills") return TK(TOKEN_KILLS, identifier);
 

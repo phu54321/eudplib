@@ -33,6 +33,9 @@ enum TokenType {
     TOKEN_BREAK,
     TOKEN_CONTINUE,
     TOKEN_RETURN,
+    TOKEN_SWITCHCASE,
+    TOKEN_CASE,
+    TOKEN_DEFAULT,
 
     // Identifiers
     TOKEN_NAME,

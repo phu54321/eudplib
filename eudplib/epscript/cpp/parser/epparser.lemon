@@ -369,6 +369,7 @@ bodyStmt ::= if_stmt.
 bodyStmt ::= while_stmt.
 bodyStmt ::= for_stmt.
 bodyStmt ::= foreach_stmt.
+bodyStmt ::= switchcase_stmt.
 bodyStmt ::= continue_stmt SEMICOLON.
 bodyStmt ::= break_stmt SEMICOLON.
 
@@ -957,6 +958,55 @@ if_stmt ::= if_block else_header stmt. [ELSE] {
     ps->gen << "EUDEndIf()" << std::endl;
 }
 
+// Switch Case block. Note that the naming convention is quite confusing - this is to avoid any name collision with the Switch condition.
+
+switchcase_header ::= SWITCHCASE LPAREN expr. { // RPAREN is at switchcase_stmt. see (2)
+    writeTraceInfo(ps->gen, B);
+    writeCsOpener(*pGen, A, B);
+    ps->gen.indent();
+    delete A; delete B;
+}
+
+case_start(A) ::= CASE(B). {
+    A = genTemp(B);
+    ps->gen << A->data << " = EUDSwitchCase()" << std::endl;
+    delete B;
+}
+
+case_clause ::= CASE(A) expr(B) COLON. {
+    writeTraceInfo(ps->gen, B);
+    writeCsOpener(*pGen, A, B);
+    ps->gen.indent();
+    delete A; delete B;
+}
+
+case_chunk ::= case_clause bodyStmtList. {
+    ps->gen.unindent(false);
+}
+
+case_chunks ::= case_chunks case_chunk. 
+
+case_chunks ::= case_chunk.
+
+default_clause ::= DEFAULT(X) COLON. {
+    writeTraceInfo(ps->gen, X);
+    delete X;
+
+    ps->gen << "if EUDDefault()():" << std::endl;
+    ps->gen.indent();
+}
+
+default_chunk ::= default_clause bodyStmtList. {
+    ps->gen.unindent(false);
+}
+
+switchcase_block ::= switchcase_header RPAREN LBRACKET case_chunks default_chunk.
+
+switchcase_block ::= switchcase_header RPAREN LBRACKET case_chunks.
+
+switchcase_stmt ::= switchcase_block RBRACKET. {
+    ps->gen << "EUDEndSwitch()" << std::endl;
+}
 
 // While block
 while_start(A) ::= WHILE(B). {

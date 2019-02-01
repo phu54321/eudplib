@@ -74,3 +74,6 @@
 #define RETURN                          74
 #define CONDITIONNAME                   75
 #define ACTIONNAME                      76
+#define SWITCHCASE                      77
+#define CASE                            78
+#define DEFAULT                         79
