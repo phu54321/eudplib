@@ -960,11 +960,9 @@ if_stmt ::= if_block else_header stmt. [ELSE] {
 
 // Switch Case block. Note that the naming convention is quite confusing - this is to avoid any name collision with the Switch condition.
 
-switchcase_header ::= SWITCHCASE LPAREN expr. { // RPAREN is at switchcase_stmt. see (2)
-    writeTraceInfo(ps->gen, B);
-    writeCsOpener(*pGen, A, B);
-    ps->gen.indent();
-    delete A; delete B;
+switchcase_header ::= SWITCHCASE LPAREN expr(A). { // RPAREN is at switchcase_stmt. see (2)
+    writeTraceInfo(ps->gen, A);
+    ps->gen << "EUDSwitch(" << A->data << ")" << std::endl;
 }
 
 case_start(A) ::= CASE(B). {
@@ -973,7 +971,7 @@ case_start(A) ::= CASE(B). {
     delete B;
 }
 
-case_clause ::= CASE(A) expr(B) COLON. {
+case_clause ::= case_start(A) expr(B) COLON. {
     writeTraceInfo(ps->gen, B);
     writeCsOpener(*pGen, A, B);
     ps->gen.indent();
@@ -992,7 +990,7 @@ default_clause ::= DEFAULT(X) COLON. {
     writeTraceInfo(ps->gen, X);
     delete X;
 
-    ps->gen << "if EUDDefault()():" << std::endl;
+    ps->gen << "if EUDSwitchDefault()():" << std::endl;
     ps->gen.indent();
 }
 
