@@ -40,6 +40,7 @@ def bits(n):
 
 
 def f_readgen_epd(mask, *args, docstring=None):
+    mask = mask & 0xFFFFFFFF
     @c.EUDFunc
     def f_read_epd_template(targetplayer):
         origcp = cp.f_getcurpl()
@@ -72,6 +73,7 @@ def f_readgen_epd(mask, *args, docstring=None):
 
 
 def f_readgen_cp(mask, *args, docstring=None):
+    mask = mask & 0xFFFFFFFF
     @c.EUDFunc
     def readerf():
         ret = [c.EUDVariable() for _ in args]
