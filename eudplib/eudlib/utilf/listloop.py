@@ -23,13 +23,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-from ..memiof import f_dwepdread_epd, f_cunitepdread_epd
-from eudplib import (
-    core as c,
-    ctrlstru as cs,
-    utils as ut,
-    trigtrg as tt
-)
+from eudplib import core as c
+from eudplib import ctrlstru as cs
+from eudplib import trigtrg as tt
+from eudplib import utils as ut
+
+from ..memiof import f_cunitepdread_epd, f_dwepdread_epd
 
 
 def EUDLoopList(header_offset, break_offset=None):
@@ -79,7 +78,7 @@ def EUDLoopUnit2():
     ])
     if cs.EUDLoopN()(1700):
         # orderID가 0(Die)이면 없는 유닛으로 판단.
-        cs.EUDContinueIf(c.MemoryXEPD(epd + (0x4C // 4), Exactly, 0, 0xFF00))
+        cs.EUDContinueIf(c.MemoryXEPD(epd + (0x4C // 4), c.Exactly, 0, 0xFF00))
         yield ptr, epd
         cs.EUDSetContinuePoint()
         cs.DoActions([ptr.AddNumber(336), epd.AddNumber(336 // 4)])
