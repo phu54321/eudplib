@@ -33,3 +33,4 @@ from .eudarray import EUDArray
 from .eudgrp import EUDGrp
 from .eudstack import EUDStack
 from .epdoffsetmap import EPDOffsetMap
+from .playerv import PVariable

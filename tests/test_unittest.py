@@ -26,6 +26,7 @@ from unittests import (
     testxvartrg,
     testmultiret,
     testvarray,
+    testpvariable,
     teststruct,
     testmath,
     testbinsearch,
