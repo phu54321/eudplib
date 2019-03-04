@@ -59,9 +59,9 @@ class StringBuffer:
         """
         filler = ForcedAddString(b'Artani')
         if content is None:
-            content = b'\x0D' * 1023
+            content = b'\r' * 1023
         elif isinstance(content, int):
-            content = b'\x0D' * content
+            content = b'\r' * content
         self.StringIndex = ForcedAddString(content)
         self.epd, self.pos = c.EUDVariable(), c.EUDVariable()
         epd = ut.EPD(GetMapStringAddr(self.StringIndex))
@@ -102,6 +102,19 @@ class StringBuffer:
         f_setcurpl(self.epd + index)
         f_cpstr_print(*args)
         self.pos << f_getcurpl()
+        f_setcurpl(prevcp)
+
+    def remove(self, start, length=1):
+        prevcp << f_getcurpl()
+        index = self.epd + start
+        f_setcurpl(index)
+        self.pos << index
+        cs.DoActions([
+            [
+                c.SetDeaths(c.CurrentPlayer, c.SetTo, ut.b2i4(b'\r\r\r\r'), 0),
+                c.AddCurrentPlayer(1),
+            ] for _ in range(length)
+        ])
         f_setcurpl(prevcp)
 
     def Display(self):
