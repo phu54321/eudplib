@@ -29,11 +29,12 @@ from eudplib import (
     utils as ut,
 )
 
-from ..memiof import CPByteWriter
+from ..memiof import CPByteWriter, f_setcurpl, f_dwread_epd
 from .rwcommon import br1, bw1
 from .cpstr import _s2b, CPString
 from .dbstr import DBString
 from ..eudarray import EUDArray
+from ..utilf import f_getuserplayerid
 
 cw = CPByteWriter()
 player_colors = "\x08\x0E\x0F\x10\x11\x15\x16\x17\x18\x19\x1B\x1C\x1D\x1E\x1F"
@@ -351,3 +352,26 @@ def f_simpleprint(*args, spaced=True):
     # Print
     f_dbstr_print(_printf_buffer, *args)
     _printf_buffer.Display()
+
+
+@c.EUDTypedFunc([c.TrgPlayer])
+def f_raise_CCMU(player):
+    orignextptr = f_dwread_epd(ut.EPD(0x628438))
+    cs.DoActions([
+        c.SetMemory(0x628438, c.SetTo, 0),
+        c.CreateUnit(1, 0, 64, player),
+        c.SetMemory(0x628438, c.SetTo, orignextptr),
+    ])
+
+
+def f_eprintln(*args):
+    f_raise_CCMU(c.CurrentPlayer)
+    localcp = f_getuserplayerid()
+    if cs.EUDIf()(c.Memory(0x6509B0, c.Exactly, localcp)):
+        f_setcurpl(ut.EPD(0x640B60 + 218 * 12))
+        f_cpstr_print(*args)
+        cs.DoActions([
+            c.SetDeaths(c.CurrentPlayer, c.SetTo, 0, 0),
+            c.SetCurrentPlayer(localcp),
+        ])
+    cs.EUDEndIf()

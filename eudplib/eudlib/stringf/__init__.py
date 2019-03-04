@@ -55,7 +55,9 @@ from .eudprint import (
     f_dbstr_addstr,
     hptr,
     f_dbstr_print,
-    f_simpleprint
+    f_simpleprint,
+    f_raise_CCMU,
+    f_eprintln,
 )
 
 from .cputf8 import f_cp949_to_utf8_cpy
