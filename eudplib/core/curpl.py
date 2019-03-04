@@ -31,6 +31,7 @@ from .rawtrigger import (
     Memory,
     SetMemory,
     SetTo,
+    Add,
     Exactly,
 )
 
