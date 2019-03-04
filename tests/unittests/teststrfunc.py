@@ -22,3 +22,9 @@ def test_strbuffer():
 
     f_setcurpl(P1)
     s.Display()
+
+
+@TestInstance
+def test_setpname():
+    OptimizeSetPName()
+    SetPName(P1, "dpdkfah")
