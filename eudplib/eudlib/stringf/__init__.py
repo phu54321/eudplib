@@ -23,9 +23,17 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-from .dbstr import (
+from .cpstr import (
     GetMapStringAddr,
+    CPString,
+)
+
+from .dbstr import (
     DBString,
+)
+
+from .strbuffer import (
+    StringBuffer,
 )
 
 from .strfunc import (
@@ -37,6 +45,11 @@ from .strfunc import (
 )
 
 from .eudprint import (
+    PColor,
+    PName,
+    ptr2s,
+    epd2s,
+    f_cpstr_print,
     f_dbstr_adddw,
     f_dbstr_addptr,
     f_dbstr_addstr,

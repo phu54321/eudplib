@@ -28,6 +28,7 @@ from unittests import (
     testvarray,
     testpvariable,
     teststruct,
+    teststrbuffer,
     testmath,
     testbinsearch,
     testbitwise,
