@@ -133,3 +133,22 @@ class TBL:
             outbytes.append(b'\0')
 
         return b''.join(outbytes)
+
+    def ForcedAddString(self, string):
+        string = ut.u2b(string)  # Starcraft uses multibyte encoding.
+        if not isinstance(string, bytes):
+            raise ut.EPError('Invalid type for string')
+
+        stringindex = len(self._dataindextb)
+
+        # Always -> Create new entry
+        dataindex = len(self._datatb)
+        # self._stringmap[string] = stringindex
+        self._datatb.append(string)
+        self._dataindextb.append(dataindex)
+        # string + b'\0' + string offset
+        self._capacity += len(string) + 1 + 2
+
+        ut.ep_assert(self._capacity < 65536, 'String table overflow')
+
+        return stringindex

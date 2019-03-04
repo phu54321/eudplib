@@ -114,3 +114,11 @@ def GetUnitIndex(u):
 
 def ApplyStringMap(chkt):
     chkt.setsection('STR', strmap.SaveTBL())
+
+
+def ForcedAddString(s):
+    return strmap.ForcedAddString(s) + 1
+
+
+def GetStringMap():
+    return strmap
