@@ -69,7 +69,7 @@ class StringBuffer:
         self.StringIndex = ForcedAddString(content)
         self.epd, self.pos = c.EUDVariable(), c.EUDVariable()
         epd = ut.EPD(GetMapStringAddr(self.StringIndex))
-        c.SetVariables([self.epdConnectionResetError], [epd, epd])
+        c.SetVariables([self.epd, self.pos], [epd, epd])
 
         def _fill():
             # calculate offset of buffer string
