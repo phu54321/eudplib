@@ -28,14 +28,9 @@ from eudplib import (
     ctrlstru as cs,
     utils as ut,
 )
-from ..memiof import f_dwread_epd, f_dwwrite_epd, f_wread
+from ..memiof import f_dwread_epd, f_dwwrite_epd
+from .cpstr import GetMapStringAddr
 from .cputf8 import f_cp949_to_utf8_cpy
-
-
-@c.EUDFunc
-def GetMapStringAddr(strId):
-    strp = f_dwread_epd(ut.EPD(0x5993D4))
-    return strp + f_wread(strp + strId * 2)
 
 
 class DBString(ut.ExprProxy):
@@ -82,7 +77,7 @@ class DBString(ut.ExprProxy):
         cs.DoActions(c.DisplayText(strId))
 
     @c.EUDMethod
-    def PlayWAV(dbs):
+    def Play(dbs):
         sp = c.EUDVariable(0)
         strId = c.EncodeString("_" * 2048)
         if cs.EUDExecuteOnce()():
