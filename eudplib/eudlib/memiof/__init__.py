@@ -76,6 +76,10 @@ from .byterw import (
     EUDByteWriter,
 )
 
+from .cpbyterw import (
+    CPByteWriter,
+)
+
 from .ptrmemio import (
     f_dwwrite,
     f_wwrite,
