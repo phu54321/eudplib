@@ -39,6 +39,7 @@ from ..memiof import (
 )
 from .cpstr import GetMapStringAddr
 from .eudprint import prevcp, f_cpstr_print
+from .strfunc import f_strlen_epd
 
 
 class StringBuffer:
@@ -62,10 +63,13 @@ class StringBuffer:
             content = b'\r' * 1023
         elif isinstance(content, int):
             content = b'\r' * content
+        else:
+            content = ut.u2utf8(content)
+        self.capacity = len(content)
         self.StringIndex = ForcedAddString(content)
         self.epd, self.pos = c.EUDVariable(), c.EUDVariable()
         epd = ut.EPD(GetMapStringAddr(self.StringIndex))
-        c.SetVariables([self.epd, self.pos], [epd, epd])
+        c.SetVariables([self.epdConnectionResetError], [epd, epd])
 
         def _fill():
             # calculate offset of buffer string
@@ -104,7 +108,7 @@ class StringBuffer:
         self.pos << f_getcurpl()
         f_setcurpl(prevcp)
 
-    def remove(self, start, length=1):
+    def delete(self, start, length=1):
         prevcp << f_getcurpl()
         index = self.epd + start
         f_setcurpl(index)
@@ -122,3 +126,6 @@ class StringBuffer:
 
     def Play(self):
         cs.DoActions(c.PlayWAV(self.StringIndex))
+
+    def length(self):
+        return f_strlen_epd(self.epd)
