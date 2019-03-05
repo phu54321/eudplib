@@ -38,7 +38,7 @@ from ..memiof import (
     f_setcurpl,
 )
 from .cpstr import GetMapStringAddr
-from .eudprint import prevcp, f_cpstr_print
+from .cpprint import prevcp, f_cpstr_print
 from .strfunc import f_strlen_epd
 
 

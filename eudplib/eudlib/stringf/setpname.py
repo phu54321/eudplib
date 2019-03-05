@@ -36,7 +36,8 @@ from ..memiof import (
     f_setcurpl,
     f_memcmp,
 )
-from .eudprint import f_cpstr_print, f_dbstr_print, ptr2s, epd2s, PName
+from .eudprint import f_dbstr_print, ptr2s, epd2s
+from .cpprint import f_cpstr_print, PName
 from .strfunc import f_strlen_epd
 from ..utilf import f_playerexist, EUDPlayerLoop, EUDEndPlayerLoop
 from ..playerv import PVariable

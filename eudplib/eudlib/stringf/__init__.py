@@ -45,17 +45,23 @@ from .strfunc import (
 )
 
 from .eudprint import (
-    PColor,
-    PName,
-    ptr2s,
-    epd2s,
-    f_cpstr_print,
     f_dbstr_adddw,
     f_dbstr_addptr,
     f_dbstr_addstr,
+    ptr2s,
+    epd2s,
     hptr,
     f_dbstr_print,
     f_simpleprint,
+)
+
+from .cpprint import (
+    f_cpstr_adddw,
+    f_cpstr_addptr,
+    f_cpstr_addstr,
+    PColor,
+    PName,
+    f_cpstr_print,
     f_raise_CCMU,
     f_eprintln,
 )
