@@ -33,7 +33,7 @@ class StringIdMap:
 
     def AddItem(self, string, id):
         string = u2b(unProxy(string))
-        if string in self._s2id:  # ambigious string
+        if string in self._s2id:  # ambiguous string
             self._s2id[string] = None
 
         else:
