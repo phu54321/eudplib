@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 '''
-Copyright (c) 2014 trgk
+Copyright (c) 2019 Armoha
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -23,40 +23,15 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-from .stringmap import InitStringMap, ApplyStringMap
-from .proptable import InitPropertyMap, ApplyPropertyMap
-from .playerinfo import InitPlayerInfo
-from .unitfix import FixUnitMap
 
-_inited = False
-_chkt = None
-_rawfile = None
+def FixUnitMap(chkt):
+    unit = bytearray(chkt.getsection('UNIT'))
 
-
-def InitMapData(chkt, rawfile):
-    global _inited, _chkt, _rawfile
-    _chkt = chkt
-    _rawfile = rawfile
-
-    InitStringMap(chkt)
-    InitPropertyMap(chkt)
-    InitPlayerInfo(chkt)
-    FixUnitMap(chkt)
-    _inited = True
-
-
-def UpdateMapData():
-    ApplyStringMap(_chkt)
-    ApplyPropertyMap(_chkt)
-
-
-def IsMapdataInitalized():
-    return _inited
-
-
-def GetChkTokenized():
-    return _chkt
-
-
-def GetRawFile():
-    return _rawfile
+    for i in range(0, len(unit), 36):
+        if unit[i + 17] == 100 and unit[i + 14] & 2:
+            unit[i + 14] -= 2
+        if unit[i + 18] == 100 and unit[i + 14] & 4:
+            unit[i + 14] -= 4
+        if unit[i + 19] == 100 and unit[i + 14] & 8:
+            unit[i + 14] -= 8
+    chkt.setsection('UNIT', unit)
