@@ -8,7 +8,9 @@ build_exe_options = {
     "packages": ["os", "eudplib"],
     "include_msvcr": True,
     "excludes": ["tkinter"],
-    "optimize": 2
+    "optimize": 2,
+    "zip_include_packages": "*",
+    "zip_exclude_packages": ""
 }
 
 # GUI applications require a different base on Windows (the default is for a
@@ -16,7 +18,7 @@ build_exe_options = {
 base = None
 
 setup(name="SC Unlimiter",
-      version="0.1",
+      version="0.2",
       description="My GUI application!",
       options={"build_exe": build_exe_options},
       executables=[Executable("unlimiter.py", base=base)]
