@@ -1,12 +1,20 @@
 # distutils setup file
 
+import os
 import sys
-from cx_Freeze import setup, Executable
+
+from cx_Freeze import Executable, setup
+
+eudplibPath = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 # Dependencies are automatically detected, but it might need fine tuning.
 build_exe_options = {
     "packages": ["os", "eudplib"],
     "include_msvcr": True,
+    "include_files": [
+        eudplibPath + "/eudplib/core/mapdata/StormLib32.dll",
+        eudplibPath + "/eudplib/epscript/libepScriptLib.dll",
+    ],
     "excludes": ["tkinter"],
     "optimize": 2,
     "zip_include_packages": "*",

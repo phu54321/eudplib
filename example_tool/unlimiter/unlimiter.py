@@ -43,7 +43,7 @@ def inj_main():
     connectDList(0x57EB68, 0x57EB70, 64, 65536, 0)  # Patch image count
     connectDList(0x64B2E0, 0x64B2E4, 20, 65536, 0)  # Patch order count
 
-    if EUDInfLoop():
+    if EUDInfLoop()():
         RunTrigTrigger()
         DoActions(SetMemory(0x64DEBC, SetTo, 40))  # Valkyrie fix
         EUDDoEvents()
