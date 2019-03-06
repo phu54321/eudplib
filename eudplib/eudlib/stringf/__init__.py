@@ -67,4 +67,8 @@ from .cpprint import (
 )
 
 from .cputf8 import f_cp949_to_utf8_cpy
-from .setpname import SetPName
+
+from .setpname import (
+    OptimizeSetPName,
+    SetPName,
+)

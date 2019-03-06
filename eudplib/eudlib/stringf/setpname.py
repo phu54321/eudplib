@@ -43,9 +43,9 @@ from ..utilf import f_playerexist, EUDPlayerLoop, EUDEndPlayerLoop
 from ..playerv import PVariable
 from ..eudarray import EUDArray
 
-useSetPName = False
+isPNameInitialized = False
 
-isTxtPtrUnchanged = c.EUDLightVariable()
+isTxtPtrUnchanged = None
 temp_Db = None
 ptr, epd = None, None
 odds_or_even = None
@@ -56,6 +56,7 @@ oddA, even0A, even1A = None, None, None
 
 def _InitPName():
     global isTxtPtrUnchanged, temp_Db, ptr, epd, temp_Db, odds_or_even, baselens
+    isTxtPtrUnchanged = c.EUDLightVariable()
     temp_Db = c.Db(218)
     ptr, epd = c.EUDVariable(), c.EUDVariable()
     odds_or_even = c.EUDLightVariable()
@@ -64,6 +65,38 @@ def _InitPName():
     oddA = EUDArray([ut.EPD(x) for x in odd])
     even0A = EUDArray([ut.EPD(x) for x in even0])
     even1A = EUDArray([ut.EPD(x) for x in even1])
+
+    if cs.EUDExecuteOnce()():
+        EUDPlayerLoop()()
+        player = f_getcurpl()
+        playerid_epd = ut.EPD(0x57EEEC) + 9 * player
+        idlen = f_strlen_epd(playerid_epd)
+        baselens[player] = idlen
+        f_dbstr_print(temp_Db, PName(player), ":")
+        val_odd = f_dwread_epd(ut.EPD(temp_Db))
+        v0, v1 = f_dwbreak(val_odd)[0:2]
+        val_even0 = v0 * 0x10000
+        val_even1 = v1 + f_wread_epd(ut.EPD(temp_Db) + 1, 0) * 0x10000
+        con_odd, con_even = oddA[player], even1A[player]
+        cs.DoActions([
+            c.SetMemoryEPD(con_odd + 2, c.SetTo, val_odd),
+            c.SetMemoryEPD(even0A[player] + 2, c.SetTo, val_even0),
+            c.SetMemoryEPD(con_even + 2, c.SetTo, val_even1),
+        ])
+        if cs.EUDIf()(idlen <= 3):
+            cs.DoActions([
+                c.SetMemoryEPD(con_even + 2, c.SetTo, 0),
+                c.SetMemoryEPD(con_even + 3, c.SetTo, 0x0F000000),
+            ])
+            if cs.EUDIf()(idlen <= 1):
+                cs.DoActions([
+                    c.SetMemoryEPD(con_odd + 2, c.SetTo, 0),
+                    c.SetMemoryEPD(con_odd + 3, c.SetTo, 0x0F000000),
+                ])
+            cs.EUDEndIf()
+        cs.EUDEndIf()
+        EUDEndPlayerLoop()
+    cs.EUDEndExecuteOnce()
 
 
 @c.EUDFunc
@@ -93,48 +126,18 @@ def f_check_id(player, dst):
     return ret
 
 
-@c.EUDFunc
-def _OptimizeSetPName():
+def OptimizeSetPName():
+    global isPNameInitialized
+    if not isPNameInitialized:
+        _InitPName()
+        isPNameInitialized = True
+    else:
+        raise ut.EPError("OptimizeSetPName() should only be used once")
+
+    prevTxtPtr, _end = c.Forward(), c.Forward()
+
     global isTxtPtrUnchanged
-
-    cs.EUDExecuteOnce()()
-    EUDPlayerLoop()()
-    player = f_getcurpl()
-    playerid_epd = 0x57EEEC + 9 * player
-    idlen = f_strlen_epd(playerid_epd)
-    baselens[player] = idlen
-    f_dbstr_print(temp_Db, PName(player), ":")
-    val_odd = f_dwread_epd(ut.EPD(temp_Db))
-    v0, v1 = f_dwbreak(val_odd)[0:2]
-    val_even0 = v0 * 0x10000
-    val_even1 = v1 + f_wread_epd(ut.EPD(temp_Db) + 1, 0) * 0x10000
-    con_odd, con_even = oddA[player], even1A[player]
-    cs.DoActions([
-        c.SetMemoryEPD(con_odd + 2, c.SetTo, val_odd),
-        c.SetMemoryEPD(even0A[player] + 2, c.SetTo, val_even0),
-        c.SetMemoryEPD(con_even + 2, c.SetTo, val_even1),
-    ])
-    if cs.EUDIf()(idlen <= 3):
-        cs.DoActions([
-            c.SetMemoryEPD(con_even + 2, c.SetTo, 0),
-            c.SetMemoryEPD(con_even + 3, c.SetTo, 0x0F000000),
-        ])
-        if cs.EUDIf()(idlen <= 1):
-            cs.DoActions([
-                c.SetMemoryEPD(con_odd + 2, c.SetTo, 0),
-                c.SetMemoryEPD(con_odd + 3, c.SetTo, 0x0F000000),
-            ])
-        cs.EUDEndIf()
-    cs.EUDEndIf()
-    EUDEndPlayerLoop()
-    cs.EUDEndExecuteOnce()
-
-    prevTxtPtr, _end, once = c.Forward(), c.Forward(), c.Forward()
-    cs.EUDJumpIf([once << c.Memory(0x57F23C, c.Exactly, ~0)], _end)
-    cs.DoActions([
-        c.SetMemory(once + 8, c.SetTo, f_dwread_epd(ut.EPD(0x57F23C))),
-        isTxtPtrUnchanged.SetNumber(0),
-    ])
+    isTxtPtrUnchanged << 0
     c.RawTrigger(
         conditions=[
             prevTxtPtr << c.Memory(0x640B58, c.Exactly, 11)
@@ -152,11 +155,9 @@ def _OptimizeSetPName():
 
 
 def SetPName(player, *name):
-    global useSetPName
-    if not useSetPName:
-        useSetPName = True
-        _InitPName()
-    _OptimizeSetPName()
+    global isPNameInitialized
+    if not isPNameInitialized:
+        raise ut.EPError("Must use OptimizeSetPName() in beforeTriggerExec")
 
     _end = c.Forward()
     cs.EUDJumpIf(isTxtPtrUnchanged.Exactly(1), _end)
@@ -166,9 +167,10 @@ def SetPName(player, *name):
         else:
             player = c.EncodePlayer(player)
     cs.EUDJumpIf(f_playerexist(player) == 0, _end)
-    basename, baselen = ut.EPD(0x57EEEC) + 9 * player, baselens[player]
+    basename, baselen = 0x57EEEC + 36 * player, baselens[player]
 
     global ptr, epd, odds_or_even
+    origcp = f_getcurpl()
     cs.DoActions([
         ptr.SetNumber(0x640B61),
         epd.SetNumber(ut.EPD(0x640B60)),
@@ -201,11 +203,10 @@ def SetPName(player, *name):
             actions=epd.AddNumber(1)
         )
     cs.EUDEndWhile()
+    f_setcurpl(origcp)
 
     _end << c.NextTrigger()
 
 
 def _f_initsetpname():
-    global useSetPName
-    if not useSetPName:
-        return
+    pass

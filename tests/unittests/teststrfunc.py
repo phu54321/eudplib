@@ -27,4 +27,11 @@ def test_strbuffer():
 @TestInstance
 def test_setpname():
     OptimizeSetPName()
-    SetPName(P1, "dpdkfah")
+    EUDPlayerLoop()()
+    p = f_getcurpl()
+    s = StringBuffer()
+    s.insert(0, PName(p))
+    s.append(": ㅎㅇ요")
+    s.Display()
+    SetPName(p, "dpdkfah ", PColor(p), PName(p))
+    EUDEndPlayerLoop()
