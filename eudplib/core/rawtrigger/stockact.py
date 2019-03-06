@@ -435,5 +435,12 @@ def SetKills(Player, Modifier, Number, Unit):
     Player = EncodePlayer(Player, issueError=True)
     Unit = EncodeUnit(Unit, issueError=True)
     if isinstance(Player, int) and Player >= 12:
-        raise NotImplementedError
+        if Player == 13:
+            return [
+                SetMemory(0x6509B0, Add, -12 * 228),
+                SetDeaths(CurrentPlayer, Modifier, Number, Unit),
+                SetMemory(0x6509B0, Add, 12 * 228),
+            ]
+        else:
+            raise NotImplementedError
     return SetDeaths(Player - 228 * 12, Modifier, Number, Unit)
