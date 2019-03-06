@@ -26,7 +26,6 @@ def test_strbuffer():
 
 @TestInstance
 def test_setpname():
-    OptimizeSetPName()
     EUDPlayerLoop()()
     p = f_getcurpl()
     s = StringBuffer()
