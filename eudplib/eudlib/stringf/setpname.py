@@ -109,7 +109,7 @@ def f_check_id(player, dst):
         cs.EUDSwitchCase()(i)
         if cs.EUDIf()([
             odds_or_even.Exactly(0),
-            odd[i] << c.MemoryEPD(dst + 1, c.Exactly, 0)
+            odd[i] << c.MemoryEPD(dst, c.Exactly, 0)
         ]):
             ret << 0
     
@@ -181,6 +181,7 @@ def SetPName(player, *name):
         cs.EUDContinueIf(f_memcmp(basename, ptr, baselen) >= 1)
         f_setcurpl(ut.EPD(temp_Db))
         f_cpstr_print(ptr2s(ptr + baselen))
+        cs.DoActions(c.SetDeaths(c.CurrentPlayer, c.SetTo, 0, 0))  # EOS
         f_setcurpl(epd)
         c.RawTrigger(
             conditions=odds_or_even.Exactly(1),
@@ -190,7 +191,7 @@ def SetPName(player, *name):
             ]
         )
         f_cpstr_print(*(name + (epd2s(ut.EPD(temp_Db)),)))
-        cs.DoActions(c.SetDeaths(c.CurrentPlayer, c.SetTo, 0, 0))
+        cs.DoActions(c.SetDeaths(c.CurrentPlayer, c.SetTo, 0, 0))  # EOS
 
         cs.EUDSetContinuePoint()
         cs.DoActions([
