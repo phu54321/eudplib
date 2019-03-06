@@ -66,7 +66,10 @@ def InitStringMap(chkt):
 
     unix = chkt.getsection('UNIx')
     mrgn = chkt.getsection('MRGN')
-    swnm = chkt.getsection('SWNM')
+    try:
+        swnm = chkt.getsection('SWNM')
+    except (KeyError):
+        swnm = None  # Not Required
 
     # Get location names
     if mrgn:
