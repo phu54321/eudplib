@@ -223,7 +223,7 @@ def CreateInjectFinalizer(chkt, root):
 
         if c.PushTriggerScope():
             tmcheckt << c.NextTrigger()
-            curtime << sf.f_dwread_epd(ut.EPD(0x57F23C))
+            curtime << sf.f_getgametick()
             if cs.EUDIf()(lasttime < curtime):
                 lasttime << curtime
                 cs.EUDJump(root)
@@ -236,7 +236,7 @@ def CreateInjectFinalizer(chkt, root):
         c.PopTriggerScope()
 
         # lasttime << curtime
-        curtime << sf.f_dwread_epd(ut.EPD(0x57F23C))
+        curtime << sf.f_getgametick()
         lasttime << curtime
 
         cs.DoActions(c.SetMemory(0x6509B0, c.SetTo, 0))  # Current player = 1

@@ -39,7 +39,7 @@ from ..memiof import (
 from .eudprint import f_dbstr_print, ptr2s, epd2s
 from .cpprint import f_cpstr_print, PName
 from .strfunc import f_strlen_epd
-from ..utilf import f_playerexist, EUDPlayerLoop, EUDEndPlayerLoop
+from ..utilf import f_playerexist, EUDPlayerLoop, EUDEndPlayerLoop, f_getgametick
 from ..playerv import PVariable
 from ..eudarray import EUDArray
 
@@ -138,7 +138,7 @@ def _OptimizeSetPName():
     cs.EUDJumpIf([once << c.Memory(0x57F23C, c.Exactly, ~0)], end_optimize)
     cs.DoActions([
         isTxtPtrUnchanged.SetNumber(0),
-        c.SetMemory(once + 8, c.SetTo, f_dwread_epd(ut.EPD(0x57F23C))),
+        c.SetMemory(once + 8, c.SetTo, f_getgametick()),
     ])
     c.RawTrigger(
         conditions=[

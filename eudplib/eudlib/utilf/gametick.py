@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 '''
-Copyright (c) 2014 trgk
+Copyright (c) 2019 Armoha
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -23,47 +23,24 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-from .logic import (
-    EUDAnd,
-    EUDOr,
-    EUDNot
+from eudplib import (
+    core as c,
+    ctrlstru as cs,
+    utils as ut
 )
+from ..memiof import f_dwread_epd
 
-from .userpl import f_getuserplayerid
 
-from .gametick import f_getgametick
+@c.EUDFunc
+def f_getgametick():
+    """Get current game tick value."""
 
-from .random import (
-    f_getseed,
-    f_srand,
-    f_rand,
-    f_dwrand,
-    f_randomize
-)
+    gametick_cache = c.EUDVariable()
+    _gametick_cond = c.Forward()
 
-from .mempatch import (
-    f_dwpatch_epd,
-    f_blockpatch_epd,
-    f_unpatchall,
-)
+    if cs.EUDIfNot([_gametick_cond << c.Memory(0x57F23C, c.Exactly, 0)]):
+        c.SetVariables(gametick_cache, f_dwread_epd(ut.EPD(0x57F23C)))
+        cs.DoActions(c.SetMemory(_gametick_cond + 8, c.SetTo, gametick_cache))
+    cs.EUDEndIf()
 
-from .pexist import (
-    f_playerexist,
-    EUDPlayerLoop,
-    EUDEndPlayerLoop
-)
-
-from .listloop import (
-    EUDLoopList,
-    EUDLoopUnit,
-    EUDLoopUnit2,
-    EUDLoopPlayerUnit,
-    EUDLoopSprite,
-    EUDLoopBullet,
-    EUDLoopTrigger
-)
-
-from .binsearch import (
-    EUDBinaryMin,
-    EUDBinaryMax,
-)
+    return gametick_cache
