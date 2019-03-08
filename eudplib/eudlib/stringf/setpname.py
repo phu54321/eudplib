@@ -221,7 +221,3 @@ def SetPName(player, *name):
     f_setcurpl(origcp)
 
     _end << c.NextTrigger()
-
-
-def _f_initsetpname():
-    pass

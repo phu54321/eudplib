@@ -28,7 +28,6 @@ from ... import ctrlstru as cs
 from ... import eudlib as sf
 from ...core.eudfunc.trace.tracetool import _f_initstacktrace
 from ...eudlib.stringf.dbstr import _f_initextstr
-from ...eudlib.stringf.setpname import _f_initsetpname
 
 
 jumper = None
@@ -49,7 +48,6 @@ def _MainStarter(mf):
         # Various initializes
         _f_initextstr()
         sf.f_getcurpl()
-        _f_initsetpname()
         _f_initstacktrace()
 
         for func in startFunctionList:
