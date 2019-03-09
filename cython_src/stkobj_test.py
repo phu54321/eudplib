@@ -1,4 +1,5 @@
 import pyximport
+
 pyximport.install()
 
 from stackobjs import StackObjects
@@ -19,13 +20,13 @@ print(alloctable)
 
 for obj in found_objects:
     s = []
-    s.append('%4s: ' % obj)
-    s.append(' ' * (alloctable[obj] // 4))
+    s.append("%4s: " % obj)
+    s.append(" " * (alloctable[obj] // 4))
     dwoccupmap = dwoccupmap_dict[obj]
     for j in dwoccupmap:
         if j:
-            s.append('#')
+            s.append("#")
         else:
-            s.append(' ')
+            s.append(" ")
 
-    print(''.join(s))
+    print("".join(s))

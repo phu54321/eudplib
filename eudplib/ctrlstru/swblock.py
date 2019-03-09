@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Copyright (c) 2014 trgk
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,7 +21,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-'''
+"""
 
 from .. import core as c
 from .. import trigger as tg
@@ -31,19 +31,19 @@ from .cshelper import CtrlStruOpener
 
 
 def _IsSwitchBlockId(idf):
-    return idf == 'swblock'
+    return idf == "swblock"
 
 
 def EUDSwitch(var):
     block = {
-        'targetvar': var,
-        'casebrlist': {},
-        'defaultbr': c.Forward(),
-        'swend': c.Forward()
+        "targetvar": var,
+        "casebrlist": {},
+        "defaultbr": c.Forward(),
+        "swend": c.Forward(),
     }
 
     c.PushTriggerScope()
-    ut.EUDCreateBlock('swblock', block)
+    ut.EUDCreateBlock("swblock", block)
 
     return True
 
@@ -53,16 +53,16 @@ def EUDSwitchCase():
         for number in numbers:
             ut.ep_assert(
                 isinstance(number, int) or isinstance(number, c.ConstExpr),
-                'Invalid selector start for EUDSwitch'
+                "Invalid selector start for EUDSwitch",
             )
 
         lb = ut.EUDGetLastBlock()
-        ut.ep_assert(lb[0] == 'swblock', 'Block start/end mismatch')
+        ut.ep_assert(lb[0] == "swblock", "Block start/end mismatch")
         block = lb[1]
 
         for number in numbers:
-            ut.ep_assert(number not in block['casebrlist'], 'Duplicate cases')
-            block['casebrlist'][number] = c.NextTrigger()
+            ut.ep_assert(number not in block["casebrlist"], "Duplicate cases")
+            block["casebrlist"][number] = c.NextTrigger()
 
         return True
 
@@ -72,11 +72,11 @@ def EUDSwitchCase():
 def EUDSwitchDefault():
     def _footer():
         lb = ut.EUDGetLastBlock()
-        ut.ep_assert(lb[0] == 'swblock', 'Block start/end mismatch')
+        ut.ep_assert(lb[0] == "swblock", "Block start/end mismatch")
         block = lb[1]
 
-        ut.ep_assert(not block['defaultbr'].IsSet(), 'Duplicate default')
-        block['defaultbr'] << c.NextTrigger()
+        ut.ep_assert(not block["defaultbr"].IsSet(), "Duplicate default")
+        block["defaultbr"] << c.NextTrigger()
 
         return True
 
@@ -84,36 +84,36 @@ def EUDSwitchDefault():
 
 
 def EUDSwitchBreak():
-    block = ut.EUDGetLastBlockOfName('swblock')[1]
-    EUDJump(block['swend'])
+    block = ut.EUDGetLastBlockOfName("swblock")[1]
+    EUDJump(block["swend"])
 
 
 def EUDSwitchBreakIf(conditions):
-    block = ut.EUDGetLastBlockOfName('swblock')[1]
-    EUDJumpIf(conditions, block['swend'])
+    block = ut.EUDGetLastBlockOfName("swblock")[1]
+    EUDJumpIf(conditions, block["swend"])
 
 
 def EUDSwitchBreakIfNot(conditions):
-    block = ut.EUDGetLastBlockOfName('swblock')[1]
-    EUDJumpIfNot(conditions, block['swend'])
+    block = ut.EUDGetLastBlockOfName("swblock")[1]
+    EUDJumpIfNot(conditions, block["swend"])
 
 
 def EUDEndSwitch():
-    lb = ut.EUDPopBlock('swblock')
+    lb = ut.EUDPopBlock("swblock")
     block = lb[1]
-    swend = block['swend']
+    swend = block["swend"]
     EUDJump(swend)  # Exit switch block
     c.PopTriggerScope()
 
     # If default block is not specified, skip it
-    if not block['defaultbr'].IsSet():
-        block['defaultbr'] << swend
+    if not block["defaultbr"].IsSet():
+        block["defaultbr"] << swend
 
     # Create key selector
-    casebrlist = block['casebrlist']
-    defbranch = block['defaultbr']
-    casekeylist = sorted(block['casebrlist'].keys())
-    var = block['targetvar']
+    casebrlist = block["casebrlist"]
+    defbranch = block["defaultbr"]
+    casekeylist = sorted(block["casebrlist"].keys())
+    var = block["targetvar"]
 
     def KeySelector(keys):
         # Uses simple binary search
@@ -129,7 +129,7 @@ def EUDEndSwitch():
             EUDJumpIf(var == midval, casebrlist[midval])
             tg.EUDBranch(var <= midval, br1, br2)
             br1 << KeySelector(keys[:midpos])
-            br2 << KeySelector(keys[midpos + 1:])
+            br2 << KeySelector(keys[midpos + 1 :])
 
         else:  # len(keys) == 0
             return defbranch

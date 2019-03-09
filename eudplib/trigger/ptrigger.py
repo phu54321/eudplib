@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Copyright (c) 2014 trgk
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,7 +21,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-'''
+"""
 
 from .. import core as c
 from .triggerdef import Trigger
@@ -78,7 +78,7 @@ def PTrigger(players, conditions=None, actions=None):
             break
 
     # Create player table!
-    dbb = b''.join([b'\0\0\0\0' if eff is False else b'aaaa' for eff in effp])
+    dbb = b"".join([b"\0\0\0\0" if eff is False else b"aaaa" for eff in effp])
     if dbb in _pdbtable:
         pdb = _pdbtable[dbb]
 
@@ -96,19 +96,16 @@ def PTrigger(players, conditions=None, actions=None):
     t1 << c.RawTrigger(
         nextptr=t3,
         conditions=c.Memory(offset_curpl, c.AtMost, 7),
-        actions=[
-            c.SetNextPtr(t1, t2),
-            c.SetMemory(offset_curpl, c.Add, ut.EPD(pdb))
-        ]
+        actions=[c.SetNextPtr(t1, t2), c.SetMemory(offset_curpl, c.Add, ut.EPD(pdb))],
     )
 
     t2 << c.RawTrigger(
         nextptr=t3,
-        conditions=c.Deaths(c.CurrentPlayer, c.Exactly, ut.b2i4(b'aaaa'), 0),
+        conditions=c.Deaths(c.CurrentPlayer, c.Exactly, ut.b2i4(b"aaaa"), 0),
         actions=[
             c.SetNextPtr(t2, tc),
             c.SetMemory(offset_curpl, c.Subtract, ut.EPD(pdb)),
-        ]
+        ],
     )
 
     tc << c.NextTrigger()
@@ -116,15 +113,12 @@ def PTrigger(players, conditions=None, actions=None):
     Trigger(conditions, actions)
 
     c.RawTrigger(
-        actions=[
-            c.SetNextPtr(t2, t3),
-            c.SetMemory(offset_curpl, c.Add, ut.EPD(pdb))
-        ]
+        actions=[c.SetNextPtr(t2, t3), c.SetMemory(offset_curpl, c.Add, ut.EPD(pdb))]
     )
 
     t3 << c.RawTrigger(
         actions=[
             c.SetNextPtr(t1, t3),
-            c.SetMemory(offset_curpl, c.Subtract, ut.EPD(pdb))
+            c.SetMemory(offset_curpl, c.Subtract, ut.EPD(pdb)),
         ]
     )

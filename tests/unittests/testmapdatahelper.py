@@ -6,7 +6,7 @@ def x(a, b):
     test_equality(
         "Location and strings can be used as a parameter",
         [a, b],
-        [EncodeLocation("Anywhere"), EncodeString("Hello world!")]
+        [EncodeLocation("Anywhere"), EncodeString("Hello world!")],
     )
 
 

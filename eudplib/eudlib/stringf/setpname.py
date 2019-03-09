@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Copyright (c) 2019 Armoha
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,13 +21,9 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-'''
+"""
 
-from ... import (
-    core as c,
-    ctrlstru as cs,
-    utils as ut,
-)
+from ... import core as c, ctrlstru as cs, utils as ut
 from ..memiof import (
     f_dwread_epd,
     f_wread_epd,
@@ -72,17 +68,18 @@ def f_check_id(player, dst):
     cs.EUDSwitch(player)
     for i in range(8):
         cs.EUDSwitchCase()(i)
-        if cs.EUDIf()([
-            odds_or_even.Exactly(0),
-            odd[i] << c.MemoryEPD(dst, c.Exactly, 0)
-        ]):
+        if cs.EUDIf()(
+            [odds_or_even.Exactly(0), odd[i] << c.MemoryEPD(dst, c.Exactly, 0)]
+        ):
             ret << 0
-    
-        if cs.EUDElseIf()([
-            odds_or_even.Exactly(1),
-            even0[i] << c.MemoryXEPD(dst, c.Exactly, 0, 0xFFFF0000),
-            even1[i] << c.MemoryEPD(dst + 1, c.Exactly, 0)
-        ]):
+
+        if cs.EUDElseIf()(
+            [
+                odds_or_even.Exactly(1),
+                even0[i] << c.MemoryXEPD(dst, c.Exactly, 0, 0xFFFF0000),
+                even1[i] << c.MemoryEPD(dst + 1, c.Exactly, 0),
+            ]
+        ):
             ret << 0
         cs.EUDEndIf()
         cs.EUDBreak()
@@ -114,21 +111,27 @@ def _OptimizeSetPName():
         val_even0 = v0 * 0x10000
         val_even1 = v1 + f_wread_epd(ut.EPD(temp_Db) + 1, 0) * 0x10000
         con_odd, con_even = oddA[player], even1A[player]
-        cs.DoActions([
-            c.SetMemoryEPD(con_odd + 2, c.SetTo, val_odd),
-            c.SetMemoryEPD(even0A[player] + 2, c.SetTo, val_even0),
-            c.SetMemoryEPD(con_even + 2, c.SetTo, val_even1),
-        ])
+        cs.DoActions(
+            [
+                c.SetMemoryEPD(con_odd + 2, c.SetTo, val_odd),
+                c.SetMemoryEPD(even0A[player] + 2, c.SetTo, val_even0),
+                c.SetMemoryEPD(con_even + 2, c.SetTo, val_even1),
+            ]
+        )
         if cs.EUDIf()(idlen <= 3):
-            cs.DoActions([
-                c.SetMemoryEPD(con_even + 2, c.SetTo, 0),
-                c.SetMemoryEPD(con_even + 3, c.SetTo, 0x0F000000),
-            ])
+            cs.DoActions(
+                [
+                    c.SetMemoryEPD(con_even + 2, c.SetTo, 0),
+                    c.SetMemoryEPD(con_even + 3, c.SetTo, 0x0F000000),
+                ]
+            )
             if cs.EUDIf()(idlen <= 1):
-                cs.DoActions([
-                    c.SetMemoryEPD(con_odd + 2, c.SetTo, 0),
-                    c.SetMemoryEPD(con_odd + 3, c.SetTo, 0x0F000000),
-                ])
+                cs.DoActions(
+                    [
+                        c.SetMemoryEPD(con_odd + 2, c.SetTo, 0),
+                        c.SetMemoryEPD(con_odd + 3, c.SetTo, 0x0F000000),
+                    ]
+                )
             cs.EUDEndIf()
         cs.EUDEndIf()
         EUDEndPlayerLoop()
@@ -136,22 +139,22 @@ def _OptimizeSetPName():
 
     once = c.Forward()
     cs.EUDJumpIf([once << c.Memory(0x57F23C, c.Exactly, ~0)], end_optimize)
-    cs.DoActions([
-        isTxtPtrUnchanged.SetNumber(0),
-        c.SetMemory(once + 8, c.SetTo, f_getgametick()),
-    ])
+    cs.DoActions(
+        [
+            isTxtPtrUnchanged.SetNumber(0),
+            c.SetMemory(once + 8, c.SetTo, f_getgametick()),
+        ]
+    )
     c.RawTrigger(
-        conditions=[
-            prevTxtPtr << c.Memory(0x640B58, c.Exactly, 11)
-        ],
-        actions=isTxtPtrUnchanged.SetNumber(1)
+        conditions=[prevTxtPtr << c.Memory(0x640B58, c.Exactly, 11)],
+        actions=isTxtPtrUnchanged.SetNumber(1),
     )
     cs.EUDJumpIf(isTxtPtrUnchanged.Exactly(1), _end)
     cs.DoActions(c.SetMemory(prevTxtPtr + 8, c.SetTo, 0))
     for i in range(3, -1, -1):
         c.RawTrigger(
-            conditions=c.MemoryX(0x640B58, c.AtLeast, 1, 2**i),
-            actions=c.SetMemory(prevTxtPtr + 8, c.Add, 2**i)
+            conditions=c.MemoryX(0x640B58, c.AtLeast, 1, 2 ** i),
+            actions=c.SetMemory(prevTxtPtr + 8, c.Add, 2 ** i),
         )
     _end << c.NextTrigger()
     end_optimize << c.RawTrigger()
@@ -165,12 +168,7 @@ def SetPName(player, *name):
         isPNameInitialized = True
 
     start = c.Forward()
-    c.RawTrigger(
-        nextptr=start_optimize,
-        actions=[
-            c.SetNextPtr(end_optimize, start),
-        ]
-    )
+    c.RawTrigger(nextptr=start_optimize, actions=[c.SetNextPtr(end_optimize, start)])
     start << c.NextTrigger()
 
     _end = c.Forward()
@@ -185,11 +183,13 @@ def SetPName(player, *name):
 
     global ptr, epd, odds_or_even
     origcp = f_getcurpl()
-    cs.DoActions([
-        ptr.SetNumber(0x640B61),
-        epd.SetNumber(ut.EPD(0x640B60)),
-        odds_or_even.SetNumber(0)
-    ])
+    cs.DoActions(
+        [
+            ptr.SetNumber(0x640B61),
+            epd.SetNumber(ut.EPD(0x640B60)),
+            odds_or_even.SetNumber(0),
+        ]
+    )
     if cs.EUDWhile()(ptr.AtMost(0x640B61 + 218 * 10)):
         cs.EUDContinueIf(f_check_id(player, epd))
         cs.EUDContinueIf(f_memcmp(basename, ptr, baselen) >= 1)
@@ -200,23 +200,18 @@ def SetPName(player, *name):
         c.RawTrigger(
             conditions=odds_or_even.Exactly(1),
             actions=[
-                c.SetDeaths(c.CurrentPlayer, c.SetTo, ut.b2i4(b'\r' * 4), 0),
+                c.SetDeaths(c.CurrentPlayer, c.SetTo, ut.b2i4(b"\r" * 4), 0),
                 c.AddCurrentPlayer(1),
-            ]
+            ],
         )
         f_cpstr_print(*(name + (epd2s(ut.EPD(temp_Db)),)))
         cs.DoActions(c.SetDeaths(c.CurrentPlayer, c.SetTo, 0, 0))  # EOS
 
         cs.EUDSetContinuePoint()
-        cs.DoActions([
-            ptr.AddNumber(218),
-            epd.AddNumber(54),
-            odds_or_even.AddNumberX(1, 1)
-        ])
-        c.RawTrigger(
-            conditions=odds_or_even.Exactly(0),
-            actions=epd.AddNumber(1)
+        cs.DoActions(
+            [ptr.AddNumber(218), epd.AddNumber(54), odds_or_even.AddNumberX(1, 1)]
         )
+        c.RawTrigger(conditions=odds_or_even.Exactly(0), actions=epd.AddNumber(1))
     cs.EUDEndWhile()
     f_setcurpl(origcp)
 

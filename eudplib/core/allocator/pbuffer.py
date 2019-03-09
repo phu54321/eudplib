@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Copyright (c) 2014 trgk
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,7 +21,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-'''
+"""
 
 
 from .rlocint import RlocInt_C
@@ -31,7 +31,6 @@ from eudplib import utils as ut
 
 
 class Payload:
-
     def __init__(self, data, prttable, orttable):
         self.data = data
         self.prttable = prttable
@@ -43,16 +42,15 @@ _packerData = {}
 
 class PayloadBuffer:
 
-    '''
+    """
     Buffer where EUDObject should write to.
-    '''
+    """
 
     def __init__(self, totlen):
         self._data = bytearray(totlen)
         self._totlen = totlen
         self._prttable = []
         self._orttable = []
-
 
     def StartWrite(self, writeaddr):
         self._datastart = writeaddr
@@ -75,15 +73,14 @@ class PayloadBuffer:
 
         if number.rlocmode:
             ut.ep_assert(
-                self._datacur % 4 == 0,
-                'Non-const dwords must be aligned to 4byte'
+                self._datacur % 4 == 0, "Non-const dwords must be aligned to 4byte"
             )
             if number.rlocmode == 1:
                 self._prttable.append(self._datacur)
             elif number.rlocmode == 4:
                 self._orttable.append(self._datacur)
             else:
-                raise ut.EPError('rlocmode should be 1 or 4')
+                raise ut.EPError("rlocmode should be 1 or 4")
 
         offset = number.offset
         self._data[self._datacur + 0] = offset & 0xFF
@@ -93,7 +90,7 @@ class PayloadBuffer:
         self._datacur += 4
 
     def WritePack(self, structformat, arglist):
-        '''
+        """
         ======= =======
           Char   Type
         ======= =======
@@ -101,7 +98,7 @@ class PayloadBuffer:
            H     Word
            I     Dword
         ======= =======
-        '''
+        """
 
         try:
             _StructPacker(_packerData[structformat], self, arglist)
@@ -110,15 +107,15 @@ class PayloadBuffer:
             _StructPacker(_packerData[structformat], self, arglist)
 
     def WriteBytes(self, b):
-        '''
+        """
         Write bytes object to buffer.
 
         :param b: bytes object to write.
-        '''
+        """
         if not isinstance(b, bytes):
             b = bytes(b)
 
-        self._data[self._datacur: self._datacur + len(b)] = b
+        self._data[self._datacur : self._datacur + len(b)] = b
         self._datacur += len(b)
 
     def WriteSpace(self, spacesize):
@@ -130,7 +127,7 @@ class PayloadBuffer:
 
 
 def CreateStructPackerData(structformat):
-    sizedict = {'B': 1, 'H': 2, 'I': 4}
+    sizedict = {"B": 1, "H": 2, "I": 4}
     sizelist = []
     for s in structformat:
         sizelist.append(sizedict[s])
@@ -150,7 +147,7 @@ def _StructPacker(sizelist, buf, arglist):
 
         ut.ep_assert(
             ri.rlocmode == 0 or (sizelist[i] == 4 and dpos % 4 == 0),
-            'Cannot write non-const in byte/word/nonalligned dword.'
+            "Cannot write non-const in byte/word/nonalligned dword.",
         )
 
         if ri.rlocmode == 1:
@@ -175,4 +172,3 @@ def _StructPacker(sizelist, buf, arglist):
         dpos += sizelist[i]
 
     buf._datacur = dpos
-

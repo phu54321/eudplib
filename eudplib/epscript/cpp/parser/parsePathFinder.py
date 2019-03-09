@@ -2,10 +2,10 @@
 
 import re
 
-re_state = re.compile(r'^State (\d+):$')
-re_shift = re.compile(r'^ +(\w+) shift  (\d+)$')
+re_state = re.compile(r"^State (\d+):$")
+re_shift = re.compile(r"^ +(\w+) shift  (\d+)$")
 
-lines = open('epparser.out').readlines()
+lines = open("epparser.out").readlines()
 
 # Get graph
 graph = {}
@@ -24,14 +24,14 @@ for line in lines:
 
 # Find path
 pathMap = {}
-q = [('', 0)]
+q = [("", 0)]
 
 while q:
     prevPath, currentState = q.pop()
     for token, nextState in graph[currentState]:
         if nextState in pathMap:
             continue
-        path = '%s %s' % (prevPath, token)
+        path = "%s %s" % (prevPath, token)
         pathMap[nextState] = path
         q.append((path, nextState))
 

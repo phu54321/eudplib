@@ -15,8 +15,4 @@ def test_stack():
     t5 = k.pop()  # 123
     t6 = EUDTernary(k.empty())(1)(0)  # 1
 
-    test_equality(
-        "Stack test",
-        [t1, t2, t3, t4, t5, t6],
-        [456, 234, 0, 789, 123, 1]
-    )
+    test_equality("Stack test", [t1, t2, t3, t4, t5, t6], [456, 234, 0, 789, 123, 1])

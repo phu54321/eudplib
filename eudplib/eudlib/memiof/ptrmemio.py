@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Copyright (c) 2014 trgk
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,7 +21,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-'''
+"""
 
 from . import (
     dwepdio as dwm,
@@ -30,11 +30,7 @@ from . import (
     bwepdio as bwm,
     modcurpl as cp,
 )
-from ... import (
-    core as c,
-    ctrlstru as cs,
-    utils as ut,
-)
+from ... import core as c, ctrlstru as cs, utils as ut
 
 # Helper functions
 
@@ -69,10 +65,7 @@ def f_dwread(ptr):
     epd, subp = c.f_div(ptr - 0x58A364, 4)
     oldcp = cp.f_getcurpl()
     dw = c.EUDVariable()
-    cs.DoActions([
-        c.SetCurrentPlayer(epd),
-        dw.SetNumber(0),
-    ])
+    cs.DoActions([c.SetCurrentPlayer(epd), dw.SetNumber(0)])
     cs.EUDSwitch(subp)
 
     # Case 0
@@ -86,18 +79,16 @@ def f_dwread(ptr):
 
         for j in range(31, 8 * i - 1, -1):
             c.RawTrigger(
-                conditions=c.DeathsX(c.CurrentPlayer, c.AtLeast, 1, 0, 2**j),
-                actions=dw.AddNumber(2**(j - 8 * i))
+                conditions=c.DeathsX(c.CurrentPlayer, c.AtLeast, 1, 0, 2 ** j),
+                actions=dw.AddNumber(2 ** (j - 8 * i)),
             )
 
-        c.SeqCompute([
-            (ut.EPD(0x6509B0), c.Add, 1),
-        ])
+        c.SeqCompute([(ut.EPD(0x6509B0), c.Add, 1)])
 
         for j in range(8 * i - 1, -1, -1):
             c.RawTrigger(
-                conditions=c.DeathsX(c.CurrentPlayer, c.AtLeast, 1, 0, 2**j),
-                actions=dw.AddNumber(2**(j + 32 - 8 * i))
+                conditions=c.DeathsX(c.CurrentPlayer, c.AtLeast, 1, 0, 2 ** j),
+                actions=dw.AddNumber(2 ** (j + 32 - 8 * i)),
             )
 
         cs.EUDBreak()

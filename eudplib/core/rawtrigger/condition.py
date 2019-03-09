@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Copyright (c) 2014 trgk
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,7 +21,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-'''
+"""
 
 from ..allocator import ConstExpr, IsConstExpr
 from eudplib import utils as ut
@@ -29,7 +29,7 @@ from eudplib import utils as ut
 
 class Condition(ConstExpr):
 
-    '''
+    """
     Condition class.
 
     Memory layout:
@@ -47,16 +47,35 @@ class Condition(ConstExpr):
        +11   flags
        +12   internal[2]
      ======  =============  ========  ===========
-    '''
+    """
 
-    def __init__(self, locid, player, amount, unitid,
-                 comparison, condtype, restype, flags, eudx=0):
+    def __init__(
+        self,
+        locid,
+        player,
+        amount,
+        unitid,
+        comparison,
+        condtype,
+        restype,
+        flags,
+        eudx=0,
+    ):
         super().__init__(self)
 
         if eudx:
-            eudx = ut.b2i2(b'SC')
-        self.fields = [locid, player, amount, unitid,
-                       comparison, condtype, restype, flags, eudx]
+            eudx = ut.b2i2(b"SC")
+        self.fields = [
+            locid,
+            player,
+            amount,
+            unitid,
+            comparison,
+            condtype,
+            restype,
+            flags,
+            eudx,
+        ]
 
         self.parenttrg = None
         self.condindex = None
@@ -69,46 +88,45 @@ class Condition(ConstExpr):
     def CheckArgs(self, i):
         ut.ep_assert(
             self.fields[0] is None or IsConstExpr(self.fields[0]),
-            'Invalid locid "%s" in trigger index %d' % (self.fields[0], i)
+            'Invalid locid "%s" in trigger index %d' % (self.fields[0], i),
         )
         ut.ep_assert(
             self.fields[1] is None or IsConstExpr(self.fields[1]),
-            'Invalid player "%s" in trigger index %d' % (self.fields[1], i)
+            'Invalid player "%s" in trigger index %d' % (self.fields[1], i),
         )
         ut.ep_assert(
             self.fields[2] is None or IsConstExpr(self.fields[2]),
-            'Invalid amount "%s" in trigger index %d' % (self.fields[2], i)
+            'Invalid amount "%s" in trigger index %d' % (self.fields[2], i),
         )
         ut.ep_assert(
             self.fields[3] is None or IsConstExpr(self.fields[3]),
-            'Invalid unitid "%s" in trigger index %d' % (self.fields[3], i)
+            'Invalid unitid "%s" in trigger index %d' % (self.fields[3], i),
         )
         ut.ep_assert(
             self.fields[4] is None or IsConstExpr(self.fields[4]),
-            'Invalid comparison "%s" in trigger index %d' % (self.fields[4], i)
+            'Invalid comparison "%s" in trigger index %d' % (self.fields[4], i),
         )
         ut.ep_assert(
             self.fields[5] is None or IsConstExpr(self.fields[5]),
-            'Invalid condtype "%s" in trigger index %d' % (self.fields[5], i)
+            'Invalid condtype "%s" in trigger index %d' % (self.fields[5], i),
         )
         ut.ep_assert(
             self.fields[6] is None or IsConstExpr(self.fields[6]),
-            'Invalid restype "%s" in trigger index %d' % (self.fields[6], i)
+            'Invalid restype "%s" in trigger index %d' % (self.fields[6], i),
         )
         ut.ep_assert(
             self.fields[7] is None or IsConstExpr(self.fields[7]),
-            'Invalid flags "%s" in trigger index %d' % (self.fields[7], i)
+            'Invalid flags "%s" in trigger index %d' % (self.fields[7], i),
         )
         return True
 
     def SetParentTrigger(self, trg, index):
         ut.ep_assert(
-            self.parenttrg is None,
-            'Condition cannot be shared by two triggers. '
+            self.parenttrg is None, "Condition cannot be shared by two triggers. "
         )
 
-        ut.ep_assert(trg is not None, 'Trigger should not be null.')
-        ut.ep_assert(0 <= index < 16, 'WTF')
+        ut.ep_assert(trg is not None, "Trigger should not be null.")
+        ut.ep_assert(0 <= index < 16, "WTF")
 
         self.parenttrg = trg
         self.condindex = index
@@ -116,8 +134,9 @@ class Condition(ConstExpr):
     def Evaluate(self):
         ut.ep_assert(
             self.parenttrg is not None,
-            'Orphan condition. This often happens when you try to do ' +
-            'arithmetics with conditions.')
+            "Orphan condition. This often happens when you try to do "
+            + "arithmetics with conditions.",
+        )
         return self.parenttrg.Evaluate() + 8 + self.condindex * 20
 
     def CollectDependency(self, pbuffer):
@@ -128,10 +147,7 @@ class Condition(ConstExpr):
         wdw(fld[2])
 
     def WritePayload(self, pbuffer):
-        pbuffer.WritePack(
-            'IIIHBBBBH',
-            self.fields,
-        )
+        pbuffer.WritePack("IIIHBBBBH", self.fields)
 
     def __bool__(self):
         raise RuntimeError("To prevent error, Condition can't be put into if.")

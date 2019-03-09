@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Copyright (c) 2014 trgk
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,7 +21,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-'''
+"""
 
 from ... import utils as ut
 from ..allocator import IsConstExpr
@@ -59,11 +59,13 @@ class EUDStruct(ut.ExprProxy, metaclass=_EUDStruct_Metaclass):
     @classmethod
     def alloc(cls, *args, **kwargs):
         from ...eudlib import objpool as pool
+
         return pool.globalPool.alloc(cls, *args, **kwargs)
 
     @classmethod
     def free(cls, data):
         from ...eudlib import objpool as pool
+
         return pool.globalPool.free(cls, data)
 
     # Constructor & Destructor of classes
@@ -149,11 +151,11 @@ class EUDStruct(ut.ExprProxy, metaclass=_EUDStruct_Metaclass):
                 raise AttributeError(e)
 
     def __setattr__(self, name, value):
-        if '_initialized' in self.__dict__:
+        if "_initialized" in self.__dict__:
             try:
                 self.setfield(name, value)
             except KeyError as e:
-                raise ut.EPError('Unknown field name %s' % name)
+                raise ut.EPError("Unknown field name %s" % name)
         else:
             self.__dict__[name] = value
 
@@ -168,4 +170,4 @@ class EUDStruct(ut.ExprProxy, metaclass=_EUDStruct_Metaclass):
         return type(self)(var)
 
     def __lshift__(self, rhs):
-        raise ut.EPError('Cannot reassign another value to eudstruct.')
+        raise ut.EPError("Cannot reassign another value to eudstruct.")

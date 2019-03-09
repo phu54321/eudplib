@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Copyright (c) 2014 trgk
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,7 +21,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-'''
+"""
 
 from .. import core as c
 from .. import ctrlstru as cs
@@ -45,24 +45,19 @@ def RunTrigTrigger():
     for player in range(8):
         skipt = c.Forward()
         cs.EUDJumpIf(
-            c.Memory(
-                0x51A280 + 12 * player + 4,
-                c.Exactly,
-                0x51A280 + 12 * player + 4
-            ), skipt)
+            c.Memory(0x51A280 + 12 * player + 4, c.Exactly, 0x51A280 + 12 * player + 4),
+            skipt,
+        )
         nt = c.Forward()
         c.RawTrigger(
             nextptr=_runner_start[player],
             actions=[
                 c.SetMemory(0x6509B0, c.SetTo, player),
-                c.SetNextPtr(_runner_end[player], nt)
-            ]
+                c.SetNextPtr(_runner_end[player], nt),
+            ],
         )
         nt << c.RawTrigger(
-            actions=c.SetNextPtr(
-                _runner_end[player],
-                ~(0x51A280 + player * 12 + 4)
-            )
+            actions=c.SetNextPtr(_runner_end[player], ~(0x51A280 + player * 12 + 4))
         )
         skipt << c.NextTrigger()
 

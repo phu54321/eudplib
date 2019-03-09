@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Copyright (c) 2014 trgk
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,15 +21,11 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-'''
+"""
 
 import weakref
 
-from .. import (
-    core as c,
-    ctrlstru as cs,
-    utils as ut
-)
+from .. import core as c, ctrlstru as cs, utils as ut
 from ..core.variable import eudv as ev
 
 from .eudarray import EUDArray
@@ -50,10 +46,7 @@ class _ObjPoolData(c.ConstExpr):
         try:
             return evb._vdict[self].Evaluate()
         except KeyError:
-            ret = evb.CreateMultipleVarTriggers(
-                self,
-                [0] * (max_fieldn * self.size)
-            )
+            ret = evb.CreateMultipleVarTriggers(self, [0] * (max_fieldn * self.size))
             return ret.Evaluate()
 
 
@@ -63,8 +56,7 @@ class ObjPool:
         self.remaining = c.EUDVariable(size)
 
         self.baseobj = _ObjPoolData(size)
-        self.data = EUDArray(
-            [72 * max_fieldn * i for i in range(size)])
+        self.data = EUDArray([72 * max_fieldn * i for i in range(size)])
 
     def full(self):
         return self.remaining == 0
@@ -83,7 +75,7 @@ class ObjPool:
     def alloc(self, basetype, *args, **kwargs):
         ut.ep_assert(
             len(basetype._fields_) <= max_fieldn,
-            "Only structs less than %d fields can be allocated" % max_fieldn
+            "Only structs less than %d fields can be allocated" % max_fieldn,
         )
         data = self._alloc()
         data = basetype.cast(data)
@@ -93,7 +85,7 @@ class ObjPool:
     def free(self, basetype, data):
         ut.ep_assert(
             len(basetype._fields_) <= max_fieldn,
-            "Only structs less than %d fields can be allocated" % max_fieldn
+            "Only structs less than %d fields can be allocated" % max_fieldn,
         )
 
         data = basetype.cast(data)

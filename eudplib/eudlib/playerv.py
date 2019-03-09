@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Copyright (c) 2019 Armoha
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,13 +21,9 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-'''
+"""
 
-from .. import (
-    core as c,
-    ctrlstru as cs,
-    utils as ut,
-)
+from .. import core as c, ctrlstru as cs, utils as ut
 from .utilf import f_playerexist
 
 
@@ -59,7 +55,7 @@ class PVariable(c.EUDVArray(8)):
                     c.SetMemory(a0 + 16, c.Add, 18 * (2 ** k)),
                     c.SetMemory(a1 + 16, c.Add, 18 * (2 ** k)),
                     c.SetMemory(a2 + 16, c.Add, 18 * (2 ** k)),
-                ]
+                ],
             )
         vtproc << c.RawTrigger(
             nextptr=self,
@@ -67,7 +63,7 @@ class PVariable(c.EUDVArray(8)):
                 a0 << c.SetMemory(0, c.SetTo, ut.EPD(ret.getValueAddr())),
                 a1 << c.SetMemory(0, c.SetTo, 0x072D0000),
                 a2 << c.SetNextPtr(self, _next),
-            ]
+            ],
         )
         _next << c.NextTrigger()
         return ret
@@ -83,16 +79,12 @@ class PVariable(c.EUDVArray(8)):
         for k in range(2, 0, -1):
             c.RawTrigger(
                 conditions=i.AtLeastX(1, 2 ** k),
-                actions=[
-                    c.SetMemory(value._varact + 16, c.Add, 18 * (2 ** k)),
-                ]
+                actions=[c.SetMemory(value._varact + 16, c.Add, 18 * (2 ** k))],
             )
         c.RawTrigger(
             nextptr=value.GetVTable(),
             conditions=i.AtLeastX(1, 1),
-            actions=[
-                c.SetMemory(value._varact + 16, c.Add, 18),
-            ]
+            actions=[c.SetMemory(value._varact + 16, c.Add, 18)],
         )
         _next << c.NextTrigger()
 
@@ -108,37 +100,21 @@ class PVariable(c.EUDVArray(8)):
 
         elif isinstance(i, c.EUDVariable):
             a0 = c.Forward()
-            c.RawTrigger(
-                actions=[
-                    c.SetMemory(a0 + 16, c.SetTo, self._epd + 348 // 4)
-                ]
-            )
+            c.RawTrigger(actions=[c.SetMemory(a0 + 16, c.SetTo, self._epd + 348 // 4)])
             for k in range(2, -1, -1):
                 c.RawTrigger(
                     conditions=i.AtLeastX(1, 2 ** k),
-                    actions=[
-                        c.SetMemory(a0 + 16, c.Add, 18 * (2 ** k)),
-                    ]
+                    actions=[c.SetMemory(a0 + 16, c.Add, 18 * (2 ** k))],
                 )
-            c.RawTrigger(
-                actions=[
-                    a0 << c.SetMemory(0, c.SetTo, value)
-                ]
-            )
+            c.RawTrigger(actions=[a0 << c.SetMemory(0, c.SetTo, value)])
 
         elif isinstance(value, c.EUDVariable):
-            c.VProc(
-                value,
-                value.QueueAssignTo(self._epd + (18 * i + 348 // 4))
-            )
+            c.VProc(value, value.QueueAssignTo(self._epd + (18 * i + 348 // 4)))
 
         else:
             c.RawTrigger(
                 actions=[
-                    c.SetDeaths(
-                        self._epd + (18 * i + 348 // 4),
-                        c.SetTo, value, 0
-                    ),
+                    c.SetDeaths(self._epd + (18 * i + 348 // 4), c.SetTo, value, 0)
                 ]
             )
 

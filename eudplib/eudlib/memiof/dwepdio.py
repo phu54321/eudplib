@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Copyright (c) 2014 trgk
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,39 +21,28 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-'''
+"""
 
-from ... import (
-    core as c,
-    ctrlstru as cs,
-    utils as ut,
-)
+from ... import core as c, ctrlstru as cs, utils as ut
 
-from .modcurpl import (
-    f_setcurpl,
-    f_getcurpl,
-)
+from .modcurpl import f_setcurpl, f_getcurpl
 
 
 @c.EUDFunc
 def f_dwepdread_epd(targetplayer):
     origcp = f_getcurpl()
     ptr, epd = c.EUDVariable(), c.EUDVariable()
-    cs.DoActions([
-        ptr.SetNumber(0),
-        epd.SetNumber(ut.EPD(0)),
-        c.SetCurrentPlayer(targetplayer)
-    ])
+    cs.DoActions(
+        [ptr.SetNumber(0), epd.SetNumber(ut.EPD(0)), c.SetCurrentPlayer(targetplayer)]
+    )
 
     for i in range(31, -1, -1):
         c.RawTrigger(
-            conditions=[
-                c.DeathsX(c.CurrentPlayer, c.AtLeast, 1, 0, 2**i)
-            ],
+            conditions=[c.DeathsX(c.CurrentPlayer, c.AtLeast, 1, 0, 2 ** i)],
             actions=[
                 ptr.AddNumber(2 ** i),
-                epd.AddNumber(2 ** (i - 2)) if i >= 2 else []
-            ]
+                epd.AddNumber(2 ** (i - 2)) if i >= 2 else [],
+            ],
         )
 
     f_setcurpl(origcp)
@@ -65,16 +54,11 @@ def f_dwepdread_epd(targetplayer):
 def f_dwread_epd(targetplayer):
     origcp = f_getcurpl()
     ptr = c.EUDVariable()
-    cs.DoActions([
-        ptr.SetNumber(0),
-        c.SetCurrentPlayer(targetplayer)
-    ])
+    cs.DoActions([ptr.SetNumber(0), c.SetCurrentPlayer(targetplayer)])
     for i in range(31, -1, -1):
         c.RawTrigger(
-            conditions=[
-                c.DeathsX(c.CurrentPlayer, c.AtLeast, 1, 0, 2**i)
-            ],
-            actions=ptr.AddNumber(2 ** i)
+            conditions=[c.DeathsX(c.CurrentPlayer, c.AtLeast, 1, 0, 2 ** i)],
+            actions=ptr.AddNumber(2 ** i),
         )
 
     f_setcurpl(origcp)
@@ -88,7 +72,7 @@ def f_epdread_epd(targetplayer):
 
 # Special flag reading functions
 def f_flagread_epd(targetplayer, *flags, _readerdict={}):
-    flags = tuple(flags)    # Make flags hashable
+    flags = tuple(flags)  # Make flags hashable
 
     if flags in _readerdict:
         readerf = _readerdict[flags]
@@ -110,14 +94,12 @@ def f_flagread_epd(targetplayer, *flags, _readerdict={}):
                 if sum(bitandflags) == 0:
                     continue
                 c.RawTrigger(
-                    conditions=[
-                        c.DeathsX(c.CurrentPlayer, c.AtLeast, 1, 0, 2**i)
-                    ],
+                    conditions=[c.DeathsX(c.CurrentPlayer, c.AtLeast, 1, 0, 2 ** i)],
                     actions=[
                         flagv.AddNumber(2 ** i)
                         for j, flagv in enumerate(flagsv)
                         if flags[j] & (2 ** i)
-                    ]
+                    ],
                 )
 
             f_setcurpl(origcp)
@@ -130,6 +112,7 @@ def f_flagread_epd(targetplayer, *flags, _readerdict={}):
 
 
 # Writing functions
+
 
 def f_dwwrite_epd(targetplayer, value):
     cs.DoActions(c.SetDeaths(targetplayer, c.SetTo, value, 0))
@@ -151,14 +134,16 @@ def f_dwbreak(number):
     byte = c.EUDCreateVariables(4)
 
     # Clear byte[], word[]
-    cs.DoActions([
-        word[0].SetNumber(0),
-        word[1].SetNumber(0),
-        byte[0].SetNumber(0),
-        byte[1].SetNumber(0),
-        byte[2].SetNumber(0),
-        byte[3].SetNumber(0)
-    ])
+    cs.DoActions(
+        [
+            word[0].SetNumber(0),
+            word[1].SetNumber(0),
+            byte[0].SetNumber(0),
+            byte[1].SetNumber(0),
+            byte[2].SetNumber(0),
+            byte[3].SetNumber(0),
+        ]
+    )
 
     for i in range(31, -1, -1):
         byteidx = i // 8
@@ -171,8 +156,8 @@ def f_dwbreak(number):
             actions=[
                 byte[byteidx].AddNumber(2 ** byteexp),
                 word[wordidx].AddNumber(2 ** wordexp),
-                number.SubtractNumber(2 ** i)
-            ]
+                number.SubtractNumber(2 ** i),
+            ],
         )
 
     return word[0], word[1], byte[0], byte[1], byte[2], byte[3]
@@ -185,14 +170,16 @@ def f_dwbreak2(number):
     byte = c.EUDCreateVariables(4)
 
     # Clear byte[], word[]
-    cs.DoActions([
-        word[0].SetNumber(0),
-        word[1].SetNumber(0),
-        byte[0].SetNumber(0),
-        byte[1].SetNumber(0),
-        byte[2].SetNumber(0),
-        byte[3].SetNumber(0)
-    ])
+    cs.DoActions(
+        [
+            word[0].SetNumber(0),
+            word[1].SetNumber(0),
+            byte[0].SetNumber(0),
+            byte[1].SetNumber(0),
+            byte[2].SetNumber(0),
+            byte[3].SetNumber(0),
+        ]
+    )
 
     for i in range(31, -1, -1):
         byteidx = i // 8
@@ -203,8 +190,8 @@ def f_dwbreak2(number):
             actions=[
                 byte[byteidx].AddNumber(2 ** i),
                 word[wordidx].AddNumber(2 ** i),
-                number.SubtractNumber(2 ** i)
-            ]
+                number.SubtractNumber(2 ** i),
+            ],
         )
 
     return word[0], word[1], byte[0], byte[1], byte[2], byte[3]

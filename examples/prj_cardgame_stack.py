@@ -70,7 +70,7 @@
 import sys
 import os
 
-sys.path.insert(0, os.path.abspath('..\\'))
+sys.path.insert(0, os.path.abspath("..\\"))
 from eudplib import *
 
 # Global variable : card deck
@@ -117,15 +117,22 @@ def PopDeck():
 
         if EUDIf(deck2n == 0):  # so sad
             # query each player to drop cards
-            DoActions([
-                (
-                    SetCurrentPlayer(player),
-                    ## TODO : DisplayTextText is removed
-                    DisplayExtText(SCMD2Text('''\
+            DoActions(
+                [
+                    (
+                        SetCurrentPlayer(player),
+                        ## TODO : DisplayTextText is removed
+                        DisplayExtText(
+                            SCMD2Text(
+                                """\
 <0F>Rule 5-1-1 2) <04>덱, 덱2가 비었습니다.
-<17>카드 한장씩을 버려주십시오.'''))
-                ) for player in range(8)
-            ])
+<17>카드 한장씩을 버려주십시오."""
+                            )
+                        ),
+                    )
+                    for player in range(8)
+                ]
+            )
 
             for player in range(8):
                 if EUDIf(IsPlayerPlaying(player)):
@@ -143,14 +150,21 @@ def PopDeck():
             EUDEndInfLoop()
 
         if EUDElse():
-            DoActions([
-                (
-                    SetCurrentPlayer(player),
-                    ## TODO : DisplayTextText is removed
-                    DisplayExtText(SCMD2Text('''\
-<0F>Rule 5-1-1 1) <04>덱이 비워졌으므로 덱2에서 보충합니다.'''))
-                ) for player in range(8)
-            ])
+            DoActions(
+                [
+                    (
+                        SetCurrentPlayer(player),
+                        ## TODO : DisplayTextText is removed
+                        DisplayExtText(
+                            SCMD2Text(
+                                """\
+<0F>Rule 5-1-1 1) <04>덱이 비워졌으므로 덱2에서 보충합니다."""
+                            )
+                        ),
+                    )
+                    for player in range(8)
+                ]
+            )
         EUDEndIf()
     EUDEndIf()
 
@@ -168,6 +182,6 @@ def main():
     EUDEndInfLoop()
 
 
-LoadMap('basemap/basemap_stack.scx')
+LoadMap("basemap/basemap_stack.scx")
 # CompressPayload(True)
-SaveMap('outputmap/Card Game [Stack].scx', main)
+SaveMap("outputmap/Card Game [Stack].scx", main)

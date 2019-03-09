@@ -1,11 +1,11 @@
-'''
+"""
 Card shuffling part only on mycardgame.py
-'''
+"""
 
 import sys
 import os
 
-sys.path.insert(0, os.path.abspath('..\\'))
+sys.path.insert(0, os.path.abspath("..\\"))
 
 from eudplib import *
 
@@ -13,10 +13,10 @@ cards = EUDArray(54)
 
 
 def ShuffleArray(arr, n):
-    ''' Array shuffler
+    """ Array shuffler
     :param EUDArray arr: Array to shuffle
     :param n: Number of elements insode array
-    '''
+    """
     i = EUDVariable()
     t = EUDVariable()
     i << 0
@@ -47,6 +47,6 @@ def main():
     EUDEndInfLoop()
 
 
-LoadMap('basemap/basemap.scx')
+LoadMap("basemap/basemap.scx")
 # CompressPayload(True)
-SaveMap('outputmap/shuffle.scx', main)
+SaveMap("outputmap/shuffle.scx", main)

@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Copyright (c) 2014 trgk
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,7 +21,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-'''
+"""
 
 from .. import rawtrigger as rt
 from .. import allocator as ac
@@ -29,17 +29,14 @@ from ... import utils as ut
 
 from .eudfuncn import EUDFuncN
 from .eudtypedfuncn import applyTypes
-from ..variable import (
-    VProc,
-    EUDVariable,
-    SetVariables,
-)
+from ..variable import VProc, EUDVariable, SetVariables
 from ..eudstruct import EUDStruct, EUDVArray
 
 
 #
 # Common argument / returns storage
 #
+
 
 def getArgStorage(argn, _argstorage_dict={}):
     """ Get common arguments storage for argn """
@@ -75,10 +72,7 @@ def callFuncBody(fstart, fend):
     """ Call function's body triggers """
     fcallend = ac.Forward()
 
-    rt.RawTrigger(
-        nextptr=fstart,
-        actions=[rt.SetNextPtr(fend, fcallend)]
-    )
+    rt.RawTrigger(nextptr=fstart, actions=[rt.SetNextPtr(fend, fcallend)])
 
     fcallend << rt.NextTrigger()
 
@@ -109,23 +103,21 @@ def EUDTypedFuncPtr(argtypes, rettypes):
     retn = len(rettypes)
 
     class PtrDataClass(EUDStruct):
-        _fields_ = [
-            '_fstart',
-            '_fendnext_epd'
-        ]
-        def __init__(self, _from = None):
+        _fields_ = ["_fstart", "_fendnext_epd"]
+
+        def __init__(self, _from=None):
             if _from is not None and isinstance(_from, EUDFuncN):
                 # Statically generate with EUDFuncN
                 self.checkValidFunction(_from)
                 f_idcstart, f_idcend = createIndirectCaller(_from)
-                super().__init__(_from = EUDVArray(2)([f_idcstart, ut.EPD(f_idcend + 4)]))
+                super().__init__(_from=EUDVArray(2)([f_idcstart, ut.EPD(f_idcend + 4)]))
             else:
                 # Cast from EUDVariable or ConstExpr
-                super().__init__(_from = _from)
+                super().__init__(_from=_from)
 
         @classmethod
         def cast(cls, _from):
-            return cls(_from = _from)
+            return cls(_from=_from)
 
         def checkValidFunction(self, f):
             ut.ep_assert(isinstance(f, EUDFuncN), "%s is not an EUDFuncN" % f)
@@ -134,12 +126,14 @@ def EUDTypedFuncPtr(argtypes, rettypes):
 
             f_argn = f._argn
             f_retn = f._retn
-            ut.ep_assert(argn == f_argn,
-                         "Function requires %d arguments (Expected %d)" %
-                         (f_argn, argn))
-            ut.ep_assert(retn == f_retn,
-                         "Function returns %d values (Expected %d)" %
-                         (f_retn, retn))
+            ut.ep_assert(
+                argn == f_argn,
+                "Function requires %d arguments (Expected %d)" % (f_argn, argn),
+            )
+            ut.ep_assert(
+                retn == f_retn,
+                "Function returns %d values (Expected %d)" % (f_retn, retn),
+            )
 
         def setFunc(self, f):
             """ Set function pointer's target to function
@@ -172,16 +166,11 @@ def EUDTypedFuncPtr(argtypes, rettypes):
             # Call function
             t, a = ac.Forward(), ac.Forward()
             SetVariables(
-                [ut.EPD(t + 4), ut.EPD(a + 16)],
-                [self._fstart, self._fendnext_epd]
+                [ut.EPD(t + 4), ut.EPD(a + 16)], [self._fstart, self._fendnext_epd]
             )
 
             fcallend = ac.Forward()
-            t << rt.RawTrigger(
-                actions=[
-                    a << rt.SetNextPtr(0, fcallend),
-                ]
-            )
+            t << rt.RawTrigger(actions=[a << rt.SetNextPtr(0, fcallend)])
             fcallend << rt.NextTrigger()
 
             if retn:

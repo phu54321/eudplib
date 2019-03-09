@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Copyright (c) 2018 Armoha
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,14 +21,10 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-'''
+"""
 
 from . import modcurpl as cp
-from ... import (
-    core as c,
-    ctrlstru as cs,
-    utils as ut,
-)
+from ... import core as c, ctrlstru as cs, utils as ut
 
 
 def bits(n):
@@ -41,21 +37,22 @@ def bits(n):
 
 def f_readgen_epd(mask, *args, docstring=None):
     mask = mask & 0xFFFFFFFF
+
     @c.EUDFunc
     def f_read_epd_template(targetplayer):
         origcp = cp.f_getcurpl()
         ret = [c.EUDVariable() for _ in args]
 
-        cs.DoActions([
-            c.SetCurrentPlayer(targetplayer),
-            [retv.SetNumber(arg[0]) for retv, arg in zip(ret, args)],
-        ])
+        cs.DoActions(
+            [
+                c.SetCurrentPlayer(targetplayer),
+                [retv.SetNumber(arg[0]) for retv, arg in zip(ret, args)],
+            ]
+        )
 
         for i in bits(mask):
             c.RawTrigger(
-                conditions=[
-                    c.DeathsX(c.CurrentPlayer, c.AtLeast, 1, 0, i)
-                ],
+                conditions=[c.DeathsX(c.CurrentPlayer, c.AtLeast, 1, 0, i)],
                 actions=[
                     retv.AddNumber(arg[1](i)) if arg[1](i) != 0 else []
                     for retv, arg in zip(ret, args)
@@ -74,19 +71,16 @@ def f_readgen_epd(mask, *args, docstring=None):
 
 def f_readgen_cp(mask, *args, docstring=None):
     mask = mask & 0xFFFFFFFF
+
     @c.EUDFunc
     def readerf():
         ret = [c.EUDVariable() for _ in args]
 
-        cs.DoActions([
-            retv.SetNumber(arg[0]) for retv, arg in zip(ret, args)
-        ])
+        cs.DoActions([retv.SetNumber(arg[0]) for retv, arg in zip(ret, args)])
 
         for i in bits(mask):
             c.RawTrigger(
-                conditions=[
-                    c.DeathsX(c.CurrentPlayer, c.AtLeast, 1, 0, i)
-                ],
+                conditions=[c.DeathsX(c.CurrentPlayer, c.AtLeast, 1, 0, i)],
                 actions=[
                     retv.AddNumber(arg[1](i)) if arg[1](i) != 0 else []
                     for retv, arg in zip(ret, args)
@@ -111,8 +105,12 @@ def f_readgen_cp(mask, *args, docstring=None):
 
 f_cunitread_epd = f_readgen_epd(0x7FFFF8, (0, lambda x: x))
 f_cunitread_cp = f_readgen_cp(0x7FFFF8, (0, lambda x: x))
-f_cunitepdread_epd = f_readgen_epd(0x7FFFF8, (0, lambda x: x), (-0x58A364 // 4, lambda y: y // 4))
-f_cunitepdread_cp = f_readgen_cp(0x7FFFF8, (0, lambda x: x), (-0x58A364 // 4, lambda y: y // 4))
+f_cunitepdread_epd = f_readgen_epd(
+    0x7FFFF8, (0, lambda x: x), (-0x58A364 // 4, lambda y: y // 4)
+)
+f_cunitepdread_cp = f_readgen_cp(
+    0x7FFFF8, (0, lambda x: x), (-0x58A364 // 4, lambda y: y // 4)
+)
 
 
 def f_maskread_epd(targetplayer, mask, _fdict={}):

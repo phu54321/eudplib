@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Copyright (c) 2014 trgk
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,7 +21,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-'''
+"""
 
 
 from eudplib import utils as ut
@@ -38,19 +38,21 @@ def InitPropertyMap(chkt):
     _uprptable.extend([None] * 64)
 
     # Backup UPRP data
-    uprp = chkt.getsection('UPRP')
-    upus = chkt.getsection('UPUS') or bytes([1] * 64)
+    uprp = chkt.getsection("UPRP")
+    upus = chkt.getsection("UPUS") or bytes([1] * 64)
 
     for i in range(64):
         if upus[i]:
-            uprpdata = uprp[20 * i: 20 * i + 20]
+            uprpdata = uprp[20 * i : 20 * i + 20]
             _uprpdict[uprpdata] = i
             _uprptable[i] = uprpdata
 
 
 def GetPropertyIndex(prop):
-    ut.ep_assert(isinstance(prop, UnitProperty) or isinstance(prop, bytes),
-                 'Invalid property type')
+    ut.ep_assert(
+        isinstance(prop, UnitProperty) or isinstance(prop, bytes),
+        "Invalid property type",
+    )
 
     prop = bytes(prop)
     try:
@@ -61,7 +63,7 @@ def GetPropertyIndex(prop):
             if _uprptable[uprpindex] is None:
                 break
 
-        ut.ep_assert(uprpindex < 64, 'Unit property table overflow')
+        ut.ep_assert(uprpindex < 64, "Unit property table overflow")
 
         _uprptable[uprpindex] = prop
         _uprpdict[prop] = uprpindex
@@ -69,5 +71,5 @@ def GetPropertyIndex(prop):
 
 
 def ApplyPropertyMap(chkt):
-    uprpdata = b''.join([uprpdata or bytes(20) for uprpdata in _uprptable])
-    chkt.setsection('UPRP', uprpdata)
+    uprpdata = b"".join([uprpdata or bytes(20) for uprpdata in _uprptable])
+    chkt.setsection("UPRP", uprpdata)

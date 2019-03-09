@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Copyright (c) 2014 trgk
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,15 +21,12 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-'''
+"""
 
 from ... import core as c
 from ... import ctrlstru as cs
 
-from . import (
-    dwepdio as dwm,
-    modcurpl as cp,
-)
+from . import dwepdio as dwm, modcurpl as cp
 
 
 class EUDByteStream:
@@ -44,10 +41,9 @@ class EUDByteStream:
     @c.EUDMethod
     def seekepd(self, epdoffset):
         """Seek EUDByteStream to specific epd player address"""
-        c.SeqCompute([
-            (self._offset, c.SetTo, epdoffset),
-            (self._suboffset, c.SetTo, 0)
-        ])
+        c.SeqCompute(
+            [(self._offset, c.SetTo, epdoffset), (self._suboffset, c.SetTo, 0)]
+        )
 
     @c.EUDMethod
     def seekoffset(self, offset):
@@ -68,10 +64,7 @@ class EUDByteStream:
         case = [c.Forward() for _ in range(5)]
         ret = c.EUDVariable()
 
-        cs.DoActions([
-            ret.SetNumber(0),
-            c.SetCurrentPlayer(self._offset)
-        ])
+        cs.DoActions([ret.SetNumber(0), c.SetCurrentPlayer(self._offset)])
 
         for i in range(3):
             case[i] << c.NextTrigger()
@@ -79,13 +72,11 @@ class EUDByteStream:
             for j in range(7, -1, -1):
                 c.RawTrigger(
                     conditions=[
-                        c.DeathsX(c.CurrentPlayer, c.AtLeast, 1, 0, 2**(j + 8 * i))
+                        c.DeathsX(c.CurrentPlayer, c.AtLeast, 1, 0, 2 ** (j + 8 * i))
                     ],
-                    actions=ret.AddNumber(2**j)
+                    actions=ret.AddNumber(2 ** j),
                 )
-            c.SeqCompute([
-                (self._suboffset, c.Add, 1)
-            ])
+            c.SeqCompute([(self._suboffset, c.Add, 1)])
             cs.EUDJump(case[-1])
 
         # suboffset == 3
@@ -93,15 +84,10 @@ class EUDByteStream:
 
         for i in range(7, -1, -1):
             c.RawTrigger(
-                conditions=[
-                    c.DeathsX(c.CurrentPlayer, c.AtLeast, 1, 0, 2**(i + 24))
-                ],
-                actions=ret.AddNumber(2**i)
+                conditions=[c.DeathsX(c.CurrentPlayer, c.AtLeast, 1, 0, 2 ** (i + 24))],
+                actions=ret.AddNumber(2 ** i),
             )
-        c.SeqCompute([
-            (self._offset, c.Add, 1),
-            (self._suboffset, c.SetTo, 0)
-        ])
+        c.SeqCompute([(self._offset, c.Add, 1), (self._suboffset, c.SetTo, 0)])
 
         case[-1] << c.NextTrigger()
         cp.f_setcurpl(orig)
@@ -118,27 +104,31 @@ class EUDByteStream:
 
         cs.EUDSwitch(self._suboffset)
         if cs.EUDSwitchCase()(0):
-            cs.DoActions([
-                c.SetMemoryXEPD(self._offset, c.SetTo, byte, 255),
-                self._suboffset.AddNumber(1)
-            ])
+            cs.DoActions(
+                [
+                    c.SetMemoryXEPD(self._offset, c.SetTo, byte, 255),
+                    self._suboffset.AddNumber(1),
+                ]
+            )
             c.EUDReturn()
 
         for i in range(1, 4):
             if cs.EUDSwitchCase()(i):
-                cs.DoActions([
-                    c.SetMemory(_dw, c.SetTo, 255 * 256**i),
-                    c.SetMemory(_dw + 20, c.SetTo, 0),
-                    [self._suboffset.AddNumber(1) if i < 3 else self._suboffset.SetNumber(0)],
-                ])
+                cs.DoActions(
+                    [
+                        c.SetMemory(_dw, c.SetTo, 255 * 256 ** i),
+                        c.SetMemory(_dw + 20, c.SetTo, 0),
+                        [
+                            self._suboffset.AddNumber(1)
+                            if i < 3
+                            else self._suboffset.SetNumber(0)
+                        ],
+                    ]
+                )
                 for j in range(7, -1, -1):
                     c.RawTrigger(
-                        conditions=[
-                            byte.AtLeastX(1, 2**j)
-                        ],
-                        actions=[
-                            c.SetMemory(_dw + 20, c.Add, 2 ** (j + i * 8))
-                        ]
+                        conditions=[byte.AtLeastX(1, 2 ** j)],
+                        actions=[c.SetMemory(_dw + 20, c.Add, 2 ** (j + i * 8))],
                     )
                 cs.EUDBreak()
 
@@ -146,8 +136,7 @@ class EUDByteStream:
 
         cs.DoActions([_dw << c.SetMemoryXEPD(self._offset, c.SetTo, 0, 0xFF00)])
         c.RawTrigger(
-            conditions=self._suboffset.Exactly(0),
-            actions=self._offset.AddNumber(1)
+            conditions=self._suboffset.Exactly(0), actions=self._offset.AddNumber(1)
         )
 
     @classmethod

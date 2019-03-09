@@ -3,7 +3,7 @@ from helper import *
 
 # Basic struct test
 class TestStruct(EUDStruct):
-    _fields_ = ['x', 'y', 'z']
+    _fields_ = ["x", "y", "z"]
 
     @EUDMethod
     def setX(self, x):
@@ -35,24 +35,19 @@ def test_struct():
     test_equality(
         "EUDStruct indirect access test",
         [a.x, b.x, c.x, d.x, a.y, b.y, c.y, d.y, a.z, b.z, c.z, d.z],
-        [3, 3, 3, 3, 7, 7, 7, 7, 8, 8, 8, 8]
+        [3, 3, 3, 3, 7, 7, 7, 7, 8, 8, 8, 8],
     )
 
     d = a.copy()
     a.add(d)
     test_equality(
-        "EUDTypedMethod test",
-        [a.x, a.y, a.z, d.x, d.y, d.z],
-        [6, 14, 16, 3, 7, 8]
+        "EUDTypedMethod test", [a.x, a.y, a.z, d.x, d.y, d.z], [6, 14, 16, 3, 7, 8]
     )
 
     e = EUDVariable()
     e << a
     TestStruct.cast(e).setX(1)
-    test_equality(
-        "EUDStruct method via EUDVariable",
-        a.x, 1
-    )
+    test_equality("EUDStruct method via EUDVariable", a.x, 1)
 
     # https://github.com/phu54321/euddraft/issues/8
     # Accessing to unknown fields should trigger an error.
@@ -62,15 +57,13 @@ def test_struct():
 
 # Nested struct test
 
+
 class Coord(EUDStruct):
-    _fields_ = ['x', 'y']
+    _fields_ = ["x", "y"]
 
 
 class Triangle(EUDStruct):
-    _fields_ = [
-        ('p', Coord * 5),
-        'q'
-    ]
+    _fields_ = [("p", Coord * 5), "q"]
 
 
 @TestInstance
@@ -85,12 +78,9 @@ def test_nested_struct():
     a.p[1].y += 2
     a.q = 3
 
-    test_assert("Nested EUDStruct test", [
-        a.p[0].x == 1,
-        a.p[0].y == 0,
-        a.p[1].y == 4,
-        a.q == 3,
-    ])
+    test_assert(
+        "Nested EUDStruct test", [a.p[0].x == 1, a.p[0].y == 0, a.p[1].y == 4, a.q == 3]
+    )
 
     b = a.copy()
     b.p[0].x = 5
@@ -98,7 +88,7 @@ def test_nested_struct():
     test_equality(
         "Shallow EUDStruct copy test",
         [a.p[0].x, b.p[0].x, b.p[0].y, b.p[1].y, a.q, b.q],
-        [5, 5, 0, 4, 3, 2]
+        [5, 5, 0, 4, 3, 2],
     )
 
 
@@ -112,18 +102,12 @@ def test_invalid_struct():
 @TestInstance
 def test_cast_0_to_struft():
     a = TestStruct.cast(0)
-    test_equality(
-        "nullptr casting",
-        a, 0
-    )
+    test_equality("nullptr casting", a, 0)
 
 
 # Test referencing itself on member decl
 class ListClass(EUDStruct):
-    _fields_ = [
-        ('prev', selftype),
-        ('next', selftype),
-    ]
+    _fields_ = [("prev", selftype), ("next", selftype)]
 
 
 @TestInstance

@@ -18,7 +18,8 @@ MPQ_WAVE_QUALITY_MEDIUM = 0x1
 # Logic
 ffi = FFI()
 
-ffi.cdef("""
+ffi.cdef(
+    """
 typedef void *HANDLE, *LPOVERLAPPED;
 typedef void VOID;
 typedef unsigned int DWORD, BOOL;
@@ -35,7 +36,8 @@ BOOL WINAPI SFileCloseFile(HANDLE);
 BOOL WINAPI SFileAddFile(HANDLE, const char*, const char*, DWORD);
 BOOL WINAPI SFileAddWave(HANDLE, const char*, const char*, DWORD, DWORD);
 
-""")
+"""
+)
 
 
 libstorm = None
@@ -46,26 +48,26 @@ def InitMpqLibrary():
 
     try:
         platformName = platform.system()
-        if platformName == 'Windows':  # windows
+        if platformName == "Windows":  # windows
             if struct.calcsize("P") == 4:  # 32bit
-                libstorm = ffi.dlopen('dlls/StormLib32.dll')
+                libstorm = ffi.dlopen("dlls/StormLib32.dll")
             else:  # 64bit
-                libstorm = ffi.dlopen('dlls/StormLib64.dll')
+                libstorm = ffi.dlopen("dlls/StormLib64.dll")
             filename_u2b = u2b
 
-        elif platformName == 'Darwin':  # mac
+        elif platformName == "Darwin":  # mac
             try:
-                libstorm = ffi.dlopen('libstorm.dylib')
-                filename_u2b = (lambda x: x.encode('utf-8'))
+                libstorm = ffi.dlopen("libstorm.dylib")
+                filename_u2b = lambda x: x.encode("utf-8")
             except OSError:
-                print('You need to install stormlib before using eudplib.')
-                print(' $ brew install homebrew/games/stormlib')
+                print("You need to install stormlib before using eudplib.")
+                print(" $ brew install homebrew/games/stormlib")
                 return False
 
         return True
 
     except OSError:
-        print('Loading SFmpq failed.')
+        print("Loading SFmpq failed.")
         libstorm = None
         return False
 
@@ -80,7 +82,7 @@ class MPQ:
 
     def Open(self, fname):
         if self.mpqh is not None:
-            raise RuntimeError('Duplicate opening')
+            raise RuntimeError("Duplicate opening")
 
         h = ffi.new("HANDLE*")
         ret = self.libstorm.SFileOpenArchive(filename_u2b(fname), 0, 0, h)
@@ -108,12 +110,7 @@ class MPQ:
 
         # Open file
         fileh = ffi.new("HANDLE*")
-        ret = self.libstorm.SFileOpenFileEx(
-            self.mpqh,
-            u2b(fname),
-            0,
-            fileh
-        )
+        ret = self.libstorm.SFileOpenFileEx(self.mpqh, u2b(fname), 0, fileh)
         if not ret:
             return None
         fileh = fileh[0]
@@ -171,7 +168,7 @@ class MPQ:
             filename_u2b(tmpfname),
             u2b(fname),
             MPQ_FILE_COMPRESS | MPQ_FILE_ENCRYPTED | MPQ_FILE_FIX_KEY,
-            MPQ_WAVE_QUALITY_MEDIUM
+            MPQ_WAVE_QUALITY_MEDIUM,
         )
         os.unlink(tmpfname)
         return ret
@@ -182,21 +179,21 @@ class MPQ:
 
 InitMpqLibrary()
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     mr = MPQ()
-    mr.Open('basemap.scx')
-    a = mr.Extract('staredit\\scenario.chk')
+    mr.Open("basemap.scx")
+    a = mr.Extract("staredit\\scenario.chk")
     mr.Close()
     print(len(a))
 
-    if os.path.exists('test.scx'):
-        os.unlink('test.scx')
-    open('test.scx', 'wb').write(open('basemap.scx', 'rb').read())
+    if os.path.exists("test.scx"):
+        os.unlink("test.scx")
+    open("test.scx", "wb").write(open("basemap.scx", "rb").read())
 
-    mr.Open('test.scx')
-    a = mr.Extract('staredit\\scenario.chk')
+    mr.Open("test.scx")
+    a = mr.Extract("staredit\\scenario.chk")
     print(len(a))
-    mr.PutFile('test', b'1234')
-    b = mr.Extract('test')
+    mr.PutFile("test", b"1234")
+    b = mr.Extract("test")
     mr.Compact()
     print(b)

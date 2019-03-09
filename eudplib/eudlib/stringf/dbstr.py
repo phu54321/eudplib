@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Copyright (c) 2014 trgk
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,13 +21,9 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-'''
+"""
 
-from eudplib import (
-    core as c,
-    ctrlstru as cs,
-    utils as ut,
-)
+from eudplib import core as c, ctrlstru as cs, utils as ut
 from ..memiof import f_dwread_epd, f_dwwrite_epd
 from .cpstr import GetMapStringAddr
 from .cputf8 import f_cp949_to_utf8_cpy
@@ -113,13 +109,12 @@ class DBStringData(c.EUDObject):
         return len(self.content) + 5
 
     def WritePayload(self, pbuf):
-        pbuf.WriteBytes(b'\x01\x00\x04\x00')
+        pbuf.WriteBytes(b"\x01\x00\x04\x00")
         pbuf.WriteBytes(self.content)
         pbuf.WriteByte(0)
 
 
 class ExtendedStringIndex_FW(c.ConstExpr):
-
     def __init__(self, resetter):
         super().__init__(self)
         self._resetter = resetter
@@ -144,7 +139,6 @@ def _RegisterResetterAction(resetteract):
 
 
 class ResetterBuffer(c.EUDObject):
-
     def __init__(self):
         super().__init__()
 

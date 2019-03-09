@@ -1,13 +1,13 @@
 import sys
 import os
 
-sys.path.insert(0, os.path.abspath('..\\'))
+sys.path.insert(0, os.path.abspath("..\\"))
 
 from eudplib import *
 
 
 class Vector2D(EUDStruct):
-    _fields_ = ['x', 'y']
+    _fields_ = ["x", "y"]
 
     def __init__(self, x=None, y=None):
         if y is None:
@@ -81,10 +81,7 @@ radius = 100
 
 
 class CircleObj(EUDStruct):
-    _fields_ = [
-        ('pos', Vector2D),
-        ('velocity', Vector2D),
-    ]
+    _fields_ = [("pos", Vector2D), ("velocity", Vector2D)]
 
     def __init__(self, copyobj=None, *, pos=None, velocity=None):
         if copyobj is not None:
@@ -143,8 +140,7 @@ class CircleObj(EUDStruct):
 
                 # calculate veldiff back
                 new_veldiff = (
-                    posdiff.mul(para_length).add(
-                        posdiff_perpend.mul(perp_length))
+                    posdiff.mul(para_length).add(posdiff_perpend.mul(perp_length))
                 ).div(posdiff_length * posdiff_length)
                 new_veldiff.deepcopy(veldiff)
 
@@ -170,6 +166,7 @@ def main():
         DoActions(SetMemory(0x6509A0, SetTo, 0))
         EUDDoEvents()
     EUDEndInfLoop()
+
 
 LoadMap("outputmap/basemap/basemap.scx")
 SaveMap("outputmap/collision.scx", main)

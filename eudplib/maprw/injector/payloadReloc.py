@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Copyright (c) 2014 trgk
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,24 +21,24 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-'''
+"""
 
 from ... import core as c
 from ... import eudlib as sf
 from ... import ctrlstru as cs
 from eudplib import utils as ut
 
-''' Stage 2 :
+""" Stage 2 :
 - Initialize payload (stage3+ + user code) & execute it
-'''
+"""
 
 
 def CreatePayloadRelocator(payload):
     # We first build code injector.
-    prtdb = c.Db(b''.join([ut.i2b4(x // 4) for x in payload.prttable]))
+    prtdb = c.Db(b"".join([ut.i2b4(x // 4) for x in payload.prttable]))
     prtn = c.EUDVariable()
 
-    ortdb = c.Db(b''.join([ut.i2b4(x // 4) for x in payload.orttable]))
+    ortdb = c.Db(b"".join([ut.i2b4(x // 4) for x in payload.orttable]))
     ortn = c.EUDVariable()
 
     orig_payload = c.Db(payload.data)
@@ -56,9 +56,8 @@ def CreatePayloadRelocator(payload):
             if cs.EUDWhile()(prtn >= 1):
                 cs.DoActions(prtn.SubtractNumber(1))
                 sf.f_dwadd_epd(
-                    ut.EPD(orig_payload) +
-                    sf.f_dwread_epd(prtn + ut.EPD(prtdb)),
-                    orig_payload // 4
+                    ut.EPD(orig_payload) + sf.f_dwread_epd(prtn + ut.EPD(prtdb)),
+                    orig_payload // 4,
                 )
             cs.EUDEndWhile()
 
@@ -68,9 +67,8 @@ def CreatePayloadRelocator(payload):
             if cs.EUDWhile()(ortn >= 1):
                 cs.DoActions(ortn.SubtractNumber(1))
                 sf.f_dwadd_epd(
-                    ut.EPD(orig_payload) +
-                    sf.f_dwread_epd(ortn + ut.EPD(ortdb)),
-                    orig_payload
+                    ut.EPD(orig_payload) + sf.f_dwread_epd(ortn + ut.EPD(ortdb)),
+                    orig_payload,
                 )
             cs.EUDEndWhile()
 

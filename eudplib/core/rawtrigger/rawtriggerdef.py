@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Copyright (c) 2014 trgk
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,7 +21,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-'''
+"""
 
 from ..eudobj import EUDObject, Db
 from .triggerscope import NextTrigger, _RegisterTrigger
@@ -40,6 +40,7 @@ def GetTriggerCounter():
 
 # Aux
 
+
 def _bool2Cond(x):
     if x is True:
         return Condition(0, 0, 0, 0, 0, 22, 0, 0)  # Always
@@ -56,17 +57,17 @@ def Disabled(arg):
 
 # RawTrigger
 
-class RawTrigger(EUDObject):
 
+class RawTrigger(EUDObject):
     def __init__(
-            self,
-            prevptr=None,
-            nextptr=None,
-            conditions=None,
-            actions=None,
-            *args,
-            preserved=True,
-            trigSection=None
+        self,
+        prevptr=None,
+        nextptr=None,
+        conditions=None,
+        actions=None,
+        *args,
+        preserved=True,
+        trigSection=None
     ):
         super().__init__()
 
@@ -96,8 +97,8 @@ class RawTrigger(EUDObject):
                 actions = []
             actions = ut.FlattenList(actions)
 
-            ut.ep_assert(len(conditions) <= 16, 'Too many conditions')
-            ut.ep_assert(len(actions) <= 64, 'Too many actions')
+            ut.ep_assert(len(conditions) <= 16, "Too many conditions")
+            ut.ep_assert(len(actions) <= 64, "Too many actions")
 
             # Register condition/actions to trigger
             for i, cond in enumerate(conditions):
@@ -115,10 +116,12 @@ class RawTrigger(EUDObject):
         # Uses trigger segment for initialization
         # NOTE : player information is lost inside eudplib.
         else:
-            self._conditions = [Db(trigSection[i * 20: i * 20 + 20])
-                                for i in range(16)]
-            self._actions = [Db(trigSection[320 + i * 32: 320 + i * 32 + 32])
-                             for i in range(64)]
+            self._conditions = [
+                Db(trigSection[i * 20 : i * 20 + 20]) for i in range(16)
+            ]
+            self._actions = [
+                Db(trigSection[320 + i * 32 : 320 + i * 32 + 32]) for i in range(64)
+            ]
             self.preserved = bool(trigSection[320 + 2048] & 4)
 
     def GetNextPtrMemory(self):

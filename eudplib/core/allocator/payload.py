@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Copyright (c) 2014 trgk
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,7 +21,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-'''
+"""
 
 from . import rlocint, pbuffer
 from . import constexpr
@@ -57,7 +57,7 @@ def setPayloadLoggerMode(mode):
     _doLog = mode
 
 
-def lprint(text, flush=False, _endingdict={True: '\n', False: '\r'}):
+def lprint(text, flush=False, _endingdict={True: "\n", False: "\r"}):
     global _lastTime, _doLog
     if not _doLog:
         return
@@ -69,15 +69,15 @@ def lprint(text, flush=False, _endingdict={True: '\n', False: '\r'}):
 
 
 def CompressPayload(mode):
-    ''' Set payload compression mode.
+    """ Set payload compression mode.
 
     :param mode: If true, enable object stacking (compression). If false,
     disable it.
-    '''
+    """
 
     global _payload_compress
     if mode not in [True, False]:
-        raise ut.EPError('Invalid type')
+        raise ut.EPError("Invalid type")
 
     if mode:
         _payload_compress = True
@@ -87,10 +87,10 @@ def CompressPayload(mode):
 
 class ObjCollector:
 
-    '''
+    """
     Object having PayloadBuffer-like interfaces. Collects all objects by
     calling RegisterObject() for every related objects.
-    '''
+    """
 
     def __init__(self):
         pass
@@ -131,7 +131,7 @@ def CollectObjects(root):
     global _dynamic_objects_set
     global _untraversed_objects
 
-    lprint('[Stage 1/3] CollectObjects', flush=True)
+    lprint("[Stage 1/3] CollectObjects", flush=True)
 
     phase = PHASE_COLLECTING
 
@@ -148,9 +148,10 @@ def CollectObjects(root):
     while _untraversed_objects:
         while _untraversed_objects:
             lprint(
-                " - Collected %d / %d objects" % (
+                " - Collected %d / %d objects"
+                % (
                     len(_found_objects_set),
-                    len(_found_objects_set) + len(_untraversed_objects)
+                    len(_found_objects_set) + len(_untraversed_objects),
                 )
             )
 
@@ -167,7 +168,7 @@ def CollectObjects(root):
             objc.EndWrite()
 
     if len(_found_objects_set) == 0:
-        raise ut.EPError('No object collected')
+        raise ut.EPError("No object collected")
 
     # Shuffle objects -> Randomize(?) addresses
     _found_objects_set.remove(_rootobj)
@@ -181,11 +182,8 @@ def CollectObjects(root):
 
     # Final
     lprint(
-        " - Collected %d / %d objects" %
-        (
-            len(_found_objects),
-            len(_found_objects)
-        ), flush=True
+        " - Collected %d / %d objects" % (len(_found_objects), len(_found_objects)),
+        flush=True,
     )
 
 
@@ -194,10 +192,10 @@ def CollectObjects(root):
 
 class ObjAllocator:
 
-    '''
+    """
     Object having PayloadBuffer-like interfaces. Collects all objects by
     calling RegisterObject() for every related objects.
-    '''
+    """
 
     def __init__(self):
         self._sizes = {}
@@ -248,7 +246,7 @@ class ObjAllocator:
     def WritePack(self, structformat, arglist):
         if structformat not in self._sizes:
             ssize = 0
-            sizedict = {'B': 1, 'H': 2, 'I': 4}
+            sizedict = {"B": 1, "H": 2, "I": 4}
             for i in range(len(arglist)):
                 ssize += sizedict[structformat[i]]
             self._sizes[structformat] = ssize
@@ -318,7 +316,7 @@ def AllocObjects():
         if len(dwoccupmap) != (obj.GetDataSize() + 3) >> 2:
 
             raise ut.EPError(
-                'Occupation map length (%d) & Object size mismatch for object (%d)'
+                "Occupation map length (%d) & Object size mismatch for object (%d)"
                 % (len(dwoccupmap), (obj.GetDataSize() + 3) >> 2)
             )
         lprint(" - Preprocessed %d / %d objects" % (i + 1, objn))
@@ -329,9 +327,9 @@ def AllocObjects():
     stackobjs.StackObjects(_found_objects, dwoccupmap_dict, _alloctable)
 
     # Get payload length
-    _payload_size = max(map(
-        lambda obj: _alloctable[obj] + obj.GetDataSize(), _found_objects
-    ))
+    _payload_size = max(
+        map(lambda obj: _alloctable[obj] + obj.GetDataSize(), _found_objects)
+    )
 
     phase = None
 
@@ -356,8 +354,8 @@ def ConstructPayload():
         written_bytes = pbuf.EndWrite()
         ut.ep_assert(
             written_bytes == objsize,
-            'obj.GetDataSize()(%d) != Real payload size(%d) for object %s'
-            % (objsize, written_bytes, obj)
+            "obj.GetDataSize()(%d) != Real payload size(%d) for object %s"
+            % (objsize, written_bytes, obj),
         )
 
         lprint(" - Written %d / %d objects" % (i + 1, objn))

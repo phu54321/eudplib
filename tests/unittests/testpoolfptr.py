@@ -54,9 +54,7 @@ def test_dfptr():
     q << f_div
     c1, c2 = q(17, 3)
     test_equality(
-        "Function dpointer test",
-        [a1, a2, b1, b2, c1, c2],
-        [2, 2, 17, 60, 5, 2]
+        "Function dpointer test", [a1, a2, b1, b2, c1, c2], [2, 2, 17, 60, 5, 2]
     )
 
     # Test 3 - no arg no ret
@@ -95,4 +93,4 @@ def f(x):
 def test_nested_dfptr():
     k = EUDFuncPtr(1, 1).alloc()
     k << f1
-    test_equality('Nested dfptr', k(EUDFuncPtr(1, 1)(f)), 26)
+    test_equality("Nested dfptr", k(EUDFuncPtr(1, 1)(f)), 26)

@@ -3,14 +3,14 @@
 import sys
 import os
 
-sys.path.insert(0, os.path.abspath('..\\'))
+sys.path.insert(0, os.path.abspath("..\\"))
 
 from eudplib import *
 
 
-'''
+"""
 Creep reading
-'''
+"""
 
 mapwidth, mapheight, creepaddr_epd = EUDCreateVariables(3)
 
@@ -19,10 +19,7 @@ mapwidth, mapheight, creepaddr_epd = EUDCreateVariables(3)
 def f_creepread_init():
     # Get creepmap address
     creepaddr_epd << f_epdread_epd(EPD(0x6D0E84))
-    SetVariables(
-        [mapwidth, mapheight],
-        f_dwbreak(f_dwread_epd(EPD(0x57F1D4)))[0:2]
-    )
+    SetVariables([mapwidth, mapheight], f_dwbreak(f_dwread_epd(EPD(0x57F1D4)))[0:2])
 
 
 @EUDFunc
@@ -48,11 +45,11 @@ def f_creepread(x, y):
     return ret
 
 
-'''
+"""
 Main logic
-'''
+"""
 
-LoadMap('outputmap/basemap/creeptest_basemap.scx')
+LoadMap("outputmap/basemap/creeptest_basemap.scx")
 # CompressPayload(True)
 
 
@@ -74,7 +71,7 @@ def main():
             # check unittype
             # /*0x064*/ u16         unitType;
             unittype = f_dwbreak(f_dwread_epd(unitepd + (0x64 // 4)))[0]
-            EUDContinueIfNot(unittype == EncodeUnit('Zerg Zergling'))
+            EUDContinueIfNot(unittype == EncodeUnit("Zerg Zergling"))
 
             # Get x, y coordinates of this unit.
             # uint16 unitx : unit + 0x28
@@ -92,22 +89,27 @@ def main():
 
             # Slow down zergling.
             # Creating kakaru and killing them slows down zergling.
-            SeqCompute([
-                (EPD(0x58DC60 + 0), SetTo, unitx),
-                (EPD(0x58DC60 + 4), SetTo, unity),
-                (EPD(0x58DC60 + 8), SetTo, unitx),
-                (EPD(0x58DC60 + 12), SetTo, unity)
-            ])
+            SeqCompute(
+                [
+                    (EPD(0x58DC60 + 0), SetTo, unitx),
+                    (EPD(0x58DC60 + 4), SetTo, unity),
+                    (EPD(0x58DC60 + 8), SetTo, unitx),
+                    (EPD(0x58DC60 + 12), SetTo, unity),
+                ]
+            )
 
-            DoActions([
-                CreateUnit(1, 'Kakaru (Twilight Critter)', 1, Player1),
-                RemoveUnitAt(All, 'Kakaru (Twilight Critter)', 1, Player1)
-            ])
+            DoActions(
+                [
+                    CreateUnit(1, "Kakaru (Twilight Critter)", 1, Player1),
+                    RemoveUnitAt(All, "Kakaru (Twilight Critter)", 1, Player1),
+                ]
+            )
 
-        DoActions(KillUnit('Kakaru (Twilight Critter)', Player1))
+        DoActions(KillUnit("Kakaru (Twilight Critter)", Player1))
 
         EUDDoEvents()
 
     EUDEndWhile()
 
-SaveMap('outputmap/testcreep.scx', main)
+
+SaveMap("outputmap/testcreep.scx", main)

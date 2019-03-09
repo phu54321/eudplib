@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Copyright (c) 2014 trgk
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,7 +21,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-'''
+"""
 
 from . import tblformat
 from ...utils import b2i2, b2i4, u2b, ep_assert, unProxy
@@ -59,15 +59,15 @@ def IgnoreColor(s):
 def InitStringMap(chkt):
     global strmap, unitmap, locmap, swmap
 
-    strmap = tblformat.TBL(chkt.getsection('STR'))
+    strmap = tblformat.TBL(chkt.getsection("STR"))
     unitmap = StringIdMap()
     locmap = StringIdMap()
     swmap = StringIdMap()
 
-    unix = chkt.getsection('UNIx')
-    mrgn = chkt.getsection('MRGN')
+    unix = chkt.getsection("UNIx")
+    mrgn = chkt.getsection("MRGN")
     try:
-        swnm = chkt.getsection('SWNM')
+        swnm = chkt.getsection("SWNM")
     except (KeyError):
         swnm = None  # Not Required
 
@@ -116,7 +116,7 @@ def GetUnitIndex(u):
 
 
 def ApplyStringMap(chkt):
-    chkt.setsection('STR', strmap.SaveTBL())
+    chkt.setsection("STR", strmap.SaveTBL())
 
 
 def ForcedAddString(s):

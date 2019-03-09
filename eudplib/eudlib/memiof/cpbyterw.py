@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Copyright (c) 2019 Armoha
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,13 +21,9 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-'''
+"""
 
-from eudplib import (
-    core as c,
-    ctrlstru as cs,
-    utils as ut,
-)
+from eudplib import core as c, ctrlstru as cs, utils as ut
 
 
 class CPByteWriter:
@@ -52,10 +48,7 @@ class CPByteWriter:
         cs.EUDSwitch(self._suboffset)
         for i in range(3):
             if cs.EUDSwitchCase()(i):
-                cs.DoActions([
-                    self._b[i].SetNumber(byte),
-                    self._suboffset.AddNumber(1)
-                ])
+                cs.DoActions([self._b[i].SetNumber(byte), self._suboffset.AddNumber(1)])
                 cs.EUDBreak()
 
         if cs.EUDSwitchCase()(3):
@@ -73,9 +66,7 @@ class CPByteWriter:
         for i in range(7, -1, -1):
             for j in range(4):
                 c.RawTrigger(
-                    conditions=[
-                        self._b[j].AtLeast(2 ** i)
-                    ],
+                    conditions=[self._b[j].AtLeast(2 ** i)],
                     actions=[
                         self._b[j].SubtractNumber(2 ** i),
                         c.SetDeaths(c.CurrentPlayer, c.Add, 2 ** (i + j * 8), 0),

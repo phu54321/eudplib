@@ -19,8 +19,4 @@ def test_pvariable():
         v_sum += a[i] * n
         n += 1
 
-    test_equality(
-        "PVariable test",
-        [v_sum, a[7]],
-        [1137, 5]
-    )
+    test_equality("PVariable test", [v_sum, a[7]], [1137, 5])

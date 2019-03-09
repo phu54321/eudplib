@@ -1,27 +1,19 @@
 from .memiof import (
     f_epdread_epd,
-
     f_dwread_epd,
     f_wread_epd,
     f_bread_epd,
-
     f_dwwrite_epd,
     f_wwrite_epd,
     f_bwrite_epd,
 )
 
-from .. import (
-    core as c,
-    utils as ut
-)
+from .. import core as c, utils as ut
 
 import functools
 import traceback
 
-rwdict = {
-    2: (f_wread_epd, f_wwrite_epd),
-    1: (f_bread_epd, f_bwrite_epd),
-}
+rwdict = {2: (f_wread_epd, f_wwrite_epd), 1: (f_bread_epd, f_bwrite_epd)}
 
 
 def _checkEPDAddr(epd):
@@ -36,9 +28,9 @@ def EPDOffsetMap(ct):
     addrTable = {}
     for name, offset, size in ct:
         if size not in [4, 2, 1]:
-            raise ut.EPError('EPDOffsetMap member size should be in 4, 2, 1')
+            raise ut.EPError("EPDOffsetMap member size should be in 4, 2, 1")
         if offset % size != 0:
-            raise ut.EPError('EPDOffsetMap members should be aligned')
+            raise ut.EPError("EPDOffsetMap members should be aligned")
         addrTable[name] = offset, size
 
     class _:
@@ -58,11 +50,11 @@ def EPDOffsetMap(ct):
 
         def getepd(self, name):
             offset, size = addrTable[name]
-            ut.ep_assert(size == 4, 'Only dword can be read as epd')
+            ut.ep_assert(size == 4, "Only dword can be read as epd")
             return f_epdread_epd(self._epd + offset // 4)
 
         def __setattr__(self, name, value):
-            if name == '_epd':
+            if name == "_epd":
                 super().__setattr__(name, value)
                 return
 

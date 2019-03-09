@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Copyright (c) 2019 Armoha
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,11 +21,11 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-'''
+"""
 
 
 def FixUnitMap(chkt):
-    unit = bytearray(chkt.getsection('UNIT'))
+    unit = bytearray(chkt.getsection("UNIT"))
 
     for i in range(0, len(unit), 36):
         if unit[i + 17] == 100 and unit[i + 14] & 2:
@@ -34,4 +34,4 @@ def FixUnitMap(chkt):
             unit[i + 14] -= 4
         if unit[i + 19] == 100 and unit[i + 14] & 8:
             unit[i + 14] -= 8
-    chkt.setsection('UNIT', unit)
+    chkt.setsection("UNIT", unit)

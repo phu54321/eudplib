@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Copyright (c) 2014 trgk
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,21 +21,12 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-'''
+"""
 
 from .. import rawtrigger as bt
-from ..allocator import (
-    Forward,
-    ConstExpr,
-    IsConstExpr,
-)
+from ..allocator import Forward, ConstExpr, IsConstExpr
 
-from ...utils import (
-    EPD,
-    ExprProxy,
-    ep_assert,
-    cachedfunc
-)
+from ...utils import EPD, ExprProxy, ep_assert, cachedfunc
 
 from ..variable import EUDVariable, SeqCompute
 from ..variable.vbuf import GetCurrentVariableBuffer
@@ -98,18 +89,20 @@ def EUDVArray(size, basetype=None):
             nptr = Forward()
             a0, a2 = Forward(), Forward()
 
-            SeqCompute([
-                (EPD(vtproc + 4), bt.SetTo, self + 72 * i),
-                (EPD(a0 + 16), bt.SetTo, self._epd + (18 * i + 344 // 4)),
-                (EPD(a2 + 16), bt.SetTo, self._epd + (18 * i + 1)),
-            ])
+            SeqCompute(
+                [
+                    (EPD(vtproc + 4), bt.SetTo, self + 72 * i),
+                    (EPD(a0 + 16), bt.SetTo, self._epd + (18 * i + 344 // 4)),
+                    (EPD(a2 + 16), bt.SetTo, self._epd + (18 * i + 1)),
+                ]
+            )
 
             vtproc << bt.RawTrigger(
                 nextptr=0,
                 actions=[
                     a0 << bt.SetDeaths(0, bt.SetTo, EPD(r.getValueAddr()), 0),
                     a2 << bt.SetDeaths(0, bt.SetTo, nptr, 0),
-                ]
+                ],
             )
 
             nptr << bt.NextTrigger()
@@ -121,24 +114,24 @@ def EUDVArray(size, basetype=None):
             # This function is hand-optimized
 
             a0, t = Forward(), Forward()
-            SeqCompute([
-                (EPD(a0 + 16), bt.SetTo, self._epd + (18 * i + 348 // 4)),
-                (EPD(a0 + 20), bt.SetTo, value),
-            ])
-            t << bt.RawTrigger(
-                actions=[
-                    a0 << bt.SetDeaths(0, bt.SetTo, 0, 0),
+            SeqCompute(
+                [
+                    (EPD(a0 + 16), bt.SetTo, self._epd + (18 * i + 348 // 4)),
+                    (EPD(a0 + 20), bt.SetTo, value),
                 ]
             )
+            t << bt.RawTrigger(actions=[a0 << bt.SetDeaths(0, bt.SetTo, 0, 0)])
 
         def fill(self, values, *, assert_expected_values_len=None):
             if assert_expected_values_len:
                 ep_assert(len(values) == assert_expected_values_len)
 
-            SeqCompute([
-                (EPD(self + 344 + i * 72), bt.SetTo, value)
-                for i, value in enumerate(values)
-            ])
+            SeqCompute(
+                [
+                    (EPD(self + 344 + i * 72), bt.SetTo, value)
+                    for i, value in enumerate(values)
+                ]
+            )
 
         def __getitem__(self, i):
             return self.get(i)

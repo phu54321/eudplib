@@ -11,30 +11,32 @@ totstrlist = []
 lexer = get_lexer_by_name("python", stripall=True)
 formatter = HtmlFormatter(linenos=True)
 
-for root, dirs, files in os.walk('eudplib'):
+for root, dirs, files in os.walk("eudplib"):
     for f in files:
-        if f[-3:] == '.py':
+        if f[-3:] == ".py":
             finalpath = os.path.join(root, f)
-            code = open(finalpath, 'r').read()
+            code = open(finalpath, "r").read()
             totsize += len(code)
-            linen = code.count('\n') + 1
+            linen = code.count("\n") + 1
             print("%-40s : %4d" % (finalpath, linen))
             totlinen += linen
 
             highlighted_code = highlight(code, lexer, formatter)
 
             totstrlist.append(
-                '<p><h2> {finalpath} : {linen} lines </h2></p>\n'
-                '{highlighted_code}<br><br>'.format(**locals()))
+                "<p><h2> {finalpath} : {linen} lines </h2></p>\n"
+                "{highlighted_code}<br><br>".format(**locals())
+            )
 
-print('Total lines: %d' % totlinen)
-print('Total size: %d' % totsize)
+print("Total lines: %d" % totlinen)
+print("Total size: %d" % totsize)
 
-cssstyle = HtmlFormatter().get_style_defs('.highlight')
+cssstyle = HtmlFormatter().get_style_defs(".highlight")
 
-totstr = ''.join(totstrlist)
+totstr = "".join(totstrlist)
 
-open('out.html', 'w').write('''\
+open("out.html", "w").write(
+    """\
 <html>
 <head>
 <title> Output </title>
@@ -44,4 +46,7 @@ open('out.html', 'w').write('''\
 {totstr}
 </body>
 </html>
-'''.format(**locals()))
+""".format(
+        **locals()
+    )
+)

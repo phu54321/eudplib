@@ -11,17 +11,30 @@ module_to_doc = eudplib
 exclude_types = [dict, str, types.ModuleType]
 eudftypes = [eudplib.core.eudfunc.eudfuncn.EUDFuncN]
 if mode == 1:
-    allowed_type = eudftypes + [type, types.FunctionType, eudplib.core.rawtrigger.constenc._KillsSpecialized]
+    allowed_type = eudftypes + [
+        type,
+        types.FunctionType,
+        eudplib.core.rawtrigger.constenc._KillsSpecialized,
+    ]
 elif mode == 2:
-    allowed_type = [int, eudplib.core.rawtrigger.constenc._Unique, eudplib.core.rawtrigger.constenc._KillsSpecialized]
+    allowed_type = [
+        int,
+        eudplib.core.rawtrigger.constenc._Unique,
+        eudplib.core.rawtrigger.constenc._KillsSpecialized,
+    ]
 else:
-    allowed_type = eudftypes + [int, eudplib.core.rawtrigger.constenc._Unique, type, types.FunctionType, eudplib.core.rawtrigger.constenc._KillsSpecialized]
-exclude_names = ['__loader__', '__path__', '__spec__']
-section_header_charr = ['=', '-', '\'', '~', '^']
+    allowed_type = eudftypes + [
+        int,
+        eudplib.core.rawtrigger.constenc._Unique,
+        type,
+        types.FunctionType,
+        eudplib.core.rawtrigger.constenc._KillsSpecialized,
+    ]
+exclude_names = ["__loader__", "__path__", "__spec__"]
+section_header_charr = ["=", "-", "'", "~", "^"]
 
 
-
-print('Collecting list of documentation-needed structures')
+print("Collecting list of documentation-needed structures")
 doc_needed_functions = set()
 doc_needed_classes = set()
 fc_documented = {}
@@ -45,16 +58,19 @@ for name, value in module_to_doc.__dict__.items():
 
 if mode != 2:
     nlist.extend(["beforeTriggerExec", "afterTriggerExec", "onPluginStart", "settings"])
-print('\n==================================\n')
+print("\n==================================\n")
 nlist.sort()
 nlist = ['"%s", ' % name for name in nlist]
 col = 4
 s = []
+
+
 def flush():
     global col
-    print("    " + ''.join(s))
+    print("    " + "".join(s))
     col = 4
     s.clear()
+
 
 for n in nlist:
     if col + len(n) >= 80:

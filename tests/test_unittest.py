@@ -5,6 +5,7 @@ DoCoverageTest = False
 
 if DoCoverageTest:
     import coverage
+
     cov = coverage.Coverage()
     cov.start()
 
@@ -56,7 +57,7 @@ helper.CompressPayload(True)
 
 
 def f():
-    helper.test_runall('unittest')
+    helper.test_runall("unittest")
 
 
 # profile_tool.profile(f, 'profile.json')

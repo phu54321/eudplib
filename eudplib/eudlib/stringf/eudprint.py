@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Copyright (c) 2014 trgk, 2019 Armoha
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,13 +21,9 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-'''
+"""
 
-from eudplib import (
-    core as c,
-    ctrlstru as cs,
-    utils as ut,
-)
+from eudplib import core as c, ctrlstru as cs, utils as ut
 
 from .rwcommon import br1, bw1
 from .dbstr import DBString
@@ -81,7 +77,7 @@ def f_dbstr_adddw(dst, number):
     for i in range(9, -1, -1):
         if i != 9:
             skipper[i] << c.NextTrigger()
-        bw1.writebyte(ch[i] + b'0'[0])
+        bw1.writebyte(ch[i] + b"0"[0])
         dst += 1
 
     bw1.writebyte(0)  # EOS
@@ -108,9 +104,9 @@ def f_dbstr_addptr(dst, number):
     # print digits
     for i in range(7, -1, -1):
         if cs.EUDIf()(ch[i] <= 9):
-            bw1.writebyte(ch[i] + b'0'[0])
+            bw1.writebyte(ch[i] + b"0"[0])
         if cs.EUDElse()():
-            bw1.writebyte(ch[i] + (b'A'[0] - 10))
+            bw1.writebyte(ch[i] + (b"A"[0] - 10))
         cs.EUDEndIf()
         dst += 1
 
@@ -147,9 +143,9 @@ def f_dbstr_print(dst, *args):
     args = ut.FlattenList(args)
     for arg in args:
         if ut.isUnproxyInstance(arg, bytes):
-            dst = f_dbstr_addstr(dst, c.Db(arg + b'\0'))
+            dst = f_dbstr_addstr(dst, c.Db(arg + b"\0"))
         elif ut.isUnproxyInstance(arg, str):
-            dst = f_dbstr_addstr(dst, c.Db(ut.u2b(arg) + b'\0'))
+            dst = f_dbstr_addstr(dst, c.Db(ut.u2b(arg) + b"\0"))
         elif ut.isUnproxyInstance(arg, DBString):
             dst = f_dbstr_addstr(dst, arg.GetStringMemoryAddr())
         elif ut.isUnproxyInstance(arg, ptr2s):
@@ -158,8 +154,7 @@ def f_dbstr_print(dst, *args):
             # int and c.EUDVariable should act the same if possible.
             # EUDVariable has a value of 32bit unsigned integer.
             # So we adjust arg to be in the same range.
-            dst = f_dbstr_addstr(dst, c.Db(
-                ut.u2b(str(arg & 0xFFFFFFFF)) + b'\0'))
+            dst = f_dbstr_addstr(dst, c.Db(ut.u2b(str(arg & 0xFFFFFFFF)) + b"\0"))
         elif ut.isUnproxyInstance(arg, c.EUDVariable):
             dst = f_dbstr_adddw(dst, arg)
         elif c.IsConstExpr(arg):
@@ -168,8 +163,7 @@ def f_dbstr_print(dst, *args):
             dst = f_dbstr_addptr(dst, arg._value)
         else:
             raise ut.EPError(
-                'Object wit unknown parameter type %s given to f_eudprint.'
-                % type(arg)
+                "Object wit unknown parameter type %s given to f_eudprint." % type(arg)
             )
 
     return dst
@@ -183,7 +177,7 @@ def f_simpleprint(*args, spaced=True):
     if spaced:
         spaced_args = []
         for arg in args:
-            spaced_args.extend([arg, ' '])
+            spaced_args.extend([arg, " "])
         args = spaced_args[:-1]
 
     # Print

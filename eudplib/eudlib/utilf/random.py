@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Copyright (c) 2014 trgk
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,14 +21,11 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-'''
+"""
 
 # This code uses simple LCG algorithm.
 
-from eudplib import (
-    core as c,
-    ctrlstru as cs,
-)
+from eudplib import core as c, ctrlstru as cs
 from ..memiof import f_dwbreak
 
 _seed = c.EUDVariable()
@@ -89,20 +86,14 @@ def f_dwrand():
     for i in range(31, 15, -1):
         c.RawTrigger(
             conditions=seed1.AtLeast(2 ** i),
-            actions=[
-                seed1.SubtractNumber(2 ** i),
-                ret.AddNumber(2 ** i),
-            ]
+            actions=[seed1.SubtractNumber(2 ** i), ret.AddNumber(2 ** i)],
         )
 
     # LOWORD
     for i in range(31, 15, -1):
         c.RawTrigger(
             conditions=seed2.AtLeast(2 ** i),
-            actions=[
-                seed2.SubtractNumber(2 ** i),
-                ret.AddNumber(2 ** (i - 16)),
-            ]
+            actions=[seed2.SubtractNumber(2 ** i), ret.AddNumber(2 ** (i - 16))],
         )
 
     return ret

@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Copyright (c) 2019 Armoha
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,13 +21,9 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-'''
+"""
 
-from eudplib import (
-    core as c,
-    ctrlstru as cs,
-    utils as ut
-)
+from eudplib import core as c, ctrlstru as cs, utils as ut
 from ..memiof import f_dwread_epd
 
 
@@ -38,7 +34,7 @@ def f_getgametick():
     gametick_cache = c.EUDVariable()
     _gametick_cond = c.Forward()
 
-    if cs.EUDIfNot([_gametick_cond << c.Memory(0x57F23C, c.Exactly, 0)]):
+    if cs.EUDIfNot()([_gametick_cond << c.Memory(0x57F23C, c.Exactly, 0)]):
         c.SetVariables(gametick_cache, f_dwread_epd(ut.EPD(0x57F23C)))
         cs.DoActions(c.SetMemory(_gametick_cond + 8, c.SetTo, gametick_cache))
     cs.EUDEndIf()

@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Copyright (c) 2014 trgk
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,7 +21,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-'''
+"""
 
 from .. import core as c
 from .. import utils as ut
@@ -29,19 +29,12 @@ from .. import utils as ut
 
 def _dww(dstepd, v):
     act = c.Forward()
-    c.SeqCompute((
-        (ut.EPD(act + 16), c.SetTo, dstepd),
-        (ut.EPD(act + 20), c.SetTo, v),
-    ))
-    c.RawTrigger(
-        actions=(act << c.SetMemory(0, c.SetTo, 0))
-    )
+    c.SeqCompute(((ut.EPD(act + 16), c.SetTo, dstepd), (ut.EPD(act + 20), c.SetTo, v)))
+    c.RawTrigger(actions=(act << c.SetMemory(0, c.SetTo, 0)))
 
 
 def _filldw(dstepd, v1):
-    c.SeqCompute((
-        (dstepd, c.SetTo, v1),
-    ))
+    c.SeqCompute(((dstepd, c.SetTo, v1),))
 
 
 @c.EUDFunc
@@ -52,28 +45,19 @@ def _fillwbb(dstepd, v1, v2, v3):
     for i in range(15, -1, -1):
         c.RawTrigger(
             conditions=v1.AtLeast(2 ** i),
-            actions=[
-                v1.SubtractNumber(2 ** i),
-                ret.AddNumber(2 ** i)
-            ]
+            actions=[v1.SubtractNumber(2 ** i), ret.AddNumber(2 ** i)],
         )
 
     for i in range(7, -1, -1):
         c.RawTrigger(
             conditions=v2.AtLeast(2 ** i),
-            actions=[
-                v2.SubtractNumber(2 ** i),
-                ret.AddNumber(2 ** (i + 16))
-            ]
+            actions=[v2.SubtractNumber(2 ** i), ret.AddNumber(2 ** (i + 16))],
         )
 
     for i in range(7, -1, -1):
         c.RawTrigger(
             conditions=v3.AtLeast(2 ** i),
-            actions=[
-                v3.SubtractNumber(2 ** i),
-                ret.AddNumber(2 ** (i + 24))
-            ]
+            actions=[v3.SubtractNumber(2 ** i), ret.AddNumber(2 ** (i + 24))],
         )
 
     _dww(dstepd, ret)
@@ -90,10 +74,7 @@ def _fillbbbb(dstepd, v1, v2, v3, v4):
         for i in range(7, -1, -1):
             c.RawTrigger(
                 conditions=v.AtLeast(2 ** i),
-                actions=[
-                    v.SubtractNumber(2 ** i),
-                    ret.AddNumber(2 ** (i + lsf))
-                ]
+                actions=[v.SubtractNumber(2 ** i), ret.AddNumber(2 ** (i + lsf))],
             )
 
     _dww(dstepd, ret)

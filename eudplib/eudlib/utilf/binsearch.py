@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Copyright (c) 2014 trgk
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,12 +21,9 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-'''
+"""
 
-from eudplib import (
-    core as c,
-    ctrlstru as cs,
-)
+from eudplib import core as c, ctrlstru as cs
 
 
 def EUDBinaryMax(cond, minv=0, maxv=0xFFFFFFFF):
@@ -60,9 +57,9 @@ def EUDBinaryMax(cond, minv=0, maxv=0xFFFFFFFF):
         if r and 2 ** i > r:
             continue
 
-        cs.DoActions(x.AddNumber(2**i))
+        cs.DoActions(x.AddNumber(2 ** i))
         if cs.EUDIfNot()([x <= maxv, cond(x)]):
-            cs.DoActions(x.SubtractNumber(2**i))
+            cs.DoActions(x.SubtractNumber(2 ** i))
         cs.EUDEndIf()
 
     return x
@@ -98,10 +95,10 @@ def EUDBinaryMin(cond, minv=0, maxv=0xFFFFFFFF):
         if r and 2 ** i > r:
             continue
 
-        if cs.EUDIf()([x >= 2**i]):
-            cs.DoActions(x.SubtractNumber(2**i))
+        if cs.EUDIf()([x >= 2 ** i]):
+            cs.DoActions(x.SubtractNumber(2 ** i))
             if cs.EUDIfNot()([x >= minv, cond(x)]):
-                cs.DoActions(x.AddNumber(2**i))
+                cs.DoActions(x.AddNumber(2 ** i))
             cs.EUDEndIf()
         cs.EUDEndIf()
 

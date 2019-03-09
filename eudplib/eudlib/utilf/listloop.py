@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Copyright (c) 2014 trgk
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,7 +21,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-'''
+"""
 
 from eudplib import core as c
 from eudplib import ctrlstru as cs
@@ -32,7 +32,7 @@ from ..memiof import f_cunitepdread_epd, f_dwepdread_epd
 
 
 def EUDLoopList(header_offset, break_offset=None):
-    blockname = 'listloop'
+    blockname = "listloop"
     ut.EUDCreateBlock(blockname, header_offset)
 
     ptr, epd = f_dwepdread_epd(ut.EPD(header_offset))
@@ -47,14 +47,11 @@ def EUDLoopList(header_offset, break_offset=None):
     c.SetVariables([ptr, epd], f_dwepdread_epd(epd + 1))
     cs.EUDEndWhile()
 
-    ut.ep_assert(
-        ut.EUDPopBlock(blockname)[1] is header_offset,
-        'listloop mismatch'
-    )
+    ut.ep_assert(ut.EUDPopBlock(blockname)[1] is header_offset, "listloop mismatch")
 
 
 def EUDLoopUnit():
-    ut.EUDCreateBlock('unitloop', 0x628430)
+    ut.EUDCreateBlock("unitloop", 0x628430)
 
     ptr, epd = f_cunitepdread_epd(ut.EPD(0x628430))
 
@@ -64,7 +61,7 @@ def EUDLoopUnit():
         c.SetVariables([ptr, epd], f_cunitepdread_epd(epd + 1))
     cs.EUDEndWhile()
 
-    ut.EUDPopBlock('unitloop')
+    ut.EUDPopBlock("unitloop")
 
 
 def EUDLoopUnit2():
@@ -72,10 +69,7 @@ def EUDLoopUnit2():
     1700개 유닛을 도는 방식으로 작동합니다.
     """
     ptr, epd = c.EUDCreateVariables(2)
-    cs.DoActions([
-        ptr.SetNumber(0x59CCA8),
-        epd.SetNumber(ut.EPD(0x59CCA8)),
-    ])
+    cs.DoActions([ptr.SetNumber(0x59CCA8), epd.SetNumber(ut.EPD(0x59CCA8))])
     if cs.EUDLoopN()(1700):
         # orderID가 0(Die)이면 없는 유닛으로 판단.
         cs.EUDContinueIf(c.MemoryXEPD(epd + (0x4C // 4), c.Exactly, 0, 0xFF00))
@@ -88,7 +82,7 @@ def EUDLoopUnit2():
 def EUDLoopPlayerUnit(player):
     player = c.EncodePlayer(player)
     first_player_unit = 0x6283F8
-    ut.EUDCreateBlock('playerunitloop', first_player_unit)
+    ut.EUDCreateBlock("playerunitloop", first_player_unit)
     ptr, epd = f_cunitepdread_epd(ut.EPD(first_player_unit) + player)
 
     if cs.EUDWhile()(ptr >= 1):
@@ -98,7 +92,7 @@ def EUDLoopPlayerUnit(player):
         c.SetVariables([ptr, epd], f_cunitepdread_epd(epd + 0x6C // 4))
     cs.EUDEndWhile()
 
-    ut.EUDPopBlock('playerunitloop')
+    ut.EUDPopBlock("playerunitloop")
 
 
 def EUDLoopBullet():
@@ -110,7 +104,7 @@ def EUDLoopSprite():
     y_epd = c.EUDVariable()
     y_epd << ut.EPD(0x629688)
 
-    ut.EUDCreateBlock('spriteloop', 'sprlo')
+    ut.EUDCreateBlock("spriteloop", "sprlo")
 
     if cs.EUDWhile()(y_epd < ut.EPD(0x629688) + 256):
         ptr, epd = f_dwepdread_epd(y_epd)
@@ -122,7 +116,7 @@ def EUDLoopSprite():
         y_epd += 1
     cs.EUDEndWhile()
 
-    ut.EUDPopBlock('spriteloop')
+    ut.EUDPopBlock("spriteloop")
 
 
 def EUDLoopTrigger(player):

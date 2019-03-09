@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Copyright (c) 2014 trgk
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,7 +21,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-'''
+"""
 
 from .. import core as c
 from .. import utils as ut
@@ -45,11 +45,7 @@ def ApplyPatchTable(initepd, obj, patchTable):
 
     for i, patchEntry in enumerate(patchTable):
         patchFields = patchEntry
-        memoryFiller = {
-            1: _filldw,
-            3: _fillwbb,
-            4: _fillbbbb,
-        }[len(patchFields)]
+        memoryFiller = {1: _filldw, 3: _fillwbb, 4: _fillbbbb}[len(patchFields)]
 
         fieldList = list(map(fieldSelector, patchFields))
         if HasEUDVariable(fieldList):
@@ -59,13 +55,9 @@ def ApplyPatchTable(initepd, obj, patchTable):
                     obj.fields[fieldName] = 0
 
 
-condpt = [
-    [0], [1], [2], [3, 4, 5], [6, 7, None, None]
-]
+condpt = [[0], [1], [2], [3, 4, 5], [6, 7, None, None]]
 
-actpt = [
-    [0], [1], [2], [3], [4], [5], [6, 7, 8], [9, None, None, None]
-]
+actpt = [[0], [1], [2], [3], [4], [5], [6, 7, 8], [9, None, None, None]]
 
 
 def PatchCondition(cond):
@@ -85,11 +77,8 @@ def PatchCondition(cond):
             return cond
         except AttributeError as e:
             if c.IsConstExpr(cond):
-                return (cond != 0)
+                return cond != 0
             raise
-
-
-
 
 
 def PatchAction(act):

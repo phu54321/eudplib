@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Copyright (c) 2014 trgk
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,7 +21,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-'''
+"""
 
 from .vararray import EUDVArray
 from ...utils import ExprProxy
@@ -32,7 +32,7 @@ class _EUDStruct_Metaclass(type):
     def __init__(cls, name, bases, dct):
         # For field declaration, modify selftype to cls
         try:
-            fields = dct['_fields_']
+            fields = dct["_fields_"]
             for i in range(len(fields)):
                 member = fields[i]
 

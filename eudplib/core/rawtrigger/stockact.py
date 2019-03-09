@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Copyright (c) 2014 trgk
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,7 +21,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-'''
+"""
 
 from .action import Action
 from .constenc import (
@@ -72,15 +72,15 @@ def UnpauseGame():
     return Action(0, 0, 0, 0, 0, 0, 0, 6, 0, 4)
 
 
-def Transmission(Unit, Where, WAVName, TimeModifier,
-                 Time, Text, AlwaysDisplay=4):
+def Transmission(Unit, Where, WAVName, TimeModifier, Time, Text, AlwaysDisplay=4):
     Unit = EncodeUnit(Unit, issueError=True)
     Where = EncodeLocation(Where, issueError=True)
     WAVName = EncodeString(WAVName, issueError=True)
     TimeModifier = EncodeModifier(TimeModifier, issueError=True)
     Text = EncodeString(Text, issueError=True)
-    return Action(Where, Text, WAVName, Time, 0, 0,
-                  Unit, 7, TimeModifier, AlwaysDisplay)
+    return Action(
+        Where, Text, WAVName, Time, 0, 0, Unit, 7, TimeModifier, AlwaysDisplay
+    )
 
 
 def PlayWAV(WAVName):
@@ -274,8 +274,7 @@ def MoveUnit(Count, UnitType, Owner, StartLocation, DestLocation):
     Owner = EncodePlayer(Owner, issueError=True)
     StartLocation = EncodeLocation(StartLocation, issueError=True)
     DestLocation = EncodeLocation(DestLocation, issueError=True)
-    return Action(StartLocation, 0, 0, 0, Owner, DestLocation,
-                  UnitType, 39, Count, 20)
+    return Action(StartLocation, 0, 0, 0, Owner, DestLocation, UnitType, 39, Count, 20)
 
 
 def LeaderBoardGreed(Goal):
@@ -323,8 +322,7 @@ def Order(Unit, Owner, StartLocation, OrderType, DestLocation):
     StartLocation = EncodeLocation(StartLocation, issueError=True)
     OrderType = EncodeOrder(OrderType, issueError=True)
     DestLocation = EncodeLocation(DestLocation, issueError=True)
-    return Action(StartLocation, 0, 0, 0, Owner, DestLocation,
-                  Unit, 46, OrderType, 20)
+    return Action(StartLocation, 0, 0, 0, Owner, DestLocation, Unit, 46, OrderType, 20)
 
 
 def Comment(Text):

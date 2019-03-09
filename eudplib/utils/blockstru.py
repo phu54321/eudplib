@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Copyright (c) 2014 trgk
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,13 +21,12 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-'''
+"""
 
 from .eperror import ep_assert
 
 
 class BlockStruManager:
-
     def __init__(self):
         self._blockstru = []
         self._lastblockdict = {}
@@ -71,7 +70,7 @@ def EUDGetLastBlockOfName(name):
 
 def EUDPeekBlock(name):
     lastblock = EUDGetLastBlock()
-    ep_assert(lastblock[0] == name, 'Block starting/ending mismatch')
+    ep_assert(lastblock[0] == name, "Block starting/ending mismatch")
     return lastblock
 
 
@@ -80,11 +79,15 @@ def EUDPopBlock(name):
     _lastblockdict = _current_bsm._lastblockdict
 
     lastblock = _blockstru.pop()
-    ep_assert(lastblock[0] == name, """\
+    ep_assert(
+        lastblock[0] == name,
+        """\
 Block starting/ending mismatch:
     - Started with %s
     - Ended with %s\
-""" % (lastblock[0], name))
+"""
+        % (lastblock[0], name),
+    )
     _lastblockdict[name].pop()
     return lastblock
 

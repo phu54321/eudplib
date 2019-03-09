@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Copyright (c) 2014 trgk
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,15 +21,11 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-'''
+"""
 
 import math
 
-from eudplib import (
-    core as c,
-    ctrlstru as cs,
-    utils as ut,
-)
+from eudplib import core as c, ctrlstru as cs, utils as ut
 
 from ..memiof import f_dwread_epd
 
@@ -46,8 +42,8 @@ def f_lengthdir(length, angle):
         clist.append(ut.i2b4(cosv))
         slist.append(ut.i2b4(sinv))
 
-    cdb = c.Db(b''.join(clist))
-    sdb = c.Db(b''.join(slist))
+    cdb = c.Db(b"".join(clist))
+    sdb = c.Db(b"".join(slist))
 
     # MAIN LOGIC
 

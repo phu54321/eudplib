@@ -34,3 +34,6 @@ def test_setpname():
     s.Display()
     SetPName(p, "dpdkfah ", PColor(p), PName(p))
     EUDEndPlayerLoop()
+
+    f_setcurpl(f_getuserplayerid())
+    f_eprintln(PName(CurrentPlayer), "ㅎㅇ")

@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Copyright (c) 2014 trgk
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,12 +21,9 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-'''
+"""
 
-from importlib.machinery import (
-    FileFinder,
-    SourceFileLoader,
-)
+from importlib.machinery import FileFinder, SourceFileLoader
 
 from .epscompile import epsCompile
 from eudplib.utils import EPError
@@ -38,7 +35,7 @@ from bisect import bisect_right
 import types
 
 
-lineno_regex = re.compile(b' *# \\(Line (\\d+)\\) .+')
+lineno_regex = re.compile(b" *# \\(Line (\\d+)\\) .+")
 
 
 def modifyCodeLineno(codeobj, codeMap):
@@ -50,7 +47,7 @@ def modifyCodeLineno(codeobj, codeMap):
     currentLine = co_firstlineno
     currentMappedLine = codeMap(currentLine)
     for i in range(0, len(co_lnotab), 2):
-        bytecodeLen, lineAdvance = co_lnotab[i: i + 2]
+        bytecodeLen, lineAdvance = co_lnotab[i : i + 2]
         nextLine = currentLine + lineAdvance
         nextMappedLine = codeMap(nextLine)
         newLineAdvance = nextMappedLine - currentMappedLine
@@ -81,9 +78,9 @@ def modifyCodeLineno(codeobj, codeMap):
         codeobj.co_filename,
         codeobj.co_name,
         codeMap(co_firstlineno),  # codeobj.co_firstlineno,
-        b''.join(new_lnotab),  # codeobj.co_lnotab,
+        b"".join(new_lnotab),  # codeobj.co_lnotab,
         codeobj.co_freevars,
-        codeobj.co_cellvars
+        codeobj.co_cellvars,
     )
 
     return codeobj
@@ -92,22 +89,22 @@ def modifyCodeLineno(codeobj, codeMap):
 class EPSLoader(SourceFileLoader):
     def get_data(self, path):
         """Return the data from path as raw bytes."""
-        fileData = open(path, 'rb').read()
-        if path.endswith('.pyc') or path.endswith('.pyo'):
+        fileData = open(path, "rb").read()
+        if path.endswith(".pyc") or path.endswith(".pyo"):
             return fileData
-        print("[epScript] Compiling \"%s\"..." % os.path.relpath(path))
+        print('[epScript] Compiling "%s"...' % os.path.relpath(path))
         compiled = epsCompile(path, fileData)
         if compiled is None:
-            raise EPError(' - Compiled failed for %s' % path)
+            raise EPError(" - Compiled failed for %s" % path)
         dirname, filename = os.path.split(path)
         epsdir = os.path.join(dirname, "__epspy__")
         try:
             if not os.path.isdir(epsdir):
                 os.mkdir(epsdir)
-            ofname = os.path.splitext(filename)[0] + '.py'
+            ofname = os.path.splitext(filename)[0] + ".py"
             ofname = os.path.join(epsdir, ofname)
-            with open(ofname, 'w', encoding='utf-8') as file:
-                file.write(compiled.decode('utf-8'))
+            with open(ofname, "w", encoding="utf-8") as file:
+                file.write(compiled.decode("utf-8"))
         except OSError:
             pass
 
@@ -119,8 +116,8 @@ class EPSLoader(SourceFileLoader):
         # Read lines from code data
         codeLine = [0]
         codeMap = [0]
-        data = data.replace(b'\r\n', b'\n')
-        for lineno, line in enumerate(data.split(b'\n')):
+        data = data.replace(b"\r\n", b"\n")
+        for lineno, line in enumerate(data.split(b"\n")):
             match = lineno_regex.match(line)
             if match:
                 codeLine.append(lineno + 1)
@@ -129,6 +126,7 @@ class EPSLoader(SourceFileLoader):
         # Reconstruct code data
         def lineMapper(line):
             return codeMap[bisect_right(codeLine, line) - 1]
+
         codeobj = modifyCodeLineno(codeobj, lineMapper)
         return codeobj
 
@@ -141,7 +139,7 @@ class EPSFinder:
         try:
             return self._finderCache[path]
         except KeyError:
-            self._finderCache[path] = FileFinder(path, (EPSLoader, ['.eps']))
+            self._finderCache[path] = FileFinder(path, (EPSLoader, [".eps"]))
             return self._finderCache[path]
 
     def find_spec(self, fullname, path, target=None):

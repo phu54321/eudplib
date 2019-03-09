@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Copyright (c) 2019 Armoha
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,17 +21,10 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-'''
+"""
 
-from eudplib import (
-    core as c,
-    ctrlstru as cs,
-    utils as ut,
-)
-from ..memiof import (
-    f_dwepdread_epd,
-    f_wread_epd,
-)
+from eudplib import core as c, ctrlstru as cs, utils as ut
+from ..memiof import f_dwepdread_epd, f_wread_epd
 from eudplib.core.curpl import _curpl_checkcond, _curpl_var
 
 
@@ -43,23 +36,18 @@ chkt = c.GetChkTokenized()
 def GetMapStringAddr(strId):
     if cs.EUDExecuteOnce()():
         STR_ptr, STR_epd = f_dwepdread_epd(ut.EPD(0x5993D4))
-        cs.DoActions([
-            c.SetMemory(add_STR_ptr + 20, c.SetTo, STR_ptr),
-            c.SetMemory(add_STR_epd + 20, c.SetTo, STR_epd),
-        ])
+        cs.DoActions(
+            [
+                c.SetMemory(add_STR_ptr + 20, c.SetTo, STR_ptr),
+                c.SetMemory(add_STR_epd + 20, c.SetTo, STR_epd),
+            ]
+        )
     cs.EUDEndExecuteOnce()
     r, m = c.f_div(strId, 2)
-    c.RawTrigger(
-        conditions=m.Exactly(1),
-        actions=m.SetNumber(2),
-    )
-    c.RawTrigger(
-        actions=add_STR_epd << r.AddNumber(0)
-    )
+    c.RawTrigger(conditions=m.Exactly(1), actions=m.SetNumber(2))
+    c.RawTrigger(actions=add_STR_epd << r.AddNumber(0))
     ret = f_wread_epd(r, m)  # strTable_epd + r
-    c.RawTrigger(
-        actions=add_STR_ptr << ret.AddNumber(0)
-    )
+    c.RawTrigger(actions=add_STR_ptr << ret.AddNumber(0))
     c.EUDReturn(ret)  # strTable_ptr + strOffset
 
 
@@ -73,10 +61,7 @@ def _s2b(x):
 
 def _addcpcache(p):
     p = c.EncodePlayer(p)
-    return [
-        _curpl_var.AddNumber(p),
-        c.SetMemory(_curpl_checkcond + 8, c.Add, p),
-    ]
+    return [_curpl_var.AddNumber(p), c.SetMemory(_curpl_checkcond + 8, c.Add, p)]
 
 
 class CPString:
@@ -97,8 +82,7 @@ class CPString:
         elif isinstance(content, str) or isinstance(content, bytes):
             self.content = _s2b(content)
         else:
-            raise ut.EPError(
-                "Unexpected type for CPString: %s" % type(content))
+            raise ut.EPError("Unexpected type for CPString: %s" % type(content))
 
         self.length = len(self.content) // 4
         self.trigger = list()
@@ -106,11 +90,11 @@ class CPString:
         actions = [
             [
                 c.SetDeaths(
-                    c.CurrentPlayer, c.SetTo,
-                    ut.b2i4(self.content[i:i + 4]), i // 48
+                    c.CurrentPlayer, c.SetTo, ut.b2i4(self.content[i : i + 4]), i // 48
                 )
                 for i in range(4 * mod, len(self.content), 48)
-            ] for mod in range(12)
+            ]
+            for mod in range(12)
         ]
         modlength = self.length
         addr = 0
@@ -122,18 +106,22 @@ class CPString:
                 a.append(c.SetMemory(0x6509B0, c.Add, 1))
                 addr += 1
                 modlength -= 1
-        actions.extend([
-            [c.SetMemory(0x6509B0, c.Add, modlength) if modlength else []],
-            _addcpcache(self.length),
-        ])
+        actions.extend(
+            [
+                [c.SetMemory(0x6509B0, c.Add, modlength) if modlength else []],
+                _addcpcache(self.length),
+            ]
+        )
         actions = ut.FlattenList(actions)
         c.PushTriggerScope()
         for i in range(0, len(actions), 64):
-            t = c.RawTrigger(actions=actions[i: i + 64])
+            t = c.RawTrigger(actions=actions[i : i + 64])
             self.trigger.append(t)
         c.PopTriggerScope()
 
-        self.valueAddr = [self.trigger[v // 64] + 348 + 32 * (v % 64) for v in self.valueAddr]
+        self.valueAddr = [
+            self.trigger[v // 64] + 348 + 32 * (v % 64) for v in self.valueAddr
+        ]
         _nextptr = c.Forward()
         self.trigger[-1]._nextptr = _nextptr
         _nextptr << c.NextTrigger()
@@ -142,7 +130,7 @@ class CPString:
         _next = c.Forward()
         c.RawTrigger(
             nextptr=self.trigger[0],
-            actions=[action] + [c.SetNextPtr(self.trigger[-1], _next)]
+            actions=[action] + [c.SetNextPtr(self.trigger[-1], _next)],
         )
         _next << c.NextTrigger()
 

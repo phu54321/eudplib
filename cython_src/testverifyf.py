@@ -1,4 +1,5 @@
 import pyximport
+
 pyximport.install()
 
 import verifyf
@@ -11,11 +12,8 @@ import cProfile
 import pstats
 
 cProfile.runctx(
-    'verifyf.verifyf(testvector, len(testvector))',
-    globals(),
-    locals(),
-    "Profile.prof"
+    "verifyf.verifyf(testvector, len(testvector))", globals(), locals(), "Profile.prof"
 )
 
 s = pstats.Stats("Profile.prof")
-s.strip_dirs().sort_stats('time').print_stats()
+s.strip_dirs().sort_stats("time").print_stats()

@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Copyright (c) 2014 trgk
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,7 +21,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-'''
+"""
 
 import functools
 import inspect
@@ -29,10 +29,7 @@ import inspect
 from ... import utils as ut
 from .. import variable as ev
 from .eudtypedfuncn import EUDTypedFuncN, applyTypes
-from ..eudstruct.selftype import (
-    selftype,
-    SetSelfType
-)
+from ..eudstruct.selftype import selftype, SetSelfType
 
 _mth_classtype = {}
 
@@ -42,12 +39,11 @@ def EUDTypedMethod(argtypes, rettypes=None, *, traced=False):
         # Get argument number of fdecl_func
         argspec = inspect.getargspec(method)
         ut.ep_assert(
-            argspec[1] is None,
-            'No variadic arguments (*args) allowed for EUDFunc.'
+            argspec[1] is None, "No variadic arguments (*args) allowed for EUDFunc."
         )
         ut.ep_assert(
             argspec[2] is None,
-            'No variadic keyword arguments (*kwargs) allowed for EUDFunc.'
+            "No variadic keyword arguments (*kwargs) allowed for EUDFunc.",
         )
 
         # Get number of arguments excluding self
@@ -64,8 +60,8 @@ def EUDTypedMethod(argtypes, rettypes=None, *, traced=False):
             return method(self, *args)
 
         genericCaller = EUDTypedFuncN(
-            argn + 1, genericCaller, method,
-            argtypes, rettypes, traced=traced)
+            argn + 1, genericCaller, method, argtypes, rettypes, traced=traced
+        )
 
         # Return function
         def call(self, *args):
@@ -79,13 +75,14 @@ def EUDTypedMethod(argtypes, rettypes=None, *, traced=False):
             # Const expression. Can use optimizations
             else:
                 if self not in constexpr_callmap:
+
                     def caller(*args):
                         args = applyTypes(argtypes, args)
                         return method(self, *args)
 
                     constexpr_callmap[self] = EUDTypedFuncN(
-                        argn, caller, method, argtypes, rettypes,
-                        traced=traced)
+                        argn, caller, method, argtypes, rettypes, traced=traced
+                    )
 
                 SetSelfType(type(self))
                 rets = constexpr_callmap[self](*args)

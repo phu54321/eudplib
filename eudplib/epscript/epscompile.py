@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Copyright (c) 2014 trgk
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,22 +21,17 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-'''
+"""
 
-from ctypes import (
-    CDLL,
-    c_int, c_char_p, c_void_p
-)
+from ctypes import CDLL, c_int, c_char_p, c_void_p
 
-from eudplib.utils import (
-    u2b, find_data_file
-)
+from eudplib.utils import u2b, find_data_file
 
 import platform
 
 libFile = {
-    'windows': 'libepScriptLib.dll',  # Windows
-    'darwin': 'libepScriptLib.dylib',  # Mac
+    "windows": "libepScriptLib.dll",  # Windows
+    "darwin": "libepScriptLib.dylib",  # Mac
 }[platform.system().lower()]
 
 
@@ -51,7 +46,7 @@ libeps.registerPlibConstants.argtypes = [c_char_p]
 
 
 def setEpsGlobals(globalList):
-    globalList_C = b'\0'.join(u2b(g) for g in globalList) + b'\0'
+    globalList_C = b"\0".join(u2b(g) for g in globalList) + b"\0"
     libeps.registerPlibConstants(globalList_C)
 
 

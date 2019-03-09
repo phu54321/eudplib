@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Copyright (c) 2014 trgk
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,23 +21,13 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-'''
+"""
 
-from ..mapdata import (
-    GetLocationIndex,
-    GetStringIndex,
-    GetSwitchIndex,
-    GetUnitIndex
-)
+from ..mapdata import GetLocationIndex, GetStringIndex, GetSwitchIndex, GetUnitIndex
 
 from eudplib import utils as ut
 
-from .strdict import (
-    DefAIScriptDict,
-    DefLocationDict,
-    DefSwitchDict,
-    DefUnitDict
-)
+from .strdict import DefAIScriptDict, DefLocationDict, DefSwitchDict, DefUnitDict
 
 import difflib
 
@@ -49,7 +39,7 @@ def EncodeAIScript(ais, issueError=False):
         ais = ut.u2b(ais)
 
     if type(ais) is bytes:
-        ut.ep_assert(len(ais) >= 4, 'AIScript name too short')
+        ut.ep_assert(len(ais) >= 4, "AIScript name too short")
 
         if len(ais) > 4:
             return ut.b2i4(DefAIScriptDict[ais])
@@ -74,8 +64,8 @@ def _EncodeAny(t, f, dl, s, issueError):
                 except KeyError:
                     sl = ["Cannot encode string %s as %s." % (s, t)]
                     for match in difflib.get_close_matches(s, dl.keys()):
-                        sl.append(' - Suggestion: %s' % match)
-                    raise ut.EPError('\n'.join(sl))
+                        sl.append(" - Suggestion: %s" % match)
+                    raise ut.EPError("\n".join(sl))
 
             if issueError:
                 raise ut.EPError('[Warning] "%s" is not a %s' % (s, t))
@@ -91,14 +81,14 @@ def _EncodeAny(t, f, dl, s, issueError):
 
 def EncodeLocation(loc, issueError=False):
     return _EncodeAny(
-        "location",
-        lambda s: GetLocationIndex(s) + 1, DefLocationDict, loc, issueError)
+        "location", lambda s: GetLocationIndex(s) + 1, DefLocationDict, loc, issueError
+    )
 
 
 def EncodeLocationIndex(loc, issueError=False):
     return _EncodeAny(
-        "location",
-        lambda s: GetLocationIndex(s), DefLocationDict, loc, issueError)
+        "location", lambda s: GetLocationIndex(s), DefLocationDict, loc, issueError
+    )
 
 
 def EncodeString(s, issueError=False):

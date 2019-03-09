@@ -9,7 +9,7 @@ def f():
         msg = "%s|%s|%s" % (
             frame.f_code.co_filename,
             frame.f_code.co_name,
-            frame.f_lineno
+            frame.f_lineno,
         )
         return msg
     finally:

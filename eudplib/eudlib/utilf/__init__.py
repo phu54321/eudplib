@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Copyright (c) 2014 trgk
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,37 +21,19 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-'''
+"""
 
-from .logic import (
-    EUDAnd,
-    EUDOr,
-    EUDNot
-)
+from .logic import EUDAnd, EUDOr, EUDNot
 
 from .userpl import f_getuserplayerid
 
 from .gametick import f_getgametick
 
-from .random import (
-    f_getseed,
-    f_srand,
-    f_rand,
-    f_dwrand,
-    f_randomize
-)
+from .random import f_getseed, f_srand, f_rand, f_dwrand, f_randomize
 
-from .mempatch import (
-    f_dwpatch_epd,
-    f_blockpatch_epd,
-    f_unpatchall,
-)
+from .mempatch import f_dwpatch_epd, f_blockpatch_epd, f_unpatchall
 
-from .pexist import (
-    f_playerexist,
-    EUDPlayerLoop,
-    EUDEndPlayerLoop
-)
+from .pexist import f_playerexist, EUDPlayerLoop, EUDEndPlayerLoop
 
 from .listloop import (
     EUDLoopList,
@@ -60,10 +42,7 @@ from .listloop import (
     EUDLoopPlayerUnit,
     EUDLoopSprite,
     EUDLoopBullet,
-    EUDLoopTrigger
+    EUDLoopTrigger,
 )
 
-from .binsearch import (
-    EUDBinaryMin,
-    EUDBinaryMax,
-)
+from .binsearch import EUDBinaryMin, EUDBinaryMax

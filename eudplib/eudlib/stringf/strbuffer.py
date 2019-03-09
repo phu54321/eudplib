@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Copyright (c) 2019 Armoha
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,22 +21,11 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-'''
+"""
 
-from ... import (
-    core as c,
-    ctrlstru as cs,
-    utils as ut,
-)
-from ...core.mapdata.stringmap import (
-    ForcedAddString,
-    ApplyStringMap,
-    GetStringMap,
-)
-from ..memiof import (
-    f_getcurpl,
-    f_setcurpl,
-)
+from ... import core as c, ctrlstru as cs, utils as ut
+from ...core.mapdata.stringmap import ForcedAddString, ApplyStringMap, GetStringMap
+from ..memiof import f_getcurpl, f_setcurpl
 from .cpstr import GetMapStringAddr
 from .cpprint import prevcp, f_cpstr_print
 from .strfunc import f_strlen_epd
@@ -48,6 +37,7 @@ class StringBuffer:
     Manipluating STR section is easy. :)
     You can do anything you would do with normal string with StringBuffer.
     """
+
     def __init__(self, content=None):
         """Constructor for StringBuffer
 
@@ -58,11 +48,11 @@ class StringBuffer:
 
         :type content: str, bytes, int
         """
-        filler = ForcedAddString(b'Artani')
+        filler = ForcedAddString(b"Artani")
         if content is None:
-            content = b'\r' * 1023
+            content = b"\r" * 1023
         elif isinstance(content, int):
-            content = b'\r' * content
+            content = b"\r" * content
         else:
             content = ut.u2utf8(content)
         self.capacity = len(content)
@@ -83,8 +73,8 @@ class StringBuffer:
                 outindex += len(s) + 1
             bufferoffset = stroffset[strmap._dataindextb[self.StringIndex - 1]]
             if bufferoffset % 4 != 2:
-                strmap._datatb[strmap._dataindextb[filler - 1]] = b'Arta'[
-                    0: 4 - bufferoffset % 4
+                strmap._datatb[strmap._dataindextb[filler - 1]] = b"Arta"[
+                    0 : 4 - bufferoffset % 4
                 ]
                 strmap._capacity -= 2 + bufferoffset % 4
                 ApplyStringMap(chkt)
@@ -96,10 +86,9 @@ class StringBuffer:
         f_setcurpl(self.pos)
         f_cpstr_print(*args)
         self.pos << f_getcurpl()
-        cs.DoActions([
-            c.SetDeaths(c.CurrentPlayer, c.SetTo, 0, 0),
-            c.SetCurrentPlayer(prevcp),
-        ])
+        cs.DoActions(
+            [c.SetDeaths(c.CurrentPlayer, c.SetTo, 0, 0), c.SetCurrentPlayer(prevcp)]
+        )
 
     def insert(self, index, *args):
         prevcp << f_getcurpl()
@@ -113,12 +102,15 @@ class StringBuffer:
         index = self.epd + start
         f_setcurpl(index)
         self.pos << index
-        cs.DoActions([
+        cs.DoActions(
             [
-                c.SetDeaths(c.CurrentPlayer, c.SetTo, ut.b2i4(b'\r\r\r\r'), 0),
-                c.AddCurrentPlayer(1),
-            ] for _ in range(length)
-        ])
+                [
+                    c.SetDeaths(c.CurrentPlayer, c.SetTo, ut.b2i4(b"\r\r\r\r"), 0),
+                    c.AddCurrentPlayer(1),
+                ]
+                for _ in range(length)
+            ]
+        )
         f_setcurpl(prevcp)
 
     def Display(self):

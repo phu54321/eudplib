@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Copyright (c) 2014 trgk
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,16 +21,13 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-'''
+"""
 
 from ... import utils as ut
 from ...trigtrg import trigtrg as tt
 from random import random
 
-from .ilccompile import (
-    ComputeBaseInlineCodeGlobals,
-    CompileInlineCode,
-)
+from .ilccompile import ComputeBaseInlineCodeGlobals, CompileInlineCode
 from .btInliner import InlineCodifyBinaryTrigger
 
 
@@ -46,9 +43,9 @@ def PRT_SetInliningRate(rate):
 
 def PreprocessInlineCode(chkt):
     global _inlineCodes
-    trigSection = chkt.getsection('TRIG')
+    trigSection = chkt.getsection("TRIG")
     _inlineCodes, trigSection = PreprocessTrigSection(trigSection)
-    chkt.setsection('TRIG', trigSection)
+    chkt.setsection("TRIG", trigSection)
 
 
 def PreprocessTrigSection(trigSection):
@@ -58,7 +55,7 @@ def PreprocessTrigSection(trigSection):
     inlineCodes = []
     trigSegments = []
     for i in range(0, len(trigSection), 2400):
-        trigSegment = trigSection[i:i + 2400]
+        trigSegment = trigSection[i : i + 2400]
         if len(trigSegment) != 2400:
             continue
 
@@ -73,7 +70,7 @@ def PreprocessTrigSection(trigSection):
 
         trigSegments.append(trigSegment)
 
-    '''
+    """
     This is rather hard to explain, but we need blank trigger.
 
     If inline_eudplib trigger is at the last of the trigger, then its
@@ -83,10 +80,10 @@ def PreprocessTrigSection(trigSection):
     to somewhere else, where everything quits.
 
     So we need 'normal' trigger at the last of TRIG triggers for every player.
-    '''
+    """
     trigSegments.append(tt.Trigger(players=[tt.AllPlayers]))
 
-    trigSection = b''.join(trigSegments)
+    trigSection = b"".join(trigSegments)
     return inlineCodes, trigSection
 
 
@@ -114,7 +111,7 @@ def GetInlineCodePlayerList(bTrigger):
 def DispatchInlineCode(inlineCodes, trigger_bytes):
     """ Check if trigger segment has special data. """
     magicCode = ut.b2i4(trigger_bytes, 20)
-    if magicCode != 0x10978d4a:
+    if magicCode != 0x10978D4A:
         return None
 
     playerCode = GetInlineCodePlayerList(trigger_bytes)
@@ -122,7 +119,7 @@ def DispatchInlineCode(inlineCodes, trigger_bytes):
         return None
 
     data = trigger_bytes[20:320] + trigger_bytes[352:2372]
-    codeData = ut.b2u(data[8:]).rstrip('\0')
+    codeData = ut.b2u(data[8:]).rstrip("\0")
 
     # Compile code
     func = CompileInlineCode(codeData)
@@ -130,7 +127,7 @@ def DispatchInlineCode(inlineCodes, trigger_bytes):
 
 
 def InlinifyNormalTrigger(inlineCodes, trigger_bytes):
-    ''' Inlinify normal binary triggers '''
+    """ Inlinify normal binary triggers """
     playerCode = 0
     for i in range(27):
         if trigger_bytes[320 + 2048 + 4 + i]:
@@ -141,7 +138,7 @@ def InlinifyNormalTrigger(inlineCodes, trigger_bytes):
 
 
 def CreateInlineCodeDispatcher(inlineCodes, func, playerCode):
-    ''' Create link from TRIG list to STR trigger. '''
+    """ Create link from TRIG list to STR trigger. """
     funcID = len(inlineCodes) + 1024
     inlineCodes.append((funcID, func))
 
@@ -155,13 +152,13 @@ def CreateInlineCodeDispatcher(inlineCodes, func, playerCode):
 
     # Apply 4 SetDeaths
     SetDeathsTemplate = tt.SetDeaths(0, tt.SetTo, 0, 0)
-    newTrigger[320 + 32 * 0: 320 + 32 * 1] = SetDeathsTemplate
-    newTrigger[320 + 32 * 1: 320 + 32 * 2] = SetDeathsTemplate
-    newTrigger[320 + 32 * 2: 320 + 32 * 3] = SetDeathsTemplate
-    newTrigger[320 + 32 * 3: 320 + 32 * 4] = SetDeathsTemplate
+    newTrigger[320 + 32 * 0 : 320 + 32 * 1] = SetDeathsTemplate
+    newTrigger[320 + 32 * 1 : 320 + 32 * 2] = SetDeathsTemplate
+    newTrigger[320 + 32 * 2 : 320 + 32 * 3] = SetDeathsTemplate
+    newTrigger[320 + 32 * 3 : 320 + 32 * 4] = SetDeathsTemplate
 
     # Apply flag
     newTrigger[0:4] = ut.i2b4(funcID)
-    newTrigger[2368:2372] = b'\0\0\0\x10'
+    newTrigger[2368:2372] = b"\0\0\0\x10"
 
     return newTrigger
