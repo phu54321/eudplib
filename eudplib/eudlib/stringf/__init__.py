@@ -56,3 +56,9 @@ from .cpprint import (
 
 from .cputf8 import f_cp949_to_utf8_cpy
 from .setpname import SetPName
+
+from .texteffect import (
+    f_cpchar_adddw,
+    f_cpchar_addstr,
+    f_cpchar_print,
+)
