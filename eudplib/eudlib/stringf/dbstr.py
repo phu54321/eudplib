@@ -25,7 +25,7 @@ THE SOFTWARE.
 
 from eudplib import core as c, ctrlstru as cs, utils as ut
 from ..memiof import f_dwread_epd, f_dwwrite_epd
-from .cpstr import GetMapStringAddr
+from .cpstr import GetStringAddr
 from .cputf8 import f_cp949_to_utf8_cpy
 
 
@@ -66,7 +66,7 @@ class DBString(ut.ExprProxy):
         sp = c.EUDVariable(0)
         strId = c.EncodeString("_" * 2048)
         if cs.EUDExecuteOnce()():
-            sp << GetMapStringAddr(strId)
+            sp << GetStringAddr(strId)
         cs.EUDEndExecuteOnce()
 
         f_cp949_to_utf8_cpy(sp, self.GetStringMemoryAddr())

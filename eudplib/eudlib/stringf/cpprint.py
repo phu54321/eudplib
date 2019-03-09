@@ -27,7 +27,7 @@ from eudplib import core as c, ctrlstru as cs, utils as ut
 
 from ..memiof import CPByteWriter, f_setcurpl, f_getcurpl, f_dwread_epd
 from .rwcommon import br1
-from .cpstr import _s2b, CPString
+from .cpstr import _s2b, CPString, GetTBLAddr
 from .dbstr import DBString
 from .eudprint import ptr2s, epd2s, hptr
 from ..eudarray import EUDArray
@@ -270,10 +270,9 @@ def f_eprintln2(*args):
         _eprintln2_template << c.NextTrigger()
 
         if cs.EUDExecuteOnce()():
-            pTBL = f_dwread_epd(ut.EPD(0x6D5A30))
-            offset = f_wread(pTBL + 871 * 2)
-            f_dwwrite(pTBL + offset, ut.b2i4(b"\r\r\r\r"))
-            epd = ut.EPD(pTBL + offset) + 1
+            ptr = GetTBLAddr(871)
+            f_dwwrite(ptr, ut.b2i4(b"\r\r\r\r"))
+            epd = ut.EPD(ptr) + 1
         cs.EUDEndExecuteOnce()
 
         if cs.EUDIf()(c.Memory(0x512684, c.Exactly, prevcp)):

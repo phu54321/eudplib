@@ -23,7 +23,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 """
 
-from .cpstr import GetMapStringAddr, CPString
+from .cpstr import (
+    GetStringAddr,
+    GetMapStringAddr,
+    GetTBLAddr,
+    CPString,
+)
 
 from .dbstr import DBString
 

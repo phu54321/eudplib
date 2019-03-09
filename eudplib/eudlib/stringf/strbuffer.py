@@ -26,7 +26,7 @@ THE SOFTWARE.
 from ... import core as c, ctrlstru as cs, utils as ut
 from ...core.mapdata.stringmap import ForcedAddString, ApplyStringMap, GetStringMap
 from ..memiof import f_getcurpl, f_setcurpl
-from .cpstr import GetMapStringAddr
+from .cpstr import GetStringAddr
 from .cpprint import prevcp, f_cpstr_print
 from .strfunc import f_strlen_epd
 
@@ -58,7 +58,7 @@ class StringBuffer:
         self.capacity = len(content)
         self.StringIndex = ForcedAddString(content)
         self.epd, self.pos = c.EUDVariable(), c.EUDVariable()
-        epd = ut.EPD(GetMapStringAddr(self.StringIndex))
+        epd = ut.EPD(GetStringAddr(self.StringIndex))
         c.SetVariables([self.epd, self.pos], [epd, epd])
 
         def _fill():

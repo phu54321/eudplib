@@ -28,12 +28,12 @@ from ..memiof import f_dwepdread_epd, f_wread_epd
 from eudplib.core.curpl import _curpl_checkcond, _curpl_var
 
 
-add_STR_ptr, add_STR_epd = c.Forward(), c.Forward()
 chkt = c.GetChkTokenized()
 
 
 @c.EUDFunc
-def GetMapStringAddr(strId):
+def GetStringAddr(strId):
+    add_STR_ptr, add_STR_epd = c.Forward(), c.Forward()
     if cs.EUDExecuteOnce()():
         STR_ptr, STR_epd = f_dwepdread_epd(ut.EPD(0x5993D4))
         cs.DoActions(
@@ -46,9 +46,32 @@ def GetMapStringAddr(strId):
     r, m = c.f_div(strId, 2)
     c.RawTrigger(conditions=m.Exactly(1), actions=m.SetNumber(2))
     c.RawTrigger(actions=add_STR_epd << r.AddNumber(0))
-    ret = f_wread_epd(r, m)  # strTable_epd + r
+    ret = f_wread_epd(r, m)
     c.RawTrigger(actions=add_STR_ptr << ret.AddNumber(0))
-    c.EUDReturn(ret)  # strTable_ptr + strOffset
+    c.EUDReturn(ret)
+
+
+GetMapStringAddr = GetStringAddr
+
+
+@c.EUDFunc
+def GetTBLAddr(tblId):
+    add_TBL_ptr, add_TBL_epd = c.Forward(), c.Forward()
+    if cs.EUDExecuteOnce()():
+        TBL_ptr, TBL_epd = f_dwepdread_epd(ut.EPD(0x6D5A30))
+        cs.DoActions(
+            [
+                c.SetMemory(add_TBL_ptr + 20, c.SetTo, TBL_ptr),
+                c.SetMemory(add_TBL_epd + 20, c.SetTo, TBL_epd),
+            ]
+        )
+    cs.EUDEndExecuteOnce()
+    r, m = c.f_div(tblId, 2)
+    c.RawTrigger(conditions=m.Exactly(1), actions=m.SetNumber(2))
+    c.RawTrigger(actions=add_TBL_epd << r.AddNumber(0))
+    ret = f_wread_epd(r, m)
+    c.RawTrigger(actions=add_TBL_ptr << ret.AddNumber(0))
+    c.EUDReturn(ret)
 
 
 def _s2b(x):
