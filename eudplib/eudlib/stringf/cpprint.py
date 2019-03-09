@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Copyright (c) 2014 trgk, 2019 Armoha
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,25 +21,16 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-'''
+"""
 
-from eudplib import (
-    core as c,
-    ctrlstru as cs,
-    utils as ut,
-)
+from eudplib import core as c, ctrlstru as cs, utils as ut
 
-from ..memiof import CPByteWriter, f_setcurpl, f_dwread_epd
+from ..memiof import CPByteWriter, f_setcurpl, f_getcurpl, f_dwread_epd
 from .rwcommon import br1
 from .cpstr import _s2b, CPString
 from .dbstr import DBString
-from .eudprint import (
-    ptr2s,
-    epd2s,
-    hptr,
-)
+from .eudprint import ptr2s, epd2s, hptr
 from ..eudarray import EUDArray
-from ..utilf import f_getuserplayerid
 
 cw = CPByteWriter()
 Color = None
@@ -127,10 +118,12 @@ def f_cpstr_addptr(number):
     :param number: DWORD to print
     """
     digit = [c.EUDLightVariable() for _ in range(8)]
-    cs.DoActions([
-        [digit[i].SetNumber(0) for i in range(8)],
-        c.SetDeaths(c.CurrentPlayer, c.SetTo, ut.b2i4(b"0000"), 0),
-    ])
+    cs.DoActions(
+        [
+            [digit[i].SetNumber(0) for i in range(8)],
+            c.SetDeaths(c.CurrentPlayer, c.SetTo, ut.b2i4(b"0000"), 0),
+        ]
+    )
 
     def f(x):
         t = x % 16
@@ -151,18 +144,22 @@ def f_cpstr_addptr(number):
                 c.RawTrigger(
                     conditions=digit[j + 4 * (i // 16)].AtLeast(10),
                     actions=c.SetDeaths(
-                        c.CurrentPlayer, c.Add,
-                        (b"A"[0] - b":"[0]) * (256 ** (3 - j)), 0
+                        c.CurrentPlayer,
+                        c.Add,
+                        (b"A"[0] - b":"[0]) * (256 ** (3 - j)),
+                        0,
                     ),
                 )
-            cs.DoActions([
-                c.AddCurrentPlayer(1),
+            cs.DoActions(
                 [
-                    c.SetDeaths(c.CurrentPlayer, c.SetTo, ut.b2i4(b"0000"), 0)
-                    if i == 16
-                    else []
-                ],
-            ])
+                    c.AddCurrentPlayer(1),
+                    [
+                        c.SetDeaths(c.CurrentPlayer, c.SetTo, ut.b2i4(b"0000"), 0)
+                        if i == 16
+                        else []
+                    ],
+                ]
+            )
 
 
 _constcpstr_dict = dict()
@@ -199,8 +196,7 @@ def f_cpstr_print(*args):
             f_cpstr_addptr(arg._value)
         else:
             raise ut.EPError(
-                "Object with unknown parameter type %s given to f_cpprint."
-                % type(arg)
+                "Object with unknown parameter type %s given to f_cpprint." % type(arg)
             )
     # EOS
     # cs.DoActions(c.SetDeaths(c.CurrentPlayer, c.SetTo, 0, 0))
@@ -209,21 +205,98 @@ def f_cpstr_print(*args):
 @c.EUDTypedFunc([c.TrgPlayer])
 def f_raise_CCMU(player):
     orignextptr = f_dwread_epd(ut.EPD(0x628438))
-    cs.DoActions([
-        c.SetMemory(0x628438, c.SetTo, 0),
-        c.CreateUnit(1, 0, 64, player),
-        c.SetMemory(0x628438, c.SetTo, orignextptr),
-    ])
+    cs.DoActions(
+        [
+            c.SetMemory(0x628438, c.SetTo, 0),
+            c.CreateUnit(1, 0, 64, player),
+            c.SetMemory(0x628438, c.SetTo, orignextptr),
+        ]
+    )
+
+
+_eprintln_template = None
+_eprintln_print = c.Forward()
+_eprintln_EOS = c.Forward()
+_eprintln_end = c.Forward()
 
 
 def f_eprintln(*args):
-    f_raise_CCMU(c.CurrentPlayer)
-    localcp = f_getuserplayerid()
-    if cs.EUDIf()(c.Memory(0x6509B0, c.Exactly, localcp)):
-        f_setcurpl(ut.EPD(0x640B60 + 218 * 12))
-        f_cpstr_print(*args)
-        cs.DoActions([
-            c.SetDeaths(c.CurrentPlayer, c.SetTo, 0, 0),
-            c.SetCurrentPlayer(localcp),
-        ])
-    cs.EUDEndIf()
+    global _eprintln_template
+    if _eprintln_template is None:
+        _eprintln_template = c.Forward()
+
+        c.PushTriggerScope()
+        _eprintln_template << c.NextTrigger()
+        f_raise_CCMU(c.CurrentPlayer)
+        if cs.EUDIf()(c.Memory(0x512684, c.Exactly, prevcp)):
+            _eprintln_print << c.RawTrigger(
+                nextptr=0, actions=[c.SetCurrentPlayer(ut.EPD(0x640B60 + 218 * 12))]
+            )
+            _eprintln_EOS << c.RawTrigger(
+                actions=[c.SetDeaths(c.CurrentPlayer, c.SetTo, 0, 0)]
+            )
+            f_setcurpl(prevcp)
+        cs.EUDEndIf()
+        _eprintln_end << c.RawTrigger(nextptr=0)
+        c.PopTriggerScope()
+
+    _print, _next = c.Forward(), c.Forward()
+    prevcp << f_getcurpl()
+    c.RawTrigger(
+        nextptr=_eprintln_template,
+        actions=[
+            c.SetNextPtr(_eprintln_print, _print),
+            c.SetNextPtr(_eprintln_end, _next),
+        ],
+    )
+    _print << c.NextTrigger()
+    f_cpstr_print(*args)
+    c.SetNextTrigger(_eprintln_EOS)
+    _next << c.NextTrigger()
+
+
+_eprintln2_template = None
+_eprintln2_print = c.Forward()
+_eprintln2_EOS = c.Forward()
+_eprintln2_end = c.Forward()
+
+
+def f_eprintln2(*args):
+    global _eprintln2_template
+    if _eprintln2_template is None:
+        _eprintln2_template = c.Forward()
+
+        c.PushTriggerScope()
+        _eprintln2_template << c.NextTrigger()
+
+        if cs.EUDExecuteOnce()():
+            pTBL = f_dwread_epd(ut.EPD(0x6D5A30))
+            offset = f_wread(pTBL + 871 * 2)
+            f_dwwrite(pTBL + offset, ut.b2i4(b"\r\r\r\r"))
+            epd = ut.EPD(pTBL + offset) + 1
+        cs.EUDEndExecuteOnce()
+
+        if cs.EUDIf()(c.Memory(0x512684, c.Exactly, prevcp)):
+            f_setcurpl(epd)
+            _eprintln2_print << c.RawTrigger(nextptr=0)
+            _eprintln2_EOS << c.RawTrigger(
+                actions=[c.SetDeaths(c.CurrentPlayer, c.SetTo, 0, 0)]
+            )
+            f_setcurpl(prevcp)
+        cs.EUDEndIf()
+        _eprintln2_end << c.RawTrigger(nextptr=0)
+        c.PopTriggerScope()
+
+    _print, _next = c.Forward(), c.Forward()
+    prevcp << f_getcurpl()
+    c.RawTrigger(
+        nextptr=_eprintln2_template,
+        actions=[
+            c.SetNextPtr(_eprintln2_print, _print),
+            c.SetNextPtr(_eprintln2_end, _next),
+        ],
+    )
+    _print << c.NextTrigger()
+    f_cpstr_print(*args)
+    c.SetNextTrigger(_eprintln2_EOS)
+    _next << c.NextTrigger()
