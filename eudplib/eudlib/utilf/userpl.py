@@ -23,10 +23,14 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 """
 
-from eudplib import core as c, utils as ut
+from eudplib import core as c, utils as ut, ctrlstru as cs
 from ..memiof import f_dwread_epd
 
 
 @c.EUDFunc
 def f_getuserplayerid():
-    return f_dwread_epd(ut.EPD(0x512684))
+    ret = c.EUDVariable()
+    if cs.EUDExecuteOnce()():
+        ret << f_dwread_epd(ut.EPD(0x512684))
+    cs.EUDEndExecuteOnce()
+    return ret
