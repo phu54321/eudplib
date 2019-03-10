@@ -26,6 +26,7 @@ THE SOFTWARE.
 from .qgc import (
     QueueGameCommand,
     QueueGameCommand_RightClick,
+    QueueGameCommand_QueuedRightClick,
     QueueGameCommand_Select,
     QueueGameCommand_MinimapPing,
     QueueGameCommand_PauseGame,

@@ -90,6 +90,17 @@ def QueueGameCommand_RightClick(xy):
 
 
 @c.EUDFunc
+def QueueGameCommand_QueuedRightClick(xy):
+    """Queue right click action.
+
+    :param xy: (y * 65536) + x, where (x, y) is coordinate for right click.
+    """
+    QueuedRightClickCommand = c.Db(b"...\x14XXYY\0\0\xE4\0\x01")
+    c.SetVariables(ut.EPD(QueuedRightClickCommand + 4), xy)
+    QueueGameCommand(QueuedRightClickCommand + 3, 10)
+
+
+@c.EUDFunc
 def QueueGameCommand_MinimapPing(xy):
     """Queue minimap ping action.
 
