@@ -29,6 +29,19 @@ from ..memiof import f_getcurpl, f_setcurpl
 from .cpstr import GetStringAddr
 from .cpprint import prevcp, f_cpstr_print
 from .strfunc import f_strlen_epd
+from .texteffect import TextFX_FadeIn, TextFX_FadeOut
+
+
+@c.EUDFunc
+def f_gettextptr():
+    ret = c.EUDVariable()
+    ret << 0
+    for i in range(3, -1, -1):
+        c.RawTrigger(
+            conditions=c.MemoryX(0x640B58, c.AtLeast, 1, 2**i),
+            actions=ret.AddNumber(2**i)
+        )
+    return ret
 
 
 class StringBuffer:
@@ -50,7 +63,7 @@ class StringBuffer:
         """
         filler = ForcedAddString(b"Artani")
         if content is None:
-            content = b"\r" * 1023
+            content = b"\r" * 218
         elif isinstance(content, int):
             content = b"\r" * content
         else:
@@ -82,23 +95,34 @@ class StringBuffer:
         c.RegisterCreatePayloadCallback(_fill)
 
     def append(self, *args):
-        prevcp << f_getcurpl()
+        end = c.Forward()
+        cp = f_getcurpl()
+        cs.EUDJumpIfNot(c.Memory(0x512684, c.Exactly, cp), end)
+        prevcp << cp
         f_setcurpl(self.pos)
         f_cpstr_print(*args)
         self.pos << f_getcurpl()
         cs.DoActions(
             [c.SetDeaths(c.CurrentPlayer, c.SetTo, 0, 0), c.SetCurrentPlayer(prevcp)]
         )
+        end << c.NextTrigger()
 
     def insert(self, index, *args):
-        prevcp << f_getcurpl()
+        end = c.Forward()
+        cp = f_getcurpl()
+        cs.EUDJumpIfNot(c.Memory(0x512684, c.Exactly, cp), end)
+        prevcp << cp
         f_setcurpl(self.epd + index)
         f_cpstr_print(*args)
         self.pos << f_getcurpl()
         f_setcurpl(prevcp)
+        end << c.NextTrigger()
 
     def delete(self, start, length=1):
-        prevcp << f_getcurpl()
+        end = c.Forward()
+        cp = f_getcurpl()
+        cs.EUDJumpIfNot(c.Memory(0x512684, c.Exactly, cp), end)
+        prevcp << cp
         index = self.epd + start
         f_setcurpl(index)
         self.pos << index
@@ -112,12 +136,49 @@ class StringBuffer:
             ]
         )
         f_setcurpl(prevcp)
+        end << c.NextTrigger()
 
     def Display(self):
         cs.DoActions(c.DisplayText(self.StringIndex))
 
+    def DisplayAt(self, line):
+        prevptr = f_gettextptr()
+        cs.DoActions(c.SetMemory(0x640B58, c.Add, line))
+        c.RawTrigger(
+            conditions=c.Memory(0x640B58, c.AtLeast, 11),
+            actions=c.SetMemory(0x640B58, c.Subtract, 11),
+        )
+        cs.DoActions([
+            c.DisplayText(self.StringIndex),
+            c.SetMemory(0x640B58, c.SetTo, prevptr)
+        ])
+
     def Play(self):
         cs.DoActions(c.PlayWAV(self.StringIndex))
+
+    def fadeIn(self, *args, color=None, wait=1, reset=True, tag=None):
+        end = c.Forward()
+        cp = f_getcurpl()
+        cs.EUDJumpIfNot(c.Memory(0x512684, c.Exactly, cp), end)
+        prevcp << cp
+        f_setcurpl(self.pos)
+        ret = TextFX_FadeIn(*args, color=color, wait=wait, reset=reset, tag=tag)
+        self.pos << f_getcurpl()
+        f_setcurpl(prevcp)
+        end << c.NextTrigger()
+        return ret
+
+    def fadeOut(self, *args, color=None, wait=1, reset=True, tag=None):
+        end = c.Forward()
+        cp = f_getcurpl()
+        cs.EUDJumpIfNot(c.Memory(0x512684, c.Exactly, cp), end)
+        prevcp << cp
+        f_setcurpl(self.pos)
+        ret = TextFX_FadeOut(*args, color=color, wait=wait, reset=reset, tag=tag)
+        self.pos << f_getcurpl()
+        f_setcurpl(prevcp)
+        end << c.NextTrigger()
+        return ret
 
     def length(self):
         return f_strlen_epd(self.epd)

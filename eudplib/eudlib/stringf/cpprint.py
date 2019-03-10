@@ -25,7 +25,7 @@ THE SOFTWARE.
 
 from eudplib import core as c, ctrlstru as cs, utils as ut
 
-from ..memiof import CPByteWriter, f_setcurpl, f_getcurpl, f_dwread_epd
+from ..memiof import CPByteWriter, f_setcurpl, f_getcurpl, f_dwread_epd, f_dwwrite
 from .rwcommon import br1
 from .cpstr import _s2b, CPString, GetTBLAddr
 from .dbstr import DBString
@@ -270,6 +270,7 @@ def f_eprintln2(*args):
         _eprintln2_template << c.NextTrigger()
 
         if cs.EUDExecuteOnce()():
+            # [871] Unit's waypoint list is full.
             ptr = GetTBLAddr(871)
             f_dwwrite(ptr, ut.b2i4(b"\r\r\r\r"))
             epd = ut.EPD(ptr) + 1

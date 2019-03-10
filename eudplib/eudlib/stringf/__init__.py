@@ -32,7 +32,7 @@ from .cpstr import (
 
 from .dbstr import DBString
 
-from .strbuffer import StringBuffer
+from .strbuffer import StringBuffer, f_gettextptr
 
 from .strfunc import f_strcpy, f_strcmp, f_strlen, f_strlen_epd, f_strnstr
 
@@ -50,7 +50,6 @@ from .eudprint import (
 from .cpprint import (
     f_cpstr_adddw,
     f_cpstr_addptr,
-    f_cpstr_addstr,
     PColor,
     PName,
     f_cpstr_print,
@@ -64,6 +63,9 @@ from .setpname import SetPName
 
 from .texteffect import (
     f_cpchar_adddw,
-    f_cpchar_addstr,
     f_cpchar_print,
+    TextFX_FadeIn,
+    TextFX_FadeOut,
+    TextFX_SetTimer,
+    TextFX_Remove,
 )
