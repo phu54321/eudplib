@@ -66,7 +66,7 @@ class StringBuffer:
         :type content: str, bytes, int
         """
         chkt = c.GetChkTokenized()
-        filler = ForcedAddString(b"Artani")
+        filler = ForcedAddString(b"Arta")
         if content is None:
             content = "\r" * 218
         elif isinstance(content, int):
@@ -92,12 +92,9 @@ class StringBuffer:
                 stroffset.append(outindex)
                 outindex += len(s) + 1
             bufferoffset = stroffset[strmap._dataindextb[self.StringIndex - 1]]
-            if bufferoffset % 4 != 2:
-                strmap._datatb[strmap._dataindextb[filler - 1]] = b"Arta"[
-                    0 : 4 - bufferoffset % 4
-                ]
+            if bufferoffset % 4 != 0:
+                strmap._datatb[strmap._dataindextb[filler - 1]] = b"Arta"[:(2 - bufferoffset) % 4]
                 strmap._capacity -= 2 + bufferoffset % 4
-                ApplyStringMap(chkt)
 
         c.RegisterCreatePayloadCallback(_fill)
 

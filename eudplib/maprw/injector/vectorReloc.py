@@ -30,6 +30,7 @@ THE SOFTWARE.
 """
 
 from ... import core as c
+from ...core.mapdata.stringmap import GetStringMap
 from eudplib import utils as ut
 from ...trigtrg import trigtrg as tt
 
@@ -88,11 +89,7 @@ def CopyDeaths(iplayer, oplayer, copyepd=False, initvalue=None):
 def CreateVectorRelocator(chkt, payload):
     global trglist
 
-    # Append 'Require EUD enabler' to string table
-    str_section = chkt.getsection("STR")
-    strtb = c.TBL(str_section)
-    eude_needed = strtb.GetStringIndex("This map requires EUD Enabler to run")
-    str_section = strtb.SaveTBL()
+    str_section = GetStringMap().SaveTBL()
 
     """
     Algorithm credit to klassical_31@naver.com
@@ -208,8 +205,7 @@ def CreateVectorRelocator(chkt, payload):
         + tt.Trigger(
             players=[tt.AllPlayers],
             actions=[
-                # SetDeaths actions in MRGN initially points to EPD(payload -
-                # 4)
+                # SetDeaths actions in MRGN initially points to EPD(payload - 4)
                 [
                     tt.SetMemory(payload_offset - 4, tt.Add, payload_offset // 4)
                     for _ in range(packn)
@@ -247,7 +243,7 @@ def CreateVectorRelocator(chkt, payload):
 
     Trigger(
         conditions=[tt.Deaths(0, tt.Exactly, 0, 0)],
-        actions=[tt.DisplayText(eude_needed), tt.Draw()],
+        actions=[tt.Draw()],
     )
 
     # End trigger execution if EUDA is not supported
