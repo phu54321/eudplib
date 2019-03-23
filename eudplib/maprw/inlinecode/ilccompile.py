@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Copyright (c) 2014 trgk
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,7 +21,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-'''
+"""
 
 
 from ... import utils as ut
@@ -49,7 +49,7 @@ def ComputeBaseInlineCodeGlobals():
         for k, v in module.__dict__.items():
             if isinstance(v, types.ModuleType):
                 continue
-            if k[0] == '_':
+            if k[0] == "_":
                 continue
 
             G[k] = v
@@ -72,7 +72,7 @@ def GetInlineCodeGlobals():
 
 
 def CompileInlineCode(code):
-    code = compile(code, '<string>', 'exec')
+    code = compile(code, "<string>", "exec")
 
     if c.PushTriggerScope():
         tStart = c.RawTrigger(actions=c.SetDeaths(0, c.SetTo, 0, 0))

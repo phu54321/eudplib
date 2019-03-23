@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Copyright (c) 2014 trgk
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,12 +21,9 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-'''
+"""
 
-from eudplib import (
-    core as c,
-    ctrlstru as cs,
-)
+from eudplib import core as c, ctrlstru as cs
 
 
 def f_setcurpl(cp):
@@ -40,11 +37,11 @@ def _f_updatecpcache():
     cpcache << 0
     for i in range(31, -1, -1):
         c.RawTrigger(
-            conditions=[c.Memory(0x6509B0, c.AtLeast, 2**i)],
+            conditions=[c.Memory(0x6509B0, c.AtLeast, 2 ** i)],
             actions=[
-                c.SetMemory(0x6509B0, c.Subtract, 2**i),
-                cpcache.AddNumber(2**i)
-            ]
+                c.SetMemory(0x6509B0, c.Subtract, 2 ** i),
+                cpcache.AddNumber(2 ** i),
+            ],
         )
     cs.DoActions(c.SetCurrentPlayer(cpcache))
 
@@ -64,3 +61,12 @@ def f_getcurpl():
     cs.EUDEndIf()
 
     return cpcache
+
+
+def f_addcurpl(cp):
+    """Add current player value.
+
+    eudplib internally caches the current player value,
+    so this function add to that value.
+    """
+    cs.DoActions(c.AddCurrentPlayer(cp))

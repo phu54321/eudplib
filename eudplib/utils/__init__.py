@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Copyright (c) 2014 trgk
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,7 +21,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-'''
+"""
 
 from .ubconv import u2b, b2u, u2utf8
 from .binio import b2i1, b2i2, b2i4, i2b1, i2b2, i2b4
@@ -40,19 +40,11 @@ from .etc import (
     Assignable2List,
     SCMD2Text,
     cachedfunc,
-
     isStrict,
-    setStrict
+    setStrict,
 )
 
-from .eperror import (
-    EPError,
-    ep_assert
-)
+from .eperror import EPError, ep_assert
 
-from .exprproxy import (
-    ExprProxy,
-    unProxy,
-    isUnproxyInstance,
-)
+from .exprproxy import ExprProxy, unProxy, isUnproxyInstance
 from .etc import find_data_file

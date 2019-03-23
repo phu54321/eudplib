@@ -17,7 +17,4 @@ def test_varray():
     for i in EUDLoopRange(0, 9):
         v_sum += c[i] * i
 
-    test_assert("VArray test", [
-        v_sum == 2292,
-        a[9] == 5
-    ])
+    test_assert("VArray test", [v_sum == 2292, a[9] == 5])

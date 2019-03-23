@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Copyright (c) 2014 trgk
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,7 +21,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-'''
+"""
 
 from .. import core as c
 from eudplib import utils as ut
@@ -40,19 +40,10 @@ def _EUDBranchSub(conditions, ontrue, onfalse):
     brtrg = c.Forward()
     tjtrg = c.Forward()
     brtrg << c.RawTrigger(
-        nextptr=onfalse,
-        conditions=conditions,
-        actions=[
-            c.SetNextPtr(brtrg, tjtrg)
-        ]
+        nextptr=onfalse, conditions=conditions, actions=[c.SetNextPtr(brtrg, tjtrg)]
     )
 
-    tjtrg << c.RawTrigger(
-        nextptr=ontrue,
-        actions=[
-            c.SetNextPtr(brtrg, onfalse)
-        ]
-    )
+    tjtrg << c.RawTrigger(nextptr=ontrue, actions=[c.SetNextPtr(brtrg, onfalse)])
 
 
 def EUDBranch(conditions, ontrue, onfalse):
@@ -73,7 +64,7 @@ def EUDBranch(conditions, ontrue, onfalse):
     for i in range(0, len(conditions), 16):
         subontrue = c.Forward()
         subonfalse = onfalse
-        _EUDBranchSub(conditions[i:i+16], subontrue, subonfalse)
+        _EUDBranchSub(conditions[i : i + 16], subontrue, subonfalse)
 
         if i + 16 < len(conditions):
             subontrue << c.NextTrigger()

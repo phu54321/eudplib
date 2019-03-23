@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Copyright (c) 2014 trgk
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,24 +21,17 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-'''
+"""
 
 from .muldiv import f_mul, f_div
-from .bitwise import (
-    f_bitand,
-    f_bitor,
-    f_bitxor,
-    f_bitnot,
-    f_bitlshift,
-    f_bitrshift,
-)
+from .bitwise import f_bitand, f_bitor, f_bitxor, f_bitnot, f_bitlshift, f_bitrshift
 
 
 from ..variable import EUDVariable
 
 
 def DefClsMethod(name, f):
-    f.__name__ = 'EUDVariable.%s' % name
+    f.__name__ = "EUDVariable.%s" % name
     setattr(EUDVariable, name, f)
 
 
@@ -48,22 +41,24 @@ def DefOperator(name, f):
     def iop(self, rhs):
         self << f(self, rhs)
         return self
-    DefClsMethod('__i%s' % name[2:], iop)
+
+    DefClsMethod("__i%s" % name[2:], iop)
 
     def rop(self, lhs):
         return f(lhs, self)
-    DefClsMethod('__r%s' % name[2:], rop)
+
+    DefClsMethod("__r%s" % name[2:], rop)
 
 
-DefOperator('__mul__', lambda x, y: f_mul(x, y))
-DefOperator('__floordiv__', lambda x, y: f_div(x, y)[0])
-DefOperator('__mod__', lambda x, y: f_div(x, y)[1])
-DefOperator('__and__', lambda x, y: f_bitand(x, y))
-DefOperator('__or__', lambda x, y: f_bitor(x, y))
-DefOperator('__xor__', lambda x, y: f_bitxor(x, y))
-DefClsMethod('__neg__', lambda x: 0 - x)
-DefClsMethod('__invert__', lambda x: f_bitnot(x))
-DefClsMethod('__ilshift__', lambda x: f_bitlshift(x))
-DefClsMethod('__irshift__', lambda x: f_bitrshift(x))
+DefOperator("__mul__", lambda x, y: f_mul(x, y))
+DefOperator("__floordiv__", lambda x, y: f_div(x, y)[0])
+DefOperator("__mod__", lambda x, y: f_div(x, y)[1])
+DefOperator("__and__", lambda x, y: f_bitand(x, y))
+DefOperator("__or__", lambda x, y: f_bitor(x, y))
+DefOperator("__xor__", lambda x, y: f_bitxor(x, y))
+DefClsMethod("__neg__", lambda x: 0 - x)
+DefClsMethod("__invert__", lambda x: f_bitnot(x))
+DefClsMethod("__ilshift__", lambda x: f_bitlshift(x))
+DefClsMethod("__irshift__", lambda x: f_bitrshift(x))
 
 # Shift operator is reserved for assigning, so we won't overload them.

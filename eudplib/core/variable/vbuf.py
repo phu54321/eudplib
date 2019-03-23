@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Copyright (c) 2014 trgk
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,7 +21,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-'''
+"""
 
 from ..eudobj import EUDObject
 from ... import utils as ut
@@ -39,19 +39,24 @@ class EUDVarBuffer(EUDObject):
 
         self._vdict = {}
         self._initvals = []
+        self._flags = []
 
     def DynamicConstructed(self):
         return True
 
-    def CreateVarTrigger(self, v, initval):
+    def CreateVarTrigger(self, v, initval, flag=None):
         ret = self + (72 * len(self._initvals))
         self._initvals.append(initval)
+        self._flags.append(flag)
         self._vdict[v] = ret
         return ret
 
-    def CreateMultipleVarTriggers(self, v, initvals):
+    def CreateMultipleVarTriggers(self, v, initvals, flags=None):
         ret = self + (72 * len(self._initvals))
         self._initvals.extend(initvals)
+        if flags is None:
+            flags = [None] * len(initvals)
+        self._flags.extend(flags)
         self._vdict[v] = ret
         return ret
 
@@ -68,8 +73,14 @@ class EUDVarBuffer(EUDObject):
 
         for i in range(len(self._initvals)):
             # 'preserve rawtrigger'
-            output[72 * i + 2376:72 * i + 2380] = b'\x04\0\0\0'
-            output[72 * i + 352:72 * i + 356] = b'\0\0\x2D\x07'
+            output[72 * i + 2376 : 72 * i + 2380] = b"\x04\0\0\0"
+            output[72 * i + 352 : 72 * i + 356] = b"\0\0\x2D\x07"
+
+        for i, flag in enumerate(self._flags):
+            if flag is None:
+                continue
+            output[72 * i + 328 : 72 * i + 332] = ut.i2b4(flag)
+            output[72 * i + 356 : 72 * i + 360] = b"\0\0SC"
 
         heads = 0
         for i, initval in enumerate(self._initvals):
@@ -77,7 +88,7 @@ class EUDVarBuffer(EUDObject):
             if initval == 0:
                 continue
             elif isinstance(initval, int):
-                output[heade:heade + 4] = ut.i2b4(initval)
+                output[heade : heade + 4] = ut.i2b4(initval)
                 continue
             emitbuffer.WriteBytes(output[heads:heade])
             emitbuffer.WriteDword(initval)

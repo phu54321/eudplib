@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Copyright (c) 2014 trgk
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,7 +21,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-'''
+"""
 
 from ctypes import *
 from eudplib import utils as ut
@@ -29,37 +29,37 @@ from eudplib import utils as ut
 
 class UnitProperty(LittleEndianStructure):
 
-    '''
+    """
     UnitProperty class. Used in 'Create Unit with Properties' action.
-    '''
+    """
 
     _fields_ = [
-        ('sprpvalid', c_ushort),
-        ('prpvalid', c_ushort),
-        ('player', c_byte),
-        ('hitpoint', c_byte),
-        ('shield', c_byte),
-        ('energy', c_byte),
-        ('resource', c_uint),
-        ('hanger', c_ushort),
-        ('sprpflag', c_ushort),
-        ('unused', c_uint)
+        ("sprpvalid", c_ushort),
+        ("prpvalid", c_ushort),
+        ("player", c_byte),
+        ("hitpoint", c_byte),
+        ("shield", c_byte),
+        ("energy", c_byte),
+        ("resource", c_uint),
+        ("hanger", c_ushort),
+        ("sprpflag", c_ushort),
+        ("unused", c_uint),
     ]
 
     def __init__(
-            self,
-            hitpoint=None,
-            shield=None,
-            energy=None,
-            resource=None,
-            hanger=None,
-            cloaked=None,
-            burrowed=None,
-            intransit=None,
-            hallucinated=None,
-            invincible=None
+        self,
+        hitpoint=None,
+        shield=None,
+        energy=None,
+        resource=None,
+        hanger=None,
+        cloaked=None,
+        burrowed=None,
+        intransit=None,
+        hallucinated=None,
+        invincible=None,
     ):
-        '''
+        """
         Properties : Value/None (Don't care)
 
         - hitpoint : 0~100(%)  if) When unit's hitpoint is greater than 167772,
@@ -77,7 +77,7 @@ class UnitProperty(LittleEndianStructure):
         - invincible   : Unit is invincible.
 
         >>> UnitProperty(hitpoint = 50, burrowed = True) # HP 50%, burrowed
-        '''
+        """
         ut.ep_assert(hitpoint is None or 0 <= hitpoint <= 100)
         ut.ep_assert(shield is None or 0 <= shield <= 100)
         ut.ep_assert(energy is None or 0 <= energy <= 100)
@@ -118,26 +118,26 @@ class UnitProperty(LittleEndianStructure):
         self.hanger = prop2int(hanger)
 
         self.prpvalid = (
-            prop2valid(hitpoint, 1 << 1) |
-            prop2valid(shield, 1 << 2) |
-            prop2valid(energy, 1 << 3) |
-            prop2valid(resource, 1 << 4) |
-            prop2valid(hanger, 1 << 5)
+            prop2valid(hitpoint, 1 << 1)
+            | prop2valid(shield, 1 << 2)
+            | prop2valid(energy, 1 << 3)
+            | prop2valid(resource, 1 << 4)
+            | prop2valid(hanger, 1 << 5)
         )
 
         # Set special properties
         self.sprpvalid = (
-            prop2valid(cloaked, 1 << 0) |
-            prop2valid(burrowed, 1 << 1) |
-            prop2valid(intransit, 1 << 2) |
-            prop2valid(hallucinated, 1 << 3) |
-            prop2valid(invincible, 1 << 4)
+            prop2valid(cloaked, 1 << 0)
+            | prop2valid(burrowed, 1 << 1)
+            | prop2valid(intransit, 1 << 2)
+            | prop2valid(hallucinated, 1 << 3)
+            | prop2valid(invincible, 1 << 4)
         )
 
         self.sprpflag = (
-            prop2flag(cloaked, 1 << 0) |
-            prop2flag(burrowed, 1 << 1) |
-            prop2flag(intransit, 1 << 2) |
-            prop2flag(hallucinated, 1 << 3) |
-            prop2flag(invincible, 1 << 4)
+            prop2flag(cloaked, 1 << 0)
+            | prop2flag(burrowed, 1 << 1)
+            | prop2flag(intransit, 1 << 2)
+            | prop2flag(hallucinated, 1 << 3)
+            | prop2flag(invincible, 1 << 4)
         )

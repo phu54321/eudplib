@@ -2,8 +2,7 @@ import pickle
 
 
 def StackObjects(found_objects, dwoccupmap_dict, alloctable):
-    dwoccupmap_max_size = sum(
-        map(lambda x: len(dwoccupmap_dict[x]), found_objects))
+    dwoccupmap_max_size = sum(map(lambda x: len(dwoccupmap_dict[x]), found_objects))
     # for obj in found_objects:
     #     dwoccupmap_max_size += len(dwoccupmap_dict[obj])
 
@@ -15,8 +14,7 @@ def StackObjects(found_objects, dwoccupmap_dict, alloctable):
 
     for objid, obj in enumerate(found_objects):
         if objid % 100 == 0:
-            print('[StackObjects] Stacking object %d/%d...' % (objid, objnum),
-                  end='\r')
+            print("[StackObjects] Stacking object %d/%d..." % (objid, objnum), end="\r")
         # Convert to faster c array
         dwoccupmap = dwoccupmap_dict[obj]
         oclen = len(dwoccupmap)
@@ -54,11 +52,12 @@ def StackObjects(found_objects, dwoccupmap_dict, alloctable):
         if (lallocaddr + oclen) * 4 > payload_size:
             payload_size = (lallocaddr + oclen) * 4
 
-    print('[StackObjects] Stacking object %d/%d...' % (objnum, objnum))
+    print("[StackObjects] Stacking object %d/%d..." % (objnum, objnum))
+
 
 if __name__ == "__main__":
-    obj = pickle.load(open('stackdata.bin', 'rb'))
-    found_objects = obj['found_objects']
-    dwoccupmap_dict = obj['dwoccupmap_dict']
+    obj = pickle.load(open("stackdata.bin", "rb"))
+    found_objects = obj["found_objects"]
+    dwoccupmap_dict = obj["dwoccupmap_dict"]
     alloctable = {}
     StackObjects(found_objects, dwoccupmap_dict, alloctable)

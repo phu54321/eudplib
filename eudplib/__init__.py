@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Copyright (c) 2014 trgk
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,7 +21,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-'''
+"""
 
 
 oldGlobals = set(globals().keys())
@@ -34,10 +34,8 @@ from .eudlib import *
 from .epscript import *
 from .trigtrg.runtrigtrg import (
     RunTrigTrigger,
-
     GetFirstTrigTrigger,
     GetLastTrigTrigger,
-
     TrigTriggerBegin,
     TrigTriggerEnd,
 )
@@ -45,7 +43,7 @@ from .trigtrg.runtrigtrg import (
 from .maprw import *
 
 
-__version__ = '0.57.2'
+__version__ = "0.57.2"
 
 import types
 
@@ -55,9 +53,9 @@ _alllist = []
 for _k, _v in dict(globals()).items():
     if _k in oldGlobals:
         continue
-    elif _k != 'stocktrg' and isinstance(_v, types.ModuleType):
+    elif _k != "stocktrg" and isinstance(_v, types.ModuleType):
         continue
-    elif _k[0] == '_':
+    elif _k[0] == "_":
         continue
     _alllist.append(_k)
 
@@ -71,8 +69,10 @@ del _v
 def eudplibVersion():
     return __version__
 
-_alllist.append('eudplibVersion')
+
+_alllist.append("eudplibVersion")
 
 
 from .epscript.epscompile import setEpsGlobals
+
 setEpsGlobals(_alllist)

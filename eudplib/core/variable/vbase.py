@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Copyright (c) 2014 trgk
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,7 +21,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-'''
+"""
 
 from .. import rawtrigger as bt
 from eudplib import utils as ut
@@ -32,7 +32,7 @@ class VariableBase:
         pass
 
     def getValueAddr(self):
-        raise ut.EPError('override')
+        raise ut.EPError("override")
 
     # -------
 
@@ -58,36 +58,40 @@ class VariableBase:
 
     # -------
 
+    def AtLeastX(self, value, mask):
+        return bt.MemoryX(self.getValueAddr(), bt.AtLeast, value, mask)
+
+    def AtMostX(self, value, mask):
+        return bt.MemoryX(self.getValueAddr(), bt.AtMost, value, mask)
+
+    def ExactlyX(self, value, mask):
+        return bt.MemoryX(self.getValueAddr(), bt.Exactly, value, mask)
+
+    # -------
+
+    def SetNumberX(self, value, mask):
+        return bt.SetMemoryX(self.getValueAddr(), bt.SetTo, value, mask)
+
+    def AddNumberX(self, value, mask):
+        return bt.SetMemoryX(self.getValueAddr(), bt.Add, value, mask)
+
+    def SubtractNumberX(self, value, mask):
+        return bt.SetMemoryX(self.getValueAddr(), bt.Subtract, value, mask)
+
+    # -------
+
     def Assign(self, value):
-        bt.RawTrigger(actions=[
-            bt.SetMemory(
-                self.getValueAddr(),
-                bt.SetTo,
-                value
-            )
-        ])
+        bt.RawTrigger(actions=[bt.SetMemory(self.getValueAddr(), bt.SetTo, value)])
 
     def __lshift__(self, value):
         self.Assign(value)
 
     def __iadd__(self, value):
-        bt.RawTrigger(actions=[
-            bt.SetMemory(
-                self.getValueAddr(),
-                bt.Add,
-                value
-            )
-        ])
+        bt.RawTrigger(actions=[bt.SetMemory(self.getValueAddr(), bt.Add, value)])
         return self
 
     def __isub__(self, value):
-        bt.RawTrigger(actions=[
-            bt.SetMemory(
-                self.getValueAddr(),
-                bt.Subtract,
-                value
-            )
-        ])
+        bt.RawTrigger(actions=[bt.SetMemory(self.getValueAddr(), bt.Subtract, value)])
         return self
 
     # -------

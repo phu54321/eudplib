@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Copyright (c) 2014 trgk
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,16 +21,12 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-'''
+"""
 
 import traceback
 
 from .. import rawtrigger as bt
-from ..allocator import (
-    Forward,
-    ConstExpr,
-    IsConstExpr
-)
+from ..allocator import Forward, ConstExpr, IsConstExpr
 from ...utils import (
     FlattenList,
     EPD,
@@ -38,7 +34,7 @@ from ...utils import (
     unProxy,
     isUnproxyInstance,
     ep_assert,
-    EPError
+    EPError,
 )
 from .vbase import VariableBase
 from .vbuf import GetCurrentVariableBuffer
@@ -54,25 +50,25 @@ def EP_SetRValueStrictMode(mode):
 
 # Unused variable don't need to be allocated.
 class VariableTriggerForward(ConstExpr):
-
-    def __init__(self, initval):
+    def __init__(self, initval, mask=None):
         super().__init__(self)
         self._initval = initval
+        self._mask = mask
 
     def Evaluate(self):
         evb = GetCurrentVariableBuffer()
         try:
             return evb._vdict[self].Evaluate()
         except KeyError:
-            vt = evb.CreateVarTrigger(self, self._initval)
+            vt = evb.CreateVarTrigger(self, self._initval, self._mask)
             return vt.Evaluate()
 
 
 class EUDVariable(VariableBase):
 
-    '''
+    """
     Full variable.
-    '''
+    """
 
     def __init__(self, initval=0):
         self._vartrigger = VariableTriggerForward(initval)
@@ -99,7 +95,7 @@ class EUDVariable(VariableBase):
 
     def checkNonRValue(self):
         if isRValueStrict and self._rvalue:
-            raise EPError('Trying to modify value of l-value variable')
+            raise EPError("Trying to modify value of l-value variable")
 
     # -------
 
@@ -143,9 +139,7 @@ class EUDVariable(VariableBase):
 
     def Assign(self, other):
         self.checkNonRValue()
-        SeqCompute((
-            (self, bt.SetTo, other),
-        ))
+        SeqCompute(((self, bt.SetTo, other),))
 
     def __lshift__(self, other):
         self.Assign(other)
@@ -163,10 +157,7 @@ class EUDVariable(VariableBase):
 
     def __add__(self, other):
         t = EUDVariable()
-        SeqCompute([
-            (t, bt.SetTo, self),
-            (t, bt.Add, other)
-        ])
+        SeqCompute([(t, bt.SetTo, self), (t, bt.Add, other)])
         return t.makeR()
 
     def __radd__(self, other):
@@ -175,22 +166,26 @@ class EUDVariable(VariableBase):
     def __sub__(self, other):
         t = EUDVariable()
 
-        SeqCompute([
-            (t, bt.SetTo, 0xffffffff),
-            (t, bt.Subtract, other),
-            (t, bt.Add, 1),
-            (t, bt.Add, self),
-        ])
+        SeqCompute(
+            [
+                (t, bt.SetTo, 0xFFFFFFFF),
+                (t, bt.Subtract, other),
+                (t, bt.Add, 1),
+                (t, bt.Add, self),
+            ]
+        )
         return t.makeR()
 
     def __rsub__(self, other):
         t = EUDVariable()
-        SeqCompute([
-            (t, bt.SetTo, 0xffffffff),
-            (t, bt.Subtract, self),
-            (t, bt.Add, 1),
-            (t, bt.Add, other),
-        ])
+        SeqCompute(
+            [
+                (t, bt.SetTo, 0xFFFFFFFF),
+                (t, bt.Subtract, self),
+                (t, bt.Add, 1),
+                (t, bt.Add, other),
+            ]
+        )
         return t.makeR()
 
     def __neg__(self):
@@ -198,10 +193,7 @@ class EUDVariable(VariableBase):
 
     def __invert__(self):
         t = EUDVariable()
-        SeqCompute([
-            (t, bt.SetTo, 0xffffffff),
-            (t, bt.Subtract, self)
-        ])
+        SeqCompute([(t, bt.SetTo, 0xFFFFFFFF), (t, bt.Subtract, self)])
         return t.makeR()
 
     # -------
@@ -225,10 +217,7 @@ class EUDVariable(VariableBase):
 
         else:
             t = EUDVariable()
-            SeqCompute((
-                (t, bt.SetTo, self),
-                (t, bt.Subtract, other)
-            ))
+            SeqCompute(((t, bt.SetTo, self), (t, bt.Subtract, other)))
             return t.Exactly(0)
 
     def __ge__(self, other):
@@ -237,15 +226,12 @@ class EUDVariable(VariableBase):
 
         else:
             t = EUDVariable()
-            SeqCompute((
-                (t, bt.SetTo, other),
-                (t, bt.Subtract, self)
-            ))
+            SeqCompute(((t, bt.SetTo, other), (t, bt.Subtract, self)))
             return t.Exactly(0)
 
     def __lt__(self, other):
         if isinstance(other, int) and other <= 0:
-            print('[Warning] No unsigned number can be leq than %d' % other)
+            print("[Warning] No unsigned number can be leq than %d" % other)
             traceback.print_stack()
             return [bt.Never()]  # No unsigned number is less than 0
 
@@ -254,16 +240,12 @@ class EUDVariable(VariableBase):
 
         else:
             t = EUDVariable()
-            SeqCompute((
-                (t, bt.SetTo, 1),
-                (t, bt.Add, self),
-                (t, bt.Subtract, other)
-            ))
+            SeqCompute(((t, bt.SetTo, 1), (t, bt.Add, self), (t, bt.Subtract, other)))
             return t.Exactly(0)
 
     def __gt__(self, other):
         if isinstance(other, int) and other >= 0xFFFFFFFF:
-            print('[Warning] No unsigned int can be greater than %d' % other)
+            print("[Warning] No unsigned int can be greater than %d" % other)
             traceback.print_stack()
             return [bt.Never()]  # No unsigned number is less than 0
 
@@ -272,10 +254,7 @@ class EUDVariable(VariableBase):
 
         else:
             t = EUDVariable()
-            SeqCompute((
-                (t, bt.SetTo, self),
-                (t, bt.Subtract, other)
-            ))
+            SeqCompute(((t, bt.SetTo, self), (t, bt.Subtract, other)))
             return t.AtLeast(1)
 
     # operator placeholders
@@ -289,7 +268,7 @@ class EUDVariable(VariableBase):
         pass
 
     def __floordiv__(self, a):
-        raise NotImplementedError('')
+        raise NotImplementedError("")
 
     def __rfloordiv__(self, a):
         pass
@@ -346,7 +325,7 @@ def VProc(v, actions):
 
     bt.RawTrigger(
         nextptr=v.GetVTable(),
-        actions=[actions] + [bt.SetNextPtr(v.GetVTable(), nexttrg)]
+        actions=[actions] + [bt.SetNextPtr(v.GetVTable(), nexttrg)],
     )
 
     nexttrg << bt.NextTrigger()
@@ -358,6 +337,7 @@ def EUDCreateVariables(varn):
 
 
 # -------
+
 
 def _GetComputeDest(dst):
     try:
@@ -415,15 +395,11 @@ def _SeqComputeSub(assignpairs):
             bt.Subtract: EUDVariable.QueueSubtractTo,
         }[mdt]
 
-        actionlist.append([
-            queuef(src, dst),
-            bt.SetNextPtr(src.GetVTable(), vt_nextptr)
-        ])
+        actionlist.append(
+            [queuef(src, dst), bt.SetNextPtr(src.GetVTable(), vt_nextptr)]
+        )
 
-    bt.RawTrigger(
-        nextptr=nextptr,
-        actions=actionlist
-    )
+    bt.RawTrigger(nextptr=nextptr, actions=actionlist)
 
     vt_nextptr << bt.NextTrigger()
 
@@ -492,7 +468,7 @@ def SeqCompute(assignpairs):
 def SetVariables(srclist, dstlist, mdtlist=None):
     srclist = FlattenList(srclist)
     dstlist = FlattenList(dstlist)
-    ep_assert(len(srclist) == len(dstlist), 'Input/output size mismatch')
+    ep_assert(len(srclist) == len(dstlist), "Input/output size mismatch")
 
     if mdtlist is None:
         mdtlist = [bt.SetTo] * len(srclist)

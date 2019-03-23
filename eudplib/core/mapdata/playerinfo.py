@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Copyright (c) 2014 trgk
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,7 +21,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-'''
+"""
 
 from eudplib import utils as ut
 
@@ -35,9 +35,9 @@ class PlayerInfo:
 def InitPlayerInfo(chkt):
     global _playerinfo
 
-    section_forc = chkt.getsection('FORC')
-    section_ownr = chkt.getsection('OWNR')
-    section_side = chkt.getsection('SIDE')
+    section_forc = chkt.getsection("FORC")
+    section_ownr = chkt.getsection("OWNR")
+    section_side = chkt.getsection("SIDE")
 
     _playerinfo = [PlayerInfo() for _ in range(8)]
 

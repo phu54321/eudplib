@@ -8,4 +8,4 @@ from perftests import (
 )
 
 # helper.CompressPayload(True)
-helper.test_runall('perf')
+helper.test_runall("perf")

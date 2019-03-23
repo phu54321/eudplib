@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Copyright (c) 2014 trgk
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,11 +21,11 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-'''
+"""
 
-'''
+"""
 String table manager. Internally used in eudplib.
-'''
+"""
 
 from eudplib import utils as ut
 
@@ -65,7 +65,7 @@ class TBL:
     def AddString(self, string):
         string = ut.u2b(string)  # Starcraft uses multibyte encoding.
         if not isinstance(string, bytes):
-            raise ut.EPError('Invalid type for string')
+            raise ut.EPError("Invalid type for string")
 
         stringindex = len(self._dataindextb)
 
@@ -85,7 +85,7 @@ class TBL:
             # string + b'\0' + string offset
             self._capacity += len(string) + 1 + 2
 
-        ut.ep_assert(self._capacity < 65536, 'String table overflow')
+        ut.ep_assert(self._capacity < 65536, "String table overflow")
 
         return stringindex
 
@@ -102,7 +102,7 @@ class TBL:
     def GetStringIndex(self, string):
         string = ut.u2b(string)
         if not isinstance(string, bytes):
-            raise ut.EPError('Invalid type for string')
+            raise ut.EPError("Invalid type for string")
 
         try:
             return self._stringmap[string] + 1
@@ -130,6 +130,25 @@ class TBL:
         # String data
         for s in self._datatb:
             outbytes.append(s)
-            outbytes.append(b'\0')
+            outbytes.append(b"\0")
 
-        return b''.join(outbytes)
+        return b"".join(outbytes)
+
+    def ForcedAddString(self, string):
+        string = ut.u2b(string)  # Starcraft uses multibyte encoding.
+        if not isinstance(string, bytes):
+            raise ut.EPError("Invalid type for string")
+
+        stringindex = len(self._dataindextb)
+
+        # Always -> Create new entry
+        dataindex = len(self._datatb)
+        # self._stringmap[string] = stringindex
+        self._datatb.append(string)
+        self._dataindextb.append(dataindex)
+        # string + b'\0' + string offset
+        self._capacity += len(string) + 1 + 2
+
+        ut.ep_assert(self._capacity < 65536, "String table overflow")
+
+        return stringindex

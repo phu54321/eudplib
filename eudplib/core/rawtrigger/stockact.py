@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Copyright (c) 2014 trgk
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,7 +21,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-'''
+"""
 
 from .action import Action
 from .constenc import (
@@ -72,15 +72,15 @@ def UnpauseGame():
     return Action(0, 0, 0, 0, 0, 0, 0, 6, 0, 4)
 
 
-def Transmission(Unit, Where, WAVName, TimeModifier,
-                 Time, Text, AlwaysDisplay=4):
+def Transmission(Unit, Where, WAVName, TimeModifier, Time, Text, AlwaysDisplay=4):
     Unit = EncodeUnit(Unit, issueError=True)
     Where = EncodeLocation(Where, issueError=True)
     WAVName = EncodeString(WAVName, issueError=True)
     TimeModifier = EncodeModifier(TimeModifier, issueError=True)
     Text = EncodeString(Text, issueError=True)
-    return Action(Where, Text, WAVName, Time, 0, 0,
-                  Unit, 7, TimeModifier, AlwaysDisplay)
+    return Action(
+        Where, Text, WAVName, Time, 0, 0, Unit, 7, TimeModifier, AlwaysDisplay
+    )
 
 
 def PlayWAV(WAVName):
@@ -274,8 +274,7 @@ def MoveUnit(Count, UnitType, Owner, StartLocation, DestLocation):
     Owner = EncodePlayer(Owner, issueError=True)
     StartLocation = EncodeLocation(StartLocation, issueError=True)
     DestLocation = EncodeLocation(DestLocation, issueError=True)
-    return Action(StartLocation, 0, 0, 0, Owner, DestLocation,
-                  UnitType, 39, Count, 20)
+    return Action(StartLocation, 0, 0, 0, Owner, DestLocation, UnitType, 39, Count, 20)
 
 
 def LeaderBoardGreed(Goal):
@@ -323,8 +322,7 @@ def Order(Unit, Owner, StartLocation, OrderType, DestLocation):
     StartLocation = EncodeLocation(StartLocation, issueError=True)
     OrderType = EncodeOrder(OrderType, issueError=True)
     DestLocation = EncodeLocation(DestLocation, issueError=True)
-    return Action(StartLocation, 0, 0, 0, Owner, DestLocation,
-                  Unit, 46, OrderType, 20)
+    return Action(StartLocation, 0, 0, 0, Owner, DestLocation, Unit, 46, OrderType, 20)
 
 
 def Comment(Text):
@@ -411,3 +409,36 @@ def SetMemoryEPD(dest, modtype, value):
 
 def SetNextPtr(trg, dest):
     return SetMemory(trg + 4, 7, dest)
+
+
+def SetDeathsX(Player, Modifier, Number, Unit, Mask):
+    Player = EncodePlayer(Player, issueError=True)
+    Modifier = EncodeModifier(Modifier, issueError=True)
+    Unit = EncodeUnit(Unit, issueError=True)
+    return Action(Mask, 0, 0, 0, Player, Number, Unit, 45, Modifier, 20, eudx=True)
+
+
+def SetMemoryX(dest, modtype, value, mask):
+    modtype = EncodeModifier(modtype, issueError=True)
+    return Action(mask, 0, 0, 0, EPD(dest), value, 0, 45, modtype, 20, eudx=True)
+
+
+def SetMemoryXEPD(dest, modtype, value, mask):
+    dest = EncodePlayer(dest, issueError=True)
+    modtype = EncodeModifier(modtype, issueError=True)
+    return Action(mask, 0, 0, 0, dest, value, 0, 45, modtype, 20, eudx=True)
+
+
+def SetKills(Player, Modifier, Number, Unit):
+    Player = EncodePlayer(Player, issueError=True)
+    Unit = EncodeUnit(Unit, issueError=True)
+    if isinstance(Player, int) and Player >= 12:
+        if Player == 13:
+            return [
+                SetMemory(0x6509B0, Add, -12 * 228),
+                SetDeaths(CurrentPlayer, Modifier, Number, Unit),
+                SetMemory(0x6509B0, Add, 12 * 228),
+            ]
+        else:
+            raise NotImplementedError
+    return SetDeaths(Player - 228 * 12, Modifier, Number, Unit)

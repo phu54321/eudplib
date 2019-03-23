@@ -13,11 +13,7 @@ def empty():
 @TestInstance
 def test_perfbasic():
     test_perf("Basic looping", lambda: None, 100 * perf_basecount)
-    test_perf(
-        "Basic function call",
-        EUDFunc(lambda: None),
-        100 * perf_basecount
-    )
+    test_perf("Basic function call", EUDFunc(lambda: None), 100 * perf_basecount)
 
     a, b, = EUDCreateVariables(2)
     a << f_dwrand()

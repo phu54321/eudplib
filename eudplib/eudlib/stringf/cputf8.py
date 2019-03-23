@@ -1,13 +1,6 @@
 from ..eudarray import EUDArray
 
-from ...ctrlstru import (
-    EUDInfLoop,
-    EUDEndInfLoop,
-    EUDIf,
-    EUDElse,
-    EUDEndIf,
-    EUDBreakIf,
-)
+from ...ctrlstru import EUDInfLoop, EUDEndInfLoop, EUDIf, EUDElse, EUDEndIf, EUDBreakIf
 from .rwcommon import br1, bw1
 from .cp949_table import cp949_table
 
@@ -56,4 +49,3 @@ def f_cp949_to_utf8_cpy(dst, src):
         EUDEndIf()
     EUDEndInfLoop()
     bw1.writebyte(0)
-    bw1.flushdword()

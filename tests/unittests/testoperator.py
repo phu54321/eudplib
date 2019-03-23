@@ -19,14 +19,14 @@ def test_variable_inequal():
     c << 2
     d << 2
 
-    test_assert('never', EUDNot([a != b]))
-    test_assert('never2', EUDNot([(a - b).AtLeast(1)]))
-    test_assert('never and never', EUDNot([a != b, c != d]))
-    test_assert('never(c) and never(c)', EUDNot([Never(), Never()]))
-    test_assert('never and never(c)', EUDNot([a != b, Never()]))
-    test_assert('never(c) and never', EUDNot([Never(), c != d]))
+    test_assert("never", EUDNot([a != b]))
+    test_assert("never2", EUDNot([(a - b).AtLeast(1)]))
+    test_assert("never and never", EUDNot([a != b, c != d]))
+    test_assert("never(c) and never(c)", EUDNot([Never(), Never()]))
+    test_assert("never and never(c)", EUDNot([a != b, Never()]))
+    test_assert("never(c) and never", EUDNot([Never(), c != d]))
 
-    test_assert('__lt__', a < c)
-    test_assert('__le__', a <= c)
-    test_assert('__le__', a <= b)
-    test_assert('__le__', EUDNot(c <= a))
+    test_assert("__lt__", a < c)
+    test_assert("__le__", a <= c)
+    test_assert("__le__", a <= b)
+    test_assert("__le__", EUDNot(c <= a))

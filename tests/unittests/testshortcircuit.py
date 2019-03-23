@@ -14,10 +14,8 @@ def f_func_with_side_effect(b):
 @TestInstance
 def test_eudscand():
     test_assert("EUDSCAnd w. (true, true)", EUDSCAnd()(Always())(Always())())
-    test_assert("EUDSCAnd w. (true, false)", EUDNot(
-        EUDSCAnd()(Always())(Never())()))
-    test_assert("EUDSCAnd w. (false, false)",
-                EUDNot(EUDSCAnd()(Never())(Never())()))
+    test_assert("EUDSCAnd w. (true, false)", EUDNot(EUDSCAnd()(Always())(Never())()))
+    test_assert("EUDSCAnd w. (false, false)", EUDNot(EUDSCAnd()(Never())(Never())()))
 
     # Check short-circuiting. f_func_with_side_effect should not be executed
     a << 0
@@ -27,7 +25,8 @@ def test_eudscand():
     # Check short-circuiting 2. f_func_with_side_effect should not be executed
     a << 0
     cv = EUDSCAnd()(f_func_with_side_effect(1))(f_func_with_side_effect(1))(
-        f_func_with_side_effect(0))(f_func_with_side_effect(1))()
+        f_func_with_side_effect(0)
+    )(f_func_with_side_effect(1))()
     test_equality("EUDSCAnd w. (t, t, f, t)", [cv, a], [0, 3])
 
 
@@ -35,8 +34,7 @@ def test_eudscand():
 def test_eudscor():
     test_assert("EUDSCOr w. (true, true)", EUDSCOr()(Always())(Always())())
     test_assert("EUDSCOr w. (true, false)", EUDSCOr()(Always())(Never())())
-    test_assert("EUDSCOr w. (false, false)",
-                EUDNot(EUDSCOr()(Never())(Never())()))
+    test_assert("EUDSCOr w. (false, false)", EUDNot(EUDSCOr()(Never())(Never())()))
 
     # Check short-circuiting. f_func_with_side_effect should not be executed
     a << 0
@@ -46,5 +44,6 @@ def test_eudscor():
     # Check short-circuiting 2. f_func_with_side_effect should not be executed
     a << 0
     cv = EUDSCOr()(f_func_with_side_effect(0))(f_func_with_side_effect(0))(
-        f_func_with_side_effect(1))(f_func_with_side_effect(1))()
+        f_func_with_side_effect(1)
+    )(f_func_with_side_effect(1))()
     test_equality("EUDSCOr w. (f, f, t, t)", [cv, a], [1, 3])

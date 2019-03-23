@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Copyright (c) 2014 trgk
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,7 +21,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-'''
+"""
 
 import functools
 
@@ -31,10 +31,7 @@ from .. import allocator as ac
 from .. import rawtrigger as bt
 from .. import variable as ev
 from .trace.tracetool import _EUDTracePush, _EUDTracePop
-from ...utils.blockstru import (
-    BlockStruManager,
-    SetCurrentBlockStruManager
-)
+from ...utils.blockstru import BlockStruManager, SetCurrentBlockStruManager
 
 
 _currentCompiledFunc = None
@@ -126,7 +123,7 @@ class EUDFuncN:
         bt.PopTriggerScope()
 
         # Finalize
-        ut.ep_assert(f_bsm.empty(), 'Block start/end mismatch inside function')
+        ut.ep_assert(f_bsm.empty(), "Block start/end mismatch inside function")
         SetCurrentBlockStruManager(prev_bsm)
 
         # No return -> set return count to 0
@@ -143,7 +140,7 @@ class EUDFuncN:
         ut.ep_assert(
             len(retv) == len(self._frets),
             "Numbers of returned value should be constant."
-            " (From function %s)" % self._callerfunc.__name__
+            " (From function %s)" % self._callerfunc.__name__,
         )
 
         ev.SetVariables(self._frets, retv)
@@ -157,8 +154,7 @@ class EUDFuncN:
 
         ut.ep_assert(
             len(args) == self._argn,
-            'Argument number mismatch : ' +
-            'len(%s) != %d' % (repr(args), self._argn)
+            "Argument number mismatch : " + "len(%s) != %d" % (repr(args), self._argn),
         )
 
         fcallend = ac.Forward()
@@ -166,10 +162,16 @@ class EUDFuncN:
         # SeqCompute gets faster when const-assignments are in front of
         # variable assignments.
         nextPtrAssignment = [(ut.EPD(self._fend + 4), bt.SetTo, fcallend)]
-        constAssigns = [(farg, bt.SetTo, arg) for farg, arg in
-                        zip(self._fargs, args) if not ev.IsEUDVariable(arg)]
-        varAssigns = [(farg, bt.SetTo, arg) for farg, arg in
-                      zip(self._fargs, args) if ev.IsEUDVariable(arg)]
+        constAssigns = [
+            (farg, bt.SetTo, arg)
+            for farg, arg in zip(self._fargs, args)
+            if not ev.IsEUDVariable(arg)
+        ]
+        varAssigns = [
+            (farg, bt.SetTo, arg)
+            for farg, arg in zip(self._fargs, args)
+            if ev.IsEUDVariable(arg)
+        ]
         ev.SeqCompute(nextPtrAssignment + constAssigns + varAssigns)
         bt.SetNextTrigger(self._fstart)
 

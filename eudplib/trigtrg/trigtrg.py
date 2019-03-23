@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Copyright (c) 2014 trgk
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,7 +21,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-'''
+"""
 
 from struct import pack
 from eudplib import utils as ut
@@ -29,7 +29,7 @@ from ..utils import EPD
 from ..core.rawtrigger.constenc import *
 from ..core.rawtrigger.strenc import *
 
-'''
+"""
 Defines stock conditions & actions. You are most likely to use only conditions
 declared in this file. This file also serves as a basic reference for trigger
 condition / actions.
@@ -41,23 +41,34 @@ condition / actions.
    3. Make your action as mentioned here.
      ex) CreateUnit(30, 'Terran Marine', 'Anywhere', Player1)
 
-'''
+"""
 
 
-def Condition(locid, player, amount, unitid,
-              comparison, condtype, restype, flag):
+def Condition(locid, player, amount, unitid, comparison, condtype, restype, flag):
     if player < 0:
         player += 0x100000000  # EPD
 
     player &= 0xFFFFFFFF
     amount &= 0xFFFFFFFF
 
-    return pack('<IIIHBBBBBB', locid, player, amount, unitid,
-                comparison, condtype, restype, flag, 0, 0)
+    return pack(
+        "<IIIHBBBBBB",
+        locid,
+        player,
+        amount,
+        unitid,
+        comparison,
+        condtype,
+        restype,
+        flag,
+        0,
+        0,
+    )
 
 
-def Action(locid1, strid, wavid, time, player1,
-           player2, unitid, acttype, amount, flags):
+def Action(
+    locid1, strid, wavid, time, player1, player2, unitid, acttype, amount, flags
+):
     player1 &= 0xFFFFFFFF
     player2 &= 0xFFFFFFFF
 
@@ -65,8 +76,22 @@ def Action(locid1, strid, wavid, time, player1,
         player1 += 0x100000000  # EPD
     if player2 < 0:
         player2 += 0x100000000  # EPD
-    return pack('<IIIIIIHBBBBBB', locid1, strid, wavid, time, player1, player2,
-                unitid, acttype, amount, flags, 0, 0, 0)
+    return pack(
+        "<IIIIIIHBBBBBB",
+        locid1,
+        strid,
+        wavid,
+        time,
+        player1,
+        player2,
+        unitid,
+        acttype,
+        amount,
+        flags,
+        0,
+        0,
+        0,
+    )
 
 
 def Trigger(players, conditions=[], actions=[]):
@@ -82,13 +107,13 @@ def Trigger(players, conditions=[], actions=[]):
     for p in players:
         peff[EncodePlayer(p)] = 1
 
-    b = b''.join(
-        conditions +
-        [bytes(20 * (16 - len(conditions)))] +
-        actions +
-        [bytes(32 * (64 - len(actions)))] +
-        [b'\x04\0\0\0'] +
-        [bytes(peff)]
+    b = b"".join(
+        conditions
+        + [bytes(20 * (16 - len(conditions)))]
+        + actions
+        + [bytes(32 * (64 - len(actions)))]
+        + [b"\x04\0\0\0"]
+        + [bytes(peff)]
     )
     ut.ep_assert(len(b) == 2400)
     return b
@@ -257,15 +282,15 @@ def UnpauseGame():
     return Action(0, 0, 0, 0, 0, 0, 0, 6, 0, 4)
 
 
-def Transmission(Unit, Where, WAVName, TimeModifier,
-                 Time, Text, AlwaysDisplay=4):
+def Transmission(Unit, Where, WAVName, TimeModifier, Time, Text, AlwaysDisplay=4):
     Unit = EncodeUnit(Unit)
     Where = EncodeLocation(Where)
     WAVName = EncodeString(WAVName)
     TimeModifier = EncodeModifier(TimeModifier)
     Text = EncodeString(Text)
-    return Action(Where, Text, WAVName, Time, 0, 0,
-                  Unit, 7, TimeModifier, AlwaysDisplay)
+    return Action(
+        Where, Text, WAVName, Time, 0, 0, Unit, 7, TimeModifier, AlwaysDisplay
+    )
 
 
 def PlayWAV(WAVName):
@@ -459,8 +484,7 @@ def MoveUnit(Count, UnitType, Owner, StartLocation, DestLocation):
     Owner = EncodePlayer(Owner)
     StartLocation = EncodeLocation(StartLocation)
     DestLocation = EncodeLocation(DestLocation)
-    return Action(StartLocation, 0, 0, 0, Owner,
-                  DestLocation, UnitType, 39, Count, 20)
+    return Action(StartLocation, 0, 0, 0, Owner, DestLocation, UnitType, 39, Count, 20)
 
 
 def LeaderBoardGreed(Goal):
@@ -508,8 +532,7 @@ def Order(Unit, Owner, StartLocation, OrderType, DestLocation):
     StartLocation = EncodeLocation(StartLocation)
     OrderType = EncodeOrder(OrderType)
     DestLocation = EncodeLocation(DestLocation)
-    return Action(StartLocation, 0, 0, 0, Owner,
-                  DestLocation, Unit, 46, OrderType, 20)
+    return Action(StartLocation, 0, 0, 0, Owner, DestLocation, Unit, 46, OrderType, 20)
 
 
 def Comment(Text):

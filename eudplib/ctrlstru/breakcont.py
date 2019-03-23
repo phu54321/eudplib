@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Copyright (c) 2014 trgk
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,12 +21,9 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-'''
+"""
 
-from . import (
-    loopblock as lb,
-    swblock as sb
-)
+from . import loopblock as lb, swblock as sb
 
 from .. import utils as ut
 
@@ -63,7 +60,7 @@ def EUDBreak():
             sb.EUDSwitchBreak()
             return
 
-    raise ut.EPError('No loop/switch block surrounding this code area')
+    raise ut.EPError("No loop/switch block surrounding this code area")
 
 
 def EUDBreakIf(conditions):
@@ -75,7 +72,7 @@ def EUDBreakIf(conditions):
             sb.EUDSwitchBreakIf(conditions)
             return
 
-    raise ut.EPError('No loop/switch block surrounding this code area')
+    raise ut.EPError("No loop/switch block surrounding this code area")
 
 
 def EUDBreakIfNot(conditions):
@@ -87,4 +84,4 @@ def EUDBreakIfNot(conditions):
             sb.EUDSwitchBreakIfNot(conditions)
             return
 
-    raise ut.EPError('No loop/switch block surrounding this code area')
+    raise ut.EPError("No loop/switch block surrounding this code area")

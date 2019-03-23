@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Copyright (c) 2014 trgk
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,18 +21,11 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-'''
+"""
 
-from .. import (
-    core as c,
-    trigger as tg,
-    utils as ut
-)
+from .. import core as c, trigger as tg, utils as ut
 
-from .basicstru import (
-    EUDJumpIf,
-    EUDJumpIfNot
-)
+from .basicstru import EUDJumpIf, EUDJumpIfNot
 
 
 class EUDSCAnd:
@@ -42,10 +35,7 @@ class EUDSCAnd:
         self.v << 1
 
         if c.PushTriggerScope():
-            self.fb = c.RawTrigger(
-                nextptr=self.jb,
-                actions=self.v.SetNumber(0)
-            )
+            self.fb = c.RawTrigger(nextptr=self.jb, actions=self.v.SetNumber(0))
         c.PopTriggerScope()
 
     def __call__(self, cond=None, *, neg=False):
@@ -68,10 +58,7 @@ class EUDSCOr:
         self.v << 0
 
         if c.PushTriggerScope():
-            self.tb = c.RawTrigger(
-                nextptr=self.jb,
-                actions=self.v.SetNumber(1)
-            )
+            self.tb = c.RawTrigger(nextptr=self.jb, actions=self.v.SetNumber(1))
         c.PopTriggerScope()
 
     def __call__(self, cond=None, *, neg=False):

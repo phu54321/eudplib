@@ -8,31 +8,34 @@ def test_ptrigger():
             players=[Player1],
             actions=[
                 SetDeaths(CurrentPlayer, Add, 1, "Terran Marine"),
-                PreserveTrigger()
-            ]
+                PreserveTrigger(),
+            ],
         )
 
         PTrigger(
             players=[Player1, Player7],
             actions=[
                 SetDeaths(CurrentPlayer, Add, 1, "Terran Marine"),
-                PreserveTrigger()
-            ]
+                PreserveTrigger(),
+            ],
         )
 
         PTrigger(
             players=[Force1],
             actions=[
                 SetDeaths(CurrentPlayer, Add, 1, "Terran Marine"),
-                PreserveTrigger()
-            ]
+                PreserveTrigger(),
+            ],
         )
     EUDEndPlayerLoop()
 
-    test_assert("PTrigger test", [
-        Deaths(P1, Exactly, 3, "Terran Marine"),
-        Deaths(P7, Exactly, 1, "Terran Marine"),
-        Deaths(P8, Exactly, 0, "Terran Marine"),
-    ])
+    test_assert(
+        "PTrigger test",
+        [
+            Deaths(P1, Exactly, 3, "Terran Marine"),
+            Deaths(P7, Exactly, 1, "Terran Marine"),
+            Deaths(P8, Exactly, 0, "Terran Marine"),
+        ],
+    )
 
     DoActions(SetDeaths(AllPlayers, SetTo, 0, "Terran Marine"))

@@ -5,6 +5,7 @@ DoCoverageTest = False
 
 if DoCoverageTest:
     import coverage
+
     cov = coverage.Coverage()
     cov.start()
 
@@ -23,17 +24,22 @@ from unittests import (
     testprint,
     testswitch,
     testvartrg,
+    testxvartrg,
     testmultiret,
     testvarray,
+    testpvariable,
     teststruct,
+    teststrfunc,
     testmath,
     testbinsearch,
+    testbitwise,
     teststack,
     testdwmemio,
     testcpmemio,
     testptrmemio,
     testtypedf,
     testpool,
+    testpoolfptr,
     test_lvalue,
     test_sq_from_1var,
     test_eps,
@@ -51,7 +57,7 @@ helper.CompressPayload(True)
 
 
 def f():
-    helper.test_runall('unittest')
+    helper.test_runall("unittest")
 
 
 # profile_tool.profile(f, 'profile.json')

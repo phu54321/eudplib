@@ -27,6 +27,7 @@ def f2(a):
 def test_multret():
     a, b = f1(0), f1(1)
     c, d, e = f2(0), f2(1), f2(2)
-    test_assert("Multiple EUDReturn test", [
-        a == 1234, b == 5678, c == 1234, d == 5678, e == 9012
-    ])
+    test_assert(
+        "Multiple EUDReturn test",
+        [a == 1234, b == 5678, c == 1234, d == 5678, e == 9012],
+    )

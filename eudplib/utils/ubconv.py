@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Copyright (c) 2014 trgk
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,11 +21,11 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-'''
+"""
 
 from .eperror import EPError
 
-g_encoding = 'cp949'
+g_encoding = "cp949"
 
 
 def UbconvSetEncoding(encoding):
@@ -39,7 +39,7 @@ def u2b(s):
     elif isinstance(s, bytes):
         return s
     else:
-        raise EPError('Invalid type %s' % type(s))
+        raise EPError("Invalid type %s" % type(s))
 
 
 def b2u(b):
@@ -48,13 +48,13 @@ def b2u(b):
     elif isinstance(b, str):
         return b
     else:
-        raise EPError('Invalid type %s' % type(b))
+        raise EPError("Invalid type %s" % type(b))
 
 
 def u2utf8(s):
     if isinstance(s, str):
-        return s.encode('utf-8')
+        return s.encode("utf-8")
     elif isinstance(s, bytes):
         return s
     else:
-        raise EPError('Invalid type %s' % type(s))
+        raise EPError("Invalid type %s" % type(s))

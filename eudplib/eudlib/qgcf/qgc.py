@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Copyright (c) 2014 trgk
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,21 +21,11 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-'''
+"""
 
-from eudplib import (
-    core as c,
-    ctrlstru as cs,
-    utils as ut
-)
+from eudplib import core as c, ctrlstru as cs, utils as ut
 
-from ..memiof import (
-    f_dwread_epd,
-    f_dwbreak,
-    f_bread,
-    f_memcpy,
-    EUDByteWriter
-)
+from ..memiof import f_dwread_epd, f_dwbreak, f_bread, f_memcpy, EUDByteWriter
 from ..eudarray import EUDArray
 
 
@@ -43,9 +33,9 @@ from ..eudarray import EUDArray
 def QueueGameCommand(data, size):
     """Queue game command to packet queue.
 
-    Starcraft periodically boradcasts game packets to other player. Game
+    Starcraft periodically broadcasts game packets to other player. Game
     packets are stored to queue, and this function add data to that queue, so
-    that SC can boradcast it.
+    that SC can broadcast it.
 
     :param data: Data to put in queue
     :param size: Size of data
@@ -70,7 +60,7 @@ bw = EUDByteWriter()
 @c.EUDFunc
 def QueueGameCommand_Select(n, ptrList):
     ptrList = EUDArray.cast(ptrList)
-    buf = c.Db(b'\x090123456789012345678901234')
+    buf = c.Db(b"\x090123456789012345678901234")
     bw.seekoffset(buf + 1)
     bw.writebyte(n)
     i = c.EUDVariable()
@@ -85,7 +75,6 @@ def QueueGameCommand_Select(n, ptrList):
         bw.writebyte(b1)
         i += 1
     cs.EUDEndWhile()
-    bw.flushdword()
     QueueGameCommand(buf, 2 * (n + 1))
 
 
@@ -95,6 +84,79 @@ def QueueGameCommand_RightClick(xy):
 
     :param xy: (y * 65536) + x, where (x, y) is coordinate for right click.
     """
-    RightClickCommand = c.Db(b'...\x14XXYY\0\0\xE4\0\x00')
+    RightClickCommand = c.Db(b"...\x14XXYY\0\0\xE4\0\x00")
     c.SetVariables(ut.EPD(RightClickCommand + 4), xy)
     QueueGameCommand(RightClickCommand + 3, 10)
+
+
+@c.EUDFunc
+def QueueGameCommand_QueuedRightClick(xy):
+    """Queue right click action.
+
+    :param xy: (y * 65536) + x, where (x, y) is coordinate for right click.
+    """
+    QueuedRightClickCommand = c.Db(b"...\x14XXYY\0\0\xE4\0\x01")
+    c.SetVariables(ut.EPD(QueuedRightClickCommand + 4), xy)
+    QueueGameCommand(QueuedRightClickCommand + 3, 10)
+
+
+@c.EUDFunc
+def QueueGameCommand_MinimapPing(xy):
+    """Queue minimap ping action.
+
+    :param xy: (y * 65536) + x, where (x, y) is coordinate for right click.
+    """
+    MinimapPingCommand = c.Db(b"...\x58XXYY")
+    c.SetVariables(ut.EPD(MinimapPingCommand + 4), xy)
+    QueueGameCommand(MinimapPingCommand + 3, 5)
+
+
+@c.EUDTypedFunc([c.TrgUnit])
+def QueueGameCommand_TrainUnit(unit):
+    TrainUnitCommand = c.Db(b"...\x1FUU..")
+    c.SetVariables(ut.EPD(TrainUnitCommand + 4), unit)
+    QueueGameCommand(TrainUnitCommand + 3, 3)
+
+
+@c.EUDFunc
+def QueueGameCommand_PauseGame():
+    PauseGameCommand = c.Db(b"\x10")
+    QueueGameCommand(PauseGameCommand, 1)
+
+
+@c.EUDFunc
+def QueueGameCommand_ResumeGame():
+    ResumeGameCommand = c.Db(b"\x11")
+    QueueGameCommand(ResumeGameCommand, 1)
+
+
+@c.EUDFunc
+def QueueGameCommand_LeaveGame(type_):
+    LeaveGameCommand = c.Db(b"...\x57T...")
+    c.SetVariables(ut.EPD(LeaveGameCommand + 4), type_)
+    QueueGameCommand(LeaveGameCommand + 3, 2)
+
+
+@c.EUDFunc
+def QueueGameCommand_RestartGame():
+    RestartGameCommand = c.Db(b"\x08")
+    QueueGameCommand(RestartGameCommand, 1)
+
+
+@c.EUDFunc
+def QueueGameCommand_MergeDarkArchon():
+    MergeDarkArchonCommand = c.Db(b"\x5A")
+    QueueGameCommand(MergeDarkArchonCommand, 1)
+
+
+@c.EUDFunc
+def QueueGameCommand_MergeArchon():
+    MergeArchonCommand = c.Db(b"\x2A")
+    QueueGameCommand(MergeArchonCommand, 1)
+
+
+@c.EUDFunc
+def QueueGameCommand_UseCheat(flags):
+    MUseCheatCommand = c.Db(b"...\x2ACCCC")
+    c.SetVariables(ut.EPD(UseCheatCommand + 4), flags)
+    QueueGameCommand(UseCheatCommand + 3, 5)

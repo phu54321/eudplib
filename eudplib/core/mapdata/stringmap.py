@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Copyright (c) 2014 trgk
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,7 +21,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-'''
+"""
 
 from . import tblformat
 from ...utils import b2i2, b2i4, u2b, ep_assert, unProxy
@@ -33,7 +33,7 @@ class StringIdMap:
 
     def AddItem(self, string, id):
         string = u2b(unProxy(string))
-        if string in self._s2id:  # ambigious string
+        if string in self._s2id:  # ambiguous string
             self._s2id[string] = None
 
         else:
@@ -59,14 +59,17 @@ def IgnoreColor(s):
 def InitStringMap(chkt):
     global strmap, unitmap, locmap, swmap
 
-    strmap = tblformat.TBL(chkt.getsection('STR'))
+    strmap = tblformat.TBL(chkt.getsection("STR"))
     unitmap = StringIdMap()
     locmap = StringIdMap()
     swmap = StringIdMap()
 
-    unix = chkt.getsection('UNIx')
-    mrgn = chkt.getsection('MRGN')
-    swnm = chkt.getsection('SWNM')
+    unix = chkt.getsection("UNIx")
+    mrgn = chkt.getsection("MRGN")
+    try:
+        swnm = chkt.getsection("SWNM")
+    except (KeyError):
+        swnm = None  # Not Required
 
     # Get location names
     if mrgn:
@@ -113,4 +116,12 @@ def GetUnitIndex(u):
 
 
 def ApplyStringMap(chkt):
-    chkt.setsection('STR', strmap.SaveTBL())
+    chkt.setsection("STR", strmap.SaveTBL())
+
+
+def ForcedAddString(s):
+    return strmap.ForcedAddString(s) + 1
+
+
+def GetStringMap():
+    return strmap

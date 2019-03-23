@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Copyright (c) 2014 trgk
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,22 +21,20 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-'''
+"""
 
 from ...utils import EUDCreateBlock, EUDGetLastBlockOfName, EUDPopBlock
 from ..allocator import Forward
 
 
 def PushTriggerScope():
-    EUDCreateBlock('triggerscope', {
-        'nexttrigger_list': []
-    })
+    EUDCreateBlock("triggerscope", {"nexttrigger_list": []})
     return True  # Allow `if PushTriggerScope()` syntax for indent
 
 
 def SetNextTrigger(trg):
     """ For optimization purpose, one may call this function directly """
-    nt_list = EUDGetLastBlockOfName('triggerscope')[1]['nexttrigger_list']
+    nt_list = EUDGetLastBlockOfName("triggerscope")[1]["nexttrigger_list"]
     for fw in nt_list:
         fw << trg
     nt_list.clear()
@@ -44,7 +42,7 @@ def SetNextTrigger(trg):
 
 def NextTrigger():
     fw = Forward()
-    nt_list = EUDGetLastBlockOfName('triggerscope')[1]['nexttrigger_list']
+    nt_list = EUDGetLastBlockOfName("triggerscope")[1]["nexttrigger_list"]
     nt_list.append(fw)
     return fw
 
@@ -54,6 +52,6 @@ def _RegisterTrigger(trg):
 
 
 def PopTriggerScope():
-    nt_list = EUDPopBlock('triggerscope')[1]['nexttrigger_list']
+    nt_list = EUDPopBlock("triggerscope")[1]["nexttrigger_list"]
     for fw in nt_list:
         fw << 0

@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Copyright (c) 2014 trgk
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,7 +21,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-'''
+"""
 
 from .rlocint import RlocInt_C, toRlocInt
 from ... import utils as ut
@@ -29,8 +29,8 @@ from ... import utils as ut
 
 class ConstExpr:
 
-    ''' Class for general expression with rlocints.
-    '''
+    """ Class for general expression with rlocints.
+    """
 
     def __init__(self, baseobj, offset=0, rlocmode=4):
         self.baseobj = baseobj
@@ -81,9 +81,7 @@ class ConstExpr:
         if not isinstance(k, int):
             return NotImplemented
         ut.ep_assert(
-            (self.rlocmode == 0) or
-            (self.rlocmode % k == 0),
-            'Address not divisible'
+            (self.rlocmode == 0) or (self.rlocmode % k == 0), "Address not divisible"
         )
         return ConstExpr(self.baseobj, self.offset // k, self.rlocmode // k)
 
@@ -105,19 +103,16 @@ class ConstExprInt(ConstExpr):
 
 class Forward(ConstExpr):
 
-    '''Class for forward definition.
-    '''
+    """Class for forward definition.
+    """
 
     def __init__(self):
         super().__init__(self)
         self._expr = None
 
     def __lshift__(self, expr):
-        ut.ep_assert(
-            self._expr is None,
-            'Reforwarding without reset is not allowed'
-        )
-        ut.ep_assert(expr is not None, 'Cannot forward to None')
+        ut.ep_assert(self._expr is None, "Reforwarding without reset is not allowed")
+        ut.ep_assert(expr is not None, "Cannot forward to None")
         if ut.isUnproxyInstance(expr, int):
             self._expr = ConstExprInt(expr)
         else:
@@ -131,7 +126,7 @@ class Forward(ConstExpr):
         self._expr = None
 
     def Evaluate(self):
-        ut.ep_assert(self._expr is not None, 'Forward not initialized')
+        ut.ep_assert(self._expr is not None, "Forward not initialized")
         return self._expr.Evaluate()
 
     def __call__(self, *args, **kwargs):
@@ -148,9 +143,9 @@ class Forward(ConstExpr):
 
 
 def Evaluate(x):
-    '''
+    """
     Evaluate expressions
-    '''
+    """
     try:
         return x.Evaluate()
     except AttributeError:
@@ -159,7 +154,4 @@ def Evaluate(x):
 
 def IsConstExpr(x):
     x = ut.unProxy(x)
-    return (
-        type(x) in (int, RlocInt_C) or
-        hasattr(x, 'Evaluate')
-    )
+    return isinstance(x, int) or isinstance(x, RlocInt_C) or hasattr(x, "Evaluate")

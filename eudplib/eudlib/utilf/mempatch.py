@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Copyright (c) 2014 trgk
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,20 +21,11 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-'''
+"""
 
-from eudplib import (
-    core as c,
-    ctrlstru as cs,
-    utils as ut,
-    trigger as t,
-)
+from eudplib import core as c, ctrlstru as cs, utils as ut, trigger as t
 from ..eudarray import EUDArray
-from ..memiof import (
-    f_dwread_epd,
-    f_dwwrite_epd,
-    f_repmovsd_epd,
-)
+from ..memiof import f_dwread_epd, f_dwwrite_epd, f_repmovsd_epd
 
 patchMax = 8192
 
@@ -61,10 +52,12 @@ def f_dwpatch_epd(dstepd, value):
 
     prev_value = f_dwread_epd(dstepd)
     f_dwwrite_epd(dstepd, value)
-    cs.DoActions([
-        c.SetMemoryEPD(dstepd, c.SetTo, value),
-        c.SetMemoryEPD(ut.EPD(dwstack) + dws_top, c.SetTo, prev_value)
-    ])
+    cs.DoActions(
+        [
+            c.SetMemoryEPD(dstepd, c.SetTo, value),
+            c.SetMemoryEPD(ut.EPD(dwstack) + dws_top, c.SetTo, prev_value),
+        ]
+    )
 
     pushpatchstack(dstepd)
     pushpatchstack(ut.EPD(dwstack) + dws_top)
@@ -96,10 +89,7 @@ def f_blockpatch_epd(dstepd, srcepd, dwn):
     if cs.EUDWhile()(dwn > 0):
         copydwn = c.EUDVariable()
         copydwn << 256
-        t.Trigger(
-            dwn <= 256,
-            copydwn.SetNumber(dwn)
-        )
+        t.Trigger(dwn <= 256, copydwn.SetNumber(dwn))
         dwn -= copydwn
 
         f_repmovsd_epd(ut.EPD(tmpbuffer), dstepd, copydwn)

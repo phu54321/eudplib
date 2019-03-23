@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Copyright (c) 2014 trgk
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,18 +21,22 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-'''
+"""
 
 from .... import utils as ut
 from ...rawtrigger import (
     RawTrigger,
-
-    Memory, AtLeast,
-
-    SetNextPtr, SetMemory, SetMemoryEPD,
-    SetTo, Add, Subtract,
-
-    PushTriggerScope, PopTriggerScope, NextTrigger,
+    Memory,
+    AtLeast,
+    SetNextPtr,
+    SetMemory,
+    SetMemoryEPD,
+    SetTo,
+    Add,
+    Subtract,
+    PushTriggerScope,
+    PopTriggerScope,
+    NextTrigger,
 )
 from ...allocator import Forward
 from ...eudobj import Db
@@ -48,9 +52,7 @@ traceToolDataEPD = ut.EPD(Db(iHeader + bytes(4 * 2048)))
 recordTraceAct = Forward()
 PushTriggerScope()
 recordTraceTrigger = RawTrigger(
-    actions=[
-        recordTraceAct << SetMemoryEPD(traceToolDataEPD + 4, SetTo, 0)
-    ]
+    actions=[recordTraceAct << SetMemoryEPD(traceToolDataEPD + 4, SetTo, 0)]
 )
 PopTriggerScope()
 
@@ -63,16 +65,14 @@ def _f_initstacktrace():
     # We will fill the trace stack 'magic code' on runtime, and later find the
     # magic code to locate the stack trace table.
 
-    RawTrigger(actions=[
-        SetMemoryEPD(traceToolDataEPD + 0, SetTo,
-                     ut.b2i4(traceHeader, 0x0)),
-        SetMemoryEPD(traceToolDataEPD + 1, SetTo,
-                     ut.b2i4(traceHeader, 0x4)),
-        SetMemoryEPD(traceToolDataEPD + 2, SetTo,
-                     ut.b2i4(traceHeader, 0x8)),
-        SetMemoryEPD(traceToolDataEPD + 3, SetTo,
-                     ut.b2i4(traceHeader, 0xC)),
-    ])
+    RawTrigger(
+        actions=[
+            SetMemoryEPD(traceToolDataEPD + 0, SetTo, ut.b2i4(traceHeader, 0x0)),
+            SetMemoryEPD(traceToolDataEPD + 1, SetTo, ut.b2i4(traceHeader, 0x4)),
+            SetMemoryEPD(traceToolDataEPD + 2, SetTo, ut.b2i4(traceHeader, 0x8)),
+            SetMemoryEPD(traceToolDataEPD + 3, SetTo, ut.b2i4(traceHeader, 0xC)),
+        ]
+    )
 
 
 def _EUDTracePush():
@@ -95,16 +95,15 @@ def GetTraceStackDepth():
     v << 0
     for i in range(31, -1, -1):
         RawTrigger(
-            conditions=Memory(recordTraceAct + 16, AtLeast, 2**i),
+            conditions=Memory(recordTraceAct + 16, AtLeast, 2 ** i),
             actions=[
-                SetMemory(recordTraceAct + 16, Subtract, 2**i),
-                v.AddNumber(2**i)
-            ]
+                SetMemory(recordTraceAct + 16, Subtract, 2 ** i),
+                v.AddNumber(2 ** i),
+            ],
         )
-    SeqCompute([
-        (ut.EPD(recordTraceAct + 16), SetTo, v),
-        (v, Subtract, traceToolDataEPD + 4)
-    ])
+    SeqCompute(
+        [(ut.EPD(recordTraceAct + 16), SetTo, v), (v, Subtract, traceToolDataEPD + 4)]
+    )
     return v
 
 
@@ -130,11 +129,7 @@ def EUDTraceLog(lineno=None):
     try:
         if lineno is None:
             lineno = frame.f_lineno
-        msg = "%s|%s|%s" % (
-            frame.f_code.co_filename,
-            frame.f_code.co_name,
-            lineno
-        )
+        msg = "%s|%s|%s" % (frame.f_code.co_filename, frame.f_code.co_name, lineno)
     finally:
         # frame object should be dereferenced as quickly as possible.
         # https://docs.python.org/3/library/inspect.html#the-interpreter-stack
@@ -156,8 +151,8 @@ def EUDTraceLogRaw(v):
         nextptr=recordTraceTrigger,
         actions=[
             SetNextPtr(recordTraceTrigger, nt),
-            SetMemory(recordTraceAct + 20, SetTo, v)
-        ]
+            SetMemory(recordTraceAct + 20, SetTo, v),
+        ],
     )
     nt << NextTrigger()
 

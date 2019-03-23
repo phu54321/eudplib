@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Copyright (c) 2014 trgk
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,15 +21,16 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-'''
+"""
 
-from eudplib import (
-    core as c,
-    utils as ut
-)
+from eudplib import core as c, utils as ut, ctrlstru as cs
 from ..memiof import f_dwread_epd
 
 
 @c.EUDFunc
 def f_getuserplayerid():
-    return f_dwread_epd(ut.EPD(0x512684))
+    ret = c.EUDVariable()
+    if cs.EUDExecuteOnce()():
+        ret << f_dwread_epd(ut.EPD(0x512684))
+    cs.EUDEndExecuteOnce()
+    return ret

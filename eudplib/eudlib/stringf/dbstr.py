@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Copyright (c) 2014 trgk
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,21 +21,12 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-'''
+"""
 
-from eudplib import (
-    core as c,
-    ctrlstru as cs,
-    utils as ut,
-)
-from ..memiof import f_dwread_epd, f_dwwrite_epd, f_wread
+from eudplib import core as c, ctrlstru as cs, utils as ut
+from ..memiof import f_dwread_epd, f_dwwrite_epd
+from .cpstr import GetStringAddr
 from .cputf8 import f_cp949_to_utf8_cpy
-
-
-@c.EUDFunc
-def GetMapStringAddr(strId):
-    strp = f_dwread_epd(ut.EPD(0x5993D4))
-    return strp + f_wread(strp + strId * 2)
 
 
 class DBString(ut.ExprProxy):
@@ -75,14 +66,14 @@ class DBString(ut.ExprProxy):
         sp = c.EUDVariable(0)
         strId = c.EncodeString("_" * 2048)
         if cs.EUDExecuteOnce()():
-            sp << GetMapStringAddr(strId)
+            sp << GetStringAddr(strId)
         cs.EUDEndExecuteOnce()
 
         f_cp949_to_utf8_cpy(sp, self.GetStringMemoryAddr())
         cs.DoActions(c.DisplayText(strId))
 
     @c.EUDMethod
-    def PlayWAV(dbs):
+    def Play(dbs):
         sp = c.EUDVariable(0)
         strId = c.EncodeString("_" * 2048)
         if cs.EUDExecuteOnce()():
@@ -118,13 +109,12 @@ class DBStringData(c.EUDObject):
         return len(self.content) + 5
 
     def WritePayload(self, pbuf):
-        pbuf.WriteBytes(b'\x01\x00\x04\x00')
+        pbuf.WriteBytes(b"\x01\x00\x04\x00")
         pbuf.WriteBytes(self.content)
         pbuf.WriteByte(0)
 
 
 class ExtendedStringIndex_FW(c.ConstExpr):
-
     def __init__(self, resetter):
         super().__init__(self)
         self._resetter = resetter
@@ -149,7 +139,6 @@ def _RegisterResetterAction(resetteract):
 
 
 class ResetterBuffer(c.EUDObject):
-
     def __init__(self):
         super().__init__()
 

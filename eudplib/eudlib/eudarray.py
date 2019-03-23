@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Copyright (c) 2014 trgk
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,7 +21,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-'''
+"""
 
 from .. import core as c
 from .. import utils as ut
@@ -29,9 +29,9 @@ from .memiof import f_dwread_epd, f_dwwrite_epd
 
 
 class EUDArrayData(c.EUDObject):
-    '''
+    """
     Structure for storing multiple values.
-    '''
+    """
 
     def __init__(self, arr):
         super().__init__()
@@ -44,7 +44,7 @@ class EUDArrayData(c.EUDObject):
 
         else:
             for i, item in enumerate(arr):
-                ut.ep_assert(c.IsConstExpr(item), 'Invalid item #%d' % i)
+                ut.ep_assert(c.IsConstExpr(item), "Invalid item #%d" % i)
             self._datas = arr
             self._arrlen = len(arr)
 

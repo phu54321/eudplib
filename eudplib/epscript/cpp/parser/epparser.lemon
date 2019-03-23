@@ -1,0 +1,1231 @@
+%include {
+#include <stdio.h>
+#include <assert.h>
+#include <string>
+#include <sstream>
+#include <iostream>
+#include <sstream>
+#include <algorithm>
+#include <regex>
+
+#include "epparser.h"
+#include "generator/pygen.h"
+#include "generator/closure.h"
+#include "parser.h"
+#include "tokenAdapter.h"
+#include "parserUtilities.h"
+
+struct ParserStruct {
+   PyGenerator gen;
+    ClosureManager closure;
+};
+
+int currentTokenizingLine;
+int lambdaIndex;
+std::string currentFunction;
+std::string currentModule;
+std::string currentFile;
+bool PARSER_DEBUG = false;
+bool MAP_DEBUG = false;
+
+}
+
+%syntax_error {
+    throw_error(-2, "General syntax error");
+}
+%parse_failure {
+    throw_error(-1, "Unrecoverable error");
+}
+
+////////
+
+%extra_argument { ParserStruct* ps }
+%token_type {Token*}
+%default_destructor { delete $$; }
+%destructor error{}   // error non-terminal is not a token.... We shouldn't delete it
+%token_destructor { delete $$; }
+
+// Precedence table
+
+%nonassoc IFX.
+%nonassoc ELSE.
+
+%left ASSIGN.
+%right QMARK.
+%left COMMA.
+%left LOR.
+%left LAND.
+%right LNOT.
+%nonassoc EQ LE LT GE GT NE.
+%left BITOR.
+%left BITXOR.
+%left BITAND.
+%left LSHIFT RSHIFT.
+%left PLUS MINUS.
+%left DIVIDE MULTIPLY MOD.
+%right UNARY BITNOT.
+%left LPAREN LSQBRACKET PERIOD.
+
+
+program ::= chunks.
+
+// Definition for chunks
+chunks ::= .
+chunks ::= chunks chunk.
+chunks ::= chunks error. {
+    throw_error(13494, "Chunk-level error");
+}
+
+chunk ::= import_chunk SEMICOLON.
+chunk ::= fdef_chunk.
+chunk ::= fdecl_chunk.
+chunk ::= object_chunk.
+chunk ::= vdef_stmt SEMICOLON.
+chunk ::= vdefAssign_global_stmt SEMICOLON.
+chunk ::= cdef_global_stmt SEMICOLON.
+chunk ::= blockStmt. {
+    throw_error(48993, "Misplaced block statement");
+}
+
+// Import_chunk
+
+dottedName(A) ::= NAME(B). { A = B; }
+dottedName(A) ::= dottedName(B) PERIOD NAME(C). {
+    C->data = B->data + "." + C->data;
+    delete B;
+    A = C;
+}
+
+import_chunk ::= IMPORT dottedName(A) AS NAME(B). {
+    std::string impPath, impModname;
+    impPathProcess(A->data, impPath, impModname);
+
+    if(!ps->closure.defModule(B->data)) {
+        throw_error(6754, "Importing already-declared module " + B->data, B->line);
+    }
+
+    if(!impPath.empty()) ps->gen << "from " << impPath << " ";
+    ps->gen << "import " << impModname << " as " << B->data << std::endl;
+    delete A; delete B;
+}
+
+import_chunk ::= IMPORT dottedName(A). {
+    std::string impPath, impModname;
+    impPathProcess(A->data, impPath, impModname);
+
+    if(!ps->closure.defModule(impModname)) {
+        throw_error(6754, "Importing already-declared module " + impModname, A->line);
+    }
+
+    if(!impPath.empty()) ps->gen << "from " << impPath << " ";
+    ps->gen << "import " << impModname << std::endl;
+    delete A;
+}
+
+fdef_rettypes(A) ::= . { A = nullptr; }
+fdef_rettypes(A) ::= COLON exprList_nonEmpty(B). { A = B; }
+
+// Function declaration
+fdef_header ::= FUNCTION NAME(name) LPAREN typedNameList(args) RPAREN fdef_rettypes(rets). {
+    // Preprocess name
+    funcNamePreprocess(name->data);
+    if(!ps->closure.defFunction(name->data)) {
+        throw_error(4495, "Duplicate function " + name->data, name->line);
+    }
+
+    ps->closure.pushScope();
+    currentFunction = name->data;
+
+    // Register variables.
+    // args->data is a comma-seperated list of (name, type). To pair names and types,
+    // we store varname in odd loops and define variables on even loops.
+    std::string argname;
+    std::vector<std::string> argnames, types;
+    bool isTypedFunction = !!rets;
+
+    subTokenListIter(args, [&](const Token* typedNameToken) {
+        auto argnameToken = typedNameToken->subToken[0];
+        auto typeToken = typedNameToken->subToken[1];
+        std::string argname = argnameToken->data;
+
+        if(typeToken == nullptr) {
+            if(!ps->closure.defVariable(argname)) {
+                throw_error(196, ("Redeclaration of variable \'" + argname + "\'"), args->line);
+            }
+            argnames.push_back(argname);
+            types.push_back("None");
+        }
+        else {
+            isTypedFunction = true;
+            if(!ps->closure.defConstant(argname)) {
+                throw_error(7714, ("Redeclaration of typed constant \'" + argname + "\'"), args->line);
+            }
+            argnames.push_back(argname);
+            types.push_back(typeToken->data);
+        }
+    });
+
+    // Add decorator header
+    if (!isTypedFunction) {
+        if(MAP_DEBUG) ps->gen << "@EUDTracedFunc" << std::endl;
+        else ps->gen << "@EUDFunc" << std::endl;
+    }
+    else {
+        if(MAP_DEBUG) ps->gen << "@EUDTracedTypedFunc([";
+        else ps->gen << "@EUDTypedFunc([";
+        writeStringList(ps->gen, types);
+        if(!rets) ps->gen << "])" << std::endl;
+        else ps->gen << "], [" << rets->data << "])" << std::endl;
+    }
+
+    // Write argument names
+    ps->gen << "def " << name->data << "(";
+    writeStringList(ps->gen, argnames);
+    ps->gen << "):" << std::endl;
+
+    ps->gen.indent();
+
+    tmpIndex = 1;
+    delete name;
+    delete args;
+    delete rets;
+}
+
+fdef_chunk ::= fdef_header stmt . {
+    ps->gen.unindent(true);
+    ps->closure.popScope();
+    currentFunction = "";
+}
+
+fdecl_chunk  ::= FUNCTION NAME(name) LPAREN typedNameList RPAREN SEMICOLON. {
+    // Preprocess name
+    funcNamePreprocess(name->data);
+    if(!ps->closure.declareFunction(name->data)) {
+        throw_error(72461, "Declaring function with non-function name " + name->data, name->line);
+    }
+}
+
+
+/// Object declaration
+
+object_body(A) ::= OBJECT NAME(name) LBRACKET. {
+    ps->gen << "class " << name->data << "(EUDStruct):\n";
+    ps->gen.indent();
+
+    if(!ps->closure.defConstant(name->data)) {
+        throw_error(8228, "Declaring object with non-function name " + name->data, name->line);
+    }
+    ps->closure.pushScope();
+
+    A = genEmpty();
+    A->subToken[0] = name;
+    A->subToken[1] = nullptr;
+}
+
+object_body(A) ::= object_body(B) VAR typedNameList_nonEmpty(varList) SEMICOLON. {
+    A = B;
+
+    // Append to subTokenList
+    Token* t = genEmpty();
+    t->subToken[0] = varList;
+    t->subToken[1] = nullptr;
+    subTokenListGetTail(A)->subToken[1] = t;
+    A->line = currentTokenizingLine;
+}
+
+method_header(H) ::= FUNCTION NAME(name) LPAREN typedNameList(args) RPAREN fdef_rettypes(rets). {
+    // Method can't be called directly, so we shouldn't have to register it to closure.
+    // duplicate method names should be checked at python-compile time.
+
+    ps->closure.pushScope();
+
+    // Register variables.
+    std::string _this = "this";  // This may be modified...?
+    if(!ps->closure.defConstant(_this)) {
+        throw_error(656, ("Redeclaration of variable \'this\'"), args->line);
+    }
+
+    std::string argname;
+    std::vector<std::string> argnames, types;
+    bool isTypedFunction = !!rets;
+    subTokenListIter(args, [&](const Token* typedNameToken) {
+        auto argnameToken = typedNameToken->subToken[0];
+        auto typeToken = typedNameToken->subToken[1];
+        std::string argname = argnameToken->data;
+
+        if(typeToken == nullptr) {
+            if(!ps->closure.defVariable(argname)) {
+                throw_error(2656, ("Redeclaration of variable \'" + argname + "\'"), args->line);
+            }
+            argnames.push_back(argname);
+            types.push_back("None");
+        }
+        else {
+            isTypedFunction = true;
+            if(!ps->closure.defConstant(argname)) {
+                throw_error(9788, ("Redeclaration of typed constant \'" + argname + "\'"), args->line);
+            }
+            argnames.push_back(argname);
+            types.push_back(typeToken->data);
+        }
+    });
+
+    // Add decorator header
+    if (!isTypedFunction) {
+        if(MAP_DEBUG) ps->gen << "@EUDTracedMethod\n";
+        else ps->gen << "@EUDMethod\n";
+    }
+    else {
+        if(MAP_DEBUG) ps->gen << "@EUDTracedTypedMethod([";
+        else ps->gen << "@EUDTypedMethod([";
+        writeStringList(ps->gen, types);
+        if(!rets) ps->gen << "])" << std::endl;
+        else ps->gen << "], [" << rets->data << "])" << std::endl;
+    }
+
+    // Add default argument 'self'
+    ps->gen << "def " << name->data << "(" << _this;
+    if (argnames.empty()) ps->gen << "):" << std::endl;
+    else {
+        ps->gen << ", ";
+        writeStringList(ps->gen, argnames);
+        ps->gen << "):" << std::endl;
+    }
+    ps->gen.indent();
+
+    currentFunction = name->data;
+
+    tmpIndex = 1;
+    delete args;
+    delete rets;
+    H = mkTokenTemp(name);
+}
+
+method_chunk(C) ::= method_header(H) stmt . {
+    ps->gen.unindent(true);
+    ps->closure.popScope();
+    currentFunction = "";
+    C = H;
+}
+
+object_body(A) ::= object_body(B) method_chunk . {
+    A = B;
+    A->line = currentTokenizingLine;
+}
+
+object_chunk  ::= object_body(A) RBRACKET SEMICOLON. {
+    ps->gen << "_fields_ = [\n";
+    subTokenListIter(A->subToken[1], [&](const Token* tok) {
+        subTokenListIter(tok, [&](const Token* nameType) {
+            ps->gen.indent();
+            if(nameType->subToken[1]) {
+                ps->gen << "('" << nameType->subToken[0]->data << "', " << nameType->subToken[1]->data << "),\n";
+            }
+            else {
+                ps->gen << "'" << nameType->subToken[0]->data << "',\n";
+            }
+            ps->gen.unindent(false);
+        });
+    });
+    ps->gen << "]\n";
+    ps->closure.popScope();
+    ps->gen.unindent(true);
+    delete A;
+}
+
+/// Single-line statements
+stmt ::= error SEMICOLON(X). { throw_error(6974, "Error while parsing statement", X->line); delete X; }
+stmt ::= bodyStmt.
+
+/// Block level statements
+// (1) Specialization for empty bodyStmtList
+lbracket ::= LBRACKET. { ps->closure.pushScope(); }
+rbracket ::= RBRACKET. { ps->closure.popScope(); }
+
+// We split blockStmtSub and blockStmt. See (2)
+blockStmt ::= blockStmtSub rbracket.
+blockStmt ::= lbracket error RBRACKET(X). {
+    throw_error(6298, "Block not terminated properly.", X->line);
+    ps->closure.popScope();
+    delete X;
+}
+
+blockStmtSub ::= lbracket.
+blockStmtSub ::= lbracket bodyStmtList.
+
+
+bodyStmt ::= blockStmt.
+bodyStmt ::= SEMICOLON.
+bodyStmt ::= vdef_stmt SEMICOLON.
+bodyStmt ::= vdefAssignStatic_stmt SEMICOLON.
+bodyStmt ::= vdefAssign_stmt SEMICOLON.
+bodyStmt ::= cdef_stmt SEMICOLON.
+bodyStmt ::= assign_stmt SEMICOLON.
+bodyStmt ::= funcexprStmt SEMICOLON.
+bodyStmt ::= actionStmt SEMICOLON.
+
+bodyStmt ::= once_stmt.
+bodyStmt ::= if_stmt.
+bodyStmt ::= while_stmt.
+bodyStmt ::= for_stmt.
+bodyStmt ::= foreach_stmt.
+bodyStmt ::= switchcase_stmt.
+bodyStmt ::= continue_stmt SEMICOLON.
+bodyStmt ::= break_stmt SEMICOLON.
+
+bodyStmt ::= return_stmt SEMICOLON.
+
+bodyStmtList ::= bodyStmt.
+bodyStmtList ::= bodyStmtList bodyStmt.
+bodyStmtList ::= bodyStmtList error. {
+    throw_error(8510, "Incomplete statement. Check if the previous line have ended properly.");
+}
+
+
+// Common expressions
+numList_nonEmpty(A) ::= NUMBER(B). { A = B; }
+numList_nonEmpty(A) ::= numList_nonEmpty(B) COMMA NUMBER(C). { A = commaConcat(B, C); }
+
+// Name without type
+typedName(A) ::= NAME(name). {
+    A = genEmpty();
+    A->subToken[0] = name;
+    A->subToken[1] = nullptr;  // Type is null.
+}
+
+// name with type
+typedName(A) ::= NAME(name) COLON expr(type). {
+    A = genEmpty();
+    A->subToken[0] = name;
+    A->subToken[1] = type;
+}
+
+typedNameList_nonEmpty(A) ::= typedName(B). {
+    A = genEmpty();
+    A->subToken[0] = B;
+    A->subToken[1] = nullptr;
+}
+
+typedNameList_nonEmpty(A) ::= typedName(B) COMMA typedNameList_nonEmpty(C). {
+    A = genEmpty();
+    A->subToken[0] = B;
+    A->subToken[1] = C;
+}
+
+typedNameList(A) ::= . { A = nullptr; }
+typedNameList(A) ::= typedNameList_nonEmpty(B). { A = B; }
+
+nameList_nonEmpty(A) ::= NAME(B). { A = B; }
+nameList_nonEmpty(A) ::= nameList_nonEmpty(B) COMMA NAME(C). { A = commaConcat(B, C); }
+
+exprList_nonEmpty(A) ::= funcexpr(B) LSQBRACKET LSQBRACKET numList_nonEmpty(C) RSQBRACKET RSQBRACKET. [SUBSCRIPT] {
+    C->data = "_SRET(" + B->data + ", [" + C->data + "])";
+    delete B;
+    A = mkTokenTemp(C);
+}
+
+
+expr(A) ::= funcexpr(B) LSQBRACKET LSQBRACKET NUMBER(C) RSQBRACKET RSQBRACKET. [SUBSCRIPT] {
+    C->data = B->data + "[" + C->data + "]";
+    delete B;
+    A = mkTokenTemp(C);
+}
+
+
+exprList_nonEmpty(A) ::= expr(B). [COMMA] { A = B; }
+exprList_nonEmpty(A) ::= exprList_nonEmpty(B) COMMA expr(C). { A = new Token((B->data) + ", " + (C->data), C->line); delete B; delete C; }
+
+exprList(A) ::= . { A = genEmpty(); }
+exprList(A) ::= exprList_nonEmpty(B). { A = B; }
+
+// Related to expressions
+expr(A) ::= NUMBER(B). { A = B; }
+expr(A) ::= KILLS(B). {
+    B->data = "4";
+    A = B;
+}
+
+expr(A) ::= NAME(B). {
+    checkIsRValue(B->data, B->line);
+    A = B;
+}
+
+expr(A)::= expr(B) PERIOD NAME(C). [MEMBER] {
+    B->data = B->data + "." + C->data;
+    delete C;
+    A = mkTokenTemp(B);
+}
+
+expr(A)::= expr(B) LSQBRACKET expr(C) RSQBRACKET. [SUBSCRIPT] {
+    B->data = B->data + "[" + C->data + "]";
+    delete C;
+    A = mkTokenTemp(B);
+}
+
+// Lambda calls
+lambdaExprStart(A) ::= FUNCTION LPAREN typedNameList(args) RPAREN fdef_rettypes(rets). {
+    std::string funcname = "_lambda" + std::to_string(++lambdaIndex);
+    ps->closure.pushScope();
+
+    // Register variables.
+    // we store varname in odd loops and define variables on even loops.
+    std::string argname;
+    std::vector<std::string> argnames, types;
+    bool isTypedFunction = false;
+
+    subTokenListIter(args, [&](const Token* typedNameToken) {
+        auto argnameToken = typedNameToken->subToken[0];
+        auto typeToken = typedNameToken->subToken[1];
+        std::string argname = argnameToken->data;
+
+        if(typeToken == nullptr) {
+            if(!ps->closure.defVariable(argname)) {
+                throw_error(196, ("Redeclaration of variable \'" + argname + "\'"), args->line);
+            }
+            argnames.push_back(argname);
+            types.push_back("None");
+        }
+        else {
+            isTypedFunction = true;
+            if(!ps->closure.defConstant(argname)) {
+                throw_error(7714, ("Redeclaration of typed constant \'" + argname + "\'"), args->line);
+            }
+            argnames.push_back(argname);
+            types.push_back(typeToken->data);
+        }
+    });
+
+    // Add decorator header
+    if (!isTypedFunction) {
+        if(MAP_DEBUG) ps->gen << "@EUDTracedFunc" << std::endl;
+        else ps->gen << "@EUDFunc" << std::endl;
+    }
+    else {
+        if(MAP_DEBUG) ps->gen << "@EUDTracedTypedFunc([";
+        else ps->gen << "@EUDTypedFunc([";
+        writeStringList(ps->gen, types);
+        if(!rets) ps->gen << "])" << std::endl;
+        else ps->gen << "], [" << rets->data << "])" << std::endl;
+    }
+
+    // Write argument names
+    ps->gen << "def " << funcname << "(";
+    writeStringList(ps->gen, argnames);
+    ps->gen << "):" << std::endl;
+
+    ps->gen.indent();
+    tmpIndex = 1;
+
+    delete args;
+
+    A = genEmpty();
+    A->data = funcname;
+}
+
+expr(A) ::= lambdaExprStart(B) stmt. {
+    ps->gen.unindent(true);
+    ps->closure.popScope();
+    A = mkTokenTemp(B);
+}
+
+
+// Function calls
+fArg(A) ::= expr(B). { A = B; }
+fArg(A) ::= STRING(B). { A = B; }
+fArg(A) ::= NAME(B) ASSIGN expr(C). {  // Keyword argument
+    C->data = B->data + "=" + C->data;
+    C->type = TOKEN_TEMP;
+    A = C;
+    delete B;
+}
+
+fArgs_nonEmpty(A) ::= fArg(B). { A = B; }
+fArgs_nonEmpty(A) ::= fArgs_nonEmpty(B) COMMA fArg(C). {
+    B->data = B->data + ", " + C->data;
+    B->type = TOKEN_TEMP;
+    A = B;
+    delete C;
+}
+
+fArgs(A) ::= . { A = genEmpty(); }
+fArgs(A) ::= fArgs_nonEmpty(B). { A = B; }
+
+funcexprStmt ::= funcexpr(A). {
+    writeTraceInfo(ps->gen, A);
+    ps->gen << A->data << std::endl;
+    delete A;
+}
+
+funcexpr(out) ::= NAME(name) LPAREN fArgs(exprs) RPAREN.  [FUNCCALL] {
+    // Preprocess name
+    checkIsFunction(name->data, name->line);
+    name->data += "(" + exprs->data + ")";
+    out = mkTokenTemp(name);
+    delete exprs;
+}
+
+funcexpr(out) ::= expr(name) LPAREN fArgs(exprs) RPAREN.  [FUNCCALL] {
+    // If calling function imported from another module, add f_ prefix to function name.
+    static std::regex prefixedFuncNameRegex("^[a-z][_a-zA-Z0-9]*");
+    std::string& nameStr = name->data;
+    if(std::count(nameStr.begin(), nameStr.end(), '.') == 1) {
+        size_t p = nameStr.find('.');
+        std::string moduleName = nameStr.substr(0, p);
+        std::string funcName = nameStr.substr(p + 1);
+        if (closure->isModule(moduleName) && std::regex_match(funcName, prefixedFuncNameRegex)) {
+            funcNamePreprocess(funcName);
+            name->data = moduleName + '.' + funcName;
+        }
+    }
+
+    // Preprocess name
+    name->data += "(" + exprs->data + ")";
+    out = mkTokenTemp(name);
+    delete exprs;
+}
+
+
+// Objects
+
+
+// Expressions
+expr(A) ::= funcexpr(B).  { A = B; }
+
+expr(A) ::= LPAREN expr(B) RPAREN. {
+    A = genEmpty();
+    A->data = "(" + B->data + ")";
+    A->type = TOKEN_EXPR;
+    A->subToken[0] = B;
+}
+
+commaSkippable ::= COMMA.
+commaSkippable ::= .
+
+expr(A) ::= LSQBRACKET exprList_nonEmpty(B) commaSkippable RSQBRACKET. {
+    B->data = "_ARR(FlattenList([" + B->data + "]))";
+    A = mkTokenTemp(B);
+}
+
+expr(A) ::= L2V LPAREN expr(B) RPAREN. {
+    B->data = "_L2V(" + B->data + ")";
+    A = mkTokenTemp(B);
+}
+
+expr(A) ::= MAPSTRING LPAREN STRING(B) RPAREN. {
+    B->data = "GetStringIndex(" + B->data + ")";
+    A = mkTokenTemp(B);
+}
+
+expr(A) ::= UNIT LPAREN STRING(B) RPAREN. {
+    B->data = "EncodeUnit(" + B->data + ")";
+    A = mkTokenTemp(B);
+}
+
+expr(A) ::= SWITCH LPAREN STRING(B) RPAREN. {
+    B->data = "EncodeSwitch(" + B->data + ")";
+    A = mkTokenTemp(B);
+}
+
+expr(A) ::= LOCATION LPAREN STRING(B) RPAREN. {
+    B->data = "GetLocationIndex(" + B->data + ")";
+    A = mkTokenTemp(B);
+}
+
+// Ternary operators
+expr(A) ::= expr(L) QMARK expr(B) COLON expr(C). [QMARK] {
+    std::stringstream ss;
+    ss << "EUDTernary";
+    applyNegativeOptimization(ss, L);
+    ss << "(" << B->data << ")(" << C->data << ")";
+    C->data = ss.str();
+    delete L;
+    delete B;
+    A = mkTokenTemp(C);
+}
+
+// Binary operators
+expr(A) ::= expr(B) PLUS        expr(C). { A = binopConcat(B, "+",  C); }
+expr(A) ::= expr(B) MINUS       expr(C). { A = binopConcat(B, "-",  C); }
+expr(A) ::= expr(B) MULTIPLY    expr(C). { A = binopConcat(B, "*",  C); }
+expr(A) ::= expr(B) DIVIDE      expr(C). { A = binopConcat(B, "//", C); }
+expr(A) ::= expr(B) MOD         expr(C). { A = binopConcat(B, "%",  C); }
+expr(A) ::= expr(B) LSHIFT      expr(C). {
+    C->data = "_LSH(" + B->data + "," + C->data + ")";
+    delete B;
+    A = mkTokenTemp(C);
+}
+expr(A) ::= expr(B) RSHIFT      expr(C). { A = binopConcat(B, ">>", C); }
+expr(A) ::= expr(B) BITAND      expr(C). { A = binopConcat(B, "&",  C); }
+expr(A) ::= expr(B) BITOR       expr(C). { A = binopConcat(B, "|",  C); }
+expr(A) ::= expr(B) BITXOR      expr(C). { A = binopConcat(B, "^",  C); }
+
+// Unary operators
+expr(A) ::= PLUS    expr(B). [UNARY] { B->data = "+" + B->data; A = mkTokenTemp(B); }
+expr(A) ::= MINUS   expr(B). [UNARY] { B->data = "-" + B->data; A = mkTokenTemp(B); }
+expr(A) ::= BITNOT  expr(B). [UNARY] { B->data = "~" + B->data; A = mkTokenTemp(B); }
+
+
+
+expr(A) ::= expr(B) EQ expr(C).   { A = binopConcat(B, "==", C); }
+expr(A) ::= expr(B) NE expr(C).   { A = negate(binopConcat(B, "==", C)); }
+
+expr(A) ::= expr(B) LE expr(C).   { A = binopConcat(B, "<=", C); }
+expr(A) ::= expr(B) GE expr(C).   { A = binopConcat(B, ">=", C); }
+
+expr(A) ::= expr(B) LT expr(C).   { A = negate(binopConcat(B, ">=", C)); }
+expr(A) ::= expr(B) GT expr(C).   { A = negate(binopConcat(B, "<=", C)); }
+
+expr(A) ::= expr(B) LAND expr(C).  {
+    A = genEmpty();
+    A->line = C->line;
+
+    // Generate data!
+    A->type = TOKEN_LAND;
+    A->subToken[0] = B;
+    A->subToken[1] = C;
+
+    std::stringstream ss;
+    ss << "EUDSCAnd()";
+    shortCircuitCondListGetter(ss, A, TOKEN_LAND);
+    ss << "()";
+    A->data = ss.str();
+}
+
+// OR operation is very costly, so we make some deliberate choice!
+expr(A) ::= expr(B) LOR expr(C).  {
+    A = genEmpty();
+    A->line = C->line;
+
+    // Generate data!
+    A->type = TOKEN_LOR;
+    A->subToken[0] = B;
+    A->subToken[1] = C;
+
+    std::stringstream ss;
+    ss << "EUDSCOr()";
+    shortCircuitCondListGetter(ss, A, TOKEN_LOR);
+    ss << "()";
+    A->data = ss.str();
+}
+
+expr(A) ::= LNOT expr(B).  { A = negate(B); }
+
+
+// Statements
+vdef_stmt ::= VAR nameList_nonEmpty(A). {
+    std::string& s = A->data;
+    int varCount = std::count(s.begin(), s.end(), ',') + 1;
+
+    // Register variables.
+    commaListIter(s, [&](std::string& varname) {
+        if(!ps->closure.defVariable(varname)) {
+            throw_error(196, ("Redeclaration of variable \'" + varname + "\'"), A->line);
+        }
+    });
+
+    if(varCount == 1) {
+        ps->gen << s << " = EUDVariable()" << std::endl;
+    }
+    else {
+        ps->gen << s << " = EUDCreateVariables(" << varCount << ")" << std::endl;
+    }
+
+    delete A;
+}
+
+vdefAssign_stmt ::= VAR(X) nameList_nonEmpty(A) ASSIGN exprList_nonEmpty(B). {
+    writeTraceInfo(ps->gen, X);
+    delete X;
+
+    std::string& s = A->data;
+    int varCount = std::count(s.begin(), s.end(), ',') + 1;
+
+    // Register variables.
+    commaListIter(s, [&](std::string& varname) {
+        if(!ps->closure.defVariable(varname)) {
+            throw_error(7998, ("Redeclaration of variable \'" + varname + "\'"), A->line);
+        }
+    });
+
+    if(varCount == 1) {
+        ps->gen << s << " = EUDVariable()" << std::endl;
+        ps->gen << s << " << (" << B->data << ")" << std::endl;
+    }
+    else {
+        ps->gen << s << " = _MVAR([" << B->data << "])" << std::endl;
+    }
+
+    delete A; delete B;
+}
+
+vdefAssignStatic_stmt ::= STATIC VAR nameList_nonEmpty(A) ASSIGN exprList_nonEmpty(B). {
+    std::string& s = A->data;
+    int varCount = std::count(s.begin(), s.end(), ',') + 1;
+
+    // Register variables.
+    commaListIter(s, [&](std::string& varname) {
+        if(!ps->closure.defVariable(varname)) {
+            throw_error(7998, ("Redeclaration of variable \'" + varname + "\'"), A->line);
+        }
+    });
+
+    if(varCount == 1) {
+        ps->gen << s << " = EUDVariable(" << B->data << ")" << std::endl;
+    }
+    else {
+        ps->gen << s << " = (EUDVariable(x) for x in (" << B->data << "))" << std::endl;
+    }
+
+    delete A; delete B;
+}
+
+vdefAssign_global_stmt ::= VAR nameList_nonEmpty(A) ASSIGN exprList_nonEmpty(B). {
+    std::string& s = A->data;
+    int varCount = std::count(s.begin(), s.end(), ',') + 1;
+
+    // Register variables.
+    commaListIter(s, [&](std::string& varname) {
+        if(!ps->closure.defVariable(varname)) {
+            throw_error(7998, ("Redeclaration of variable \'" + varname + "\'"), A->line);
+        }
+    });
+
+    ps->gen << s << " = EUDCreateVariables(" << varCount << ")" << std::endl;
+    ps->gen << "_IGVA([" << s << "], lambda: [" << B->data << "])" << std::endl;
+
+    delete A; delete B;
+}
+
+cdef_stmt ::= CONST(X) nameList_nonEmpty(A) ASSIGN exprList_nonEmpty(B). {
+    writeTraceInfo(ps->gen, X);
+    delete X;
+
+    std::string& s = A->data;
+    int nameCount = std::count(s.begin(), s.end(), ',') + 1;
+
+    // Register constants.
+    commaListIter(s, [&](std::string& constname) {
+        if(!ps->closure.defConstant(constname)) {
+            throw_error(7719, ("Redeclaration of constant \'" + constname + "\'"), A->line);
+        }
+    });
+    if(nameCount == 1) {
+        ps->gen << s << " = " << B->data << std::endl;
+    }
+    else {
+        ps->gen << s << " = List2Assignable([" << B->data << "])" << std::endl;
+    }
+    delete A; delete B;
+}
+
+cdef_global_stmt ::= CONST nameList_nonEmpty(A) ASSIGN exprList_nonEmpty(B). {
+    std::string& s = A->data;
+    int nameCount = std::count(s.begin(), s.end(), ',') + 1;
+
+    // Register constants.
+    commaListIter(s, [&](std::string& constname) {
+        if(!ps->closure.defConstant(constname)) {
+            throw_error(7719, ("Redeclaration of constant \'" + constname + "\'"), A->line);
+        }
+    });
+    if(nameCount == 1) {
+        ps->gen << s << " = _CGFW(lambda: [" << B->data << "], 1)[0]" << std::endl;
+    }
+    else {
+        ps->gen << s << " = List2Assignable(_CGFW(lambda: [" << B->data << "], " << nameCount << "))" << std::endl;
+    }
+    delete A; delete B;
+}
+
+// Assign operators
+lvalue(A) ::= NAME(B). {
+    checkIsVariable(B->data, B->line);
+    A = B;
+}
+
+lvalue(A) ::= expr(B) LSQBRACKET expr(C) RSQBRACKET. [SUBSCRIPT] {
+    C->data = "_ARRW(" + B->data + ", " + C->data + ")";
+    A = mkTokenTemp(C);
+    delete B;
+}
+
+lvalue(A) ::= expr(B) PERIOD NAME(C). [MEMBER] {
+    C->data = "_ATTW(" + B->data + ", '" + C->data + "')";
+    A = mkTokenTemp(C);
+    delete B;
+}
+
+lvalueList_nonEmpty(A) ::= lvalue(B). { A = B; }
+lvalueList_nonEmpty(A) ::= lvalueList_nonEmpty(B) COMMA lvalue(C). { A = commaConcat(B, C); }
+
+assign_stmt ::= lvalue(A) ASSIGN expr(B). {
+    writeTraceInfo(ps->gen, A);
+    ps->gen << A->data << " << (" << B->data << ")" << std::endl;
+    delete A; delete B;
+}
+
+assign_stmt ::= lvalueList_nonEmpty(A) ASSIGN exprList_nonEmpty(B). {
+    writeTraceInfo(ps->gen, A);
+    ps->gen << "_SV([" << A->data << "], [" << B->data << "])" << std::endl;
+    delete A; delete B;
+}
+
+// Never use something like "+=" here! They may corrupt python namespaces!
+// Assignment like += alters python namespaces (Makes thing local), so they should not be used
+// when accessing global variables. Here we just call plain inplace operator functions.
+assign_stmt ::= INC lvalue(A). [ASSIGN] { writeTraceInfo(ps->gen, A); ps->gen << A->data << ".__iadd__(1)" << std::endl; delete A; }
+assign_stmt ::= lvalue(A) INC. [ASSIGN] { writeTraceInfo(ps->gen, A); ps->gen << A->data << ".__iadd__(1)" << std::endl; delete A; }
+assign_stmt ::= DEC lvalue(A). [ASSIGN] { writeTraceInfo(ps->gen, A); ps->gen << A->data << ".__isub__(1)" << std::endl; delete A; }
+assign_stmt ::= lvalue(A) DEC. [ASSIGN] { writeTraceInfo(ps->gen, A); ps->gen << A->data << ".__isub__(1)" << std::endl; delete A; }
+assign_stmt ::= lvalue(A) IADD expr(B). [ASSIGN] { writeTraceInfo(ps->gen, A); ps->gen << A->data << ".__iadd__("       << B->data << ")" << std::endl; delete A; delete B; }
+assign_stmt ::= lvalue(A) ISUB expr(B). [ASSIGN] { writeTraceInfo(ps->gen, A); ps->gen << A->data << ".__isub__("       << B->data << ")" << std::endl; delete A; delete B; }
+assign_stmt ::= lvalue(A) IMUL expr(B). [ASSIGN] { writeTraceInfo(ps->gen, A); ps->gen << A->data << ".__imul__("       << B->data << ")" << std::endl; delete A; delete B; }
+assign_stmt ::= lvalue(A) IDIV expr(B). [ASSIGN] { writeTraceInfo(ps->gen, A); ps->gen << A->data << ".__ifloordiv__("  << B->data << ")" << std::endl; delete A; delete B; }
+assign_stmt ::= lvalue(A) IMOD expr(B). [ASSIGN] { writeTraceInfo(ps->gen, A); ps->gen << A->data << ".__imod__("       << B->data << ")" << std::endl; delete A; delete B; }
+assign_stmt ::= lvalue(A) ILSH expr(B). [ASSIGN] { writeTraceInfo(ps->gen, A); ps->gen << A->data << ".__ilshift__("    << B->data << ")" << std::endl; delete A; delete B; }
+assign_stmt ::= lvalue(A) IRSH expr(B). [ASSIGN] { writeTraceInfo(ps->gen, A); ps->gen << A->data << ".__irshift__("    << B->data << ")" << std::endl; delete A; delete B; }
+assign_stmt ::= lvalue(A) IBND expr(B). [ASSIGN] { writeTraceInfo(ps->gen, A); ps->gen << A->data << ".__iand__("       << B->data << ")" << std::endl; delete A; delete B; }
+assign_stmt ::= lvalue(A) IBOR expr(B). [ASSIGN] { writeTraceInfo(ps->gen, A); ps->gen << A->data << ".__ior__("        << B->data << ")" << std::endl; delete A; delete B; }
+assign_stmt ::= lvalue(A) IBXR expr(B). [ASSIGN] { writeTraceInfo(ps->gen, A); ps->gen << A->data << ".__ixor__("       << B->data << ")" << std::endl; delete A; delete B; }
+
+
+//
+//// CONTROL STRUCTURE BLOCKS
+//
+//  (2) LEMON parser generator reduces the parsing rule only after lookahead token arrives. This means that the
+//     parser may not write the controls structure opening codes until reading the next line. To sync debug trace
+//     information (which contains currentTokenizingLine) with written code, we force LEMON to reduce various
+//     control structure openings by postponing RPAREN reduce. In this case RPAREN acts as a lookahead token for
+//     control structure reduce action.
+//
+
+// Once block. This block gets exceuted only once.
+once_start ::= ONCE. {
+    ps->gen << "if EUDExecuteOnce()():" << std::endl;
+    ps->gen.indent();
+}
+
+once_stmt ::= once_start stmt. {
+    ps->gen.unindent(false);
+    ps->gen << "EUDEndExecuteOnce()" << std::endl;
+}
+
+// If~Else block
+if_start(A) ::= IF(B). {
+    A = genTemp(B);
+    ps->gen << A->data << " = EUDIf()" << std::endl;
+    delete B;
+}
+
+if_header ::= if_start(A) LPAREN expr(B). {  // RPAREN is at if_block. see (2)
+    writeTraceInfo(ps->gen, B);
+    writeCsOpener(*pGen, A, B);
+    ps->gen.indent();
+    delete A; delete B;
+}
+
+if_block ::= if_header RPAREN stmt.
+
+elif_start(A) ::= ELSE IF(B). {
+    A = genTemp(B);
+    ps->gen.unindent(false);
+    ps->gen << A->data << " = EUDElseIf()" << std::endl;
+    delete B;
+}
+
+elif_header ::= elif_start(A) LPAREN expr(B). {  // RPAREN is at if_block. see (2)
+    writeTraceInfo(ps->gen, B);
+    writeCsOpener(*pGen, A, B);
+    ps->gen.indent();
+    delete A; delete B;
+}
+
+if_block ::= if_block elif_header RPAREN stmt.
+
+else_header ::= ELSE. {
+    ps->gen.unindent(false);
+    ps->gen << "if EUDElse()():" << std::endl;
+    ps->gen.indent();
+}
+
+if_stmt ::= if_block. [IFX] {
+    ps->gen.unindent(false);
+    ps->gen << "EUDEndIf()" << std::endl;
+}
+
+if_stmt ::= if_block else_header stmt. [ELSE] {
+    ps->gen.unindent(false);
+    ps->gen << "EUDEndIf()" << std::endl;
+}
+
+// Switch Case block. Note that the naming convention is quite confusing - this is to avoid any name collision with the Switch condition.
+
+switchcase_header ::= SWITCHCASE LPAREN expr(A). { // RPAREN is at switchcase_stmt. see (2)
+    writeTraceInfo(ps->gen, A);
+    ps->gen << "EUDSwitch(" << A->data << ")" << std::endl;
+}
+
+case_start(A) ::= CASE(B). {
+    A = genTemp(B);
+    ps->gen << A->data << " = EUDSwitchCase()" << std::endl;
+    delete B;
+}
+
+case_clause ::= case_start(A) exprList_nonEmpty(B) COLON. {
+    writeTraceInfo(ps->gen, B);
+    writeCsOpener(*pGen, A, B);
+    ps->gen.indent();
+    delete A; delete B;
+}
+
+case_chunk ::= case_clause. {
+    ps->gen << "pass" << std::endl;
+    ps->gen.unindent(false);
+}
+
+case_chunk ::= case_clause bodyStmtList. {
+    ps->gen.unindent(false);
+}
+
+case_chunks ::= case_chunks case_chunk. 
+
+case_chunks ::= case_chunk.
+
+default_clause ::= DEFAULT(X) COLON. {
+    writeTraceInfo(ps->gen, X);
+    delete X;
+
+    ps->gen << "if EUDSwitchDefault()():" << std::endl;
+    ps->gen.indent();
+}
+
+default_chunk ::= default_clause. {
+    ps->gen << "pass" << std::endl;
+    ps->gen.unindent(false);
+}
+
+default_chunk ::= default_clause bodyStmtList. {
+    ps->gen.unindent(false);
+}
+
+switchcase_block ::= switchcase_header RPAREN LBRACKET case_chunks default_chunk.
+
+switchcase_block ::= switchcase_header RPAREN LBRACKET case_chunks.
+
+switchcase_stmt ::= switchcase_block RBRACKET. {
+    ps->gen << "EUDEndSwitch()" << std::endl;
+}
+
+// While block
+while_start(A) ::= WHILE(B). {
+    A = genTemp(B);
+    ps->gen << A->data << " = EUDWhile()" << std::endl;
+    delete B;
+}
+
+while_header ::= while_start(A) LPAREN expr(B). {  // RPAREN is at while_stmt. see (2)
+    writeTraceInfo(ps->gen, B);
+    writeCsOpener(*pGen, A, B);
+    ps->gen.indent();
+    delete A; delete B;
+}
+
+while_stmt ::= while_header RPAREN stmt. {
+    ps->gen.unindent(false);
+    ps->gen << "EUDEndWhile()" << std::endl;
+}
+
+/// FOR/FOREACH
+for_opener ::= FOR(A) LPAREN. {
+    ps->closure.pushScope();
+    delete A;
+}
+
+// C-style for block
+for_init_stmt_nonEmpty ::= vdef_stmt.
+for_init_stmt_nonEmpty ::= vdefAssign_stmt.
+for_init_stmt_nonEmpty ::= cdef_stmt.
+for_init_stmt_nonEmpty ::= assign_stmt.
+for_init_stmt_nonEmpty ::= for_init_stmt_nonEmpty COMMA for_init_stmt_nonEmpty.
+for_init_stmt ::= for_init_stmt_nonEmpty.
+for_init_stmt ::= .
+
+for_action_stmt_nonEmpty ::= funcexprStmt.
+for_action_stmt_nonEmpty ::= assign_stmt.
+for_action_stmt_nonEmpty ::= for_action_stmt_nonEmpty COMMA for_action_stmt_nonEmpty.
+for_action_stmt ::= .
+for_action_stmt ::= for_action_stmt_nonEmpty.
+
+for_header1(A) ::= for_opener for_init_stmt SEMICOLON(B). {
+    // opening for expr
+    A = genTemp(B);
+    ps->gen << A->data << " = EUDWhile()" << std::endl;
+    delete B;
+}
+
+for_header2(X)::= for_header1(A) expr(B) SEMICOLON. {
+    writeTraceInfo(ps->gen, B);
+
+    writeCsOpener(*pGen, A, B);
+    ps->gen.indent();
+    delete A;
+
+    // Opening for assign_statement
+    X = genTemp(B);
+    delete B;
+    ps->gen << "def " << X->data <<"():" << std::endl;
+    ps->gen.indent();
+}
+
+for_header(X) ::= for_header2(A) for_action_stmt. {  // RPAREN is at for_stmt. see (2)
+    X = A;
+    ps->gen.unindent(false);
+}
+
+for_stmt ::= for_header(X) RPAREN stmt. {
+    ps->gen << "EUDSetContinuePoint()" << std::endl;
+    ps->gen << X->data << "()" << std::endl;
+    ps->gen.unindent(false);
+    ps->gen << "EUDEndWhile()" << std::endl;
+    ps->closure.popScope();
+    delete X;
+}
+
+
+
+// Foreach block
+foreach_opener ::= FOREACH LPAREN. {
+    ps->closure.pushScope();
+}
+
+foreach_header ::= foreach_opener nameList_nonEmpty(names) COLON exprList_nonEmpty(exprs). {  // RPAREN is at foreach_stmt. see (2)
+    commaListIter(names->data, [&](std::string& s) {
+        ps->closure.defVariable(s);
+    });
+    ps->gen << "for " << names->data << " in " << exprs->data << ":" << std::endl;
+    ps->gen.indent();
+    delete names;
+    delete exprs;
+}
+
+foreach_stmt ::= foreach_header RPAREN stmt. {
+    ps->gen.unindent(true);
+    ps->closure.popScope();
+}
+
+
+
+// Loop exits
+continue_stmt ::= CONTINUE(X). {
+    writeTraceInfo(ps->gen, X);
+    delete X;
+
+    ps->gen << "EUDContinue()" << std::endl;
+}
+
+break_stmt ::= BREAK(X). {
+    writeTraceInfo(ps->gen, X);
+    delete X;
+
+    ps->gen << "EUDBreak()" << std::endl;
+}
+
+
+
+// returns
+return_stmt ::= RETURN(X) exprList(exprs). {
+    writeTraceInfo(ps->gen, X);
+    delete X;
+
+    ps->gen << "EUDReturn(" << exprs->data << ")" << std::endl;
+    delete exprs;
+}
+
+
+// Trigger statements
+
+expr(A) ::= CONDITIONNAME(B) LPAREN fArgs(C) RPAREN. {
+    B->data = B->data + "(" + C->data + ")";
+    delete C;
+    A = mkTokenTemp(B);
+}
+
+expr(A) ::= KILLS(B) LPAREN fArgs(C) RPAREN. {
+    B->data = B->data + "(" + C->data + ")";
+    delete C;
+    A = mkTokenTemp(B);
+}
+
+actionStmt ::= ACTIONNAME(A) LPAREN fArgs(B) RPAREN. {
+    writeTraceInfo(ps->gen, A);
+    ps->gen << "DoActions(" << A->data << "(" << B->data << "))" << std::endl;
+    delete A; delete B;
+}
+
+
+// Program building block
+
+%code {
+
+PyGenerator* pGen;
+ClosureManager* closure;
+
+
+std::string ParseString(const std::string& fname, const std::string& code, bool addComment)
+{
+    // Module name from fname
+    // last \/ ~ first .
+    auto lpos = fname.find_last_of("\\/");
+    if(lpos == std::string::npos) lpos = 0;
+    else lpos++;
+    auto rpos = fname.find_first_of(".", lpos);
+    if(rpos == std::string::npos) rpos = fname.size();
+    currentModule = fname.substr(lpos, rpos - lpos);
+    currentFile = fname;
+
+#ifndef NDEBUG
+    if(PARSER_DEBUG) ParseTrace(stdout, "--");
+#endif
+
+    // Main code
+    Tokenizer tok(code);
+    void* pParser = ParseAlloc (malloc);
+    ParserStruct ps;
+    Token* token;
+    currentTokenizingLine = 0;
+    pGen = &ps.gen;
+    closure = &ps.closure;
+    lambdaIndex = 0;
+
+    if(PARSER_DEBUG) std::cout << "Parsing string [[[\n" << code.c_str() << "\n]]]\n";
+    tmpIndex = 1;
+    resetParserErrorNum();
+    while ((token = tok.getToken()) != nullptr) {
+        if (currentTokenizingLine != tok.getCurrentLine()) {
+            currentTokenizingLine = tok.getCurrentLine();
+            if(addComment) ps.gen << "# (Line " << currentTokenizingLine << ") " << trim(tok.getCurrentLineString()) << std::endl;
+            if(PARSER_DEBUG) printf("# reading line %s\n", tok.getCurrentLineString().c_str());
+        }
+        int newTokType = getConvertedType(token->type);
+        if (newTokType != -1) {
+            Parse (pParser, newTokType, token, &ps);
+        }
+        else {
+            throw_error(8104, "Invalid token");
+        }
+    }
+    Parse (pParser, 0, nullptr, &ps);
+    ParseFree(pParser, free );
+
+    std::string ret = iwCollapse(ps.gen.str());
+    if(getParseErrorNum() > 0) {
+        ret += "\nraise RuntimeError('Compile error')\n";
+    }
+
+#ifndef NDEBUG
+    if(PARSER_DEBUG) ParseTrace(NULL, "--");
+#endif
+
+    return ret;
+}
+}
