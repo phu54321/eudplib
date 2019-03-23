@@ -141,66 +141,134 @@ def TextFX_SetTimer(tag, modtype, value):
 @c.EUDFunc
 def _remove_TextFX(o0, o1, e0, e1):
     txtPtr = c.EUDVariable()
-    con_o0, con_o1, con_e0, con_e1 = [c.Forward() for _ in range(4)]
-    setPtr_o, setPtr_e = c.Forward(), c.Forward()
-    del_o, del_e = c.Forward(), c.Forward()
+    con_o0 = [c.Forward() for _ in range(7)]
+    con_o1 = [c.Forward() for _ in range(7)]
+    con_e0 = [c.Forward() for _ in range(5)]
+    con_e1 = [c.Forward() for _ in range(5)]
     cs.DoActions(
         [
             txtPtr.SetNumber(-1),
-            c.SetMemory(con_o0 + 4, c.SetTo, ut.EPD(0x640B60)),
-            c.SetMemory(con_o0 + 8, c.SetTo, o0),
-            c.SetMemory(con_o1 + 4, c.SetTo, ut.EPD(0x640B64)),
-            c.SetMemory(con_o1 + 8, c.SetTo, o1),
-            c.SetMemory(setPtr_o + 8, c.SetTo, 0),
-            c.SetMemory(del_o + 4, c.SetTo, ut.EPD(0x640B60)),
-            c.SetMemory(con_e0 + 4, c.SetTo, ut.EPD(0x640C38)),
-            c.SetMemory(con_e0 + 8, c.SetTo, e0),
-            c.SetMemory(con_e1 + 4, c.SetTo, ut.EPD(0x640C3C)),
-            c.SetMemory(con_e1 + 8, c.SetTo, e1),
-            c.SetMemory(setPtr_e + 8, c.SetTo, 1),
-            c.SetMemory(del_e + 4, c.SetTo, ut.EPD(0x640C38)),
+            [c.SetMemory(con + 8, c.SetTo, o0) for con in con_o0],
+            [c.SetMemory(con + 8, c.SetTo, o1) for con in con_o1],
+            [c.SetMemory(con + 8, c.SetTo, e0) for con in con_e0],
+            [c.SetMemory(con + 8, c.SetTo, e1) for con in con_e1],
         ]
     )
+    for i in range(7):
+        _odd = 0x640B60 + 436 * i
+        c.RawTrigger(
+            conditions=[
+                con_o0[i] << c.Memory(_odd, c.Exactly, -1),
+                con_o1[i] << c.MemoryX(_odd + 4, c.Exactly, -1, 0xFFFF),
+            ],
+            actions=[
+                txtPtr.SetNumber(2 * i),
+                c.SetMemory(_odd, c.SetTo, 0),
+                c.SetMemory(_odd + 4, c.SetTo, 0),
+            ],
+        )
+    for i in range(5):
+        _even = 0x640C38 + 436 * i
+        c.RawTrigger(
+            conditions=[
+                con_e0[i] << c.MemoryX(_even, c.Exactly, -1, 0xFFFF0000),
+                con_e1[i] << c.Memory(_even + 4, c.Exactly, -1),
+            ],
+            actions=[
+                txtPtr.SetNumber(2 * i + 1),
+                c.SetMemoryX(_even, c.SetTo, 0, 0xFFFF0000),
+                c.SetMemory(_even + 4, c.SetTo, 0),
+            ],
+        )
+    return txtPtr
+
+
+@c.EUDFunc
+def __remove_TextFX(o0, o1, e0, e1):
+    origcp = f_getcurpl()
+    txtPtr = c.EUDVariable()
+    trg_o0, trg_o1, trg_e0, trg_e1 = [c.Forward() for _ in range(4)]
+    setPtr_o, setPtr_e = c.Forward(), c.Forward()
+
+    _proc = c.Forward()
+    c.RawTrigger(
+        nextptr=o0.GetVTable(),
+        actions=[
+            txtPtr.SetNumber(-1),
+            c.SetMemory(0x6509B0, c.SetTo, ut.EPD(0x640B60)),
+            c.SetMemory(setPtr_o + 8, c.SetTo, 0),
+            c.SetMemory(setPtr_e + 8, c.SetTo, 1),
+            o0.QueueAssignTo(ut.EPD(trg_o0) + 4),
+            o1.QueueAssignTo(ut.EPD(trg_o1) + 4),
+            e0.QueueAssignTo(ut.EPD(trg_e0) + 4),
+            e1.QueueAssignTo(ut.EPD(trg_e1) + 4),
+            c.SetNextPtr(o0.GetVTable(), o1.GetVTable()),
+            c.SetNextPtr(o1.GetVTable(), e0.GetVTable()),
+            c.SetNextPtr(e0.GetVTable(), e1.GetVTable()),
+            c.SetNextPtr(e1.GetVTable(), _proc),
+        ]
+    )
+    _proc << c.NextTrigger()
     if cs.EUDLoopN()(6):
-        c.RawTrigger(
+        incr_o, incr_e = c.Forward(), c.Forward()
+        trg_o0 << c.RawTrigger(
+            nextptr=incr_o,
             conditions=[
-                con_o0 << c.Memory(0x640B60, c.Exactly, 0),
-                con_o1 << c.MemoryX(0x640B64, c.Exactly, 0, 0xFFFF),
+                c.Deaths(c.CurrentPlayer, c.Exactly, -1, 0),
             ],
             actions=[
+                c.SetMemory(0x6509B0, c.Add, 1),
+                c.SetNextPtr(trg_o0, trg_o1)
+            ]
+        )
+        trg_o1 << c.RawTrigger(
+            conditions=[
+                c.DeathsX(c.CurrentPlayer, c.Exactly, -1, 0, 0xFFFF),
+            ],
+            actions=[
+                c.SetNextPtr(trg_o0, incr_o),
+                c.SetDeathsX(c.CurrentPlayer, c.SetTo, 0, 0, 0xFFFF),
+                c.SetMemory(0x6509B0, c.Add, -1),
+                c.SetDeaths(c.CurrentPlayer, c.SetTo, 0, 0),
                 setPtr_o << txtPtr.SetNumber(0),
-                del_o << c.SetMemory(0x640B60, c.SetTo, 0),
             ]
         )
-        c.RawTrigger(
+        incr_o << c.RawTrigger(
             actions=[
-                c.SetMemory(con_o0 + 4, c.Add, 109),
-                c.SetMemory(con_o1 + 4, c.Add, 109),
+                c.SetMemory(0x6509B0, c.Add, 54),
                 c.SetMemory(setPtr_o + 8, c.Add, 2),
-                c.SetMemory(del_o + 4, c.Add, 109),
             ]
         )
-    cs.EUDEndLoopN()
-    if cs.EUDLoopN()(5):
-        c.RawTrigger(
+        trg_e0 << c.RawTrigger(
+            nextptr=incr_e,
             conditions=[
-                con_e0 << c.MemoryX(0x640C38, c.Exactly, 0, 0xFFFF0000),
-                con_e1 << c.Memory(0x640C3C, c.Exactly, 0),
+                c.DeathsX(c.CurrentPlayer, c.Exactly, -1, 0, 0xFFFF0000),
             ],
             actions=[
-                setPtr_e << txtPtr.SetNumber(1),
-                del_e << c.SetMemoryX(0x640C38, c.SetTo, 0, 0xFFFF0000),
+                c.SetMemory(0x6509B0, c.Add, 1),
+                c.SetNextPtr(trg_e0, trg_e1)
             ]
         )
-        c.RawTrigger(
+        trg_e1 << c.RawTrigger(
+            conditions=[
+                c.Deaths(c.CurrentPlayer, c.Exactly, -1, 0),
+            ],
             actions=[
-                c.SetMemory(con_e0 + 4, c.Add, 109),
-                c.SetMemory(con_e1 + 4, c.Add, 109),
+                c.SetNextPtr(trg_e0, incr_e),
+                c.SetDeaths(c.CurrentPlayer, c.SetTo, 0, 0),
+                c.SetMemory(0x6509B0, c.Add, -1),
+                c.SetDeathsX(c.CurrentPlayer, c.SetTo, 0, 0, 0xFFFF0000),
+                setPtr_e << txtPtr.SetNumber(1),
+            ]
+        )
+        incr_e << c.RawTrigger(
+            actions=[
+                c.SetMemory(0x6509B0, c.Add, 55),
                 c.SetMemory(setPtr_e + 8, c.Add, 2),
-                c.SetMemory(del_e + 4, c.Add, 109),
             ]
         )
     cs.EUDEndLoopN()
+    f_setcurpl(origcp)
     return txtPtr
 
 
@@ -209,21 +277,21 @@ def TextFX_Remove(tag):
     _, _, identifier = _TextFX_dict[tag]
     o0 = ut.b2i4(identifier[0:4])
     o1 = ut.b2i2(identifier[4:6])
-    e0 = ut.b2i4(b"\0\0" + identifier[0:2])
+    e0 = ut.b2i2(identifier[0:2]) * 0x10000
     e1 = ut.b2i4(identifier[2:6])
     return _remove_TextFX(o0, o1, e0, e1)
 
 
 _check_cp = c.Forward()
-_is_below_start = None
+_is_below_start = c.Forward()
 _cpbelowbuffer = c.EUDLightVariable()
 
 
 def _is_CP_less_than_start(actions):
     global _is_below_start
-    if _is_below_start is None:
+    if not _is_below_start.IsSet():
         c.PushTriggerScope()
-        _is_below_start = c.RawTrigger(
+        _is_below_start << c.RawTrigger(
             conditions=[
                 _check_cp << c.Memory(0x6509B0, c.AtMost, 1)
             ],
