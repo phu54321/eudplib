@@ -1,3 +1,7 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+
 import bsdiff4
 from ..core.mapdata.chktok import CHK
 
