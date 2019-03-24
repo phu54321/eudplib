@@ -30,6 +30,7 @@ from .inlinecode.ilcprocesstrig import PreprocessInlineCode
 from .injector.mainloop import _MainStarter
 from .mpqadd import UpdateMPQ
 from ..core.eudfunc.trace.tracetool import _GetTraceMap, _ResetTraceMap
+from .chkdiff import chkdiff
 import binascii
 
 
@@ -72,12 +73,17 @@ def SaveMap(fname, rootf):
     rawchk = chkt.savechk()
     print("Output scenario.chk : %.3fMB" % (len(rawchk) / 1000000))
 
+    # Get diff
+    origchkt = mapdata.GetOriginalChkTokenized()
+    diff = chkdiff(origchkt, chkt)
+
     # Process by modifying existing mpqfile
     open(fname, "wb").write(mapdata.GetRawFile())
 
     mw = mpqapi.MPQ()
     mw.Open(fname)
     mw.PutFile("staredit\\scenario.chk", rawchk)
+    mw.PutFile("staredit\\scenario.chk.patch", diff)
     UpdateMPQ(mw)
     mw.Compact()
     mw.Close()
