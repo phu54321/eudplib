@@ -12,7 +12,10 @@ def chkdiff(src, dst):
         except KeyError:
             srcSec = b''
         dstSec = dst.getsection(sectionName)
-        diff = bsdiff4.diff(srcSec, dstSec)
+        if srcSec == dstSec:
+            diff = b''
+        else:
+            diff = bsdiff4.diff(srcSec, dstSec)
 
         out.setsection(sectionName, diff)
 
