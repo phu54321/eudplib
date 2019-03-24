@@ -93,7 +93,7 @@ def SaveMap(fname, rootf):
         print('[U] Patch-based unprotection enabled.')
         origchkt = mapdata.GetOriginalChkTokenized()
         print(' 1. Calculating bsdiff btw original & new chk')
-        diff = chkdiff(origchkt, chkt)
+        diff = chkdiff(chkt, origchkt)
         print(' 2. Compressing')
         diff = lzma.compress(diff)
         print(' 3. Encrypting')
