@@ -1,14 +1,15 @@
 import sys
 import os
 
-sys.path.insert(0, os.path.abspath('..\\'))
+sys.path.insert(0, os.path.abspath("..\\"))
 
 import pyximport
+
 pyximport.install()
 
 from eudplib import *
 
-LoadMap('outputmap/basemap/사이비2.scx')
+LoadMap("outputmap/basemap/사이비2.scx")
 
 
 @EUDFunc
@@ -19,4 +20,4 @@ def main():
     EUDEndWhile()
 
 
-SaveMap('outputmap/testinlinecode.scx', main)
+SaveMap("outputmap/testinlinecode.scx", main)

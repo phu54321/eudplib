@@ -4,10 +4,7 @@ import sys as _sys
 import os as _os
 import random as _random
 
-_sys.path.insert(
-    1,
-    _os.path.abspath(
-        _os.path.join(_os.path.dirname(__file__), "..")))
+_sys.path.insert(1, _os.path.abspath(_os.path.join(_os.path.dirname(__file__), "..")))
 
 
 from eudplib import *
@@ -106,8 +103,7 @@ def test_operator(testname, realf, exptf=None):
             expt.append(exptf(*rnums) & 0xFFFFFFFF)
 
         test_assert(
-            "Operator test : %s" % testname,
-            [r == e for r, e in zip(real, expt)]
+            "Operator test : %s" % testname, [r == e for r, e in zip(real, expt)]
         )
 
 
@@ -118,10 +114,10 @@ class expect_eperror:
     def __exit__(self, type, e, traceback):
         PopTriggerScope()
         if isinstance(e, EPError):
-            print(' - Error as expected : %s' % e)
+            print(" - Error as expected : %s" % e)
             return True
         else:
-            raise RuntimeError('EPError not thrown')
+            raise RuntimeError("EPError not thrown")
 
 
 ###############################################################
@@ -146,13 +142,18 @@ def test_perf(testname, func, count):
     averageTime = elapsedTime // count
     setcp1()
     f_simpleprint(
-        '\x03' * 150 + "[PERF] \x04%s \x03* %d    \x05" % (testname, count),
-        averageTime, '/', elapsedTime, spaced=False)
+        "\x03" * 150 + "[PERF] \x04%s \x03* %d    \x05" % (testname, count),
+        averageTime,
+        "/",
+        elapsedTime,
+        spaced=False,
+    )
     resetcp()
     test_wait(12)
 
 
 ###############################################################
+
 
 def test_complete():
     setcp1()

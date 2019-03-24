@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Copyright (c) 2014 trgk
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,12 +21,9 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-'''
+"""
 
-from ctypes import (
-    c_int, c_char_p, c_void_p,
-    create_string_buffer, byref
-)
+from ctypes import c_int, c_char_p, c_void_p, create_string_buffer, byref
 import os
 import struct
 import platform
@@ -54,22 +51,24 @@ def InitMpqLibrary():
 
     try:
         platformName = platform.system()
-        if platformName == 'Windows':  # windows
+        if platformName == "Windows":  # windows
             from ctypes import WinDLL
+
             if struct.calcsize("P") == 4:  # 32bit
-                libstorm = WinDLL(find_data_file('StormLib32.dll', __file__))
+                libstorm = WinDLL(find_data_file("StormLib32.dll", __file__))
             else:  # 64bit
-                libstorm = WinDLL(find_data_file('StormLib64.dll', __file__))
+                libstorm = WinDLL(find_data_file("StormLib64.dll", __file__))
             filename_u2b = u2b
 
-        elif platformName == 'Darwin':  # mac
+        elif platformName == "Darwin":  # mac
             from ctypes import CDLL
+
             try:
-                libstorm = CDLL('libstorm.dylib')
-                filename_u2b = (lambda x: x.encode('utf-8'))
+                libstorm = CDLL("libstorm.dylib")
+                filename_u2b = lambda x: x.encode("utf-8")
             except OSError:
-                print('You need to install stormlib before using eudplib.')
-                print(' $ brew install homebrew/games/stormlib')
+                print("You need to install stormlib before using eudplib.")
+                print(" $ brew install homebrew/games/stormlib")
                 return False
 
         # for MpqRead
@@ -82,11 +81,9 @@ def InitMpqLibrary():
 
         libstorm.SFileOpenArchive.argtypes = [c_char_p, c_int, c_int, c_void_p]
         libstorm.SFileCloseArchive.argtypes = [c_void_p]
-        libstorm.SFileOpenFileEx.argtypes = [
-            c_void_p, c_char_p, c_int, c_void_p]
+        libstorm.SFileOpenFileEx.argtypes = [c_void_p, c_char_p, c_int, c_void_p]
         libstorm.SFileGetFileSize.argtypes = [c_void_p, c_void_p]
-        libstorm.SFileReadFile.argtypes = [
-            c_void_p, c_char_p, c_int, c_void_p, c_int]
+        libstorm.SFileReadFile.argtypes = [c_void_p, c_char_p, c_int, c_void_p, c_int]
         libstorm.SFileCloseFile.argtypes = [c_void_p]
 
         # for MpqWrite
@@ -96,13 +93,12 @@ def InitMpqLibrary():
 
         libstorm.SFileCompactArchive.argtypes = [c_void_p, c_char_p, c_int]
         libstorm.SFileAddFile.argtypes = [c_void_p, c_char_p, c_char_p, c_int]
-        libstorm.SFileAddWave.argtypes = [
-            c_void_p, c_char_p, c_char_p, c_int, c_int]
+        libstorm.SFileAddWave.argtypes = [c_void_p, c_char_p, c_char_p, c_int, c_int]
 
         return True
 
     except OSError:
-        print('Loading SFmpq failed.')
+        print("Loading SFmpq failed.")
         libstorm = None
         return False
 
@@ -117,15 +113,10 @@ class MPQ:
 
     def Open(self, fname):
         if self.mpqh is not None:
-            raise RuntimeError('Duplicate opening')
+            raise RuntimeError("Duplicate opening")
 
         h = c_void_p()
-        ret = self.libstorm.SFileOpenArchive(
-            filename_u2b(fname),
-            0,
-            0,
-            byref(h)
-        )
+        ret = self.libstorm.SFileOpenArchive(filename_u2b(fname), 0, 0, byref(h))
         if not ret:
             self.mpqh = None
             return False
@@ -143,12 +134,12 @@ class MPQ:
 
     def EnumFiles(self):
         # using listfile.
-        lst = self.Extract('(listfile)')
+        lst = self.Extract("(listfile)")
         if lst is None:
             return []
 
         try:
-            return b2u(lst).replace('\r', '').split('\n')
+            return b2u(lst).replace("\r", "").split("\n")
         except UnicodeDecodeError:
             return []
 
@@ -161,12 +152,7 @@ class MPQ:
 
         # Open file
         fileh = c_void_p()
-        ret = self.libstorm.SFileOpenFileEx(
-            self.mpqh,
-            u2b(fname),
-            0,
-            byref(fileh)
-        )
+        ret = self.libstorm.SFileOpenFileEx(self.mpqh, u2b(fname), 0, byref(fileh))
         if not ret:
             return None
 
@@ -223,7 +209,7 @@ class MPQ:
             filename_u2b(tmpfname),
             u2b(fname),
             MPQ_FILE_COMPRESS | MPQ_FILE_ENCRYPTED | MPQ_FILE_FIX_KEY,
-            MPQ_WAVE_QUALITY_MEDIUM
+            MPQ_WAVE_QUALITY_MEDIUM,
         )
         os.unlink(tmpfname)
         return ret
@@ -234,21 +220,21 @@ class MPQ:
 
 InitMpqLibrary()
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     mr = MPQ()
-    mr.Open('basemap.scx')
-    a = mr.Extract('staredit\\scenario.chk')
+    mr.Open("basemap.scx")
+    a = mr.Extract("staredit\\scenario.chk")
     mr.Close()
     print(len(a))
 
-    if os.path.exists('test.scx'):
-        os.unlink('test.scx')
-    open('test.scx', 'wb').write(open('basemap.scx', 'rb').read())
+    if os.path.exists("test.scx"):
+        os.unlink("test.scx")
+    open("test.scx", "wb").write(open("basemap.scx", "rb").read())
 
-    mr.Open('test.scx')
-    a = mr.Extract('staredit\\scenario.chk')
+    mr.Open("test.scx")
+    a = mr.Extract("staredit\\scenario.chk")
     print(len(a))
-    mr.PutFile('test', b'1234')
-    b = mr.Extract('test')
+    mr.PutFile("test", b"1234")
+    b = mr.Extract("test")
     mr.Compact()
     print(b)

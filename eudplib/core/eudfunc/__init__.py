@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Copyright (c) 2014 trgk
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,31 +21,15 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-'''
+"""
 
-from .eudf import (
-    EUDFunc,
-    EUDTracedFunc,
-    EUDTypedFunc,
-    EUDTracedTypedFunc,
-)
+from .eudf import EUDFunc, EUDTracedFunc, EUDTypedFunc, EUDTracedTypedFunc
 
-from .eudfptr import (
-    EUDFuncPtr,
-    EUDTypedFuncPtr
-)
+from .eudfptr import EUDFuncPtr, EUDTypedFuncPtr
 
-from .eudfmethod import (
-    EUDMethod,
-    EUDTracedMethod,
-    EUDTypedMethod,
-    EUDTracedTypedMethod,
-)
+from .eudfmethod import EUDMethod, EUDTracedMethod, EUDTypedMethod, EUDTracedTypedMethod
 
-from .eudfuncn import (
-    EUDReturn,
-    EUDFuncN,
-)
+from .eudfuncn import EUDReturn, EUDFuncN
 
 from .trace import *
 

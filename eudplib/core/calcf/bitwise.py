@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Copyright (c) 2014 trgk
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,64 +21,86 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-'''
+"""
 
 from .. import allocator as ac
 from .. import variable as ev
 from .. import eudfunc as ef
 from .. import rawtrigger as rt
 from .muldiv import f_mul
+from ...utils import EPD
 
 
-def bw_gen(cond, docstring=None):
-    @ef.EUDFunc
-    def f_bitsize_template(a, b):
-        tmp = ev.EUDLightVariable()
-        ret = ev.EUDVariable()
+@ef.EUDFunc
+def f_bitand(a, b):
+    """Calculate a & b"""
+    act = ac.Forward()
 
-        ret << 0
+    ev.VProc(b, [rt.SetMemory(act, rt.SetTo, ~0), b.QueueSubtractTo(EPD(act))])
+    rt.RawTrigger(actions=[act << a.SetNumberX(0, 0)])
 
-        for i in range(31, -1, -1):
-            rt.RawTrigger(
-                conditions=[
-                    a.AtLeast(2 ** i)
-                ],
-                actions=[
-                    tmp.AddNumber(1),
-                    a.SubtractNumber(2 ** i)
-                ]
-            )
-
-            rt.RawTrigger(
-                conditions=[
-                    b.AtLeast(2 ** i)
-                ],
-                actions=[
-                    tmp.AddNumber(1),
-                    b.SubtractNumber(2 ** i)
-                ]
-            )
-
-            rt.RawTrigger(
-                conditions=cond(tmp),
-                actions=ret.AddNumber(2 ** i)
-            )
-
-            tmp << 0
-
-        return ret
-
-    if docstring:
-        f_bitsize_template.__doc__ = docstring
-
-    return f_bitsize_template
+    return a
 
 
-f_bitand = bw_gen(lambda x: x.Exactly(2), "Calculate a & b")
-f_bitor = bw_gen(lambda x: x.AtLeast(1), "Calculate a | b")
-f_bitxor = bw_gen(lambda x: x.Exactly(1), "Calculate a ^ b")
-f_bitnand = bw_gen(lambda x: x.Exactly(0), "Calculate ~(a & b)")
-f_bitnor = bw_gen(lambda x: x.AtMost(1), "Calculate ~(a | b)")
+@ef.EUDFunc
+def f_bitor(a, b):
+    """Calculate a | b"""
+    act = ac.Forward()
+
+    ev.VProc(b, b.QueueAssignTo(EPD(act)))
+    rt.RawTrigger(actions=[act << a.SetNumberX(~0, 0)])
+
+    return a
+
+
+@ef.EUDFunc
+def f_bitxor(a, b):
+    """Calculate a ^ b"""
+    act = ac.Forward()
+
+    ev.VProc(a, a.QueueAssignTo(EPD(act) + 5 + 16))
+    ev.VProc(b, b.QueueAssignTo(EPD(act)))
+    ev.VProc(b, [rt.SetMemory(act + 32, rt.SetTo, ~0), b.QueueSubtractTo(EPD(act) + 8)])
+    rt.RawTrigger(
+        actions=[
+            act << a.SetNumberX(~0, 0),  # a | b
+            rt.SetMemoryX(act + 20 + 64, rt.SetTo, 0, ~0),  # a & b
+            a.SubtractNumber(0),
+        ]
+    )
+
+    return a
+
+
+@ef.EUDFunc
+def f_bitnand(a, b):
+    """Calculate ~(a & b)"""
+    ret = ev.EUDVariable()
+    act = ac.Forward()
+
+    ev.VProc(
+        b,
+        [
+            ret.SetNumber(~0),
+            rt.SetMemory(act, rt.SetTo, ~0),
+            b.QueueSubtractTo(EPD(act)),
+        ],
+    )
+    ev.VProc(a, [act << a.SetNumberX(0, 0), a.QueueSubtractTo(ret)])
+
+    return ret
+
+
+@ef.EUDFunc
+def f_bitnor(a, b):
+    """Calculate ~(a | b)"""
+    ret = ev.EUDVariable()
+    act = ac.Forward()
+
+    ev.VProc(b, [ret.SetNumber(~0), b.QueueAssignTo(EPD(act))])
+    ev.VProc(a, [act << a.SetNumberX(~0, 0), a.QueueSubtractTo(ret)])
+
+    return ret
 
 
 def f_bitnxor(a, b):
@@ -105,25 +127,20 @@ def f_bitsplit(a):
         bits[i] << 0
         rt.RawTrigger(
             conditions=a.AtLeast(2 ** i),
-            actions=[
-                a.SubtractNumber(2 ** i),
-                bits[i].SetNumber(1)
-            ]
+            actions=[a.SubtractNumber(2 ** i), bits[i].SetNumber(1)],
         )
     return bits
 
 
 # -------
 
+
 @ef.EUDFunc
 def _exp2_vv(n):
     ret = ev.EUDVariable()
     ret << 0
     for i in range(32):
-        rt.RawTrigger(
-            conditions=[n == i],
-            actions=[ret.SetNumber((2 ** i))]
-        )
+        rt.RawTrigger(conditions=[n == i], actions=[ret.SetNumber((2 ** i))])
     return ret
 
 
@@ -145,25 +162,15 @@ def _f_bitlshift(a, b):
     loopend = ac.Forward()
     loopcnt = ac.Forward()
 
-    rt.RawTrigger(
-        actions=[
-            rt.SetNextPtr(a.GetVTable(), loopcnt),
-            a.QueueAddTo(a),
-        ]
-    )
+    rt.RawTrigger(actions=[rt.SetNextPtr(a.GetVTable(), loopcnt), a.QueueAddTo(a)])
 
     loopstart << rt.RawTrigger(
         nextptr=a.GetVTable(),
         conditions=b.Exactly(0),
-        actions=rt.SetNextPtr(loopstart, loopend)
+        actions=rt.SetNextPtr(loopstart, loopend),
     )
-    loopcnt << rt.RawTrigger(
-        nextptr=loopstart,
-        actions=b.SubtractNumber(1)
-    )
-    loopend << rt.RawTrigger(
-        actions=rt.SetNextPtr(loopstart, a.GetVTable())
-    )
+    loopcnt << rt.RawTrigger(nextptr=loopstart, actions=b.SubtractNumber(1))
+    loopend << rt.RawTrigger(actions=rt.SetNextPtr(loopstart, a.GetVTable()))
 
     return a
 

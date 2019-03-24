@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Copyright (c) 2014 trgk
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,7 +21,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-'''
+"""
 
 from ..rawtrigger import (
     EncodeAllyStatus,
@@ -38,7 +38,7 @@ from ..rawtrigger import (
     EncodeSwitchState,
     EncodeAIScript,
     EncodeLocation,
-    EncodeLocation,
+    EncodeLocationIndex,
     EncodeUnit,
     EncodeString,
     EncodeSwitch,
@@ -50,6 +50,7 @@ def createEncoder(f):
         @staticmethod
         def cast(s):
             return f(s)
+
     return _
 
 
@@ -67,6 +68,7 @@ TrgSwitchAction = createEncoder(EncodeSwitchAction)
 TrgSwitchState = createEncoder(EncodeSwitchState)
 TrgAIScript = createEncoder(EncodeAIScript)
 TrgLocation = createEncoder(EncodeLocation)
+TrgLocationIndex = createEncoder(EncodeLocationIndex)
 TrgString = createEncoder(EncodeString)
 TrgSwitch = createEncoder(EncodeSwitch)
 TrgUnit = createEncoder(EncodeUnit)

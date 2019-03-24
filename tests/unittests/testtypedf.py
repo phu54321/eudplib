@@ -26,15 +26,13 @@ def test_typedfunc():
     a = indirectcaller(f_mul, 3, 6)
     test_equality("Simple indirect call", [a], [18])
 
-    tptr = EUDTypedFuncPtr(
-        [EUDFuncPtr(2, 1), None, None], [None]
-    )(indirectcaller)
+    tptr = EUDTypedFuncPtr([EUDFuncPtr(2, 1), None, None], [None])(indirectcaller)
     b = tptr(f_add, 3, 6)
     test_equality("Typed function call via function pointer", [b], [9])
 
 
 class TestStruct(EUDStruct):
-    _fields_ = ['x']
+    _fields_ = ["x"]
 
     def constructor(self, x):
         self.x = x

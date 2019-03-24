@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Copyright (c) 2014 trgk
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,25 +21,29 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-'''
+"""
 
 from .stringmap import InitStringMap, ApplyStringMap
 from .proptable import InitPropertyMap, ApplyPropertyMap
 from .playerinfo import InitPlayerInfo
+from .unitfix import FixUnitMap
 
 _inited = False
 _chkt = None
+_origchkt = None
 _rawfile = None
 
 
 def InitMapData(chkt, rawfile):
-    global _inited, _chkt, _rawfile
+    global _inited, _origchkt, _chkt, _rawfile
     _chkt = chkt
+    _origchkt = chkt.clone()
     _rawfile = rawfile
 
     InitStringMap(chkt)
     InitPropertyMap(chkt)
     InitPlayerInfo(chkt)
+    FixUnitMap(chkt)
     _inited = True
 
 
@@ -54,6 +58,11 @@ def IsMapdataInitalized():
 
 def GetChkTokenized():
     return _chkt
+
+
+def GetOriginalChkTokenized():
+    """ NEVER MODIFY ANYTHING WITHIN THIS CHKTOK """
+    return _origchkt
 
 
 def GetRawFile():

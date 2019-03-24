@@ -10,8 +10,4 @@ def test_curpl():
     DoActions(SetMemory(0x6509B0, SetTo, 5))
     c = f_getcurpl()
     f_setcurpl(Player1)
-    test_assert("f_get/setcurpl test", [
-        a == 1,
-        b == 4,
-        c == 5
-    ])
+    test_assert("f_get/setcurpl test", [a == 1, b == 4, c == 5])

@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Copyright (c) 2014 trgk
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,7 +21,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-'''
+"""
 
 import inspect
 import functools
@@ -35,12 +35,11 @@ def EUDTypedFunc(argtypes, rettypes=None, *, traced=False):
         argspec = inspect.getargspec(fdecl_func)
         argn = len(argspec[0])
         ut.ep_assert(
-            argspec[1] is None,
-            'No variadic arguments (*args) allowed for EUDFunc.'
+            argspec[1] is None, "No variadic arguments (*args) allowed for EUDFunc."
         )
         ut.ep_assert(
             argspec[2] is None,
-            'No variadic keyword arguments (*kwargs) allowed for EUDFunc.'
+            "No variadic keyword arguments (*kwargs) allowed for EUDFunc.",
         )
 
         def caller(*args):
@@ -48,11 +47,7 @@ def EUDTypedFunc(argtypes, rettypes=None, *, traced=False):
             args = applyTypes(argtypes, args)
             return fdecl_func(*args)
 
-        ret = EUDTypedFuncN(
-            argn, caller, fdecl_func,
-            argtypes, rettypes,
-            traced=traced
-        )
+        ret = EUDTypedFuncN(argn, caller, fdecl_func, argtypes, rettypes, traced=traced)
         functools.update_wrapper(ret, fdecl_func)
         return ret
 

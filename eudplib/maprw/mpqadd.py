@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Copyright (c) 2014 trgk
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,7 +21,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-'''
+"""
 
 from .. import utils as ut
 
@@ -37,10 +37,7 @@ def UpdateFileListByListfile(mpqr):
 
     # no listfile -> add default listfile
     if not flist:
-        flist = [
-            'staredit\\scenario.chk',
-            '(listfile)'
-        ]
+        flist = ["staredit\\scenario.chk", "(listfile)"]
 
     for fname in flist:
         MPQAddFile(fname, None)
@@ -64,16 +61,11 @@ def MPQAddFile(fname, content, isWave=False):
     fname_key = ut.u2b(fname.upper())
 
     ut.ep_assert(
-        isinstance(content, bytes) or
-        isinstance(content, bytearray) or
-        content is None,
-        "Invalid content type"
+        isinstance(content, bytes) or isinstance(content, bytearray) or content is None,
+        "Invalid content type",
     )
 
-    ut.ep_assert(
-        fname_key not in _addedFiles,
-        "MPQ filename duplicate : \"%s\"" % fname
-    )
+    ut.ep_assert(fname_key not in _addedFiles, 'MPQ filename duplicate : "%s"' % fname)
 
     _addedFiles[fname_key] = (fname, content, isWave)
 
@@ -103,12 +95,12 @@ def UpdateMPQ(mpqw):
                 ret = mpqw.PutFile(ut.u2b(fname), content)
             if not ret:
                 raise ut.EPError(
-                    'Failed adding file %s to mpq: May be duplicate' % fname
+                    "Failed adding file %s to mpq: May be duplicate" % fname
                 )
 
 
 def GetAddedFiles():
     ret = set(fname for fname, content, isWave in _addedFiles.values())
-    ret.add('staredit\scenario.chk')
-    ret.add('(listfile)')
+    ret.add("staredit\scenario.chk")
+    ret.add("(listfile)")
     return ret

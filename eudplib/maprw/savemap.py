@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Copyright (c) 2014 trgk
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,7 +21,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-'''
+"""
 
 from ..core.mapdata import mapdata, mpqapi
 from ..core import RegisterCreatePayloadCallback
@@ -30,11 +30,20 @@ from .inlinecode.ilcprocesstrig import PreprocessInlineCode
 from .injector.mainloop import _MainStarter
 from .mpqadd import UpdateMPQ
 from ..core.eudfunc.trace.tracetool import _GetTraceMap, _ResetTraceMap
-import binascii
+from .chkdiff import chkdiff
 
+import binascii
+import lzma
+import simplecrypt
 
 traceHeader = None
 traceMap = []
+
+patchPassword = None
+
+def PRT_SetPatchPassword(password):
+    global patchPassword
+    patchPassword = password
 
 
 def getTraceMap():
@@ -56,7 +65,7 @@ def SaveMap(fname, rootf):
     :param rootf: Main entry function.
     """
 
-    print('Saving to %s...' % fname)
+    print("Saving to %s..." % fname)
     chkt = mapdata.GetChkTokenized()
 
     _ResetTraceMap()
@@ -70,25 +79,36 @@ def SaveMap(fname, rootf):
 
     chkt.optimize()
     rawchk = chkt.savechk()
-    print('Output scenario.chk : %.3fMB' % (len(rawchk) / 1000000))
+    print("Output scenario.chk : %.3fMB" % (len(rawchk) / 1000000))
 
     # Process by modifying existing mpqfile
-    open(fname, 'wb').write(mapdata.GetRawFile())
+    open(fname, "wb").write(mapdata.GetRawFile())
 
     mw = mpqapi.MPQ()
     mw.Open(fname)
-    mw.PutFile('staredit\\scenario.chk', rawchk)
+    mw.PutFile("staredit\\scenario.chk", rawchk)
+
+    # Get diff
+    if patchPassword:
+        print('[U] Patch-based unprotection enabled.')
+        origchkt = mapdata.GetOriginalChkTokenized()
+        print(' 1. Calculating bsdiff btw original & new chk')
+        diff = chkdiff(origchkt, chkt)
+        print(' 2. Compressing')
+        diff = lzma.compress(diff)
+        print(' 3. Encrypting')
+        diff = simplecrypt.encrypt(patchPassword, diff)
+        mw.PutFile("staredit\\scenario.chk.patch", diff)
+
     UpdateMPQ(mw)
     mw.Compact()
     mw.Close()
 
     if traceMap:
-        traceFname = fname + '.epmap'
+        traceFname = fname + ".epmap"
         print("Writing trace file to %s" % traceFname)
-        with open(traceFname, 'w', encoding='utf-8') as wf:
-            wf.write('H0: %s\n' %
-                     binascii.hexlify(traceHeader[0]).decode('ascii'))
-            wf.write('H1: %s\n' %
-                     binascii.hexlify(traceHeader[1]).decode('ascii'))
+        with open(traceFname, "w", encoding="utf-8") as wf:
+            wf.write("H0: %s\n" % binascii.hexlify(traceHeader[0]).decode("ascii"))
+            wf.write("H1: %s\n" % binascii.hexlify(traceHeader[1]).decode("ascii"))
             for k, v in traceMap:
                 wf.write(" - %08X : %s\n" % (k, v))

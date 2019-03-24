@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Copyright (c) 2014 trgk
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,11 +21,10 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-'''
+"""
 
 
 class CtrlStruOpener:
-
     def __init__(self, f):
         self._f = f
         self._called = False
@@ -33,13 +32,14 @@ class CtrlStruOpener:
     def __del__(self):
         if not self._called:
             raise RuntimeError(
-                'Control structures must be double-parenthesised.' +
-                ' ex) EUDInfLoop()()')
+                "Control structures must be double-parenthesised."
+                + " ex) EUDInfLoop()()"
+            )
 
     def __bool__(self):
         raise RuntimeError(
-            'Control structures must be double-parenthesised.' +
-            ' ex) EUDInfLoop()()')
+            "Control structures must be double-parenthesised." + " ex) EUDInfLoop()()"
+        )
 
     def __call__(self, *args, **kwargs):
         self._called = True

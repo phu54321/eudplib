@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Copyright (c) 2014 trgk
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,7 +21,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-'''
+"""
 
 from .. import core as c
 from .tpatcher import PatchCondition, PatchAction
@@ -43,7 +43,7 @@ def Trigger(conditions=None, actions=None, preserved=True):
         actions. Trigger internally uses `RawTrigger`.
     """
 
-    ut.ep_assert(isinstance(preserved, bool), 'preserved should be bool')
+    ut.ep_assert(isinstance(preserved, bool), "preserved should be bool")
 
     if conditions is None:
         conditions = []
@@ -64,9 +64,7 @@ def Trigger(conditions=None, actions=None, preserved=True):
             patched_actions.append(PatchAction(act))
 
         c.RawTrigger(
-            conditions=patched_conds,
-            actions=patched_actions,
-            preserved=preserved
+            conditions=patched_conds, actions=patched_actions, preserved=preserved
         )
 
     else:
@@ -76,7 +74,7 @@ def Trigger(conditions=None, actions=None, preserved=True):
 
         # Check conditions
         for i in range(0, len(conditions), 16):
-            conds = conditions[i:i + 16]
+            conds = conditions[i : i + 16]
             cts = c.Forward()
 
             patched_conds = []
@@ -87,7 +85,7 @@ def Trigger(conditions=None, actions=None, preserved=True):
             cts << c.RawTrigger(
                 nextptr=cend,
                 conditions=patched_conds,
-                actions=c.SetNextPtr(cts, nextcond)
+                actions=c.SetNextPtr(cts, nextcond),
             )
             nextcond << c.NextTrigger()
 
@@ -100,7 +98,7 @@ def Trigger(conditions=None, actions=None, preserved=True):
 
         # Execute actions
         for i in range(0, len(actions), 64):
-            acts = actions[i:i + 64]
+            acts = actions[i : i + 64]
             patched_actions = []
             for act in acts:
                 patched_actions.append(PatchAction(act))
@@ -114,5 +112,5 @@ def Trigger(conditions=None, actions=None, preserved=True):
         cend << c.NextTrigger()
         for i in range(0, len(condts), 64):
             c.RawTrigger(
-                actions=[c.SetNextPtr(cts, cend) for cts in condts[i:i + 64]]
+                actions=[c.SetNextPtr(cts, cend) for cts in condts[i : i + 64]]
             )

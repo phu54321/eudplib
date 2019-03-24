@@ -12,12 +12,17 @@ os.system("kernprof -l test_unittest.py")
 execTime = time.time() - st
 print("Execute time = %fs" % execTime)
 
-profile_result = subprocess.check_output(
-    "python -m line_profiler test_unittest.py.lprof",
-    shell=True
-).decode('utf-8').replace("\r\n", "\n")
+profile_result = (
+    subprocess.check_output(
+        "python -m line_profiler test_unittest.py.lprof", shell=True
+    )
+    .decode("utf-8")
+    .replace("\r\n", "\n")
+)
 print(profile_result)
 
-with open('lprof_log.txt', 'a') as lprof_fp:
-    lprof_fp.write("[%s]: Total execution time %.4fs\n%s\n\n\n" %
-                   (curTime, execTime, profile_result))
+with open("lprof_log.txt", "a") as lprof_fp:
+    lprof_fp.write(
+        "[%s]: Total execution time %.4fs\n%s\n\n\n"
+        % (curTime, execTime, profile_result)
+    )

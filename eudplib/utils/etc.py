@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Copyright (c) 2014 trgk
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,7 +21,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-'''
+"""
 
 import functools
 import collections
@@ -38,7 +38,7 @@ def EPD(p):
 
 
 def FlattenList(l):
-    if isinstance(l, bytes) or isinstance(l, str) or hasattr(l, 'dontFlatten'):
+    if isinstance(l, bytes) or isinstance(l, str) or hasattr(l, "dontFlatten"):
         return [l]
 
     try:
@@ -54,7 +54,7 @@ def FlattenList(l):
 def eqsplit(iterable, eqr):
     if isinstance(iterable, list):
         for i in range(0, len(iterable), eqr):
-            yield iterable[i:i + eqr]
+            yield iterable[i : i + eqr]
 
     else:
         it = iter(iterable)
@@ -95,6 +95,7 @@ def cachedfunc(function):
             rv = function(*args)
             memo[args_hashable] = rv
             return rv
+
     return wrapper
 
 
@@ -102,22 +103,23 @@ def cachedfunc(function):
 
 # Original code from TrigEditPlus::ConvertString_SCMD2ToRaw
 
+
 def SCMD2Text(s):
-        #
-        # normal -> xdigitinput1 -> xdigitinput2 -> xdigitinput3 -> normal
-        #        '<'           xdigit          xdigit            '>'
-        #                        -> normal
-        #                       '>' emit '<>'
-        #                                        -> normal
-        #                                        '>' emit x00
-        #                                                        -> normal
-        # xdigit/normal  emit '<xx'
+    #
+    # normal -> xdigitinput1 -> xdigitinput2 -> xdigitinput3 -> normal
+    #        '<'           xdigit          xdigit            '>'
+    #                        -> normal
+    #                       '>' emit '<>'
+    #                                        -> normal
+    #                                        '>' emit x00
+    #                                                        -> normal
+    # xdigit/normal  emit '<xx'
     def toxdigit(i):
-        if '0' <= i <= '9':
+        if "0" <= i <= "9":
             return ord(i) - 48
-        elif 'a' <= i <= 'z':
+        elif "a" <= i <= "z":
             return ord(i) - 97 + 10
-        elif 'A' <= i <= 'Z':
+        elif "A" <= i <= "Z":
             return ord(i) - 65 + 10
         else:
             return None
@@ -130,7 +132,7 @@ def SCMD2Text(s):
     # simple fsm
     for i in s:
         if state == 0:
-            if i == '<':
+            if i == "<":
                 state = 1
             else:
                 out.append(i)
@@ -143,7 +145,7 @@ def SCMD2Text(s):
                 state = 2
 
             else:
-                out.extend(['<', i])
+                out.extend(["<", i])
                 state = 0
 
         elif state == 2:
@@ -153,24 +155,24 @@ def SCMD2Text(s):
                 bufch[1] = i
                 state = 3
 
-            elif i == '>':
+            elif i == ">":
                 out.append(chr(buf[0]))
                 state = 0
 
             else:
-                out.extend(['<', bufch[0], i])
+                out.extend(["<", bufch[0], i])
                 state = 0
 
         elif state == 3:
-            if i == '>':
+            if i == ">":
                 out.append(chr(buf[0] * 16 + buf[1]))
                 state = 0
 
             else:
-                out.extend(['<', bufch[0], bufch[1], i])
+                out.extend(["<", bufch[0], bufch[1], i])
                 state = 0
 
-    return ''.join(out)
+    return "".join(out)
 
 
 ####
@@ -191,7 +193,7 @@ def setStrict(mode):
 
 
 def find_data_file(filename, file):
-    if getattr(sys, 'frozen', False):
+    if getattr(sys, "frozen", False):
         # The application is frozen
         datadir = os.path.dirname(sys.executable)
     else:

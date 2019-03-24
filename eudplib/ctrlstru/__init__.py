@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Copyright (c) 2014 trgk
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,17 +21,11 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-'''
+"""
 
 from .cshelper import CtrlStruOpener
 
-from .basicstru import (
-    DoActions,
-    EUDJump,
-    EUDJumpIf,
-    EUDJumpIfNot,
-    EUDTernary,
-)
+from .basicstru import DoActions, EUDJump, EUDJumpIf, EUDJumpIfNot, EUDTernary
 
 from .simpleblock import (
     EUDIf,
@@ -40,7 +34,6 @@ from .simpleblock import (
     EUDElseIfNot,
     EUDElse,
     EUDEndIf,
-
     EUDExecuteOnce,
     EUDEndExecuteOnce,
 )
@@ -48,23 +41,15 @@ from .simpleblock import (
 from .loopblock import (
     EUDInfLoop,
     EUDEndInfLoop,
-
     EUDLoopN,
     EUDEndLoopN,
-
     EUDLoopRange,
-
     EUDWhile,
     EUDWhileNot,
     EUDEndWhile,
 )
 
-from .swblock import (
-    EUDSwitch,
-    EUDSwitchCase,
-    EUDSwitchDefault,
-    EUDEndSwitch,
-)
+from .swblock import EUDSwitch, EUDSwitchCase, EUDSwitchDefault, EUDEndSwitch
 
 from .breakcont import (
     EUDContinue,
@@ -72,13 +57,9 @@ from .breakcont import (
     EUDContinueIfNot,
     EUDSetContinuePoint,
     EUDIsContinuePointSet,
-
     EUDBreak,
     EUDBreakIf,
-    EUDBreakIfNot
+    EUDBreakIfNot,
 )
 
-from .shortcircuit import (
-    EUDSCOr,
-    EUDSCAnd,
-)
+from .shortcircuit import EUDSCOr, EUDSCAnd

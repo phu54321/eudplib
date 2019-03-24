@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Copyright (c) 2014 trgk
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,7 +21,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-'''
+"""
 
 from eudplib import utils as ut
 
@@ -32,13 +32,13 @@ General CHK class.
 
 def sectionname_format(sn):
     if type(sn) is str:
-        sn = sn.encode('ascii')
+        sn = sn.encode("ascii")
 
     if len(sn) < 4:
-        sn += b' ' * (4 - len(sn))
+        sn += b" " * (4 - len(sn))
 
     elif len(sn) > 4:
-        raise ut.EPError('Length of section name cannot be longer than 4')
+        raise ut.EPError("Length of section name cannot be longer than 4")
 
     return sn
 
@@ -65,7 +65,7 @@ class CHK:
         index = 0
         while index < len(b):
             # read data
-            sectionname = b[index: index + 4]
+            sectionname = b[index : index + 4]
             sectionlength = ut.b2i4(b, index + 4)
 
             if sectionlength < 0:
@@ -73,12 +73,17 @@ class CHK:
                 self.sections = t
                 return False
 
-            section = b[index + 8: index + 8 + sectionlength]
+            section = b[index + 8 : index + 8 + sectionlength]
             index += sectionlength + 8
 
             self.sections[sectionname] = section
 
         return True
+
+    def clone (self):
+        t = CHK()
+        t.sections = dict(self.sections)
+        return t
 
     def savechk(self):
         # calculate output size
@@ -86,7 +91,7 @@ class CHK:
         for name, binary in self.sections.items():
             blist.append(name + ut.i2b4(len(binary)) + binary)
 
-        return b''.join(blist)
+        return b"".join(blist)
 
     def enumsection(self):
         return list(self.sections.keys())
@@ -107,44 +112,63 @@ class CHK:
 
         # Delete unused sections
         used_section = [
-            b'VER ', b'VCOD', b'OWNR', b'ERA ', b'DIM ', b'SIDE', b'MTXM',
-            b'UNIT', b'THG2', b'MASK', b'STR ', b'UPRP', b'MRGN', b'TRIG',
-            b'MBRF', b'SPRP', b'FORC', b'COLR', b'PUNI', b'PUPx', b'PTEx',
-            b'UNIx', b'UPGx', b'TECx',
+            b"VER ",
+            b"VCOD",
+            b"OWNR",
+            b"ERA ",
+            b"DIM ",
+            b"SIDE",
+            b"MTXM",
+            b"UNIT",
+            b"THG2",
+            b"MASK",
+            b"STR ",
+            b"UPRP",
+            b"MRGN",
+            b"TRIG",
+            b"MBRF",
+            b"SPRP",
+            b"FORC",
+            b"COLR",
+            b"PUNI",
+            b"PUPx",
+            b"PTEx",
+            b"UNIx",
+            b"UPGx",
+            b"TECx",
         ]
 
-        unused_section = [
-            sn for sn in self.sections.keys() if sn not in used_section]
+        unused_section = [sn for sn in self.sections.keys() if sn not in used_section]
         for sn in unused_section:
             del self.sections[sn]
 
         # Terrain optimization
-        dim = self.getsection(b'DIM ')
+        dim = self.getsection(b"DIM ")
         mapw = ut.b2i2(dim, 0)
         maph = ut.b2i2(dim, 2)
         terrainsize = mapw * maph
 
         # MASK optimization : cancel 0xFFs.
-        mask = self.getsection(b'MASK')
+        mask = self.getsection(b"MASK")
         clippos = 0
         for i in range(terrainsize - 1, -1, -1):
-            if mask[i] != 0xff:
+            if mask[i] != 0xFF:
                 clippos = i + 1
                 break
 
         mask = mask[:clippos]
-        self.setsection(b'MASK', mask)
+        self.setsection(b"MASK", mask)
 
         # MTXM optimization
         # MASK optimization : cancel 0xFFs.
-        mtxm = self.getsection(b'MTXM')
+        mtxm = self.getsection(b"MTXM")
         clippos = 0
         for i in range(terrainsize - 1, -1, -1):
             if mtxm[2 * i] != 0x00 or mtxm[2 * i + 1] != 0x00:
                 clippos = i + 1
                 break
 
-        mtxm = mtxm[:2 * clippos]
-        self.setsection(b'MTXM', mtxm)
+        mtxm = mtxm[: 2 * clippos]
+        self.setsection(b"MTXM", mtxm)
 
         # More optimization would be possible, but I don't care.

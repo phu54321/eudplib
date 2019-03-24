@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Copyright (c) 2014 trgk
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,14 +21,10 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-'''
+"""
 
 
-def StackObjects(
-    found_objects,
-    dwoccupmap_dict,
-    alloctable,
-):
+def StackObjects(found_objects, dwoccupmap_dict, alloctable):
     dwoccupmap_max_size = 0
     for obj in found_objects:
         dwoccupmap_max_size += len(dwoccupmap_dict[obj])

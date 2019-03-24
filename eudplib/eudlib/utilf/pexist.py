@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Copyright (c) 2014 trgk
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,19 +21,11 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-'''
+"""
 
-from ..memiof import (
-    f_dwread_epd,
-    f_getcurpl,
-    f_setcurpl,
-)
+from ..memiof import f_dwread_epd, f_getcurpl, f_setcurpl
 
-from eudplib import (
-    core as c,
-    ctrlstru as cs,
-    utils as ut
-)
+from eudplib import core as c, ctrlstru as cs, utils as ut
 
 
 @c.EUDFunc
@@ -47,9 +39,7 @@ def f_playerexist(player):
     cs.EUDSwitch(player)
     for p in range(8):
         if cs.EUDSwitchCase()(p):
-            if cs.EUDIf()(
-                c.Memory(pts + p * 12 + 8, c.Exactly, ~(pts + p * 12 + 4))
-            ):
+            if cs.EUDIf()(c.Memory(pts + p * 12 + 8, c.Exactly, ~(pts + p * 12 + 4))):
                 c.EUDReturn(0)
             if cs.EUDElse()():
                 c.EUDReturn(1)
@@ -62,26 +52,27 @@ def f_playerexist(player):
 
 # --------
 
+
 def EUDPlayerLoop():
     def _footer():
-        block = {'origcp': f_getcurpl(), 'playerv': c.EUDVariable()}
-        playerv = block['playerv']
+        block = {"origcp": f_getcurpl(), "playerv": c.EUDVariable()}
+        playerv = block["playerv"]
 
         playerv << 0
         cs.EUDWhile()(playerv <= 7)
         cs.EUDContinueIfNot(f_playerexist(playerv))
         f_setcurpl(playerv)
 
-        ut.EUDCreateBlock('ploopblock', block)
+        ut.EUDCreateBlock("ploopblock", block)
         return True
 
     return cs.CtrlStruOpener(_footer)
 
 
 def EUDEndPlayerLoop():
-    block = ut.EUDPopBlock('ploopblock')[1]
-    playerv = block['playerv']
-    origcp = block['origcp']
+    block = ut.EUDPopBlock("ploopblock")[1]
+    playerv = block["playerv"]
+    origcp = block["origcp"]
 
     if not cs.EUDIsContinuePointSet():
         cs.EUDSetContinuePoint()

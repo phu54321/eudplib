@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Copyright (c) 2014 trgk
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,7 +21,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-'''
+"""
 
 from .condition import Condition
 from .constenc import (
@@ -30,14 +30,10 @@ from .constenc import (
     EncodeResource,
     EncodeScore,
     EncodeSwitchState,
-    Kills  # for __calls__ binding
+    Kills,  # for __calls__ binding
 )
 
-from .strenc import (
-    EncodeLocation,
-    EncodeSwitch,
-    EncodeUnit,
-)
+from .strenc import EncodeLocation, EncodeSwitch, EncodeUnit
 
 from ...utils import EPD
 
@@ -197,3 +193,18 @@ def Memory(dest, cmptype, value):
 
 def MemoryEPD(dest, cmptype, value):
     return Deaths(dest, cmptype, value, 0)
+
+
+def DeathsX(Player, Comparison, Number, Unit, Mask):
+    Player = EncodePlayer(Player, issueError=True)
+    Comparison = EncodeComparison(Comparison, issueError=True)
+    Unit = EncodeUnit(Unit, issueError=True)
+    return Condition(Mask, Player, Number, Unit, Comparison, 15, 0, 0, eudx=True)
+
+
+def MemoryX(dest, cmptype, value, mask):
+    return DeathsX(EPD(dest), cmptype, value, 0, mask)
+
+
+def MemoryXEPD(dest, cmptype, value, mask):
+    return DeathsX(dest, cmptype, value, 0, mask)

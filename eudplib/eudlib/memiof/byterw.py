@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Copyright (c) 2014 trgk
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,23 +21,18 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-'''
+"""
 
 from ... import core as c
 from ... import ctrlstru as cs
 
-from . import dwepdio as dwm
+from . import dwepdio as dwm, modcurpl as cp
 
 
-_epd, _suboffset = c.EUDCreateVariables(2)
-
-
-class EUDByteReader:
-    """Read byte by byte."""
+class EUDByteStream:
+    """Read and Write byte by byte."""
 
     def __init__(self):
-        self._dw = c.EUDVariable()
-        self._b = c.EUDCreateVariables(4)
         self._suboffset = c.EUDVariable()
         self._offset = c.EUDVariable()
 
@@ -45,183 +40,108 @@ class EUDByteReader:
 
     @c.EUDMethod
     def seekepd(self, epdoffset):
-        """Seek EUDByteReader to specific epd player address"""
-        c.SeqCompute([
-            (self._offset, c.SetTo, epdoffset),
-            (self._suboffset, c.SetTo, 0)
-        ])
-
-        c.SetVariables(self._dw, dwm.f_dwread_epd(epdoffset))
-
-        c.SetVariables([
-            self._b[0],
-            self._b[1],
-            self._b[2],
-            self._b[3],
-        ], dwm.f_dwbreak(self._dw)[2:6])
+        """Seek EUDByteStream to specific epd player address"""
+        c.SeqCompute(
+            [(self._offset, c.SetTo, epdoffset), (self._suboffset, c.SetTo, 0)]
+        )
 
     @c.EUDMethod
     def seekoffset(self, offset):
-        """Seek EUDByteReader to specific address"""
-        global _epd, _suboffset
-
+        """Seek EUDByteStream to specific address"""
         # convert offset to epd offset & suboffset
-        c.SetVariables([_epd, _suboffset], c.f_div(offset, 4))
-        c.SeqCompute([(_epd, c.Add, -0x58A364 // 4)])
-
-        # seek to epd & set suboffset
-        self.seekepd(_epd)
-        c.SeqCompute([
-            (self._suboffset, c.SetTo, _suboffset)
-        ])
+        c.SetVariables([self._offset, self._suboffset], c.f_div(offset, 4))
+        c.SeqCompute([(self._offset, c.Add, -0x58A364 // 4)])
 
     # -------
 
     @c.EUDMethod
     def readbyte(self):
-        """Read byte from current address. Reader will advance by 1 bytes.
+        """Read byte from current address. ByteStream will advance by 1 bytes.
 
         :returns: Read byte
         """
-        case0, case1, case2, case3, swend = [c.Forward() for _ in range(5)]
+        orig = cp.f_getcurpl()
+        case = [c.Forward() for _ in range(5)]
         ret = c.EUDVariable()
 
-        # suboffset == 0
-        case0 << c.NextTrigger()
-        cs.EUDJumpIfNot(self._suboffset.Exactly(0), case1)
-        c.SeqCompute([
-            (ret, c.SetTo, self._b[0]),
-            (self._suboffset, c.Add, 1)
-        ])
-        cs.EUDJump(swend)
+        cs.DoActions([ret.SetNumber(0), c.SetCurrentPlayer(self._offset)])
 
-        # suboffset == 1
-        case1 << c.NextTrigger()
-        cs.EUDJumpIfNot(self._suboffset.Exactly(1), case2)
-        c.SeqCompute([
-            (ret, c.SetTo, self._b[1]),
-            (self._suboffset, c.Add, 1)
-        ])
-        cs.EUDJump(swend)
-
-        # suboffset == 2
-        case2 << c.NextTrigger()
-        cs.EUDJumpIfNot(self._suboffset.Exactly(2), case3)
-        c.SeqCompute([
-            (ret, c.SetTo, self._b[2]),
-            (self._suboffset, c.Add, 1)
-        ])
-        cs.EUDJump(swend)
+        for i in range(3):
+            case[i] << c.NextTrigger()
+            cs.EUDJumpIfNot(self._suboffset.Exactly(i), case[i + 1])
+            for j in range(7, -1, -1):
+                c.RawTrigger(
+                    conditions=[
+                        c.DeathsX(c.CurrentPlayer, c.AtLeast, 1, 0, 2 ** (j + 8 * i))
+                    ],
+                    actions=ret.AddNumber(2 ** j),
+                )
+            c.SeqCompute([(self._suboffset, c.Add, 1)])
+            cs.EUDJump(case[-1])
 
         # suboffset == 3
-        # read more dword
-        case3 << c.NextTrigger()
+        case[3] << c.NextTrigger()
 
-        c.SeqCompute([
-            (ret, c.SetTo, self._b[3]),
-            (self._offset, c.Add, 1),
-            (self._suboffset, c.SetTo, 0)
-        ])
+        for i in range(7, -1, -1):
+            c.RawTrigger(
+                conditions=[c.DeathsX(c.CurrentPlayer, c.AtLeast, 1, 0, 2 ** (i + 24))],
+                actions=ret.AddNumber(2 ** i),
+            )
+        c.SeqCompute([(self._offset, c.Add, 1), (self._suboffset, c.SetTo, 0)])
 
-        c.SetVariables(self._dw, dwm.f_dwread_epd(self._offset))
-        c.SetVariables([
-            self._b[0],
-            self._b[1],
-            self._b[2],
-            self._b[3],
-        ], dwm.f_dwbreak(self._dw)[2:6])
-
-        swend << c.NextTrigger()
+        case[-1] << c.NextTrigger()
+        cp.f_setcurpl(orig)
         return ret
-
-
-class EUDByteWriter:
-    """Write byte by byte"""
-
-    def __init__(self):
-        self._dw = c.EUDVariable()
-        self._suboffset = c.EUDVariable()
-        self._offset = c.EUDVariable()
-        self._b = [c.EUDLightVariable() for _ in range(4)]
-
-    @c.EUDMethod
-    def seekepd(self, epdoffset):
-        """Seek EUDByteWriter to specific epd player addresss"""
-
-        c.SeqCompute([
-            (self._offset, c.SetTo, epdoffset),
-            (self._suboffset, c.SetTo, 0)
-        ])
-
-        c.SetVariables(self._dw, dwm.f_dwread_epd(epdoffset))
-
-        c.SetVariables(self._b, dwm.f_dwbreak(self._dw)[2:6])
-
-    @c.EUDMethod
-    def seekoffset(self, offset):
-        """Seek EUDByteWriter to specific address"""
-
-        global _epd, _suboffset
-
-        # convert offset to epd offset & suboffset
-        c.SetVariables([_epd, _suboffset], c.f_div(offset, 4))
-        c.SeqCompute([(_epd, c.Add, (0x100000000 - 0x58A364) // 4)])
-
-        self.seekepd(_epd)
-        c.SeqCompute([
-            (self._suboffset, c.SetTo, _suboffset)
-        ])
 
     @c.EUDMethod
     def writebyte(self, byte):
         """Write byte to current position.
 
-        Write a byte to current position of EUDByteWriter. Writer will advance
-        by 1 byte.
-
-        .. note::
-            Bytes could be buffered before written to memory. After you
-            finished using writebytes, you must call `flushdword` to flush the
-            buffer.
+        Write a byte to current position of EUDByteStream.
+        ByteStream will advance by 1 byte.
         """
+        _dw = c.Forward()
+
         cs.EUDSwitch(self._suboffset)
-        for i in range(3):
+        if cs.EUDSwitchCase()(0):
+            cs.DoActions(
+                [
+                    c.SetMemoryXEPD(self._offset, c.SetTo, byte, 255),
+                    self._suboffset.AddNumber(1),
+                ]
+            )
+            c.EUDReturn()
+
+        for i in range(1, 4):
             if cs.EUDSwitchCase()(i):
-                cs.DoActions([
-                    self._b[i].SetNumber(byte),
-                    self._suboffset.AddNumber(1)
-                ])
+                cs.DoActions(
+                    [
+                        c.SetMemory(_dw, c.SetTo, 255 * 256 ** i),
+                        c.SetMemory(_dw + 20, c.SetTo, 0),
+                        [
+                            self._suboffset.AddNumber(1)
+                            if i < 3
+                            else self._suboffset.SetNumber(0)
+                        ],
+                    ]
+                )
+                for j in range(7, -1, -1):
+                    c.RawTrigger(
+                        conditions=[byte.AtLeastX(1, 2 ** j)],
+                        actions=[c.SetMemory(_dw + 20, c.Add, 2 ** (j + i * 8))],
+                    )
                 cs.EUDBreak()
-
-        if cs.EUDSwitchCase()(3):
-            cs.DoActions(self._b[3].SetNumber(byte))
-            self.flushdword()
-            cs.DoActions([
-                self._offset.AddNumber(1),
-                self._suboffset.SetNumber(0),
-            ])
-
-            c.SetVariables(self._dw, dwm.f_dwread_epd(self._offset))
-            c.SetVariables(self._b, dwm.f_dwbreak(self._dw)[2:6])
 
         cs.EUDEndSwitch()
 
-    @c.EUDMethod
-    def flushdword(self):
-        """Flush buffer."""
-        # mux bytes
-        c.RawTrigger(actions=self._dw.SetNumber(0))
+        cs.DoActions([_dw << c.SetMemoryXEPD(self._offset, c.SetTo, 0, 0xFF00)])
+        c.RawTrigger(
+            conditions=self._suboffset.Exactly(0), actions=self._offset.AddNumber(1)
+        )
 
-        for i in range(7, -1, -1):
-            for j in range(4):
-                c.RawTrigger(
-                    conditions=[
-                        self._b[j].AtLeast(2 ** i)
-                    ],
-                    actions=[
-                        self._b[j].SubtractNumber(2 ** i),
-                        self._dw.AddNumber(2 ** (i + j * 8))
-                    ]
-                )
+    @classmethod
+    def flushdword(cls):
+        pass
 
-        dwm.f_dwwrite_epd(self._offset, self._dw)
+
+EUDByteReader, EUDByteWriter = EUDByteStream, EUDByteStream
