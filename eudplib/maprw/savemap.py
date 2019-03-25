@@ -37,7 +37,6 @@ import os
 import binascii
 import lzma
 import hashlib
-from Cryptodome.Cipher import AES
 
 traceHeader = None
 traceMap = []
@@ -93,6 +92,7 @@ def SaveMap(fname, rootf):
 
     # Get diff
     if patchPassword:
+        from Cryptodome.Cipher import AES
         print('[U] Patch-based unprotection enabled.')
         origchkt = mapdata.GetOriginalChkTokenized()
         print(' 1. Calculating bsdiff btw original & new chk')

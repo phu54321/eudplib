@@ -42,6 +42,9 @@ class TBL:
         self._stringmap = {}
         self._dataindextb = []  # String starts from #1
         self._capacity = 2  # Size of STR section
+        self._emptystring = []
+        self._loaded = False
+        self._first_extended_string = None
 
         if content is not None:
             self.LoadTBL(content)
@@ -60,7 +63,23 @@ class TBL:
                 send += 1
 
             string = content[stringoffset:send]
+            if string == b"":
+                empty_len = len(self._emptystring)
+                for j in range(i, stringcount):
+                    j += 1
+                    nextoffset = ut.b2i2(content, j * 2)
+                    nextend = nextoffset
+                    while content[nextend] != 0:
+                        nextend += 1
+                    nextstring = content[nextoffset:nextend]
+                    if nextstring != b"":
+                        self._emptystring.append((i - 1, nextstring))
+                        break
+                if len(self._emptystring) == empty_len:
+                    self._emptystring.append(i - 1)
             self.AddString(string)
+            last_content = string
+        self._loaded = True
 
     def AddString(self, string):
         string = ut.u2b(string)  # Starcraft uses multibyte encoding.
@@ -78,12 +97,30 @@ class TBL:
 
         # Else -> Create new entry
         except KeyError:
-            dataindex = len(self._datatb)
+            if self._emptystring and self._loaded and self._first_extended_string:
+                try:
+                    emptystring = self._emptystring.pop(0)
+                    stringindex, nextstring = emptystring
+                except TypeError:
+                    stringindex = emptystring
+                    nextstring = self._first_extended_string
+                dataindex = self._datatb.index(nextstring)
+                self._datatb.insert(dataindex, string)
+                for i, v in enumerate(self._dataindextb):
+                    if v >= dataindex:
+                        self._dataindextb[i] += 1
+                self._dataindextb[stringindex] = dataindex
+                # string + b'\0'
+                self._capacity += len(string) + 1
+            else:
+                if self._first_extended_string is None:
+                    self._first_extended_string = string
+                dataindex = len(self._datatb)
+                self._datatb.append(string)
+                self._dataindextb.append(dataindex)
+                # string + b'\0' + string offset
+                self._capacity += len(string) + 1 + 2
             self._stringmap[string] = stringindex
-            self._datatb.append(string)
-            self._dataindextb.append(dataindex)
-            # string + b'\0' + string offset
-            self._capacity += len(string) + 1 + 2
 
         ut.ep_assert(self._capacity < 65536, "String table overflow")
 
