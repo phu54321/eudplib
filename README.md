@@ -1,5 +1,9 @@
 # eudplib
 
+> Go to [Armoha's fork](https://github.com/armoha/eudplib) for the maintained version.
+> This repository mainly exists for historical purposes (the original implementation)
+> and as a place for me to submit new PRs to that repository.
+
 Implementation of EUD-based structural programming on [Starcraft](https://us.shop.battle.net/ko-kr/family/starcraft-remastered). Starcraft only supports basic conditional `if(~) { actions; }` blocks called 'Triggers'. No `else`, no variables, no `while` or `for` loops, no functions, and no pointers. Nothing. eudplib framework hijacks Starcraft's trigger system to implement all these structural programming schemes.
 
 eudplib allows basic C-level programming on Starcraft. See [binary searching with function pointer](https://github.com/phu54321/eudplib/blob/master/tests/unittests/testbinsearch.py) as an example. This code showcases function, function pointer, and variable usage.
